@@ -99,7 +99,7 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
     import Modal from '@/components/modal';
 
     export default {
@@ -138,7 +138,6 @@
                 encaminharParaTecnico: 'avaliacaoResultados/encaminharParaTecnico',
             }),
             enviarEncaminhamento() {
-                console.log(new Date().toLocaleString());
                 this.encaminharParaTecnico({
                     atual: 5,
                     proximo: 6,

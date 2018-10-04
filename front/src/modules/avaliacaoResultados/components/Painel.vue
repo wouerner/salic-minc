@@ -10,16 +10,35 @@
             >
                 <v-tabs-slider color="deep-orange accent-3"></v-tabs-slider>
 
+                <v-tab href="#tab-0">
+                    Encaminhar 
+                </v-tab>
                 <v-tab href="#tab-1">
-                    Analisar
+                    Em Analise
                     <v-icon>how_to_reg</v-icon>
                 </v-tab>
-
                 <v-tab href="#tab-2">
-                    Assinados
+                     Finalizados
                     <v-icon>done_all</v-icon>
                 </v-tab>
+                <v-tab href="#tab-3">
+                     Em assinatura
+                    <v-icon>edit</v-icon>
+                </v-tab>
 
+                <v-tab-item
+                        :id="'tab-0'"
+                        :key="0"
+                >
+                    <v-card flat>
+                        <v-card-text>
+                            <TabelaProjetos
+                                :dados="getProjetosParaDistribuir"
+                                :comp="action"
+                            ></TabelaProjetos>
+                        </v-card-text>
+                    </v-card>
+                </v-tab-item>
                 <v-tab-item
                         :id="'tab-1'"
                         :key="1"
@@ -28,6 +47,7 @@
                         <v-card-text>
                             <TabelaProjetos
                                 :analisar="true"
+                                :dados="dadosTabelaTecnico"
                             ></TabelaProjetos>
                         </v-card-text>
                     </v-card>
@@ -39,6 +59,19 @@
                     <v-card flat>
                         <v-card-text>
                             <TabelaProjetos
+                                :dados="getProjetosFinalizados"
+                            ></TabelaProjetos>
+                        </v-card-text>
+                    </v-card>
+                </v-tab-item>
+                <v-tab-item
+                        :id="'tab-3'"
+                        :key="3"
+                >
+                    <v-card flat>
+                        <v-card-text>
+                            <TabelaProjetos
+                                :dados="getProjetosFinalizados"
                             ></TabelaProjetos>
                         </v-card-text>
                     </v-card>
@@ -49,16 +82,39 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import TabelaProjetos from './TabelaProjetos';
+import BtnEncaminhar from './BtnEncaminhar';
 
 export default {
     name: 'Painel',
+    created() {
+        this.projetosFinalizados({ estadoid: 6 });
+        this.obterDadosTabelaTecnico({ estadoid: 5 });
+        this.distribuir({ estadoid: 6 });
+    },
     data() {
         return {
+            action: BtnEncaminhar,
         };
     },
     components: {
         TabelaProjetos,
+        BtnEncaminhar,
+    },
+    methods: {
+        ...mapActions({
+            obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
+            projetosFinalizados: 'avaliacaoResultados/projetosFinalizados',
+            distribuir: 'avaliacaoResultados/projetosParaDistribuir',
+        }),
+    },
+    computed: {
+        ...mapGetters({
+            dadosTabelaTecnico: 'avaliacaoResultados/dadosTabelaTecnico',
+            getProjetosFinalizados: 'avaliacaoResultados/getProjetosFinalizados',
+            getProjetosParaDistribuir: 'avaliacaoResultados/getProjetosParaDistribuir',
+        }),
     },
 };
 </script>

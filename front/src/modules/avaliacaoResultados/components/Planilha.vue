@@ -1,11 +1,14 @@
 <template>
-    <v-container fluid>
+    <v-container fluid v-if="dadosProjeto">
         <v-card>
             <v-card-title primary-title>
-                <h3>TÍTULO A SER DEFINIDO</h3>
+                <h3>{{ dadosProjeto.items.pronac}} &#45; {{ dadosProjeto.items.nomeProjeto }}</h3>
             </v-card-title>
             <v-card-text>
-                <p v-if="existeDiligencia">Existe Diligência para esse projeto. Acesse <router-link to="#">aqui</router-link>.</p>
+                <p v-if="dadosProjeto.items.diligencia">Existe Diligência para esse projeto. Acesse <a :href="'/proposta/diligenciar/listardiligenciaanalista/idPronac/' + idPronac">aqui</a>.</p>
+                <p v-else-if="documento != 0">Existe Documento para assinar nesse projeto.</p>
+                <p v-else-if="estado.estadoId == 5">Projeto em analise.</p>
+
                 <p v-else>Sem Observações.</p>
             </v-card-text>
             <v-card-actions>
@@ -28,7 +31,8 @@
                         {{ produto.produto }}
                     </v-layout>
                         <!-- ETAPA -->
-                        <v-expansion-panel class="pl-3 elevation-0"
+                        <v-expansion-panel
+                            class="pl-3 elevation-0"
                             expand
                         >
                             <v-expansion-panel-content
@@ -80,11 +84,22 @@
                                                                     <td>{{ props.item.item }}</td>
                                                                     <td>{{ moeda(props.item.varlorAprovado) }}</td>
                                                                     <td>{{ moeda(props.item.varlorComprovado) }}</td>
-                                                                    <td>R$ # valorAprovado - valorComprovado</td>
-                                                                    <td>
-                                                                        <v-btn color="red" small dark title="Comprovar Item">
-                                                                            <v-icon>gavel</v-icon>
-                                                                        </v-btn>
+                                                                    <td>{{ moeda(props.item.varlorAprovado - props.item.varlorComprovado) }}</td>
+                                                                    <td >
+                                                                        <template
+                                                                            v-if="podeEditar(props.item.varlorComprovado)"
+                                                                        >
+                                                                            <v-btn
+                                                                                :href="'/prestacao-contas/analisar/comprovante/idPronac/' + idPronac + '/uf/' + uf.Uf + '/produto/' + produto.cdProduto + '/idmunicipio/' + cidade.cdCidade + '/idPlanilhaItem/' + props.item.idPlanilhaItens + '/etapa/' + etapa.cdEtapa"
+                                                                                replace
+                                                                                color="red"
+                                                                                small
+                                                                                dark
+                                                                                title="Comprovar Item"
+                                                                            >
+                                                                                <v-icon>gavel</v-icon>
+                                                                            </v-btn>
+                                                                        </template>
                                                                     </td>
                                                                 </template>
                                                             </v-data-table>
@@ -105,19 +120,19 @@
             <table class="white--text font-weight-bold" width="100%">
                 <tr>
                     <td>Valor Aprovado</td>
-                    <td>R$ 00,00</td>
+                    <td>{{ moeda(dadosProjeto.items.vlAprovado) }}</td>
                 </tr>
                 <tr>
                     <td>Valor Comprovado</td>
-                    <td>R$ 00,00</td>
+                    <td>{{ moeda(dadosProjeto.items.vlComprovado) }}</td>
                 </tr>
                 <tr>
                     <td>Valor a Comprovar</td>
-                    <td>R$ 00,00</td>
+                    <td>{{ moeda(dadosProjeto.items.vlTotalComprovar) }}</td>
                 </tr>
             </table>
         </v-card>
-        
+
         <v-speed-dial
             v-model="fab"
             bottom
@@ -137,53 +152,45 @@
                 <v-icon>menu</v-icon>
                 <v-icon>close</v-icon>
             </v-btn>
-            <v-tooltip left>
+            <v-tooltip left v-if="(documento != 0)">
+
                 <v-btn
                     fab
                     dark
                     small
                     color="green"
                     slot="activator"
+                    :href="'/assinatura/index/visualizar-projeto?idDocumentoAssinatura=' + documento.idDocumentoAssinatura"
+
                 >
-                    <v-icon>check</v-icon>
+                    <v-icon>edit</v-icon>
                 </v-btn>
-                <span>Finalizar Análise</span>
+                <span>Assinar</span>
             </v-tooltip>
-            <v-tooltip left>
+            <v-tooltip left v-if="(documento == 0)">
                 <v-btn
                     fab
                     dark
                     small
                     color="teal"
                     slot="activator"
+                    :to="'/emitir-parecer/' + idPronac"
                 >
                     <v-icon>gavel</v-icon>
                 </v-btn>
                 <span>Emitir Parecer</span>
             </v-tooltip>
-            <v-tooltip left>
+            <v-tooltip left v-if="(documento == 0)">
                 <v-btn
                     fab
                     dark
                     small
-                    color="white"
+                    color="red ligthen-4"
                     slot="activator"
                 >
                     <v-icon>warning</v-icon>
                 </v-btn>
                 <span>Diligenciar</span>
-            </v-tooltip>
-            <v-tooltip left>
-                <v-btn
-                    fab
-                    dark
-                    small
-                    color="yellow"
-                    slot="activator"
-                >
-                    <v-icon>arrow_upward</v-icon>
-                </v-btn>
-                <span>Ir para o topo</span>
             </v-tooltip>
         </v-speed-dial>
      </v-container>
@@ -197,8 +204,6 @@
         name: 'Painel',
         data() {
             return {
-                existeDiligencia: true,
-                produtos: this.planilha,
                 headers: [
                     { text: 'Item de Custo', value: 'item', sortable: false },
                     { text: 'Valor Aprovado', value: 'varlorAprovado', sortable: false },
@@ -219,10 +224,25 @@
         computed: {
             ...mapGetters({
                 getPlanilha: 'avaliacaoResultados/planilha',
+                getProjetoAnalise: 'avaliacaoResultados/projetoAnalise',
             }),
+            dadosProjeto() {
+                return this.getProjetoAnalise.data;
+            },
+            documento() {
+                let documento = this.getProjetoAnalise.data.items.documento;
+                documento = documento !== null ? this.getProjetoAnalise.data.items.documento : 0;
+                return documento;
+            },
+            estado() {
+                let estado = this.getProjetoAnalise.data.items.estado;
+                estado = (estado !== null) ? this.getProjetoAnalise.data.items.estado : 0;
+                return estado;
+            },
         },
         mounted() {
             this.setPlanilha(this.idPronac);
+            this.setProjetoAnalise(this.idPronac);
         },
         components: {
             ModalTemplate,
@@ -230,10 +250,20 @@
         methods: {
             ...mapActions({
                 setPlanilha: 'avaliacaoResultados/planilha',
+                setProjetoAnalise: 'avaliacaoResultados/projetoAnalise',
             }),
             moeda: (moedaString) => {
                 const moeda = Number(moedaString);
                 return moeda.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            },
+            podeEditar(varlorComprovado) {
+                if (varlorComprovado !== 0
+                    && !this.dadosProjeto.items.diligencia
+                    && this.documento == 0) {
+                    return true;
+                }
+
+                return false;
             },
         },
     };
