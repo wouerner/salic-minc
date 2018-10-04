@@ -1,6 +1,6 @@
 <?php
 
-class Navagacao_Model_Perfil extends MinC_Db_Model
+class Navegacao_Model_Perfil extends MinC_Db_Model
 {
     protected $gru_nome;
 

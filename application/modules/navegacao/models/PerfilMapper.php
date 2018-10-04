@@ -11,11 +11,11 @@ class Navegacao_Model_PerfilMapper extends MinC_Db_Mapper
         $tbPerfil = new \Navegacao_Model_DbTable_TbPerfil();
         $queryResult = $tbPerfil->buscarPerfisDisponiveis($usu_codigo, $sis_codigo);
 
-        $result = array();
+        $result = [];
 
         foreach ($queryResult as $params) {
-            $tbPerfil = new \Navagacao_Model_Perfil($params);
-            array_push($result, $tbPerfil->gru_nome);
+            $tbPerfil = new \Navegacao_Model_Perfil($params);
+            array_push($result, $tbPerfil->getGruNome());
         }
 
         return $result;
