@@ -18,6 +18,7 @@ import LocalRealizacaoDeslocamento from './visualizar/components/outrasInformaco
 import DocumentosAssinados from './visualizar/components/outrasInformacoes/DocumentosAssinados';
 import DadosComplementares from './visualizar/components/outrasInformacoes/DadosComplementares';
 import DocumentosAnexados from './visualizar/components/outrasInformacoes/DocumentosAnexados';
+import PlanoDistribuicao from './visualizar/components/outrasInformacoes/PlanoDistribuicao';
 
 
 Vue.use(Router);
@@ -171,6 +172,15 @@ const routes = [
                 component: DocumentosAnexados,
                 meta: {
                     title: 'Documentos Anexados',
+
+                },
+            },
+            {
+                path: 'plano-distribuicao',
+                name: 'PlanoDistribuicao',
+                component: PlanoDistribuicao,
+                meta: {
+                    title: 'Plano de Distribui&ccedil;&atilde;o',
 
                 },
             },
