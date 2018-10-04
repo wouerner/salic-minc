@@ -2,8 +2,8 @@
 
 class Navegacao_Model_Perfil extends MinC_Db_Model
 {
-    protected $orgao_sigla_autorizada;
-    protected $nome_grupo;
+    private $orgao_sigla_autorizada;
+    private $nome_grupo;
 
     public function __construct($params)
     {
@@ -15,6 +15,7 @@ class Navegacao_Model_Perfil extends MinC_Db_Model
     {
         return $this->orgao_sigla_autorizada;
     }
+
     public function setOrgaoSiglaAutorizada($orgao_sigla_autorizada)
     {
         $this->orgao_sigla_autorizada = $orgao_sigla_autorizada;
