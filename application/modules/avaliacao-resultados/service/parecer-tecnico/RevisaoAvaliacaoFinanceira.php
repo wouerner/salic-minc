@@ -6,11 +6,11 @@ namespace Application\Modules\AvaliacaoResultados\Service\ParecerTecnico;
 class RevisaoAvaliacaoFinanceira
 {
 
-    public function buscarRevisoes($data) {
-
+    public function buscarRevisoes($data)
+    {
         $tbAvaliacaoFinanceira = new \AvaliacaoResultados_Model_DbTable_tbAvaliacaoFinanceiraRevisao();
         $where = [
-            'idAvaliacaoFinanceira' => $data["idAvaliacaoFinanceira"]
+            'idAvaliacaoFinanceira' => $data
         ];
         $dadosRevisao = $tbAvaliacaoFinanceira->findByAvaliacaoFinanceira($where)->toArray();
         return $dadosRevisao;
@@ -20,16 +20,19 @@ class RevisaoAvaliacaoFinanceira
     {
         $authInstance = \Zend_Auth::getInstance();
         $arrAuth = array_change_key_case((array)$authInstance->getIdentity());
-        $tbAvaliacaoFinanceiraRevisao = new \AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisao($parametros);
+        $tbAvaliacaoFinanceiraRevisao = new \AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisao($data);
+
         if(!isset($data["idAvaliacaoFinanceiraRevisao"])){
             $tbAvaliacaoFinanceiraRevisao->setDtAtualizacao(date('Y-m-d h:i:s'));
         }else{
             $tbAvaliacaoFinanceiraRevisao->setDtRevisao(date('Y-m-d h:i:s'));
         }
+
         $tbAvaliacaoFinanceiraRevisao->setIdAgente($arrAuth['usu_codigo']);
         $mapper = new \AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisaoMapper();
         $codigo = $mapper->save($tbAvaliacaoFinanceiraRevisao);
-        $this->request->setParam('idAvaliacaoFinanceiraRevisao', $codigo);
+
+        //$this->request->setParam('idAvaliacaoFinanceiraRevisao', $codigo);
         if (!$codigo) {
             return $mapper->getMessages();
         }
@@ -40,7 +43,7 @@ class RevisaoAvaliacaoFinanceira
     {
         $tbAvaliacaoFinanceira = new \AvaliacaoResultados_Model_DbTable_tbAvaliacaoFinanceiraRevisao();
         $where = [
-            'idAvaliacaoFinanceiraRevisao' => $data["idAvaliacaoFinanceiraRevisao"]
+            'idAvaliacaoFinanceiraRevisao' => $data
         ];
         $dadosRevisao = $tbAvaliacaoFinanceira->findOneRevisao($where)->toArray();
 
