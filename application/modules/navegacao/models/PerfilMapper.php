@@ -20,4 +20,12 @@ class Navegacao_Model_PerfilMapper extends MinC_Db_Mapper
 
         return $result;
     }
+
+    public function getIdUsuario($usu_codigo)
+    {
+        $tbPerfil = new \Navegacao_Model_DbTable_TbPerfil();
+        $queryResult = $tbPerfil->getIdUsuario($usu_codigo);
+
+        return $queryResult;
+    }
 }

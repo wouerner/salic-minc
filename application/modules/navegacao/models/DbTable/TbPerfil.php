@@ -47,6 +47,41 @@ class Navegacao_Model_DbTable_TbPerfil extends MinC_Db_Table_Abstract
         $sql->where('gru_codigo <> ?', 129);
         $sql->order('org_siglaautorizado ASC');
         $sql->order('gru_nome ASC');
+
         return $this->fetchAll($sql);
+    }
+
+    public function getIdUsuario($usu_codigo = null, $usu_identificacao = null)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('u' => $this->_name),
+            array(
+                'u.usu_codigo',
+                'u.usu_identificacao'
+            ),
+            $this->_schema
+        );
+
+        $select->joinInner(
+            array('a' => 'agentes'),
+            'u.usu_identificacao = a.cnpjcpf',
+            array('a.idagente'),
+            parent::getSchema('agentes')
+        );
+
+        if (!empty($usu_codigo)) {
+            $select->where("usu_codigo = ? ", $usu_codigo);
+        }
+        if (!empty($usu_identificacao)) {
+            $select->where("usu_identificacao = ? ", $usu_identificacao);
+        }
+        try {
+            $result = $this->fetchRow($select);
+            return ($result) ? $result->toArray() : $result;
+        } catch (Exception_Db $e) {
+            $this->view->message = $e->getMessage();
+        }
     }
 }

@@ -135,7 +135,6 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
      */
     protected function perfil($tipo = 0, $permissoes = null)
     {
-//        xd('aaaaaaaaa', $tipo, $permissoes);
         # Convertendo os objetos da sessao em array, transformando as chaves em minusculas.
         $auth = Zend_Auth::getInstance();
         $objIdentity = $auth->getIdentity();
