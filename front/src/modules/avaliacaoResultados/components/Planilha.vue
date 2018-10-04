@@ -2,17 +2,30 @@
     <v-container fluid v-if="dadosProjeto">
         <v-card>
             <v-card-title primary-title>
-                <h3>{{ dadosProjeto.items.pronac}} &#45; {{ dadosProjeto.items.nomeProjeto }}</h3>
+                <h2>{{ dadosProjeto.items.pronac }} &#45; {{ dadosProjeto.items.nomeProjeto }}</h2>
             </v-card-title>
             <v-card-text>
                 <p v-if="dadosProjeto.items.diligencia">Existe Diligência para esse projeto. Acesse <a :href="'/proposta/diligenciar/listardiligenciaanalista/idPronac/' + idPronac">aqui</a>.</p>
                 <p v-else-if="documento != 0">Existe Documento para assinar nesse projeto.</p>
                 <p v-else-if="estado.estadoId == 5">Projeto em analise.</p>
-
                 <p v-else>Sem Observações.</p>
+                <div class="mt-4 mb-3">
+                    <div class="d-inline-block">
+                        <h4>Valor Aprovado</h4>
+                        {{ moeda(dadosProjeto.items.vlAprovado) }}
+                    </div>
+                    <div class="d-inline-block ml-5">
+                        <h4>Valor Comprovado</h4>
+                        {{ moeda(dadosProjeto.items.vlComprovado) }}
+                    </div>
+                    <div class="d-inline-block ml-5">
+                        <h4>Valor a Comprovar</h4>
+                        {{ moeda(dadosProjeto.items.vlTotalComprovar) }}
+                    </div>
+                </div>
             </v-card-text>
             <v-card-actions>
-                <v-btn color="success" to="#">VER PROJETO</v-btn>
+                <v-btn color="success" :href="'/consultardadosprojeto/index?idPronac=' + idPronac" target="_blank">VER PROJETO</v-btn>
                 <v-btn color="success" to="#">CONSOLIDAÇÃO</v-btn>
             </v-card-actions>
         </v-card>
@@ -114,23 +127,6 @@
                         </v-expansion-panel>
                 </v-expansion-panel-content>
             </v-expansion-panel>
-        </v-card>
-
-        <v-card class="mt-3 pa-3" color="teal">
-            <table class="white--text font-weight-bold" width="100%">
-                <tr>
-                    <td>Valor Aprovado</td>
-                    <td>{{ moeda(dadosProjeto.items.vlAprovado) }}</td>
-                </tr>
-                <tr>
-                    <td>Valor Comprovado</td>
-                    <td>{{ moeda(dadosProjeto.items.vlComprovado) }}</td>
-                </tr>
-                <tr>
-                    <td>Valor a Comprovar</td>
-                    <td>{{ moeda(dadosProjeto.items.vlTotalComprovar) }}</td>
-                </tr>
-            </table>
         </v-card>
 
         <v-speed-dial
