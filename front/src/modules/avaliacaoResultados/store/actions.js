@@ -130,8 +130,7 @@ export const finalizarParecer = (_, params) => {
         });
 };
 
-export const encaminharParaTecnico = ({ commit }, params) => {
-    commit();
+export const encaminharParaTecnico = (_, params) => {
     avaliacaoResultadosHelperAPI.encaminharParaTecnico(params);
 };
 

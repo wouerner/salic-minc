@@ -137,7 +137,7 @@ import { mapActions, mapGetters } from 'vuex';
 import ModalTemplate from '@/components/modal';
 
 export default {
-    name: 'UpdateBar',
+    name: 'EmitirParecer',
     data() {
         return {
             tipo: true,
@@ -176,8 +176,6 @@ export default {
     methods:
     {
         ...mapActions({
-            modalOpen: 'modal/modalOpen',
-            modalClose: 'modal/modalClose',
             requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
             salvar: 'avaliacaoResultados/salvarParecer',
             finalizar: 'avaliacaoResultados/finalizarParecer',
