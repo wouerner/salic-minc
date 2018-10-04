@@ -58,13 +58,15 @@ class HistoricoEncaminhamento
             $produto = html_entity_decode(utf8_encode($item['Produto']));
             $unidade = html_entity_decode(utf8_encode($item['Unidade']));
             $observacao = html_entity_decode(utf8_encode($item['Observacao']));
+            $objDateTimeDtEnvio = new \DateTime($item['DtEnvio']);
+            $objDateTimeDtRetorno = new \DateTime($item['DtRetorno']);
 
             $result[] = [
                 'Produto' => $produto,
                 'Unidade' => $unidade,
                 'Observacao' => $observacao,
-                'DtEnvio' => $item['DtEnvio'],
-                'DtRetorno' => $item['DtRetorno'],
+                'DtEnvio' => $objDateTimeDtEnvio->format('d/m/Y H:i:s'),
+                'DtRetorno' => $objDateTimeDtRetorno->format('d/m/Y H:i:s'),
                 'qtDias' => $item['qtDias']
             ];
 
