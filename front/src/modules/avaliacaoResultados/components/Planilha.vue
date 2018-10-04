@@ -194,7 +194,7 @@
 
 <script>
     import { mapActions, mapGetters } from 'vuex';
-    import ModalTemplate from '@/components/modal';
+    import AnalisarItem from './AnalisarItem';
 
     export default {
         name: 'Painel',
@@ -241,7 +241,7 @@
             this.setProjetoAnalise(this.idPronac);
         },
         components: {
-            ModalTemplate,
+            AnalisarItem,
         },
         methods: {
             ...mapActions({

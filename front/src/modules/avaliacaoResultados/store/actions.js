@@ -139,6 +139,13 @@ export const alterarParecer = ({ commit }, param) => {
     commit(types.SET_PARECER, param);
 };
 
+export const obterDadosItemComprovacao = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.obterDadosItemComprovacao(params)
+        .then((response) => {
+            const itemComprovacao = response.data.data;
+            commit(types.GET_DADOS_ITEM_COMPROVACAO, itemComprovacao.items);
+        });
+};
 
 export const getLaudoFinal = ({ commit }) => {
     const data = { manifestacao: 'A', laudoTecnico: 'Tem mais de 10 caracteres!! 39 no total' };
