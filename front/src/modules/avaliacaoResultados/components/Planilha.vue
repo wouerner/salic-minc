@@ -206,6 +206,7 @@
     import { mapActions, mapGetters } from 'vuex';
     import ModalTemplate from '@/components/modal';
     import ConsolidacaoAnalise from './ConsolidacaoAnalise';
+    import AnalisarItem from './AnalisarItem';
 
     export default {
         name: 'Painel',
@@ -254,6 +255,7 @@
         components: {
             ModalTemplate,
             ConsolidacaoAnalise,
+            AnalisarItem,
         },
         methods: {
             ...mapActions({
