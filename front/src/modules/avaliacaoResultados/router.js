@@ -10,7 +10,7 @@ import Diligenciar from './components/Diligenciar';
 import Historico from './components/Historico';
 import ConsolidacaoAnalise from './components/ConsolidacaoAnalise';
 import Laudo from './components/Laudo';
-import AnalisarAvaliacao from './components/AnalisarAvaliacao';
+import AnalisarItem from './components/AnalisarItem';
 
 Vue.use(Router);
 
@@ -104,11 +104,11 @@ const routes = [
         },
     },
     {
-        path: '/analisar-avaliacao',
-        name: 'AnalisarAvaliacao',
-        component: AnalisarAvaliacao,
+        path: '/analisar-item/*',
+        name: 'AnalisarItem',
+        component: AnalisarItem,
         meta: {
-            title: 'Análise da avaliação de resultados',
+            title: 'Análise de itens',
         },
     },
 ];

@@ -51,3 +51,5 @@ export const finalizarParecer = (params) => {
 export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/tecnicos-encaminhamento');
 
 export const encaminharParaTecnico = params => api.postRequest('/avaliacao-resultados/estado/', buildData(params));
+
+export const obterDadosItemComprovacao = params => api.getRequest(`/avaliacao-resultados/avaliacao-comprovante/${params}`);

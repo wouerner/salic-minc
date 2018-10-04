@@ -83,16 +83,6 @@
                                                                     <td>{{ moeda(props.item.varlorComprovado) }}</td>
                                                                     <td>{{ moeda(props.item.varlorAprovado - props.item.varlorComprovado) }}</td>
                                                                     <td v-if="props.item.varlorComprovado !== 0">
-                                                                        <v-btn
-                                                                            :href="'/prestacao-contas/analisar/comprovante/idPronac/' + idPronac + '/uf/' + uf.Uf + '/produto/' + produto.cdProduto + '/idmunicipio/' + cidade.cdCidade + '/idPlanilhaItem/' + props.item.idPlanilhaItens + '/etapa/' + etapa.cdEtapa"
-                                                                            replace
-                                                                            color="red"
-                                                                            small
-                                                                            dark
-                                                                            title="Comprovar Item"
-                                                                        >
-                                                                                <v-icon>gavel</v-icon>
-                                                                        </v-btn>
                                                                     </td>
                                                                     <td v-else>Sem comprovantes</td>
                                                                 </template>
@@ -200,7 +190,7 @@
 
 <script>
     import { mapActions, mapGetters } from 'vuex';
-    import ModalTemplate from '@/components/modal';
+    import AnalisarItem from './AnalisarItem';
 
     export default {
         name: 'Painel',
@@ -234,7 +224,7 @@
             this.setPlanilha(this.idPronac);
         },
         components: {
-            ModalTemplate,
+            AnalisarItem,
         },
         methods: {
             ...mapActions({

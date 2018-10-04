@@ -21,6 +21,7 @@ export const state = {
     redirectLink: {},
     planilha: {},
     projetosFinalizados: {},
+    dadosItemComprovacao: {},
 };
 
 export const mutations = {
@@ -91,5 +92,8 @@ export const mutations = {
     },
     [types.SET_DADOS_PROJETOS_FINALIZADOS](state, dados) {
         state.projetosFinalizados = dados;
+    },
+    [types.GET_DADOS_ITEM_COMPROVACAO](state, dados) {
+        state.dadosItemComprovacao = dados;
     },
 };
