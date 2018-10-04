@@ -72,7 +72,6 @@ class AvaliacaoResultados_RevisaoController extends MinC_Controller_Rest_Abstrac
     {
         $revisaoService = new RevisaoService();
         $response = $revisaoService->salvar($this->request->getParams());
-
         $this->renderJsonResponse($response['dados'], $response['code']);
     }
 

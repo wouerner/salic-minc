@@ -32,14 +32,16 @@ class RevisaoAvaliacaoFinanceira
             $tbAvaliacaoFinanceiraRevisao->setDtRevisao(date('Y-m-d h:i:s'));
         }
         $tbAvaliacaoFinanceiraRevisao->setIdAgente($arrAuth['usu_codigo']);
+
         $mapper = new \AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisaoMapper();
         $codigo = $mapper->save($tbAvaliacaoFinanceiraRevisao);
 
         if (!$codigo) {
-            $error = [$mapper->getMessages(), 400];
+            $error = ['dados'=>$mapper->getMessages(),'code'=> 400];
             return $error;
         }
-        $retorno = [$this->buscarRevisao($codigo),200];
+        $retorno = ['dados'=>$this->buscarRevisao($codigo), 'code'=>200];
+
         return $retorno;
     }
 
