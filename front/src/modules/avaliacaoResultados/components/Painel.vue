@@ -9,7 +9,7 @@
                     icons-and-text
             >
                 <v-tabs-slider color="deep-orange accent-3"></v-tabs-slider>
-                <v-tab href="#tab-0">
+                <v-tab href="#tab-0" v-if="getUsuario.grupo_ativo == 125">
                     Encaminhar 
                     <v-icon>assignment_ind</v-icon>
                 </v-tab>
@@ -95,6 +95,7 @@ export default {
         this.projetosFinalizados({ estadoid: 6 });
         this.obterDadosTabelaTecnico({ estadoid: 5 });
         this.distribuir({ estadoid: 6 });
+        this.usuarioLogado();
     },
     data() {
         return {
@@ -110,6 +111,7 @@ export default {
             obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
             projetosFinalizados: 'avaliacaoResultados/projetosFinalizados',
             distribuir: 'avaliacaoResultados/projetosParaDistribuir',
+            usuarioLogado: 'autenticacao/usuarioLogado',
         }),
     },
     computed: {
@@ -117,6 +119,7 @@ export default {
             dadosTabelaTecnico: 'avaliacaoResultados/dadosTabelaTecnico',
             getProjetosFinalizados: 'avaliacaoResultados/getProjetosFinalizados',
             getProjetosParaDistribuir: 'avaliacaoResultados/getProjetosParaDistribuir',
+            getUsuario: 'autenticacao/getUsuario',
         }),
     },
 };
