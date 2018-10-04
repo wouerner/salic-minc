@@ -50,11 +50,12 @@ export const finalizarParecer = (params) => {
     return api.postRequest('/avaliacao-resultados/estado', buildData(data));
 };
 
-export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/tecnicos-encaminhamento');
+export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/tecnicos');
 
 export const encaminharParaTecnico = params => api.postRequest('/avaliacao-resultados/estado/', buildData(params));
 
 export const obterDadosItemComprovacao = params => api.getRequest(`/avaliacao-resultados/avaliacao-comprovante/${params}`);
+
 export const criarParecerLaudoFinal = (params) => {
     console.log(params);
     // const parametro = params.idPronac;

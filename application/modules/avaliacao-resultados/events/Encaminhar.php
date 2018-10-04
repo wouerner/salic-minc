@@ -24,14 +24,12 @@ class AvaliacaoResultados_Events_Encaminhar
     }
 
     public function run($params) {
-        echo "Run || ";
         $this->events->trigger(__FUNCTION__, $this, $params);
     }
 
     public function salvarEncaminhamento() {
         return function($t) {
             $params = $t->getParams();
-            echo ' 1. salvarEncaminhamento || ';
             $EncaminharAvaliacaoService = new EncaminharAvaliacaoService();
             $EncaminharAvaliacaoService->salvar($params);
         };
@@ -42,7 +40,6 @@ class AvaliacaoResultados_Events_Encaminhar
             $params = $t->getParams();
             $projeto = new Projetos();
             $projeto->alterarSituacao($params['idPronac'], '', 'E27', 'Comprova&ccedil;&atilde;o Financeira do Projeto em Análise');
-            echo ' alterarSituacaoProjeto || ';
         };
     }
 
@@ -63,8 +60,6 @@ class AvaliacaoResultados_Events_Encaminhar
             $model->setEstadoId($params['proximo']);
 
             $mapper->save($model);
-
-            echo ' alterarEstado || ';
         };
     }
 }

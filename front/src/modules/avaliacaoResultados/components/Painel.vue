@@ -3,10 +3,10 @@
         <h1 class="display-2 font-weight-thin">Análise Técnica</h1>
         <v-card>
             <v-tabs
-                    centered
-                    color="green"
-                    dark
-                    icons-and-text
+                centered
+                color="green"
+                dark
+                icons-and-text
             >
                 <v-tabs-slider color="deep-orange accent-3"></v-tabs-slider>
                 <v-tab href="#tab-0" v-if="getUsuario.grupo_ativo == 125">
