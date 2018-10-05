@@ -15,30 +15,29 @@
                         </div>
                     </v-flex>
                 </td>
-                <td class="text-xs-right">{{ props.item.NomeProjeto }}</td>
-                <td class="text-xs-right">{{ props.item.Situacao }}</td>
-                <td class="text-xs-right">{{ props.item.Area }}/{{ props.item.Segmento }}</td>
-                <td class="text-xs-right">{{ props.item.UfProjeto }}</td>
-                <td class="text-xs-right">{{ props.item.DtSituacao }}</td>
-                <td class="text-xs-right">
+                <td class="text-xs-left">{{ props.item.NomeProjeto }}</td>
+                <td class="text-xs-center">{{ props.item.Situacao }}</td>
+                <td class="text-xs-center">{{ props.item.UfProjeto }}</td>
+                <!-- <td class="text-xs-right">
                     <v-btn flat icon color="green" :to="{ name: 'AnalisePlanilha', params:{ id:props.item.idPronac }}">
-                        <v-icon class="material-icons">compare_arrows</v-icon>
+                        <v-icon class="material-icons">assignment_indcompare_arrows</v-icon>
                     </v-btn>
                 </td>
                 <td class="text-xs-right">
                     <v-btn flat icon color="indigo" :href="'/proposta/diligenciar/listardiligenciaanalista?idPronac='+ props.item.idPronac +'&situacao=E17&tpDiligencia=174'">
                         <v-icon>warning</v-icon>
                     </v-btn>
-                </td>
-                <td class="text-xs-right">
-                    <Historico
-                            :id-pronac="props.item.idPronac"
+                </td> -->
+                <td class="text-xs-center">
+                    <template v-for="c in componentes">
+                        <component 
+                            :is="c" 
+                            :id-pronac="props.item.IdPRONAC"
                             :pronac="props.item.Pronac"
                             :nome-projeto="props.item.NomeProjeto"
-                    ></Historico>
-
+                        ></component>
+                    </template>
                 </td>
-                <component :is="comp"></component>
             </template>
             <template slot="no-data">
                 <v-alert :value="true" color="error" icon="warning">
@@ -64,11 +63,10 @@
 import { mapActions, mapGetters } from 'vuex';
 import ModalTemplate from '@/components/modal';
 import Historico from './Historico';
-import TipoAvaliacao from './TipoAvaliacao';
 
 export default {
     name: 'TabelaProjetos',
-    props: ['dados', 'comp'],
+    props: ['dados', 'componentes'],
     data() {
         return {
             pagination: {
@@ -83,25 +81,21 @@ export default {
                     value: 'numero',
                 },
                 { text: 'PRONAC', value: 'Pronac' },
-                { text: 'Nome Do Projeto', value: 'NomeProjeto' },
-                { text: 'Situacao', value: 'Situacao' },
-                { text: 'Area/Segmento', value: 'Area' },
-                { text: 'Estado', value: 'UfProjeto' },
-                { text: 'Dt.recebimento', value: 'DtSituacao' },
+                { text: 'Nome Do Projeto', 
+                    align: 'center',
+                    value: 'NomeProjeto' },
+                { 
+                    text: 'Situacao', 
+                    align: 'center',
+                    value: 'Situacao' },
+                { 
+                    text: 'Estado', 
+                    align: 'center',
+                    value: 'UfProjeto' },
                 {
-                    text: 'Analisar',
-                    value: 'analisar',
+                    text: 'Ações',
                     sortable: false,
-                },
-                {
-                    text: 'Diligencia',
-                    value: 'diligencia',
-                    sortable: false,
-                },
-                {
-                    text: 'Historico',
-                    value: 'historico',
-                    sortable: false,
+                    align: 'center',
                 },
             ],
         };
@@ -109,7 +103,6 @@ export default {
     components: {
         ModalTemplate,
         Historico,
-        TipoAvaliacao,
     },
     methods: {
         ...mapActions({
@@ -118,7 +111,7 @@ export default {
     },
     watch: {
         dadosTabelaTecnico() {
-            this.pagination.totalItems = this.dadosTabelaTecnico.items.length;
+            this.pagination.totalItems = this.dados.items.length;
         },
     },
     computed: {

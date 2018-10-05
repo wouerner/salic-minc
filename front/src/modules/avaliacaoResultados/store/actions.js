@@ -124,14 +124,21 @@ export const projetoAnalise = ({ commit }, params) => {
         });
 };
 
+export const consolidacaoAnalise = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.consolidacaoAnalise(params)
+        .then((response) => {
+            const consolidacaoAnalise = response.data;
+            commit(types.GET_CONSOLIDACAO_ANALISE, consolidacaoAnalise);
+        });
+};
+
 export const finalizarParecer = (_, params) => {
     avaliacaoResultadosHelperAPI.finalizarParecer(params)
         .then(() => {
         });
 };
 
-export const encaminharParaTecnico = ({ commit }, params) => {
-    commit();
+export const encaminharParaTecnico = (_, params) => {
     avaliacaoResultadosHelperAPI.encaminharParaTecnico(params);
 };
 
@@ -139,6 +146,13 @@ export const alterarParecer = ({ commit }, param) => {
     commit(types.SET_PARECER, param);
 };
 
+export const obterDadosItemComprovacao = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.obterDadosItemComprovacao(params)
+        .then((response) => {
+            const itemComprovacao = response.data.data;
+            commit(types.GET_DADOS_ITEM_COMPROVACAO, itemComprovacao.items);
+        });
+};
 
 export const getLaudoFinal = ({ commit }) => {
     const data = { manifestacao: 'A', laudoTecnico: 'Tem mais de 10 caracteres!! 39 no total' };

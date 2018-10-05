@@ -21,11 +21,12 @@ export const state = {
     redirectLink: {},
     planilha: {},
     projetoAnalise: {},
+    consolidacaoAnalise: {},
     parecerLaudoFinal: {},
     characterManifestacao: '',
     characterParecer: '',
-    projetoAnalise: {},
     projetosFinalizados: {},
+    dadosItemComprovacao: {},
     projetosParaDistribuir: {},
 };
 
@@ -95,6 +96,9 @@ export const mutations = {
     [types.GET_PROJETO_ANALISE](state, projetoAnalise) {
         state.projetoAnalise = projetoAnalise;
     },
+    [types.GET_CONSOLIDACAO_ANALISE](state, consolidacaoAnalise) {
+        state.consolidacaoAnalise = consolidacaoAnalise;
+    },
     [types.GET_LAUDO_FINAL](state, data) {
         state.parecerLaudoFinal = data;
     },
@@ -113,7 +117,10 @@ export const mutations = {
     [types.SET_DADOS_PROJETOS_FINALIZADOS](state, dados) {
         state.projetosFinalizados = dados;
     },
-    [types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR](state, dados) {
+    [types.GET_DADOS_ITEM_COMPROVACAO](state, dados) {
+        state.dadosItemComprovacao = dados;
+    },
+    [types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR](state, dados){
         state.projetosParaDistribuir = dados;
     },
 };

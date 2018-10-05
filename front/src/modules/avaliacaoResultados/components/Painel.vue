@@ -3,15 +3,15 @@
         <h1 class="display-2 font-weight-thin">Análise Técnica</h1>
         <v-card>
             <v-tabs
-                    centered
-                    color="green"
-                    dark
-                    icons-and-text
+                centered
+                color="green"
+                dark
+                icons-and-text
             >
                 <v-tabs-slider color="deep-orange accent-3"></v-tabs-slider>
-
-                <v-tab href="#tab-0">
+                <v-tab href="#tab-0" v-if="getUsuario.grupo_ativo == 125">
                     Encaminhar 
+                    <v-icon>assignment_ind</v-icon>
                 </v-tab>
                 <v-tab href="#tab-1">
                     Em Analise
@@ -25,7 +25,6 @@
                      Em assinatura
                     <v-icon>edit</v-icon>
                 </v-tab>
-
                 <v-tab-item
                         :id="'tab-0'"
                         :key="0"
@@ -34,7 +33,7 @@
                         <v-card-text>
                             <TabelaProjetos
                                 :dados="getProjetosParaDistribuir"
-                                :comp="action"
+                                :componentes="distribuirAcoes"
                             ></TabelaProjetos>
                         </v-card-text>
                     </v-card>
@@ -48,6 +47,7 @@
                             <TabelaProjetos
                                 :analisar="true"
                                 :dados="dadosTabelaTecnico"
+                                :componentes="listaAcoes"
                             ></TabelaProjetos>
                         </v-card-text>
                     </v-card>
@@ -60,6 +60,7 @@
                         <v-card-text>
                             <TabelaProjetos
                                 :dados="getProjetosFinalizados"
+                                :componentes="listaAcoes"
                             ></TabelaProjetos>
                         </v-card-text>
                     </v-card>
@@ -72,6 +73,7 @@
                         <v-card-text>
                             <TabelaProjetos
                                 :dados="getProjetosFinalizados"
+                                :componentes="listaAcoes"
                             ></TabelaProjetos>
                         </v-card-text>
                     </v-card>
@@ -84,7 +86,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import TabelaProjetos from './TabelaProjetos';
-import BtnEncaminhar from './BtnEncaminhar';
+import Historico from './Historico';
+import Encaminhar from './ComponenteEncaminhar';
 
 export default {
     name: 'Painel',
@@ -92,21 +95,23 @@ export default {
         this.projetosFinalizados({ estadoid: 6 });
         this.obterDadosTabelaTecnico({ estadoid: 5 });
         this.distribuir({ estadoid: 6 });
+        this.usuarioLogado();
     },
     data() {
         return {
-            action: BtnEncaminhar,
+            listaAcoes: [Historico],
+            distribuirAcoes: [Encaminhar],
         };
     },
     components: {
         TabelaProjetos,
-        BtnEncaminhar,
     },
     methods: {
         ...mapActions({
             obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
             projetosFinalizados: 'avaliacaoResultados/projetosFinalizados',
             distribuir: 'avaliacaoResultados/projetosParaDistribuir',
+            usuarioLogado: 'autenticacao/usuarioLogado',
         }),
     },
     computed: {
@@ -114,6 +119,7 @@ export default {
             dadosTabelaTecnico: 'avaliacaoResultados/dadosTabelaTecnico',
             getProjetosFinalizados: 'avaliacaoResultados/getProjetosFinalizados',
             getProjetosParaDistribuir: 'avaliacaoResultados/getProjetosParaDistribuir',
+            getUsuario: 'autenticacao/getUsuario',
         }),
     },
 };

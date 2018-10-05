@@ -42,6 +42,8 @@ export const planilha = params => api.getRequest(`/prestacao-contas/realizar-pre
 
 export const projetoAnalise = params => api.getRequest(`/avaliacao-resultados/projeto/idPronac/${params}`);
 
+export const consolidacaoAnalise = params => api.getRequest(`/prestacao-contas/visualizar-projeto/dados-projeto?idPronac=${params}`);
+
 export const finalizarParecer = (params) => {
     // const parametro = params.idPronac;
     // delete params.idPronac;
@@ -50,9 +52,11 @@ export const finalizarParecer = (params) => {
     return api.postRequest('/avaliacao-resultados/estado', buildData(data));
 };
 
-export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/tecnicos-encaminhamento');
+export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/tecnicos');
 
 export const encaminharParaTecnico = params => api.postRequest('/avaliacao-resultados/estado/', buildData(params));
+
+export const obterDadosItemComprovacao = params => api.getRequest(`/avaliacao-resultados/avaliacao-comprovante/${params}`);
 
 export const criarParecerLaudoFinal = (params) => {
     console.log(params);
@@ -72,15 +76,7 @@ export const finalizarParecerLaudoFinal = (params) => {
     // return api.postRequest('/avaliacao-resultados/estado', buildData(data));
 };
 
-export const criarDiligencia = (params) => {
-    alert('Enviar Solicitação');
-    // const parametro = params.idPronac;
-    // delete params.idPronac;
-    // const data = params;
-    
-    // return api.postRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${parametro}`, buildData(data));
-};
-
 export const obterProjetosParaDistribuir = () => api.getRequest('/prestacao-contas/prestacao-contas/obter-analise-financeira-virtual');
 
 export const criarDiligencia = params => api.postRequest('/diligencia/diligencia', buildData(params));
+
