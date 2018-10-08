@@ -56,7 +56,6 @@
             </div>
         </div>
     </div>
-
 </template>
 
 <script>
@@ -107,11 +106,6 @@ export default {
             obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
         }),
     },
-    watch: {
-        dadosTabelaTecnico() {
-            this.pagination.totalItems = this.dados.items.length;
-        },
-    },
     computed: {
         ...mapGetters({
             dadosTabelaTecnico: 'avaliacaoResultados/dadosTabelaTecnico',
@@ -121,6 +115,13 @@ export default {
                 this.pagination.totalItems == null
             ) return 0;
             return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
+        },
+    },
+    watch: {
+        dadosTabelaTecnico() {
+            if (this.dados.items !== undefined) {
+                this.pagination.totalItems = this.dados.items.length;
+            }
         },
     },
 };
