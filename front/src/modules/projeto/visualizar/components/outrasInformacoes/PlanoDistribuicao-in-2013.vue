@@ -1,8 +1,8 @@
 <template>
     <div id="conteudo">
         <IdentificacaoProjeto
-            :pronac="informacoes.Pronac"
-            :nomeProjeto="informacoes.NomeProjeto">
+            :pronac="dadosProjeto.Pronac"
+            :nomeProjeto="dadosProjeto.NomeProjeto">
         </IdentificacaoProjeto>
 
         <table class="">
@@ -67,16 +67,17 @@
                                                     <tbody>
                                                     <tr>
                                                         <td>
-                                                            <b>Patrocinador</b>
+                                                            <b>Patrocinador</b><br>
+                                                            {{ dado.QtdePatrocinador }}
                                                             <br>
                                                         </td>
                                                         <td>
                                                             <b>Divulgação</b><br>
-                                                            0 Variavel
+                                                            {{ dado.QtdeProponente }}
                                                         </td>
                                                         <td>
                                                             <b>População de Baixa Renda</b><br>
-                                                            1.000Variavel
+                                                            {{ dado.QtdeOutros }}
                                                         </td>
                                                     </tr>
                                                     </tbody>
@@ -88,11 +89,11 @@
                                                     <tr>
                                                         <td>
                                                             <b>Normal</b><br>
-                                                            0 Variavel
+                                                            {{ dado.QtdeVendaNormal }}
                                                         </td>
                                                         <td>
                                                             <b>Promocional</b><br>
-                                                            0 Variavel
+                                                            {{ dado.QtdeVendaPromocional }}
                                                         </td>
                                                     </tr>
                                                     </tbody>
@@ -104,7 +105,7 @@
                                                     <tr>
                                                         <td>
                                                             <b>Nº Exemplares / Ingressos</b><br>
-                                                            1.000 Variavel
+                                                            {{ dado.QtdeProduzida }}
                                                         </td>
                                                     </tr>
                                                     </tbody>
@@ -129,11 +130,11 @@
                                                     <tr>
                                                         <td>
                                                             <b>Normal</b><br>
-                                                            0,00Variavel
+                                                            {{ dado.PrecoUnitarioNormal }}
                                                         </td>
                                                         <td>
                                                             <b>Promocional</b><br>
-                                                            0,00 Variavel
+                                                            {{ dado.PrecoUnitarioPromocional }}
                                                         </td>
                                                     </tr>
                                                     </tbody>
@@ -145,11 +146,11 @@
                                                     <tr>
                                                         <td>
                                                             <b>Normal</b><br>
-                                                            0,00 Variavel
+                                                            {{ dado.ReceitaNormal }}
                                                         </td>
                                                         <td>
                                                             <b>Promocional</b><br>
-                                                            0,00 Variavel
+                                                            {{ dado.ReceitaPro }}
                                                         </td>
                                                     </tr>
                                                     </tbody>
@@ -161,7 +162,7 @@
                                                     <tr>
                                                         <td>
                                                             <b>Total Receita Prevista (R$)</b><br>
-                                                            0,00 Variavel
+                                                            {{ dado.ReceitaPrevista }}
                                                         </td>
                                                     </tr>
                                                     </tbody>
@@ -181,9 +182,11 @@
     </div>
 </template>
 <script>
+    import { mapGetters } from 'vuex';
     import IdentificacaoProjeto from './IdentificacaoProjeto';
+
     export default {
-        name: 'PlanoDistribuicao',
+        name: 'PlanoDistribuicao-in-2013',
         props: ['idPronac'],
         components: {
             IdentificacaoProjeto,
@@ -210,6 +213,11 @@
             dados(value) {
                 this.informacoes = value.informacoes;
             },
+        },
+        computed: {
+            ...mapGetters({
+                dadosProjeto: 'projeto/projeto',
+            }),
         },
         methods: {
             buscar_dados() {

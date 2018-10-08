@@ -18,7 +18,7 @@ import LocalRealizacaoDeslocamento from './visualizar/components/outrasInformaco
 import DocumentosAssinados from './visualizar/components/outrasInformacoes/DocumentosAssinados';
 import DadosComplementares from './visualizar/components/outrasInformacoes/DadosComplementares';
 import DocumentosAnexados from './visualizar/components/outrasInformacoes/DocumentosAnexados';
-import PlanoDistribuicao from './visualizar/components/outrasInformacoes/PlanoDistribuicao';
+import PlanoDistribuicao from './visualizar/components/outrasInformacoes/PlanoDistribuicao-in-2013';
 import HistoricoEncaminhamento from './visualizar/components/outrasInformacoes/HistoricoEncaminhamento';
 
 Vue.use(Router);
@@ -176,7 +176,7 @@ const routes = [
                 },
             },
             {
-                path: 'plano-distribuicao',
+                path: 'plano-distribuicao-in-2013',
                 name: 'PlanoDistribuicao',
                 component: PlanoDistribuicao,
                 meta: {
