@@ -59,7 +59,6 @@ export default {
     created() {
         this.projetosFinalizados({ estadoid: 6 });
         this.obterDadosTabelaTecnico({ estadoid: 5 });
-        this.perfisDisponiveis();
     },
     data() {
         return {
@@ -72,7 +71,6 @@ export default {
         ...mapActions({
             obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
             projetosFinalizados: 'avaliacaoResultados/projetosFinalizados',
-            perfisDisponiveis: 'avaliacaoResultados/perfisDisponiveis',
         }),
     },
     computed: {

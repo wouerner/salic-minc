@@ -144,13 +144,13 @@ export default {
             perfisDisponiveis: 'avaliacaoResultados/perfisDisponiveis',
         }),
     },
-    mounted() {
-        // this.dadosMenuAjax();
+    created() {
+        this.buscarPerfisDisponiveis();
     },
     methods: {
         ...mapActions({
             dadosMenuAjax: 'avaliacaoResultados/dadosMenu',
-            perfisDisponiveis: 'avaliacaoResultados/perfisDisponiveis',
+            buscarPerfisDisponiveis: 'avaliacaoResultados/buscarPerfisDisponiveis',
         }),
     },
 };

@@ -135,8 +135,8 @@ export const alterarParecer = ({ commit }, param) => {
 };
 
 
-export const perfisDisponiveis = ({ commit }, params) => {
-    avaliacaoResultadosHelperAPI.perfisDisponiveis(params)
+export const buscarPerfisDisponiveis = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.buscarPerfisDisponiveis(params)
         .then((response) => {
             const items = desencapsularResponse.default(response);
             commit('SET_PERFIS_DISPONIVEIS', items);
