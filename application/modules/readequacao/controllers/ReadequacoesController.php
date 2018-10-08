@@ -1244,13 +1244,13 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
         if ($filtro == 'analisados') {
             unset($where['idOrgaoOrigem = ?']);
-            $where['CASE 
-	                    WHEN projetos.Orgao in (160,179,682)
-		            THEN 166
-                        WHEN projetos.Orgao in (251,341)
-                    THEN 272
+            $where["CASE 
+	      WHEN projetos.Orgao in (" . Orgaos::ORGAO_SUPERIOR_SAV . "," . Orgaos::ORGAO_SAV_SAL . "," . Orgaos::SAV_DPAV . ")
+		   THEN " . Orgaos::ORGAO_SAV_CAP . "
+	     WHEN projetos.Orgao in (" . Orgaos::ORGAO_SUPERIOR_SEFIC . "," . Orgaos::SEFIC_DEIPC .")
+		   THEN " . Orgaos::ORGAO_GEAR_SACAV . "
                     ELSE projetos.Orgao
-                    END = ?'] = $this->idOrgao;
+                    END = ?"] = $this->idOrgao;
 
             if ($this->_request->getParam('pronac')) {
                 unset($where['a.PRONAC = ?']);

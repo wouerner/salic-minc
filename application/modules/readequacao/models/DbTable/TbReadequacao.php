@@ -185,15 +185,18 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
 		   THEN '<b><font color=red>Devolvida pelo Diretor</font></b>'
 	     WHEN tbReadequacao.siEncaminhamento = 23
 		   THEN '<b><font color=red>Devolvida pelo Secretário</font></b>'
-		   ELSE usuarios.usu_nome 
+         WHEN tbReadequacao.siEncaminhamento = 26
+		   THEN '<b><font color=red>Solicitação devolvida ao Coordenador após completar o ciclo de assinaturas</font></b>'
+		   ELSE usuarios.usu_nome
+
 	   END"),
              'idOrgao' => 'tbDistribuirReadequacao.idUnidade',
              'idOrgaoOrigem' => new Zend_Db_Expr("
        CASE 
-	     WHEN projetos.Orgao in (160,179,682)
-		   THEN 166
-	     WHEN projetos.Orgao in (251,341)
-		   THEN 272
+	     WHEN projetos.Orgao in (" . Orgaos::ORGAO_SUPERIOR_SAV . "," . Orgaos::ORGAO_SAV_SAL . "," . Orgaos::SAV_DPAV . ")
+		   THEN " . Orgaos::ORGAO_SAV_CAP . "
+	     WHEN projetos.Orgao in (" . Orgaos::ORGAO_SUPERIOR_SEFIC . "," . Orgaos::SEFIC_DEIPC .")
+		   THEN " . Orgaos::ORGAO_GEAR_SACAV . "
 		   ELSE projetos.Orgao
 	   END"),            
              'siEncaminhamento' => 'tbReadequacao.siEncaminhamento'
@@ -241,13 +244,17 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
             [],
             $this->_schema
         );
+
+        $servicoReadequacaoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\ReadequacaoAssinatura(
+            $this->grupoAtivo,
+            $this->auth
+        );
         
         $select->joinLeft(
             ['tbDocumentoAssinatura' => 'tbDocumentoAssinatura'],
             'tbReadequacaoXParecer.idParecer = tbDocumentoAssinatura.idAtoDeGestao AND
              tbDocumentoAssinatura.idTipoDoAtoAdministrativo IN ('.
-            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS . ',' .
-            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC . ') AND
+            implode(',', $servicoReadequacaoAssinatura->obterAtosAdministativos()) .') AND
             tbDocumentoAssinatura.cdSituacao =' . Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA . ' AND
             tbDocumentoAssinatura.stEstado = ' . Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO,
             [
