@@ -1,8 +1,8 @@
 <?php
 
-use Application\Modules\Projeto\Service\PlanoDistribuicao\PlanoDistribuicao as PlanoDistribuicaoService;
+use Application\Modules\Projeto\Service\PlanoDistribuicaoIn2013\PlanoDistribuicaoIn2013 as PlanoDistribuicaoIn2013Service;
 
-class Projeto_PlanoDistribuicaoRestController extends MinC_Controller_Rest_Abstract
+class Projeto_PlanoDistribuicaoIn2013RestController extends MinC_Controller_Rest_Abstract
 {
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
@@ -15,8 +15,8 @@ class Projeto_PlanoDistribuicaoRestController extends MinC_Controller_Rest_Abstr
     public function indexAction()
     {
         try {
-            $HistoricoEnquadramentoService = new PlanoDistribuicaoService($this->getRequest(), $this->getResponse());
-            $resposta = $HistoricoEnquadramentoService->buscaPlanoDistribuicao();
+            $HistoricoEnquadramentoService = new PlanoDistribuicaoIn2013Service($this->getRequest(), $this->getResponse());
+            $resposta = $HistoricoEnquadramentoService->buscaPlanoDistribuicaoIn2013();
 
             $this->customRenderJsonResponse(['data' => $resposta], 200);
 

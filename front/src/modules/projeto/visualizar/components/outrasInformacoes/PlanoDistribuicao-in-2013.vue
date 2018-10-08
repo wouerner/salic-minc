@@ -225,7 +225,7 @@
                 const idPronac = self.$route.params.idPronac;
                 /* eslint-disable */
                 $3.ajax({
-                    url: '/projeto/plano-distribuicao-rest/index/idPronac/' + idPronac,
+                    url: '/projeto/plano-distribuicao-in2013-rest/index/idPronac/' + idPronac,
                 }).done(function (response) {
                     self.dados = response.data;
                 });

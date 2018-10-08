@@ -1,10 +1,10 @@
 <?php
 
-namespace Application\Modules\Projeto\Service\PlanoDistribuicao;
+namespace Application\Modules\Projeto\Service\PlanoDistribuicaoIn2013;
 
 use Seguranca;
-//vai ser usado para ins2018
-class PlanoDistribuicao
+
+class PlanoDistribuicaoIn2013
 {
     /**
      * @var \Zend_Controller_Request_Abstract $request
@@ -22,7 +22,7 @@ class PlanoDistribuicao
         $this->response = $response;
     }
 
-    public function buscaPlanoDistribuicao()
+    public function buscaPlanoDistribuicaoIn2013()
     {
         $idPronac = $this->request->idPronac;
 
