@@ -31,7 +31,12 @@
                         <v-card-text>
                             <v-list three-line subheader>
                                 <v-subheader>
-                                    Área de Encaminhamento
+                                    {{pronac}} - {{nomeProjeto}}
+                                </v-subheader>
+                                <v-divider></v-divider>
+
+                                <v-subheader>
+                                    Informações do encaminhamento
                                 </v-subheader>
                                 <v-list-tile>
                                     <v-list-tile-action>
@@ -39,10 +44,6 @@
                                     </v-list-tile-action>
                                     SEFIC/DEIPC/CGARE
                                 </v-list-tile>
-                                <v-divider></v-divider>
-                                <v-subheader>
-                                    Informações do encaminhamento
-                                </v-subheader>
                                 <v-list-tile>
                                     <v-list-tile-action>
                                         <v-icon color="green">perm_identity</v-icon>
@@ -76,19 +77,19 @@
                         <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn
+                                    color="red"
+                                    flat
+                                    @click="dialog = false, $refs.form.reset()"
+                            >
+                                Fechar
+                            </v-btn>
+                            <v-btn
                                     color="primary"
                                     flat
                                     @click="enviarEncaminhamento"
                                     :disabled="!form"
                             >
                                 Encaminhar
-                            </v-btn>
-                            <v-btn
-                                    color="red"
-                                    flat
-                                    @click="dialog = false, $refs.form.reset()"
-                            >
-                                Fechar
                             </v-btn>
                         </v-card-actions>
                     </v-form>
@@ -104,10 +105,11 @@
 
     export default {
         name: 'ComponenteEncaminhar',
-        created() {
-            this.obterDestinatarios();
-        },
-        props: ['idPronac'],
+        props: [
+            'idPronac',
+            'nomeProjeto',
+            'pronac',
+        ],
         data() {
             return {
                 dialog: false,
@@ -121,7 +123,11 @@
         },
         watch: {
             dialog(val) {
-                if (!val) this.$refs.form.reset();
+                if (!val) {
+                    this.$refs.form.reset();
+                } else {
+                    this.obterDestinatarios();
+                }
             },
         },
         components: {

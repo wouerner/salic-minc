@@ -116,16 +116,25 @@
                                                                         <template
                                                                             v-if="podeEditar(props.item.varlorComprovado)"
                                                                         >
-                                                                            <v-btn
-                                                                                :href="'/prestacao-contas/analisar/comprovante/idPronac/' + idPronac + '/uf/' + uf.Uf + '/produto/' + produto.cdProduto + '/idmunicipio/' + cidade.cdCidade + '/idPlanilhaItem/' + props.item.idPlanilhaItens + '/etapa/' + etapa.cdEtapa"
-                                                                                replace
-                                                                                color="red"
-                                                                                small
-                                                                                dark
-                                                                                title="Comprovar Item"
+                                                                            <!--<v-btn-->
+                                                                                <!--:href="'/avaliacao-resultados/#/analisar-item/idPronac/' + idPronac + '/uf/' + uf.Uf + '/produto/' + produto.cdProduto + '/idmunicipio/' + cidade.cdCidade + '/idPlanilhaItem/' + props.item.idPlanilhaItens + '/etapa/' + etapa.cdEtapa"-->
+                                                                                <!--replace-->
+                                                                                <!--color="red"-->
+                                                                                <!--small-->
+                                                                                <!--dark-->
+                                                                                <!--title="Comprovar Item"-->
+                                                                            <!--&gt;-->
+                                                                                <!--<v-icon>gavel</v-icon>-->
+                                                                            <!--</v-btn>-->
+                                                                            <analisar-item
+                                                                                :id-pronac="idPronac"
+                                                                                :uf="uf.Uf"
+                                                                                :produto="produto.cdProduto"
+                                                                                :idmunicipio="cidade.cdCidade"
+                                                                                :id-planilha-item="props.item.idPlanilhaItens"
+                                                                                :etapa="etapa.cdEtapa"
                                                                             >
-                                                                                <v-icon>gavel</v-icon>
-                                                                            </v-btn>
+                                                                            </analisar-item>
                                                                         </template>
                                                                     </td>
                                                                 </template>

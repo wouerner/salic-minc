@@ -10,7 +10,7 @@
             >
                 <v-tabs-slider color="deep-orange accent-3"></v-tabs-slider>
                 <v-tab href="#tab-0" v-if="getUsuario.grupo_ativo == 125">
-                    Encaminhar 
+                    Encaminhar
                     <v-icon>assignment_ind</v-icon>
                 </v-tab>
                 <v-tab href="#tab-1">
@@ -45,9 +45,16 @@
                     <v-card flat>
                         <v-card-text>
                             <TabelaProjetos
+                                v-if="getUsuario.grupo_ativo == 125"
                                 :analisar="true"
                                 :dados="dadosTabelaTecnico"
-                                :componentes="listaAcoes"
+                                :componentes="listaAcoesCoordenador"
+                            ></TabelaProjetos>
+                            <TabelaProjetos
+                                v-else
+                                :analisar="true"
+                                :dados="dadosTabelaTecnico"
+                                :componentes="listaAcoesTecnico"
                             ></TabelaProjetos>
                         </v-card-text>
                     </v-card>
@@ -60,7 +67,7 @@
                         <v-card-text>
                             <TabelaProjetos
                                 :dados="getProjetosFinalizados"
-                                :componentes="listaAcoes"
+                                :componentes="listaAcoesTecnico"
                             ></TabelaProjetos>
                         </v-card-text>
                     </v-card>
@@ -73,7 +80,7 @@
                         <v-card-text>
                             <TabelaProjetos
                                 :dados="getProjetosFinalizados"
-                                :componentes="listaAcoes"
+                                :componentes="listaAcoesTecnico"
                             ></TabelaProjetos>
                         </v-card-text>
                     </v-card>
@@ -88,6 +95,7 @@ import { mapActions, mapGetters } from 'vuex';
 import TabelaProjetos from './TabelaProjetos';
 import Historico from './Historico';
 import Encaminhar from './ComponenteEncaminhar';
+import TipoAvaliacao from './TipoAvaliacao';
 
 export default {
     name: 'Painel',
@@ -99,7 +107,8 @@ export default {
     },
     data() {
         return {
-            listaAcoes: [Historico],
+            listaAcoesTecnico: [Historico, TipoAvaliacao],
+            listaAcoesCoordenador: [Historico, TipoAvaliacao],
             distribuirAcoes: [Encaminhar],
         };
     },

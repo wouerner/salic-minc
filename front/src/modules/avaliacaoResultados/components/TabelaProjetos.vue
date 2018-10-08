@@ -33,7 +33,7 @@
                         <component 
                             :is="c" 
                             :id-pronac="props.item.IdPRONAC"
-                            :pronac="props.item.Pronac"
+                            :pronac="props.item.PRONAC"
                             :nome-projeto="props.item.NomeProjeto"
                         ></component>
                     </template>
@@ -61,7 +61,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import ModalTemplate from '@/components/modal';
 import Historico from './Historico';
 
 export default {
@@ -101,7 +100,6 @@ export default {
         };
     },
     components: {
-        ModalTemplate,
         Historico,
     },
     methods: {
