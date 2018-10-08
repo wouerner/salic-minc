@@ -79,7 +79,7 @@
                     <v-card flat>
                         <v-card-text>
                             <TabelaProjetos
-                                :dados="getProjetosFinalizados"
+                                :dados="getProjetosAssinatura"
                                 :componentes="listaAcoesTecnico"
                             ></TabelaProjetos>
                         </v-card-text>
@@ -101,6 +101,7 @@ export default {
     name: 'Painel',
     created() {
         this.projetosFinalizados({ estadoid: 6 });
+        this.projetosAssinatura();
         this.obterDadosTabelaTecnico({ estadoid: 5 });
         this.distribuir({ estadoid: 6 });
         this.usuarioLogado();
@@ -119,6 +120,7 @@ export default {
         ...mapActions({
             obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
             projetosFinalizados: 'avaliacaoResultados/projetosFinalizados',
+            projetosAssinatura: 'avaliacaoResultados/projetosAssinatura',
             distribuir: 'avaliacaoResultados/projetosParaDistribuir',
             usuarioLogado: 'autenticacao/usuarioLogado',
         }),
@@ -127,6 +129,7 @@ export default {
         ...mapGetters({
             dadosTabelaTecnico: 'avaliacaoResultados/dadosTabelaTecnico',
             getProjetosFinalizados: 'avaliacaoResultados/getProjetosFinalizados',
+            getProjetosAssinatura: 'avaliacaoResultados/getProjetosAssinatura',
             getProjetosParaDistribuir: 'avaliacaoResultados/getProjetosParaDistribuir',
             getUsuario: 'autenticacao/getUsuario',
         }),
