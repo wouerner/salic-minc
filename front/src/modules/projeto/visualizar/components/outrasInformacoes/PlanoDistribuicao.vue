@@ -6,21 +6,21 @@
         </IdentificacaoProjeto>
 
         <table class="">
-            <tbody v-for="(dado, index) in dados">
+            <tbody v-for="(dado, index) in dados" :key="index">
                 <tr>
                     <td align="left">
                         <input  type="button"
                                 class="btn_adicionar"
                                 id="objetivos"
-                                @click="setActiveTab(1);">
+                                @click="setActiveTab(index);">
                         <b>{{ dado.Produto }}</b><b>
-                            <span class="red" v-if="dado.stPrincipal == 1 "> (produto principal)</span>
+                            <span class="red" v-if="dado.stPrincipal == index "> (produto principal)</span>
                         </b>
 
                     </td>
                 </tr>
 
-                <tr v-if="activeTab === 1" align="left" style="padding: 5px">
+                <tr v-if="activeTab === index" align="left" style="padding: 5px">
                     <td>
                         <table class="tabela">
                             <tbody>
