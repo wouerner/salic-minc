@@ -14,7 +14,7 @@
                                 id="objetivos"
                                 @click="setActiveTab(index);">
                         <b>{{ dado.Produto }}</b><b>
-                            <span class="red" v-if="dado.stPrincipal == index "> (produto principal)</span>
+                            <span class="red" v-if="dado.stPrincipal === 1 "> (produto principal)</span>
                         </b>
 
                     </td>
@@ -182,7 +182,6 @@
 </template>
 <script>
     import IdentificacaoProjeto from './IdentificacaoProjeto';
-    // import TabelaPlanoDistribuicao from './TabelaPlanoDistribuicao';
     export default {
         name: 'PlanoDistribuicao',
         props: ['idPronac'],
@@ -221,11 +220,11 @@
                     url: '/projeto/plano-distribuicao-rest/index/idPronac/' + idPronac,
                 }).done(function (response) {
                     self.dados = response.data;
-                    // self.informacoes = response.data.informacoes;
                 });
             },
 
             setActiveTab(index) {
+                console.log(index);
                 if (this.activeTab === index) {
                     this.activeTab = -1;
                 } else {
