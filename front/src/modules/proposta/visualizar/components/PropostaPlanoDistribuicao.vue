@@ -122,9 +122,6 @@ export default {
         };
     },
     props: [
-        'idplanodistribuicao',
-        'idmunicipioibge',
-        'iduf',
         'arrayProdutos',
         'arrayDetalhamentos',
     ],

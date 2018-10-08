@@ -326,16 +326,16 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             $menu['outrasinformacoes']['submenu'][] = [
                 'label' => 'Plano de distribui&ccedil;&atilde;o',
                 'title' => 'Ir para Plano de distribui&ccedil;&atilde;o',
-                'link' => '/default/consultardadosprojeto/plano-de-distribuicao/?idPronac=' . $idPronacHash,
-                'ajax' => true,
+                'link' => "/projeto/#/{$idPronacHash}/plano-distribuicao-in-2013",
+                'ajax' => false,
                 'grupo' => []
             ];
         } else {
             $menu['outrasinformacoes']['submenu'][] = [
                 'label' => 'Plano de distribui&ccedil;&atilde;o',
                 'title' => 'Ir para Plano de distribui&ccedil;&atilde;o',
-                'link' => '/proposta/visualizar-plano-distribuicao/visualizar/idPreProjeto/' . $projeto['idProjeto'],
-                'ajax' => true,
+                'link' => "/projeto/#/{$idPronacHash}/plano-distribuicao",
+                'ajax' => false,
                 'grupo' => []
             ];
         }

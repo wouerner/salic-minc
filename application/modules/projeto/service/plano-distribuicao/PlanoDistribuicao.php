@@ -24,41 +24,14 @@ class PlanoDistribuicao
 
     public function buscaPlanoDistribuicao()
     {
-        $idPronac = $this->request->idPronac;
+        $idPreProjeto = $this->request->idPreProjeto;
 
-        if (strlen($idPronac) > 7) {
-            $idPronac = \Seguranca::dencrypt($idPronac);
-        }
+        $tbPlanoDistribuicao = new \Proposta_Model_DbTable_PlanoDistribuicaoProduto();
+        $dados['planodistribuicaoproduto'] = $tbPlanoDistribuicao->buscar(array('idProjeto = ?' => $idPreProjeto))->toArray();
+        $dados['tbdetalhaplanodistribuicao'] = $tbPlanoDistribuicao->buscarPlanoDistribuicaoDetalhadoByIdProjeto($idPreProjeto);
+        $dados = \TratarArray::utf8EncodeArray($dados);
 
-        if (!empty($idPronac)) {
-            $buscarDistribuicao = \RealizarAnaliseProjetoDAO::planodedistribuicao($idPronac);
-        }
+        return $dados;
 
-        foreach ($buscarDistribuicao as $item) {
-
-            $resultArray[] = [
-                'idPlanoDistribuicao' => $item->idPlanoDistribuicao,
-                'idProjeto' => $item->idProjeto,
-                'idProduto' => $item->idProduto,
-                'stPrincipal' => $item->stPrincipal,
-                'QtdeProduzida' => $item->QtdeProduzida,
-                'QtdeProponente' => $item->QtdeProponente,
-                'QtdeVendaNormal' => $item->QtdeVendaNormal,
-                'QtdePatrocinador' => $item->QtdePatrocinador,
-                'QtdeOutros' => $item->QtdeOutros,
-                'QtdeVendaPromocional' => $item->QtdeVendaPromocional,
-                'Produto' => utf8_encode($item->Produto),
-                'Area' => utf8_encode($item->Area),
-                'Segmento' => utf8_encode($item->Segmento),
-                'PosicaoDaLogo' => utf8_encode($item->PosicaoDaLogo),
-                'PrecoUnitarioNormal' => $item->PrecoUnitarioNormal,
-                'PrecoUnitarioPromocional' => $item->PrecoUnitarioPromocional,
-                'ReceitaNormal' => $item->ReceitaNormal,
-                'ReceitaPro' => $item->ReceitaPro,
-                'ReceitaPrevista' => $item->ReceitaPrevista,
-            ];
-        }
-
-        return $resultArray;
     }
 }
