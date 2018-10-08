@@ -30,13 +30,6 @@ class PlanoDistribuicao
             $idPronac = \Seguranca::dencrypt($idPronac);
         }
 
-        $Projetos = new \Projetos();
-        $projeto = $Projetos->buscar(array('IdPRONAC = ?'=>$idPronac))->current();
-
-        $informacoes['Pronac'] = $projeto['AnoProjeto'] . $projeto['Sequencial'];
-        $informacoes['NomeProjeto'] = $projeto['NomeProjeto'];
-        $resultArray['informacoes'] = $informacoes;
-
         if (!empty($idPronac)) {
             $buscarDistribuicao = \RealizarAnaliseProjetoDAO::planodedistribuicao($idPronac);
         }
@@ -57,7 +50,12 @@ class PlanoDistribuicao
                 'Produto' => utf8_encode($item->Produto),
                 'Area' => utf8_encode($item->Area),
                 'Segmento' => utf8_encode($item->Segmento),
-                'PosicaoDaLogo' => utf8_encode($item->PosicaoDaLogo)
+                'PosicaoDaLogo' => utf8_encode($item->PosicaoDaLogo),
+                'PrecoUnitarioNormal' => $item->PrecoUnitarioNormal,
+                'PrecoUnitarioPromocional' => $item->PrecoUnitarioPromocional,
+                'ReceitaNormal' => $item->ReceitaNormal,
+                'ReceitaPro' => $item->ReceitaPro,
+                'ReceitaPrevista' => $item->ReceitaPrevista,
             ];
         }
 
