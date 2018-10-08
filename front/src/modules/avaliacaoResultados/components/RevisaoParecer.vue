@@ -20,11 +20,18 @@
                     <v-btn icon dark @click.native="dialog = false">
                         <v-icon>close</v-icon>
                     </v-btn>
-                    <v-toolbar-title>Avaliar itens</v-toolbar-title>
+                    <v-toolbar-title>Analise de Resultados - Revisão do Parecer Técnico </v-toolbar-title>
                 </v-toolbar>
 
                 <v-card-text>
-                    <v-subheader >Dados da Comprovação</v-subheader>
+
+                    <v-flex xs12 sm12 md12>
+                        <p><b>Projeto:</b> ano+sequencial - Coisinha tem nome </p>
+                    </v-flex>
+                    <v-flex xs12 sm12 md12>
+                        <p><b>Proponente:</b> Seu Juca - 666.777.676.69</p>
+                    </v-flex>
+
                     <v-data-table
                         class="elevation-2"
                         hide-headers
@@ -35,26 +42,67 @@
                             <!--v-if="dadosItemComprovacao.dadosItem" -->
 
                             <tr>
-                                <th colspan="6">Comprova&ccedil;&atilde;o de Pagamento do Item</th>
-                            </tr>
-                            <tr>
-                                <td left><b>Produto:</b></td>
-                                <td>valor</td>
-                                <td left><b>Etapa:</b></td>
-                                <td>valor</td>
-                                <td left><b>Item de Custo:</b></td>
-                                <td>valor</td>
-                            </tr>
-                            <tr>
-                                <td left><b>Valor Aprovado:</b></td>
-                                <td>R$ valor</td>
-                                <td left><b>Valor Comprovado:</b></td>
-                                <td>R$ valor</td>
-                                <td left><b>Comprovação Validada:</b></td>
-                                <td>R$ valor</td>
+                                <th colspan="4">Parecer Tecnico</th>
                             </tr>
                         </template>
+                        <template slot="no-data">
+                            <v-container grid-list-sm>
+                                <v-layout row wrap class="justify-center">
+                                        <v-card  tile flat flex >
+                                            <v-card-title class="justify-center" >
+                                               <b> Quantidade de Comprovantes </b>
+                                            </v-card-title>
+                                            <v-card-text>
+                                                <v-data-table hide-actions hide-headers>
+                                                    <template slot="no-data">
+                                                        <tr>
+                                                            <td left><b>Total:</b></td>
+                                                            <td >valor</td>
+                                                            <td left><b>Validados:</b></td>
+                                                            <td>valor</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td left><b>Não Avaliados:</b></td>
+                                                            <td left>valor</td>
+                                                            <td left><b>Recusados:</b></td>
+                                                            <td left>valor</td>
+                                                        </tr>
+                                                    </template>
+                                                </v-data-table>
+                                            </v-card-text>
+                                        </v-card>
+
+                                        <v-card flat flex="6" xs10 sm7 md7>
+                                            <v-card-title class="justify-center" >
+                                                <b> Valores Comprovados </b>
+                                            </v-card-title>
+                                            <v-card-text>
+                                                <v-data-table hide-actions hide-headers>
+                                                    <template slot="no-data">
+                                                        <tr>
+                                                            <td left><b>Total:</b></td>
+                                                            <td >valor</td>
+                                                            <td left><b>Validados:</b></td>
+                                                            <td>valor</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td left><b>Não Avaliados:</b></td>
+                                                            <td left>valor</td>
+                                                            <td left><b>Recusados:</b></td>
+                                                            <td left>valor</td>
+                                                        </tr>
+                                                    </template>
+                                                </v-data-table>
+                                            </v-card-text>
+                                        </v-card>
+                                </v-layout>
+                            </v-container>
+
+                        </template>
                     </v-data-table>
+
+                    <v-spacer></v-spacer>
+
 
                     <v-subheader >Itens</v-subheader>
 
@@ -84,7 +132,7 @@
                                 <v-flex >
 
                                     <v-toolbar dense>
-                                        <v-toolbar-title>Avaliar Comprovante - valor</v-toolbar-title>
+                                        <v-toolbar-title>Avaliar Parecer Técnico +++ </v-toolbar-title>
 
 
                                         <v-btn  icon>
@@ -107,9 +155,9 @@
                                                     <template slot="no-data">
                                                         <tr>
                                                             <td left><b>Fornecedor:</b></td>
-                                                            <td>valor</td>
+                                                            <td>Seu juquinha</td>
                                                             <td left><b>CNPJ/CPF:</b></td>
-                                                            <td colspan="5">valor</td>
+                                                            <td colspan="5">Seu PC</td>
                                                         </tr>
                                                         <tr>
                                                             <td left><b>Comprovante:</b></td>
