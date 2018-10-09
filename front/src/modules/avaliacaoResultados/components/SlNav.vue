@@ -171,7 +171,7 @@
                     </v-toolbar-title>
                     <v-list class="scrollable">
                         <v-list-tile v-for="(perfil, index) in perfisDisponiveis" :key="index">
-                            <div style="cursor:pointer;">{{perfil}}</div>
+                            <div @click="trocarPerfil(perfil)" style="cursor:pointer;">{{perfil}}</div>
                         </v-list-tile>
                     </v-list>
                 </v-menu>
@@ -228,6 +228,10 @@
                 dadosMenuAjax: 'avaliacaoResultados/dadosMenu',
                 buscarPerfisDisponiveis: 'avaliacaoResultados/buscarPerfisDisponiveis',
             }),
+            trocarPerfil(perfil) {
+                console.log('chegando');
+                console.log(perfil);
+            },
         },
     };
 </script>
