@@ -24,6 +24,7 @@ class AvaliacaoResultados_Events_Encaminhar
     }
 
     public function run($params) {
+        /* var_dump($params);die; */
         $this->events->trigger(__FUNCTION__, $this, $params);
     }
 
@@ -58,6 +59,9 @@ class AvaliacaoResultados_Events_Encaminhar
 
             $model->setIdPronac($params['idPronac']);
             $model->setEstadoId($params['proximo']);
+            $model->setOrgao($params['idOrgaoDestino']);
+            $model->setGrupo($params['cdGruposDestino']);
+            $model->setIdAgente($params['idAgenteDestino']);
 
             $mapper->save($model);
         };
