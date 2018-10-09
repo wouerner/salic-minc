@@ -176,7 +176,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         $menu['outrasinformacoes']['submenu'][] = [
             'label' => 'Provid&ecirc;ncia tomada',
             'title' => 'Ir para Provid&ecirc;ncia tomada',
-            'link' => '/default/consultardadosprojeto/providencia-tomada/?idPronac=' . $idPronacHash,
+            'link' => "/projeto/#/{$idPronacHash}/providencia-tomadas",
             'ajax' => false,
             'grupo' => []
         ];
@@ -343,7 +343,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         $menu['outrasinformacoes']['submenu'][] = [
             'label' => 'Provid&ecirc;ncia tomada',
             'title' => 'Ir para Provid&ecirc;ncia tomada',
-            'link' => '/default/consultardadosprojeto/providencia-tomada/?idPronac=' . $idPronacHash,
+            'link' => "/projeto/#/{$idPronacHash}/providencia-tomadas",
             'ajax' => false,
             'grupo' => []
         ];
