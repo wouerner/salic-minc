@@ -118,15 +118,12 @@ export const mutations = {
     [types.SET_DADOS_PROJETOS_FINALIZADOS](state, dados) {
         state.projetosFinalizados = dados;
     },
-<<<<<<< HEAD
     [types.SET_PERFIS_DISPONIVEIS](state, dados) {
         state.perfisDisponiveis = dados;
-=======
     [types.GET_DADOS_ITEM_COMPROVACAO](state, dados) {
         state.dadosItemComprovacao = dados;
     },
     [types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR](state, dados){
         state.projetosParaDistribuir = dados;
->>>>>>> origin/avaliacao-resultados-fix
     },
 };
