@@ -19,7 +19,11 @@ class AvaliacaoResultados_Bootstrap extends Zend_Application_Module_Bootstrap
                     'historico',
                     'estado',
                     'tipo-avaliacao-rest',
-                    'assinatura'
+                    'assinatura',
+                    'avaliacao-comprovante',
+                    'revisao',
+                    'projeto',
+                    'tecnicos'
                 ]
             ]
         );

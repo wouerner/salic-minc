@@ -20,8 +20,15 @@ export const state = {
     tipoAvaliacao: {},
     redirectLink: {},
     planilha: {},
+    projetoAnalise: {},
+    consolidacaoAnalise: {},
+    parecerLaudoFinal: {},
+    characterManifestacao: '',
+    characterParecer: '',
     projetosFinalizados: {},
     perfisDisponiveis: [],
+    dadosItemComprovacao: {},
+    projetosParaDistribuir: {},
 };
 
 export const mutations = {
@@ -87,13 +94,39 @@ export const mutations = {
     [types.GET_PLANILHA](state, planilha) {
         state.planilha = planilha;
     },
+    [types.GET_PROJETO_ANALISE](state, projetoAnalise) {
+        state.projetoAnalise = projetoAnalise;
+    },
+    [types.GET_CONSOLIDACAO_ANALISE](state, consolidacaoAnalise) {
+        state.consolidacaoAnalise = consolidacaoAnalise;
+    },
+    [types.GET_LAUDO_FINAL](state, data) {
+        state.parecerLaudoFinal = data;
+    },
+    [types.SET_MANIFESTACAO_PROVISORIA](state, characterManifestacao) {
+        state.characterManifestacao = characterManifestacao;
+    },
+    [types.SET_PARECER_PROVISORIO](state, characterParecer) {
+        state.characterParecer = characterParecer;
+    },
+    [types.GET_PROJETO_ANALISE](state, projetoAnalise) {
+        state.projetoAnalise = projetoAnalise;
+    },
     [types.SET_PARECER](state, parecer) {
         state.parecer = parecer;
     },
     [types.SET_DADOS_PROJETOS_FINALIZADOS](state, dados) {
         state.projetosFinalizados = dados;
     },
+<<<<<<< HEAD
     [types.SET_PERFIS_DISPONIVEIS](state, dados) {
         state.perfisDisponiveis = dados;
+=======
+    [types.GET_DADOS_ITEM_COMPROVACAO](state, dados) {
+        state.dadosItemComprovacao = dados;
+    },
+    [types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR](state, dados){
+        state.projetosParaDistribuir = dados;
+>>>>>>> origin/avaliacao-resultados-fix
     },
 };
