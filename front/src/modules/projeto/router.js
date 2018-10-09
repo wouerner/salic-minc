@@ -22,6 +22,7 @@ import PlanoDistribuicaoIn2013 from './visualizar/components/outrasInformacoes/P
 import HistoricoEncaminhamento from './visualizar/components/outrasInformacoes/HistoricoEncaminhamento';
 import PlanoDistribuicaoIn2017 from './visualizar/components/outrasInformacoes/PlanoDistribuicaoIn2017';
 import ProvidenciaTomada from './visualizar/components/outrasInformacoes/ProvidenciaTomada';
+import DiligenciaProjeto from './visualizar/components/outrasInformacoes/DiligenciaProjeto';
 
 Vue.use(Router);
 
@@ -207,6 +208,14 @@ const routes = [
                 component: ProvidenciaTomada,
                 meta: {
                     title: 'Provid&ecirc;ncia Tomada',
+                },
+            },
+            {
+                path: 'diligencia-projeto',
+                name: 'DiligenciaProjeto',
+                component: DiligenciaProjeto,
+                meta: {
+                    title: 'Diligencias do Projeto',
                 },
             },
         ],
