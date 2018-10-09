@@ -378,7 +378,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 'idDocumentoAssinatura = ?' => $idDocumentoAssinatura
             ));
 
-            if ($assinaturaExistente->current()) {
+            if (count($assinaturaExistente) > 0) {
                 throw new Exception("O documento j&aacute; foi assinado pelo usu&aacute;rio logado nesta fase atual.");
             }
 
