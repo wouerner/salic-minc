@@ -30,12 +30,32 @@ class ProvidenciaTomada
             $idPronac = \Seguranca::dencrypt($idPronac);
         }
 
+        $pronacArray = [];
+        $pronacArray['p.IdPRONAC = ?'] = $idPronac;
 
         $tblHisSituacao = new \HistoricoSituacao();
-        $total = $tblHisSituacao->buscarHistoricosEncaminhamentoIdPronac($idPronac, null, null, null, true);
-xd($total);
+        $result = $tblHisSituacao->buscarHistoricosEncaminhamentoIdPronac($pronacArray, null, null, null, false);
 
-        return $total;
+        $providenciaTomada = $this->montaArrayProvidenciaTomada($result);
+
+        return $resultArray;
+    }
+
+    private function montaArrayProvidenciaTomada($providenciaTomada)
+    {
+        $resultArray = [];
+
+        foreach ($providenciaTomada as $providencia) {
+            $resultArray[] = [
+                'DtSituacao' => $providencia['DtSituacao'],
+                'Situacao' => $providencia['Situacao'],
+                'ProvidenciaTomada' => $providencia['ProvidenciaTomada'],
+                'cnpjcpf' => $providencia['cnpjcpf'],
+                'usuario' => $providencia['usuario']
+            ];
+        }
+
+        return $resultArray;
     }
 
 }
