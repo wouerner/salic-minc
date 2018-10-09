@@ -7,15 +7,10 @@ const path = require('path')
 const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const portfinder = require('portfinder')
 
-// const HOST = process.env.HOST
-// const PORT = process.env.PORT && Number(process.env.PORT)
-
-const devWebpackConfig = merge(baseWebpackConfig, {
+const watchWebpackConfig = merge(baseWebpackConfig, {
     module: {
         rules: utils.styleLoaders({
             sourceMap: config.dev.cssSourceMap,
@@ -75,15 +70,9 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             template: 'index.html',
             filename: config.build.index,
             inject: true,
-            // minify: {
-            //     removeComments: true,
-            //     collapseWhitespace: true,
-            //     removeAttributeQuotes: true
-            //     // more options:
-            //     // https://github.com/kangax/html-minifier#options-quick-reference
-            // },
-            // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-            chunksSortMode: 'dependency'
+            hash: true,
+            chunks: ['main', 'vendor','manifest'],
+            chunksSortMode: 'dependency',
         }),
         new BrowserSyncPlugin({
             // browse to http://localhost:3000/ during development,
@@ -100,7 +89,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
 if (config.build.bundleAnalyzerReport) {
     const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-    devWebpackConfig.plugins.push(new BundleAnalyzerPlugin())
+    watchWebpackConfig.plugins.push(new BundleAnalyzerPlugin())
 }
 
-module.exports = devWebpackConfig
+module.exports = watchWebpackConfig
