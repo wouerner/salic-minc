@@ -120,6 +120,7 @@ export const mutations = {
     },
     [types.SET_PERFIS_DISPONIVEIS](state, dados) {
         state.perfisDisponiveis = dados;
+    },
     [types.GET_DADOS_ITEM_COMPROVACAO](state, dados) {
         state.dadosItemComprovacao = dados;
     },
