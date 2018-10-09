@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Modules\Permissao\Service\Permissao;
+namespace Application\Modules\Perfil\Service\Perfil;
 
 class Perfil
 {
@@ -13,7 +13,7 @@ class Perfil
         $this->response = $response;
     }
 
-    public function buscarPerfisDisponoveis()
+    public function alterarPerfil()
     {
         xd('service');
 //        $auth = \Zend_Auth::getInstance();

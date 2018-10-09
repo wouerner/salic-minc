@@ -1,8 +1,8 @@
 <?php
 
-use Application\Modules\Permissao\Service\Permissao\Permissao as PermissaoService;
+use Application\Modules\Perfil\Service\Perfil\Perfil as PerfilService1;
 
-class Permissao_PermissaoRestController extends MinC_Controller_Rest_Abstract
+class Perfil_PerfilRestController extends MinC_Controller_Rest_Abstract
 {
     public function __construct(
         Zend_Controller_Request_Abstract $request,
@@ -30,8 +30,8 @@ class Permissao_PermissaoRestController extends MinC_Controller_Rest_Abstract
 
     public function indexAction()
     {
-        $permissaoService = new PermissaoService($this->getRequest(), $this->getResponse());
-        $resposta = $permissaoService->buscarPerfisDisponoveis();
+        $perfilService = new PerfilService1($this->getRequest(), $this->getResponse());
+        $resposta = $perfilService->alterarPerfil();
 
         $this->renderJsonResponse($resposta, 200);
     }

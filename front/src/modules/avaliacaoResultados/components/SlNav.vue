@@ -227,10 +227,10 @@
             ...mapActions({
                 dadosMenuAjax: 'avaliacaoResultados/dadosMenu',
                 buscarPerfisDisponiveis: 'avaliacaoResultados/buscarPerfisDisponiveis',
+                alterarPerfil: 'avaliacaoResultados/alterarPerfil',
             }),
             trocarPerfil(perfil) {
-                console.log('chegando');
-                console.log(perfil);
+                this.alterarPerfil(perfil);
             },
         },
     };

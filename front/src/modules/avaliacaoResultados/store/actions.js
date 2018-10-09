@@ -204,3 +204,10 @@ export const projetosParaDistribuir = ({ commit }) => {
             commit(types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR, data);
         });
 };
+
+export const alterarPerfil = () => {
+    avaliacaoResultadosHelperAPI.alterarPerfil()
+        .then(() => {
+            console.log('asdasdadasdasdas');
+        });
+};

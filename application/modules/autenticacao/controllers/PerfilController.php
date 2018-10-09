@@ -37,7 +37,7 @@ class Autenticacao_PerfilController extends MinC_Controller_Action_Abstract
             $_SESSION["GrupoAtivo"]["codOrgao"] = $GrupoAtivo->codOrgao;
             parent::message("Seu perfil foi alterado no sistema. Voc&ecirc; ter&aacute; acesso a outras funcionalidades!", "principalproponente", "INFO");
         } else {
-            xd('AAAAAAAAAAAAAAAAAAAA', $codGrupo, $codOrgao);
+//            xd('AAAAAAAAAAAAAAAAAAAA', $codGrupo, $codOrgao);
             //Reescreve a sessao com o novo orgao superior
             $tblUsuario = new Autenticacao_Model_DbTable_Usuario();
             $codOrgaoMaxSuperior = $tblUsuario->recuperarOrgaoMaxSuperior($codOrgao);

@@ -81,3 +81,5 @@ export const finalizarParecerLaudoFinal = (params) => {
 export const obterProjetosParaDistribuir = () => api.getRequest('/prestacao-contas/prestacao-contas/obter-analise-financeira-virtual');
 
 export const criarDiligencia = params => api.postRequest('/diligencia/diligencia', buildData(params));
+
+export const alterarPerfil = () => api.getRequest('perfil/perfil-rest/index');
