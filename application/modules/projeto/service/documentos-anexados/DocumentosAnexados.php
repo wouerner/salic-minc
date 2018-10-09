@@ -39,7 +39,7 @@ class DocumentosAnexados
 
         $resultArray = [];
         $informacoes['Pronac'] = $projeto['AnoProjeto'] . $projeto['Sequencial'];
-        $informacoes['NomeProjeto'] = $projeto['NomeProjeto'];
+        $informacoes['NomeProjeto'] = utf8_encode($projeto['NomeProjeto']);
         $informacoes['idPronac'] = $idPronac;
 
         $resultArray['documentos'] = $docs;
