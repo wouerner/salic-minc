@@ -82,4 +82,4 @@ export const obterProjetosParaDistribuir = () => api.getRequest('/prestacao-cont
 
 export const criarDiligencia = params => api.postRequest('/diligencia/diligencia', buildData(params));
 
-export const alterarPerfil = () => api.getRequest('perfil/perfil-rest/index');
+export const alterarPerfil = (grupoAtivo, orgaoAtivo) => api.getRequest(`perfil/perfil-rest/index?codGrupo=${grupoAtivo}&codOrgao=${orgaoAtivo}`);

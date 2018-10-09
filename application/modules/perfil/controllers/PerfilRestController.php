@@ -31,8 +31,11 @@ class Perfil_PerfilRestController extends MinC_Controller_Rest_Abstract
     public function indexAction()
     {
         $perfilService = new PerfilService1($this->getRequest(), $this->getResponse());
-        $resposta = $perfilService->alterarPerfil();
-
+        $resposta = $perfilService->alterarPerfil(
+            Zend_Auth::getInstance(),
+            new Zend_Session_Namespace('GrupoAtivo'),
+            new Autenticacao_Model_DbTable_Usuario());
+        
         $this->renderJsonResponse($resposta, 200);
     }
 
