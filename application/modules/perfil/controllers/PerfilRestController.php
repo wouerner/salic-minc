@@ -34,8 +34,9 @@ class Perfil_PerfilRestController extends MinC_Controller_Rest_Abstract
         $resposta = $perfilService->alterarPerfil(
             Zend_Auth::getInstance(),
             new Zend_Session_Namespace('GrupoAtivo'),
-            new Autenticacao_Model_DbTable_Usuario());
-        
+            new Autenticacao_Model_DbTable_Usuario()
+        );
+
         $this->renderJsonResponse($resposta, 200);
     }
 
