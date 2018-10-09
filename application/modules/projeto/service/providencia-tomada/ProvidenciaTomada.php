@@ -37,6 +37,7 @@ class ProvidenciaTomada
         $result = $tblHisSituacao->buscarHistoricosEncaminhamentoIdPronac($pronacArray, null, null, null, false);
 
         $providenciaTomada = $this->montaArrayProvidenciaTomada($result);
+        $resultArray['providenciaTomada'] = $providenciaTomada;
 
         return $resultArray;
     }
@@ -46,12 +47,15 @@ class ProvidenciaTomada
         $resultArray = [];
 
         foreach ($providenciaTomada as $providencia) {
+            $ProvidenciaTomada = html_entity_decode(utf8_encode($providencia['ProvidenciaTomada']));
+            $usuario = html_entity_decode(utf8_encode($providencia['usuario']));
+            $objDateTimeDtSituacao = new \DateTime($providencia['DtSituacao']);
             $resultArray[] = [
-                'DtSituacao' => $providencia['DtSituacao'],
+                'DtSituacao' => $objDateTimeDtSituacao->format('d/m/Y H:i:s'),
                 'Situacao' => $providencia['Situacao'],
-                'ProvidenciaTomada' => $providencia['ProvidenciaTomada'],
+                'ProvidenciaTomada' => $ProvidenciaTomada,
                 'cnpjcpf' => $providencia['cnpjcpf'],
-                'usuario' => $providencia['usuario']
+                'usuario' => $usuario
             ];
         }
 
