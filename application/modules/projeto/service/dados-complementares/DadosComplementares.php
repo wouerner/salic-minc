@@ -49,7 +49,7 @@ class DadosComplementares
 
         $resultArray = [];
 
-        $informacoes['Pronac'] = $projeto['AnoProjeto'] + $projeto['Sequencial'];
+        $informacoes['Pronac'] = $projeto['AnoProjeto'] . $projeto['Sequencial'];
         $informacoes['NomeProjeto'] = $projeto['NomeProjeto'];
 
         $resultArray['CustosVinculados'] = $CustosVinculadosArray;
