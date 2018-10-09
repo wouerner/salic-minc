@@ -44,7 +44,7 @@ class LocalRealizacaoDeslocamento
         $deslocamento = $this->montaArrayDeslocamento($buscarDeslocamento);
 
         $informacoes['Pronac'] = $result['AnoProjeto'] + $result['Sequencial'];
-        $informacoes['NomeProjeto'] = $result['NomeProjeto'];
+        $informacoes['NomeProjeto'] = utf8_encode($result['NomeProjeto']);
 
         $resultArray['localRealizacoes'] = $localRealizacoes;
         $resultArray['Deslocamento'] = $deslocamento;
