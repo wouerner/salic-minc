@@ -1,4 +1,3 @@
-import { state } from '@/modules/autenticacao/store/mutations';
 import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
 import * as desencapsularResponse from '@/helpers/actions';
 import * as types from './types';
@@ -206,13 +205,18 @@ export const projetosParaDistribuir = ({ commit }) => {
         });
 };
 
-export const alterarPerfil = () => {
-    const usuario = state.usuario;
-    const grupoAtivo = usuario.grupo_ativo;
-    const orgaoAtivo = usuario.orgao_ativo;
+export const alterarPerfil = (_, perfil) => {
+    console.log(perfil);
+    const grupoAtivo = perfil.gru_codigo;
+    const orgaoAtivo = perfil.uog_orgao;
 
-    avaliacaoResultadosHelperAPI.alterarPerfil(grupoAtivo, orgaoAtivo)
-        .then(() => {
-            window.location.replace(`/autenticacao/perfil/alterarperfil?codGrupo=${grupoAtivo}&codOrgao=${orgaoAtivo}`);
-        });
+    window.location.replace(`/autenticacao/perfil/alterarperfil?codGrupo=${grupoAtivo}&codOrgao=${orgaoAtivo}`);
+
+    // const usuario = state.usuario;
+    // const grupoAtivo = usuario.grupo_ativo;
+    // const orgaoAtivo = usuario.orgao_ativo;
+    //
+    // avaliacaoResultadosHelperAPI.alterarPerfil(grupoAtivo, orgaoAtivo)
+    // .then(() => {
+    // });
 };

@@ -166,13 +166,13 @@
                     <v-toolbar-title
                         slot="activator"
                     >
-                        <span>{{perfisDisponiveis[0]}}</span>
+                        <span>{{perfisDisponiveis[0].orgao_sigla_autorizada}} - {{perfisDisponiveis[0].nome_grupo}}</span>
                         <v-icon dark>arrow_drop_down</v-icon>
                     </v-toolbar-title>
                     <v-list class="scrollable">
                         <v-list-tile v-for="(perfil, index) in perfisDisponiveis" :key="index">
                             <div @click="trocarPerfil(perfil)" style="cursor:pointer;">
-                                {{perfil}}
+                                {{perfil.orgao_sigla_autorizada}} - {{perfil.nome_grupo}}
                             </div>
                         </v-list-tile>
                     </v-list>
@@ -232,6 +232,7 @@
                 alterarPerfil: 'avaliacaoResultados/alterarPerfil',
             }),
             trocarPerfil(perfil) {
+                console.log(perfil);
                 this.alterarPerfil(perfil);
             },
         },
