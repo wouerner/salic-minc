@@ -4,7 +4,7 @@
 // import 'es6-promise/auto';
 import Vue from 'vue';
 import App from './App';
-// import Vuetify from 'vuetify'
+import Vuetify from 'vuetify'
 
 import {
     store,
@@ -17,9 +17,9 @@ import {
 // import 'vue-material/dist/vue-material.min.css'
 // import './assets/scss/material-dashboard.scss'
 
-// import 'vuetify/dist/vuetify.min.css'
+import 'vuetify/dist/vuetify.min.css'
 
-// Vue.use(Vuetify)
+Vue.use(Vuetify)
 
 Vue.config.productionTip = false;
 
