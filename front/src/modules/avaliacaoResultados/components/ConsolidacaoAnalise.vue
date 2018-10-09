@@ -18,17 +18,20 @@
                             <div slot="header" v-text="consolidacao.title"></div>
                             <v-card>
                                 <v-card-text>
-                                    <table>
-                                        <tr>
-                                            <th>
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                            </td>
-                                        </tr>
-
-                                    </table>
+                                    <v-data-table
+                                        :headers="consolidacaoHeaders(consolidacao.cols)"
+                                        :items="consolidacao.lines"
+                                        hide-actions
+                                        no-data-text="Não há dados disponíveis."
+                                    >
+                                        <template slot="items" slot-scope="props">
+                                            <td
+                                                v-for="(celula, i) in props.item" 
+                                                :key="i"
+                                                v-html="celula"
+                                            ></td>
+                                        </template>
+                                    </v-data-table>
                                 </v-card-text>
                             </v-card>
                         </v-expansion-panel-content>
@@ -66,6 +69,18 @@
             ...mapActions({
                 setConsolidacaoAnalise: 'avaliacaoResultados/consolidacaoAnalise',
             }),
+            consolidacaoHeaders: (cols) => {
+                const headerKeys = Object.keys(cols);
+                const headers = headerKeys.map(item => (
+                    {
+                        text: cols[item].name,
+                        value: item,
+                        sortable: false,
+                        class: cols[item].class,
+                    }
+                ));
+                return headers;
+            },
         },
     };
 </script>
