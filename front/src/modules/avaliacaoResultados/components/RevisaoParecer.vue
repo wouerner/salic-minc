@@ -29,13 +29,12 @@
                         <p><b>Projeto:</b> ano+sequencial - Coisinha tem nome </p>
                     </v-flex>
                     <v-flex xs12 sm12 md12>
-                        <p><b>Proponente:</b> Seu Juca - 666.777.676.69</p>
+                        <p><b>Proponente:</b> {{proponente.CgcCpf}} - {{proponente.Nome}}</p>
                     </v-flex>
 
                     <v-data-table
                         class="elevation-2"
                         hide-headers
-                        :items="[]"
                         hide-actions
                     >
                         <template slot="no-data">
