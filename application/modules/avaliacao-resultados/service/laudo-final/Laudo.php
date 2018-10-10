@@ -11,10 +11,18 @@ class Laudo
     public function obterLaudo(){
         return[222222];
     }
+
     public function salvarLaudo($idLaudoFinal, $idPronac, $dtLaudoFinal, $siManifestacao, $dsLaudoFinal, $idUsuario){
-        var_dump($idLaudoFinal, $idPronac, $dtLaudoFinal, $siManifestacao, $dsLaudoFinal, $idUsuario);
-        die;
-        //tratativa $data
+        $model = new \AvaliacaoResultados_Model_LaudoFinal;
+        $model->setIdLaudoFinal($idLaudoFinal);
+        $model->setIdPronac($idPronac);
+        $model->setDtLaudoFinal($dtLaudoFinal);
+        $model->setSiManifestacao($siManifestacao);
+        $model->setDsLaudoFinal($dsLaudoFinal);
+        $model->setIdUsuario($idUsuario);
+
+        $mapper = new \AvaliacaoResultados_Model_LaudoFinalMapper;
+        $mapper->save($model);
         return true;
     }
 }
