@@ -136,7 +136,7 @@ class DiligenciaProjeto
         $result['diligenciaProposta'] = $proposta;
         $result['diligenciaProjeto'] = $diligenciaProjeto;
         $result['diligenciaAdequacao'] = $adequacao;
-
+//xd($result);
         return $result;
     }
 
@@ -145,6 +145,10 @@ class DiligenciaProjeto
         $resultArray = [];
 
         foreach ($diligenciasProposta as $diligencia) {
+            $Solicitacao = html_entity_decode(utf8_encode($diligencia['Solicitacao']));
+            $Resposta = html_entity_decode(utf8_encode($diligencia['Resposta']));
+            $nomeProjeto = html_entity_decode(utf8_encode($diligencia['nomeProjeto']));
+
             $objDateTimedataSolicitacao = new \DateTime($diligencia['dataSolicitacao']);
             $objDateTimedataResposta = new \DateTime($diligencia['dataResposta']);
 
@@ -152,9 +156,9 @@ class DiligenciaProjeto
                 'idPreprojeto' => $diligencia['pronac'],
                 'dataSolicitacao' => $objDateTimedataSolicitacao->format('d/m/Y'),
                 'dataResposta' => $objDateTimedataResposta->format('d/m/Y'),
-                'nomeProjeto' => $diligencia['nomeProjeto'],
-                'Solicitacao' => $diligencia['Solicitacao'],
-                'Resposta' => $diligencia['Resposta'],
+                'nomeProjeto' => $nomeProjeto,
+                'Solicitacao' => $Solicitacao,
+                'Resposta' => $Resposta,
             ];
         }
 
@@ -166,9 +170,10 @@ class DiligenciaProjeto
         $resultArray = [];
 
         foreach ($diligenciaAdequacao as $diligencia) {
+            $dsAvaliacao = html_entity_decode(utf8_encode($diligencia['dsAvaliacao']));
 
             $resultArray[] = [
-                'dsAvaliacao' => $diligencia['dsAvaliacao'],
+                'dsAvaliacao' => $dsAvaliacao,
             ];
         }
 
@@ -179,13 +184,26 @@ class DiligenciaProjeto
     {
         $resultArray = [];
         foreach ($diligencias as $diligencia) {
-        $arquivo = new \Arquivo();
-        $arquivos = $arquivo->buscarAnexosDiligencias($diligencia['idDiligencia']);
+            $Solicitacao = html_entity_decode(utf8_encode($diligencia['Solicitacao']));
+            $Resposta = html_entity_decode(utf8_encode($diligencia['Resposta']));
+
+            $arquivo = new \Arquivo();
+            $arquivos = $arquivo->buscarAnexosDiligencias($diligencia['idDiligencia']);
+
+            foreach ($arquivos as $arquivo) {
+                $objdtEnvio = new \DateTime($arquivo->dtEnvio);
+                $arquivoArray[] = [
+                    'idArquivo' => $arquivo->idArquivo,
+                    'nmArquivo' => utf8_encode($arquivo->nmArquivo),
+                    'dtEnvio' => $objdtEnvio->format('d/m/Y'),
+                    'idDiligencia' => $arquivo->idDiligencia,
+                ];
+            }
 
             $resultArray[] = [
-                'Solicitacao' => $diligencia['Solicitacao'],
-                'Resposta' => $diligencia['Resposta'],
-                'arquivo' => $arquivos
+                'Solicitacao' => $Solicitacao,
+                'Resposta' => $Resposta,
+                'arquivo' => $arquivoArray
             ];
         }
 
