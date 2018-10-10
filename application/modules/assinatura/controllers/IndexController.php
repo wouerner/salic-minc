@@ -212,7 +212,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 ]);
 
                 if (!$objAssinatura->isProjetoAssinado()
-                    && (int)$this->view->documentoAssinatura['cdSituacao'] == (int)Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO) {
+                    && (int)$this->view->documentoAssinatura['cdSituacao'] == (int)Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA) {
                     $this->view->isPermitidoAssinar = true;
                 }
             }

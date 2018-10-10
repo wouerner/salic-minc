@@ -286,13 +286,44 @@ $situacoes = array(
                 <?php if ($this->qtdRegistros > 0): ?>
                     <table class="tabela tablesorter">
                         <?php if ($this->filtro == 'aguardando_publicacao'): ?>
-                            <?php echo $this->partial('readequacoes/partial/aguardandoPublicacao.phtml', array('dados' => $this->dados, 'filtro' => $this->filtro, 'conselheiros' => $this->conselheiros, 'paginacao' => $this->paginacao, 'pronac' => $this->pronac)); ?>
+                            <?php echo $this->partial(
+                                'readequacoes/partial/aguardandoPublicacao.phtml',
+                                [
+                                    'dados' => $this->dados,
+                                    'filtro' => $this->filtro,
+                                    'conselheiros' => $this->conselheiros,
+                                    'paginacao' => $this->paginacao,
+                                    'pronac' => $this->pronac
+                                ]); ?>
                         <?php elseif ($this->filtro == 'analisados'): ?>
-                            <?php echo $this->partial('readequacoes/partial/analisados.phtml', array('dados' => $this->dados, 'filtro' => $this->filtro, 'conselheiros' => $this->conselheiros, 'paginacao' => $this->paginacao, 'pronac' => $this->pronac)); ?>
+                            <?php echo $this->partial(
+                                'readequacoes/partial/analisados.phtml',
+                                [
+                                    'dados' => $this->dados,
+                                    'filtro' => $this->filtro,
+                                    'conselheiros' => $this->conselheiros,
+                                    'paginacao' => $this->paginacao,
+                                    'pronac' => $this->pronac,
+                                    'idPerfil' => $this->idPerfil
+                                ]); ?>
                         <?php elseif ($this->filtro == 'em_analise'): ?>
-                            <?php echo $this->partial('readequacoes/partial/emAnalise.phtml', array('dados' => $this->dados, 'filtro' => $this->filtro, 'paginacao' => $this->paginacao, 'pronac' => $this->pronac)); ?>
+                            <?php echo $this->partial(
+                                'readequacoes/partial/emAnalise.phtml',
+                                [
+                                    'dados' => $this->dados,
+                                    'filtro' => $this->filtro,
+                                    'paginacao' => $this->paginacao,
+                                    'pronac' => $this->pronac
+                                ]); ?>
                         <?php else: ?>
-                            <?php echo $this->partial('readequacoes/partial/aguardandoDistribuicao.phtml', array('dados' => $this->dados, 'filtro' => $this->filtro, 'paginacao' => $this->paginacao, 'pronac' => $this->pronac)); ?>
+                            <?php echo $this->partial(
+                                'readequacoes/partial/aguardandoDistribuicao.phtml',
+                                [
+                                    'dados' => $this->dados,
+                                    'filtro' => $this->filtro,
+                                    'paginacao' => $this->paginacao,
+                                    'pronac' => $this->pronac
+                                ]); ?>
                         <?php endif; ?>
                     </table>
 

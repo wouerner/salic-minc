@@ -1277,6 +1277,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $tbTitulacaoConselheiro = new tbTitulacaoConselheiro();
         $this->view->conselheiros = $tbTitulacaoConselheiro->buscarConselheirosTitularesTbUsuarios();
 
+        $this->view->idPerfil = $this->idPerfil;
         $this->view->paginacao = $paginacao;
         $this->view->qtdRegistros = $total;
         $this->view->dados = $busca;
