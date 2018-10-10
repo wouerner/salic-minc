@@ -195,3 +195,12 @@ export const projetosParaDistribuir = ({ commit }) => {
             commit(types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR, data);
         });
 };
+
+export const projetosAssinatura = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.obterProjetosParaAssinatura(params)
+        .then((response) => {
+            const data = response.data;
+            const dadosTabela = data.data;
+            commit(types.SET_DADOS_PROJETOS_ASSINATURA, dadosTabela);
+        });
+};
