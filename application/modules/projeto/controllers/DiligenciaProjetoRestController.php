@@ -16,8 +16,8 @@ class Projeto_DiligenciaProjetoRestController extends MinC_Controller_Rest_Abstr
     public function indexAction()
     {
         try {
-            $documentoAssinadoService = new DiligenciaProjetoService($this->getRequest(), $this->getResponse());
-            $resposta = $documentoAssinadoService->buscarListaDiligenciaProjeto();
+            $diligenciaService = new DiligenciaProjetoService($this->getRequest(), $this->getResponse());
+            $resposta = $diligenciaService->listaDiligenciaProjeto();
 
             $this->customRenderJsonResponse(['data' => $resposta], 200);
 
@@ -35,7 +35,21 @@ class Projeto_DiligenciaProjetoRestController extends MinC_Controller_Rest_Abstr
 
     public function getAction()
     {
-        $this->renderJsonResponse([], 200);
+        try {
+            $diligenciaService = new DiligenciaProjetoService($this->getRequest(), $this->getResponse());
+            $resposta = $diligenciaService->visualizarDiligenciaProjeto();
+
+            $this->customRenderJsonResponse(['data' => $resposta], 200);
+
+        } catch (Exception $objException) {
+            $this->customRenderJsonResponse([
+                'error' => [
+                    'code' => 404,
+                    'message' => $objException->getMessage()
+                ]
+            ], 404);
+
+        }
     }
 
     public function postAction()
