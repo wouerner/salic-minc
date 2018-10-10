@@ -41,6 +41,7 @@ class AvaliacaoResultados_LaudoController extends MinC_Controller_Rest_Abstract
 
     public function postAction()
     {
+        var_dump($this->_request->p, $this->getRequest()->getParams(p)); die;
         $idLaudoFinal = $this->getRequest()->getParam('idLaudoFinal');
         $idPronac = $this->getRequest()->getParam('idPronac');
         $dtLaudoFinal = $this->getRequest()->getParam('dtLaudoFinal');
