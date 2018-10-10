@@ -17,7 +17,7 @@ class Projeto_DiligenciaProjetoRestController extends MinC_Controller_Rest_Abstr
     {
         try {
             $documentoAssinadoService = new DiligenciaProjetoService($this->getRequest(), $this->getResponse());
-            $resposta = $documentoAssinadoService->buscaDiligenciaProjeto();
+            $resposta = $documentoAssinadoService->buscarListaDiligenciaProjeto();
 
             $this->customRenderJsonResponse(['data' => $resposta], 200);
 

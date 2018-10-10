@@ -22,7 +22,7 @@ class DiligenciaProjeto
         $this->response = $response;
     }
 
-    public function buscaDiligenciaProjeto()
+    public function buscarListaDiligenciaProjeto()
     {
         $idPronac = $this->request->idPronac;
 
@@ -38,13 +38,15 @@ class DiligenciaProjeto
             if (isset($projeto->idProjeto) && !empty($projeto->idProjeto)) {
                 $diligenciasProposta = $tblPreProjeto->listarDiligenciasPreProjeto(array('pre.idPreProjeto = ?' => $projeto->idProjeto,'aval.ConformidadeOK = ? '=>0));
                 $proposta = $this->montarArrayDiligenciaProposta($diligenciasProposta);
-                xd($diligenciasProposta);
             }
         }
             $diligencias = $tblProjeto->listarDiligencias(array('pro.IdPRONAC = ?' => $idPronac, 'dil.stEnviado = ?' => 'S'));
+            $diligencia = $this->montarArrayDiligenciaProjeto($diligencias);
 
             $tbAvaliarAdequacaoProjeto = new \Analise_Model_DbTable_TbAvaliarAdequacaoProjeto();
             $diligenciasAdequacao = $tbAvaliarAdequacaoProjeto->obterAvaliacoesDiligenciadas(['a.idPronac = ?' => $idPronac]);
+            $adequacao = $this->montarArrayDiligenciaAdequacao($diligenciasAdequacao);
+            xd($adequacao);
     }
 
     private function montarArrayDiligenciaProposta($diligenciasProposta)
@@ -52,13 +54,11 @@ class DiligenciaProjeto
         $resultArray = [];
 
         foreach ($diligenciasProposta as $diligencia) {
+            $objDateTimedataSolicitacao = new \DateTime($diligencia['dataSolicitacao']);
+
             $resultArray[] = [
                 'idPreprojeto' => $diligencia['pronac'],
-                'nomeProposta' => $diligencia['nomeProjeto'],
-                'dataSolicitacao' => $diligencia['dataSolicitacao'],
-                'dataResposta' => $diligencia['dataResposta'],
-                'Solicitacao' => $diligencia['Solicitacao'],
-                'Resposta' => $diligencia['Resposta'],
+                'dataSolicitacao' => $objDateTimedataSolicitacao->format('d/m/Y H:i:s'),
             ];
         }
 
@@ -70,28 +70,37 @@ class DiligenciaProjeto
         $resultArray = [];
 
         foreach ($diligencias as $diligencia) {
+            $tipoDiligencia = html_entity_decode(utf8_encode($diligencia['tipoDiligencia']));
+            $objDateTimedataSolicitacao = new \DateTime($diligencia['dataSolicitacao']);
+            $objDateTimedataResposta = new \DateTime($diligencia['dataResposta']);
+
             $qtdia = 40;
             $resultArray[] = [
-                'pronac' => $diligencia['pronac'],
                 'produto' => $diligencia['produto'],
-                'tipoDiligencia' => $diligencia['tipoDiligencia'],
-                'dataSolicitacao' => $diligencia['dataSolicitacao'],
-                'dataResposta' => $diligencia['dataResposta'],
+                'tipoDiligencia' => $tipoDiligencia,
+                'dataSolicitacao' => $objDateTimedataSolicitacao->format('d/m/Y H:i:s'),
+                'dataResposta' => $objDateTimedataResposta->format('d/m/Y H:i:s'),
                 'prazoResposta' => strtotime($diligencia['dataSolicitacao'].' +'.$qtdia.' day'),
-                'nomeProjeto' => $diligencia['nomeProjeto'],
-                'Solicitacao' => $diligencia['Solicitacao'],
-                'Resposta' => $diligencia['Resposta'],
             ];
         }
 
         return $resultArray;
     }
 
-    private function buscarAnexosDiligenciasProjeto($idDiligencia)
+    private function montarArrayDiligenciaAdequacao($diligenciasAdequacao)
     {
-        $arquivo = new \Arquivo();
-        $arquivos = $arquivo->buscarAnexosDiligencias($idDiligencia);
+        $resultArray = [];
 
-        return $arquivos;
+        foreach ($diligenciasAdequacao as $diligencia) {
+            $objDateTimedtAvaliacao = new \DateTime($diligencia['dtAvaliacao']);
+
+            $qtdia = 40;
+            $resultArray[] = [
+                'tipoDiligencia' => 'Dilig&ecirc;ncia na An&aacute;lise da adequa&ccedil;&atilde;o &agrave; realidade do projeto.',
+                'dtAvaliacao' => $objDateTimedtAvaliacao->format('d/m/Y H:i:s'),
+            ];
+        }
+
+        return $resultArray;
     }
 }
