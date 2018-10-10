@@ -26,7 +26,9 @@ class AvaliacaoResultados_TipoLaudoController extends MinC_Controller_Rest_Abstr
 
     public function indexAction()
     {
-        $this->renderJsonResponse(["Nenhum conteúdo"], 204);
+        $laudoFinal = new AvaliacaoResultados_Model_DbTable_LaudoFinal();
+        $laudoFinal = $laudoFinal->all();
+        $this->customRenderJsonResponse($laudoFinal->toArray(), 200);
     }
 
     public function getAction()

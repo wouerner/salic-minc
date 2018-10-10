@@ -14,4 +14,35 @@ class AvaliacaoResultados_Model_LaudoFinalMapper extends MinC_Db_Mapper
         }
         return false;
     }
+
+    public function isValid( $model)
+    {
+        $booStatus = true;
+        $arrData = $model->toArray();
+        $arrRequired = [
+            'idLaudoFinal',
+            'siManifestacao',
+            'dsLaudoFinal',
+            'idUsuario'
+        ];
+
+        foreach ($arrRequired as $strValue) {
+            if (!isset($arrData[$strValue]) || empty($arrData[$strValue])) {
+                $this->setMessage('Campo obrigat&oacute;rio!', $strValue);
+                $booStatus = false;
+            }
+        }
+
+        if (!isset($arrData['idAvaliacaoFinanceira']) && isset($arrData['idPronac'])) {
+            $row = $this->getDbTable()->findBy([
+                'idPronac' => $arrData['idPronac']
+            ]);
+
+            // if(!empty($row)){
+            //     Fazer update
+            // }
+        }
+
+        return $booStatus;
+    }
 }
