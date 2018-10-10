@@ -255,7 +255,6 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
             'tbReadequacaoXParecer.idParecer = tbDocumentoAssinatura.idAtoDeGestao AND
              tbDocumentoAssinatura.idTipoDoAtoAdministrativo IN ('.
             implode(',', $servicoReadequacaoAssinatura->obterAtosAdministativos()) .') AND
-            tbDocumentoAssinatura.cdSituacao =' . Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA . ' AND
             tbDocumentoAssinatura.stEstado = ' . Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO,
             [
                 'tbDocumentoAssinatura.idDocumentoAssinatura',
