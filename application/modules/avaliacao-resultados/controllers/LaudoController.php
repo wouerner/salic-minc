@@ -48,10 +48,8 @@ class AvaliacaoResultados_LaudoController extends MinC_Controller_Rest_Abstract
         $dsLaudoFinal = $this->getRequest()->getParam('dsLaudoFinal');
         $idUsuario = $this->getRequest()->getParam('idUsuario');
 
-        $params = [$idLaudoFinal, $idPronac, $dtLaudoFinal, $siManifestacao, $dsLaudoFinal, $idUsuario];
-        
         $service = new LaudoService();
-        $data = $service->salvarLaudo($params);
+        $data = $service->salvarLaudo($idLaudoFinal, $idPronac, $dtLaudoFinal, $siManifestacao, $dsLaudoFinal, $idUsuario);
         $this->renderJsonResponse([$data], 200);
         // TODO: Implement postAction() method.
     }
