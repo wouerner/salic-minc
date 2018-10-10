@@ -27,20 +27,23 @@
 
                         <v-card>
                             <v-card-title primary-title>
+                                <v-container pa-0 ma-0>
                                 <div>
-                                    <div class="headline">Top western road trips</div>
-                                    <span class="black--text">coisa chataaaaaaaaaaaaaaaaaa!!!!!!!!!!!!</span>
+                                    <div class="headline"><b>Projeto:</b> {{projeto.AnoProjeto}}{{projeto.Sequencial}} - {{projeto.NomeProjeto}}</div>
+                                    <span class="black--text"><b>Proponente:</b> {{proponente.CgcCpf}} - {{proponente.Nome}}</span>
                                 </div>
+                                </v-container>
                             </v-card-title>
 
                             <v-card-text>
 
-                                <v-container grid-list-md text-xs-center>
+                                <v-container grid-list-xs text-xs-center ma-0 pa-0>
 
                                     <v-layout row wrap>
-                                        <v-flex xs6>
+                                        <v-flex xs12 md6 mb-2>
 
                                             <v-data-table
+                                                :items="[]"
                                                 class="elevation-2"
                                                 hide-headers
                                                 hide-actions
@@ -69,9 +72,10 @@
 
 
 
-                                        <v-flex xs6>
+                                        <v-flex xs12 md6 mb-4>
 
                                             <v-data-table
+                                                :items="[]"
                                                 class="elevation-1"
                                                 hide-headers
                                                 hide-actions
@@ -82,19 +86,42 @@
                                                     </tr>
                                                     <tr>
                                                         <td left><b>Total:</b></td>
-                                                        <td >valor</td>
+                                                        <td >{{consolidacaoComprovantes.vlComprovadoProjeto}}</td>
                                                         <td left><b>Validados:</b></td>
-                                                        <td><font color="#006400">valor </font></td>
+                                                        <td><font color="#006400">{{consolidacaoComprovantes.vlComprovadoValidado}}</font></td>
                                                     </tr>
                                                     <tr>
                                                         <td left><b>Não Avaliados:</b></td>
-                                                        <td left>valor</td>
+                                                        <td left>{{consolidacaoComprovantes.vlNaoComprovado}}</td>
                                                         <td left><b>Recusados:</b></td>
-                                                        <td left><font color="red">valor </font></td>
+                                                        <td left><font color="red">{{consolidacaoComprovantes.vlComprovadoRecusado}}</font></td>
                                                     </tr>
                                                 </template>
                                             </v-data-table>
 
+                                        </v-flex>
+                                        <v-divider></v-divider>
+
+                                        <v-flex md12 xs12>
+                                            <v-data-table
+                                                :items="[]"
+                                                class="elevation-1"
+                                                hide-headers
+                                                hide-actions
+                                                flat
+                                            >
+                                                <template slot="no-data">
+                                                    <tr>
+                                                        <th class="text-sm-left">Parecer Tecnico</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{{parecer.dsParecer}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td :onchange="setStatus()"><b>Manifestação:</b> {{item}}</td>
+                                                    </tr>
+                                                </template>
+                                            </v-data-table>
                                         </v-flex>
 
                                     </v-layout>
@@ -103,26 +130,34 @@
                         </v-card>
 
 
-
-                        <v-subheader >Itens</v-subheader>
-
                         <v-expansion-panel >
                             <v-expansion-panel-content >
                                 <v-layout slot="header" class="blue--text">
                                     <v-icon class="mr-3 blue--text" >insert_drive_file
                                     </v-icon>
-                                    Coordenador
+                                    Revisão do Coordenador
                                     <v-spacer></v-spacer>
-                                    <v-chip small color="green" text-color="white">
+                                    <template v-if="revisao.status == 1" :onchange="revisao.siStatus">
+                                    <v-chip small color="green" text-color="white" >
                                         <v-avatar>
                                             <v-icon>check_circle</v-icon>
                                         </v-avatar>
                                         Aprovado
                                     </v-chip>
+                                    </template>
+                                    <template v-if="revisao.status == 0" :onchange="revisao.siStatus">
+                                    <v-chip small color="red" text-color="white">
+                                        <v-avatar>
+                                            <v-icon>close</v-icon>
+                                        </v-avatar>
+                                        Reprovado
+                                    </v-chip>
+                                    </template>
+
                                 </v-layout>
 
                                 <v-card
-                                    color="green lighten-4"
+                                    :color="background[revisao.siStatus]"
                                     flat
                                     tile
                                 >
@@ -137,25 +172,18 @@
 
                                                 <v-card-text class="elevation-2">
                                                     <v-data-table
-
+                                                        :items="[]"
                                                         class="elevation-2"
                                                         hide-headers
                                                         hide-actions
                                                     >
                                                         <template slot="no-data">
                                                             <tr>
-                                                                <td left><b>Fornecedor:</b></td>
-                                                                <td>Seu juquinha</td>
-                                                                <td left><b>CNPJ/CPF:</b></td>
-                                                                <td colspan="5">Seu PC</td>
-                                                            </tr>
-
-                                                            <tr>
-                                                                <td left><b>Avaliação:</b></td>
+                                                                <th left><b>Revisão:</b></th>
                                                                 <td colspan="7">
-                                                                    <v-radio-group row>
-                                                                        <v-radio label="Aprovado" value="radio-1"></v-radio>
-                                                                        <v-radio label="Reprovado" value="radio-2" color="red"></v-radio>
+                                                                    <v-radio-group row v-model="revisao.siStatus">
+                                                                        <v-radio label="Aprovado" :value="1" ></v-radio>
+                                                                        <v-radio label="Reprovado" :value="0" color="red"></v-radio>
                                                                     </v-radio-group>
                                                                 </td>
                                                             </tr>
@@ -165,7 +193,6 @@
                                                     <v-textarea
                                                         solo
                                                         no-resize
-                                                        label="Parecer da avaliação"
                                                         value=""
                                                         hint="Digite o parecer da sua avaliação"
                                                         height="180px"
@@ -191,12 +218,73 @@
 
 
 <script>
+    import { mapActions, mapGetters } from 'vuex';
+
   export default {
       name: 'RevisaoParecer',
       data() {
           return {
               dialog: false,
+              revisao: {
+                  siStatus: 0,
+                  dsRevisao:'',
+                  idAvaliacaoFinanceira: this.getParecer.idAvaliacaoFinanceira,
+                  idGrupoAtivo: 21,
+                  idAgente: 333
+              },
+              background: [
+                  'red lighten-4',
+                  'green lighten-4'
+              ],
+              parecerData: { },
+              items: [
+                  {
+                      id: 'R',
+                      text: 'Reprovação',
+                  },
+                  {
+                      id: 'A',
+                      text: 'Aprovação',
+                  },
+                  {
+                      id: 'P',
+                      text: 'Aprovação com Ressalva',
+                  },
+              ],
+              item:'',
           };
+      },
+      methods:
+          {
+              ...mapActions({
+                  requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
+              }),
+              getConsolidacao(id) {
+                  this.requestEmissaoParecer(id);
+                  this.setStatus();
+              },
+              setStatus(){
+                  this.items.forEach(i => {
+                      if (i['id'] == this.getParecer.siManifestacao) {
+                          this.item = i.text;
+                      }
+                  });
+              }
+          },
+      computed:
+          {
+              ...mapGetters({
+                  modalVisible: 'modal/default',
+                  consolidacaoComprovantes: 'avaliacaoResultados/consolidacaoComprovantes',
+                  proponente: 'avaliacaoResultados/proponente',
+                  parecer: 'avaliacaoResultados/parecer',
+                  projeto: 'avaliacaoResultados/projeto',
+                  getParecer: 'avaliacaoResultados/parecer',
+              }),
+          },
+      mounted() {
+          this.redirectLink = this.redirectLink + this.idPronac;
+          this.getConsolidacao(195025);
       },
   };
 </script>
