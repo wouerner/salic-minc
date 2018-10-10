@@ -8,7 +8,7 @@
                 icons-and-text
             >
                 <v-tabs-slider color="deep-orange accent-3"></v-tabs-slider>
-                <v-tab href="#tab-0" 
+                <v-tab href="#tab-0"
                     v-if="getUsuario.grupo_ativo == 125"
                 >
                     <template v-if="Object.keys(getProjetosParaDistribuir).length == 0">
@@ -37,13 +37,18 @@
                     </template>
                 </v-tab>
                 <v-tab href="#tab-2">
-                     Finalizados
+                    Assinar
                     <v-icon>done_all</v-icon>
                 </v-tab>
                 <v-tab href="#tab-3">
-                     Em assinatura
+                    Acompanhamento 
                     <v-icon>edit</v-icon>
                 </v-tab>
+                <v-tab href="#tab-4">
+                    Historico 
+                    <v-icon>edit</v-icon>
+                </v-tab>
+
                 <v-tab-item
                     :id="'tab-0'"
                     :key="0"
@@ -97,7 +102,7 @@
                     <v-card flat>
                         <v-card-text>
                             <TabelaProjetos
-                                :dados="getProjetosFinalizados"
+                                :dados="getProjetosAssinatura"
                                 :componentes="listaAcoesTecnico"
                             ></TabelaProjetos>
                         </v-card-text>
@@ -119,6 +124,10 @@ import AnaliseButton from './analise/analisarButton';
 export default {
     name: 'Painel',
     created() {
+        this.projetosFinalizados({ estadoid: 6 });
+        this.projetosAssinatura();
+        this.obterDadosTabelaTecnico({ estadoid: 5 });
+        this.distribuir({ estadoid: 6 });
         this.usuarioLogado();
     },
     mounted() {
@@ -149,6 +158,7 @@ export default {
         ...mapActions({
             obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
             projetosFinalizados: 'avaliacaoResultados/projetosFinalizados',
+            projetosAssinatura: 'avaliacaoResultados/projetosAssinatura',
             distribuir: 'avaliacaoResultados/projetosParaDistribuir',
             usuarioLogado: 'autenticacao/usuarioLogado',
         }),
@@ -157,6 +167,7 @@ export default {
         ...mapGetters({
             dadosTabelaTecnico: 'avaliacaoResultados/dadosTabelaTecnico',
             getProjetosFinalizados: 'avaliacaoResultados/getProjetosFinalizados',
+            getProjetosAssinatura: 'avaliacaoResultados/getProjetosAssinatura',
             getProjetosParaDistribuir: 'avaliacaoResultados/getProjetosParaDistribuir',
             getUsuario: 'autenticacao/getUsuario',
         }),

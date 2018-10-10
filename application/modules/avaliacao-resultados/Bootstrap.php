@@ -23,7 +23,9 @@ class AvaliacaoResultados_Bootstrap extends Zend_Application_Module_Bootstrap
                     'avaliacao-comprovante',
                     'revisao',
                     'projeto',
-                    'tecnicos'
+                    'tecnicos',
+                    'fluxo-projeto',
+                    'projeto-assinatura'
                 ]
             ]
         );

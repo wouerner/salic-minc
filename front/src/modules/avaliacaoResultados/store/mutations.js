@@ -28,6 +28,7 @@ export const state = {
     projetosFinalizados: {},
     dadosItemComprovacao: {},
     projetosParaDistribuir: {},
+    getProjetosAssinatura: [],
 };
 
 export const mutations = {
@@ -122,5 +123,8 @@ export const mutations = {
     },
     [types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR](state, dados){
         state.projetosParaDistribuir = dados;
+    },
+    [types.SET_DADOS_PROJETOS_ASSINATURA](state, dados){
+        state.getProjetosAssinatura = dados;
     },
 };
