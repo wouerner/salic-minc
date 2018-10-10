@@ -16,16 +16,22 @@ class Laudo
     }
 
     public function salvarLaudo($idLaudoFinal, $idPronac, $dtLaudoFinal, $siManifestacao, $dsLaudoFinal, $idUsuario){
+        $auth = \Zend_Auth::getInstance();
+        $tbTable = new \AvaliacaoResultados_Model_DbTable_LaudoFinal;
+        $tbTable->insert(['idPronac'=>$idPronac, 
+                          'idUsuario'=>$auth->getIdentity()->usu_codigo, 
+                          'dtLaudoFinal'=>(new \DateTime())->format('Y-m-d'), 
+                          'siManifestacao'=>$siManifestacao, 
+                          'dsLaudoFinal'=>$dsLaudoFinal]);
+
         $model = new \AvaliacaoResultados_Model_LaudoFinal;
-        $model->setIdLaudoFinal($idLaudoFinal);
         $model->setIdPronac($idPronac);
         $model->setDtLaudoFinal($dtLaudoFinal);
         $model->setSiManifestacao($siManifestacao);
         $model->setDsLaudoFinal($dsLaudoFinal);
         $model->setIdUsuario($idUsuario);
-
+        
         $mapper = new \AvaliacaoResultados_Model_LaudoFinalMapper;
-        $mapper->save($model);
-        return true;
+        return $mapper->save($model);
     }
 }

@@ -9,10 +9,11 @@ class AvaliacaoResultados_Model_LaudoFinalMapper extends MinC_Db_Mapper
 
     public function save($model)
     {
-        if ($this->isValid($model)) {
-            return parent::save($model);
-        }
-        return false;
+        // if ($this->isValid($model)) {
+            // var_dump($model); die;
+            var_dump( parent::save($model)); die;
+        // }
+        // return false;
     }
 
     public function isValid($model)
