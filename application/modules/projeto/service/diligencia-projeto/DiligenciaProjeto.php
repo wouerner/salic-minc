@@ -63,7 +63,7 @@ class DiligenciaProjeto
 
             $resultArray[] = [
                 'idPreprojeto' => $diligencia['pronac'],
-                'dataSolicitacao' => $objDateTimedataSolicitacao->format('d/m/Y H:i:s'),
+                'dataSolicitacao' => $objDateTimedataSolicitacao->format('d/m/Y'),
             ];
         }
 
@@ -83,9 +83,9 @@ class DiligenciaProjeto
             $resultArray[] = [
                 'produto' => $diligencia['produto'],
                 'tipoDiligencia' => $tipoDiligencia,
-                'dataSolicitacao' => $objDateTimedataSolicitacao->format('d/m/Y H:i:s'),
-                'dataResposta' => $objDateTimedataResposta->format('d/m/Y H:i:s'),
-                'prazoResposta' => strtotime($diligencia['dataSolicitacao'].' +'.$qtdia.' day'),
+                'dataSolicitacao' => $objDateTimedataSolicitacao->format('d/m/Y'),
+                'dataResposta' => $objDateTimedataResposta->format('d/m/Y'),
+                'prazoResposta' => date('d/m/Y',strtotime($diligencia['dataSolicitacao'].' +'.$qtdia.' day')),
             ];
         }
 
@@ -102,7 +102,7 @@ class DiligenciaProjeto
             $qtdia = 40;
             $resultArray[] = [
                 'tipoDiligencia' => 'Dilig&ecirc;ncia na An&aacute;lise da adequa&ccedil;&atilde;o &agrave; realidade do projeto.',
-                'dtAvaliacao' => $objDateTimedtAvaliacao->format('d/m/Y H:i:s'),
+                'dtAvaliacao' => $objDateTimedtAvaliacao->format('d/m/Y'),
             ];
         }
 
