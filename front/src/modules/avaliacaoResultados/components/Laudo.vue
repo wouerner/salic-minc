@@ -30,19 +30,6 @@
                         </v-flex>
                     </td>
                     <td class="text-xs-center">{{ props.item.nomeProjeto }}</td>
-                    <td
-                            v-if="props.item.cnpj"
-                            class="text-xs-center"
-                    >
-                        {{ props.item.cnpj }}
-                    </td>
-                    <td
-                            v-else
-                            class="text-xs-center"
-                    >
-                        {{ props.item.cpf }}
-                    </td>
-                    <td class="text-xs-center">{{ props.item.proponente }}</td>
                     <td class="text-xs-center">
                         <v-chip
                                 v-if="props.item.manifestacao == 1"
@@ -176,16 +163,6 @@
                     },
                     {
                         align: 'center',
-                        text: 'CNPJ/CPF',
-                        value: 'cpf',
-                    },
-                    {
-                        align: 'center',
-                        text: 'Proponente',
-                        value: 'proponente',
-                    },
-                    {
-                        align: 'center',
                         text: 'Manifestação',
                         value: 'manifestacao',
                     },
@@ -212,7 +189,6 @@
         },
         watch: {
             dadosTabela() {
-                this.pagination.totalItems = this.dadosTabela.items.length;
             },
         },
         computed: {

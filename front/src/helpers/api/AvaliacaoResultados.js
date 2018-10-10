@@ -85,3 +85,4 @@ export const criarDiligencia = params => api.postRequest('/diligencia/diligencia
 
 export const obterProjetosParaAssinatura = () => api.getRequest('/avaliacao-resultados/projeto-assinatura');
 
+export const obterProjetosLaudoFinal = () => api.getRequest('/avaliacao-resultados/laudo');
