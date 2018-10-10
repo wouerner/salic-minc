@@ -189,27 +189,32 @@ class DiligenciaProjeto
             $Solicitacao = html_entity_decode(utf8_encode($diligencia['Solicitacao']));
             $Resposta = html_entity_decode(utf8_encode($diligencia['Resposta']));
 
-            $arquivo = new \Arquivo();
-            $arquivos = $arquivo->buscarAnexosDiligencias($diligencia['idDiligencia']);
-
-            foreach ($arquivos as $arquivo) {
-                $objdtEnvio = new \DateTime($arquivo->dtEnvio);
-                $arquivoArray[] = [
-                    'idArquivo' => $arquivo->idArquivo,
-                    'nmArquivo' => utf8_encode($arquivo->nmArquivo),
-                    'dtEnvio' => $objdtEnvio->format('d/m/Y'),
-                    'idDiligencia' => $arquivo->idDiligencia,
-                ];
-            }
+            $arquivo = $this->obterAnexosDiligencias($diligencia);
 
             $resultArray[] = [
                 'Solicitacao' => $Solicitacao,
                 'Resposta' => $Resposta,
-                'arquivo' => $arquivoArray
+                'arquivo' => $arquivo
             ];
         }
 
-
         return $resultArray;
+    }
+
+    private function obterAnexosDiligencias($diligencia)
+    {
+        $arquivo = new \Arquivo();
+        $arquivos = $arquivo->buscarAnexosDiligencias($diligencia['idDiligencia']);
+        $arquivoArray = [];
+        foreach ($arquivos as $arquivo) {
+            $objdtEnvio = new \DateTime($arquivo->dtEnvio);
+            $arquivoArray[] = [
+                'idArquivo' => $arquivo->idArquivo,
+                'nmArquivo' => utf8_encode($arquivo->nmArquivo),
+                'dtEnvio' => $objdtEnvio->format('d/m/Y'),
+                'idDiligencia' => $arquivo->idDiligencia,
+            ];
+        }
+        return $arquivoArray;
     }
 }
