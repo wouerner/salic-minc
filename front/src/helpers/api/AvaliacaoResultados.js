@@ -83,5 +83,5 @@ export const obterProjetosParaDistribuir = () => api.getRequest('/prestacao-cont
 
 export const criarDiligencia = params => api.postRequest('/diligencia/diligencia', buildData(params));
 
-export const obterProjetosParaAssinatura = () => api.getRequest('/avaliacao-resultados/projeto-assinatura');
+export const obterProjetosAssinatura = params => api.getRequest(`/avaliacao-resultados/projeto-assinatura/estado/${params.estado}`);
 

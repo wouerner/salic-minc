@@ -37,12 +37,16 @@
                     </template>
                 </v-tab>
                 <v-tab href="#tab-2">
-                     Finalizados
-                    <v-icon>done_all</v-icon>
+                     Assinar
+                    <v-icon>done</v-icon>
                 </v-tab>
                 <v-tab href="#tab-3">
                      Em assinatura
-                    <v-icon>edit</v-icon>
+                    <v-icon>done_all</v-icon>
+                </v-tab>
+                <v-tab href="#tab-4">
+                     Historico
+                    <v-icon>history</v-icon>
                 </v-tab>
                 <v-tab-item
                     :id="'tab-0'"
@@ -84,7 +88,7 @@
                     <v-card flat>
                         <v-card-text>
                             <TabelaProjetos
-                                :dados="getProjetosFinalizados"
+                                :dados="getProjetosAssinar"
                                 :componentes="listaAcoesTecnico"
                             ></TabelaProjetos>
                         </v-card-text>
@@ -97,7 +101,20 @@
                     <v-card flat>
                         <v-card-text>
                             <TabelaProjetos
-                                :dados="getProjetosAssinatura"
+                                :dados="getProjetosEmAssinatura"
+                                :componentes="listaAcoesTecnico"
+                            ></TabelaProjetos>
+                        </v-card-text>
+                    </v-card>
+                </v-tab-item>
+                <v-tab-item
+                    :id="'tab-4'"
+                    :key="4"
+                >
+                    <v-card flat>
+                        <v-card-text>
+                            <TabelaProjetos
+                                :dados="getProjetosHistorico"
                                 :componentes="listaAcoesTecnico"
                             ></TabelaProjetos>
                         </v-card-text>
@@ -109,27 +126,31 @@
 </template>
 
 <script>
+
 import { mapActions, mapGetters } from 'vuex';
 import TabelaProjetos from './TabelaProjetos';
 import Historico from './Historico';
 import Encaminhar from './ComponenteEncaminhar';
-import TipoAvaliacao from './TipoAvaliacao';
 import AnaliseButton from './analise/analisarButton';
 
 export default {
     name: 'Painel',
     created() {
         this.projetosFinalizados({ estadoid: 6 });
-        this.projetosAssinatura();
         this.obterDadosTabelaTecnico({ estadoid: 5 });
         this.distribuir({ estadoid: 6 });
+
+        this.projetosAssinatura({ estado: 'assinar' });
+        this.projetosAssinatura({ estado: 'em_assinatura' });
+        this.projetosAssinatura({ estado: 'historico' });
+
         this.usuarioLogado();
     },
     mounted() {
     },
     watch: {
         getUsuario(val) {
-            if (Object.keys(val).length > 0 && val.usu_codigo != 0 ) {
+            if (Object.keys(val).length > 0 && val.usu_codigo !== 0) {
 
                 this.projetosFinalizados({ estadoid: 6, idAgente: this.getUsuario.usu_codigo });
                 this.obterDadosTabelaTecnico({ estadoid: 5, idAgente: this.getUsuario.usu_codigo });
@@ -160,7 +181,9 @@ export default {
         ...mapGetters({
             dadosTabelaTecnico: 'avaliacaoResultados/dadosTabelaTecnico',
             getProjetosFinalizados: 'avaliacaoResultados/getProjetosFinalizados',
-            getProjetosAssinatura: 'avaliacaoResultados/getProjetosAssinatura',
+            getProjetosAssinar: 'avaliacaoResultados/getProjetosAssinar',
+            getProjetosEmAssinatura: 'avaliacaoResultados/getProjetosEmAssinatura',
+            getProjetosHistorico: 'avaliacaoResultados/getProjetosHistorico',
             getProjetosParaDistribuir: 'avaliacaoResultados/getProjetosParaDistribuir',
             getUsuario: 'autenticacao/getUsuario',
         }),

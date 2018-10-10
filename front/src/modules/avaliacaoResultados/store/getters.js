@@ -19,4 +19,6 @@ export const characterParecer = state => state.characterParecer;
 export const getProjetosFinalizados = state => state.projetosFinalizados;
 export const dadosItemComprovacao = state => state.dadosItemComprovacao;
 export const getProjetosParaDistribuir = state => state.projetosParaDistribuir;
-export const getProjetosAssinatura = state => state.getProjetosAssinatura;
+export const getProjetosAssinar = state => state.getProjetosAssinar;
+export const getProjetosEmAssinatura = state => state.getProjetosEmAssinatura;
+export const getProjetosHistorico = state => state.getProjetosHistorico;

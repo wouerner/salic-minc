@@ -18,15 +18,30 @@ class AvaliacaoResultados_ProjetoAssinaturaController extends MinC_Controller_Re
         parent::__construct($request, $response, $invokeArgs);
     }
 
-    public function indexAction()
-    {
+    public function indexAction(){}
+
+    public function getAction(){
         $projetosAssinaturaService = new FluxoProjetoAssinaturaService($this->getRequest(), $this->getResponse());
-        $projetos = $projetosAssinaturaService->projetosAguardandoAssinatura();
+        $projetos = [];
 
-        $this->renderJsonResponse(\TratarArray::utf8EncodeArray($projetos->toArray()), 200);
+        switch ($this->getRequest()->getParam('estado')) {
+            case 'assinar':
+                $projetos = $projetosAssinaturaService->obterProjetosAguardandoAssinaturaTecnico()->toArray();
+                break;
+            case 'em_assinatura':
+                $projetos = $projetosAssinaturaService->obterProjetosAguardandoAssinaturasSuperiores()->toArray();
+                break;
+            case 'historico':
+                $projetos = $projetosAssinaturaService->obterProjetosComAssinaturasFinalizadaPorTecnico()->toArray();
+                break;
+            default:
+                $this->customRenderJsonResponse($projetos, 404);
+        }
+
+        $this->renderJsonResponse(
+            \TratarArray::utf8EncodeArray($projetos),
+            200);
     }
-
-    public function getAction(){}
 
     public function headAction(){}
 
