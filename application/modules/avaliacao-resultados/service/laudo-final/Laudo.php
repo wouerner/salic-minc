@@ -11,7 +11,8 @@ class Laudo
     public function obterLaudo(){
         return[222222];
     }
-    public function salvarLaudo(){
+    public function salvarLaudo($data){
+        //tratativa $data
         return true;
     }
 }
