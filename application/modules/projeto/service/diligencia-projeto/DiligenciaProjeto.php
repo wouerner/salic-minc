@@ -136,7 +136,7 @@ class DiligenciaProjeto
         $result['diligenciaProposta'] = $proposta;
         $result['diligenciaProjeto'] = $diligenciaProjeto;
         $result['diligenciaAdequacao'] = $adequacao;
-//xd($result);
+
         return $result;
     }
 
@@ -171,9 +171,11 @@ class DiligenciaProjeto
 
         foreach ($diligenciaAdequacao as $diligencia) {
             $dsAvaliacao = html_entity_decode(utf8_encode($diligencia['dsAvaliacao']));
+            $objDateTimeDtAvaliacao = new \DateTime($diligencia['dtAvaliacao']);
 
             $resultArray[] = [
                 'dsAvaliacao' => $dsAvaliacao,
+                'dtAvaliacao' => $objDateTimeDtAvaliacao->format('d/m/Y'),
             ];
         }
 
