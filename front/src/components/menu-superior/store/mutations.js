@@ -1,14 +1,11 @@
 import * as types from './types';
 
 export const state = {
-    modalAberta: false,
+    perfisDisponiveis: [],
 };
 
 export const mutations = {
-    [types.MODAL_OPEN](state, modal) {
-        state.modalAberta = modal;
-    },
-    [types.MODAL_CLOSE](state) {
-        state.modalAberta = '';
+    [types.SET_PERFIS_DISPONIVEIS](state, dados) {
+        state.perfisDisponiveis = dados;
     },
 };

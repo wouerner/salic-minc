@@ -1,2 +1,20 @@
+import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
+import * as desencapsularResponse from '@/helpers/actions';
 import * as types from './types';
 
+export const buscarPerfisDisponiveis = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.buscarPerfisDisponiveis(params)
+        .then((response) => {
+            const items = desencapsularResponse.default(response);
+            console.log('asaaaaaaaaaaaaaaaaaaaaaa');
+            console.log(items);
+            commit(types.SET_PERFIS_DISPONIVEIS, items);
+        });
+};
+
+export const alterarPerfil = (_, perfil) => {
+    const grupoAtivo = perfil.gru_codigo;
+    const orgaoAtivo = perfil.uog_orgao;
+    const url = `/autenticacao/perfil/alterarperfil?codGrupo=${grupoAtivo}&codOrgao=${orgaoAtivo}`;
+    window.location.replace(url);
+};

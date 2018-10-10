@@ -147,14 +147,6 @@ export const alterarParecer = ({ commit }, param) => {
     commit(types.SET_PARECER, param);
 };
 
-export const buscarPerfisDisponiveis = ({ commit }, params) => {
-    avaliacaoResultadosHelperAPI.buscarPerfisDisponiveis(params)
-        .then((response) => {
-            const items = desencapsularResponse.default(response);
-            commit('SET_PERFIS_DISPONIVEIS', items);
-        });
-};
-
 export const obterDadosItemComprovacao = ({ commit }, params) => {
     avaliacaoResultadosHelperAPI.obterDadosItemComprovacao(params)
         .then((response) => {
@@ -203,12 +195,4 @@ export const projetosParaDistribuir = ({ commit }) => {
             const data = response.data;
             commit(types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR, data);
         });
-};
-
-export const alterarPerfil = (_, perfil) => {
-    const grupoAtivo = perfil.gru_codigo;
-    const orgaoAtivo = perfil.uog_orgao;
-
-    window.location.replace(`/autenticacao/perfil/alterarperfil?codGrupo=${grupoAtivo}&codOrgao=${orgaoAtivo}`);
-
 };

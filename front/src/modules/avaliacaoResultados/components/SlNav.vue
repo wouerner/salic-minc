@@ -13,11 +13,6 @@
         components: {
             MenuSuperior,
         },
-        // data() {
-        //     return {
-        //         dados: this.dadosMenuAjax(),
-        //     };
-        // },
         computed: {
             ...mapGetters({
                 dadosMenu: 'avaliacaoResultados/dadosMenu',
@@ -29,17 +24,7 @@
         methods: {
             ...mapActions({
                 dadosMenuAjax: 'avaliacaoResultados/dadosMenu',
-                // buscarPerfisDisponiveis: 'avaliacaoResultados/buscarPerfisDisponiveis',
-                // alterarPerfil: 'avaliacaoResultados/alterarPerfil',
             }),
         },
     };
 </script>
-
-<style>
-    .scrollable {
-        width: 500px;
-        height: 750px;
-        overflow: scroll;
-    }
-</style>

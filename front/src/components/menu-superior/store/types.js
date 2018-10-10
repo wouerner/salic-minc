@@ -1,2 +1,1 @@
-export const MODAL_OPEN = 'MODAL_OPEN';
-export const MODAL_CLOSE = 'MODAL_CLOSE';
+export const SET_PERFIS_DISPONIVEIS = 'SET_PERFIS_DISPONIVEIS';

@@ -171,8 +171,7 @@
         },
         computed: {
             ...mapGetters({
-                // dadosMenu: 'avaliacaoResultados/dadosMenu',
-                perfisDisponiveis: 'avaliacaoResultados/perfisDisponiveis',
+                perfisDisponiveis: 'menuSuperior/perfisDisponiveis',
             }),
         },
         created() {
@@ -181,8 +180,8 @@
         methods: {
             ...mapActions({
                 // dadosMenuAjax: 'avaliacaoResultados/dadosMenu',
-                buscarPerfisDisponiveis: 'avaliacaoResultados/buscarPerfisDisponiveis',
-                alterarPerfil: 'avaliacaoResultados/alterarPerfil',
+                buscarPerfisDisponiveis: 'menuSuperior/buscarPerfisDisponiveis',
+                alterarPerfil: 'menuSuperior/alterarPerfil',
             }),
             trocarPerfil(perfil) {
                 this.alterarPerfil(perfil);

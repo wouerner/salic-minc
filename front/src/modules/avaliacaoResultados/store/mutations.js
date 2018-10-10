@@ -26,7 +26,6 @@ export const state = {
     characterManifestacao: '',
     characterParecer: '',
     projetosFinalizados: {},
-    perfisDisponiveis: [],
     dadosItemComprovacao: {},
     projetosParaDistribuir: {},
 };
@@ -117,9 +116,6 @@ export const mutations = {
     },
     [types.SET_DADOS_PROJETOS_FINALIZADOS](state, dados) {
         state.projetosFinalizados = dados;
-    },
-    [types.SET_PERFIS_DISPONIVEIS](state, dados) {
-        state.perfisDisponiveis = dados;
     },
     [types.GET_DADOS_ITEM_COMPROVACAO](state, dados) {
         state.dadosItemComprovacao = dados;

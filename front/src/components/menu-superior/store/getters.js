@@ -1,1 +1,1 @@
-export default state => state.modalAberta;
+export const perfisDisponiveis = state => state.perfisDisponiveis;
