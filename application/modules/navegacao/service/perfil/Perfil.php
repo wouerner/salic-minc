@@ -30,6 +30,7 @@ class Perfil
     private function montaPerfis($perfis)
     {
         $result = [];
+        array_push($result, $this->montarProponente());
 
         foreach ($perfis as $perfil) {
             $current_object = [];
@@ -50,7 +51,26 @@ class Perfil
         return $result;
     }
 
-    private function utf8Encode($perfis) {
+    private function montarProponente()
+    {
+        $current_object = [];
+
+        $current_object['usu_orgao'] = '';
+        $current_object['usu_orgao_lotacao'] = '';
+        $current_object['uog_orgao'] = 2222;
+        $current_object['orgao_sigla_autorizada'] = '';
+        $current_object['org_nome_autorizado'] = '';
+        $current_object['gru_codigo'] = 1111;
+        $current_object['nome_grupo'] = 'Proponente';
+        $current_object['org_superior'] = '';
+        $current_object['uog_status'] = '';
+        $current_object['id_unico'] = '';
+
+        return $current_object;
+    }
+
+    private function utf8Encode($perfis)
+    {
         array_walk($perfis, function (&$value) {
             $value = array_map('utf8_encode', $value);
         });

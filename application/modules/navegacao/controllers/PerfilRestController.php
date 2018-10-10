@@ -31,7 +31,14 @@ class Navegacao_PerfilRestController extends MinC_Controller_Rest_Abstract
     public function indexAction()
     {
         $perfilService = new PerfilService($this->getRequest(), $this->getResponse());
-        $resposta = $perfilService->buscarPerfisDisponoveis();
+        $perfisDisponoveis = $perfilService->buscarPerfisDisponoveis();
+        $usuarioAtivo = new Zend_Session_Namespace('UsuarioAtivo');
+        $grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+
+        $resposta = [];
+        $resposta['perfisDisponoveis'] = $perfisDisponoveis;
+        $resposta['usuarioAtivo'] = $usuarioAtivo;
+        $resposta['grupoAtivo'] = $grupoAtivo;
 
         $this->renderJsonResponse($resposta, 200);
     }
