@@ -175,22 +175,27 @@
 
     export default {
         name: 'AnalisarItem',
-        created() {
-            this.obterDadosItemComprovacao();
-        },
-        // props: [
-        //     'idPronac',
-        // ],
+        props: [
+            'idPronac',
+            'uf',
+            'produto',
+            'idmunicipio',
+            'idPlanilhaItem',
+            'etapa',
+        ],
         watch: {
             dialog(val) {
                 if (val) {
-                    this.obterDadosItemComprovacao(this.getUrlParams());
+                    if (typeof this.getUrlParams() !== 'undefined') {
+                        this.obterDadosItemComprovacao(this.getUrlParams());
+                    } else {
+                        this.obterDadosItemComprovacao(`idPronac/${this.idPronac}/uf/${this.uf}/produto/${this.produto}/idmunicipio/${this.idmunicipio}/idPlanilhaItem/${this.idPlanilhaItem}/etapa/${this.etapa}`);
+                    }
                 }
             },
         },
         data() {
             return {
-                idPronac: 195025, // @TODO remover depois
                 projetoHeaders: [
                     {
                         text: 'PRONAC',

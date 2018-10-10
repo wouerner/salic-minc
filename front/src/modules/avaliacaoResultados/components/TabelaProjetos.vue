@@ -33,7 +33,7 @@
                         <component 
                             :is="c" 
                             :id-pronac="props.item.IdPRONAC"
-                            :pronac="props.item.Pronac"
+                            :pronac="props.item.PRONAC"
                             :nome-projeto="props.item.NomeProjeto"
                         ></component>
                     </template>
@@ -56,12 +56,10 @@
             </div>
         </div>
     </div>
-
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import ModalTemplate from '@/components/modal';
 import Historico from './Historico';
 
 export default {
@@ -101,18 +99,12 @@ export default {
         };
     },
     components: {
-        ModalTemplate,
         Historico,
     },
     methods: {
         ...mapActions({
             obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
         }),
-    },
-    watch: {
-        dadosTabelaTecnico() {
-            this.pagination.totalItems = this.dados.items.length;
-        },
     },
     computed: {
         ...mapGetters({
@@ -123,6 +115,13 @@ export default {
                 this.pagination.totalItems == null
             ) return 0;
             return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
+        },
+    },
+    watch: {
+        dadosTabelaTecnico() {
+            if (this.dados.items !== undefined) {
+                this.pagination.totalItems = this.dados.items.length;
+            }
         },
     },
 };

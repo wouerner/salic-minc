@@ -8,7 +8,7 @@
                         <v-toolbar-items>
                             <v-btn v-if="tpDiligencia && solicitacao" dark flat @click.native="enviarDiligencia()">Enviar</v-btn>
                             <v-btn v-else dark flat disabled>Enviar</v-btn>
-                            <v-btn dark flat :to="{ name: 'Analise Planilha', params:{ id:this.$route.params.id }}">Cancelar</v-btn>
+                            <v-btn dark flat :to="{ name: 'AnalisePlanilha', params:{ id:this.$route.params.id }}">Cancelar</v-btn>
                         </v-toolbar-items>
                 </v-toolbar>
                 <v-container grid-list-sm>

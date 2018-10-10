@@ -2,7 +2,9 @@
     <v-container grid-list-md >
         <v-layout row justify-center>
             <v-dialog v-model="dialog" width="600" lazy>
-                <v-btn slot="activator" color="green darken-4" dark>Analisar</v-btn>
+                <v-btn slot="activator" flat icon color="green darken-4">
+                    <v-icon>compare_arrows</v-icon>
+                </v-btn>
                 <v-flex>
                     <v-card >
                         <v-card-title primary-title>
@@ -83,7 +85,7 @@
                                 <v-subheader>Tipo de avaliação</v-subheader>
                             </v-list>
                              <v-radio-group row column v-model="percentual" :click="redirecionarEncaminhar()">
-                                 <v-radio color="green darken-4"  label="Todos Comprovantes" :value="0"></v-radio>
+                                 <v-radio color="green darken-4"  label="Todos Comprovantes" :value="100"></v-radio>
                                  <v-radio color="green darken-4" label="90%"  :value="90"></v-radio>
                                  <v-radio color="green darken-4" label="95%"  :value="95"></v-radio>
                                  <v-radio color="green darken-4" label="99%"  :value="99"></v-radio>
@@ -92,7 +94,7 @@
                         <v-divider></v-divider>
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn dark large color="green darken-4" :href="redirect">AVALIAR</v-btn>
+                            <v-btn dark large color="green darken-4" :href="'/avaliacao-resultados/#/planilha/'+ this.idPronac">AVALIAR</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-flex>
@@ -107,20 +109,15 @@ import ModalTemplate from '@/components/modal';
 
 export default {
     name: 'TipoAvaliacao',
-    props: ['idpronac'],
+    props: [
+        'idPronac',
+        'pronac',
+        'nomeProjeto',
+    ],
     data() {
         return {
-            idPronac: 0,
-            percentual: '',
-            encaminhar: '',
-            aprovado: 300,
-            captado: 200,
-            comprovado: 100,
-            todos: 75,
-            valor1: 80,
-            valor2: 10,
-            valor3: 20,
             dialog: false,
+            percentual: 100,
         };
     },
     components: {
@@ -136,7 +133,7 @@ export default {
             this.getTipo(id);
         },
         redirecionarEncaminhar() {
-            const data = { idPronac: this.idpronac, percentual: this.percentual };
+            const data = { idPronac: this.idPronac, percentual: this.percentual };
             this.redirectLink(data);
         },
     },
@@ -149,7 +146,7 @@ export default {
     watch: {
         dialog(val) {
             if (val) {
-                this.getTipoAvaliacaoResultado(this.idpronac);
+                this.getTipoAvaliacaoResultado(this.idPronac);
             }
         },
     },

@@ -34,7 +34,10 @@ export const getTeste = params => api.postRequest('/realizarprestacaodecontas/ca
 
 export const getTipoAvaliacao = params => api.getRequest(`/avaliacao-resultados/tipo-avaliacao-rest/idPronac/${params}`);
 
-export const obterDadosTabelaTecnico = params => api.getRequest(`/avaliacao-resultados/fluxo-projeto?estadoid=${params.estadoid}`);
+export const obterDadosTabelaTecnico = (params) => {
+    const data = params;
+    return api.getRequest(`/avaliacao-resultados/fluxo-projeto?estadoid=${data.estadoid}&idAgente=${data.idAgente}`);
+};
 
 export const obterHistoricoEncaminhamento = params => api.getRequest(`/avaliacao-resultados/historico/idPronac/${params}`);
 
@@ -79,3 +82,4 @@ export const finalizarParecerLaudoFinal = (params) => {
 export const obterProjetosParaDistribuir = () => api.getRequest('/prestacao-contas/prestacao-contas/obter-analise-financeira-virtual');
 
 export const criarDiligencia = params => api.postRequest('/diligencia/diligencia', buildData(params));
+
