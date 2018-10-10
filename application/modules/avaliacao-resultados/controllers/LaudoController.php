@@ -1,6 +1,8 @@
 <?php
 
-class AvaliacaoResultados_TipoLaudoController extends MinC_Controller_Rest_Abstract
+use Application\Modules\AvaliacaoResultados\Service\LaudoFinal\Laudo as LaudoService;
+
+class AvaliacaoResultados_LaudoController extends MinC_Controller_Rest_Abstract
 {
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
     {
@@ -10,10 +12,7 @@ class AvaliacaoResultados_TipoLaudoController extends MinC_Controller_Rest_Abstr
             Autenticacao_Model_Grupos::COORDENADOR_GERAL_PRESTACAO_DE_CONTAS,
         ];
 
-        $permissionsPerMethod  = [
-//            'index' => $profiles,
-//            'post' => $profiles
-        ];
+        $permissionsPerMethod  = [];
         $this->setProtectedMethodsProfilesPermission($permissionsPerMethod);
 
         parent::__construct($request, $response, $invokeArgs);
@@ -26,7 +25,10 @@ class AvaliacaoResultados_TipoLaudoController extends MinC_Controller_Rest_Abstr
 
     public function indexAction()
     {
-        $this->renderJsonResponse(["Nenhum conteúdo"], 204);
+        $service = new LaudoService();
+        $data = $service->obterProjetos();
+
+        $this->renderJsonResponse($data, 200);
     }
 
     public function getAction()
