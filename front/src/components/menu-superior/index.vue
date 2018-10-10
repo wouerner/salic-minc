@@ -117,7 +117,7 @@
                     <v-toolbar-title
                         slot="activator"
                     >
-                        <span>{{perfisDisponiveis[0].orgao_sigla_autorizada}} - {{perfisDisponiveis[0].nome_grupo}}</span>
+                        <span>{{perfisDisponiveis[1].orgao_sigla_autorizada}} - {{perfisDisponiveis[1].nome_grupo}}</span>
                         <v-icon dark>arrow_drop_down</v-icon>
                     </v-toolbar-title>
                     <v-list class="scrollable">
@@ -152,6 +152,7 @@
         <div v-else>
             Carregando...
         </div>
+    <!--{{usuarioAtivo}} &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; {{grupoAtivo}}-->
     </div>
 </template>
 
@@ -172,6 +173,8 @@
         computed: {
             ...mapGetters({
                 perfisDisponiveis: 'menuSuperior/perfisDisponiveis',
+                usuarioAtivo: 'menuSuperior/usuarioAtivo',
+                grupoAtivo: 'menuSuperior/grupoAtivo',
             }),
         },
         created() {

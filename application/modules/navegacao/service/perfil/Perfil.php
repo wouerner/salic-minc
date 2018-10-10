@@ -13,19 +13,42 @@ class Perfil
         $this->response = $response;
     }
 
-    public function buscarPerfisDisponoveis()
+    public function buscarPerfisDisponoveis($grupoAtivo)
     {
         $auth = \Zend_Auth::getInstance();
-        $objIdentity = $auth->getIdentity();
-        $arrAuth = array_change_key_case((array)$objIdentity);
+        $usuarioAtivo = $auth->getIdentity();
+        $arrAuth = array_change_key_case((array) $usuarioAtivo);
 
         $objModelUsuario = new \Navegacao_Model_PerfilMapper();
-        $perfis = $objModelUsuario->buscarPerfisDisponiveis($arrAuth['usu_codigo'], 21);
-        $result = $this->montaPerfis($perfis);
+        $perfisDisponoveis = $objModelUsuario->buscarPerfisDisponiveis($arrAuth['usu_codigo'], 21);
+        $reposta = $this->montaPerfis($perfisDisponoveis);
 
-        return $this->utf8Encode($result);
+        return $this->montaResultado($reposta, (array) $usuarioAtivo, $grupoAtivo);
     }
 
+    private function montaResultado($perfisDisponoveis, $usuarioAtivo, $grupoAtivo)
+    {
+        $resposta = [];
+        $resposta['perfisDisponoveis'] = $this->utf8Encode($perfisDisponoveis);
+        $resposta['usuarioAtivo'] = $this->utf8Encode([(array) $usuarioAtivo ]);
+        $resposta['grupoAtivo'] = [ 'codGrupo' => $grupoAtivo->codGrupo, 'codOrgao' => $grupoAtivo->codOrgao ];
+
+        $grupoSelecionadoIndex = $this->grupoSelecionadoIndex($resposta['perfisDisponoveis'], $resposta['grupoAtivo']);
+        xd($grupoSelecionadoIndex);
+        return $resposta;
+    }
+
+
+    private function grupoSelecionadoIndex($perfisDisponoveis, $grupoAtivo)
+    {
+        foreach ($perfisDisponoveis as $key => $perfil) {
+            if ($perfil['gru_codigo'] == $grupoAtivo['codGrupo'] && $perfil['uog_orgao'] == $grupoAtivo['codOrgao']) {
+                return $key;
+            }
+        }
+
+        return 0;
+    }
 
     private function montaPerfis($perfis)
     {
