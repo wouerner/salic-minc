@@ -162,16 +162,16 @@
         name: 'SlNav',
         components: {},
         props: {
-            dadosMenuAjax: Array,
+            dadosMenu: Array,
         },
         data() {
             return {
-                dados: this.dadosMenuAjax(),
+                dados: this.dadosMenu,
             };
         },
         computed: {
             ...mapGetters({
-                dadosMenu: 'avaliacaoResultados/dadosMenu',
+                // dadosMenu: 'avaliacaoResultados/dadosMenu',
                 perfisDisponiveis: 'avaliacaoResultados/perfisDisponiveis',
             }),
         },

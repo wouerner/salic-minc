@@ -206,17 +206,9 @@ export const projetosParaDistribuir = ({ commit }) => {
 };
 
 export const alterarPerfil = (_, perfil) => {
-    console.log(perfil);
     const grupoAtivo = perfil.gru_codigo;
     const orgaoAtivo = perfil.uog_orgao;
 
     window.location.replace(`/autenticacao/perfil/alterarperfil?codGrupo=${grupoAtivo}&codOrgao=${orgaoAtivo}`);
 
-    // const usuario = state.usuario;
-    // const grupoAtivo = usuario.grupo_ativo;
-    // const orgaoAtivo = usuario.orgao_ativo;
-    //
-    // avaliacaoResultadosHelperAPI.alterarPerfil(grupoAtivo, orgaoAtivo)
-    // .then(() => {
-    // });
 };
