@@ -23,4 +23,22 @@ class AvaliacaoResultados_Model_DbTable_LaudoFinal extends MinC_Db_Table_Abstrac
 
         return $db->fetchRow($select);
     }
+
+    public function projetosLaudoFinal()
+    {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $select = $db->select();
+        $select->from(
+            ['p' => 'Projetos'],
+            ['p.IdPronac', 'p.NomeProjeto', 'av.siManifestacao'],
+            'sac.dbo'
+        )
+        ->join(['doc'=>'tbDocumentoAssinatura'], 'p.IdPRONAC=doc.IdPRONAC', null, 'sac.dbo')
+        ->join(['av'=>'tbAvaliacaoFinanceira'], 'av.idPronac=p.IdPRONAC', null, 'sac.dbo')
+        ->where('doc.idTipoDoAtoAdministrativo=622')
+        ->where('doc.cdSituacao=2')
+        ->where('doc.stEstado=1');
+        
+        return $db->fetchAll($select);
+    }
 }

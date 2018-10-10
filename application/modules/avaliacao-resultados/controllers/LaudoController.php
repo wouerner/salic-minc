@@ -26,8 +26,13 @@ class AvaliacaoResultados_LaudoController extends MinC_Controller_Rest_Abstract
     public function indexAction()
     {
         $service = new LaudoService();
-        $data = $service->obterProjetos();
+        $projetos = $service->obterProjetos();
 
+        $data = [];
+
+        foreach($projetos as $projeto){
+            $data[] =  array_map('utf8_encode', $projeto);
+        }
         $this->renderJsonResponse($data, 200);
     }
 
