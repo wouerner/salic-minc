@@ -4,6 +4,7 @@ export const state = {
     perfisDisponiveis: [],
     usuarioAtivo:{},
     grupoAtivo: {},
+    grupoSelecionadoIndex: 0,
 };
 
 export const mutations = {
@@ -15,5 +16,8 @@ export const mutations = {
     },
     [types.SET_GRUPO_ATIVO](state, dados) {
         state.grupoAtivo = dados;
+    },
+    [types.SET_GRUPO_SELECIONADO_INDEX](state, dados) {
+        state.grupoSelecionadoIndex = dados;
     },
 };

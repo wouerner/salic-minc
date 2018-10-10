@@ -115,15 +115,26 @@
                     offset-y
                 >
                     <v-toolbar-title
+                        v-if="perfisDisponiveis[grupoSelecionadoIndex].orgao_sigla_autorizada"
                         slot="activator"
                     >
-                        <span>{{perfisDisponiveis[1].orgao_sigla_autorizada}} - {{perfisDisponiveis[1].nome_grupo}}</span>
+                        <span>{{perfisDisponiveis[grupoSelecionadoIndex].orgao_sigla_autorizada}} - {{perfisDisponiveis[grupoSelecionadoIndex].nome_grupo}}</span>
+                        <v-icon dark>arrow_drop_down</v-icon>
+                    </v-toolbar-title>
+                    <v-toolbar-title
+                        v-else
+                        slot="activator"
+                    >
+                        <span>{{perfisDisponiveis[grupoSelecionadoIndex].nome_grupo}}</span>
                         <v-icon dark>arrow_drop_down</v-icon>
                     </v-toolbar-title>
                     <v-list class="scrollable">
                         <v-list-tile v-for="(perfil, index) in perfisDisponiveis" :key="index">
-                            <div @click="trocarPerfil(perfil)" style="cursor:pointer;">
+                            <div v-if="perfil.orgao_sigla_autorizada" @click="trocarPerfil(perfil)" style="cursor:pointer;">
                                 {{perfil.orgao_sigla_autorizada}} - {{perfil.nome_grupo}}
+                            </div>
+                            <div v-else @click="trocarPerfil(perfil)" style="cursor:pointer;">
+                                {{perfil.nome_grupo}}
                             </div>
                         </v-list-tile>
                     </v-list>
@@ -175,6 +186,7 @@
                 perfisDisponiveis: 'menuSuperior/perfisDisponiveis',
                 usuarioAtivo: 'menuSuperior/usuarioAtivo',
                 grupoAtivo: 'menuSuperior/grupoAtivo',
+                grupoSelecionadoIndex: 'menuSuperior/grupoSelecionadoIndex',
             }),
         },
         created() {

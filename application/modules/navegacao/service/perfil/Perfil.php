@@ -32,9 +32,11 @@ class Perfil
         $resposta['perfisDisponoveis'] = $this->utf8Encode($perfisDisponoveis);
         $resposta['usuarioAtivo'] = $this->utf8Encode([(array) $usuarioAtivo ]);
         $resposta['grupoAtivo'] = [ 'codGrupo' => $grupoAtivo->codGrupo, 'codOrgao' => $grupoAtivo->codOrgao ];
+        $resposta['grupoSelecionadoIndex'] = $this->grupoSelecionadoIndex(
+            $resposta['perfisDisponoveis'],
+            $resposta['grupoAtivo']
+        );
 
-        $grupoSelecionadoIndex = $this->grupoSelecionadoIndex($resposta['perfisDisponoveis'], $resposta['grupoAtivo']);
-        xd($grupoSelecionadoIndex);
         return $resposta;
     }
 

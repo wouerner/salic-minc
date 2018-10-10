@@ -9,6 +9,7 @@ export const buscarPerfisDisponiveis = ({ commit }, params) => {
             commit(types.SET_PERFIS_DISPONIVEIS, items.perfisDisponoveis);
             commit(types.SET_USUARIO_ATIVO, items.usuarioAtivo);
             commit(types.SET_GRUPO_ATIVO, items.grupoAtivo);
+            commit(types.SET_GRUPO_SELECIONADO_INDEX, items.grupoSelecionadoIndex);
         });
 };
 
