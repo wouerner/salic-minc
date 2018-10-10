@@ -54,15 +54,15 @@
                                                     </tr>
                                                     <tr>
                                                         <td left><b>Total:</b></td>
-                                                        <td >valor</td>
+                                                        <td >{{consolidacaoComprovantes.qtTotalComprovante}}</td>
                                                         <td left><b>Validados:</b></td>
-                                                        <td><font color="#006400">valor </font></td>
+                                                        <td><font color="#006400">{{consolidacaoComprovantes.qtComprovantesValidadosProjeto}} </font></td>
                                                     </tr>
                                                     <tr>
                                                         <td left><b>Não Avaliados:</b></td>
-                                                        <td left>valor</td>
+                                                        <td left>{{consolidacaoComprovantes.qtComprovantesNaoAvaliados}}</td>
                                                         <td left><b>Recusados:</b></td>
-                                                        <td left><font color="red">valor </font></td>
+                                                        <td left><font color="red">{{consolidacaoComprovantes.qtComprovantesRecusadosProjeto}} </font></td>
                                                     </tr>
                                                 </template>
                                             </v-data-table>
@@ -137,7 +137,7 @@
                                     </v-icon>
                                     Revisão do Coordenador
                                     <v-spacer></v-spacer>
-                                    <template v-if="revisao.status == 1" :onchange="revisao.siStatus">
+                                    <template v-if="revisao.siStatus == 1" :onchange="revisao.siStatus">
                                     <v-chip small color="green" text-color="white" >
                                         <v-avatar>
                                             <v-icon>check_circle</v-icon>
@@ -145,7 +145,7 @@
                                         Aprovado
                                     </v-chip>
                                     </template>
-                                    <template v-if="revisao.status == 0" :onchange="revisao.siStatus">
+                                    <template v-if="revisao.siStatus == 0" :onchange="revisao.siStatus">
                                     <v-chip small color="red" text-color="white">
                                         <v-avatar>
                                             <v-icon>close</v-icon>
@@ -162,10 +162,6 @@
                                     tile
                                 >
                                     <v-flex >
-
-                                        <v-toolbar dense>
-                                            <v-toolbar-title>Avaliar Parecer Técnico </v-toolbar-title>
-                                        </v-toolbar>
 
                                         <v-card-text>
                                             <v-card>
@@ -193,8 +189,8 @@
                                                     <v-textarea
                                                         solo
                                                         no-resize
-                                                        value=""
-                                                        hint="Digite o parecer da sua avaliação"
+                                                        :value="revisao.dsRevisao"
+                                                        hint="Digite sua avaliação"
                                                         height="180px"
                                                     ></v-textarea>
                                                     <div>
@@ -228,7 +224,7 @@
               revisao: {
                   siStatus: 0,
                   dsRevisao:'',
-                  idAvaliacaoFinanceira: this.getParecer.idAvaliacaoFinanceira,
+                  idAvaliacaoFinanceira: 0,
                   idGrupoAtivo: 21,
                   idAgente: 333
               },
