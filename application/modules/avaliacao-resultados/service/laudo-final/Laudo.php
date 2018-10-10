@@ -5,6 +5,13 @@ namespace Application\Modules\AvaliacaoResultados\Service\LaudoFinal;
 class Laudo 
 {
     public function obterProjetos(){
-        return [];
+        return [323232];
+    }
+
+    public function obterLaudo(){
+        return[222222];
+    }
+    public function salvarLaudo(){
+        return true;
     }
 }
