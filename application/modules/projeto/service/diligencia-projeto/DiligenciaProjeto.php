@@ -40,13 +40,18 @@ class DiligenciaProjeto
                 $proposta = $this->montarArrayDiligenciaProposta($diligenciasProposta);
             }
         }
-            $diligencias = $tblProjeto->listarDiligencias(array('pro.IdPRONAC = ?' => $idPronac, 'dil.stEnviado = ?' => 'S'));
-            $diligencia = $this->montarArrayDiligenciaProjeto($diligencias);
+        $diligencias = $tblProjeto->listarDiligencias(array('pro.IdPRONAC = ?' => $idPronac, 'dil.stEnviado = ?' => 'S'));
+        $projeto = $this->montarArrayDiligenciaProjeto($diligencias);
 
-            $tbAvaliarAdequacaoProjeto = new \Analise_Model_DbTable_TbAvaliarAdequacaoProjeto();
-            $diligenciasAdequacao = $tbAvaliarAdequacaoProjeto->obterAvaliacoesDiligenciadas(['a.idPronac = ?' => $idPronac]);
-            $adequacao = $this->montarArrayDiligenciaAdequacao($diligenciasAdequacao);
-            xd($adequacao);
+        $tbAvaliarAdequacaoProjeto = new \Analise_Model_DbTable_TbAvaliarAdequacaoProjeto();
+        $diligenciasAdequacao = $tbAvaliarAdequacaoProjeto->obterAvaliacoesDiligenciadas(['a.idPronac = ?' => $idPronac]);
+        $adequacao = $this->montarArrayDiligenciaAdequacao($diligenciasAdequacao);
+
+        $result['diligenciaProposta'] = $proposta;
+        $result['diligenciaProjeto'] = $projeto;
+        $result['diligenciaAdequacao'] = $adequacao;
+
+        return $result;
     }
 
     private function montarArrayDiligenciaProposta($diligenciasProposta)
