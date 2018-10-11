@@ -73,7 +73,7 @@
 <script>
 export default {
     name: 'VisualizarDiligenciaProposta',
-    props: ['idPronac', 'posicao', 'infos'],
+    props: ['idPronac', 'infos'],
     data() {
         return {
             dados: {

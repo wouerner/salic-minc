@@ -21,26 +21,11 @@
                 <div v-if="dados.diligenciaAdequacao.length > 0">
                     <fieldset>
                         <legend>Dilig&ecirc;ncias da Adequa&ccedil;&atilde;o do Projeto</legend>
-                        <table class="tabela">
-                            <thead>
-                                <tr class="destacar">
-                                    <th>VISUALIZAR</th>
-                                    <th>DATA DA AVALIA&Ccedil;&Atilde;O</th>
-                                    <th>TIPO DE DILIG&Ecirc;NCIA</th>
-                                </tr>
-                            </thead>
-                            <tbody v-for="(dado, index) in dados.diligenciaAdequacao" :key="index">
-                                <tr>
-                                    <td class="center">
-                                        <button class="waves-effect waves-darken btn white black-text">
-                                            <i class="material-icons">visibility</i>
-                                        </button>
-                                    </td>
-                                    <td>{{ dado.dtAvaliacao }}</td>
-                                    <td>{{ dado.tipoDiligencia }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <VisualizarDiligenciaAdequacao
+                                :idPronac="idPronac"
+                                :infos="dados.diligenciaAdequacao"
+                            >
+                            </VisualizarDiligenciaAdequacao>
                     </fieldset>
                 </div>
             </div>
@@ -86,6 +71,7 @@
 import { mapGetters } from 'vuex';
 import IdentificacaoProjeto from './IdentificacaoProjeto';
 import VisualizarDiligenciaProposta from './components/VisualizarDiligenciaProposta';
+import VisualizarDiligenciaAdequacao from './components/VisualizarDiligenciaAdequacao';
 
 
 export default {
@@ -93,6 +79,7 @@ export default {
     components: {
         IdentificacaoProjeto,
         VisualizarDiligenciaProposta,
+        VisualizarDiligenciaAdequacao,
     },
     data() {
         return {
