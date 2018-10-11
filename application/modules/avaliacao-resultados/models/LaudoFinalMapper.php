@@ -9,18 +9,21 @@ class AvaliacaoResultados_Model_LaudoFinalMapper extends MinC_Db_Mapper
 
     public function save($model)
     {
-        if ($this->isValid($model)) {
-            return parent::save($model);
-        }
-        return false;
+        // if ($this->isValid($model)) {
+            // var_dump($model); die;
+            var_dump( parent::save($model)); die;
+        // }
+        // return false;
     }
 
-    public function isValid( $model)
+    public function isValid($model)
     {
         $booStatus = true;
         $arrData = $model->toArray();
         $arrRequired = [
             'idLaudoFinal',
+            'idPronac',
+            'dtLaudoFinal',
             'siManifestacao',
             'dsLaudoFinal',
             'idUsuario'
@@ -33,14 +36,11 @@ class AvaliacaoResultados_Model_LaudoFinalMapper extends MinC_Db_Mapper
             }
         }
 
-        if (!isset($arrData['idAvaliacaoFinanceira']) && isset($arrData['idPronac'])) {
+        if (isset($arrData['idPronac'])) {
             $row = $this->getDbTable()->findBy([
                 'idPronac' => $arrData['idPronac']
             ]);
 
-            // if(!empty($row)){
-            //     Fazer update
-            // }
         }
 
         return $booStatus;

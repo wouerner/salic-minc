@@ -2,15 +2,15 @@
 
 class AvaliacaoResultados_Model_LaudoFinal extends MinC_Db_Model
 {
-    protected $_id;
+    protected $_idLaudoFinal;
     protected $_idPronac;
     protected $_dtLaudoFinal;
     protected $_siManifestacao;
     protected $_dsLaudoFinal;
     protected $_idUsuario;
 
-    public function getId(){
-        return $this->_id;
+    public function getIdLaudoFinal(){
+        return $this->_idLaudoFinal;
     }
 
     public function getIdPronac(){
@@ -33,8 +33,8 @@ class AvaliacaoResultados_Model_LaudoFinal extends MinC_Db_Model
         return $this->_idUsuario;
     }
     
-    public function setId($value){
-        $this->_id = $value;
+    public function setIdLaudoFinal($value){
+        $this->_idLaudoFinal = $value;
         return $this;
     }
     
