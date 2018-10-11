@@ -100,7 +100,7 @@ class DiligenciaProjeto
             $objDateTimedtAvaliacao = new \DateTime($diligencia['dtAvaliacao']);
 
             $resultArray[] = [
-                'tipoDiligencia' => 'Dilig&ecirc;ncia na An&aacute;lise da adequa&ccedil;&atilde;o &agrave; realidade do projeto.',
+                'tipoDiligencia' => html_entity_decode('Dilig&ecirc;ncia na An&aacute;lise da adequa&ccedil;&atilde;o &agrave; realidade do projeto.'),
                 'dtAvaliacao' => $objDateTimedtAvaliacao->format('d/m/Y'),
             ];
         }
