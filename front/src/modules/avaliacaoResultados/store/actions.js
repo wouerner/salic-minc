@@ -169,10 +169,14 @@ export const atualizarParecer = ({ commit }, characterParecer) => {
 };
 
 export const salvarLaudoFinal = (_, data) => {
-    avaliacaoResultadosHelperAPI.criarParecerLaudoFinal(data)
-        .then((response) => {
-            console.log(response);
-        });
+    const p = new Promise((resolve) => {
+        avaliacaoResultadosHelperAPI.criarParecerLaudoFinal(data)
+            .then(() => {
+                resolve();
+            });
+    });
+
+    return p;
 };
 
 export const finalizarLaudoFinal = (_, data) => {
