@@ -28,6 +28,8 @@ export const state = {
     projetosFinalizados: {},
     dadosItemComprovacao: {},
     projetosParaDistribuir: {},
+    getProjetosAssinatura: [],
+    getProjetosLaudoFinal: [],
     getProjetosAssinar: {},
     getProjetosEmAssinatura: {},
     getProjetosHistorico: {},
@@ -133,8 +135,10 @@ export const mutations = {
     [types.SET_DADOS_PROJETOS_EM_ASSINATURA](state, dados){
         state.getProjetosEmAssinatura = dados;
     },
+    [types.SET_DADOS_PROJETOS_LAUDO_FINAL](state, dados){
+        state.getProjetosLaudoFinal = dados;
+    },
     [types.SET_DADOS_PROJETOS_HISTORICO](state, dados){
         state.getProjetosHistorico = dados;
     },
-
 };

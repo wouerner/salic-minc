@@ -218,3 +218,12 @@ export const projetosAssinatura = ({ commit }, params) => {
             commit(type, dadosTabela);
         });
 };
+
+export const obterProjetosLaudoFinal = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.obterProjetosLaudoFinal()
+        .then((response) => {
+            const data = response.data;
+            const dadosTabela = data.data;
+            commit(types.SET_DADOS_PROJETOS_LAUDO_FINAL, dadosTabela);
+        });
+};
