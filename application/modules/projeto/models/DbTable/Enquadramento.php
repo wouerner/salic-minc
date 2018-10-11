@@ -95,7 +95,7 @@ class Projeto_Model_DbTable_Enquadramento extends MinC_Db_Table_Abstract
                 [
                     new Zend_Db_Expr('a.AnoProjeto+a.Sequencial as Pronac'),
                     'a.IdPRONAC',
-                    'ResumoProjeto',
+                    'a.ResumoProjeto',
                     'a.NomeProjeto',
                     'a.DtInicioExecucao',
                     'a.DtFimExecucao',
@@ -118,17 +118,16 @@ class Projeto_Model_DbTable_Enquadramento extends MinC_Db_Table_Abstract
             ],
             $this->_schema
         );
-
         $sql->joinLeft(
-            ['c' => 'tbPauta'],
+            ['c' => 'Parecer'],
             'a.IdPRONAC = c.IdPRONAC',
             [],
-            'BDCORPORATIVO.scSAC'
+            $this->_schema
         );
 
         $sql->joinLeft(
             ['d' => 'tbReuniao'],
-            'c.idNrReuniao = d.idNrReuniao',
+            'c.NumeroReuniao = d.idNrReuniao',
             ['d.NrReuniao'],
             $this->_schema
         );
@@ -152,10 +151,10 @@ class Projeto_Model_DbTable_Enquadramento extends MinC_Db_Table_Abstract
         );
 
         $sql->joinInner(
-          ['h'=> 'tbVerificaProjeto'],
-          'h.IdPRONAC = a.IdPRONAC',
-          ['stAnaliseProjeto'],
-          $this->_schema
+            ['h'=> 'tbVerificaProjeto'],
+            'h.IdPRONAC = a.IdPRONAC',
+            ['h.stAnaliseProjeto'],
+            $this->_schema
         );
 
         $sql->joinInner(
@@ -167,6 +166,7 @@ class Projeto_Model_DbTable_Enquadramento extends MinC_Db_Table_Abstract
             ],
             'TABELAS.dbo'
         );
+
         $sql->joinInner(
             ['j' => 'tbProjetoFase'],
             'a.IdPRONAC = J.idPronac',
@@ -178,8 +178,11 @@ class Projeto_Model_DbTable_Enquadramento extends MinC_Db_Table_Abstract
             $sql->where('a.NomeProjeto like ? OR a.AnoProjeto+a.Sequencial like ? OR d.NrReuniao like ?', '%'.$search['value'].'%');
         }
 
-        $sql->where('j.idNormativo > 6');
-        $sql->where('j.stEstado = 1');
+        $sql->where('c.TipoParecer = ?', 1);
+        $sql->where('c.stAtivo = ?', 1);
+        $sql->where('c.idTipoAgente = ?', 6);
+        $sql->where('j.idNormativo > ?', 6);
+        $sql->where('j.stEstado = ?', 1);
         $sql->where('sac.dbo.fnDtPortariaAprovacao(a.AnoProjeto,a.Sequencial) IS NOT NULL');
 
         foreach ($where as $coluna => $valor) {
