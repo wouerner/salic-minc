@@ -7,13 +7,14 @@
                 dense
                 dark
             >
-                <v-toolbar-title>
-                    <img src="/public/img/logo_salic.png" alt="logo" height="30px">
-                </v-toolbar-title>
+                <!--<v-icon>home</v-icon>-->
+                <!--<v-toolbar-title>-->
+                    <!--<img src="/public/img/logo_salic.png" alt="logo" height="30px">-->
+                <!--</v-toolbar-title>-->
                 <v-spacer></v-spacer>
                 <v-menu
                     :nudge-width="100"
-                    v-for="(item, index) in dadosMenu"
+                    v-for="item in dadosMenu"
                     :key="item.id"
                     offset-y
                 >
@@ -77,9 +78,17 @@
                 dense
                 dark
             >
-                <v-toolbar-title>
-                    <img src="/public/img/logo_salic.png" alt="logo" height="30px">
-                </v-toolbar-title>
+                <!--<v-icon>home</v-icon>-->
+                <a href="/principal">
+                    <img
+                        src="/public/img/logo_salic.png"
+                        width="120"
+                        height="40"
+                    />
+                </a>
+                <!--<v-toolbar-title>-->
+                    <!--<img src="/public/img/logo_salic.png" alt="logo" height="30px">-->
+                <!--</v-toolbar-title>-->
                 <v-spacer></v-spacer>
                 <v-menu
                     :nudge-width="100"
@@ -163,7 +172,6 @@
         <div v-else>
             Carregando...
         </div>
-    <!--{{usuarioAtivo}} &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; {{grupoAtivo}}-->
     </div>
 </template>
 
@@ -194,7 +202,6 @@
         },
         methods: {
             ...mapActions({
-                // dadosMenuAjax: 'avaliacaoResultados/dadosMenu',
                 buscarPerfisDisponiveis: 'menuSuperior/buscarPerfisDisponiveis',
                 alterarPerfil: 'menuSuperior/alterarPerfil',
             }),
