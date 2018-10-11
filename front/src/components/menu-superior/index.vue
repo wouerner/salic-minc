@@ -1,10 +1,8 @@
 <template>
     <div>
         <div v-if="dados">
-
             <v-toolbar
                 app
-                color=""
                 dense
                 dark
                 style="background-color: #1b5e20"
