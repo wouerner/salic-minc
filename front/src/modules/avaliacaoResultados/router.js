@@ -12,6 +12,7 @@ import ConsolidacaoAnalise from './components/ConsolidacaoAnalise';
 import EmitirLaudoFinal from './components/EmitirLaudoFinal';
 import Laudo from './components/Laudo';
 import AnalisarItem from './components/AnalisarItem';
+import RevisaoParecer from './components/RevisaoParecer';
 
 Vue.use(Router);
 
@@ -38,6 +39,14 @@ const routes = [
         component: EmitirParecer,
         meta: {
             title: 'Principal',
+        },
+    },
+    {
+        path: '/revisao',
+        name: 'Revisao',
+        component: RevisaoParecer,
+        meta: {
+            title: 'Revisão Parecer',
         },
     },
     {
