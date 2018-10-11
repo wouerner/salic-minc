@@ -5,41 +5,51 @@
             <i class="material-icons">visibility</i>
         </button>
         <div v-if="activeTab === posicao">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>NR PROPOSTA</th>
-                            <th>NOME DA PROPOSTA</th>
-                        </tr>
-                        <tr>
-                            <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
-                            <th>DATA DA RESPOSTA</th>
-                        </tr>
-                        <tr>
-                            <th>SOLICITA&Ccedil;&Atilde;O</th>
-                        </tr>
-                        <tr>
-                            <th>RESPOSTA</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{ dados.diligenciaProposta[posicao].idPreprojeto }}</td>
-                            <td>{{ dados.diligenciaProposta[posicao].nomeProjeto }}</td>
-                        </tr>
-                        <tr>
-                            <td>{{ dados.diligenciaProposta[posicao].dataSolicitacao }}</td>
-                            <td>{{ dados.diligenciaProposta[posicao].dataResposta }}</td>
-                        </tr>
-                        <tr>
-                            <td>{{ dados.diligenciaProposta[posicao].Solicitacao }}</td>
-                        </tr>
-                        <tr>
-                            <td>{{ dados.diligenciaProposta[posicao].Resposta }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <table class="tabela">
+                <tbody>
+                    <tr>
+                        <th>Nr PROPOSTA</th>
+                        <th>NOME DA PROPOSTA</th>
+                    </tr>
+                    <tr>
+                        <td>{{ dados.diligenciaProposta[posicao].idPreprojeto }}</td>
+                        <td>{{ dados.diligenciaProposta[posicao].nomeProjeto }}</td>
+                    </tr>
+                    <tr>
+                        <th>DATA DA SOLICITAÇÃO</th>
+                        <th>DATA DA RESPOSTA</th>
+                    </tr>
+                    <tr>
+                        <td>{{ dados.diligenciaProposta[posicao].dataSolicitacao }}</td>
+                        <td>{{ dados.diligenciaProposta[posicao].Resposta }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="tabela">
+                <tbody>
+                    <tr>
+                        <th>SOLICITA&Ccedil;&Atilde;O</th>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 20px">
+                            {{ dados.diligenciaProposta[posicao].Solicitacao }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="tabela">
+                <tbody>
+                    <tr>
+                        <th>Resposta:</th>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 20px">
+                            {{ dados.diligenciaProposta[posicao].Resposta }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
