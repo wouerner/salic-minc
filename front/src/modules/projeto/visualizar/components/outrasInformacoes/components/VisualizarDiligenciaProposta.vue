@@ -8,7 +8,7 @@
                     <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
                 </tr>
             </thead>
-            <tbody v-for="(dado, index) in dados.diligenciaProposta" :key="index">
+            <tbody v-for="(info, index) in infos" :key="index">
                 <tr>
                     <td class="center">
                         <button
@@ -18,10 +18,10 @@
                             <i class="material-icons">visibility</i>
                         </button>
                     </td>
-                    <td>{{ dado.idPreprojeto }}</td>
-                    <td>{{ dado.dataSolicitacao }}</td>
+                    <td>{{ info.idPreprojeto }}</td>
+                    <td>{{ info.dataSolicitacao }}</td>
                 </tr>
-                <tr v-if="activeTab === index">
+                <tr v-if="activeTab === index && dados.diligenciaProposta.length > 0">
                     <td colspan="3">
                          <table class="tabela">
                             <tbody>
@@ -73,7 +73,7 @@
 <script>
 export default {
     name: 'VisualizarDiligenciaProposta',
-    props: ['idPronac', 'posicao', 'dados'],
+    props: ['idPronac', 'posicao', 'infos'],
     data() {
         return {
             dados: {
@@ -105,7 +105,6 @@ export default {
                 url: '/projeto/diligencia-projeto-rest/get/idPronac/' + self.idPronac,
             }).done(function (response) {
                 self.dados = response.data;
-                console.log(self.dados.diligenciaProposta[self.posicao].idPreprojeto)
             });
         },
     },

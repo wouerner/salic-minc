@@ -11,8 +11,7 @@
                         <legend>Dilig&ecirc;ncia Proposta</legend>
                             <VisualizarDiligenciaProposta
                                 :idPronac="idPronac"
-                                :posicao="index"
-                                :dados="dados.diligenciaProposta"
+                                :infos="dados.diligenciaProposta"
                             >
                             </VisualizarDiligenciaProposta>
                     </fieldset>
