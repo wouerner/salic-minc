@@ -1,62 +1,79 @@
 <template>
-    <div id="conteudo">
-        <button class="waves-effect waves-darken btn white black-text"
-                @click="setActiveTab(posicao);">
-            <i class="material-icons">visibility</i>
-        </button>
-        <div v-if="activeTab === posicao">
-            <table class="tabela">
-                <tbody>
-                    <tr>
-                        <th>Nr PROPOSTA</th>
-                        <th>NOME DA PROPOSTA</th>
-                    </tr>
-                    <tr>
-                        <td>{{ dados.diligenciaProposta[posicao].idPreprojeto }}</td>
-                        <td>{{ dados.diligenciaProposta[posicao].nomeProjeto }}</td>
-                    </tr>
-                    <tr>
-                        <th>DATA DA SOLICITAÇÃO</th>
-                        <th>DATA DA RESPOSTA</th>
-                    </tr>
-                    <tr>
-                        <td>{{ dados.diligenciaProposta[posicao].dataSolicitacao }}</td>
-                        <td>{{ dados.diligenciaProposta[posicao].Resposta }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="tabela">
-                <tbody>
-                    <tr>
-                        <th>SOLICITA&Ccedil;&Atilde;O</th>
-                    </tr>
-                    <tr>
-                        <td style="padding-left: 20px">
-                            {{ dados.diligenciaProposta[posicao].Solicitacao }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="tabela">
-                <tbody>
-                    <tr>
-                        <th>Resposta:</th>
-                    </tr>
-                    <tr>
-                        <td style="padding-left: 20px">
-                            {{ dados.diligenciaProposta[posicao].Resposta }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div>
+        <table class="tabela">
+            <thead>
+                <tr class="destacar">
+                    <th>VISUALIZAR</th>
+                    <th>NR PROPOSTA</th>
+                    <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
+                </tr>
+            </thead>
+            <tbody v-for="(dado, index) in dados.diligenciaProposta" :key="index">
+                <tr>
+                    <td class="center">
+                        <button
+                            class="waves-effect waves-darken btn white black-text"
+                            @click="setActiveTab(index);"
+                        >
+                            <i class="material-icons">visibility</i>
+                        </button>
+                    </td>
+                    <td>{{ dado.idPreprojeto }}</td>
+                    <td>{{ dado.dataSolicitacao }}</td>
+                </tr>
+                <tr v-if="activeTab === index">
+                    <td colspan="3">
+                         <table class="tabela">
+                            <tbody>
+                                <tr>
+                                    <th>Nr PROPOSTA</th>
+                                    <th>NOME DA PROPOSTA</th>
+                                </tr>
+                                <tr>
+                                    <td>{{ dados.diligenciaProposta[index].idPreprojeto }}</td>
+                                    <td>{{ dados.diligenciaProposta[index].nomeProjeto }}</td>
+                                </tr>
+                                <tr>
+                                    <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
+                                    <th>DATA DA RESPOSTA</th>
+                                </tr>
+                                <tr>
+                                    <td>{{ dados.diligenciaProposta[index].dataSolicitacao }}</td>
+                                    <td>{{ dados.diligenciaProposta[index].Resposta }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table v-if="dados.diligenciaProposta[index].Solicitacao" class="tabela">
+                            <tbody>
+                                <tr>
+                                    <th>SOLICITA&Ccedil;&Atilde;O</th>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 20px" v-html="dados.diligenciaProposta[index].Solicitacao"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table v-if="dados.diligenciaProposta[index].Resposta" class="tabela">
+                            <tbody>
+                                <tr>
+                                    <th>Resposta:</th>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 20px" v-html="dados.diligenciaProposta[index].Solicitacao"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
 <script>
 export default {
     name: 'VisualizarDiligenciaProposta',
-    props: ['idPronac', 'posicao'],
+    props: ['idPronac', 'posicao', 'dados'],
     data() {
         return {
             dados: {

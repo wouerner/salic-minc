@@ -1,32 +1,20 @@
 <template>
     <div id="conteudo">
-            <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
-                                  :nomeProjeto="dadosProjeto.NomeProjeto">
+            <IdentificacaoProjeto
+                :pronac="dadosProjeto.Pronac"
+                :nomeProjeto="dadosProjeto.NomeProjeto"
+            >
             </IdentificacaoProjeto>
             <div v-if="dados.diligenciaProposta">
                 <div v-if="dados.diligenciaProposta.length > 0">
                     <fieldset>
                         <legend>Dilig&ecirc;ncia Proposta</legend>
-                        <table class="tabela">
-                            <thead>
-                                <tr class="destacar">
-                                    <th>VISUALIZAR</th>
-                                    <th>NR PROPOSTA</th>
-                                    <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
-                                </tr>
-                            </thead>
-                            <tbody v-for="(dado, index) in dados.diligenciaProposta" :key="index">
-                                <tr>
-                                    <td class="center">
-                                        <VisualizarDiligenciaProposta   :idPronac="idPronac"
-                                                                        :posicao="index">
-                                        </VisualizarDiligenciaProposta>
-                                    </td>
-                                    <td>{{ dado.idPreprojeto }}</td>
-                                    <td>{{ dado.dataSolicitacao }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            <VisualizarDiligenciaProposta
+                                :idPronac="idPronac"
+                                :posicao="index"
+                                :dados="dados.diligenciaProposta"
+                            >
+                            </VisualizarDiligenciaProposta>
                     </fieldset>
                 </div>
             </div>
