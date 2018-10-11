@@ -1,40 +1,23 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-
-import Listar from './listar/Index';
 import Visualizar from './visualizar/Visualizar';
-// import DadosProjeto from './visualizar/components/DadosProjeto';
 import PlanilhaPropostaOriginal from './visualizar/components/incentivo/planilha/PlanilhaPropostaOriginal';
 import PlanilhaPropostaAutorizada from './visualizar/components/incentivo/planilha/PlanilhaPropostaAutorizada';
 import PlanilhaPropostaAdequada from './visualizar/components/incentivo/planilha/PlanilhaPropostaAdequada';
 import PlanilhaHomologada from './visualizar/components/incentivo/planilha/PlanilhaHomologada';
 import PlanilhaReadequada from './visualizar/components/incentivo/planilha/PlanilhaReadequada';
 import RelacaoDePagamentos from './visualizar/components/incentivo/RelacaoDePagamentos';
-// import Proponente from './visualizar/components/incentivo/Proponente';
 import Convenente from './visualizar/components/convenio/Convenente';
 import Proposta from './visualizar/components/incentivo/Proposta';
 
 const DadosProjeto = () => import(/* webpackChunkName: "dados-projeto" */ './visualizar/components/DadosProjeto');
 const Proponente = () => import(/* webpackChunkName: "proponente" */ './visualizar/components/incentivo/Proponente');
 
-
-Vue.use(Router);
-
 const templateAjax = {
     template: '<div id="conteudo"></div>',
 };
 
-const routes = [
+export default [
     {
-        path: '/',
-        name: 'index',
-        component: Listar,
-        meta: {
-            title: 'Lista de projetos',
-        },
-    },
-    {
-        path: '/:idPronac',
+        path: '/projeto/:idPronac',
         component: Visualizar,
         children: [
             {
@@ -133,5 +116,3 @@ const routes = [
         ],
     },
 ];
-
-export default new Router({ routes });

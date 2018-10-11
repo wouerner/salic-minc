@@ -42,11 +42,6 @@ class IndexController extends MinC_Controller_Action_Abstract
         if (empty($this->autenticacao)) {
             $this->redirect("/autenticacao/index/index");
         }
-
-//        $gitTag = '?v=' . $this->view->gitTag();
-//        $this->view->headScript()->offsetSetFile(99, '/public/dist/js/manifest.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
-//        $this->view->headScript()->offsetSetFile(100, '/public/dist/js/vendor.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
-//        $this->view->headScript()->offsetSetFile(101, '/public/dist/js/main.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
     }
 
     public function indisponivelAction()

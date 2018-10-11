@@ -26,7 +26,7 @@ const watchWebpackConfig = merge(baseWebpackConfig, {
             'process.env': require('../config/dev.env')
         }),
         new ExtractTextPlugin({
-            filename: utils.assetsPath('css/[name].[hash].css'),
+            filename: utils.assetsPath('css/[name].css'),
             // Setting the following option to `false` will not extract CSS from codesplit chunks.
             // Their CSS will instead be inserted dynamically with style-loader when the codesplit chunk has been loaded by webpack.
             // It's currently set to `true` because we are seeing that sourcemaps are included in the codesplit bundle as well when it's `false`,
