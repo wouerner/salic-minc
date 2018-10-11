@@ -36,7 +36,7 @@
                             </tr>
                             <tr>
                                 <td align="center" class="destacar">
-                                    <b>Área</b>
+                                    <b>&Aacute;rea</b>
                                 </td>
                                 <td align="center" class="destacar">
                                     <b>Segmento</b>
@@ -52,7 +52,7 @@
                                         <tbody>
                                         <tr class="destacar">
                                             <td align="center">
-                                                <b>Distribuição Gratuita (Qtde)</b>
+                                                <b>Distribui&ccedil;&atilde;o Gratuita (Qtde)</b>
                                             </td>
                                             <td align="center">
                                                 <b>Total para Venda (Qtde)</b>
@@ -72,11 +72,11 @@
                                                             <br>
                                                         </td>
                                                         <td>
-                                                            <b>Divulgação</b><br>
+                                                            <b>Divulga&ccedil;&atilde;o</b><br>
                                                             {{ dado.QtdeProponente }}
                                                         </td>
                                                         <td>
-                                                            <b>População de Baixa Renda</b><br>
+                                                            <b>Popula&ccedil;&atilde;o de Baixa Renda</b><br>
                                                             {{ dado.QtdeOutros }}
                                                         </td>
                                                     </tr>
@@ -114,7 +114,7 @@
                                         </tr>
                                         <tr class="destacar">
                                             <td align="center">
-                                                <b>Preço Unitário (R$)</b>
+                                                <b>Pre&ccedil;o Unit&aacute;rio (R$)</b>
                                             </td>
                                             <td align="center">
                                                 <b>Receita Prevista (R$)</b>
