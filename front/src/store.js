@@ -5,6 +5,8 @@ import modal from '@/components/modal/store';
 import projeto from './modules/projeto/store';
 import foo from './modules/foo/store';
 import avaliacaoResultados from './modules/avaliacaoResultados/store';
+import proposta from './modules/proposta/store';
+import autenticacao from './modules/autenticacao/store';
 
 Vue.use(Vuex);
 
@@ -16,6 +18,8 @@ export default new Vuex.Store({
         foo,
         modal,
         avaliacaoResultados,
+        proposta,
+        autenticacao,
     },
     strict: debug,
 });

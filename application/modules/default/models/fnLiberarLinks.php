@@ -275,7 +275,9 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
         $diasProjeto = new Zend_Db_Expr("SELECT DATEDIFF(DAY,'$dadosProjeto->DtSituacao',GETDATE()) as dias");
         $diasProjeto = $db->fetchRow($diasProjeto);
 
-        if ((($data <= 11 and in_array($dadosProjeto->Situacao, $situacoesRecurso) and !$recurso1->idRecurso and !$recurso2->idRecurso)
+        if($diasProjeto->dias <=10 and $dadosProjeto->Situacao == 'D51'){
+            $Recursos = 1;
+        }else if ((($data <= 11 and in_array($dadosProjeto->Situacao, $situacoesRecurso) and !$recurso1->idRecurso and !$recurso2->idRecurso)
             or
             !$recurso3->idRecurso and !in_array($dadosProjeto->Situacao, $situacoesRecurso) and $Recurso4->dado <=10)
             or
@@ -345,10 +347,11 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
 
             $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
             $existeReadequacaoEmAndamento = $Readequacao_Model_DbTable_TbReadequacao->existeReadequacaoEmAndamento($idPronac);
-            $existeReadequacaoEmEdicao = $Readequacao_Model_DbTable_TbReadequacao->existeReadequacaoEmEdicao($idPronac);
             
             if ($existeReadequacaoEmAndamento) {
                 $readequacaoAndamento = $Readequacao_Model_DbTable_TbReadequacao->obterReadequacaoOrcamentariaEmAndamento($idPronac);
+                $existeReadequacaoEmEdicao = $Readequacao_Model_DbTable_TbReadequacao->existeReadequacaoEmEdicao($idPronac, $readequacaoAndamento['idTipoReadequacao']);
+
                 
                 if ($existeReadequacaoEmEdicao) {
                     switch ($readequacaoAndamento['idTipoReadequacao']) {

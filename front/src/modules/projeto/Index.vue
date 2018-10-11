@@ -1,6 +1,6 @@
 <template>
     <div id="projeto">
-        Aqui o index de projeto
+        <router-view></router-view>
 
         <router-link :to="{ name: 'dadosprojeto', params: { idPronac: idPronac }}">
             Teste
