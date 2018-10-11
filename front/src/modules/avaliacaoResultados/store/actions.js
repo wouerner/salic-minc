@@ -1,4 +1,5 @@
 import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
+import * as desencapsularResponse from '@/helpers/actions';
 import * as types from './types';
 
 export const dadosMenu = ({ commit }) => {
