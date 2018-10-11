@@ -63,9 +63,20 @@
                         </v-chip>
                     </td>
                     <td class="text-xs-center">
-                        <v-btn flat icon color="green">
-                            <v-icon>keyboard_return</v-icon>
-                        </v-btn>
+                        <v-dialog v-model="dialog" max-width="290">
+                            <v-btn slot="activator" flat icon color="green">
+                                <v-icon>keyboard_return</v-icon>
+                            </v-btn>
+                            <v-card>
+                                <v-card-title class="headline">Deseja realmente devolver o documento?</v-card-title>
+                                <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>
+                                <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="red" flat @click.native="dialog = false">Cancelar</v-btn>
+                                <v-btn color="green" flat @click.native="dialog = false">Devolver</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
                     </td>
                     <td class="text-xs-center">
                         <v-btn flat icon color="blue"
@@ -118,6 +129,7 @@
                 },
                 searchLength: 0,
                 search: '',
+                dialog: false,
                 cabecalho: [
                     {
                         text: '#',
