@@ -25,7 +25,7 @@
                     <td class="text-xs-center">
                         <v-flex xs12 sm4 text-xs-center>
                             <div>
-                                <v-btn :href="'/avaliacao-resultados/#/'">{{ props.item.IdPronac }}</v-btn>
+                                <v-btn :href="'/projeto/#/incentivo/'+ props.item.IdPronac">{{ props.item.PRONAC }}</v-btn>
                             </div>
                         </v-flex>
                     </td>
@@ -37,7 +37,7 @@
                                 text-color="white"
                         >
                             <v-avatar>
-                                <v-icon>mood</v-icon>
+                                <v-icon dark>mood</v-icon>
                             </v-avatar>
                             Aprovado
                         </v-chip>
