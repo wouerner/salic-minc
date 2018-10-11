@@ -10,9 +10,9 @@
                         color="green lighten-2"
                         text="white"
                         dark
+                        flat
                 >
-                    Encaminhar
-
+                    <v-icon class="material-icons">assignment_ind</v-icon>
                 </v-btn>
 
                 <v-card>
@@ -31,7 +31,12 @@
                         <v-card-text>
                             <v-list three-line subheader>
                                 <v-subheader>
-                                    Área de Encaminhamento
+                                    {{pronac}} - {{nomeProjeto}}
+                                </v-subheader>
+                                <v-divider></v-divider>
+
+                                <v-subheader>
+                                    Informações do encaminhamento
                                 </v-subheader>
                                 <v-list-tile>
                                     <v-list-tile-action>
@@ -39,10 +44,6 @@
                                     </v-list-tile-action>
                                     SEFIC/DEIPC/CGARE
                                 </v-list-tile>
-                                <v-divider></v-divider>
-                                <v-subheader>
-                                    Informações do encaminhamento
-                                </v-subheader>
                                 <v-list-tile>
                                     <v-list-tile-action>
                                         <v-icon color="green">perm_identity</v-icon>
@@ -52,13 +53,16 @@
                                             height="10px"
                                             solo
                                             single-line
-                                            :items="dadosProjeto.tecnicos"
+                                            :items="dadosDestinatarios"
                                             label="-- Escolha um técnico  --"
+                                            item-text="usu_nome"
+                                            item-value="usu_codigo"
                                             :rules="[rules.required]"
                                     ></v-select>
                                 </v-list-tile>
                                 <v-list-tile>
                                     <v-textarea
+                                            v-model="justificativa"
                                             ref="justificativa"
                                             label="Justificativa de encaminhamento para análise"
                                             prepend-icon="create"
@@ -73,19 +77,19 @@
                         <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn
-                                    color="primary"
-                                    flat
-                                    @click="enviarEncaminhamento()"
-                                    :disabled="!form"
-                            >
-                                Encaminhar
-                            </v-btn>
-                            <v-btn
                                     color="red"
                                     flat
                                     @click="dialog = false, $refs.form.reset()"
                             >
                                 Fechar
+                            </v-btn>
+                            <v-btn
+                                    color="primary"
+                                    flat
+                                    @click="enviarEncaminhamento"
+                                    :disabled="!form"
+                            >
+                                Encaminhar
                             </v-btn>
                         </v-card-actions>
                     </v-form>
@@ -101,29 +105,29 @@
 
     export default {
         name: 'ComponenteEncaminhar',
-        created() {
-            this.obterDadosTabela();
-        },
-        props: ['idPronac'],
+        props: [
+            'idPronac',
+            'nomeProjeto',
+            'pronac',
+        ],
         data() {
             return {
                 dialog: false,
-                dadosProjeto: {
-                    idPronac: 123456,
-                    nomeProjeto: 'dfdfgdfg',
-                    tecnicos: ['Foo', 'Bar', 'Fizz', 'Buzz']
-                },
                 rules: {
-                    required: v => !!v
+                    required: v => !!v,
                 },
                 destinatarioEncaminhamento: null,
                 justificativa: null,
-                form: null
-            }
+                form: null,
+            };
         },
         watch: {
-            dialog: function (val) {
-                if(!val) this.$refs.form.reset()
+            dialog(val) {
+                if (!val) {
+                    this.$refs.form.reset();
+                } else {
+                    this.obterDestinatarios();
+                }
             },
         },
         components: {
@@ -131,22 +135,37 @@
         },
         computed: {
             ...mapGetters({
-                dadosTabela: 'foo/dadosTabela',
-                modalVisible: 'modal/default',
+                dadosDestinatarios: 'avaliacaoResultados/dadosDestinatarios',
             }),
         },
         methods: {
             ...mapActions({
-                obterDadosTabela: 'foo/obterDadosTabela',
-                setRegistroAtivo: 'foo/setRegistroAtivo',
-                removerRegistro: 'foo/removerRegistro',
-                modalOpen: 'modal/modalOpen',
-                modalClose: 'modal/modalClose',
+                obterDestinatarios: 'avaliacaoResultados/obterDestinatarios',
+                encaminharParaTecnico: 'avaliacaoResultados/encaminharParaTecnico',
+                obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
+                projetosFinalizados: 'avaliacaoResultados/projetosFinalizados',
+                distribuir: 'avaliacaoResultados/projetosParaDistribuir',
             }),
-            enviarEncaminhamento(){
+            enviarEncaminhamento() {
+                this.encaminharParaTecnico({
+                    atual: 4,
+                    proximo: 5,
+                    idPronac: this.idPronac || 123456,
+                    idOrgaoDestino: 1,
+                    idAgenteDestino: this.destinatarioEncaminhamento,
+                    cdGruposDestino: 1,
+                    dtFimEncaminhamento: '2015-09-25 10:38:41',
+                    idSituacaoEncPrestContas: 1,
+                    idSituacao: 1,
+                    dsJustificativa: this.justificativa,
+                });
                 this.dialog = false;
                 this.$refs.form.reset();
-            }
+
+                this.projetosFinalizados({ estadoid: 6 });
+                this.obterDadosTabelaTecnico({ estadoid: 5 });
+                this.distribuir({ estadoid: 6 });
+            },
         },
     };
 </script>
