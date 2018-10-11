@@ -8,7 +8,7 @@
                 icons-and-text
             >
                 <v-tabs-slider color="deep-orange accent-3"></v-tabs-slider>
-                <v-tab href="#tab-0" 
+                <v-tab href="#tab-0"
                     v-if="getUsuario.grupo_ativo == 125"
                 >
                     <template v-if="Object.keys(getProjetosParaDistribuir).length == 0">
@@ -48,6 +48,7 @@
                      Historico
                     <v-icon>history</v-icon>
                 </v-tab>
+
                 <v-tab-item
                     :id="'tab-0'"
                     :key="0"
@@ -131,6 +132,7 @@ import { mapActions, mapGetters } from 'vuex';
 import TabelaProjetos from './TabelaProjetos';
 import Historico from './Historico';
 import Encaminhar from './ComponenteEncaminhar';
+import TipoAvaliacao from './TipoAvaliacao';
 import AnaliseButton from './analise/analisarButton';
 
 export default {
@@ -150,8 +152,7 @@ export default {
     },
     watch: {
         getUsuario(val) {
-            if (Object.keys(val).length > 0 && val.usu_codigo !== 0) {
-
+            if (Object.keys(val).length > 0 && val.usu_codigo != 0 ) {
                 this.projetosFinalizados({ estadoid: 6, idAgente: this.getUsuario.usu_codigo });
                 this.obterDadosTabelaTecnico({ estadoid: 5, idAgente: this.getUsuario.usu_codigo });
                 this.distribuir({ estadoid: 6 });
@@ -162,6 +163,9 @@ export default {
         return {
             listaAcoesTecnico: [Historico, AnaliseButton],
             listaAcoesCoordenador: [Historico],
+            //listaAcoesTecnico: [Historico, TipoAvaliacao],
+            listaAcoesCoordenador: [Historico],
+            //listaAcoesCoordenador: [Historico, TipoAvaliacao],
             distribuirAcoes: [Encaminhar],
         };
     },

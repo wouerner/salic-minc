@@ -43,7 +43,8 @@
             <!-- PRODUTO -->
             <v-expansion-panel
                 expand
-                v-if="this.getPlanilha != undefined && Object.keys(this.getPlanilha)"
+                :v-if="getPlanilha != undefined && Object.keys(getPlanilha)"
+                :value="expandir(getPlanilha)"
             >
                 <v-expansion-panel-content
                     v-for="(produto,i) in getPlanilha"
@@ -57,6 +58,7 @@
                         <v-expansion-panel
                             class="pl-3 elevation-0"
                             expand
+                            :value="expandir(produto)"
                         >
                             <v-expansion-panel-content
                                 v-for="(etapa,i) in produto.etapa"
@@ -70,6 +72,7 @@
                                 <v-expansion-panel
                                     class="pl-3 elevation-0"
                                     expand
+                                    :value="expandir(etapa)"
                                 >
                                     <v-expansion-panel-content
                                         v-for="(uf,i) in etapa.UF"
@@ -83,6 +86,7 @@
                                         <v-expansion-panel
                                             class="pl-3 elevation-0"
                                             expand
+                                            :value="expandir(uf)"
                                         >
                                             <v-expansion-panel-content
                                                 v-for="(cidade,i) in uf.cidade"
@@ -283,6 +287,14 @@
                 }
 
                 return false;
+            },
+            expandir(obj) {
+                const arr = [];
+                const items = Object.keys(obj).length;
+                for (let i = 0; i < items; i += 1) {
+                    arr.push(true);
+                }
+                return arr;
             },
         },
     };
