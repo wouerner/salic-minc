@@ -4,88 +4,94 @@
                                   :nomeProjeto="dadosProjeto.NomeProjeto">
             </IdentificacaoProjeto>
             <div v-if="dados.diligenciaProposta">
-                <fieldset>
-                    <legend>Dilig&ecirc;ncia Proposta</legend>
-                    <table class="tabela">
-                        <thead>
-                            <tr class="destacar">
-                                <th>VISUALIZAR</th>
-                                <th>NR PROPOSTA</th>
-                                <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
-                            </tr>
-                        </thead>
-                        <tbody v-for="(dado, index) in dados.diligenciaProposta" :key="index">
-                            <tr>
-                                <td class="center">
-                                    <button class="waves-effect waves-darken btn white black-text">
-                                        <i class="material-icons">visibility</i>
-                                    </button>
-                                </td>
-                                <td>{{ dado.idPreprojeto }}</td>
-                                <td>{{ dado.dataSolicitacao }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </fieldset>
+                <div v-if="dados.diligenciaProposta.length > 0">
+                    <fieldset>
+                        <legend>Dilig&ecirc;ncia Proposta</legend>
+                        <table class="tabela">
+                            <thead>
+                                <tr class="destacar">
+                                    <th>VISUALIZAR</th>
+                                    <th>NR PROPOSTA</th>
+                                    <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
+                                </tr>
+                            </thead>
+                            <tbody v-for="(dado, index) in dados.diligenciaProposta" :key="index">
+                                <tr>
+                                    <td class="center">
+                                        <button class="waves-effect waves-darken btn white black-text">
+                                            <i class="material-icons">visibility</i>
+                                        </button>
+                                    </td>
+                                    <td>{{ dado.idPreprojeto }}</td>
+                                    <td>{{ dado.dataSolicitacao }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </fieldset>
+                </div>
             </div>
             <div v-if="dados.diligenciaAdequacao">
-                <fieldset>
-                    <legend>Dilig&ecirc;ncias da Adequa&ccedil;&atilde;o do Projeto</legend>
-                    <table class="tabela">
-                        <thead>
-                            <tr class="destacar">
-                                <th>VISUALIZAR</th>
-                                <th>DATA DA AVALIA&Ccedil;&Atilde;O</th>
-                                <th>TIPO DE DILIG&Ecirc;NCIA</th>
-                            </tr>
-                        </thead>
-                        <tbody v-for="(dado, index) in dados.diligenciaAdequacao" :key="index">
-                            <tr>
-                                <td class="center">
-                                    <button class="waves-effect waves-darken btn white black-text">
-                                        <i class="material-icons">visibility</i>
-                                    </button>
-                                </td>
-                                <td>{{ dado.dtAvaliacao }}</td>
-                                <td>{{ dado.tipoDiligencia }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </fieldset>
+                <div v-if="dados.diligenciaAdequacao.length > 0">
+                    <fieldset>
+                        <legend>Dilig&ecirc;ncias da Adequa&ccedil;&atilde;o do Projeto</legend>
+                        <table class="tabela">
+                            <thead>
+                                <tr class="destacar">
+                                    <th>VISUALIZAR</th>
+                                    <th>DATA DA AVALIA&Ccedil;&Atilde;O</th>
+                                    <th>TIPO DE DILIG&Ecirc;NCIA</th>
+                                </tr>
+                            </thead>
+                            <tbody v-for="(dado, index) in dados.diligenciaAdequacao" :key="index">
+                                <tr>
+                                    <td class="center">
+                                        <button class="waves-effect waves-darken btn white black-text">
+                                            <i class="material-icons">visibility</i>
+                                        </button>
+                                    </td>
+                                    <td>{{ dado.dtAvaliacao }}</td>
+                                    <td>{{ dado.tipoDiligencia }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </fieldset>
+                </div>
             </div>
             <div v-if="dados.diligenciaProjeto">
-                <fieldset>
-                    <legend>Dilig&ecirc;ncia Projeto</legend>
-                    <table class="tabela">
-                        <thead>
-                            <tr class="destacar">
-                                <th>VISUALIZAR</th>
-                                <th>PRODUTO</th>
-                                <th>TIPO DE DILIG&Ecirc;NCIA</th>
-                                <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
-                                <th>DATA DA RESPOSTA</th>
-                                <th>PRAZO DA RESPOSTA</th>
-                                <th>PRORROGADO</th>
-                            </tr>
-                        </thead>
-                        <tbody v-for="(dado, index) in dados.diligenciaProjeto" :key="index">
-                            <tr>
-                                <td class="center">
-                                    <button class="waves-effect waves-darken btn white black-text">
-                                        <i class="material-icons">visibility</i>
-                                    </button>
-                                </td>
-                                <td v-if="dado.produto">{{ dado.produto }}</td>
-                                <td v-else class="center"> - </td>
-                                <td>{{ dado.tipoDiligencia }}</td>
-                                <td>{{ dado.dataSolicitacao }}</td>
-                                <td>{{ dado.dataResposta }}</td>
-                                <td>{{ dado.prazoResposta }}</td>
-                                <td>Prorrogado</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </fieldset>
+                <div v-if="dados.diligenciaProjeto.length > 0">
+                    <fieldset>
+                        <legend>Dilig&ecirc;ncia Projeto</legend>
+                        <table class="tabela">
+                            <thead>
+                                <tr class="destacar">
+                                    <th>VISUALIZAR</th>
+                                    <th>PRODUTO</th>
+                                    <th>TIPO DE DILIG&Ecirc;NCIA</th>
+                                    <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
+                                    <th>DATA DA RESPOSTA</th>
+                                    <th>PRAZO DA RESPOSTA</th>
+                                    <th>PRORROGADO</th>
+                                </tr>
+                            </thead>
+                            <tbody v-for="(dado, index) in dados.diligenciaProjeto" :key="index">
+                                <tr>
+                                    <td class="center">
+                                        <button class="waves-effect waves-darken btn white black-text">
+                                            <i class="material-icons">visibility</i>
+                                        </button>
+                                    </td>
+                                    <td v-if="dado.produto">{{ dado.produto }}</td>
+                                    <td v-else class="center"> - </td>
+                                    <td>{{ dado.tipoDiligencia }}</td>
+                                    <td>{{ dado.dataSolicitacao }}</td>
+                                    <td>{{ dado.dataResposta }}</td>
+                                    <td>{{ dado.prazoResposta }}</td>
+                                    <td>Prorrogado</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </fieldset>
+                </div>
             </div>
     </div>
 </template>
@@ -128,7 +134,6 @@ export default {
                 url: '/projeto/diligencia-projeto-rest/index/idPronac/' + idPronac,
             }).done(function (response) {
                 self.dados = response.data;
-                console.log(self.dados);
             });
         },
     },
