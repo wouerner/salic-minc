@@ -18,9 +18,9 @@
                             <tbody v-for="(dado, index) in dados.diligenciaProposta" :key="index">
                                 <tr>
                                     <td class="center">
-                                        <button class="waves-effect waves-darken btn white black-text">
-                                            <i class="material-icons">visibility</i>
-                                        </button>
+                                        <VisualizarDiligenciaProposta   :idPronac="idPronac"
+                                                                        :posicao="index">
+                                        </VisualizarDiligenciaProposta>
                                     </td>
                                     <td>{{ dado.idPreprojeto }}</td>
                                     <td>{{ dado.dataSolicitacao }}</td>
@@ -98,12 +98,14 @@
 <script>
 import { mapGetters } from 'vuex';
 import IdentificacaoProjeto from './IdentificacaoProjeto';
+import VisualizarDiligenciaProposta from './components/VisualizarDiligenciaProposta';
+
 
 export default {
     name: 'DiligenciaProjeto',
-    props: ['idPronac'],
     components: {
         IdentificacaoProjeto,
+        VisualizarDiligenciaProposta,
     },
     data() {
         return {
@@ -113,6 +115,7 @@ export default {
                         return {};
                     },
                 },
+            idPronac: {},
         };
     },
     mounted() {
@@ -128,10 +131,10 @@ export default {
     methods: {
         buscar_dados() {
             const self = this;
-            const idPronac = self.$route.params.idPronac
+            self.idPronac = self.$route.params.idPronac
             /* eslint-disable */
             $3.ajax({
-                url: '/projeto/diligencia-projeto-rest/index/idPronac/' + idPronac,
+                url: '/projeto/diligencia-projeto-rest/index/idPronac/' + self.idPronac,
             }).done(function (response) {
                 self.dados = response.data;
             });
