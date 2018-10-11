@@ -15,7 +15,7 @@
             </v-card-title>
             <v-data-table
                     :headers="cabecalho"
-                    :items="dadosTabela.items"
+                    :items="getProjetosLaudoFinal.items"
                     :pagination.sync="pagination"
                     hide-actions
                     :search="search"
@@ -25,14 +25,14 @@
                     <td class="text-xs-center">
                         <v-flex xs12 sm4 text-xs-center>
                             <div>
-                                <v-btn :href="'/avaliacao-resultados/#/'">{{ props.item.pronac }}</v-btn>
+                                <v-btn :href="'/avaliacao-resultados/#/'">{{ props.item.IdPronac }}</v-btn>
                             </div>
                         </v-flex>
                     </td>
-                    <td class="text-xs-center">{{ props.item.nomeProjeto }}</td>
+                    <td class="text-xs-center">{{ props.item.NomeProjeto }}</td>
                     <td class="text-xs-center">
                         <v-chip
-                                v-if="props.item.manifestacao == 1"
+                                v-if="props.item.siManifestacao == 'A'"
                                 color="green darken-4"
                                 text-color="white"
                         >
@@ -42,7 +42,7 @@
                             Aprovado
                         </v-chip>
                         <v-chip
-                                v-if="props.item.manifestacao == 2"
+                                v-if="props.item.siManifestacao == 'P'"
                                 color="green lighten-1"
                                 text-color="white"
                         >
@@ -52,7 +52,7 @@
                             Aprovado com ressalva
                         </v-chip>
                         <v-chip
-                                v-if="props.item.manifestacao == 3"
+                                v-if="props.item.siManifestacao == 'R'"
                                 color="red"
                                 text-color="white"
                         >
@@ -108,6 +108,7 @@
     export default {
         name: 'Painel',
         created() {
+            this.obterProjetosLaudoFinal();
         },
         data() {
             return {
@@ -117,34 +118,6 @@
                 },
                 searchLength: 0,
                 search: '',
-                dadosTabela: {
-                    items: [
-                        {
-                            pronac: '133456',
-                            nomeProjeto: 'asdasddo Projeto',
-                            cnpj: '',
-                            cpf: '04236881462',
-                            proponente: 'Pedro Phiaaaaalipe',
-                            manifestacao: '1',
-                        },
-                        {
-                            pronac: '1266456',
-                            nomeProjeto: 'dddddddo Projeto',
-                            cnpj: '13482035000156',
-                            cpf: '',
-                            proponente: 'Joaozinho do Grau',
-                            manifestacao: '2',
-                        },
-                        {
-                            pronac: '53456',
-                            nomeProjeto: 'ggxProjeto',
-                            cnpj: '123344.6516./110-1',
-                            cpf: '',
-                            proponente: 'Tião do shape de pedreiro',
-                            manifestacao: '3',
-                        },
-                    ],
-                },
                 cabecalho: [
                     {
                         text: '#',
@@ -185,6 +158,7 @@
         },
         methods: {
             ...mapActions({
+                obterProjetosLaudoFinal: 'avaliacaoResultados/obterProjetosLaudoFinal',
             }),
         },
         watch: {
@@ -193,6 +167,7 @@
         },
         computed: {
             ...mapGetters({
+                getProjetosLaudoFinal: 'avaliacaoResultados/getProjetosLaudoFinal',
             }),
             pages() {
                 if (this.pagination.rowsPerPage == null ||
