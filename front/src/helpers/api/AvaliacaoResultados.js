@@ -85,6 +85,8 @@ export const obterProjetosParaDistribuir = () => api.getRequest('/prestacao-cont
 
 export const criarDiligencia = params => api.postRequest('/diligencia/diligencia', buildData(params));
 
+export const obterProjetosAssinatura = params => api.getRequest(`/avaliacao-resultados/projeto-assinatura/estado/${params.estado}`);
+
 export const alterarPerfil = (grupoAtivo, orgaoAtivo) => api.getRequest(`perfil/perfil-rest/index?codGrupo=${grupoAtivo}&codOrgao=${orgaoAtivo}`);
 
 export const obterProjetosParaAssinatura = () => api.getRequest('/avaliacao-resultados/projeto-assinatura');
