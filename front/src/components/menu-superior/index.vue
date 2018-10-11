@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="teste" v-if="dados">
+        <div v-if="dados">
 
             <v-toolbar
                 app
@@ -144,9 +144,5 @@
         width: 500px;
         height: 750px;
         overflow: scroll;
-    }
-
-    .teste {
-
     }
 </style>
