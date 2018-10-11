@@ -152,22 +152,25 @@
     },
     methods: {
         detalhamentosByID(lista, id) {
-            const novaLista = [];
 
             if (typeof lista !== 'undefined') {
-                Object.keys(lista)
-                    .map((key) => {
-                        if (lista[key].idPlanoDistribuicao === id) {
-                            novaLista.push(lista[key]);
-                        }
-                    });
+                /* eslint-disable */
+                let novaLista = [];
 
+                Object.keys(lista).map((key) => {
+                    if (lista[key].idPlanoDistribuicao === id) {
+                        novaLista.push(lista[key]);
+                    }
+                    return novaLista;
+                });
                 return novaLista;
             }
             return lista;
         },
         label_sim_ou_nao(valor) {
-            if (valor === 1) { return 'Sim'; }
+            if (valor === 1) {
+                return 'Sim';
+            }
             return 'N\xE3o';
         },
         iniciarCollapsible() {
