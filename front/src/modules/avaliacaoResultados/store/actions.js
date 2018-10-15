@@ -155,17 +155,12 @@ export const obterDadosItemComprovacao = ({ commit }, params) => {
         });
 };
 
-export const getLaudoFinal = ({ commit }) => {
-    const data = { manifestacao: 'A', laudoTecnico: 'Tem mais de 10 caracteres!! 39 no total' };
-    commit(types.GET_LAUDO_FINAL, data);
-};
-
-export const atualizarManifestacao = ({ commit }, characterManifestacao) => {
-    commit(types.SET_MANIFESTACAO_PROVISORIA, characterManifestacao);
-};
-
-export const atualizarParecer = ({ commit }, characterParecer) => {
-    commit(types.SET_PARECER_PROVISORIO, characterParecer);
+export const getLaudoFinal = ({ commit }, param) => {
+    avaliacaoResultadosHelperAPI.obterLaudoFinal(param)
+    .then((response) => {
+        const dados = response.data.data;
+        commit(types.GET_PARECER_LAUDO_FINAL, dados);
+    });
 };
 
 export const salvarLaudoFinal = (_, data) => {
@@ -185,7 +180,8 @@ export const finalizarLaudoFinal = (_, data) => {
 export const enviarDiligencia = (_, data) => {
     avaliacaoResultadosHelperAPI.criarDiligencia(data)
         .then((response) => {
-            console.log(response);
+            const data = response.data;
+            console.log(data);
         });
 };
 
@@ -219,7 +215,7 @@ export const projetosAssinatura = ({ commit }, params) => {
         });
 };
 
-export const obterProjetosLaudoFinal = ({ commit }, params) => {
+export const obterProjetosLaudoFinal = ({ commit }) => {
     avaliacaoResultadosHelperAPI.obterProjetosLaudoFinal()
         .then((response) => {
             const data = response.data;
