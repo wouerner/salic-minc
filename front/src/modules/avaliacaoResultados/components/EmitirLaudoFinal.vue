@@ -29,7 +29,11 @@
                         <v-layout wrap align-center>
                             <v-flex>
                                 <label for="manifestacao">Manifestação *</label>
-                                <v-radio-group :value="parecerLaudoFinal.items.siManifestacao" @change="updateManifestacao" id="manifestacao" :rules="itemRules" row>
+                                <v-radio-group :value="parecerLaudoFinal.items.siManifestacao"
+                                               @change="updateManifestacao"
+                                               id="manifestacao"
+                                               :rules="itemRules"
+                                               row>
                                     <v-radio color="success" label="Aprovado" value="A"></v-radio>
                                     <v-radio color="success" label="Aprovado com ressalvas" value="P"></v-radio>
                                     <v-radio color="success" label="Reprovado" value="R"></v-radio>
@@ -37,7 +41,13 @@
                             </v-flex>
                         </v-layout>
                         <v-flex>
-                            <v-textarea :value="parecerLaudoFinal.items.dsLaudoFinal" @input="updateParecer" :rules="parecerRules" color="deep-purple" label="Parecer *" height="200px" required="required">
+                            <v-textarea :value="parecerLaudoFinal.items.dsLaudoFinal"
+                                        @input="updateParecer"
+                                        :rules="parecerRules"
+                                        color="deep-purple"
+                                        label="Parecer *"
+                                        height="200px"
+                                        required="required">
                             </v-textarea>
                         </v-flex>
                     </v-container>
@@ -64,6 +74,7 @@
                     v => !!v || 'Parecer é obrigatório!',
                     v => Object(v).length >= 10 || 'Parecer deve conter mais que 10 caracteres',
                 ],
+                laudoFinalData: { },
             };
         },
         methods: {
@@ -74,8 +85,6 @@
                 salvar: 'avaliacaoResultados/salvarLaudoFinal',
                 finalizar: 'avaliacaoResultados/finalizarLaudoFinal',
                 getLaudoFinal: 'avaliacaoResultados/getLaudoFinal',
-                atualizarManifestacao: 'avaliacaoResultados/atualizarManifestacao',
-                atualizarParecer: 'avaliacaoResultados/atualizarParecer',
             }),
             getConsolidacao(id) {
                 this.requestEmissaoParecer(id);
@@ -83,9 +92,21 @@
             salvarLaudoFinal() {
                 const data = {
                     idPronac: this.idPronac,
-                    siManifestacao: this.characterManifestacao,
-                    dsLaudoFinal: this.characterParecer,
+                    siManifestacao: this.parecerLaudoFinal.items.siManifestacao,
+                    dsLaudoFinal: this.parecerLaudoFinal.items.dsLaudoFinal,
                 };
+
+                if (this.parecerLaudoFinal.items.idLaudoFinal) {
+                    data.idLaudoFinal = this.parecerLaudoFinal.items.idLaudoFinal;
+                }
+
+                if (this.laudoFinalData.siManifestacao) {
+                    data.siManifestacao = this.laudoFinalData.siManifestacao;
+                }
+
+                if (this.laudoFinalData.dsParecer) {
+                    data.dsLaudoFinal = this.laudoFinalData.dsLaudoFinal;
+                }
     
                 this.salvar(data);
                 /** Descomentar linha após migração da lista para o VUEJS */
@@ -104,11 +125,11 @@
                 /** Descomentar linha após migração da lista para o VUEJS */
                 // this.dialog = false;
             },
-            updateManifestacao(characterManifestacao) {
-                this.atualizarManifestacao(characterManifestacao);
+            updateManifestacao(e) {
+                this.laudoFinalData.siManifestacao = e;
             },
-            updateParecer(characterParecer) {
-                this.atualizarParecer(characterParecer);
+            updateParecer(e) {
+                this.laudoFinalData.dsLaudoFinal = e;
             },
         },
         computed: {
@@ -117,15 +138,11 @@
                 proponente: 'avaliacaoResultados/proponente',
                 projeto: 'avaliacaoResultados/projeto',
                 parecerLaudoFinal: 'avaliacaoResultados/getParecerLaudoFinal',
-                characterManifestacao: 'avaliacaoResultados/characterManifestacao',
-                characterParecer: 'avaliacaoResultados/characterParecer',
             }),
         },
         created() {
             this.getConsolidacao(this.idPronac);
             this.getLaudoFinal(this.idPronac);
-            this.atualizarManifestacao(this.parecerLaudoFinal.items.siManifestacao);
-            this.atualizarParecer(this.parecerLaudoFinal.items.dsLaudoFinal);
         },
     };
 </script>
