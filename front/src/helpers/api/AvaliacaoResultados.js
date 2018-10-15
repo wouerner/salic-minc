@@ -82,7 +82,9 @@ export const finalizarParecer = (params) => {
 
 /** FIM DO PARECER TECNICO */
 
-export const obterProjetosLaudoFinal = () => api.getRequest('/avaliacao-resultados/laudo');
+export const obterLaudoFinal = () => api.getRequest('/avaliacao-resultados/laudo');
+
+export const obterProjetosLaudoFinal = () => api.getRequest('/avaliacao-resultados/laudo/index');
 
 export const alterarPerfil = (grupoAtivo, orgaoAtivo) => api.getRequest(`perfil/perfil-rest/index?codGrupo=${grupoAtivo}&codOrgao=${orgaoAtivo}`);
 

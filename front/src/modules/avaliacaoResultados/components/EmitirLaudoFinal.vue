@@ -9,7 +9,7 @@
                         <v-toolbar-title>Emissão de Laudo Final de Avaliação de Resultados</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                            <v-btn dark flat @click.native="salvarLaudoFinal()" :disabled="!valid">Salvar</v-btn>
+                            <v-btn dark flat @click.native="salvarLaudoFinal()">Salvar</v-btn>
                             <v-btn dark flat @click.native="finalizarLaudoFinal()" :disabled="!parecerLaudoFinal.idLaudoFinal">Gerar Documento</v-btn>
                         </v-toolbar-items>
                 </v-toolbar>
@@ -136,7 +136,6 @@
             this.getLaudoFinal();
             this.atualizarManifestacao(this.parecerLaudoFinal.siManifestacao);
             this.atualizarParecer(this.parecerLaudoFinal.dsLaudoFinal);
-            // this.$refs.form.validate();
         },
     };
 </script>
