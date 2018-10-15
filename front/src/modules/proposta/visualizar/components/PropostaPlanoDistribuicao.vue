@@ -108,9 +108,9 @@
     </div>
 </template>
 <script>
-import PropostaDetalhamentoPlanoDistribuicao from './PropostaDetalhamentoPlanoDistribuicao';
+    import PropostaDetalhamentoPlanoDistribuicao from './PropostaDetalhamentoPlanoDistribuicao';
 
-export default {
+    export default {
     name: 'PropostaPlanoDistribuicao',
     data() {
         return {
@@ -152,6 +152,7 @@ export default {
     },
     methods: {
         detalhamentosByID(lista, id) {
+
             if (typeof lista !== 'undefined') {
                 /* eslint-disable */
                 let novaLista = [];

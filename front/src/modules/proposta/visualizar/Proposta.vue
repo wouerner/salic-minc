@@ -196,7 +196,6 @@
 </template>
 
 <script>
-
 import { mapActions, mapGetters } from 'vuex';
 import Planilha from '@/components/Planilha/Planilha';
 import Carregando from '@/components/Carregando';
@@ -249,10 +248,10 @@ export default {
             this.dados = this.dadosProposta;
         }
 
-        if (typeof this.proposta !== 'undefined') {
-            this.dados = this.proposta;
-            this.loading = false;
-        }
+            if (typeof this.proposta !== 'undefined') {
+                this.dados = this.proposta;
+                this.loading = false;
+            }
 
         this.iniciarCollapsible();
     },
