@@ -33,35 +33,11 @@
                 <div v-if="dados.diligenciaProjeto.length > 0">
                     <fieldset>
                         <legend>Dilig&ecirc;ncia Projeto</legend>
-                        <table class="tabela">
-                            <thead>
-                                <tr class="destacar">
-                                    <th>VISUALIZAR</th>
-                                    <th>PRODUTO</th>
-                                    <th>TIPO DE DILIG&Ecirc;NCIA</th>
-                                    <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
-                                    <th>DATA DA RESPOSTA</th>
-                                    <th>PRAZO DA RESPOSTA</th>
-                                    <th>PRORROGADO</th>
-                                </tr>
-                            </thead>
-                            <tbody v-for="(dado, index) in dados.diligenciaProjeto" :key="index">
-                                <tr>
-                                    <td class="center">
-                                        <button class="waves-effect waves-darken btn white black-text">
-                                            <i class="material-icons">visibility</i>
-                                        </button>
-                                    </td>
-                                    <td v-if="dado.produto">{{ dado.produto }}</td>
-                                    <td v-else class="center"> - </td>
-                                    <td>{{ dado.tipoDiligencia }}</td>
-                                    <td>{{ dado.dataSolicitacao }}</td>
-                                    <td>{{ dado.dataResposta }}</td>
-                                    <td>{{ dado.prazoResposta }}</td>
-                                    <td>Prorrogado</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <VisualizarDiligenciaProjeto
+                                :idPronac="idPronac"
+                                :infos="dados.diligenciaProjeto"
+                            >
+                        </VisualizarDiligenciaProjeto>
                     </fieldset>
                 </div>
             </div>
@@ -72,6 +48,7 @@ import { mapGetters } from 'vuex';
 import IdentificacaoProjeto from './IdentificacaoProjeto';
 import VisualizarDiligenciaProposta from './components/VisualizarDiligenciaProposta';
 import VisualizarDiligenciaAdequacao from './components/VisualizarDiligenciaAdequacao';
+import VisualizarDiligenciaProjeto from './components/VisualizarDiligenciaProjeto';
 
 
 export default {
@@ -80,6 +57,7 @@ export default {
         IdentificacaoProjeto,
         VisualizarDiligenciaProposta,
         VisualizarDiligenciaAdequacao,
+        VisualizarDiligenciaProjeto,
     },
     data() {
         return {
