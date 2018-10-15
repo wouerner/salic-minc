@@ -188,13 +188,19 @@ class DiligenciaProjeto
         foreach ($diligencias as $diligencia) {
             $Solicitacao = html_entity_decode(utf8_encode($diligencia['Solicitacao']));
             $Resposta = html_entity_decode(utf8_encode($diligencia['Resposta']));
+            $nomeProjeto = html_entity_decode(utf8_encode($diligencia['nomeProjeto']));
+            $objDateTimedataSolicitacao = new \DateTime($diligencia['dataSolicitacao']);
+            $objDateTimedataResposta = new \DateTime($diligencia['dataResposta']);
 
             $arquivo = $this->obterAnexosDiligencias($diligencia);
 
             $resultArray[] = [
                 'Solicitacao' => $Solicitacao,
                 'Resposta' => $Resposta,
-                'arquivo' => $arquivo
+                'arquivo' => $arquivo,
+                'nomeProjeto' => $nomeProjeto,
+                'dataSolicitacao' => $objDateTimedataSolicitacao->format('d/m/Y'),
+                'dataResposta' => $objDateTimedataResposta->format('d/m/Y'),
             ];
         }
 

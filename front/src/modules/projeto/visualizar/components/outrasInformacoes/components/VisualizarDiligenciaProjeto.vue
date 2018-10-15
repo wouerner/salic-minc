@@ -30,45 +30,45 @@
                     <td>{{ info.prazoResposta }}</td>
                     <td>Prorrogado</td>
                 </tr>
-                <tr v-if="activeTab === index && dados.diligenciaProposta.length > 0">
-                    <td colspan="3">
+                <tr v-if="activeTab === index && dados.diligenciaProjeto.length > 0">
+                    <td colspan="7">
                          <table class="tabela">
                             <tbody>
                                 <tr>
-                                    <th>Nr PROPOSTA</th>
-                                    <th>NOME DA PROPOSTA</th>
+                                    <th>PRONAC</th>
+                                    <th>NOME DO PROJETO</th>
                                 </tr>
                                 <tr>
-                                    <td>{{ dados.diligenciaProposta[index].idPreprojeto }}</td>
-                                    <td>{{ dados.diligenciaProposta[index].nomeProjeto }}</td>
+                                    <td>{{ idPronac }}</td>
+                                    <td>{{ dados.diligenciaProjeto[index].nomeProjeto }}</td>
                                 </tr>
                                 <tr>
                                     <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
                                     <th>DATA DA RESPOSTA</th>
                                 </tr>
                                 <tr>
-                                    <td>{{ dados.diligenciaProposta[index].dataSolicitacao }}</td>
-                                    <td>{{ dados.diligenciaProposta[index].Resposta }}</td>
+                                    <td>{{ dados.diligenciaProjeto[index].dataSolicitacao }}</td>
+                                    <td>{{ dados.diligenciaProjeto[index].dataResposta }}</td>
                                 </tr>
                             </tbody>
                         </table>
-                        <table v-if="dados.diligenciaProposta[index].Solicitacao" class="tabela">
+                        <table v-if="dados.diligenciaProjeto[index].Solicitacao" class="tabela">
                             <tbody>
                                 <tr>
                                     <th>SOLICITA&Ccedil;&Atilde;O</th>
                                 </tr>
                                 <tr>
-                                    <td style="padding-left: 20px" v-html="dados.diligenciaProposta[index].Solicitacao"></td>
+                                    <td style="padding-left: 20px" v-html="dados.diligenciaProjeto[index].Solicitacao"></td>
                                 </tr>
                             </tbody>
                         </table>
-                        <table v-if="dados.diligenciaProposta[index].Resposta" class="tabela">
+                        <table v-if="dados.diligenciaProjeto[index].Resposta" class="tabela">
                             <tbody>
                                 <tr>
                                     <th>Resposta:</th>
                                 </tr>
                                 <tr>
-                                    <td style="padding-left: 20px" v-html="dados.diligenciaProposta[index].Solicitacao"></td>
+                                    <td style="padding-left: 20px" v-html="dados.diligenciaProjeto[index].Resposta"></td>
                                 </tr>
                             </tbody>
                         </table>
