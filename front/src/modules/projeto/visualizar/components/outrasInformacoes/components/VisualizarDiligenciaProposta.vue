@@ -59,7 +59,7 @@
                                     <th>Resposta:</th>
                                 </tr>
                                 <tr>
-                                    <td style="padding-left: 20px" v-html="dados.diligenciaProposta[index].Solicitacao"></td>
+                                    <td style="padding-left: 20px" v-html="dados.diligenciaProposta[index].Resposta"></td>
                                 </tr>
                             </tbody>
                         </table>
