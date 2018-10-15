@@ -18,11 +18,20 @@ class Laudo
     public function salvarLaudo($idLaudoFinal, $idPronac, $dtLaudoFinal, $siManifestacao, $dsLaudoFinal, $idUsuario){
         $auth = \Zend_Auth::getInstance();
         $tbTable = new \AvaliacaoResultados_Model_DbTable_LaudoFinal;
-        $tbTable->insert(['idPronac'=>$idPronac, 
-                          'idUsuario'=>$auth->getIdentity()->usu_codigo, 
-                          'dtLaudoFinal'=>(new \DateTime())->format('Y-m-d'), 
-                          'siManifestacao'=>$siManifestacao, 
-                          'dsLaudoFinal'=>$dsLaudoFinal]);
+        var_dump($idLaudoFinal); die;
+        if(empty($idLaudoFinal)){
+            $tbTable->insert(['idPronac'=>$idPronac, 
+                              'idUsuario'=>$auth->getIdentity()->usu_codigo, 
+                              'dtLaudoFinal'=>(new \DateTime())->format('Y-m-d'), 
+                              'siManifestacao'=>$siManifestacao, 
+                              'dsLaudoFinal'=>$dsLaudoFinal]);
+        }else{
+            $tbTable->alterar(['idUsuario'=>$auth->getIdentity()->usu_codigo, 
+                              'dtLaudoFinal'=>(new \DateTime())->format('Y-m-d'), 
+                              'siManifestacao'=>$siManifestacao, 
+                              'dsLaudoFinal'=>$dsLaudoFinal],
+                              'idLaudoFinal'==$idLaudoFinal);
+        }
 
         $model = new \AvaliacaoResultados_Model_LaudoFinal;
         $model->setIdPronac($idPronac);
