@@ -197,7 +197,7 @@ class DiligenciaProjeto
             $resultArray[] = [
                 'Solicitacao' => $Solicitacao,
                 'Resposta' => $Resposta,
-                'arquivo' => $arquivo,
+                'Arquivo' => $arquivo,
                 'nomeProjeto' => $nomeProjeto,
                 'dataSolicitacao' => $objDateTimedataSolicitacao->format('d/m/Y'),
                 'dataResposta' => $objDateTimedataResposta->format('d/m/Y'),
@@ -217,7 +217,7 @@ class DiligenciaProjeto
             $arquivoArray[] = [
                 'idArquivo' => $arquivo->idArquivo,
                 'nmArquivo' => utf8_encode($arquivo->nmArquivo),
-                'dtEnvio' => $objdtEnvio->format('d/m/Y'),
+                'dtEnvio' => $objdtEnvio->format('d/m/Y H:i:s'),
                 'idDiligencia' => $arquivo->idDiligencia,
             ];
         }

@@ -65,10 +65,25 @@
                         <table v-if="dados.diligenciaProjeto[index].Resposta" class="tabela">
                             <tbody>
                                 <tr>
-                                    <th>Resposta:</th>
+                                    <th>RESPOSTA</th>
                                 </tr>
                                 <tr>
                                     <td style="padding-left: 20px" v-html="dados.diligenciaProjeto[index].Resposta"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table v-if="dados.diligenciaProjeto[index].Arquivo" class="tabela">
+                            <tbody>
+                                <tr>
+                                    <th colspan="2">ARQUIVOS ANEXADOS</th>
+                                </tr>
+                                <tr>
+                                    <th>Arquivo</th>
+                                    <th>Dt. Envio</th>
+                                </tr>
+                                <tr v-for="(Arquivo, index) in dados.diligenciaProjeto[index].Arquivo" :key="index">
+                                    <td style="padding-left: 20px" v-html="Arquivo.nmArquivo"></td>
+                                    <td> {{ Arquivo.dtEnvio }}</td>
                                 </tr>
                             </tbody>
                         </table>

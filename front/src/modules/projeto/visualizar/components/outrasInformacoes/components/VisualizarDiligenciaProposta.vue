@@ -56,7 +56,7 @@
                         <table v-if="dados.diligenciaProposta[index].Resposta" class="tabela">
                             <tbody>
                                 <tr>
-                                    <th>Resposta:</th>
+                                    <th>RESPOSTA</th>
                                 </tr>
                                 <tr>
                                     <td style="padding-left: 20px" v-html="dados.diligenciaProposta[index].Resposta"></td>
