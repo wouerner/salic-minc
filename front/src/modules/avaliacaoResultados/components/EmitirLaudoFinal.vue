@@ -117,6 +117,7 @@
                     idPronac: this.idPronac,
                     siManifestacao: this.characterManifestacao,
                     dsLaudoFinal: this.characterParecer,
+                    idLaudoFinal: this.parecerLaudoFinal.items.idLaudoFinal,
                     atual: 5,
                     proximo: 6,
                 };
