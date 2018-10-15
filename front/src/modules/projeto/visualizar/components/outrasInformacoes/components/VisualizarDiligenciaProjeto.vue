@@ -82,7 +82,9 @@
                                     <th>Dt. Envio</th>
                                 </tr>
                                 <tr v-for="(Arquivo, index) in dados.diligenciaProjeto[index].Arquivo" :key="index">
-                                    <td style="padding-left: 20px" v-html="Arquivo.nmArquivo"></td>
+                                    <td style="padding-left: 20px">
+                                        <a :href="`/upload/abrir?id=${Arquivo.idArquivo}`"  v-html="Arquivo.nmArquivo"></a>
+                                    </td>
                                     <td> {{ Arquivo.dtEnvio }}</td>
                                 </tr>
                             </tbody>
