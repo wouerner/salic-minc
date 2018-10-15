@@ -11,7 +11,8 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
     protected $_name = 'tbAtoAdministrativo';
     protected $_primary = 'idAtoAdministrativo';
 
-    public function definirModeloAssinatura(array $dados) {
+    public function definirModeloAssinatura(array $dados)
+    {
         $this->modelAtoAdministrativo = new Assinatura_Model_TbAtoAdministrativo($dados);
         return $this;
     }
@@ -20,8 +21,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         $idOrgaoDoAssinante,
         $idPerfilDoAssinante,
         $idTipoDoAto
-    )
-    {
+    ) {
         $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
         $objQuery->from(
@@ -32,7 +32,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
                 'idCargoDoAssinante',
                 'idPerfilDoAssinante',
                 'idOrgaoDoAssinante',
-                'idOrdemDaAssinatura'
+                'idOrdemDaAssinatura',
             ),
             $this->_schema
         );
@@ -62,8 +62,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         $idTipoDoAto,
         $idOrgaoSuperiorDoAssinante,
         $idOrgaoDoAssinante = null
-    )
-    {
+    ) {
         $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
         $objQuery->from(
@@ -71,7 +70,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
             array(
                 'quantidade_assinaturas' => new Zend_Db_Expr(
                     "count(*)"
-                )
+                ),
             ),
             $this->_schema
         );
@@ -117,8 +116,13 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         }
     }
 
-    public function obterAtoAdministrativoAtual($idTipoDoAto, $idPerfilDoAssinante, $idOrgaoDoAssinante)
-    {
+    protected function obterQueryAtoAdministrativo(
+        $idTipoDoAto,
+        $idPerfilDoAssinante,
+        $idOrgaoDoAssinante,
+        $idOrgaoSuperiorDoAssinante = null
+    ): \MinC_Db_Table_Select{
+
         $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
         $objQuery->from(
@@ -129,6 +133,44 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         $objQuery->where('idTipoDoAto = ?', $idTipoDoAto);
         $objQuery->where('idPerfilDoAssinante = ?', $idPerfilDoAssinante);
         $objQuery->where('idOrgaoDoAssinante = ?', $idOrgaoDoAssinante);
+
+        if (!is_null($idOrgaoSuperiorDoAssinante)) {
+            $objQuery->where('idOrgaoSuperiorDoAssinante = ?', $idOrgaoSuperiorDoAssinante);
+        }
+
+        return $objQuery;
+    }
+
+    public function obterPrimeiroAtoAdministrativo(
+        $idTipoDoAto,
+        $idOrgaoSuperiorDoAssinante,
+        $idPerfilDoAssinante,
+        $idOrgaoDoAssinante
+    ) {
+
+        $objQuery = $this->obterQueryAtoAdministrativo(
+            $idTipoDoAto,
+            $idPerfilDoAssinante,
+            $idOrgaoDoAssinante
+        );
+
+        $objQuery->where("idOrdemDaAssinatura = ?", 1);
+
+        return $this->_db->fetchRow($objQuery);
+    }
+
+    public function obterAtoAdministrativoAtual(
+        $idTipoDoAto,
+        $idPerfilDoAssinante,
+        $idOrgaoDoAssinante
+    ) {
+
+        $objQuery = $this->obterQueryAtoAdministrativo(
+            $idTipoDoAto,
+            $idPerfilDoAssinante,
+            $idOrgaoDoAssinante
+        );
+
         $objResultado = $this->fetchRow($objQuery);
         if ($objResultado) {
             return $objResultado->toArray();
@@ -186,7 +228,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
             "Verificacao.Descricao asc",
             "OrgaoSuperior.Sigla asc",
             "TbAtoAdministrativo.idOrdemDaAssinatura asc",
-            "Orgaos.Sigla asc"
+            "Orgaos.Sigla asc",
         ]);
         return $this->fetchAll($objQuery)->toArray();
     }
