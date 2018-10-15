@@ -15,7 +15,7 @@
             </v-card-title>
             <v-data-table
                     :headers="cabecalho"
-                    :items="listaProjetos.items"
+                    :items="getProjetosLaudoFinal.items"
                     :pagination.sync="pagination"
                     hide-actions
                     :search="search"
@@ -25,7 +25,7 @@
                     <td class="text-xs-center">
                         <v-flex>
                             <div>
-                                <v-btn :href="'/avaliacao-resultados/#/'">{{ props.item.IdPronac }}</v-btn>
+                                <v-btn :href="'/projeto/#/incentivo/'+ props.item.IdPronac">{{ props.item.PRONAC }}</v-btn>
                             </div>
                         </v-flex>
                     </td>
@@ -37,7 +37,7 @@
                                 text-color="white"
                         >
                             <v-avatar>
-                                <v-icon>mood</v-icon>
+                                <v-icon dark>mood</v-icon>
                             </v-avatar>
                             Aprovado
                         </v-chip>
@@ -63,9 +63,20 @@
                         </v-chip>
                     </td>
                     <td class="text-xs-center">
-                        <v-btn flat icon color="green">
-                            <v-icon>keyboard_return</v-icon>
-                        </v-btn>
+                        <v-dialog v-model="dialog" max-width="290">
+                            <v-btn slot="activator" flat icon color="green">
+                                <v-icon>keyboard_return</v-icon>
+                            </v-btn>
+                            <v-card>
+                                <v-card-title class="headline">Deseja realmente devolver o documento?</v-card-title>
+                                <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>
+                                <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="red" flat @click.native="dialog = false">Cancelar</v-btn>
+                                <v-btn color="green" flat @click.native="dialog = false">Devolver</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
                     </td>
                     <td class="text-xs-center">
                         <v-btn flat icon color="blue"
@@ -108,6 +119,7 @@
     export default {
         name: 'Painel',
         created() {
+            this.obterProjetosLaudoFinal();
         },
         data() {
             return {
@@ -117,34 +129,7 @@
                 },
                 searchLength: 0,
                 search: '',
-                // dadosTabela: {
-                //     items: [
-                //         {
-                //             pronac: '133456',
-                //             nomeProjeto: 'asdasddo Projeto',
-                //             cnpj: '',
-                //             cpf: '04236881462',
-                //             proponente: 'Pedro Phiaaaaalipe',
-                //             manifestacao: 'A',
-                //         },
-                //         {
-                //             pronac: '1266456',
-                //             nomeProjeto: 'dddddddo Projeto',
-                //             cnpj: '13482035000156',
-                //             cpf: '',
-                //             proponente: 'Joaozinho do Grau',
-                //             manifestacao: 'P',
-                //         },
-                //         {
-                //             pronac: '53456',
-                //             nomeProjeto: 'ggxProjeto',
-                //             cnpj: '123344.6516./110-1',
-                //             cpf: '',
-                //             proponente: 'Tião do shape de pedreiro',
-                //             manifestacao: 'R',
-                //         },
-                //     ],
-                // },
+                dialog: false,
                 cabecalho: [
                     {
                         align: 'center',
@@ -185,7 +170,7 @@
         },
         methods: {
             ...mapActions({
-                ProjetosLaudoFinal: 'avaliacaoResultados/obterProjetosLaudoFinal',
+                obterProjetosLaudoFinal: 'avaliacaoResultados/obterProjetosLaudoFinal',
             }),
         },
         watch: {
@@ -194,7 +179,7 @@
         },
         computed: {
             ...mapGetters({
-                listaProjetos: 'avaliacaoResultados/getProjetosLaudoFinal',
+                getProjetosLaudoFinal: 'avaliacaoResultados/getProjetosLaudoFinal',
             }),
             pages() {
                 if (this.pagination.rowsPerPage == null ||
