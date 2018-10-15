@@ -12,7 +12,6 @@ class Laudo
 
     public function obterLaudo($idPronac){
         $model = new \AvaliacaoResultados_Model_DbTable_LaudoFinal();
-        
         return $model->laudoFinal($idPronac);
     }
 
