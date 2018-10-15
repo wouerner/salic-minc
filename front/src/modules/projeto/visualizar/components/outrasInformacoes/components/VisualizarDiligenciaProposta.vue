@@ -8,64 +8,66 @@
                     <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
                 </tr>
             </thead>
-            <tbody v-for="(info, index) in infos" :key="index">
+            <tbody v-for="(diligencia, index) in diligencias" :key="index">
                 <tr>
                     <td class="center">
                         <button
                             class="waves-effect waves-darken btn white black-text"
-                            @click="setActiveTab(index);"
+                            @click="setActiveTab(diligencia.idPreprojeto, diligencia.idAvaliacaoProposta)"
                         >
                             <i class="material-icons">visibility</i>
                         </button>
                     </td>
-                    <td>{{ info.idPreprojeto }}</td>
-                    <td>{{ info.dataSolicitacao }}</td>
-                </tr>
-                <tr v-if="activeTab === index && dados.diligenciaProposta.length > 0">
-                    <td colspan="3">
-                         <table class="tabela">
-                            <tbody>
-                                <tr>
-                                    <th>Nr PROPOSTA</th>
-                                    <th>NOME DA PROPOSTA</th>
-                                </tr>
-                                <tr>
-                                    <td>{{ dados.diligenciaProposta[index].idPreprojeto }}</td>
-                                    <td>{{ dados.diligenciaProposta[index].nomeProjeto }}</td>
-                                </tr>
-                                <tr>
-                                    <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
-                                    <th>DATA DA RESPOSTA</th>
-                                </tr>
-                                <tr>
-                                    <td>{{ dados.diligenciaProposta[index].dataSolicitacao }}</td>
-                                    <td>{{ dados.diligenciaProposta[index].Resposta }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table v-if="dados.diligenciaProposta[index].Solicitacao" class="tabela">
-                            <tbody>
-                                <tr>
-                                    <th>SOLICITA&Ccedil;&Atilde;O</th>
-                                </tr>
-                                <tr>
-                                    <td style="padding-left: 20px" v-html="dados.diligenciaProposta[index].Solicitacao"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table v-if="dados.diligenciaProposta[index].Resposta" class="tabela">
-                            <tbody>
-                                <tr>
-                                    <th>Resposta:</th>
-                                </tr>
-                                <tr>
-                                    <td style="padding-left: 20px" v-html="dados.diligenciaProposta[index].Solicitacao"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
+                    <td>{{ diligencia.idPreprojeto }}</td>
+                    <td>{{ diligencia.dataSolicitacao }}</td>
                 </tr>
             </tbody>
+        </table>
+        <table>
+            <tr v-if="activeTab && Object.keys(dadosDiligencia).length > 0">
+                <td colspan="3">
+                    <table class="tabela">
+                        <tbody>
+                        <tr>
+                            <th>Nr PROPOSTA</th>
+                            <th>NOME DA PROPOSTA</th>
+                        </tr>
+                        <tr>
+                            <td>{{ dadosDiligencia.idPreprojeto }}</td>
+                            <td>{{ dadosDiligencia.nomeProjeto }}</td>
+                        </tr>
+                        <tr>
+                            <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
+                            <th>DATA DA RESPOSTA</th>
+                        </tr>
+                        <tr>
+                            <td>{{ dadosDiligencia.dataSolicitacao }}</td>
+                            <td>{{ dadosDiligencia.dataResposta }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table v-if="dadosDiligencia.Solicitacao" class="tabela">
+                        <tbody>
+                        <tr>
+                            <th>SOLICITA&Ccedil;&Atilde;O</th>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 20px" v-html="dadosDiligencia.Solicitacao"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table v-if="dadosDiligencia.Resposta" class="tabela">
+                        <tbody>
+                        <tr>
+                            <th>Resposta:</th>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 20px" v-html="dadosDiligencia.Solicitacao"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
         </table>
     </div>
 </template>
@@ -73,38 +75,35 @@
 <script>
 export default {
     name: 'VisualizarDiligenciaProposta',
-    props: ['idPronac', 'infos'],
+    props: ['idPronac', 'diligencias'],
     data() {
         return {
-            dados: {
-                    type: Object,
-                    default() {
-                        return {};
-                    },
+            dadosDiligencia: {
+                type: Object,
+                default() {
+                    return {};
                 },
-            activeTab: -1,
+            },
+            activeTab: false,
         };
     },
-    mounted() {
-        if (typeof this.idPronac !== 'undefined') {
-            this.buscar_dados();
-        }
-    },
     methods: {
-        setActiveTab(index) {
-            if (this.activeTab === index) {
-                this.activeTab = -1;
-            } else {
-                this.activeTab = index;
-            }
+        setActiveTab(idPreProjeto, idAvaliacaoProposta) {
+            this.activeTab = !this.activeTab;
+            // if (this.activeTab === index) {
+            //     this.activeTab = -1;
+            // } else {
+            //     this.activeTab = index;
+            // }
+            this.obterDiligencias(idPreProjeto, idAvaliacaoProposta);
         },
-        buscar_dados() {
+        obterDiligencias(idPreProjeto, idAvaliacaoProposta) {
             const self = this;
             /* eslint-disable */
             $3.ajax({
-                url: '/projeto/diligencia-projeto-rest/get/idPronac/' + self.idPronac,
+                url: `/projeto/diligencia-proposta-rest/get/idPreProjeto/${idPreProjeto}/idAvaliacaoProposta/${idAvaliacaoProposta}`,
             }).done(function (response) {
-                self.dados = response.data;
+                self.dadosDiligencia = response.data;
             });
         },
     },

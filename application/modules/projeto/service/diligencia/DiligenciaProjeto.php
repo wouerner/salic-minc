@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Modules\Projeto\Service\DiligenciaProjeto;
+namespace Application\Modules\Projeto\Service\Diligencia;
 
 use Seguranca;
 
@@ -30,12 +30,12 @@ class DiligenciaProjeto
             $idPronac = Seguranca::dencrypt($idPronac);
         }
 
+        $tblProjeto = new \Projetos();
         if (!empty($idPronac)) {
-            $tblProjeto = new \Projetos();
-            $tblPreProjeto = new \Proposta_Model_DbTable_PreProjeto();
             $projeto = $tblProjeto->buscar(array('IdPRONAC = ?' => $idPronac))->current();
 
             if (isset($projeto->idProjeto) && !empty($projeto->idProjeto)) {
+                $tblPreProjeto = new \Proposta_Model_DbTable_PreProjeto();
                 $diligenciasProposta = $tblPreProjeto->listarDiligenciasPreProjeto(array('pre.idPreProjeto = ?' => $projeto->idProjeto,'aval.ConformidadeOK = ? '=>0));
                 $proposta = $this->montarArrayListaDiligenciaProposta($diligenciasProposta);
             }
@@ -57,12 +57,12 @@ class DiligenciaProjeto
     private function montarArrayListaDiligenciaProposta($diligenciasProposta)
     {
         $resultArray = [];
-
         foreach ($diligenciasProposta as $diligencia) {
             $objDateTimedataSolicitacao = new \DateTime($diligencia['dataSolicitacao']);
 
             $resultArray[] = [
                 'idPreprojeto' => $diligencia['pronac'],
+                'idAvaliacaoProposta' => $diligencia['idAvaliacaoProposta'],
                 'dataSolicitacao' => $objDateTimedataSolicitacao->format('d/m/Y'),
             ];
         }
@@ -82,6 +82,7 @@ class DiligenciaProjeto
             $qtdia = 40;
             $resultArray[] = [
                 'produto' => $diligencia['produto'],
+                'idDiligencia' => $diligencia['idDiligencia'],
                 'tipoDiligencia' => $tipoDiligencia,
                 'dataSolicitacao' => $objDateTimedataSolicitacao->format('d/m/Y'),
                 'dataResposta' => $objDateTimedataResposta->format('d/m/Y'),
@@ -100,6 +101,7 @@ class DiligenciaProjeto
             $objDateTimedtAvaliacao = new \DateTime($diligencia['dtAvaliacao']);
 
             $resultArray[] = [
+                'idAvaliarAdequacaoProjeto' => $diligencia['idAvaliarAdequacaoProjeto'],
                 'tipoDiligencia' => html_entity_decode('Dilig&ecirc;ncia na An&aacute;lise da adequa&ccedil;&atilde;o &agrave; realidade do projeto.'),
                 'dtAvaliacao' => $objDateTimedtAvaliacao->format('d/m/Y'),
             ];
@@ -111,33 +113,30 @@ class DiligenciaProjeto
     public function visualizarDiligenciaProjeto()
     {
         $idPronac = $this->request->idPronac;
+        $idDiligencia = (int) $this->request->idDiligencia;
 
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
 
-        $tblProjeto = new \Projetos();
-        $tblPreProjeto = new \Proposta_Model_DbTable_PreProjeto();
-        $projeto = $tblProjeto->buscar(array('IdPRONAC = ?' => $idPronac))->current();
-
-        if (isset($projeto->idProjeto) && !empty($projeto->idProjeto)) {
-            $diligenciasProposta = $tblPreProjeto->listarDiligenciasPreProjeto(array('pre.idPreProjeto = ?' => $projeto->idProjeto,'aval.ConformidadeOK = ? '=>0));
-            $proposta = $this->obterDiligenciaProposta($diligenciasProposta);
+        if (empty($idDiligencia)) {
+            return [];
         }
 
-        $diligencias = $tblProjeto->listarDiligencias(array('pro.IdPRONAC = ?' => $idPronac, 'dil.stEnviado = ?' => 'S'));
-        $diligenciaProjeto = $this->obterDiligenciaProjeto($diligencias);
+        $tblProjeto = new \Projetos();
+        $diligencia = $tblProjeto->listarDiligencias([
+            'pro.IdPRONAC = ?' => $idPronac,
+            'dil.idDiligencia = ?' => $idDiligencia,
+            'dil.stEnviado = ?' => 'S']
+            )->current();
+
+        $diligenciaProjeto = $this->obterDiligenciaProjeto($diligencia);
 
         $tbAvaliarAdequacaoProjeto = new \Analise_Model_DbTable_TbAvaliarAdequacaoProjeto();
         $diligenciasAdequacao = $tbAvaliarAdequacaoProjeto->obterAvaliacoesDiligenciadas(['a.idPronac = ?' => $idPronac]);
-        $adequacao = $this->obterDiligenciaAdequaçãoProjeto($diligenciasAdequacao);
+//        $adequacao = $this->obterDiligenciaAdequaçãoProjeto($diligenciasAdequacao);
 
-
-        $result['diligenciaProposta'] = $proposta;
-        $result['diligenciaProjeto'] = $diligenciaProjeto;
-        $result['diligenciaAdequacao'] = $adequacao;
-
-        return $result;
+        return $diligenciaProjeto;
     }
 
     private function obterDiligenciaProposta($diligenciasProposta)
@@ -182,21 +181,22 @@ class DiligenciaProjeto
         return $resultArray;
     }
 
-    private function obterDiligenciaProjeto($diligencias)
+    private function obterDiligenciaProjeto($diligencia)
     {
-        $resultArray = [];
-        foreach ($diligencias as $diligencia) {
-            $Solicitacao = html_entity_decode(utf8_encode($diligencia['Solicitacao']));
-            $Resposta = html_entity_decode(utf8_encode($diligencia['Resposta']));
+        $objDateTimedataSolicitacao = new \DateTime($diligencia['dataSolicitacao']);
+        $objDateTimedataResposta = new \DateTime($diligencia['dataResposta']);
+        $Solicitacao = html_entity_decode(utf8_encode($diligencia['Solicitacao']));
+        $Resposta = html_entity_decode(utf8_encode($diligencia['Resposta']));
 
-            $arquivo = $this->obterAnexosDiligencias($diligencia);
+        $arquivos= $this->obterAnexosDiligencias($diligencia);
 
-            $resultArray[] = [
-                'Solicitacao' => $Solicitacao,
-                'Resposta' => $Resposta,
-                'arquivo' => $arquivo
-            ];
-        }
+        $resultArray = [
+            'dataSolicitacao' => $objDateTimedataSolicitacao->format('d/m/Y'),
+            'dataResposta' => $objDateTimedataResposta->format('d/m/Y'),
+            'Solicitacao' => $Solicitacao,
+            'Resposta' => $Resposta,
+            'arquivos' => $arquivos
+        ];
 
         return $resultArray;
     }

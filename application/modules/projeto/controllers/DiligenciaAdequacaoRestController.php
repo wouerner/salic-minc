@@ -1,8 +1,8 @@
 <?php
 
-use Application\Modules\Projeto\Service\Diligencia\DiligenciaProjeto as DiligenciaProjetoService;
+use Application\Modules\Projeto\Service\Diligencia\DiligenciaAdequacao as DiligenciaAdequacaoService;
 
-class Projeto_DiligenciaProjetoRestController extends MinC_Controller_Rest_Abstract
+class Projeto_DiligenciaAdequacaoRestController extends MinC_Controller_Rest_Abstract
 {
     protected $idAgente = 0;
 
@@ -15,29 +15,14 @@ class Projeto_DiligenciaProjetoRestController extends MinC_Controller_Rest_Abstr
 
     public function indexAction()
     {
-        try {
-            $diligenciaService = new DiligenciaProjetoService($this->getRequest(), $this->getResponse());
-            $resposta = $diligenciaService->listaDiligenciaProjeto();
-
-            $this->customRenderJsonResponse(['data' => $resposta], 200);
-
-        } catch (Exception $objException) {
-            $this->customRenderJsonResponse([
-                'error' => [
-                    'code' => 404,
-                    'message' => $objException->getMessage()
-                ]
-            ], 404);
-
-        }
 
     }
 
     public function getAction()
     {
         try {
-            $diligenciaService = new DiligenciaProjetoService($this->getRequest(), $this->getResponse());
-            $resposta = $diligenciaService->visualizarDiligenciaProjeto();
+            $diligenciaService = new DiligenciaAdequacaoService($this->getRequest(), $this->getResponse());
+            $resposta = $diligenciaService->visualizarDiligenciaAdequacaoProjeto();
 
             $this->customRenderJsonResponse(['data' => $resposta], 200);
 

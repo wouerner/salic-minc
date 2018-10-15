@@ -8,34 +8,36 @@
                     <th>TIPO DE DILIG&Ecirc;NCIA</th>
                 </tr>
             </thead>
-            <tbody v-for="(info, index) in infos" :key="index">
+            <tbody v-for="(diligencia, index) in diligencias" :key="index">
                 <tr>
                     <td class="center">
                         <button
                             class="waves-effect waves-darken btn white black-text"
-                            @click="setActiveTab(index);"
+                            @click="setActiveTab(diligencia.idAvaliarAdequacaoProjeto)"
                         >
                             <i class="material-icons">visibility</i>
                         </button>
                     </td>
-                    <td>{{ info.dtAvaliacao }}</td>
-                    <td>{{ info.tipoDiligencia }}</td>
-                </tr>
-                <tr v-if="activeTab === index && dados.diligenciaAdequacao.length > 0">
-                    <td colspan="3">
-                        <table v-if="dados.diligenciaAdequacao[index].dsAvaliacao" class="tabela">
-                            <tbody>
-                                <tr>
-                                    <th>SOLICITA&Ccedil;&Atilde;O</th>
-                                </tr>
-                                <tr>
-                                    <td style="padding-left: 20px" v-html="dados.diligenciaAdequacao[index].dsAvaliacao"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
+                    <td>{{ diligencia.dtAvaliacao }}</td>
+                    <td>{{ diligencia.tipoDiligencia }}</td>
                 </tr>
             </tbody>
+        </table>
+        <table v-if="activeTab && Object.keys(dadosDiligencia).length > 0">
+            <tr>
+                <td colspan="3">
+                    <table v-if="dadosDiligencia.dsAvaliacao" class="tabela">
+                        <tbody>
+                        <tr>
+                            <th>SOLICITA&Ccedil;&Atilde;O</th>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 20px" v-html="dadosDiligencia.dsAvaliacao"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
         </table>
     </div>
 </template>
@@ -43,38 +45,30 @@
 <script>
 export default {
     name: 'VisualizarDiligenciaAdequacao',
-    props: ['idPronac', 'infos'],
+    props: ['idPronac', 'diligencias'],
     data() {
         return {
-            dados: {
-                    type: Object,
-                    default() {
-                        return {};
-                    },
+            dadosDiligencia: {
+                type: Object,
+                default() {
+                    return {};
                 },
-            activeTab: -1,
+            },
+            activeTab: false,
         };
     },
-    mounted() {
-        if (typeof this.idPronac !== 'undefined') {
-            this.buscar_dados();
-        }
-    },
     methods: {
-        setActiveTab(index) {
-            if (this.activeTab === index) {
-                this.activeTab = -1;
-            } else {
-                this.activeTab = index;
-            }
+        setActiveTab(idAvaliarAdequacaoProjeto) {
+            this.activeTab = !this.activeTab;
+            this.obterDiligencias(idAvaliarAdequacaoProjeto);
         },
-        buscar_dados() {
+        obterDiligencias(idAvaliarAdequacaoProjeto) {
             const self = this;
             /* eslint-disable */
             $3.ajax({
-                url: '/projeto/diligencia-projeto-rest/get/idPronac/' + self.idPronac,
+                url: `/projeto/diligencia-adequacao-rest/get/idPronac/${self.idPronac}/idAvaliarAdequacaoProjeto/${idAvaliarAdequacaoProjeto}`,
             }).done(function (response) {
-                self.dados = response.data;
+                self.dadosDiligencia = response.data;
             });
         },
     },
