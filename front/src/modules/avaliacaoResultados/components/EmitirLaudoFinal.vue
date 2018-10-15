@@ -29,7 +29,11 @@
                         <v-layout wrap align-center>
                             <v-flex>
                                 <label for="manifestacao">Manifestação *</label>
-                                <v-radio-group :value="parecerLaudoFinal.items.siManifestacao" @change="updateManifestacao" id="manifestacao" :rules="itemRules" row>
+                                <v-radio-group :value="parecerLaudoFinal.items.siManifestacao"
+                                               @change="updateManifestacao"
+                                               id="manifestacao"
+                                               :rules="itemRules"
+                                               row>
                                     <v-radio color="success" label="Aprovado" value="A"></v-radio>
                                     <v-radio color="success" label="Aprovado com ressalvas" value="P"></v-radio>
                                     <v-radio color="success" label="Reprovado" value="R"></v-radio>
@@ -37,7 +41,13 @@
                             </v-flex>
                         </v-layout>
                         <v-flex>
-                            <v-textarea :value="parecerLaudoFinal.items.dsLaudoFinal" @input="updateParecer" :rules="parecerRules" color="deep-purple" label="Parecer *" height="200px" required="required">
+                            <v-textarea :value="parecerLaudoFinal.items.dsLaudoFinal" 
+                                        @input="updateParecer"
+                                        :rules="parecerRules"
+                                        color="deep-purple"
+                                        label="Parecer *"
+                                        height="200px"
+                                        required="required">
                             </v-textarea>
                         </v-flex>
                     </v-container>
@@ -85,6 +95,7 @@
                     idPronac: this.idPronac,
                     siManifestacao: this.characterManifestacao,
                     dsLaudoFinal: this.characterParecer,
+                    idLaudoFinal: this.parecerLaudoFinal.items.idLaudoFinal,
                 };
     
                 this.salvar(data);
@@ -96,6 +107,7 @@
                     idPronac: this.idPronac,
                     siManifestacao: this.characterManifestacao,
                     dsLaudoFinal: this.characterParecer,
+                    idLaudoFinal: this.parecerLaudoFinal.items.idLaudoFinal,
                     atual: 5,
                     proximo: 6,
                 };
