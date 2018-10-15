@@ -17,7 +17,7 @@ class Finalizar implements IAcaoFinalizar
 
         $dados = [
             'stEstado' => (int)\Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_FINALIZADO,
-            'siEncaminhamento' => (int)\Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CHECKLIST_PUBLICACAO
+            'siEncaminhamento' => (int)\Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_DEVOLVIDA_AO_COORDENADOR_FINAL
         ];
         
         $where = "idReadequacao = {$idReadequacao}";	
