@@ -187,6 +187,7 @@ class DiligenciaProjeto
         $objDateTimedataResposta = new \DateTime($diligencia['dataResposta']);
         $Solicitacao = html_entity_decode(utf8_encode($diligencia['Solicitacao']));
         $Resposta = html_entity_decode(utf8_encode($diligencia['Resposta']));
+        $nomeProjeto = html_entity_decode(utf8_encode($diligencia['nomeProjeto']));
 
         $arquivos= $this->obterAnexosDiligencias($diligencia);
 
@@ -195,6 +196,7 @@ class DiligenciaProjeto
             'dataResposta' => $objDateTimedataResposta->format('d/m/Y'),
             'Solicitacao' => $Solicitacao,
             'Resposta' => $Resposta,
+            'nomeProjeto' => $nomeProjeto,
             'arquivos' => $arquivos
         ];
 
@@ -211,7 +213,7 @@ class DiligenciaProjeto
             $arquivoArray[] = [
                 'idArquivo' => $arquivo->idArquivo,
                 'nmArquivo' => utf8_encode($arquivo->nmArquivo),
-                'dtEnvio' => $objdtEnvio->format('d/m/Y'),
+                'dtEnvio' => $objdtEnvio->format('d/m/Y H:i:s'),
                 'idDiligencia' => $arquivo->idDiligencia,
             ];
         }
