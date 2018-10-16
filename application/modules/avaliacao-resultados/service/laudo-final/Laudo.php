@@ -15,7 +15,7 @@ class Laudo
         return $model->laudoFinal($idPronac);
     }
 
-    public function salvarLaudo($idLaudoFinal, $idPronac, $dtLaudoFinal, $siManifestacao, $dsLaudoFinal, $idUsuario){
+    public function salvarLaudo($idLaudoFinal, $idPronac, $siManifestacao, $dsLaudoFinal){
         // var_dump($idLaudoFinal); die;
         $auth = \Zend_Auth::getInstance();
         $tbTable = new \AvaliacaoResultados_Model_DbTable_LaudoFinal;
@@ -27,19 +27,18 @@ class Laudo
                               'dsLaudoFinal'=>$dsLaudoFinal]);
         } else {
             $tbTable->alterar(['idUsuario'=>$auth->getIdentity()->usu_codigo,
-                              'siManifestacao'=>$siManifestacao,
-                              'dsLaudoFinal'=>$dsLaudoFinal],
+                               'siManifestacao'=>$siManifestacao,
+                               'dsLaudoFinal'=>$dsLaudoFinal],
                               ['idLaudoFinal = ?' => $idLaudoFinal]);
         }
-
-        $model = new \AvaliacaoResultados_Model_LaudoFinal;
-        $model->setIdPronac($idPronac);
-        $model->setDtLaudoFinal($dtLaudoFinal);
-        $model->setSiManifestacao($siManifestacao);
-        $model->setDsLaudoFinal($dsLaudoFinal);
-        $model->setIdUsuario($idUsuario);
+        // $model = new \AvaliacaoResultados_Model_LaudoFinal;
+        // $model->setIdPronac($idPronac);
+        // $model->setDtLaudoFinal((new \DateTime())->format('Y-m-d'));
+        // $model->setSiManifestacao($siManifestacao);
+        // $model->setDsLaudoFinal($dsLaudoFinal);
+        // $model->setIdUsuario($auth->getIdentity()->usu_codigo);
         
-        $mapper = new \AvaliacaoResultados_Model_LaudoFinalMapper;
-        return $mapper->save($model);
+        // $mapper = new \AvaliacaoResultados_Model_LaudoFinalMapper;
+        // return $mapper->save($model);
     }
 }
