@@ -13,7 +13,7 @@
                     <td class="center">
                         <button
                             class="waves-effect waves-darken btn white black-text"
-                            @click="setActiveTab(diligencia.idAvaliarAdequacaoProjeto, index)"
+                            @click="setAbaAtiva(diligencia.idAvaliarAdequacaoProjeto, index)"
                         >
                             <i class="material-icons">visibility</i>
                         </button>
@@ -21,7 +21,7 @@
                     <td>{{ diligencia.dtAvaliacao }}</td>
                     <td>{{ diligencia.tipoDiligencia }}</td>
                 </tr>
-                <tr v-if="activeTab === index && ativo && Object.keys(dadosDiligencia).length > 0">
+                <tr v-if="abaAtiva === index && ativo && Object.keys(dadosDiligencia).length > 0">
                     <td colspan="3">
                         <table v-if="dadosDiligencia.dsAvaliacao" class="tabela">
                             <tbody>
@@ -52,16 +52,16 @@ export default {
                     return {};
                 },
             },
-            activeTab: -1,
+            abaAtiva: -1,
             ativo: false,
         };
     },
     methods: {
-        setActiveTab(idAvaliarAdequacaoProjeto, index) {
-            if (this.activeTab === index) {
+        setAbaAtiva(idAvaliarAdequacaoProjeto, index) {
+            if (this.abaAtiva === index) {
                 this.ativo = !this.ativo;
             } else {
-                this.activeTab = index;
+                this.abaAtiva = index;
                 this.ativo = true;
                 this.obterDiligencias(idAvaliarAdequacaoProjeto);
             }
