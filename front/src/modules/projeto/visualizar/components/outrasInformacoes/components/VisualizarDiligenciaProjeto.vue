@@ -12,12 +12,12 @@
                 <th>PRORROGADO</th>
             </tr>
             </thead>
-            <tbody>
-                <tr v-for="(diligencia, index) in diligencias" :key="index">
+            <tbody v-for="(diligencia, index) in diligencias" :key="index">
+                <tr>
                     <td class="center">
                         <button
                                 class="waves-effect waves-darken btn white black-text"
-                                @click="setActiveTab(index, diligencia.idDiligencia);"
+                                @click="setActiveTab(diligencia.idDiligencia, index);"
                         >
                             <i class="material-icons">visibility</i>
                         </button>
@@ -32,75 +32,72 @@
                     <td>{{ diligencia.prazoResposta }}</td>
                     <td>Prorrogado</td>
                 </tr>
+                <tr v-if="activeTab === index && ativo && Object.keys(dadosDiligencia).length > 0">
+                    <td colspan="7">
+                        <table class="tabela">
+                            <tbody>
+                            <tr>
+                                <th>PRONAC</th>
+                                <th>NOME DA PROPOSTA</th>
+                            </tr>
+                            <tr>
+                                <td>{{ dadosProjeto.Pronac }}</td>
+                                <td>{{ dadosProjeto.NomeProjeto }}</td>
+                            </tr>
+                            <tr>
+                                <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
+                                <th>DATA DA RESPOSTA</th>
+                            </tr>
+                            <tr>
+                                <td>{{ dadosDiligencia.dataSolicitacao }}</td>
+                                <td>{{ dadosDiligencia.dataResposta }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table v-if="dadosDiligencia.Solicitacao" class="tabela">
+                            <tbody>
+                            <tr>
+                                <th>SOLICITA&Ccedil;&Atilde;O</th>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 20px" v-html="dadosDiligencia.Solicitacao"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table v-if="dadosDiligencia.Resposta" class="tabela">
+                            <tbody>
+                            <tr>
+                                <th>Resposta:</th>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 20px" v-html="dadosDiligencia.Resposta"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table class="tabela" v-if="dadosDiligencia.arquivos && Object.keys(dadosDiligencia.arquivos).length > 0">
+                            <tbody>
+                                <tr>
+                                    <th colspan="3">Arquivos Anexados</th>
+                                </tr>
+                                <tr>
+                                    <td class="destacar bold" align="center">Arquivo</td>
+                                    <td class="destacar bold" align="center">Dt.Envio</td>
+                                </tr>
+                                <tr v-for="arquivo of dadosDiligencia.arquivos" :key="arquivo.idArquivo">
+                                    <td>
+                                        <a :href="`/upload/abrir?id=${arquivo.idArquivo}`" target="_blank">
+                                            {{ arquivo.nmArquivo }}
+                                        </a>
+                                    </td>
+                                    <td align="center">
+                                        {{ arquivo.dtEnvio }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
             </tbody>
-        </table>
-
-        <table v-if="activeTab && Object.keys(dadosDiligencia).length > 0">
-            <tr>
-                <td colspan="3">
-                    <table class="tabela">
-                        <tbody>
-                        <tr>
-                            <th>PRONAC</th>
-                            <th>NOME DA PROPOSTA</th>
-                        </tr>
-                        <tr>
-                            <td>{{ dadosProjeto.Pronac }}</td>
-                            <td>{{ dadosProjeto.NomeProjeto }}</td>
-                        </tr>
-                        <tr>
-                            <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
-                            <th>DATA DA RESPOSTA</th>
-                        </tr>
-                        <tr>
-                            <td>{{ dadosDiligencia.dataSolicitacao }}</td>
-                            <td>{{ dadosDiligencia.dataResposta }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <table v-if="dadosDiligencia.Solicitacao" class="tabela">
-                        <tbody>
-                        <tr>
-                            <th>SOLICITA&Ccedil;&Atilde;O</th>
-                        </tr>
-                        <tr>
-                            <td style="padding-left: 20px" v-html="dadosDiligencia.Solicitacao"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <table v-if="dadosDiligencia.Resposta" class="tabela">
-                        <tbody>
-                        <tr>
-                            <th>Resposta:</th>
-                        </tr>
-                        <tr>
-                            <td style="padding-left: 20px" v-html="dadosDiligencia.Resposta"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <table class="tabela" v-if="dadosDiligencia.arquivos && Object.keys(dadosDiligencia.arquivos).length > 0">
-                        <tbody>
-                            <tr>
-                                <th colspan="3">Arquivos Anexados</th>
-                            </tr>
-                            <tr>
-                                <td class="destacar bold" align="center">Arquivo</td>
-                                <td class="destacar bold" align="center">Dt.Envio</td>
-                            </tr>
-                            <tr v-for="arquivo of dadosDiligencia.arquivos" :key="arquivo.idArquivo">
-                                <td>
-                                    <a :href="`/upload/abrir?id=${arquivo.idArquivo}`" target="_blank">
-                                        {{ arquivo.nmArquivo }}
-                                    </a>
-                                </td>
-                                <td align="center">
-                                    {{ arquivo.dtEnvio }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
         </table>
     </div>
 </template>
@@ -118,7 +115,8 @@ export default {
                     return {};
                 },
             },
-            activeTab: false,
+            activeTab: -1,
+            ativo: false,
         };
     },
     computed: {
@@ -127,9 +125,14 @@ export default {
         }),
     },
     methods: {
-        setActiveTab(index, idDiligencia) {
-            this.activeTab = !this.activeTab;
-            this.obterDadosDiligencia(idDiligencia);
+        setActiveTab(idDiligencia, index) {
+            if (this.activeTab === index) {
+                this.ativo = !this.ativo;
+            } else {
+                this.activeTab = index;
+                this.ativo = true;
+                this.obterDadosDiligencia(idDiligencia);
+            }
         },
         obterDadosDiligencia(idDiligencia) {
             const self = this;
