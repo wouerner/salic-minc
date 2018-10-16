@@ -45,23 +45,9 @@ export const buscarPerfisDisponiveis = () => api.getRequest('/navegacao/perfil-r
 
 export const obterDadosItemComprovacao = params => api.getRequest(`/avaliacao-resultados/avaliacao-comprovante/${params}`);
 
-export const criarParecerLaudoFinal = (params) => {
-    console.log(params);
-    // const parametro = params.idPronac;
-    // delete params.idPronac;
-    // const data = params;
+export const criarParecerLaudoFinal = params => api.postRequest('/avaliacao-resultados/laudo', buildData(params));
 
-    // return api.postRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${parametro}`, buildData(data));
-};
-
-export const finalizarParecerLaudoFinal = (params) => {
-    console.log(params);
-    // const parametro = params.idPronac;
-    // delete params.idPronac;
-    // const data = params;
-
-    // return api.postRequest('/avaliacao-resultados/estado', buildData(data));
-};
+export const finalizarParecerLaudoFinal = params => api.postRequest('/avaliacao-resultados/assinatura', buildData(params));
 
 export const obterProjetosParaDistribuir = () => api.getRequest('/prestacao-contas/prestacao-contas/obter-analise-financeira-virtual');
 
@@ -89,7 +75,9 @@ export const finalizarParecer = (params) => {
 
 /** FIM DO PARECER TECNICO */
 
-export const obterProjetosLaudoFinal = () => api.getRequest('/avaliacao-resultados/laudo');
+export const obterLaudoFinal = (idPronac) => api.getRequest(`/avaliacao-resultados/laudo/get?idPronac=${idPronac}`);
+
+export const obterProjetosLaudoFinal = () => api.getRequest('/avaliacao-resultados/laudo/index');
 
 export const alterarPerfil = (grupoAtivo, orgaoAtivo) => api.getRequest(`perfil/perfil-rest/index?codGrupo=${grupoAtivo}&codOrgao=${orgaoAtivo}`);
 
