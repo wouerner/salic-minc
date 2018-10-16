@@ -132,10 +132,6 @@ class DiligenciaProjeto
 
         $diligenciaProjeto = $this->obterDiligenciaProjeto($diligencia);
 
-        $tbAvaliarAdequacaoProjeto = new \Analise_Model_DbTable_TbAvaliarAdequacaoProjeto();
-        $diligenciasAdequacao = $tbAvaliarAdequacaoProjeto->obterAvaliacoesDiligenciadas(['a.idPronac = ?' => $idPronac]);
-//        $adequacao = $this->obterDiligenciaAdequaçãoProjeto($diligenciasAdequacao);
-
         return $diligenciaProjeto;
     }
 
@@ -158,23 +154,6 @@ class DiligenciaProjeto
                 'nomeProjeto' => $nomeProjeto,
                 'Solicitacao' => $Solicitacao,
                 'Resposta' => $Resposta,
-            ];
-        }
-
-        return $resultArray;
-    }
-
-    private function obterDiligenciaAdequaçãoProjeto($diligenciaAdequacao)
-    {
-        $resultArray = [];
-
-        foreach ($diligenciaAdequacao as $diligencia) {
-            $dsAvaliacao = html_entity_decode(utf8_encode($diligencia['dsAvaliacao']));
-            $objDateTimeDtAvaliacao = new \DateTime($diligencia['dtAvaliacao']);
-
-            $resultArray[] = [
-                'dsAvaliacao' => $dsAvaliacao,
-                'dtAvaliacao' => $objDateTimeDtAvaliacao->format('d/m/Y'),
             ];
         }
 

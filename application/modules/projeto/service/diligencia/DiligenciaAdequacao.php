@@ -44,12 +44,12 @@ class DiligenciaAdequacao
             ]
         )->current();
 
-        $adequacao = $this->obterDiligenciaAdequaçãoProjeto($diligenciasAdequacao);
+        $adequacao = $this->obterDiligenciaAdequacaoProjeto($diligenciasAdequacao);
 
         return $adequacao;
     }
 
-    private function obterDiligenciaAdequaçãoProjeto($diligencia)
+    private function obterDiligenciaAdequacaoProjeto($diligencia)
     {
             $dsAvaliacao = html_entity_decode(utf8_encode($diligencia['dsAvaliacao']));
             $objDateTimeDtAvaliacao = new \DateTime($diligencia['dtAvaliacao']);
