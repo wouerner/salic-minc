@@ -31,7 +31,8 @@ export const state = {
     getProjetosAssinar: {},
     getProjetosEmAssinatura: {},
     getProjetosHistorico: {},
-    revisaoParecer:{},
+    revisaoParecer: {},
+    revisao: {},
 };
 
 export const mutations = {
@@ -45,6 +46,9 @@ export const mutations = {
     },
     [types.HISTORICO_REVISAO](state, revisaoParecer) {
         state.revisaoParecer = revisaoParecer;
+    },
+    [types.SET_REVISAO](state, revisao){
+        state.revisaoParecer.push(revisao);
     },
     [types.GET_PROJETO](state, projeto) {
         state.projeto = projeto;
@@ -121,20 +125,20 @@ export const mutations = {
     [types.GET_DADOS_ITEM_COMPROVACAO](state, dados) {
         state.dadosItemComprovacao = dados;
     },
-    [types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR](state, dados){
+    [types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR](state, dados) {
         state.projetosParaDistribuir = dados;
     },
 
-    [types.SET_DADOS_PROJETOS_ASSINAR](state, dados){
+    [types.SET_DADOS_PROJETOS_ASSINAR](state, dados) {
         state.getProjetosAssinar = dados;
     },
-    [types.SET_DADOS_PROJETOS_EM_ASSINATURA](state, dados){
+    [types.SET_DADOS_PROJETOS_EM_ASSINATURA](state, dados) {
         state.getProjetosEmAssinatura = dados;
     },
-    [types.SET_DADOS_PROJETOS_LAUDO_FINAL](state, dados){
+    [types.SET_DADOS_PROJETOS_LAUDO_FINAL](state, dados) {
         state.getProjetosLaudoFinal = dados;
     },
-    [types.SET_DADOS_PROJETOS_HISTORICO](state, dados){
+    [types.SET_DADOS_PROJETOS_HISTORICO](state, dados) {
         state.getProjetosHistorico = dados;
     },
 };
