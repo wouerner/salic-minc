@@ -168,8 +168,8 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         $menu['outrasinformacoes']['submenu'][] = [
             'label' => 'Dilig&ecirc;ncias do projeto',
             'title' => 'Ir para Dilig&ecirc;ncias do projeto',
-            'link' => '/default/consultardadosprojeto/diligencias/?idPronac=' . $idPronacHash,
-            'ajax' => true,
+            'link' => "/projeto/#/{$idPronacHash}/diligencias",
+            'ajax' => false,
             'grupo' => []
         ];
 
@@ -309,8 +309,8 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         $menu['outrasinformacoes']['submenu'][] = [
             'label' => 'Dilig&ecirc;ncias do projeto',
             'title' => 'Ir para Dilig&ecirc;ncias do projeto',
-            'link' => '/default/consultardadosprojeto/diligencias/?idPronac=' . $idPronacHash,
-            'ajax' => true,
+            'link' => "/projeto/#/{$idPronacHash}/diligencias",
+            'ajax' => false,
             'grupo' => []
         ];
 

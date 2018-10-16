@@ -7,19 +7,19 @@
             </IdentificacaoProjeto>
             <div v-if="dados.diligenciaProposta">
                 <div v-if="dados.diligenciaProposta.length > 0">
-                    <fieldset>
+                    <fieldset style="margin: 0px;">
                         <legend>Dilig&ecirc;ncia Proposta</legend>
-                            <VisualizarDiligenciaProposta
-                                :idPronac="idPronac"
-                                :diligencias="dados.diligenciaProposta"
-                            >
-                            </VisualizarDiligenciaProposta>
+                        <VisualizarDiligenciaProposta
+                            :idPronac="idPronac"
+                            :diligencias="dados.diligenciaProposta"
+                        >
+                        </VisualizarDiligenciaProposta>
                     </fieldset>
                 </div>
             </div>
             <div v-if="dados.diligenciaAdequacao">
                 <div v-if="dados.diligenciaAdequacao.length > 0">
-                    <fieldset>
+                    <fieldset style="margin: 0px;">
                         <legend>Dilig&ecirc;ncias da Adequa&ccedil;&atilde;o do Projeto</legend>
                         <VisualizarDiligenciaAdequacao
                                 :idPronac="idPronac"
@@ -31,7 +31,7 @@
             </div>
             <div v-if="dados.diligenciaProjeto">
                 <div v-if="dados.diligenciaProjeto.length > 0">
-                    <fieldset>
+                    <fieldset style="margin: 0px;">
                         <legend>Dilig&ecirc;ncia Projeto</legend>
                         <VisualizarDiligenciaProjeto
                             :idPronac="idPronac"

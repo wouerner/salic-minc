@@ -211,7 +211,7 @@ const routes = [
                 },
             },
             {
-                path: 'diligencia-projeto',
+                path: 'diligencias',
                 name: 'DiligenciaProjeto',
                 component: DiligenciaProjeto,
                 meta: {
