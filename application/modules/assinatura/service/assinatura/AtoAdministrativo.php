@@ -8,19 +8,19 @@ class AtoAdministrativo implements IServico
 {
     public function obterAtoAdministrativoAtual(
         $idTipoDoAto,
-        $idOrgaoSuperiorDoAssinante,
+        $idPerfilDoAssinante,
         $idOrgaoDoAssinante,
-        $idPerfilDoAssinante
+        $idOrgaoSuperiorDoAssinante
     ) {
 
         $tbAtoAdministrativoDbTable = new \Assinatura_Model_DbTable_TbAtoAdministrativo();
         $atoAdministrativo = $tbAtoAdministrativoDbTable->obterPrimeiroAtoAdministrativo(
             $idTipoDoAto,
-            $idOrgaoSuperiorDoAssinante,
             $idPerfilDoAssinante,
-            $idOrgaoDoAssinante
+            $idOrgaoDoAssinante,
+            $idOrgaoSuperiorDoAssinante
         );
-        xd_($atoAdministrativo);
+        
         return $atoAdministrativo;
     }
 }
