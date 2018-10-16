@@ -20,16 +20,6 @@ export const atualizarRegistro = params => api.putRequest(path, buildData(params
 
 export const removerRegistro = params => api.deleteRequest(path, params.Codigo);
 
-export const parecerConsolidacao = params => api.getRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${params}`);
-
-export const criarParecer = (params) => {
-    const parametro = params.idPronac;
-    delete params.idPronac;
-    const data = params;
-
-    return api.postRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${parametro}`, buildData(data));
-};
-
 export const getTeste = params => api.postRequest('/realizarprestacaodecontas/carregar-destinatarios/', buildData(params));
 
 export const getTipoAvaliacao = params => api.getRequest(`/avaliacao-resultados/tipo-avaliacao-rest/idPronac/${params}`);
@@ -46,14 +36,6 @@ export const planilha = params => api.getRequest(`/prestacao-contas/realizar-pre
 export const projetoAnalise = params => api.getRequest(`/avaliacao-resultados/projeto/idPronac/${params}`);
 
 export const consolidacaoAnalise = params => api.getRequest(`/prestacao-contas/visualizar-projeto/dados-projeto?idPronac=${params}`);
-
-export const finalizarParecer = (params) => {
-    // const parametro = params.idPronac;
-    // delete params.idPronac;
-    const data = params;
-
-    return api.postRequest('/avaliacao-resultados/estado', buildData(data));
-};
 
 export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/tecnicos');
 
@@ -85,6 +67,30 @@ export const obterProjetosParaDistribuir = () => api.getRequest('/prestacao-cont
 
 export const criarDiligencia = params => api.postRequest('/diligencia/diligencia', buildData(params));
 
+/**  PARECER TECNICO */
+
+export const parecerConsolidacao = params => api.getRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${params}`);
+
+export const criarParecer = (params) => {
+    const parametro = params.idPronac;
+    delete params.idPronac;
+    const data = params;
+
+    return api.postRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${parametro}`, buildData(data));
+};
+
+export const finalizarParecer = (params) => {
+    // const parametro = params.idPronac;
+    // delete params.idPronac;
+    const data = params;
+
+    return api.postRequest('/avaliacao-resultados/estado', buildData(data));
+};
+
+/** FIM DO PARECER TECNICO */
+
+export const obterProjetosLaudoFinal = () => api.getRequest('/avaliacao-resultados/laudo');
+
 export const alterarPerfil = (grupoAtivo, orgaoAtivo) => api.getRequest(`perfil/perfil-rest/index?codGrupo=${grupoAtivo}&codOrgao=${orgaoAtivo}`);
 
-export const obterProjetosParaAssinatura = () => api.getRequest('/avaliacao-resultados/projeto-assinatura');
+export const obterProjetosAssinatura = params => api.getRequest(`/avaliacao-resultados/projeto-assinatura/estado/${params.estado}`);
