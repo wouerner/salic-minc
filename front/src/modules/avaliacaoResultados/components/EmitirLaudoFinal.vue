@@ -11,7 +11,7 @@
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
                             <v-btn dark flat @click.native="salvarLaudoFinal()">Salvar</v-btn>
-                            <v-btn dark flat @click.native="finalizarLaudoFinal()" :disabled="!parecerLaudoFinal.items.idLaudoFinal">Gerar Documento</v-btn>
+                            <v-btn dark flat @click.native="finalizarLaudoFinal()" >Finalizar</v-btn>
                         </v-toolbar-items>
                     </v-toolbar>
                     <v-container grid-list-sm>
@@ -114,14 +114,25 @@
             },
             finalizarLaudoFinal() {
                 const data = {
-                    idPronac: this.idPronac,
+                    idpronac: this.idPronac,
                     idtipodoatoadministrativo: 623,
-                    // siManifestacao: this.characterManifestacao,
-                    // dsLaudoFinal: this.characterParecer,
-                    // idLaudoFinal: this.parecerLaudoFinal.items.idLaudoFinal,
-                    // atual: 5,
-                    // proximo: 6,
+                    siManifestacao: this.parecerLaudoFinal.items.siManifestacao,
+                    dsLaudoFinal: this.parecerLaudoFinal.items.dsLaudoFinal,
+                    atual: 5,
+                    proximo: 6,
                 };
+
+                if (this.parecerLaudoFinal.items.idLaudoFinal) {
+                    data.idLaudoFinal = this.parecerLaudoFinal.items.idLaudoFinal;
+                }
+
+                if (this.laudoFinalData.siManifestacao) {
+                    data.siManifestacao = this.laudoFinalData.siManifestacao;
+                }
+
+                if (this.laudoFinalData.dsLaudoFinal) {
+                    data.dsLaudoFinal = this.laudoFinalData.dsLaudoFinal;
+                }
     
                 this.finalizar(data);
                 /** Descomentar linha após migração da lista para o VUEJS */

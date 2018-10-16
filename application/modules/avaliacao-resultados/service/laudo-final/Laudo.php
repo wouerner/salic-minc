@@ -16,7 +16,6 @@ class Laudo
     }
 
     public function salvarLaudo($idLaudoFinal, $idPronac, $siManifestacao, $dsLaudoFinal){
-        // var_dump($idLaudoFinal); die;
         $auth = \Zend_Auth::getInstance();
         $tbTable = new \AvaliacaoResultados_Model_DbTable_LaudoFinal;
         if(empty($idLaudoFinal)) {
