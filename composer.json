@@ -69,6 +69,7 @@
             "Application\\Modules\\Projeto\\Service\\PlanoDistribuicaoIn2013\\": "./application/modules/projeto/service/plano-distribuicao-in2013/",
             "Application\\Modules\\Projeto\\Service\\PlanoDistribuicao\\": "./application/modules/projeto/service/plano-distribuicao/",
             "Application\\Modules\\Projeto\\Service\\Diligencia\\": "./application/modules/projeto/service/diligencia/",
+            "Application\\Modules\\Projeto\\Service\\Tramitacao\\": "./application/modules/projeto/service/tramitacao/",
             "MinC\\Assinatura\\": "./library/MinC/Assinatura/",
             "MinC\\Db\\Model\\": "./library/MinC/Db/Model/"
         }
