@@ -104,7 +104,7 @@
                     data.siManifestacao = this.laudoFinalData.siManifestacao;
                 }
 
-                if (this.laudoFinalData.dsParecer) {
+                if (this.laudoFinalData.dsLaudoFinal) {
                     data.dsLaudoFinal = this.laudoFinalData.dsLaudoFinal;
                 }
     
