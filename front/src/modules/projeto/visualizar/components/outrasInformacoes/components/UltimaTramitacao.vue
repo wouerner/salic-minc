@@ -58,7 +58,6 @@ export default {
                 url: `/projeto/ultima-tramitacao-rest/get/idPronac/${self.idPronac}`,
             }).done(function (response) {
                 self.dados = response.data;
-                console.log(self.dados);
             });
         },
     },

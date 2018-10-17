@@ -8,6 +8,13 @@
                 <legend>&Uacute;ltima Tramita&ccedil;&atilde;o</legend>
                 <UltimaTramitacao :idPronac="dadosProjeto.idPronac"></UltimaTramitacao>
             </fieldset>
+
+            <fieldset style="margin: 0px;">
+                <legend>Tramita&ccedil;&atilde;o do Projeto</legend>
+                <TramitacaoProjeto
+                        :idPronac="dadosProjeto.idPronac">
+                </TramitacaoProjeto>
+            </fieldset>
         </div>
     </div>
 </template>
@@ -15,6 +22,7 @@
 import { mapGetters } from 'vuex';
 import IdentificacaoProjeto from './IdentificacaoProjeto';
 import UltimaTramitacao from './components/UltimaTramitacao';
+import TramitacaoProjeto from './components/TramitacaoProjeto';
 
 export default {
     name: 'Tramitacao',
@@ -22,6 +30,7 @@ export default {
     components: {
         IdentificacaoProjeto,
         UltimaTramitacao,
+        TramitacaoProjeto,
     },
     computed: {
         ...mapGetters({

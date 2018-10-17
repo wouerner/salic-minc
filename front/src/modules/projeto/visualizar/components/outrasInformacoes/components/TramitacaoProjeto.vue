@@ -1,0 +1,73 @@
+<template>
+    <div v-if="dados">
+        <table class="tabela">
+            <thead>
+                <tr class="destacar">
+                    <th align="center">
+                        <b>Origem</b>
+                    </th>
+                    <th align="center">
+                        <b>Dt.Envio</b>
+                    </th>
+                    <th align="center">
+                        <b>Destino</b>
+                    </th>
+                    <th align="center">
+                        <b>Dt.Recebimento</b>
+                    </th>
+                    <th align="center">
+                        <b>Estado</b>
+                    </th>
+                    <th align="center">
+                        <b>Despacho</b>
+                    </th>
+                </tr>
+            </thead>
+            <tbody v-for="(dado, index) in dados" :key="index">
+
+                <tr>
+                    <td align="center">{{ dado.Origem }}</td>
+                    <td align="center">{{ dado.dtTramitacaoEnvio }}</td>
+                    <td align="center">{{ dado.Destino }}</td>
+                    <td align="center">{{ dado.dtTramitacaoRecebida }}</td>
+                    <td align="center">{{ dado.Situacao }}</td>
+                    <td align="center">{{ dado.meDespacho}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'TramitacaoProjeto',
+    props: ['idPronac'],
+    data() {
+        return {
+            dados: {
+                type: Object,
+                default() {
+                    return {};
+                },
+            },
+        };
+    },
+    mounted() {
+        if (typeof this.idPronac !== 'undefined') {
+            this.obterTramitacaoProjeto();
+        }
+    },
+    methods: {
+        obterTramitacaoProjeto() {
+            const self = this;
+            /* eslint-disable */
+            $3.ajax({
+                url: `/projeto/tramitacao-projeto-rest/get/idPronac/${self.idPronac}`,
+            }).done(function (response) {
+                self.dados = response.data;
+            });
+        },
+    },
+}
+</script>
+
