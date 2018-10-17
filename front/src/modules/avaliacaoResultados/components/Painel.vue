@@ -163,10 +163,8 @@ export default {
         return {
             listaAcoesTecnico: [Historico, AnaliseButton],
             listaAcoesCoordenador: [Historico],
-            //listaAcoesTecnico: [Historico, TipoAvaliacao],
-            listaAcoesCoordenador: [Historico],
-            //listaAcoesCoordenador: [Historico, TipoAvaliacao],
             distribuirAcoes: [Encaminhar],
+
         };
     },
     components: {
