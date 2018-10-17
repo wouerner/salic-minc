@@ -9,6 +9,9 @@ import AnaliseComprovantes from './components/AnaliseComprovantes';
 import Diligenciar from './components/Diligenciar';
 import Historico from './components/Historico';
 import ConsolidacaoAnalise from './components/ConsolidacaoAnalise';
+import EmitirLaudoFinal from './components/EmitirLaudoFinal';
+import Laudo from './components/Laudo';
+import AnalisarItem from './components/AnalisarItem';
 
 Vue.use(Router);
 
@@ -46,8 +49,8 @@ const routes = [
         },
     },
     {
-        path: '/planilha',
-        name: 'Analise Planilha',
+        path: '/planilha/:id',
+        name: 'AnalisePlanilha',
         component: Planilha,
         meta: {
             title: 'Analise da planilha',
@@ -62,7 +65,7 @@ const routes = [
         },
     },
     {
-        path: '/diligenciar',
+        path: '/diligenciar/:id',
         name: 'Diligenciar',
         component: Diligenciar,
         meta: {
@@ -83,6 +86,30 @@ const routes = [
         component: ConsolidacaoAnalise,
         meta: {
             title: 'Consolidacao da Analise',
+        },
+    },
+    {
+        path: '/emitir-laudo-final/:id',
+        name: 'EmitirLaudoFinal',
+        component: EmitirLaudoFinal,
+        meta: {
+            title: 'Emitir Laudo Final',
+        },
+    },
+    {
+        path: '/laudo',
+        name: 'Laudo',
+        component: Laudo,
+        meta: {
+            title: 'Laudo Final de Avaliação de Resultados',
+        },
+    },
+    {
+        path: '/analisar-item/*',
+        name: 'AnalisarItem',
+        component: AnalisarItem,
+        meta: {
+            title: 'Análise de itens',
         },
     },
     {

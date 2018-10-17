@@ -75,12 +75,28 @@ class Assinatura_IndexController extends Assinatura_GenericController
             'columns' => $columns
         ]);
 
+        $grupo = '';
+        if($idTipoDoAtoAdministrativos) {
+            $serviceAtoAdministrativo =  new \Application\Modules\Assinatura\Service\Assinatura\AtoAdministrativo();
+
+            $atoAdministrativo = $serviceAtoAdministrativo->obterAtoAdministrativoAtual(
+                $idTipoDoAtoAdministrativos,
+                $this->grupoAtivo->codGrupo,
+                $this->grupoAtivo->codOrgao,
+                $this->auth->getIdentity()->usu_org_max_superior
+            );
+            $grupo = (count($atoAdministrativo) > 0) ? $atoAdministrativo['grupo'] : '';
+        }
+
         $tbAssinaturaDbTable->preencherModeloAtoAdministrativo([
             'idOrgaoDoAssinante' => $this->grupoAtivo->codOrgao,
             'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo,
             'idOrgaoSuperiorDoAssinante' => $this->auth->getIdentity()->usu_org_max_superior,
-            'idTipoDoAto' => $idTipoDoAtoAdministrativos
+            'idTipoDoAto' => $idTipoDoAtoAdministrativos,
+            'grupo' => $grupo
         ]);
+
+
 
         $projetosDisponiveis = $tbAssinaturaDbTable->obterAssinaturasDisponiveis();
         $recordsFiltered = 0;
@@ -307,7 +323,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 $this->grupoAtivo->codGrupo,
                 $this->grupoAtivo->codOrgao
             );
-            
+
             if ($post) {
 
                 try {
@@ -323,7 +339,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                         );
                         $tblUsuario = new Autenticacao_Model_DbTable_Usuario();
                         $codOrgaoMaxSuperior = $tblUsuario->recuperarOrgaoMaxSuperior($this->grupoAtivo->codOrgao);
-                        
+
                         $servicoAssinatura = new \MinC\Assinatura\Servico\Assinatura(
                             [
                                 'idPronac' => $idPronac,
