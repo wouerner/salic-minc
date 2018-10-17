@@ -1,8 +1,8 @@
 <?php
 
-namespace Application\Modules\Navegacao\Service\Perfil;
+namespace Application\Modules\Navegacao\Service\Footer;
 
-class Perfil
+class Footer
 {
     private $request;
     private $response;
@@ -15,22 +15,15 @@ class Perfil
 
     public function buscarVersao()
     {
-        $vcs = $this->getVcs();
-        if ($vcs) {
-            $functionName = "get" . ucfirst($vcs) . "FullVersion";
-            if (is_callable(array($this, $functionName))) {
-                return $this->$functionName();
-            }
-        }
+        return $this->getGitFullVersion();
     }
 
+    private function getGitFullVersion() {
+        exec("git describe --tags --abbrev=0", $tagNumber);
+        exec("git rev-parse --abbrev-ref HEAD", $branchName);
+        exec("git rev-parse --short HEAD", $commit);
 
-    private function getVcs() {
-        $folders = array('.git', '.svn');
-        foreach ($folders as $vcs) {
-            if (is_dir(realpath(constant('APPLICATION_PATH') . "/../{$vcs}"))) {
-                return substr($vcs, 1);
-            }
-        }
+        return $tagNumber;
     }
+
 }

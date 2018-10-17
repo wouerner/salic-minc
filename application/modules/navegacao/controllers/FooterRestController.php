@@ -30,10 +30,8 @@ class Navegacao_FooterRestController extends MinC_Controller_Rest_Abstract
 
     public function indexAction()
     {
-        xd('controller');
         $footerService = new FooterService($this->getRequest(), $this->getResponse());
         $versao = $footerService->buscarVersao();
-
         $this->renderJsonResponse($versao, 200);
     }
 
