@@ -38,12 +38,8 @@ class DocumentosAnexados
         $docs = $this->montaArrayDocumentos($documentos);
 
         $resultArray = [];
-        $informacoes['Pronac'] = $projeto['AnoProjeto'] . $projeto['Sequencial'];
-        $informacoes['NomeProjeto'] = utf8_encode($projeto['NomeProjeto']);
-        $informacoes['idPronac'] = $idPronac;
 
         $resultArray['documentos'] = $docs;
-        $resultArray['informacoes'] = $informacoes;
 
         return $resultArray;
     }

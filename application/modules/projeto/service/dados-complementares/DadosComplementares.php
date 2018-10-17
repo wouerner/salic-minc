@@ -49,12 +49,8 @@ class DadosComplementares
 
         $resultArray = [];
 
-        $informacoes['Pronac'] = $projeto['AnoProjeto'] . $projeto['Sequencial'];
-        $informacoes['NomeProjeto'] = utf8_encode($projeto['NomeProjeto']);
-
         $resultArray['CustosVinculados'] = $CustosVinculadosArray;
         $resultArray['Proposta'] = $PropostaArray;
-        $resultArray['informacoes'] = $informacoes;
 
         return $resultArray;
     }

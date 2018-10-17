@@ -1,13 +1,13 @@
 <template>
     <div id="conteudo">
         <IdentificacaoProjeto
-            :pronac="informacoes.Pronac"
-            :nomeProjeto="informacoes.NomeProjeto">
+            :pronac="dadosProjeto.Pronac"
+            :nomeProjeto="dadosProjeto.NomeProjeto">
         </IdentificacaoProjeto>
         <table>
             <thead>
             <tr class="destacar">
-                <th class="center">N°</th>
+                <th class="center">N&ordm;</th>
                 <th class="center">CLASSIFICA&ccedil;&atilde;O</th>
                 <th class="center">DATA</th>
                 <th class="center">TIPO DE DOCUMENTO</th>
@@ -21,7 +21,7 @@
                 <td class="center">{{ dado.Data }}</td>
                 <td class="center">{{ dado.Descricao }}</td>
                 <td class="center">
-                <a class="" :href="`/consultardadosprojeto/abrir-documentos-anexados?id=${dado.idArquivo}&tipo=${dado.AgenteDoc}&idPronac=${dados.informacoes.idPronac}`"
+                <a class="" :href="`/consultardadosprojeto/abrir-documentos-anexados?id=${dado.idArquivo}&tipo=${dado.AgenteDoc}&idPronac=${dadosProjeto.idPronac}`"
                    target="_blank"
                     data-position="top" data-delay="50" data-tooltip="Visualizar">
                     {{ dado.NoArquivo }}
@@ -33,7 +33,9 @@
     </div>
 </template>
 <script>
+    import { mapGetters } from 'vuex';
     import IdentificacaoProjeto from './IdentificacaoProjeto';
+
     export default {
         name: 'DocumentosAnexados',
         props: ['idPronac'],
@@ -61,13 +63,18 @@
                 this.informacoes = value.informacoes;
             },
         },
+        computed: {
+        ...mapGetters({
+            dadosProjeto: 'projeto/projeto',
+        }),
+    },
         methods: {
             buscar_dados() {
                 const self = this;
                 const idPronac = self.$route.params.idPronac;
                 /* eslint-disable */
                 $3.ajax({
-                    url: '/projeto/documentos-anexados-rest/index/idPronac/' + idPronac,
+                    url: '/projeto/documentos-anexados-rest/index/idPronac/' + self.dadosProjeto.idPronac,
                 }).done(function (response) {
                     self.dados = response.data;
                     // self.informacoes = response.data.informacoes;
