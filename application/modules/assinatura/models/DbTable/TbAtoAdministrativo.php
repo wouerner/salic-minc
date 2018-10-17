@@ -124,8 +124,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         $idTipoDoAto,
         $idPerfilDoAssinante,
         $idOrgaoDoAssinante,
-        $idOrgaoSuperiorDoAssinante = null,
-        $grupo
+        $idOrgaoSuperiorDoAssinante = null
     ): \MinC_Db_Table_Select{
 
         $objQuery = $this->select();
