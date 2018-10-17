@@ -1,6 +1,4 @@
-import * as typesNoticias from '@/modules/noticias/store/types';
 import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
-import * as desencapsularResponse from '@/helpers/actions';
 import * as types from './types';
 
 export const dadosMenu = ({ commit }) => {
@@ -158,33 +156,29 @@ export const obterDadosItemComprovacao = ({ commit }, params) => {
 
 export const getLaudoFinal = ({ commit }, param) => {
     avaliacaoResultadosHelperAPI.obterLaudoFinal(param)
-    .then((response) => {
-        const dados = response.data.data;
-        commit(types.GET_PARECER_LAUDO_FINAL, dados);
-    });
+        .then((response) => {
+            const dados = response.data.data;
+            commit(types.GET_PARECER_LAUDO_FINAL, dados);
+        });
 };
 
-export const salvarLaudoFinal = ({ commit, state, rootState }, data) => {
-    console.log(rootState);
+export const salvarLaudoFinal = ({ commit }, data) => {
     avaliacaoResultadosHelperAPI.criarParecerLaudoFinal(data)
         .then(() => {
-            const message = "Laudo final salvo com sucesso!"
-            commit('noticias/SET_DADOS', { ativo: true, color: 'info', text: 'Salvo com sucesso!' }, { root: true });
+            const message = 'Laudo final salvo com sucesso!';
+            commit('noticias/SET_DADOS', { ativo: true, color: 'info', text: message }, { root: true });
         });
 };
 
 export const finalizarLaudoFinal = (_, data) => {
     avaliacaoResultadosHelperAPI.finalizarParecerLaudoFinal(data)
-        .then((response) => {
-            console.log(response);
+        .then(() => {
         });
 };
 
 export const enviarDiligencia = (_, data) => {
     avaliacaoResultadosHelperAPI.criarDiligencia(data)
-        .then((response) => {
-            const data = response.data;
-            console.log(data);
+        .then(() => {
         });
 };
 
@@ -199,15 +193,15 @@ export const projetosParaDistribuir = ({ commit }) => {
 export const projetosAssinatura = ({ commit }, params) => {
     let type = '';
     switch (params.estado) {
-        case 'em_assinatura':
-            type = types.SET_DADOS_PROJETOS_EM_ASSINATURA;
-            break;
-        case 'historico':
-            type = types.SET_DADOS_PROJETOS_HISTORICO;
-            break;
-        case 'assinar':
-        default:
-            type = types.SET_DADOS_PROJETOS_ASSINAR;
+    case 'em_assinatura':
+        type = types.SET_DADOS_PROJETOS_EM_ASSINATURA;
+        break;
+    case 'historico':
+        type = types.SET_DADOS_PROJETOS_HISTORICO;
+        break;
+    case 'assinar':
+    default:
+        type = types.SET_DADOS_PROJETOS_ASSINAR;
     }
 
     avaliacaoResultadosHelperAPI.obterProjetosAssinatura(params)
