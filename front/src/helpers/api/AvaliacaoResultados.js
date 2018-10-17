@@ -82,5 +82,3 @@ export const obterProjetosLaudoFinal = () => api.getRequest('/avaliacao-resultad
 export const alterarPerfil = (grupoAtivo, orgaoAtivo) => api.getRequest(`perfil/perfil-rest/index?codGrupo=${grupoAtivo}&codOrgao=${orgaoAtivo}`);
 
 export const obterProjetosAssinatura = params => api.getRequest(`/avaliacao-resultados/projeto-assinatura/estado/${params.estado}`);
-
-export const buscarVersao = () => api.getRequest('/navegacao/footer-rest/index');

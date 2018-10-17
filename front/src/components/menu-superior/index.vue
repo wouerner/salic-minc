@@ -92,7 +92,7 @@
                         </v-list-tile>
                     </v-list>
                 </v-menu>
-            </v-toolbar>
+           Plano anual de atividades e manutenção 2014 - Museu Instituto Bruno Segalla </v-toolbar>
         </div>
         <div v-else>
             Carregando...

@@ -224,11 +224,3 @@ export const obterProjetosLaudoFinal = ({ commit }) => {
             commit(types.SET_DADOS_PROJETOS_LAUDO_FINAL, dadosTabela);
         });
 };
-
-export const buscarVersao = ({ commit }) => {
-    avaliacaoResultadosHelperAPI.buscarVersao()
-        .then((response) => {
-            const versao = desencapsularResponse.default(response);
-            commit(types.SET_VERSAO, versao[0]);
-        });
-};
