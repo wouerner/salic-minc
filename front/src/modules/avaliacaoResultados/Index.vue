@@ -9,17 +9,17 @@
                   </v-layout>
                 </v-container>
             </v-content>
-            <SlFoot></SlFoot>
+            <Rodape></Rodape>
       </v-app>
     </div>
 </template>
 
 <script>
+    import Rodape from '@/components/rodape';
     import SlNav from './components/SlNav';
-    import SlFoot from './components/SlFoot';
 
     export default {
         name: 'Index',
-        components: { SlNav, SlFoot },
+        components: { SlNav, Rodape },
     };
 </script>

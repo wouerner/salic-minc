@@ -1,4 +1,4 @@
-import * as rodapeHelperAPI from '@/helpers/api/rodape';
+import * as rodapeHelperAPI from '@/helpers/api/navegacao';
 import * as desencapsularResponse from '@/helpers/actions';
 import * as types from './types';
 
