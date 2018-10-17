@@ -23,6 +23,7 @@ import HistoricoEncaminhamento from './visualizar/components/outrasInformacoes/H
 import PlanoDistribuicaoIn2017 from './visualizar/components/outrasInformacoes/PlanoDistribuicaoIn2017';
 import ProvidenciaTomada from './visualizar/components/outrasInformacoes/ProvidenciaTomada';
 import DiligenciaProjeto from './visualizar/components/outrasInformacoes/DiligenciaProjeto';
+import Tramitacao from './visualizar/components/outrasInformacoes/Tramitacao';
 
 Vue.use(Router);
 
@@ -215,7 +216,15 @@ const routes = [
                 name: 'DiligenciaProjeto',
                 component: DiligenciaProjeto,
                 meta: {
-                    title: 'Diligencias do Projeto',
+                    title: 'Dilig&ecirc;ncias do Projeto',
+                },
+            },
+            {
+                path: 'tramitacao',
+                name: 'Tramitacao',
+                component: Tramitacao,
+                meta: {
+                    title: 'Tramita&ccedil;&atilde;o',
                 },
             },
         ],
