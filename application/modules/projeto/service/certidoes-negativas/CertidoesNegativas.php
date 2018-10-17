@@ -57,11 +57,8 @@ class CertidoesNegativas
             $certidoes[] = $itemArray;
         }
 
-        $informacoes['Pronac'] = $resultado[0]['Pronac'];
-        $informacoes['NomeProjeto'] = $rs['NomeProjeto'];
 
         $resultArray['certidoes'] = $certidoes;
-        $resultArray['informacoes'] = $informacoes;
 
         return $resultArray;
     }
