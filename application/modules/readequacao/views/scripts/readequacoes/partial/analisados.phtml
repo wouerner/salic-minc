@@ -121,7 +121,7 @@ foreach ($this->dados as $d): ?>
 	$this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO ||
 	$this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO_PRESTACAO_DE_CONTAS): ?>	
 	<td style="text-align: center">
-	    <?php if ($this->disponivelParaFinalizar($d->siEncaminhamento)): ?>
+	    <?php if ($this->disponivelParaFinalizar($d->siEncaminhamento, $d->idPronac)): ?>
             <a href="javascript:void(0)"
 	       id="finalizarFluxoReadequacao"
 	       data-href="<?= $this->url([
