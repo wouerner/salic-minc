@@ -51,7 +51,7 @@
         <v-card class="mt-3" flat>
             <!-- PRODUTO -->
             <v-expansion-panel
-                expand
+               expand
                 :v-if="getPlanilha != undefined && Object.keys(getPlanilha)"
                 :value="expandir(getPlanilha)"
             >
