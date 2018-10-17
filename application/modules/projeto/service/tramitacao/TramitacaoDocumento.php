@@ -54,7 +54,7 @@ class TramitacaoDocumento
                 'dtAnexacao' => $objDateTimedtJuntada->format('d/m/Y H:i:s'),
                 'Usuario' => $tramitacao['Usuario'],
                 'idLote' => $tramitacao['idLote'],
-                'Situacao' => $Situacao,
+                'Situacao' => $tramitacao['Situacao'],
             ];
         }
 
