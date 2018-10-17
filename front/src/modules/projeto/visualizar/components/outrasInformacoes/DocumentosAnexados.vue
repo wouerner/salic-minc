@@ -4,7 +4,7 @@
             :pronac="dadosProjeto.Pronac"
             :nomeProjeto="dadosProjeto.NomeProjeto">
         </IdentificacaoProjeto>
-        <table>
+        <table v-if="Object.keys(dados.documentos).length > 0">
             <thead>
             <tr class="destacar">
                 <th class="center">N&ordm;</th>
@@ -30,6 +30,14 @@
             </tr>
             </tbody>
         </table>
+        <div v-else>
+                <fieldset>
+                    <legend>Certid&otilde;es Negativas</legend>
+                    <div class="center">
+                        <em>Dados n&atilde;o  informado.</em>
+                    </div>
+                </fieldset>
+        </div>
     </div>
 </template>
 <script>
@@ -54,7 +62,7 @@
             };
         },
         mounted() {
-            if (typeof this.$route.params.idPronac !== 'undefined') {
+            if (typeof this.dadosProjeto.idPronac !== 'undefined') {
                 this.buscar_dados();
             }
         },

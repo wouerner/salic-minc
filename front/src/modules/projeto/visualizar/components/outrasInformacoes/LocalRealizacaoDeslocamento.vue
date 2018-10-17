@@ -1,27 +1,28 @@
 <template>
     <div id="conteudo">
         <div v-if="dados.informacoes">
-            <IdentificacaoProjeto :pronac="dados.informacoes.Pronac"
-                                  :nomeProjeto="dados.informacoes.NomeProjeto">
+            <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
+                                  :nomeProjeto="dadosProjeto.NomeProjeto">
             </IdentificacaoProjeto>
             <fieldset>
                 <legend>Local de Realiza&ccedil;&atilde;o</legend>
-                <table class="tabela">
-                <thead>
-                    <tr class="destacar">
-                        <th class="center">Pa&iacute;s</th>
-                        <th class="center">UF</th>
-                        <th class="center">Cidade</th>
-                    </tr>
-                </thead>
-                <tbody v-for="(dado, index) in dados.localRealizacoes" :key="index">
-                    <tr>
-                        <td class="center">{{ dado.Descricao }}</td>
-                        <td class="center">{{ dado.UF }}</td>
-                        <td class="center">{{ dado.Cidade }}</td>
-                    </tr>
-                </tbody>
-            </table>
+                <table class="tabela" v-if="Object.keys(dados.localRealizacoes).length > 0">
+                    <thead>
+                        <tr class="destacar">
+                            <th class="center">Pa&iacute;s</th>
+                            <th class="center">UF</th>
+                            <th class="center">Cidade</th>
+                        </tr>
+                    </thead>
+                    <tbody v-for="(dado, index) in dados.localRealizacoes" :key="index">
+                        <tr>
+                            <td class="center">{{ dado.Descricao }}</td>
+                            <td class="center">{{ dado.UF }}</td>
+                            <td class="center">{{ dado.Cidade }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div v-else class="center" ><em>Dados N&atilde;o Informados.</em></div>
             </fieldset>
             <fieldset>
                 <legend>Deslocamento</legend>
@@ -57,6 +58,7 @@
     </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
 import IdentificacaoProjeto from './IdentificacaoProjeto';
 
 export default {
@@ -75,9 +77,14 @@ export default {
         };
     },
     mounted() {
-        if (typeof this.$route.params.idPronac !== 'undefined') {
+        if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             this.buscar_dados();
         }
+    },
+    computed: {
+        ...mapGetters({
+            dadosProjeto: 'projeto/projeto',
+        }),
     },
     methods: {
         buscar_dados() {
@@ -85,7 +92,7 @@ export default {
             const idPronac = self.$route.params.idPronac
             /* eslint-disable */
             $3.ajax({
-                url: '/projeto/local-realizacao-deslocamento-rest/index/idPronac/' + idPronac,
+                url: '/projeto/local-realizacao-deslocamento-rest/index/idPronac/' + self.dadosProjeto.idPronac,
             }).done(function (response) {
                 self.dados = response.data;
             });
