@@ -48,6 +48,7 @@ class TramitacaoDocumento
             $objDateTimedtJuntada = new \DateTime($tramitacao['dtJuntada']);
 
             $resultArray[] = [
+                'idDocumento' => $tramitacao['idDocumento'],
                 'dsTipoDocumento' => $dsTipoDocumento,
                 'dtDocumento' => $objDateTimedtDocumento->format('d/m/Y H:i:s'),
                 'noArquivo' => $noArquivo,
