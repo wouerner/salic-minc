@@ -94,7 +94,8 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
     public function obterProximoOrgaoDeDestino(
         $idTipoDoAto,
         $idOrdemDaAssinaturaAtual,
-        $idOrgaoSuperiorDoAssinante
+        $idOrgaoSuperiorDoAssinante,
+        $grupo = null
     ) {
         $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
@@ -106,6 +107,9 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         $objQuery->where('idTipoDoAto = ?', $idTipoDoAto);
         $objQuery->where('idOrdemDaAssinatura > ?', $idOrdemDaAssinaturaAtual);
         $objQuery->where('idOrgaoSuperiorDoAssinante = ?', $idOrgaoSuperiorDoAssinante);
+        if($grupo) {
+            $objQuery->where('grupo = ?', $grupo);
+        }
         $objQuery->order('idOrdemDaAssinatura asc');
         $objQuery->limit(1);
 
@@ -120,7 +124,8 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         $idTipoDoAto,
         $idPerfilDoAssinante,
         $idOrgaoDoAssinante,
-        $idOrgaoSuperiorDoAssinante = null
+        $idOrgaoSuperiorDoAssinante = null,
+        $grupo
     ): \MinC_Db_Table_Select{
 
         $objQuery = $this->select();
@@ -360,6 +365,9 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
 
         $objQuery->where('idTipoDoAto = ?', $objModelAtoAdministrativo->getIdTipoDoAto());
         $objQuery->where('idOrgaoSuperiorDoAssinante = ?', $objModelAtoAdministrativo->getIdOrgaoSuperiorDoAssinante());
+        if($objModelAtoAdministrativo->getGrupo()) {
+            $objQuery->where('grupo = ?', $objModelAtoAdministrativo->getGrupo());
+        }
         $objResultado = $this->fetchRow($objQuery);
 
         if ($objResultado) {

@@ -11,7 +11,8 @@ class AtoAdministrativo implements IServico
         $idPerfilDoAssinante,
         $idOrgaoDoAssinante,
         $idOrgaoSuperiorDoAssinante
-    ) {
+    )
+    {
 
         $tbAtoAdministrativoDbTable = new \Assinatura_Model_DbTable_TbAtoAdministrativo();
         $atoAdministrativo = $tbAtoAdministrativoDbTable->obterPrimeiroAtoAdministrativo(
@@ -20,7 +21,30 @@ class AtoAdministrativo implements IServico
             $idOrgaoDoAssinante,
             $idOrgaoSuperiorDoAssinante
         );
-        
+
         return $atoAdministrativo;
+    }
+
+    public function obterGrupoAtoAdministrativoAtual(
+        $idTipoDoAto,
+        $idPerfilDoAssinante,
+        $idOrgaoDoAssinante,
+        $idOrgaoSuperiorDoAssinante
+    )
+    {
+
+        $atoAdministrativo = $this->obterAtoAdministrativoAtual(
+            $idTipoDoAto,
+            $idPerfilDoAssinante,
+            $idOrgaoDoAssinante,
+            $idOrgaoSuperiorDoAssinante
+        );
+
+        $grupo = null;
+        if (count($atoAdministrativo) > 0) {
+            $grupo = $atoAdministrativo['grupo'];
+        }
+
+        return $grupo;
     }
 }
