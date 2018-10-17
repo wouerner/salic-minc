@@ -70,6 +70,9 @@
             "Application\\Modules\\Projeto\\Service\\PlanoDistribuicao\\": "./application/modules/projeto/service/plano-distribuicao/",
             "Application\\Modules\\Projeto\\Service\\Diligencia\\": "./application/modules/projeto/service/diligencia/",
             "Application\\Modules\\Projeto\\Service\\Tramitacao\\": "./application/modules/projeto/service/tramitacao/",
+            "Application\\Modules\\AvaliacaoResultados\\Service\\Assinatura\\": "./application/modules/avaliacao-resultados/service/assinatura",
+            "Application\\Modules\\AvaliacaoResultados\\Service\\Assinatura\\Parecer\\": "./application/modules/avaliacao-resultados/service/assinatura/parecer",
+            "Application\\Modules\\AvaliacaoResultados\\Service\\LaudoFinal\\": "./application/modules/avaliacao-resultados/service/laudo-final",
             "MinC\\Assinatura\\": "./library/MinC/Assinatura/",
             "MinC\\Db\\Model\\": "./library/MinC/Db/Model/"
         }
