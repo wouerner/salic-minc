@@ -31,7 +31,9 @@
                         <v-card-text>
                             <v-list three-line subheader>
                                 <v-subheader>
-                                    {{pronac}} - {{nomeProjeto}}
+                                    <h4 class="headline mb-0 grey--text text--darken-3">
+                                        {{pronac}} - {{nomeProjeto}}
+                                    </h4>    
                                 </v-subheader>
                                 <v-divider></v-divider>
 
@@ -60,17 +62,19 @@
                                             :rules="[rules.required]"
                                     ></v-select>
                                 </v-list-tile>
-                                <v-list-tile>
-                                    <v-textarea
-                                            v-model="justificativa"
-                                            ref="justificativa"
-                                            label="Justificativa de encaminhamento para análise"
-                                            prepend-icon="create"
-                                            color="green"
-                                            autofocus
-                                            :rules="[rules.required]"
-                                    ></v-textarea>
-                                </v-list-tile>
+
+
+                                <v-textarea
+                                        v-model="justificativa"
+                                        ref="justificativa"
+                                        label="Justificativa de encaminhamento para análise"
+                                        prepend-icon="create"
+                                        color="green"
+                                        autofocus
+                                        :rules="[rules.required]"
+                                        height="150px"
+                                ></v-textarea>
+
                             </v-list>
                         </v-card-text>
                         <v-divider></v-divider>
