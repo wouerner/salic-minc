@@ -197,15 +197,15 @@ export const projetosParaDistribuir = ({ commit }) => {
 export const projetosAssinatura = ({ commit }, params) => {
     let type = '';
     switch (params.estado) {
-        case 'em_assinatura':
-            type = types.SET_DADOS_PROJETOS_EM_ASSINATURA;
-            break;
-        case 'historico':
-            type = types.SET_DADOS_PROJETOS_HISTORICO;
-            break;
-        case 'assinar':
-        default:
-            type = types.SET_DADOS_PROJETOS_ASSINAR;
+    case 'em_assinatura':
+        type = types.SET_DADOS_PROJETOS_EM_ASSINATURA;
+        break;
+    case 'historico':
+        type = types.SET_DADOS_PROJETOS_HISTORICO;
+        break;
+    case 'assinar':
+    default:
+        type = types.SET_DADOS_PROJETOS_ASSINAR;
     }
 
     avaliacaoResultadosHelperAPI.obterProjetosAssinatura(params)
@@ -222,5 +222,13 @@ export const obterProjetosLaudoFinal = ({ commit }) => {
             const data = response.data;
             const dadosTabela = data.data;
             commit(types.SET_DADOS_PROJETOS_LAUDO_FINAL, dadosTabela);
+        });
+};
+
+export const buscarVersao = ({ commit }) => {
+    avaliacaoResultadosHelperAPI.buscarVersao()
+        .then((response) => {
+            const versao = desencapsularResponse.default(response);
+            commit(types.SET_DADOS_PROJETOS_LAUDO_FINAL, versao);
         });
 };

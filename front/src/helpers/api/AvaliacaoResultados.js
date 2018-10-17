@@ -75,10 +75,12 @@ export const finalizarParecer = (params) => {
 
 /** FIM DO PARECER TECNICO */
 
-export const obterLaudoFinal = (idPronac) => api.getRequest(`/avaliacao-resultados/laudo/get?idPronac=${idPronac}`);
+export const obterLaudoFinal = idPronac => api.getRequest(`/avaliacao-resultados/laudo/get?idPronac=${idPronac}`);
 
 export const obterProjetosLaudoFinal = () => api.getRequest('/avaliacao-resultados/laudo/index');
 
 export const alterarPerfil = (grupoAtivo, orgaoAtivo) => api.getRequest(`perfil/perfil-rest/index?codGrupo=${grupoAtivo}&codOrgao=${orgaoAtivo}`);
 
 export const obterProjetosAssinatura = params => api.getRequest(`/avaliacao-resultados/projeto-assinatura/estado/${params.estado}`);
+
+export const buscarVersao = () => api.getRequest('/navegacao/footer-rest/index');
