@@ -151,7 +151,8 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         $objQuery = $this->obterQueryAtoAdministrativo(
             $idTipoDoAto,
             $idPerfilDoAssinante,
-            $idOrgaoDoAssinante
+            $idOrgaoDoAssinante,
+            $idOrgaoSuperiorDoAssinante
         );
 
         $objQuery->where("idOrdemDaAssinatura = ?", 1);
@@ -214,8 +215,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         $objQuery->joinLeft(
             array("OrgaoSuperior" => "Orgaos"),
             "{$this->_name}.idOrgaoSuperiorDoAssinante = OrgaoSuperior.Codigo",
-            array("dsOrgaoSuperiorDoAssinante" => new Zend_Db_Expr("CASE WHEN OrgaoSuperior.Sigla = '' THEN {$this->_name}.idOrgaoSuperiorDoAssinante ELSE OrgaoSuperior.Sigla END")
-            ),
+            array("dsOrgaoSuperiorDoAssinante" => "OrgaoSuperior.Sigla"),
             $this->_schema
         );
 

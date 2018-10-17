@@ -241,12 +241,12 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
 
         $query->where("idDocumentoAssinatura = ?", $this->modeloTbAssinatura->getIdDocumentoAssinatura());
         $quantidadeAssinaturas = $this->_db->fetchRow($query);
-        
+
         if ($quantidadeAssinaturas) {
             return $quantidadeAssinaturas['quantidade'];
         }
     }
-        
+
     public function obterQueryAssinaturasDisponiveis(): \MinC_Db_Table_Select
     {
         if (!$this->modeloTbAtoAdministrativo) {
@@ -277,12 +277,22 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
                                        where idPronac = Projetos.IdPRONAC
                                          and idDocumentoAssinatura = tbDocumentoAssinatura.idDocumentoAssinatura)";
 
+        $grupo = $this->modeloTbAtoAdministrativo->getGrupo();
+        $sqlTotalQuantidadeAssinaturasGrupo = '';
+        $sqlPossuiAssinaturaGrupo = '';
+        $sqlAtoAdministrativoGrupo = '';
+        if($grupo) {
+            $sqlTotalQuantidadeAssinaturasGrupo = " AND TbAtoAdministrativoInterno.grupo = {$this->modeloTbAtoAdministrativo->getGrupo()} ";
+            $sqlPossuiAssinaturaGrupo = " AND {$this->_schema}.TbAtoAdministrativo.grupo = {$this->modeloTbAtoAdministrativo->getGrupo()} ";
+            $sqlAtoAdministrativoGrupo = " AND TbAtoAdministrativo.grupo = {$this->modeloTbAtoAdministrativo->getGrupo()} ";
+        }
+
         $sqlTotalQuantidadeAssinaturas = "(SELECT count(1)
                                              FROM TbAtoAdministrativo TbAtoAdministrativoInterno
                                             WHERE TbAtoAdministrativoInterno.idOrgaoSuperiorDoAssinante = {$this->modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()}
                                               AND TbAtoAdministrativoInterno.idTipoDoAto = {$this->_schema}.tbDocumentoAssinatura.idTipoDoAtoAdministrativo
-                                              AND TbAtoAdministrativoInterno.grupo = {$this->modeloTbAtoAdministrativo->getGrupo()}
-                                              ";
+                                              {$sqlTotalQuantidadeAssinaturasGrupo}
+                                          )";
 
         $query->from(
             array("Projetos" => "Projetos"),
@@ -311,7 +321,7 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
                             AND {$this->_schema}.TbAtoAdministrativo.idOrgaoDoAssinante = {$this->modeloTbAtoAdministrativo->getIdOrgaoDoAssinante()}
                             AND {$this->_schema}.TbAtoAdministrativo.idPerfilDoAssinante = {$this->modeloTbAtoAdministrativo->getIdPerfilDoAssinante()}
                             AND {$this->_schema}.TbAtoAdministrativo.idOrgaoSuperiorDoAssinante = {$this->modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()}
-                            AND {$this->_schema}.TbAtoAdministrativo.grupo = {$this->modeloTbAtoAdministrativo->getGrupo()}
+                            {$sqlPossuiAssinaturaGrupo}
                           WHERE {$this->_schema}.TbAssinatura.idDocumentoAssinatura = {$this->_schema}.tbDocumentoAssinatura.idDocumentoAssinatura
                           AND {$this->_schema}.TbAtoAdministrativo.idTipoDoAto = {$this->_schema}.tbDocumentoAssinatura.idTipoDoAtoAdministrativo
                       )
@@ -368,7 +378,7 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
              AND TbAtoAdministrativo.idPerfilDoAssinante = {$this->modeloTbAtoAdministrativo->getIdPerfilDoAssinante()}
              AND TbAtoAdministrativo.idOrgaoSuperiorDoAssinante = {$this->modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()}
              AND TbAtoAdministrativo.idTipoDoAto = tbDocumentoAssinatura.idTipoDoAtoAdministrativo
-             AND TbAtoAdministrativo.grupo = {$this->modeloTbAtoAdministrativo->getGrupo()}
+             {$sqlAtoAdministrativoGrupo}
              ",
             [
                 'idOrdemDaAssinatura',
