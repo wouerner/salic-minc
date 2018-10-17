@@ -1,8 +1,8 @@
 <template>
     <div id="conteudo">
-        <div v-if="dados.informacoes">
-            <IdentificacaoProjeto :pronac="dados.informacoes.Pronac"
-                                  :nomeProjeto="dados.informacoes.NomeProjeto">
+        <div v-if="dadosProjeto">
+            <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
+                                  :nomeProjeto="dadosProjeto.NomeProjeto">
             </IdentificacaoProjeto>
             <TabelaDadosComplementares  dadoComplementar="Objetivos"
                                         :dsDadoComplementar="dados.Proposta.Objetivos">
@@ -42,6 +42,7 @@
     </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
 import IdentificacaoProjeto from './IdentificacaoProjeto';
 import TabelaDadosComplementares from './TabelaDadosComplementares'
 export default {
@@ -62,9 +63,14 @@ export default {
         };
     },
     mounted() {
-        if (typeof this.$route.params.idPronac !== 'undefined') {
+        if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             this.buscar_dados();
         }
+    },
+    computed: {
+        ...mapGetters({
+            dadosProjeto: 'projeto/projeto',
+        }),
     },
     methods: {
         buscar_dados() {
@@ -72,7 +78,7 @@ export default {
             const idPronac = self.$route.params.idPronac
             /* eslint-disable */
             $3.ajax({
-                url: '/projeto/dados-complementares-rest/index/idPronac/' + idPronac,
+                url: '/projeto/dados-complementares-rest/index/idPronac/' + self.dadosProjeto.idPronac,
             }).done(function (response) {
                 self.dados = response.data;
                 console.log(self.dados);
