@@ -1,6 +1,6 @@
 <template>
     <div v-if="dados">
-        <table class="tabela">
+        <table class="tabela" v-if="Object.keys(dados).length > 0">
             <thead>
                 <tr class="destacar">
                     <th align="center">
@@ -35,6 +35,9 @@
                 </tr>
             </tbody>
         </table>
+        <div v-else class="center">
+            <em>Dados n&atilde;o  informado.</em>
+        </div>
     </div>
 </template>
 

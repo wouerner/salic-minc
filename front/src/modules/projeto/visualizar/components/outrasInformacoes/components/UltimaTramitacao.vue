@@ -1,6 +1,6 @@
 <template>
     <div v-if="dados">
-        <table class="tabela">
+        <table class="tabela" v-if="Object.keys(dados).length > 0">
             <tbody v-for="(dado, index) in dados" :key="index">
             <tr class="destacar">
                 <td align="center"><b>Emissor</b></td>
@@ -28,6 +28,9 @@
             </tr>
             </tbody>
         </table>
+        <div v-else class="center">
+            <em>Dados n&atilde;o  informado.</em>
+        </div>
     </div>
 </template>
 
