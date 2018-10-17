@@ -197,11 +197,11 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
             $this->_schema
         );
 
-        $objQuery->joinInner(
+        $objQuery->joinLeft(
             array("Verificacao_Agentes" => "Verificacao"),
             "{$this->_name}.idCargoDoAssinante = Verificacao_Agentes.idVerificacao",
             array("dsCargoDoAssinante" => "Descricao"),
-            "Agentes"
+            "Agentes.dbo"
         );
 
         $objQuery->joinInner(
@@ -211,10 +211,11 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
             $this->_schema
         );
 
-        $objQuery->joinInner(
+        $objQuery->joinLeft(
             array("OrgaoSuperior" => "Orgaos"),
             "{$this->_name}.idOrgaoSuperiorDoAssinante = OrgaoSuperior.Codigo",
-            array("dsOrgaoSuperiorDoAssinante" => "OrgaoSuperior.Sigla"),
+            array("dsOrgaoSuperiorDoAssinante" => new Zend_Db_Expr("CASE WHEN OrgaoSuperior.Sigla = '' THEN {$this->_name}.idOrgaoSuperiorDoAssinante ELSE OrgaoSuperior.Sigla END")
+            ),
             $this->_schema
         );
 
