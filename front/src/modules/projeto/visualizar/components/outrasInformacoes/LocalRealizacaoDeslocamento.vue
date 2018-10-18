@@ -1,6 +1,6 @@
 <template>
     <div id="conteudo">
-        <div v-if="dados.informacoes">
+        <div v-if="Object.keys(dados).length > 0">
             <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
                                   :nomeProjeto="dadosProjeto.NomeProjeto">
             </IdentificacaoProjeto>
@@ -89,7 +89,6 @@ export default {
     methods: {
         buscar_dados() {
             const self = this;
-            const idPronac = self.$route.params.idPronac
             /* eslint-disable */
             $3.ajax({
                 url: '/projeto/local-realizacao-deslocamento-rest/index/idPronac/' + self.dadosProjeto.idPronac,
