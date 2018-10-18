@@ -9,6 +9,7 @@ import avaliacaoResultados from './modules/avaliacaoResultados/store';
 import proposta from './modules/proposta/store';
 import autenticacao from './modules/autenticacao/store';
 import dateFilter from './filters/date';
+import noticias from './modules/noticias/store';
 
 Vue.use(Vuex);
 Vue.filter('date', dateFilter);

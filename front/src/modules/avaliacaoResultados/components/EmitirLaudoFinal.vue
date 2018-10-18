@@ -85,7 +85,6 @@
                 salvar: 'avaliacaoResultados/salvarLaudoFinal',
                 finalizar: 'avaliacaoResultados/finalizarLaudoFinal',
                 getLaudoFinal: 'avaliacaoResultados/getLaudoFinal',
-                setSnackbar: 'noticias/setDados',
             }),
             getConsolidacao(id) {
                 this.requestEmissaoParecer(id);
@@ -153,7 +152,6 @@
                 proponente: 'avaliacaoResultados/proponente',
                 projeto: 'avaliacaoResultados/projeto',
                 parecerLaudoFinal: 'avaliacaoResultados/getParecerLaudoFinal',
-                getSnackbar: 'noticias/getDados',
             }),
         },
         created() {

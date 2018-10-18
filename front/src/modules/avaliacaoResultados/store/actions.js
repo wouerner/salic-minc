@@ -159,18 +159,18 @@ export const getLaudoFinal = ({ commit }) => {
     avaliacaoResultadosHelperAPI.obterLaudoFinal()
         .then((response) => {
             const dados = response.data.data;
-            commit(types.GET_LAUDO_FINAL, dados);
+            commit(types.GET_PARECER_LAUDO_FINAL, dados);
         });
 };
 
-export const salvarLaudoFinal = ({ commit }, data) => {
+export const salvarLaudoFinal = ({ commit, rootState }, data) => {
     avaliacaoResultadosHelperAPI.criarParecerLaudoFinal(data)
         .then(() => {
             commit('noticias/SET_DADOS', { ativo: true, color: 'success', text: 'Salvo com sucesso!' }, { root: true });
         });
 };
 
-export const finalizarLaudoFinal = ({ commit }, data) => {
+export const finalizarLaudoFinal = ({ commit, rootState }, data) => {
     avaliacaoResultadosHelperAPI.finalizarParecerLaudoFinal(data)
         .then(() => {
             commit('noticias/SET_DADOS', { ativo: true, color: 'success', text: 'Finalizado com sucesso!' }, { root: true });
