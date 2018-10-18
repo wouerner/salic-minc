@@ -10,8 +10,15 @@
                         <v-toolbar-title>Emissão de Laudo Final de Avaliação de Resultados</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                            <v-btn dark flat @click.native="salvarLaudoFinal()" :disabled="!valid">Salvar</v-btn>
-                            <v-btn dark flat @click.native="finalizarLaudoFinal()" :disabled="!valid">Finalizar</v-btn>
+                            <v-btn dark flat
+                                   @click.native="salvarLaudoFinal()"
+                                   :disabled="!valid">Salvar
+                            </v-btn>
+                            <v-btn dark flat
+                                   @click.native="finalizarLaudoFinal()"
+                                   :disabled="!valid"
+                                   :to="{ name: 'Laudo'}">Finalizar
+                            </v-btn>
                         </v-toolbar-items>
                     </v-toolbar>
                     <v-container grid-list-sm>

@@ -89,7 +89,7 @@ export const updateRevisao = (params) => {
 
 /** FIM REVISAO PARECER */
 
-export const obterLaudoFinal = () => api.getRequest('/avaliacao-resultados/laudo');
+export const obterLaudoFinal = idPronac => api.getRequest(`/avaliacao-resultados/laudo/get?idPronac=${idPronac}`);
 
 export const obterProjetosLaudoFinal = () => api.getRequest('/avaliacao-resultados/laudo/index');
 

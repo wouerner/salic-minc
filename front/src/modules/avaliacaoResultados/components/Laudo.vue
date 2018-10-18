@@ -2,7 +2,6 @@
     <v-container fluid>
         <v-card>
             <v-card-title>
-                <h2>Laudo Final</h2>
                 <v-spacer></v-spacer>
                 <v-text-field
                         v-model="search"
@@ -15,7 +14,7 @@
             </v-card-title>
             <v-data-table
                     :headers="cabecalho"
-                    :items="getProjetosLaudoFinal.items"
+                    :items="dados.items"
                     :pagination.sync="pagination"
                     hide-actions
                     :search="search"
@@ -118,9 +117,10 @@
 
     export default {
         name: 'Painel',
-        created() {
-            this.obterProjetosLaudoFinal();
-        },
+        props: ['dados'],
+        // created() {
+        //     this.obterProjetosLaudoFinal();
+        // },
         data() {
             return {
                 pagination: {
@@ -167,15 +167,7 @@
         components: {
             ModalTemplate,
         },
-        methods: {
-            ...mapActions({
-                obterProjetosLaudoFinal: 'avaliacaoResultados/obterProjetosLaudoFinal',
-            }),
-        },
         computed: {
-            ...mapGetters({
-                getProjetosLaudoFinal: 'avaliacaoResultados/getProjetosLaudoFinal',
-            }),
             pages() {
                 if (this.pagination.rowsPerPage == null ||
                     this.pagination.totalItems == null
