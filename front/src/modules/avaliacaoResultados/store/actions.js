@@ -1,6 +1,5 @@
 import * as typesNoticias from '@/modules/noticias/store/types';
 import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
-import * as desencapsularResponse from '@/helpers/actions';
 import * as types from './types';
 
 export const dadosMenu = ({ commit }) => {
@@ -156,12 +155,12 @@ export const obterDadosItemComprovacao = ({ commit }, params) => {
         });
 };
 
-export const getLaudoFinal = ({ commit }, param) => {
-    avaliacaoResultadosHelperAPI.obterLaudoFinal(param)
-    .then((response) => {
-        const dados = response.data.data;
-        commit(types.GET_PARECER_LAUDO_FINAL, dados);
-    });
+export const getLaudoFinal = ({ commit }) => {
+    avaliacaoResultadosHelperAPI.obterLaudoFinal()
+        .then((response) => {
+            const dados = response.data.data;
+            commit(types.GET_LAUDO_FINAL, dados);
+        });
 };
 
 export const salvarLaudoFinal = ({ commit }, data) => {
@@ -197,15 +196,15 @@ export const projetosParaDistribuir = ({ commit }) => {
 export const projetosAssinatura = ({ commit }, params) => {
     let type = '';
     switch (params.estado) {
-        case 'em_assinatura':
-            type = types.SET_DADOS_PROJETOS_EM_ASSINATURA;
-            break;
-        case 'historico':
-            type = types.SET_DADOS_PROJETOS_HISTORICO;
-            break;
-        case 'assinar':
-        default:
-            type = types.SET_DADOS_PROJETOS_ASSINAR;
+    case 'em_assinatura':
+        type = types.SET_DADOS_PROJETOS_EM_ASSINATURA;
+        break;
+    case 'historico':
+        type = types.SET_DADOS_PROJETOS_HISTORICO;
+        break;
+    case 'assinar':
+    default:
+        type = types.SET_DADOS_PROJETOS_ASSINAR;
     }
 
     avaliacaoResultadosHelperAPI.obterProjetosAssinatura(params)
@@ -224,3 +223,27 @@ export const obterProjetosLaudoFinal = ({ commit }) => {
             commit(types.SET_DADOS_PROJETOS_LAUDO_FINAL, dadosTabela);
         });
 };
+
+export const obterHistoricoRevisao = ({ commit }, params) => {
+    const p = new Promise((resolve) => {
+        avaliacaoResultadosHelperAPI.getListaRevisoes(params)
+            .then((response) => {
+                const dados = response.data.data;
+                commit(types.HISTORICO_REVISAO, dados.items);
+                resolve();
+            });
+    });
+    return p;
+};
+
+export const salvarRevisao = ({ commit }, params) => {
+    const p = new Promise((resolve) => {
+        avaliacaoResultadosHelperAPI.postRevisao(params)
+            .then((response) => {
+                commit(types.SET_REVISAO, response.data.data.items.dados[0]);
+                resolve();
+            });
+    });
+    return p;
+};
+
