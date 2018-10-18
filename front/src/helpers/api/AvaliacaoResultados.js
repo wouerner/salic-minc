@@ -83,13 +83,11 @@ export const getRevisao = params => api.getRequest(`/avaliacao-resultados/revisa
 
 export const postRevisao = params => api.postRequest('http://localhost/avaliacao-resultados/revisao/', buildData(params));
 
-export const updateRevisao = (params) => {
-    console.info('id id id');
-};
+export const updateRevisao = () => { };
 
 /** FIM REVISAO PARECER */
 
-export const obterLaudoFinal = () => api.getRequest('/avaliacao-resultados/laudo');
+export const obterLaudoFinal = idPronac => api.getRequest(`/avaliacao-resultados/laudo/get?idPronac=${idPronac}`);
 
 export const obterProjetosLaudoFinal = () => api.getRequest('/avaliacao-resultados/laudo/index');
 
