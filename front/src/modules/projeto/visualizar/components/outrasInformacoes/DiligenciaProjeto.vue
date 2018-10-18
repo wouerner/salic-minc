@@ -5,41 +5,35 @@
                 :nomeProjeto="dadosProjeto.NomeProjeto"
             >
             </IdentificacaoProjeto>
-            <div v-if="dados.diligenciaProposta">
-                <div v-if="dados.diligenciaProposta.length > 0">
-                    <fieldset style="margin: 0px;">
-                        <legend>Dilig&ecirc;ncia Proposta</legend>
-                        <VisualizarDiligenciaProposta
-                            :idPronac="idPronac"
-                            :diligencias="dados.diligenciaProposta"
-                        >
-                        </VisualizarDiligenciaProposta>
-                    </fieldset>
-                </div>
+            <div>
+                <fieldset style="margin: 0px;">
+                    <legend>Dilig&ecirc;ncia Proposta</legend>
+                    <VisualizarDiligenciaProposta
+                        :idPronac="idPronac"
+                        :diligencias="dados.diligenciaProposta"
+                    >
+                    </VisualizarDiligenciaProposta>
+                </fieldset>
             </div>
-            <div v-if="dados.diligenciaAdequacao">
-                <div v-if="dados.diligenciaAdequacao.length > 0">
-                    <fieldset style="margin: 0px;">
-                        <legend>Dilig&ecirc;ncias da Adequa&ccedil;&atilde;o do Projeto</legend>
-                        <VisualizarDiligenciaAdequacao
-                                :idPronac="idPronac"
-                                :diligencias="dados.diligenciaAdequacao"
-                            >
-                            </VisualizarDiligenciaAdequacao>
-                    </fieldset>
-                </div>
-            </div>
-            <div v-if="dados.diligenciaProjeto">
-                <div v-if="dados.diligenciaProjeto.length > 0">
-                    <fieldset style="margin: 0px;">
-                        <legend>Dilig&ecirc;ncia Projeto</legend>
-                        <VisualizarDiligenciaProjeto
+            <div >
+                <fieldset style="margin: 0px;">
+                    <legend>Dilig&ecirc;ncias da Adequa&ccedil;&atilde;o do Projeto</legend>
+                    <VisualizarDiligenciaAdequacao
                             :idPronac="idPronac"
-                            :diligencias="dados.diligenciaProjeto"
+                            :diligencias="dados.diligenciaAdequacao"
                         >
-                        </VisualizarDiligenciaProjeto>
-                    </fieldset>
-                </div>
+                        </VisualizarDiligenciaAdequacao>
+                </fieldset>
+            </div>
+            <div>
+                <fieldset style="margin: 0px;">
+                    <legend>Dilig&ecirc;ncia Projeto</legend>
+                    <VisualizarDiligenciaProjeto
+                        :idPronac="idPronac"
+                        :diligencias="dados.diligenciaProjeto"
+                    >
+                    </VisualizarDiligenciaProjeto>
+                </fieldset>
             </div>
     </div>
 </template>

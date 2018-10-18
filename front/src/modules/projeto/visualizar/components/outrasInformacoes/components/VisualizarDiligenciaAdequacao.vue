@@ -1,6 +1,6 @@
 <template>
     <div>
-        <table class="tabela">
+        <table class="tabela" v-if="Object.keys(diligencias).length > 0">
             <thead>
                 <tr class="destacar">
                     <th>VISUALIZAR</th>
@@ -21,7 +21,7 @@
                     <td>{{ diligencia.dtAvaliacao }}</td>
                     <td>{{ diligencia.tipoDiligencia }}</td>
                 </tr>
-                <tr v-if="abaAtiva === index && ativo && Object.keys(dadosDiligencia).length > 0">
+                <tr v-if="abaAtiva === index && ativo && Object.keys(dadosDiligencia).length > 2">
                     <td colspan="3">
                         <table v-if="dadosDiligencia.dsAvaliacao" class="tabela">
                             <tbody>
@@ -37,6 +37,9 @@
                 </tr>
             </tbody>
         </table>
+        <div v-else class="center">
+            <em>Dados n&atilde;o  informado.</em>
+        </div>
     </div>
 </template>
 
