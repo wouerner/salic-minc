@@ -1,5 +1,14 @@
 <template>
     <v-container fluid v-if="dadosProjeto">
+        <v-btn 
+            slot="activator"
+            flat
+            :to="{ name: 'Painel'}"
+            color="#1b5e20"
+        >
+            
+            <span><v-icon small class="material-icons">keyboard_backspace</v-icon> Voltar</span>
+        </v-btn>
         <v-card>
             <v-card-title primary-title>
                 <h2>{{ dadosProjeto.items.pronac }} &#45; {{ dadosProjeto.items.nomeProjeto }}</h2>
@@ -42,7 +51,7 @@
         <v-card class="mt-3" flat>
             <!-- PRODUTO -->
             <v-expansion-panel
-                expand
+               expand
                 :v-if="getPlanilha != undefined && Object.keys(getPlanilha)"
                 :value="expandir(getPlanilha)"
             >
@@ -116,25 +125,26 @@
                                                                         <template
                                                                             v-if="podeEditar(props.item.varlorComprovado)"
                                                                         >
-                                                                            <!--<v-btn-->
-                                                                                <!--:href="'/avaliacao-resultados/#/analisar-item/idPronac/' + idPronac + '/uf/' + uf.Uf + '/produto/' + produto.cdProduto + '/idmunicipio/' + cidade.cdCidade + '/idPlanilhaItem/' + props.item.idPlanilhaItens + '/etapa/' + etapa.cdEtapa"-->
-                                                                                <!--replace-->
-                                                                                <!--color="red"-->
-                                                                                <!--small-->
-                                                                                <!--dark-->
-                                                                                <!--title="Comprovar Item"-->
-                                                                            <!--&gt;-->
-                                                                                <!--<v-icon>gavel</v-icon>-->
-                                                                            <!--</v-btn>-->
-                                                                            <analisar-item
-                                                                                :id-pronac="idPronac"
-                                                                                :uf="uf.Uf"
-                                                                                :produto="produto.cdProduto"
-                                                                                :idmunicipio="cidade.cdCidade"
-                                                                                :id-planilha-item="props.item.idPlanilhaItens"
-                                                                                :etapa="etapa.cdEtapa"
+                                                                        <!-- :href="'/avaliacao-resultados/#/analisar-item/idPronac/' + idPronac + '/uf/' + uf.Uf + '/produto/' + produto.cdProduto + '/idmunicipio/' + cidade.cdCidade + '/idPlanilhaItem/' + props.item.idPlanilhaItens + '/etapa/' + etapa.cdEtapa" -->
+                                                                            <v-btn
+                                                                                :href="'/prestacao-contas/analisar/comprovante/idPronac/' + idPronac + '/uf/' + uf.Uf + '/produto/' + produto.cdProduto + '/idmunicipio/' + cidade.cdCidade + '/idPlanilhaItem/' + props.item.idPlanilhaItens + '/etapa/' + etapa.cdEtapa"
+                                                                                replace
+                                                                                color="red"
+                                                                                small
+                                                                                dark
+                                                                                title="Comprovar Item"
                                                                             >
-                                                                            </analisar-item>
+                                                                                <v-icon>gavel</v-icon>
+                                                                            </v-btn>
+                                                                            <!-- <analisar-item -->
+                                                                            <!--     :id-pronac="idPronac" -->
+                                                                            <!--     :uf="uf.Uf" -->
+                                                                            <!--     :produto="produto.cdProduto" -->
+                                                                            <!--     :idmunicipio="cidade.cdCidade" -->
+                                                                            <!--     :id-planilha-item="props.item.idPlanilhaItens" -->
+                                                                            <!--     :etapa="etapa.cdEtapa" -->
+                                                                            <!-- > -->
+                                                                            <!-- </analisar-item> -->
                                                                         </template>
                                                                     </td>
                                                                 </template>
