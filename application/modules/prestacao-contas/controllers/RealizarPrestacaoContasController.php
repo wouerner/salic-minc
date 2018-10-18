@@ -38,6 +38,11 @@ class PrestacaoContas_RealizarPrestacaoContasController extends MinC_Controller_
         $vlComprovado = 0;
         $vlAprovado = 0;
         foreach ($resposta as $item) {
+
+            if ($item->vlAprovado == 0) {
+                continue;
+            }
+            
             $vlComprovar = $item->vlAprovado - $item->vlComprovado;
             $vlTotalComprovar += $vlComprovar;
 
