@@ -83,9 +83,7 @@ export const getRevisao = params => api.getRequest(`/avaliacao-resultados/revisa
 
 export const postRevisao = params => api.postRequest('http://localhost/avaliacao-resultados/revisao/', buildData(params));
 
-export const updateRevisao = (params) => {
-    console.info('id id id');
-};
+export const updateRevisao = () => { };
 
 /** FIM REVISAO PARECER */
 

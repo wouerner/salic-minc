@@ -8,6 +8,7 @@ import foo from './modules/foo/store';
 import avaliacaoResultados from './modules/avaliacaoResultados/store';
 import proposta from './modules/proposta/store';
 import autenticacao from './modules/autenticacao/store';
+import noticias from './modules/noticias/store';
 import dateFilter from './filters/date';
 import noticias from './modules/noticias/store';
 
