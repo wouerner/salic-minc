@@ -42,11 +42,7 @@ class HistoricoEncaminhamento
 
         $Encaminhamentos = $this->montaArrayHistoricoEncaminhamento($historicoEncaminhamento);
        
-        $informacoes['Pronac'] = $DadosProjeto['pronac'];
-        $informacoes['NomeProjeto'] = utf8_encode($DadosProjeto['nomeProjeto']);
-
         $resultArray['Encaminhamentos'] = $Encaminhamentos;
-        $resultArray['informacoes'] = $informacoes;
 
         return $resultArray;
     }
