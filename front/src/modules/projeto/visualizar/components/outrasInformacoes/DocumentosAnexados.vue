@@ -21,22 +21,22 @@
                 <td class="center">{{ dado.Data }}</td>
                 <td class="center">{{ dado.Descricao }}</td>
                 <td class="center">
-                <a class="" :href="`/consultardadosprojeto/abrir-documentos-anexados?id=${dado.idArquivo}&tipo=${dado.AgenteDoc}&idPronac=${dadosProjeto.idPronac}`"
-                   target="_blank"
-                    data-position="top" data-delay="50" data-tooltip="Visualizar">
-                    {{ dado.NoArquivo }}
-                </a>
+                    <a class="" :href="`/consultardadosprojeto/abrir-documentos-anexados?id=${dado.idArquivo}&tipo=${dado.AgenteDoc}&idPronac=${dadosProjeto.idPronac}`"
+                       target="_blank"
+                        data-position="top" data-delay="50" data-tooltip="Visualizar">
+                        {{ dado.NoArquivo }}
+                    </a>
                 </td>
             </tr>
             </tbody>
         </table>
         <div v-else>
-                <fieldset>
-                    <legend>Certid&otilde;es Negativas</legend>
-                    <div class="center">
-                        <em>Dados n&atilde;o  informado.</em>
-                    </div>
-                </fieldset>
+            <fieldset>
+                <legend>Certid&otilde;es Negativas</legend>
+                <div class="center">
+                    <em>Dados n&atilde;o  informado.</em>
+                </div>
+            </fieldset>
         </div>
     </div>
 </template>
@@ -72,10 +72,10 @@
             },
         },
         computed: {
-        ...mapGetters({
-            dadosProjeto: 'projeto/projeto',
-        }),
-    },
+            ...mapGetters({
+                dadosProjeto: 'projeto/projeto',
+            }),
+        },
         methods: {
             buscar_dados() {
                 const self = this;
@@ -84,7 +84,6 @@
                     url: '/projeto/documentos-anexados-rest/index/idPronac/' + self.dadosProjeto.idPronac,
                 }).done(function (response) {
                     self.dados = response.data;
-                    // self.informacoes = response.data.informacoes;
                 });
             },
         },
