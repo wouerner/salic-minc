@@ -15,9 +15,9 @@ class RevisaoAvaliacaoFinanceira
         $dadosRevisao = $tbAvaliacaoFinanceira->findByAvaliacaoFinanceira($where)->toArray();
         if(!$dadosRevisao && empty($dadosRevisao))
         {
-            return [$dadosRevisao, 400];
+            return ['dados'=>$dadosRevisao,'code'=> 400];
         }
-        return [$dadosRevisao, 200];
+        return ['dados'=>$dadosRevisao,'code'=> 200];
     }
 
     public function salvar($data)
@@ -31,7 +31,7 @@ class RevisaoAvaliacaoFinanceira
         }else{
             $tbAvaliacaoFinanceiraRevisao->setDtRevisao(date('Y-m-d h:i:s'));
         }
-        $tbAvaliacaoFinanceiraRevisao->setIdAgente($arrAuth['usu_codigo']);
+        //$tbAvaliacaoFinanceiraRevisao->setIdAgente($arrAuth['idAgente']);
 
         $mapper = new \AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisaoMapper();
         $codigo = $mapper->save($tbAvaliacaoFinanceiraRevisao);
