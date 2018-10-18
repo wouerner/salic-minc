@@ -111,74 +111,73 @@
     import PropostaDetalhamentoPlanoDistribuicao from './PropostaDetalhamentoPlanoDistribuicao';
 
     export default {
-    name: 'PropostaPlanoDistribuicao',
-    data() {
-        return {
-            produtos: [],
-            detalhamentos: [],
-            active: false,
-            icon: 'add',
-            radio: 'n',
-        };
-    },
-    props: [
-        'idplanodistribuicao',
-        'idmunicipioibge',
-        'iduf',
-        'arrayProdutos',
-        'arrayDetalhamentos',
-    ],
-    components: {
-        PropostaDetalhamentoPlanoDistribuicao,
-    },
-    watch: {
-        arrayProdutos(value) {
-            this.produtos = value;
+        name: 'PropostaPlanoDistribuicao',
+        data() {
+            return {
+                produtos: [],
+                detalhamentos: [],
+                active: false,
+                icon: 'add',
+                radio: 'n',
+            };
         },
-        arrayDetalhamentos(value) {
-            this.detalhamentos = value;
+        props: [
+            'idplanodistribuicao',
+            'idmunicipioibge',
+            'iduf',
+            'arrayProdutos',
+            'arrayDetalhamentos',
+        ],
+        components: {
+            PropostaDetalhamentoPlanoDistribuicao,
         },
-    },
-    mounted() {
-        if (typeof this.arrayProdutos !== 'undefined') {
-            this.produtos = this.arrayProdutos;
-        }
+        watch: {
+            arrayProdutos(value) {
+                this.produtos = value;
+            },
+            arrayDetalhamentos(value) {
+                this.detalhamentos = value;
+            },
+        },
+        mounted() {
+            if (typeof this.arrayProdutos !== 'undefined') {
+                this.produtos = this.arrayProdutos;
+            }
 
-        if (typeof this.arrayDetalhamentos !== 'undefined') {
-            this.detalhamentos = this.arrayDetalhamentos;
-        }
+            if (typeof this.arrayDetalhamentos !== 'undefined') {
+                this.detalhamentos = this.arrayDetalhamentos;
+            }
 
-        this.iniciarCollapsible();
-    },
-    methods: {
-        detalhamentosByID(lista, id) {
+            this.iniciarCollapsible();
+        },
+        methods: {
+            detalhamentosByID(lista, id) {
+                if (typeof lista !== 'undefined') {
+                    /* eslint-disable */
+                    let novaLista = [];
 
-            if (typeof lista !== 'undefined') {
-                /* eslint-disable */
-                let novaLista = [];
-
-                Object.keys(lista).map((key) => {
-                    if (lista[key].idPlanoDistribuicao === id) {
-                        novaLista.push(lista[key]);
-                    }
+                    Object.keys(lista).map((key) => {
+                        if (lista[key].idPlanoDistribuicao === id) {
+                            novaLista.push(lista[key]);
+                        }
+                        return novaLista;
+                    });
                     return novaLista;
+                }
+                return lista;
+            },
+            label_sim_ou_nao(valor) {
+                if (valor === 1) {
+                    return 'Sim';
+                }
+                return 'N\xE3o';
+            },
+            iniciarCollapsible() {
+                /* eslint-disable */
+                $3('.collapsible').each(function () {
+                    $3(this).collapsible();
                 });
-                return novaLista;
-            }
-            return lista;
+            },
         },
-        label_sim_ou_nao(valor) {
-            if (valor === 1) {
-                return 'Sim';
-            }
-            return 'N\xE3o';
-        },
-        iniciarCollapsible() {
-            /* eslint-disable */
-            $3('.collapsible').each(function () {
-                $3(this).collapsible();
-            });
-        },
-    },
-};
+    };
 </script>

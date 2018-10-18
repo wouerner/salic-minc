@@ -63,9 +63,9 @@ export default {
     name: 'PropostaLocalRealizacaoDeslocamento',
     props: ['idpreprojeto', 'proposta'],
     data() {
-      return {
-          localizacoes: {},
-      }
+        return {
+            localizacoes: {},
+        };
     },
     mounted() {
         if (this.proposta && this.proposta.abrangencia) {
@@ -77,7 +77,7 @@ export default {
     },
     watch: {
         idpreprojeto(value) {
-            if(value.abrangencia) {
+            if (value.abrangencia) {
                 this.localizacoes = value.abrangencia;
             }
             this.buscaLocalRealizacaoDeslocamento(value);
@@ -87,7 +87,7 @@ export default {
         },
         proposta(value) {
             this.localizacoes = value;
-        }
+        },
     },
     computed: {
         ...mapGetters({

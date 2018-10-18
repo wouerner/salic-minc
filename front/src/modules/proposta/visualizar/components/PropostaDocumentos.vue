@@ -58,12 +58,12 @@ import { utils } from '@/mixins/utils';
 export default {
     name: 'PropostaDocumentos',
     props: {
-        'proposta': {},
+        proposta: {},
     },
     data() {
-      return {
-          documentos: {},
-      }
+        return {
+            documentos: {},
+        };
     },
     mixins: [utils],
     mounted() {

@@ -51,7 +51,7 @@
                 </v-toolbar-items>
 
                 <!--<v-btn icon>-->
-                    <!--<v-icon>message</v-icon>-->
+                <!--<v-icon>message</v-icon>-->
                 <!--</v-btn>-->
                 <v-menu
                     :close-on-content-click="false"
@@ -189,7 +189,7 @@
                     return this.usuarioAtivo[0].usu_identificacao;
                 }
                 return '';
-            }
+            },
         },
         created() {
             this.buscarPerfisDisponiveis();
