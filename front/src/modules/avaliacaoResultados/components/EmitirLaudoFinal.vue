@@ -116,9 +116,6 @@
                 }
 
                 this.salvar(data);
-
-                /** Descomentar linha após migração da lista para o VUEJS */
-                // this.dialog = false;
             },
             finalizarLaudoFinal() {
                 const data = {
@@ -143,8 +140,6 @@
                 }
 
                 this.finalizar(data);
-                /** Descomentar linha após migração da lista para o VUEJS */
-                // this.dialog = false;
             },
             updateManifestacao(e) {
                 this.laudoFinalData.siManifestacao = e;

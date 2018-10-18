@@ -30,14 +30,5 @@ class Laudo
                                'dsLaudoFinal'=>$dsLaudoFinal],
                               ['idLaudoFinal = ?' => $idLaudoFinal]);
         }
-        // $model = new \AvaliacaoResultados_Model_LaudoFinal;
-        // $model->setIdPronac($idPronac);
-        // $model->setDtLaudoFinal((new \DateTime())->format('Y-m-d'));
-        // $model->setSiManifestacao($siManifestacao);
-        // $model->setDsLaudoFinal($dsLaudoFinal);
-        // $model->setIdUsuario($auth->getIdentity()->usu_codigo);
-        
-        // $mapper = new \AvaliacaoResultados_Model_LaudoFinalMapper;
-        // return $mapper->save($model);
     }
 }

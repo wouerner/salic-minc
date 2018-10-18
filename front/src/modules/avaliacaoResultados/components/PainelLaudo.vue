@@ -43,11 +43,8 @@
                     :key="0"
                 >
                     <v-card flat
-                        v-if="getProjetosLaudoFinal"
                     >
-                        <Laudo :analisar="true"
-                               :dados="getProjetosLaudoFinal">
-                        </Laudo>
+                        <Laudo :dados="getProjetosLaudoFinal"></Laudo>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item

@@ -112,15 +112,11 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
     import ModalTemplate from '@/components/modal';
 
     export default {
         name: 'Painel',
         props: ['dados'],
-        // created() {
-        //     this.obterProjetosLaudoFinal();
-        // },
         data() {
             return {
                 pagination: {
