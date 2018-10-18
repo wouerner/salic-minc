@@ -1,5 +1,4 @@
 import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
-import * as desencapsularResponse from '@/helpers/actions';
 import * as types from './types';
 
 export const dadosMenu = ({ commit }) => {
@@ -155,34 +154,31 @@ export const obterDadosItemComprovacao = ({ commit }, params) => {
         });
 };
 
-export const getLaudoFinal = ({ commit }, param) => {
-    avaliacaoResultadosHelperAPI.obterLaudoFinal(param)
-    .then((response) => {
-        const dados = response.data.data;
-        commit(types.GET_PARECER_LAUDO_FINAL, dados);
-    });
+export const getLaudoFinal = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.obterLaudoFinal(params)
+        .then((response) => {
+            const dados = response.data.data;
+            commit(types.GET_PARECER_LAUDO_FINAL, dados);
+        });
 };
 
 export const salvarLaudoFinal = ({ commit }, data) => {
     avaliacaoResultadosHelperAPI.criarParecerLaudoFinal(data)
         .then(() => {
-            const message = "Laudo final salvo com sucesso!"
-            alert(message);
+            commit('noticias/SET_DADOS', { ativo: true, color: 'success', text: 'Salvo com sucesso!' }, { root: true });
         });
 };
 
-export const finalizarLaudoFinal = (_, data) => {
+export const finalizarLaudoFinal = ({ commit }, data) => {
     avaliacaoResultadosHelperAPI.finalizarParecerLaudoFinal(data)
-        .then((response) => {
-            console.log(response);
+        .then(() => {
+            commit('noticias/SET_DADOS', { ativo: true, color: 'success', text: 'Finalizado com sucesso!' }, { root: true });
         });
 };
 
 export const enviarDiligencia = (_, data) => {
     avaliacaoResultadosHelperAPI.criarDiligencia(data)
-        .then((response) => {
-            const data = response.data;
-            console.log(data);
+        .then(() => {
         });
 };
 
@@ -224,3 +220,27 @@ export const obterProjetosLaudoFinal = ({ commit }) => {
             commit(types.SET_DADOS_PROJETOS_LAUDO_FINAL, dadosTabela);
         });
 };
+
+export const obterHistoricoRevisao = ({ commit }, params) => {
+    const p = new Promise((resolve) => {
+        avaliacaoResultadosHelperAPI.getListaRevisoes(params)
+            .then((response) => {
+                const dados = response.data.data;
+                commit(types.HISTORICO_REVISAO, dados.items);
+                resolve();
+            });
+    });
+    return p;
+};
+
+export const salvarRevisao = ({ commit }, params) => {
+    const p = new Promise((resolve) => {
+        avaliacaoResultadosHelperAPI.postRevisao(params)
+            .then((response) => {
+                commit(types.SET_REVISAO, response.data.data.items.dados[0]);
+                resolve();
+            });
+    });
+    return p;
+};
+

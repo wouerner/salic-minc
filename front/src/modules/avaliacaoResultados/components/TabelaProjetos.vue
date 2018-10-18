@@ -30,8 +30,8 @@
                 </td> -->
                 <td class="text-xs-center">
                     <template v-for="c in componentes">
-                        <component 
-                            :is="c" 
+                        <component
+                            :is="c"
                             :id-pronac="props.item.IdPRONAC"
                             :pronac="props.item.PRONAC"
                             :nome-projeto="props.item.NomeProjeto"
@@ -48,10 +48,10 @@
         <div class="text-xs-center">
             <div class="text-xs-center pt-2">
                 <v-pagination
-                        v-model="pagination.page"
-                        :length="pages"
-                        :total-visible="3"
-                        color="green lighten-2"
+                    v-model="pagination.page"
+                    :length="pages"
+                    :total-visible="4"
+                    color="green lighten-2"
                 ></v-pagination>
             </div>
         </div>
@@ -60,7 +60,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import Historico from './Historico';
 
 export default {
     name: 'TabelaProjetos',
@@ -79,15 +78,15 @@ export default {
                     value: 'numero',
                 },
                 { text: 'PRONAC', value: 'Pronac' },
-                { text: 'Nome Do Projeto', 
+                { text: 'Nome Do Projeto',
                     align: 'center',
                     value: 'NomeProjeto' },
-                { 
-                    text: 'Situacao', 
+                {
+                    text: 'Situacao',
                     align: 'center',
                     value: 'Situacao' },
-                { 
-                    text: 'Estado', 
+                {
+                    text: 'Estado',
                     align: 'center',
                     value: 'UfProjeto' },
                 {
@@ -97,9 +96,6 @@ export default {
                 },
             ],
         };
-    },
-    components: {
-        Historico,
     },
     methods: {
         ...mapActions({
