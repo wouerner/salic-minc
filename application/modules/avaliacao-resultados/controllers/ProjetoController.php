@@ -31,6 +31,11 @@ class AvaliacaoResultados_ProjetoController extends MinC_Controller_Rest_Abstrac
         $vlComprovado = 0;
         $vlAprovado = 0;
         foreach ($resposta as $item) {
+
+            if ($item->vlAprovado == 0) {
+                continue;
+            }
+            
             $vlComprovar = $item->vlAprovado - $item->vlComprovado;
             $vlTotalComprovar += $vlComprovar;
 

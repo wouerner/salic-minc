@@ -2883,7 +2883,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
             CONVERT(DECIMAL(38,2), sac.dbo.fnVlComprovado_Fonte_Produto_Etapa_Local_Item_Validado
                    (a.idPronac,a.nrFonteRecurso,a.idProduto,a.idEtapa,a.idUFDespesa,
                     a.idMunicipioDespesa,a.idPlanilhaItem))  as ComprovacaoValidada,
-            CONVERT(DECIMAL(38,2), sac.dbo.fnVlComprovado_Fonte_Produto_Etapa_Local_Item_Validado
+            CONVERT(DECIMAL(38,2), sac.dbo.fnVlComprovado_Fonte_Produto_Etapa_Local_Item
                    (a.idPronac,a.nrFonteRecurso,a.idProduto,a.idEtapa,a.idUFDespesa,
                     a.idMunicipioDespesa,a.idPlanilhaItem)) as Total
                     "
@@ -2933,20 +2933,6 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
             'AGENTES.dbo'
         );
 
-//        $select->joinLeft(
-//            ['g' => 'tbComprovantePagamentoxPlanilhaAprovacao'],
-//            "(a . idPlanilhaAprovacao = g . idPlanilhaAprovacao)",
-//            [],
-//            'BDCORPORATIVO.scSAC'
-//        );
-
-//        $select->joinLeft(
-//            ['h' => 'tbComprovantePagamento'],
-//            "(g . idComprovantePagamento = h . idComprovantePagamento)" ,
-//            [],
-//            'BDCORPORATIVO.scSAC'
-//        );
-
         $select->join(
             ['i' => 'Projetos'],
             "(a . IdPRONAC = i . IdPRONAC)" ,
@@ -2956,15 +2942,6 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
 
         $select->where('a.nrFonteRecurso = 109');
         $select->where('a.stAtivo = ? ', 'S');
-        $select->where(new Zend_Db_Expr("sac.dbo.fnVlAprovado_Fonte_Produto_Etapa_Local_Item(
-            a.idPronac,
-            a.nrFonteRecurso,
-            a.idProduto,
-            a.idEtapa,
-            a.idUFDespesa,
-            a.idMunicipioDespesa,
-            a.idPlanilhaItem) > 0")
-        );
 
         $select->where('a.IdPRONAC = ?', $idPronac);
 
