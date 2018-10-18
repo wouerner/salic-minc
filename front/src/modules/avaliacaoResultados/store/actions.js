@@ -1,4 +1,3 @@
-import * as typesNoticias from '@/modules/noticias/store/types';
 import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
 import * as types from './types';
 
@@ -179,9 +178,7 @@ export const finalizarLaudoFinal = ({ commit }, data) => {
 
 export const enviarDiligencia = (_, data) => {
     avaliacaoResultadosHelperAPI.criarDiligencia(data)
-        .then((response) => {
-            const data = response.data;
-            console.log(data);
+        .then(() => {
         });
 };
 
