@@ -22,9 +22,18 @@
                 </tbody>
             </table>
         </div>
+        <div v-else>
+                <fieldset>
+                    <legend>Provid&ecirc;ncia Tomada</legend>
+                    <div class="center">
+                        <em>Dados n&atilde;o  informado.</em>
+                    </div>
+                </fieldset>
+            </div>
     </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
 import IdentificacaoProjeto from './IdentificacaoProjeto';
 
 export default {
@@ -43,17 +52,21 @@ export default {
         };
     },
     mounted() {
-        if (typeof this.$route.params.idPronac !== 'undefined') {
+        if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             this.buscar_dados();
         }
+    },
+    computed: {
+        ...mapGetters({
+            dadosProjeto: 'projeto/projeto',
+        }),
     },
     methods: {
         buscar_dados() {
             const self = this;
-            const idPronac = self.$route.params.idPronac
             /* eslint-disable */
             $3.ajax({
-                url: '/projeto/providencia-tomada-rest/index/idPronac/' + idPronac,
+                url: '/projeto/providencia-tomada-rest/index/idPronac/' + self.dadosProjeto.idPronac,
             }).done(function (response) {
                 self.dados = response.data;
             });
