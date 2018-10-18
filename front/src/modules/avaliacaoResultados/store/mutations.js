@@ -31,6 +31,7 @@ export const state = {
     getProjetosAssinar: {},
     getProjetosEmAssinatura: {},
     getProjetosHistorico: {},
+    versao: {},
     revisaoParecer: {},
     revisao: {},
 };
@@ -140,5 +141,8 @@ export const mutations = {
     },
     [types.SET_DADOS_PROJETOS_HISTORICO](state, dados) {
         state.getProjetosHistorico = dados;
+    },
+    [types.SET_VERSAO](state, dados) {
+        state.versao = dados;
     },
 };

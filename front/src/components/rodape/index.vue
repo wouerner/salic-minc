@@ -22,13 +22,13 @@
                 <v-flex xs3 text-xs-center>
                     Versão:
                     <a v-if="Object.keys(versao).length > 0"
-                        style="color: #f7cd6f"
-                        class="tooltipped"
-                        data-position="top"
-                        data-delay="50"
-                        data-tooltip="Branch: avaliacao-resultados-fix-footer"
-                        target="_blank"
-                        href="https://github.com/culturagovbr/salic-minc/releases"
+                       style="color: #f7cd6f"
+                       class="tooltipped"
+                       data-position="top"
+                       data-delay="50"
+                       data-tooltip="Branch: avaliacao-resultados-fix-footer"
+                       target="_blank"
+                       href="https://github.com/culturagovbr/salic-minc/releases"
                     >
                         {{versao}}
                     </a>
@@ -63,7 +63,7 @@
         },
         computed: {
             ...mapGetters({
-                versao: 'avaliacaoResultados/versao',
+                versao: 'rodape/versao',
             }),
         },
         created() {
@@ -71,7 +71,7 @@
         },
         methods: {
             ...mapActions({
-                buscarVersao: 'avaliacaoResultados/buscarVersao',
+                buscarVersao: 'rodape/buscarVersao',
             }),
         },
     };
