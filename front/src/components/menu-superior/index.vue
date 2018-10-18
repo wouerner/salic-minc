@@ -51,7 +51,7 @@
                 </v-toolbar-items>
 
                 <!--<v-btn icon>-->
-                    <!--<v-icon>message</v-icon>-->
+                <!--<v-icon>message</v-icon>-->
                 <!--</v-btn>-->
                 <v-menu
                     :close-on-content-click="false"
@@ -144,7 +144,7 @@
                         </v-list>
                     </v-card>
                 </v-menu>
-           Plano anual de atividades e manutenção 2014 - Museu Instituto Bruno Segalla </v-toolbar>
+            </v-toolbar>
         </div>
     </div>
 </template>
