@@ -1,6 +1,6 @@
 <template>
     <div id="conteudo">
-        <table>
+        <table v-if="dados">
             <thead>
             <tr class="destacar">
                 <th class="center">PRONAC</th>
@@ -30,6 +30,14 @@
             </tr>
             </tbody>
         </table>
+        <div v-else>
+            <fieldset>
+                <legend>Documentos assinados</legend>
+                <div class="center">
+                    <em>Sem documentos assinados para este projeto.</em>
+                </div>
+            </fieldset>
+        </div>
     </div>
 </template>
 <script>
