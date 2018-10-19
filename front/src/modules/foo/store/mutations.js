@@ -19,8 +19,6 @@ export const mutations = {
         const dadosTabela = state.dadosTabela;
 
         dadosTabela.forEach((value, index) => {
-            console.log('AAAAAAAAAAAAAAAAAAAAAAA');
-            console.log(registro);
             if (registro.Codigo === value.Codigo) {
                 state.dadosTabela.splice(index, 1, registro);
             }
