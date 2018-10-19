@@ -1,12 +1,12 @@
 <template>
     <v-container fluid v-if="dadosProjeto">
-        <v-btn 
+        <v-btn
             slot="activator"
             flat
             :to="{ name: 'Painel'}"
             color="#1b5e20"
         >
-            
+
             <span><v-icon small class="material-icons">keyboard_backspace</v-icon> Voltar</span>
         </v-btn>
         <v-card>
@@ -292,7 +292,7 @@
             podeEditar(varlorComprovado) {
                 if (varlorComprovado !== 0
                     && !this.dadosProjeto.items.diligencia
-                    && this.documento == 0) {
+                    && this.documento === 0) {
                     return true;
                 }
 
