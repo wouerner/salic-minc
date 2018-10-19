@@ -1,13 +1,13 @@
 <template>
     <v-container fluid v-if="dadosProjeto">
-        <v-btn 
-            slot="activator"
-            flat
-            :to="{ name: 'Painel'}"
-            color="#1b5e20"
-        >
-            <span><v-icon small class="material-icons">keyboard_backspace</v-icon> Voltar</span>
-        </v-btn>
+        <v-toolbar>
+            <v-btn icon class="hidden-xs-only"
+                :to="{ name: 'Painel'}"
+            >
+                <v-icon>arrow_back</v-icon>
+              </v-btn>
+            <v-toolbar-title>Planilha</v-toolbar-title>
+        </v-toolbar>
         <v-card>
             <v-card-title primary-title>
                 <h2>{{ dadosProjeto.items.pronac }} &#45; {{ dadosProjeto.items.nomeProjeto }}</h2>
@@ -47,7 +47,6 @@
 
             </v-card-actions>
         </v-card>
-        {{Object.keys(planilha)}}
         <template v-if="Object.keys(planilha).length">
             <v-card class="mt-3" flat>
                 <!-- PRODUTO -->
@@ -165,9 +164,11 @@
         </template>
         <template v-else>
             <v-progress-circular
+                color="primary"
                 indeterminate
             >
-            <v-progress-circular>
+            Carregando...
+            </v-progress-circular>
         </template>
         <v-speed-dial
             v-model="fab"
