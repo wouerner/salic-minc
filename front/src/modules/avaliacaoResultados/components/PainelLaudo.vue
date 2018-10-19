@@ -7,7 +7,7 @@
                 tabs
                 height="40px"
             >
-                <v-toolbar-title>Avaliação de Resultados - Laudo final</v-toolbar-title>
+                <v-toolbar-title>Laudo final</v-toolbar-title>
             </v-toolbar>
             <v-tabs
                 centered
@@ -44,7 +44,7 @@
                 >
                     <v-card flat>
                         <Laudo :dados="getProjetosLaudoFinal"
-                               :componentes="analise = true"
+                               :componentes="analisar = true"
                         ></Laudo>
                     </v-card>
                 </v-tab-item>
@@ -63,12 +63,11 @@
                     :key="2"
                 >
                     <v-card flat>
-                        <v-card-text>
-                            <!-- <TabelaProjetos
-                                :dados="getLaudosEmAssinatura"
-                                :componentes="emAssinatura = true"
-                            ></TabelaProjetos> -->
-                        </v-card-text>
+                        <v-card>
+                            <Laudo
+                                :dados="getProjetosLaudoEmAssinatura"
+                            ></Laudo>
+                        </v-card>
                     </v-card>
                 </v-tab-item>
             </v-tabs>
@@ -85,7 +84,8 @@ export default {
     name: 'PainelLaudo',
     created() {
         this.obterProjetosLaudoFinal({ estadoId: 10 });
-        this.obterProjetosLaudoAssinar({ estadoId: 11 });
+        this.obterProjetosLaudoAssinar({ estadoId: 14 });
+        this.obterProjetosLaudoEmAssinatura({ estadoId: 11 });
     },
     data() {
         return { };
@@ -97,6 +97,7 @@ export default {
         ...mapActions({
             obterProjetosLaudoFinal: 'avaliacaoResultados/obterProjetosLaudoFinal',
             obterProjetosLaudoAssinar: 'avaliacaoResultados/obterProjetosLaudoAssinar',
+            obterProjetosLaudoEmAssinatura: 'avaliacaoResultados/obterProjetosLaudoEmAssinatura',
             usuarioLogado: 'autenticacao/usuarioLogado',
         }),
     },
@@ -104,6 +105,7 @@ export default {
         ...mapGetters({
             getProjetosLaudoFinal: 'avaliacaoResultados/getProjetosLaudoFinal',
             getProjetosLaudoAssinar: 'avaliacaoResultados/getProjetosLaudoAssinar',
+            getProjetosLaudoEmAssinatura: 'avaliacaoResultados/getProjetosLaudoEmAssinatura',
             getUsuario: 'autenticacao/getUsuario',
         }),
     },

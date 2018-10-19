@@ -20,6 +20,7 @@ export const getProjetosParaDistribuir = state => state.projetosParaDistribuir;
 export const getProjetosAssinatura = state => state.getProjetosAssinatura;
 export const getProjetosLaudoFinal = state => state.getProjetosLaudoFinal;
 export const getProjetosLaudoAssinar = state => state.getProjetosLaudoAssinar;
+export const getProjetosLaudoEmAssinatura = state => state.getProjetosLaudoEmAssinatura;
 export const getProjetosAssinar = state => state.getProjetosAssinar;
 export const getProjetosEmAssinatura = state => state.getProjetosEmAssinatura;
 export const getProjetosHistorico = state => state.getProjetosHistorico;

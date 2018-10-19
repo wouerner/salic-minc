@@ -125,7 +125,7 @@
                     siManifestacao: this.parecerLaudoFinal.items.siManifestacao,
                     dsLaudoFinal: this.parecerLaudoFinal.items.dsLaudoFinal,
                     atual: 10,
-                    proximo: 11,
+                    proximo: 14,
                 };
 
                 if (this.parecerLaudoFinal.items.idLaudoFinal) {
