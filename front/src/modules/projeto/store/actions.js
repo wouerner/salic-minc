@@ -85,3 +85,11 @@ export const buscarTransferenciaRecursos = ({ commit }, acao) => {
             commit(types.SET_TRANSFERENCIA_RECURSOS, transferenciaRecursos);
         });
 };
+
+export const buscarCertidoesNegativas = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarCertidoesNegativas(idPronac)
+        .then((response) => {
+            const data = response.data.data;
+            commit(types.SET_CERTIDOES_NEGATIVAS, data);
+        });
+};

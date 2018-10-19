@@ -52,36 +52,21 @@ export default {
     components: {
         IdentificacaoProjeto,
     },
-    data() {
-        return {
-            dados: {
-                    type: Object,
-                    default() {
-                        return {};
-                    },
-                },
-        };
-    },
     mounted() {
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-            this.buscar_dados();
+            this.buscarCertidoesNegativas(this.dadosProjeto.idPronac);
         }
     },
     computed: {
         ...mapGetters({
             dadosProjeto: 'projeto/projeto',
+            dados: 'projeto/certidoesNegativas'
         }),
     },
     methods: {
-        buscar_dados() {
-            const self = this;
-            /* eslint-disable */
-            $3.ajax({
-                url: '/projeto/certidoes-negativas-rest/index/idPronac/' + self.dadosProjeto.idPronac,
-            }).done(function (response) {
-                self.dados = response.data;
-            });
-        },
+        ...mapActions({
+                buscarCertidoesNegativas: 'projeto/buscarCertidoesNegativas',
+            }),
     },
 }
 </script>

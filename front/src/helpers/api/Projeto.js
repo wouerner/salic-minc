@@ -59,3 +59,12 @@ export const buscaPlanilhaAdequada = (idPreProjeto) => {
     const queryParams = `?idPreProjeto=${idPreProjeto}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscarCertidoesNegativas = (idPronac) => {
+    const modulo = '/projeto';
+    const controller = '/certidoes-negativas-rest';
+    const metodo = '/index';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};
