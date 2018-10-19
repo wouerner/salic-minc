@@ -48,11 +48,12 @@
                             </v-flex>
                         </v-layout>
                         <v-flex>
+                            <label for="parecer">Parecer *</label>
                             <v-textarea :value="parecerLaudoFinal.items.dsLaudoFinal"
                                         @input="updateParecer"
                                         :rules="parecerRules"
                                         color="deep-purple"
-                                        label="Parecer *"
+                                        id="parecer"
                                         height="200px"
                                         required="required">
                             </v-textarea>
