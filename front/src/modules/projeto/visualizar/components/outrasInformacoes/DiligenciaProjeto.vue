@@ -5,7 +5,7 @@
                 :nomeProjeto="dadosProjeto.NomeProjeto"
             >
             </IdentificacaoProjeto>
-            <div>
+            <div v-if="dados.diligenciaProposta">
                 <fieldset style="margin: 0px;">
                     <legend>Dilig&ecirc;ncia Proposta</legend>
                     <VisualizarDiligenciaProposta
@@ -15,7 +15,7 @@
                     </VisualizarDiligenciaProposta>
                 </fieldset>
             </div>
-            <div >
+            <div v-if="dados.diligenciaAdequacao">
                 <fieldset style="margin: 0px;">
                     <legend>Dilig&ecirc;ncias da Adequa&ccedil;&atilde;o do Projeto</legend>
                     <VisualizarDiligenciaAdequacao
@@ -25,7 +25,7 @@
                         </VisualizarDiligenciaAdequacao>
                 </fieldset>
             </div>
-            <div>
+            <div v-if="dados.diligenciaProjeto">
                 <fieldset style="margin: 0px;">
                     <legend>Dilig&ecirc;ncia Projeto</legend>
                     <VisualizarDiligenciaProjeto

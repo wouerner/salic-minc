@@ -1,6 +1,6 @@
 <template>
     <div id="conteudo">
-        <div v-if="dadosProjeto">
+        <div v-if="dados.Proposta && dados.CustosVinculados">
             <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
                                   :nomeProjeto="dadosProjeto.NomeProjeto">
             </IdentificacaoProjeto>
@@ -80,7 +80,6 @@ export default {
                 url: '/projeto/dados-complementares-rest/index/idPronac/' + self.dadosProjeto.idPronac,
             }).done(function (response) {
                 self.dados = response.data;
-                console.log(self.dados);
             });
         },
     },

@@ -1,5 +1,5 @@
 <template>
-    <div id="conteudo">
+    <div id="conteudo" v-if="dados.documentos">
         <IdentificacaoProjeto
             :pronac="dadosProjeto.Pronac"
             :nomeProjeto="dadosProjeto.NomeProjeto">

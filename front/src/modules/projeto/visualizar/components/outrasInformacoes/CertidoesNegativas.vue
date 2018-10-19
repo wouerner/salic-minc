@@ -1,6 +1,6 @@
 <template>
     <div id="conteudo">
-        <div v-if="dadosProjeto">
+        <div v-if="dados.certidoes">
             <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
                                   :nomeProjeto="dadosProjeto.NomeProjeto">
             </IdentificacaoProjeto>
@@ -44,7 +44,7 @@
 </template>
 <script>
 
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import IdentificacaoProjeto from './IdentificacaoProjeto';
 
 export default {

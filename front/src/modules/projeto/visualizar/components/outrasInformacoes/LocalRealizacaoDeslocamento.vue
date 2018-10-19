@@ -1,5 +1,5 @@
 <template>
-    <div id="conteudo">
+    <div id="conteudo" v-if="dados.localRealizacoes">
         <div v-if="Object.keys(dados).length > 0">
             <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
                                   :nomeProjeto="dadosProjeto.NomeProjeto">

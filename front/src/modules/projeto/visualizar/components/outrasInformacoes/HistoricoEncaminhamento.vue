@@ -1,6 +1,6 @@
 <template>
     <div id="conteudo">
-        <div>
+        <div v-if="dados.Encaminhamentos">
             <IdentificacaoProjeto
                     :pronac="dadosProjeto.Pronac"
                     :nomeProjeto="dadosProjeto.NomeProjeto">
