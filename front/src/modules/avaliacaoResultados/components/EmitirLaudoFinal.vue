@@ -10,8 +10,15 @@
                         <v-toolbar-title>Emissão de Laudo Final de Avaliação de Resultados</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                            <v-btn dark flat @click.native="salvarLaudoFinal()" :disabled="!valid">Salvar</v-btn>
-                            <v-btn dark flat @click.native="finalizarLaudoFinal()" :disabled="!valid">Finalizar</v-btn>
+                            <v-btn dark flat
+                                   @click.native="salvarLaudoFinal()"
+                                   :disabled="!valid">Salvar
+                            </v-btn>
+                            <v-btn dark flat
+                                   @click.native="finalizarLaudoFinal()"
+                                   :disabled="!valid"
+                                   :to="{ name: 'Laudo'}">Finalizar
+                            </v-btn>
                         </v-toolbar-items>
                     </v-toolbar>
                     <v-container grid-list-sm>
@@ -59,7 +66,7 @@
 
 <script>
     import { mapActions, mapGetters } from 'vuex';
-    
+
     export default {
         data() {
             return {
@@ -109,8 +116,6 @@
                 }
 
                 this.salvar(data);
-                /** Descomentar linha após migração da lista para o VUEJS */
-                // this.dialog = false;
             },
             finalizarLaudoFinal() {
                 const data = {
@@ -118,8 +123,8 @@
                     idtipodoatoadministrativo: 623,
                     siManifestacao: this.parecerLaudoFinal.items.siManifestacao,
                     dsLaudoFinal: this.parecerLaudoFinal.items.dsLaudoFinal,
-                    atual: 5,
-                    proximo: 6,
+                    atual: 10,
+                    proximo: 11,
                 };
 
                 if (this.parecerLaudoFinal.items.idLaudoFinal) {
@@ -133,10 +138,8 @@
                 if (this.laudoFinalData.dsLaudoFinal) {
                     data.dsLaudoFinal = this.laudoFinalData.dsLaudoFinal;
                 }
-    
+
                 this.finalizar(data);
-                /** Descomentar linha após migração da lista para o VUEJS */
-                // this.dialog = false;
             },
             updateManifestacao(e) {
                 this.laudoFinalData.siManifestacao = e;
