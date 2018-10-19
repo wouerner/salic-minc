@@ -10,8 +10,15 @@
                         <v-toolbar-title>Emissão de Laudo Final de Avaliação de Resultados</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                            <v-btn dark flat @click.native="salvarLaudoFinal()" :disabled="!valid">Salvar</v-btn>
-                            <v-btn dark flat @click.native="finalizarLaudoFinal()" :disabled="!valid">Finalizar</v-btn>
+                            <v-btn dark flat
+                                   @click.native="salvarLaudoFinal()"
+                                   :disabled="!valid">Salvar
+                            </v-btn>
+                            <v-btn dark flat
+                                   @click.native="finalizarLaudoFinal()"
+                                   :disabled="!valid"
+                                   :to="{ name: 'Laudo'}">Finalizar
+                            </v-btn>
                         </v-toolbar-items>
                     </v-toolbar>
                     <v-container grid-list-sm>
@@ -41,11 +48,12 @@
                             </v-flex>
                         </v-layout>
                         <v-flex>
+                            <label for="parecer">Parecer *</label>
                             <v-textarea :value="parecerLaudoFinal.items.dsLaudoFinal"
                                         @input="updateParecer"
                                         :rules="parecerRules"
                                         color="deep-purple"
-                                        label="Parecer *"
+                                        id="parecer"
                                         height="200px"
                                         required="required">
                             </v-textarea>
@@ -85,7 +93,6 @@
                 salvar: 'avaliacaoResultados/salvarLaudoFinal',
                 finalizar: 'avaliacaoResultados/finalizarLaudoFinal',
                 getLaudoFinal: 'avaliacaoResultados/getLaudoFinal',
-                setSnackbar: 'noticias/setDados',
             }),
             getConsolidacao(id) {
                 this.requestEmissaoParecer(id);
@@ -110,9 +117,6 @@
                 }
 
                 this.salvar(data);
-
-                /** Descomentar linha após migração da lista para o VUEJS */
-                // this.dialog = false;
             },
             finalizarLaudoFinal() {
                 const data = {
@@ -121,7 +125,7 @@
                     siManifestacao: this.parecerLaudoFinal.items.siManifestacao,
                     dsLaudoFinal: this.parecerLaudoFinal.items.dsLaudoFinal,
                     atual: 10,
-                    proximo: 11,
+                    proximo: 14,
                 };
 
                 if (this.parecerLaudoFinal.items.idLaudoFinal) {
@@ -137,8 +141,6 @@
                 }
 
                 this.finalizar(data);
-                /** Descomentar linha após migração da lista para o VUEJS */
-                // this.dialog = false;
             },
             updateManifestacao(e) {
                 this.laudoFinalData.siManifestacao = e;
@@ -153,7 +155,6 @@
                 proponente: 'avaliacaoResultados/proponente',
                 projeto: 'avaliacaoResultados/projeto',
                 parecerLaudoFinal: 'avaliacaoResultados/getParecerLaudoFinal',
-                getSnackbar: 'noticias/getDados',
             }),
         },
         created() {

@@ -28,9 +28,12 @@ export const state = {
     projetosParaDistribuir: {},
     getProjetosAssinatura: [],
     getProjetosLaudoFinal: [],
+    getProjetosLaudoAssinar: {},
+    getProjetosLaudoEmAssinatura: {},
     getProjetosAssinar: {},
     getProjetosEmAssinatura: {},
     getProjetosHistorico: {},
+    versao: {},
     revisaoParecer: {},
     revisao: {},
 };
@@ -138,7 +141,16 @@ export const mutations = {
     [types.SET_DADOS_PROJETOS_LAUDO_FINAL](state, dados) {
         state.getProjetosLaudoFinal = dados;
     },
+    [types.SET_DADOS_PROJETOS_LAUDO_ASSINAR](state, dados) {
+        state.getProjetosLaudoAssinar = dados;
+    },
+    [types.SET_DADOS_PROJETOS_LAUDO_EM_ASSINATURA](state, dados) {
+        state.getProjetosLaudoEmAssinatura = dados;
+    },
     [types.SET_DADOS_PROJETOS_HISTORICO](state, dados) {
         state.getProjetosHistorico = dados;
+    },
+    [types.SET_VERSAO](state, dados) {
+        state.versao = dados;
     },
 };

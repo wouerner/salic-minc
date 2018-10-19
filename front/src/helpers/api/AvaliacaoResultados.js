@@ -87,9 +87,9 @@ export const updateRevisao = () => { };
 
 /** FIM REVISAO PARECER */
 
-export const obterLaudoFinal = () => api.getRequest('/avaliacao-resultados/laudo');
+export const obterLaudoFinal = idPronac => api.getRequest(`/avaliacao-resultados/laudo/get?idPronac=${idPronac}`);
 
-export const obterProjetosLaudoFinal = () => api.getRequest('/avaliacao-resultados/laudo/index');
+export const obterProjetosLaudoFinal = param => api.getRequest(`/avaliacao-resultados/laudo/index?estadoId=${param.estadoId}`);
 
 export const alterarPerfil = (grupoAtivo, orgaoAtivo) => api.getRequest(`perfil/perfil-rest/index?codGrupo=${grupoAtivo}&codOrgao=${orgaoAtivo}`);
 

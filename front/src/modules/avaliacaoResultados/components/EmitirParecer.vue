@@ -142,7 +142,7 @@ export default {
         return {
             tipo: true,
             idPronac: this.$route.params.id,
-            redirectLink: '/planilha/',
+            redirectLink: '#/planilha/',
             valid: false,
             dialog: true,
             itemRules: [

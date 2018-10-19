@@ -4,10 +4,10 @@ namespace Application\Modules\AvaliacaoResultados\Service\LaudoFinal;
 
 class Laudo 
 {
-    public function obterProjetos(){
+    public function obterProjetos($estadoId){
         $model = new \AvaliacaoResultados_Model_DbTable_LaudoFinal();
         
-        return $model->projetosLaudoFinal()->toArray();
+        return $model->projetosLaudoFinal($estadoId)->toArray();
     }
 
     public function obterLaudo($idPronac){
@@ -30,14 +30,5 @@ class Laudo
                                'dsLaudoFinal'=>$dsLaudoFinal],
                               ['idLaudoFinal = ?' => $idLaudoFinal]);
         }
-        // $model = new \AvaliacaoResultados_Model_LaudoFinal;
-        // $model->setIdPronac($idPronac);
-        // $model->setDtLaudoFinal((new \DateTime())->format('Y-m-d'));
-        // $model->setSiManifestacao($siManifestacao);
-        // $model->setDsLaudoFinal($dsLaudoFinal);
-        // $model->setIdUsuario($auth->getIdentity()->usu_codigo);
-        
-        // $mapper = new \AvaliacaoResultados_Model_LaudoFinalMapper;
-        // return $mapper->save($model);
     }
 }

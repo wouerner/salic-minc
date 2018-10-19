@@ -1,9 +1,17 @@
 <template>
     <v-container fluid>
         <v-card>
+            <v-toolbar
+                color="green darken-1"
+                dark
+                tabs
+                height="40px"
+            >
+                <v-toolbar-title>Laudo final</v-toolbar-title>
+            </v-toolbar>
             <v-tabs
                 centered
-                color="green"
+                color="green darken-1"
                 dark
                 icons-and-text
             >
@@ -34,12 +42,10 @@
                     :id="'tab-0'"
                     :key="0"
                 >
-                    <v-card flat
-                        v-if="getProjetosLaudoFinal"
-                    >
-                        <Laudo :analisar="true"
-                               :dados="getProjetosLaudoFinal">
-                        </Laudo>
+                    <v-card flat>
+                        <Laudo :dados="getProjetosLaudoFinal"
+                               :componentes="analisar = true"
+                        ></Laudo>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item
@@ -47,12 +53,9 @@
                     :key="1"
                 >
                     <v-card flat>
-                        <v-card-text>
-                            <!-- <TabelaProjetos
-                                :dados="getProjetosFinalizados"
-                                :componentes="listaAcoesAssinar"
-                            ></TabelaProjetos> -->
-                        </v-card-text>
+                        <Laudo :dados="getProjetosLaudoAssinar"
+                               :componentes="assinar = true"
+                        ></Laudo>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item
@@ -60,12 +63,11 @@
                     :key="2"
                 >
                     <v-card flat>
-                        <v-card-text>
-                            <!-- <TabelaProjetos
-                                :dados="getLaudosEmAssinatura"
-                                :componentes="listaAcoesTecnico"
-                            ></TabelaProjetos> -->
-                        </v-card-text>
+                        <v-card>
+                            <Laudo
+                                :dados="getProjetosLaudoEmAssinatura"
+                            ></Laudo>
+                        </v-card>
                     </v-card>
                 </v-tab-item>
             </v-tabs>
@@ -81,41 +83,10 @@ import Laudo from './Laudo';
 export default {
     name: 'PainelLaudo',
     created() {
-        this.projetosAssinatura({ estado: 'assinar' });
-        this.projetosAssinatura({ estado: 'em_assinatura' });
-        this.projetosAssinatura({ estado: 'historico' });
-
+        this.obterProjetosLaudoFinal({ estadoId: 10 });
+        this.obterProjetosLaudoAssinar({ estadoId: 14 });
+        this.obterProjetosLaudoEmAssinatura({ estadoId: 11 });
     },
-    // watch: {
-    //     getUsuario(val) {
-    //         if (Object.keys(val).length > 0 && val.usu_codigo != 0 ) {
-
-    //             let projetosTecnico = {};
-    //             let projetosFinalizados = {};
-    //             if (this.getUsuario.grupo_ativo == 125) {
-    //                 projetosTecnico = {
-    //                     estadoid: 5,
-    //                 };
-
-    //                 projetosFinalizados = {
-    //                     estadoid: 6,
-    //                 };
-    //             } else {
-    //                 projetosTecnico = {
-    //                     estadoid: 5,
-    //                     idAgente: this.getUsuario.usu_codigo,
-    //                 };
-
-    //                 projetosFinalizados = {
-    //                     estadoid: 6,
-    //                     idAgente: this.getUsuario.usu_codigo,
-    //                 };
-    //             }
-
-    //             this.obterDadosTabelaTecnico(projetosTecnico);
-    //         }
-    //     },
-    // },
     data() {
         return { };
     },
@@ -125,15 +96,16 @@ export default {
     methods: {
         ...mapActions({
             obterProjetosLaudoFinal: 'avaliacaoResultados/obterProjetosLaudoFinal',
-            projetosAssinatura: 'avaliacaoResultados/projetosAssinatura',
+            obterProjetosLaudoAssinar: 'avaliacaoResultados/obterProjetosLaudoAssinar',
+            obterProjetosLaudoEmAssinatura: 'avaliacaoResultados/obterProjetosLaudoEmAssinatura',
             usuarioLogado: 'autenticacao/usuarioLogado',
         }),
     },
     computed: {
         ...mapGetters({
             getProjetosLaudoFinal: 'avaliacaoResultados/getProjetosLaudoFinal',
-            getLaudosAssinar: 'avaliacaoResultados/getLaudosAssinar',
-            getLaudosEmAssinatura: 'avaliacaoResultados/getLaudosEmAssinatura',
+            getProjetosLaudoAssinar: 'avaliacaoResultados/getProjetosLaudoAssinar',
+            getProjetosLaudoEmAssinatura: 'avaliacaoResultados/getProjetosLaudoEmAssinatura',
             getUsuario: 'autenticacao/getUsuario',
         }),
     },
