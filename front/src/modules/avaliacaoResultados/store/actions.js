@@ -154,11 +154,11 @@ export const obterDadosItemComprovacao = ({ commit }, params) => {
         });
 };
 
-export const getLaudoFinal = ({ commit }) => {
-    avaliacaoResultadosHelperAPI.obterLaudoFinal()
+export const getLaudoFinal = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.obterLaudoFinal(params)
         .then((response) => {
             const dados = response.data.data;
-            commit(types.GET_LAUDO_FINAL, dados);
+            commit(types.GET_PARECER_LAUDO_FINAL, dados);
         });
 };
 

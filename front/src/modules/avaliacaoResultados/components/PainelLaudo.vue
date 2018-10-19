@@ -1,9 +1,17 @@
 <template>
     <v-container fluid>
         <v-card>
+            <v-toolbar
+                color="green darken-1"
+                dark
+                tabs
+                style="height: 40px;"
+            >
+                <v-toolbar-title>Avaliação de Resultados - Laudo final</v-toolbar-title>
+            </v-toolbar>
             <v-tabs
                 centered
-                color="green"
+                color="green darken-1"
                 dark
                 icons-and-text
             >
@@ -35,11 +43,8 @@
                     :key="0"
                 >
                     <v-card flat
-                        v-if="getProjetosLaudoFinal"
                     >
-                        <Laudo :analisar="true"
-                               :dados="getProjetosLaudoFinal">
-                        </Laudo>
+                        <Laudo :dados="getProjetosLaudoFinal"></Laudo>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item
@@ -81,41 +86,11 @@ import Laudo from './Laudo';
 export default {
     name: 'PainelLaudo',
     created() {
+        this.obterProjetosLaudoFinal();
         this.projetosAssinatura({ estado: 'assinar' });
         this.projetosAssinatura({ estado: 'em_assinatura' });
         this.projetosAssinatura({ estado: 'historico' });
-
     },
-    // watch: {
-    //     getUsuario(val) {
-    //         if (Object.keys(val).length > 0 && val.usu_codigo != 0 ) {
-
-    //             let projetosTecnico = {};
-    //             let projetosFinalizados = {};
-    //             if (this.getUsuario.grupo_ativo == 125) {
-    //                 projetosTecnico = {
-    //                     estadoid: 5,
-    //                 };
-
-    //                 projetosFinalizados = {
-    //                     estadoid: 6,
-    //                 };
-    //             } else {
-    //                 projetosTecnico = {
-    //                     estadoid: 5,
-    //                     idAgente: this.getUsuario.usu_codigo,
-    //                 };
-
-    //                 projetosFinalizados = {
-    //                     estadoid: 6,
-    //                     idAgente: this.getUsuario.usu_codigo,
-    //                 };
-    //             }
-
-    //             this.obterDadosTabelaTecnico(projetosTecnico);
-    //         }
-    //     },
-    // },
     data() {
         return { };
     },

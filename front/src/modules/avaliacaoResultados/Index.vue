@@ -9,6 +9,7 @@
                   </v-layout>
                 </v-container>
             </v-content>
+
             <v-snackbar
                 v-model="snackbar"
                 :color="getSnackbar.color"
@@ -19,7 +20,7 @@
             >
                 {{ this.getSnackbar.text }}
             </v-snackbar>
-        <SlFoot></SlFoot>
+            <Rodape></Rodape>
       </v-app>
     </div>
 </template>
@@ -27,11 +28,11 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import SlNav from './components/SlNav';
-import SlFoot from './components/SlFoot';
+import Rodape from '@/components/rodape';
 
 export default {
     name: 'Index',
-    components: { SlNav, SlFoot },
+    components: { SlNav, Rodape },
     methods: {
         ...mapActions({
             setSnackbar: 'noticias/setDados',
