@@ -93,3 +93,11 @@ export const buscarCertidoesNegativas = ({ commit }, idPronac) => {
             commit(types.SET_CERTIDOES_NEGATIVAS, data);
         });
 };
+
+export const buscarDocumentosAnexados = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarDocumentosAnexados(idPronac)
+        .then((response) => {
+        const data = response.data.data;
+        commit(types.SET_DOCUMENTOS_ANEXADOS, data);
+    });
+};

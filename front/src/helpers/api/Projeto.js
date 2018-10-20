@@ -68,3 +68,12 @@ export const buscarCertidoesNegativas = (idPronac) => {
     const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscarDocumentosAnexados = (idPronac) => {
+    const modulo = '/projeto';
+    const controller = '/documentos-assinados-rest';
+    const metodo = '/index';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};

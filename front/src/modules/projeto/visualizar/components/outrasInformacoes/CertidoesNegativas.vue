@@ -7,27 +7,27 @@
             <div v-if="Object.keys(dados.certidoes).length > 0">
                 <table class="tabela">
                     <thead>
-                        <tr class="destacar">
-                            <th class="center">CERTID&otilde;es</th>
-                            <th class="center">DATA DE EMISS&Atilde;O</th>
-                            <th class="center">DATA DE VALIDADE</th>
-                            <th class="center">PRONAC</th>
-                            <th class="center">SITUA&Ccedil;&Atilde;O</th>
-                        </tr>
+                    <tr class="destacar">
+                        <th class="center">CERTID&otilde;es</th>
+                        <th class="center">DATA DE EMISS&Atilde;O</th>
+                        <th class="center">DATA DE VALIDADE</th>
+                        <th class="center">PRONAC</th>
+                        <th class="center">SITUA&Ccedil;&Atilde;O</th>
+                    </tr>
                     </thead>
                     <tbody v-for="(dado, index) in dados.certidoes" :key="index">
-                        <tr>
-                            <td class="center">{{ dado.dsCertidao }}</td>
-                            <td class="center">{{ dado.DtEmissao }}</td>
-                            <td class="center">{{ dado.DtValidade }}</td>
-                            <td class="center">{{ dado.Pronac }}</td>
-                            <td class="center" v-if="dado.Situacao" >
-                                {{ dado.Situacao }}
-                            </td>
-                            <td class="center" v-else>
-                                Vencida
-                            </td>
-                        </tr>
+                    <tr>
+                        <td class="center">{{ dado.dsCertidao }}</td>
+                        <td class="center">{{ dado.DtEmissao }}</td>
+                        <td class="center">{{ dado.DtValidade }}</td>
+                        <td class="center">{{ dado.Pronac }}</td>
+                        <td class="center" v-if="dado.Situacao">
+                            {{ dado.Situacao }}
+                        </td>
+                        <td class="center" v-else>
+                            Vencida
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -44,30 +44,30 @@
 </template>
 <script>
 
-import { mapActions, mapGetters } from 'vuex';
-import IdentificacaoProjeto from './IdentificacaoProjeto';
+    import {mapActions, mapGetters} from 'vuex';
+    import IdentificacaoProjeto from './IdentificacaoProjeto';
 
-export default {
-    name: 'CertidoesNegativas',
-    components: {
-        IdentificacaoProjeto,
-    },
-    mounted() {
-        if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-            this.buscarCertidoesNegativas(this.dadosProjeto.idPronac);
-        }
-    },
-    computed: {
-        ...mapGetters({
-            dadosProjeto: 'projeto/projeto',
-            dados: 'projeto/certidoesNegativas'
-        }),
-    },
-    methods: {
-        ...mapActions({
+    export default {
+        name: 'CertidoesNegativas',
+        components: {
+            IdentificacaoProjeto,
+        },
+        mounted() {
+            if (typeof this.dadosProjeto.idPronac !== 'undefined') {
+                this.buscarCertidoesNegativas(this.dadosProjeto.idPronac);
+            }
+        },
+        computed: {
+            ...mapGetters({
+                dadosProjeto: 'projeto/projeto',
+                dados: 'projeto/certidoesNegativas'
+            }),
+        },
+        methods: {
+            ...mapActions({
                 buscarCertidoesNegativas: 'projeto/buscarCertidoesNegativas',
             }),
-    },
-}
+        },
+    }
 </script>
 
