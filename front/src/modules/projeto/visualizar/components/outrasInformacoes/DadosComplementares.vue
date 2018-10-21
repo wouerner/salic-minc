@@ -4,85 +4,86 @@
             <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
                                   :nomeProjeto="dadosProjeto.NomeProjeto">
             </IdentificacaoProjeto>
-            <TabelaDadosComplementares  dadoComplementar="Objetivos"
-                                        :dsDadoComplementar="dados.Proposta.Objetivos">
+            <TabelaDadosComplementares dadoComplementar="Objetivos"
+                                       :dsDadoComplementar="dados.Proposta.Objetivos">
             </TabelaDadosComplementares>
-            <TabelaDadosComplementares  dadoComplementar="Justificativa"
-                                        :dsDadoComplementar="dados.Proposta.Justificativa">
+            <TabelaDadosComplementares dadoComplementar="Justificativa"
+                                       :dsDadoComplementar="dados.Proposta.Justificativa">
             </TabelaDadosComplementares>
-            <TabelaDadosComplementares  dadoComplementar="Custos Vinculados"
-                                        :custosVinculados="dados.CustosVinculados">
+            <TabelaDadosComplementares dadoComplementar="Custos Vinculados"
+                                       :custosVinculados="dados.CustosVinculados">
             </TabelaDadosComplementares>
-            <TabelaDadosComplementares  dadoComplementar="Acessibilidade"
-                                        :dsDadoComplementar="dados.Proposta.Acessibilidade">
+            <TabelaDadosComplementares dadoComplementar="Acessibilidade"
+                                       :dsDadoComplementar="dados.Proposta.Acessibilidade">
             </TabelaDadosComplementares>
-            <TabelaDadosComplementares  dadoComplementar="Democratiza&ccedil;&atilde;o de Acesso"
-                                        :dsDadoComplementar="dados.Proposta.DemocratizacaoDeAcesso">
+            <TabelaDadosComplementares dadoComplementar="Democratiza&ccedil;&atilde;o de Acesso"
+                                       :dsDadoComplementar="dados.Proposta.DemocratizacaoDeAcesso">
             </TabelaDadosComplementares>
-            <TabelaDadosComplementares  dadoComplementar="Etapa de Trabalho"
-                                        :dsDadoComplementar="dados.Proposta.EtapaDeTrabalho">
+            <TabelaDadosComplementares dadoComplementar="Etapa de Trabalho"
+                                       :dsDadoComplementar="dados.Proposta.EtapaDeTrabalho">
             </TabelaDadosComplementares>
-            <TabelaDadosComplementares  dadoComplementar="Ficha T&eacute;cnica"
-                                        :dsDadoComplementar="dados.Proposta.FichaTecnica">
+            <TabelaDadosComplementares dadoComplementar="Ficha T&eacute;cnica"
+                                       :dsDadoComplementar="dados.Proposta.FichaTecnica">
             </TabelaDadosComplementares>
-            <TabelaDadosComplementares  dadoComplementar="Sinopse da Obra"
-                                        :dsDadoComplementar="dados.Proposta.Sinopse">
+            <TabelaDadosComplementares dadoComplementar="Sinopse da Obra"
+                                       :dsDadoComplementar="dados.Proposta.Sinopse">
             </TabelaDadosComplementares>
-            <TabelaDadosComplementares  dadoComplementar="Impacto Ambiental"
-                                        :dsDadoComplementar="dados.Proposta.ImpactoAmbiental">
+            <TabelaDadosComplementares dadoComplementar="Impacto Ambiental"
+                                       :dsDadoComplementar="dados.Proposta.ImpactoAmbiental">
             </TabelaDadosComplementares>
-            <TabelaDadosComplementares  dadoComplementar="Especifica&ccedil;&otilde;es t&eacute;cnicas do produto"
-                                        :dsDadoComplementar="dados.Proposta.EspecificacaoTecnica">
+            <TabelaDadosComplementares dadoComplementar="Especifica&ccedil;&otilde;es t&eacute;cnicas do produto"
+                                       :dsDadoComplementar="dados.Proposta.EspecificacaoTecnica">
             </TabelaDadosComplementares>
-            <TabelaDadosComplementares  dadoComplementar="Outras Informa&ccedil;&otilde;es"
-                                        :dsDadoComplementar="dados.Proposta.OutrasInformacoes">
+            <TabelaDadosComplementares dadoComplementar="Outras Informa&ccedil;&otilde;es"
+                                       :dsDadoComplementar="dados.Proposta.OutrasInformacoes">
             </TabelaDadosComplementares>
 
         </div>
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
-import IdentificacaoProjeto from './IdentificacaoProjeto';
-import TabelaDadosComplementares from './TabelaDadosComplementares'
-export default {
-    name: 'DadosComplementares',
-    props: ['idPronac'],
-    components: {
-        IdentificacaoProjeto,
-        TabelaDadosComplementares,
-    },
-    data() {
-        return {
-            dados: {
+    import { mapGetters } from 'vuex';
+    import IdentificacaoProjeto from './IdentificacaoProjeto';
+    import TabelaDadosComplementares from './TabelaDadosComplementares'
+
+    export default {
+        name: 'DadosComplementares',
+        props: ['idPronac'],
+        components: {
+            IdentificacaoProjeto,
+            TabelaDadosComplementares,
+        },
+        data() {
+            return {
+                dados: {
                     type: Object,
                     default() {
                         return {};
                     },
                 },
-        };
-    },
-    mounted() {
-        if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-            this.buscar_dados();
-        }
-    },
-    computed: {
-        ...mapGetters({
-            dadosProjeto: 'projeto/projeto',
-        }),
-    },
-    methods: {
-        buscar_dados() {
-            const self = this;
-            /* eslint-disable */
-            $3.ajax({
-                url: '/projeto/dados-complementares-rest/index/idPronac/' + self.dadosProjeto.idPronac,
-            }).done(function (response) {
-                self.dados = response.data;
-            });
+            };
         },
-    },
-}
+        mounted() {
+            if (typeof this.dadosProjeto.idPronac !== 'undefined') {
+                this.buscar_dados();
+            }
+        },
+        computed: {
+            ...mapGetters({
+                dadosProjeto: 'projeto/projeto',
+            }),
+        },
+        methods: {
+            buscar_dados() {
+                const self = this;
+                /* eslint-disable */
+                $3.ajax({
+                    url: '/projeto/dados-complementares-rest/index/idPronac/' + self.dadosProjeto.idPronac,
+                }).done(function (response) {
+                    self.dados = response.data;
+                });
+            },
+        },
+    }
 </script>
 
