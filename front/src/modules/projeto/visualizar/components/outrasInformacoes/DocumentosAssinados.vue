@@ -1,6 +1,6 @@
 <template>
     <div id="conteudo">
-        <table v-if="dados">
+        <table v-if="Object.keys(dados).length > 0">
             <thead>
             <tr class="destacar">
                 <th class="center">PRONAC</th>
