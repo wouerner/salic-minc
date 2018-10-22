@@ -89,7 +89,7 @@ export const buscarTransferenciaRecursos = ({ commit }, acao) => {
 export const buscarCertidoesNegativas = ({ commit }, idPronac) => {
     projetoHelperAPI.buscarCertidoesNegativas(idPronac)
         .then((response) => {
-            const data = response.data.data;
+            const data = response.data.data.items;
             commit(types.SET_CERTIDOES_NEGATIVAS, data);
         });
 };
@@ -106,7 +106,6 @@ export const buscarDadosComplementares = ({ commit }, idPronac) => {
     projetoHelperAPI.buscarDadosComplementares(idPronac)
         .then((response) => {
             const data = response.data.data.items;
-            console.log(data);
             commit(types.SET_DADOS_COMPLEMENTARES, data);
         });
 };

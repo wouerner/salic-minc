@@ -18,7 +18,7 @@ class Projeto_CertidoesNegativasRestController extends MinC_Controller_Rest_Abst
             $CertidoesNegativasService = new CertidoesNegativasService($this->getRequest(), $this->getResponse());
             $resposta = $CertidoesNegativasService->buscaCertidoesNegativas();
 
-            $this->customRenderJsonResponse(['data' => $resposta], 200);
+            $this->RenderJsonResponse($resposta, 200);
 
         } catch (Exception $objException) {
             $this->customRenderJsonResponse([
