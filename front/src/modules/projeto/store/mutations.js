@@ -11,6 +11,7 @@ export const state = {
     transferenciaRecursos: [],
     certidoesNegativas: {},
     documentosAssinados: {},
+    dadosComplementares: {},
 };
 
 export const mutations = {
@@ -43,5 +44,8 @@ export const mutations = {
     },
     [types.SET_DOCUMENTOS_ASSINADOS](state, documentosAssinados) {
         state.documentosAssinados = documentosAssinados;
+    },
+    [types.SET_DADOS_COMPLEMENTARES](state, dadosComplementares) {
+        state.dadosComplementares = dadosComplementares;
     },
 };

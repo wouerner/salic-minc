@@ -77,3 +77,12 @@ export const buscarDocumentosAssinados = (idPronac) => {
     const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscarDadosComplementares = (idPronac) => {
+    const modulo = '/projeto';
+    const controller = '/dados-complementares-rest';
+    const metodo = '/index';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};

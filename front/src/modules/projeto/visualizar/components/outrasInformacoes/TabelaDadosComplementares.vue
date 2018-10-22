@@ -16,22 +16,20 @@
                         <td>{{ dsDadoComplementar }}</td>
                     </div>
                     <div v-else-if="custosVinculados">
-                        <td>
-                            <table class="tabela">
-                                <thead>
-                                    <tr>
-                                        <th>ITEM</th>
-                                        <th>PERCENTUAL</th>
-                                    </tr>
-                                </thead>
-                                <tbody v-for="(custosVinculado, index) in custosVinculados" :key="index">
-                                    <tr>
-                                        <td>{{ custosVinculado.Descricao }}</td>
-                                        <td>{{ custosVinculado.Percentual }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
+                        <table class="tabela">
+                            <thead>
+                                <tr>
+                                    <th>ITEM</th>
+                                    <th>PERCENTUAL</th>
+                                </tr>
+                            </thead>
+                            <tbody v-for="(custosVinculado, index) in custosVinculados" :key="index">
+                                <tr>
+                                    <td>{{ custosVinculado.Descricao }}</td>
+                                    <td>{{ custosVinculado.Percentual }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div v-else>N&atilde;o se aplica.</div>
                 </tr>

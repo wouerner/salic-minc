@@ -18,7 +18,7 @@ class Projeto_DadosComplementaresRestController extends MinC_Controller_Rest_Abs
             $DadosComplementaresService = new DadosComplementaresService($this->getRequest(), $this->getResponse());
             $resposta = $DadosComplementaresService->buscaDadosComplementares();
 
-            $this->customRenderJsonResponse(['data' => $resposta], 200);
+            $this->RenderJsonResponse($resposta, 200);
 
         } catch (Exception $objException) {
             $this->customRenderJsonResponse([

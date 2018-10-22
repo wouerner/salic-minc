@@ -8,3 +8,4 @@ export const planilhaAdequada = state => state.planilhaAdequada;
 export const transferenciaRecursos = state => state.transferenciaRecursos;
 export const certidoesNegativas = state => state.certidoesNegativas;
 export const documentosAssinados = state => state.documentosAssinados;
+export const dadosComplementares = state => state.dadosComplementares;
