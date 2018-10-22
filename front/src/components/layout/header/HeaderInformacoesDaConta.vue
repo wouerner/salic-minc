@@ -50,7 +50,7 @@
                                 <span>{{perfisDisponiveis[grupoSelecionadoIndex].nome_grupo}}</span>
                                 <v-icon dark>arrow_drop_down</v-icon>
                             </v-list-tile-title>
-                            <v-list class="scrollable">
+                            <v-list style="width: 440px; max-height: 500px; overflow: scroll;">
                                 <v-list-tile v-for="(perfil, index) in perfisDisponiveis" :key="index">
                                     <div v-if="perfil.orgao_sigla_autorizada" @click="trocarPerfil(perfil)"
                                          style="cursor:pointer;">
@@ -108,10 +108,10 @@
         },
         computed: {
             ...mapGetters({
-                perfisDisponiveis: 'menuSuperior/perfisDisponiveis',
-                usuarioAtivo: 'menuSuperior/usuarioAtivo',
-                grupoAtivo: 'menuSuperior/grupoAtivo',
-                grupoSelecionadoIndex: 'menuSuperior/grupoSelecionadoIndex',
+                perfisDisponiveis: 'header/perfisDisponiveis',
+                usuarioAtivo: 'header/usuarioAtivo',
+                grupoAtivo: 'header/grupoAtivo',
+                grupoSelecionadoIndex: 'header/grupoSelecionadoIndex',
             }),
             nomeUsuarioCompleto() {
                 if (this.usuarioAtivo[0]) {
@@ -135,8 +135,8 @@
         },
         methods: {
             ...mapActions({
-                buscarPerfisDisponiveis: 'menuSuperior/buscarPerfisDisponiveis',
-                alterarPerfil: 'menuSuperior/alterarPerfil',
+                buscarPerfisDisponiveis: 'header/buscarPerfisDisponiveis',
+                alterarPerfil: 'header/alterarPerfil',
             }),
             trocarPerfil(perfil) {
                 this.alterarPerfil(perfil);
@@ -144,11 +144,3 @@
         },
     };
 </script>
-
-<style scoped>
-    .scrollable {
-        width: 500px;
-        height: 750px;
-        overflow: scroll;
-    }
-</style>

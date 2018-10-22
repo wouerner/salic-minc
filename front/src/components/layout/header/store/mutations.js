@@ -2,9 +2,10 @@ import * as types from './types';
 
 export const state = {
     perfisDisponiveis: [],
-    usuarioAtivo:{},
+    usuarioAtivo: {},
     grupoAtivo: {},
     grupoSelecionadoIndex: 0,
+    solicitacoes: {},
 };
 
 export const mutations = {
@@ -19,5 +20,8 @@ export const mutations = {
     },
     [types.SET_GRUPO_SELECIONADO_INDEX](state, dados) {
         state.grupoSelecionadoIndex = dados;
+    },
+    [types.SET_SOLICITACOES](state, dados) {
+        state.solicitacoes = dados;
     },
 };

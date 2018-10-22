@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import modal from '@/components/modal/store';
-import menuSuperior from '@/components/Layout/Cabecalho/store';
+import header from '@/components/layout/header/store';
 import rodape from '@/components/rodape/store';
 import projeto from './modules/projeto/store';
 import foo from './modules/foo/store';
@@ -22,7 +22,7 @@ export default new Vuex.Store({
         projeto,
         foo,
         modal,
-        menuSuperior,
+        header,
         rodape,
         avaliacaoResultados,
         proposta,

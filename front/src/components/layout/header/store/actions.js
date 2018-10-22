@@ -1,4 +1,5 @@
 import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
+import * as solicitacaoHelperAPI from '@/helpers/api/Solicitacao';
 import * as desencapsularResponse from '@/helpers/actions';
 import * as types from './types';
 
@@ -18,4 +19,12 @@ export const alterarPerfil = (_, perfil) => {
     const orgaoAtivo = perfil.uog_orgao;
     const url = `/autenticacao/perfil/alterarperfil?codGrupo=${grupoAtivo}&codOrgao=${orgaoAtivo}`;
     window.location.replace(url);
+};
+
+export const obterSolicitacoes = ({ commit }) => {
+    solicitacaoHelperAPI.obterSolicitacoes()
+        .then((response) => {
+            const items = desencapsularResponse.default(response);
+            commit(types.SET_SOLICITACOES, items);
+        });
 };

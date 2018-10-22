@@ -21,13 +21,13 @@
 </template>
 
 <script>
-    import MenuPrincipal from './MenuPrincipal';
-    import InformacoesDaConta from './InformacoesDaConta';
-    import Solicitacoes from './Solicitacoes';
-    import Logo from './Logo';
+    import MenuPrincipal from './HeaderMenuPrincipal';
+    import InformacoesDaConta from './HeaderInformacoesDaConta';
+    import Solicitacoes from './HeaderSolicitacoes';
+    import Logo from './HeaderLogo';
 
     export default {
-        name: 'Cabecalho',
+        name: 'Header',
         components: { InformacoesDaConta, MenuPrincipal, Solicitacoes, Logo },
         props: {
             dadosMenu: {},
