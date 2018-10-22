@@ -90,7 +90,7 @@
                         <v-btn flat icon color="blue"
                                :href="'/assinatura/index/assinar-projeto?IdPRONAC='+props.item.IdPronac+'&idTipoDoAtoAdministrativo=623'">
                             <v-tooltip bottom>
-                                <v-icon slot="activator" class="material-icons">save_alt</v-icon>
+                                <v-icon slot="activator" class="material-icons">assignment_turned_in</v-icon>
                                 <span>Assinar Laudo</span>
                             </v-tooltip>
                         </v-btn>
