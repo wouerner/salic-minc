@@ -69,7 +69,7 @@ export const buscarCertidoesNegativas = (idPronac) => {
     return api.getRequest(path, queryParams);
 };
 
-export const buscarDocumentosAnexados = (idPronac) => {
+export const buscarDocumentosAssinados = (idPronac) => {
     const modulo = '/projeto';
     const controller = '/documentos-assinados-rest';
     const metodo = '/index';

@@ -10,7 +10,7 @@ export const state = {
     planilhaAdequada: {},
     transferenciaRecursos: [],
     certidoesNegativas: {},
-    documentosAnexados: {},
+    documentosAssinados: {},
 };
 
 export const mutations = {
@@ -41,7 +41,7 @@ export const mutations = {
     [types.SET_CERTIDOES_NEGATIVAS](state, certidoesNegativas) {
         state.certidoesNegativas = certidoesNegativas;
     },
-    [types.SET_DOCUMENTOS_ANEXADOS](state, documentosAnexados) {
-        state.documentosAnexados = documentosAnexados;
+    [types.SET_DOCUMENTOS_ASSINADOS](state, documentosAssinados) {
+        state.documentosAssinados = documentosAssinados;
     },
 };

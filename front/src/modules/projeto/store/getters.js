@@ -7,4 +7,4 @@ export const planilhaAutorizada = state => state.planilhaAutorizada;
 export const planilhaAdequada = state => state.planilhaAdequada;
 export const transferenciaRecursos = state => state.transferenciaRecursos;
 export const certidoesNegativas = state => state.certidoesNegativas;
-export const documentosAnexados = state => state.documentosAnexados;
+export const documentosAssinados = state => state.documentosAssinados;

@@ -50,18 +50,18 @@
         props: ['idPronac'],
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-                this.buscarDocumentosAnexados(this.dadosProjeto.idPronac);
+                this.buscarDocumentosAssinados(this.dadosProjeto.idPronac);
             }
         },
         computed: {
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
-                dados: 'projeto/documentosAnexados',
+                dados: 'projeto/documentosAssinados',
             }),
         },
         methods: {
             ...mapActions({
-                buscarDocumentosAnexados: 'projeto/buscarDocumentosAnexados',
+                buscarDocumentosAssinados: 'projeto/buscarDocumentosAssinados',
             }),
         },
     }
