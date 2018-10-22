@@ -58,7 +58,7 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import IdentificacaoProjeto from './IdentificacaoProjeto';
 
 export default {
@@ -66,36 +66,21 @@ export default {
     components: {
         IdentificacaoProjeto,
     },
-    data() {
-        return {
-            dados: {
-                    type: Object,
-                    default() {
-                        return {};
-                    },
-                },
-        };
-    },
     mounted() {
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-            this.buscar_dados();
+            this.buscarLocalRealizacaoDeslocamento(this.dadosProjeto.idPronac);
         }
     },
     computed: {
         ...mapGetters({
             dadosProjeto: 'projeto/projeto',
+            dados: 'projeto/localRealizacaoDeslocamento',
         }),
     },
     methods: {
-        buscar_dados() {
-            const self = this;
-            /* eslint-disable */
-            $3.ajax({
-                url: '/projeto/local-realizacao-deslocamento-rest/index/idPronac/' + self.dadosProjeto.idPronac,
-            }).done(function (response) {
-                self.dados = response.data;
-            });
-        },
+        ...mapActions({
+                buscarLocalRealizacaoDeslocamento: 'projeto/buscarLocalRealizacaoDeslocamento',
+            }),
     },
 }
 </script>

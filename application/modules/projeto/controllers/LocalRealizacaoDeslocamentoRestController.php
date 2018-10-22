@@ -18,7 +18,7 @@ class Projeto_LocalRealizacaoDeslocamentoRestController extends MinC_Controller_
             $LocalRealizacaoDeslocamentoService = new LocalRealizacaoDeslocamentoService($this->getRequest(), $this->getResponse());
             $resposta = $LocalRealizacaoDeslocamentoService->buscaLocalRealizacaoDeslocamento();
 
-            $this->customRenderJsonResponse(['data' => $resposta], 200);
+            $this->RenderJsonResponse($resposta, 200);
 
         } catch (Exception $objException) {
             $this->customRenderJsonResponse([
