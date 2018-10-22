@@ -37,6 +37,7 @@ export const state = {
     versao: {},
     revisaoParecer: {},
     revisao: {},
+    projetosRevisao: {},
 };
 
 export const mutations = {
@@ -156,5 +157,8 @@ export const mutations = {
     },
     [types.SET_VERSAO](state, dados) {
         state.versao = dados;
+    },
+    [types.SYNC_PROJETOS_REVISAO](state, dados) {
+        state.projetosRevisao = dados;
     },
 };
