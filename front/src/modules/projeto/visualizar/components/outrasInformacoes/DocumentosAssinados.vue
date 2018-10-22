@@ -64,5 +64,5 @@
                 buscarDocumentosAssinados: 'projeto/buscarDocumentosAssinados',
             }),
         },
-    }
+    };
 </script>

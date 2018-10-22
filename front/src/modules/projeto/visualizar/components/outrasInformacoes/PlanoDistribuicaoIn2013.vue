@@ -4,9 +4,8 @@
             :pronac="dadosProjeto.Pronac"
             :nomeProjeto="dadosProjeto.NomeProjeto">
         </IdentificacaoProjeto>
-
         <table class="">
-            <tbody v-for="(dado, index) in dados" :key="index">
+            <tbody v-for="(dado, index) in dadosIn2013" :key="index">
                 <tr>
                     <td align="left">
                         <input  type="button"
@@ -182,7 +181,7 @@
     </div>
 </template>
 <script>
-    import { mapGetters } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
     import IdentificacaoProjeto from './IdentificacaoProjeto';
 
     export default {
@@ -190,23 +189,16 @@
         props: ['idPronac'],
         components: {
             IdentificacaoProjeto,
-            // TabelaPlanoDistribuicao
         },
         data() {
             return {
-                dados: {
-                    type: Object,
-                    default() {
-                        return {};
-                    },
-                },
                 informacoes: {},
                 activeTab: -1,
             };
         },
         mounted() {
             if (typeof this.$route.params.idPronac !== 'undefined') {
-                this.buscar_dados();
+                this.buscarPlanoDistribuicaoIn2013(this.dadosProjeto.idPronac);
             }
         },
         watch: {
@@ -217,22 +209,14 @@
         computed: {
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
+                dadosIn2013: 'projeto/planoDistribuicaoIn2013',
             }),
         },
         methods: {
-            buscar_dados() {
-                const self = this;
-                const idPronac = self.$route.params.idPronac;
-                /* eslint-disable */
-                $3.ajax({
-                    url: '/projeto/plano-distribuicao-in2013-rest/index/idPronac/' + idPronac,
-                }).done(function (response) {
-                    self.dados = response.data;
-                });
-            },
-
+            ...mapActions({
+                buscarPlanoDistribuicaoIn2013: 'projeto/buscarPlanoDistribuicaoIn2013',
+            }),
             setActiveTab(index) {
-                console.log(index);
                 if (this.activeTab === index) {
                     this.activeTab = -1;
                 } else {
@@ -240,5 +224,5 @@
                 }
             },
         },
-    }
+    };
 </script>

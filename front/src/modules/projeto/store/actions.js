@@ -132,3 +132,11 @@ export const buscarProvidenciaTomada = ({ commit }, idPronac) => {
             commit(types.SET_PROVIDENCIA_TOMADA, data);
         });
 };
+
+export const buscarPlanoDistribuicaoIn2013 = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarPlanoDistribuicaoIn2013(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_PLANO_DISTRIBUICAO_IN2013, data);
+        });
+};

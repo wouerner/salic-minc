@@ -15,6 +15,7 @@ export const state = {
     documentosAnexados: [],
     localRealizacaoDeslocamento: {},
     providenciaTomada: {},
+    planoDistribuicaoIn2013: [],
 };
 
 export const mutations = {
@@ -59,5 +60,8 @@ export const mutations = {
     },
     [types.SET_PROVIDENCIA_TOMADA](state, providenciaTomada) {
         state.providenciaTomada = providenciaTomada;
+    },
+    [types.SET_PLANO_DISTRIBUICAO_IN2013](state, dados) {
+        state.planoDistribuicaoIn2013 = dados;
     },
 };

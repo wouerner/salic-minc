@@ -18,7 +18,7 @@ class Projeto_PlanoDistribuicaoIn2013RestController extends MinC_Controller_Rest
             $HistoricoEnquadramentoService = new PlanoDistribuicaoIn2013Service($this->getRequest(), $this->getResponse());
             $resposta = $HistoricoEnquadramentoService->buscaPlanoDistribuicaoIn2013();
 
-            $this->customRenderJsonResponse(['data' => $resposta], 200);
+            $this->renderJsonResponse($resposta, 200);
 
         } catch (Exception $objException) {
             $this->customRenderJsonResponse([
