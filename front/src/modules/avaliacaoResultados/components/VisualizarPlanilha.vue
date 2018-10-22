@@ -121,6 +121,9 @@
                                                                     <td>{{ moeda(props.item.varlorAprovado) }}</td>
                                                                     <td>{{ moeda(props.item.varlorComprovado) }}</td>
                                                                     <td>{{ moeda(props.item.varlorAprovado - props.item.varlorComprovado) }}</td>
+                                                                    <td>
+                                                                        <DetalheItemCusto></DetalheItemCusto>
+                                                                    </td>
                                                                 </template>
                                                             </v-data-table>
                                                         </v-tab-item>
@@ -142,6 +145,7 @@
 <script>
     import { mapActions, mapGetters } from 'vuex';
     import ModalTemplate from '@/components/modal';
+    import DetalheItemCusto from './modal';
     import ConsolidacaoAnalise from './ConsolidacaoAnalise';
     import AnalisarItem from './AnalisarItem';
 
@@ -198,6 +202,7 @@
             ModalTemplate,
             ConsolidacaoAnalise,
             AnalisarItem,
+            DetalheItemCusto,
         },
         methods: {
             ...mapActions({
