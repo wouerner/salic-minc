@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 
 import modal from '@/components/modal/store';
 import header from '@/components/layout/header/store';
-import rodape from '@/components/rodape/store';
+import rodape from '@/components/layout/footer/store';
 import projeto from './modules/projeto/store';
 import foo from './modules/foo/store';
 import avaliacaoResultados from './modules/avaliacaoResultados/store';

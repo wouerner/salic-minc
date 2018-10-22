@@ -7,3 +7,5 @@ export const buscarVersao = () => {
 
     return api.getRequest(`${module}${controller}${action}`);
 };
+
+export const buscarPerfisDisponiveis = () => api.getRequest('/navegacao/perfil-rest/index');

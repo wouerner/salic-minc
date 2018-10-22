@@ -3,7 +3,13 @@
         :close-on-content-click="false"
         offset-x
     >
-        <v-btn flat slot="activator" class="pa-0" :loading="loadingUsuario">
+        <v-btn
+            :loading="loadingUsuario"
+            @click="isExibirPerfis = true"
+            slot="activator"
+            class="pa-0"
+            flat
+        >
             <v-avatar color="teal" size="30px" class="mr-1 left">
                 <span class="white--text headline">{{primeiraLetraNomeUsuario}}</span>
             </v-avatar>
@@ -11,7 +17,7 @@
             <v-icon right dark class="ma-0 hidden-sm-and-down">arrow_drop_down</v-icon>
         </v-btn>
 
-        <v-card>
+        <v-card style="width: 440px;">
             <v-list>
                 <v-list-tile avatar>
                     <v-list-tile-avatar>
@@ -19,7 +25,6 @@
                             <span class="white--text headline">{{primeiraLetraNomeUsuario}}</span>
                         </v-avatar>
                     </v-list-tile-avatar>
-
                     <v-list-tile-content>
                         <v-list-tile-title>{{nomeUsuarioCompleto}}</v-list-tile-title>
                         <v-list-tile-sub-title>{{cpfUsuario}}</v-list-tile-sub-title>
@@ -28,43 +33,8 @@
             </v-list>
 
             <v-divider></v-divider>
-            <v-list v-if="Object.keys(perfisDisponiveis).length > 0">
-                <v-list-tile>
-                    <v-list-tile-action>
-                        <v-icon color="indigo">person</v-icon>
-                    </v-list-tile-action>
 
-                    <v-list-tile-content>
-                        <v-menu>
-                            <v-list-tile-title
-                                v-if="perfisDisponiveis && perfisDisponiveis[grupoSelecionadoIndex].orgao_sigla_autorizada"
-                                slot="activator"
-                            >
-                                <span>{{perfisDisponiveis[grupoSelecionadoIndex].orgao_sigla_autorizada}} - {{perfisDisponiveis[grupoSelecionadoIndex].nome_grupo}}</span>
-                                <v-icon>arrow_drop_down</v-icon>
-                            </v-list-tile-title>
-                            <v-list-tile-title
-                                v-else
-                                slot="activator"
-                            >
-                                <span>{{perfisDisponiveis[grupoSelecionadoIndex].nome_grupo}}</span>
-                                <v-icon dark>arrow_drop_down</v-icon>
-                            </v-list-tile-title>
-                            <v-list style="width: 440px; max-height: 500px; overflow: scroll;">
-                                <v-list-tile v-for="(perfil, index) in perfisDisponiveis" :key="index">
-                                    <div v-if="perfil.orgao_sigla_autorizada" @click="trocarPerfil(perfil)"
-                                         style="cursor:pointer;">
-                                        {{perfil.orgao_sigla_autorizada}} - {{perfil.nome_grupo}}
-                                    </div>
-                                    <div v-else @click="trocarPerfil(perfil)" style="cursor:pointer;">
-                                        {{perfil.nome_grupo}}
-                                    </div>
-                                </v-list-tile>
-                            </v-list>
-                        </v-menu>
-                    </v-list-tile-content>
-                </v-list-tile>
-            </v-list>
+            <HeaderInformacoesDaContaPerfis v-if="isExibirPerfis"></HeaderInformacoesDaContaPerfis>
 
             <v-divider></v-divider>
 
@@ -90,33 +60,29 @@
             </v-list>
         </v-card>
     </v-menu>
-    
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
+    import { mapGetters } from 'vuex';
+    import HeaderInformacoesDaContaPerfis from '@/components/layout/header/HeaderInformacoesDaContaPerfis';
 
     export default {
-        name: 'InformacoesDaConta',
+        name: 'HeaderInformacoesDaConta',
+        components: { HeaderInformacoesDaContaPerfis },
         data() {
             return {
                 loadingUsuario: true,
+                isExibirPerfis: false,
             };
-        },
-        created() {
-            this.buscarPerfisDisponiveis();
         },
         computed: {
             ...mapGetters({
-                perfisDisponiveis: 'header/perfisDisponiveis',
-                usuarioAtivo: 'header/usuarioAtivo',
-                grupoAtivo: 'header/grupoAtivo',
-                grupoSelecionadoIndex: 'header/grupoSelecionadoIndex',
+                usuario: 'autenticacao/getUsuario',
             }),
             nomeUsuarioCompleto() {
-                if (this.usuarioAtivo[0]) {
+                if (Object.keys(this.usuario).length > 0) {
                     this.loadingUsuario = false;
-                    return this.usuarioAtivo[0].usu_nome;
+                    return this.usuario.usu_nome;
                 }
                 return '';
             },
@@ -127,19 +93,10 @@
                 return this.nomeUsuarioCompleto.split(' ')[0];
             },
             cpfUsuario() {
-                if (this.usuarioAtivo[0]) {
-                    return this.usuarioAtivo[0].usu_identificacao;
+                if (this.usuario) {
+                    return this.usuario.usu_identificacao;
                 }
                 return '';
-            },
-        },
-        methods: {
-            ...mapActions({
-                buscarPerfisDisponiveis: 'header/buscarPerfisDisponiveis',
-                alterarPerfil: 'header/alterarPerfil',
-            }),
-            trocarPerfil(perfil) {
-                this.alterarPerfil(perfil);
             },
         },
     };

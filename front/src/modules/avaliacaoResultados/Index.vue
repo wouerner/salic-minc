@@ -27,8 +27,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import Rodape from '@/components/layout/footer';
 import SlNav from './components/SlNav';
-import Rodape from '@/components/rodape';
 
 export default {
     name: 'Index',

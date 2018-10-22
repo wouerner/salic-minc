@@ -1,16 +1,13 @@
-import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
+import * as layoutHelperAPI from '@/helpers/api/Layout';
 import * as solicitacaoHelperAPI from '@/helpers/api/Solicitacao';
 import * as desencapsularResponse from '@/helpers/actions';
 import * as types from './types';
 
 export const buscarPerfisDisponiveis = ({ commit }, params) => {
-    avaliacaoResultadosHelperAPI.buscarPerfisDisponiveis(params)
+    layoutHelperAPI.buscarPerfisDisponiveis(params)
         .then((response) => {
             const items = desencapsularResponse.default(response);
-            commit(types.SET_PERFIS_DISPONIVEIS, items.perfisDisponoveis);
-            commit(types.SET_USUARIO_ATIVO, items.usuarioAtivo);
-            commit(types.SET_GRUPO_ATIVO, items.grupoAtivo);
-            commit(types.SET_GRUPO_SELECIONADO_INDEX, items.grupoSelecionadoIndex);
+            commit(types.SET_PERFIS_DISPONIVEIS, items);
         });
 };
 
