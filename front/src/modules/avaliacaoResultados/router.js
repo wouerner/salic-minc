@@ -71,7 +71,7 @@ const routes = [
         name: 'VisualizarPlanilha',
         component: VisualizarPlanilha,
         meta: {
-            title: 'Visualizar  Planilha',
+            title: 'Visualizar Planilha',
         },
     },
     {
