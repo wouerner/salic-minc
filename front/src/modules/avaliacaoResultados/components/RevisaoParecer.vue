@@ -150,7 +150,7 @@
 
 
 
-                                        <v-expansion-panel mb-2 focusable v-for="revisado in historico" :key="revisado.idAvaliacaoFinanceiraRevisao">
+                                            <v-expansion-panel mb-2 focusable v-for="revisado in historico" :key="revisado.idAvaliacaoFinanceiraRevisao">
                                             <v-expansion-panel-content>
                                                 <v-layout slot="header" class="blue--text">
                                                     <v-icon class="mr-3 blue--text" >insert_drive_file
@@ -349,7 +349,7 @@
 
 
 <script>
-    import {mapActions, mapGetters} from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
 
     export default {
         name: 'RevisaoParecer',
@@ -420,12 +420,12 @@
 
                   this.carregarHistorico();
 
-                  if (this.grupo.codGrupo == 125) {
+                  if (this.grupo.codGrupo === 125) {
                       /** corrdenador habilitado */
                       this.perfilAtivo.cordenador = false;
                       this.perfilAtivo.geral = true;
                       this.perfilAtivo.revisar = true;
-                  } else if (this.grupo.codGrupo == 126) {
+                  } else if (this.grupo.codGrupo === 126) {
                       /**  cordenador Geral habilitado */
                       this.perfilAtivo.cordenador = true;
                       this.perfilAtivo.geral = false;
@@ -444,7 +444,7 @@
                   this.revisao.idGrupoAtivo = this.grupo.codGrupo;
                   this.revisao.idAgente = this.agente[0].usu_codigo;
                   this.salvarRev(this.revisao).then((response) => {
-                      if (response.code == 200) {
+                      if (response.code === 200) {
                           this.snackbar = true;
                       }
                   });
@@ -458,7 +458,7 @@
                   return '';
               },
           },
-      computed:
+        computed:
           {
               ...mapGetters({
                   modalVisible: 'modal/default',
