@@ -237,6 +237,14 @@ export const obterProjetosLaudoEmAssinatura = ({ commit }, param) => {
         });
 };
 
+export const obterProjetosLaudoFinalizados = ({ commit }, param) => {
+    avaliacaoResultadosHelperAPI.obterProjetosLaudoFinal(param)
+        .then((response) => {
+            const dadosTabela = response.data.data;
+            commit(types.SET_DADOS_PROJETOS_LAUDO_FINALIZADOS, dadosTabela);
+        });
+};
+
 export const obterHistoricoRevisao = ({ commit }, params) => {
     const p = new Promise((resolve) => {
         avaliacaoResultadosHelperAPI.getListaRevisoes(params)
