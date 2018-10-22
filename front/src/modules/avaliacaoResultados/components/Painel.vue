@@ -151,6 +151,7 @@ import AnaliseButton from './analise/analisarButton';
 import AssinarButton from './analise/AssinarButton';
 import RevisaoButton from './revisao/revisaoButton';
 import VisualizarButton from './analise/visualizarButton';
+import Devolver from './Devolver';
 
 export default {
     name: 'Painel',
@@ -204,7 +205,7 @@ export default {
             listaAcoesAssinar: [Historico, AssinarButton],
             listaAcoesCoordenador: [Historico],
             distribuirAcoes: [Encaminhar],
-            revisaoAcoes: [RevisaoButton, VisualizarButton],
+            revisaoAcoes: [RevisaoButton, VisualizarButton, Devolver],
         };
     },
     components: {
