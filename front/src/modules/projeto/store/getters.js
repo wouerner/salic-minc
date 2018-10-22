@@ -10,3 +10,5 @@ export const certidoesNegativas = state => state.certidoesNegativas;
 export const documentosAssinados = state => state.documentosAssinados;
 export const dadosComplementares = state => state.dadosComplementares;
 export const documentosAnexados = state => state.documentosAnexados;
+export const localRealizacaoDeslocamento = state => state.localRealizacaoDeslocamento;
+export const providenciaTomada = state => state.providenciaTomada;
