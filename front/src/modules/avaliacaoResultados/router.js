@@ -5,6 +5,7 @@ import EmitirParecer from './components/EmitirParecer';
 import Painel from './components/Painel';
 import TipoAvaliacao from './components/TipoAvaliacao';
 import Planilha from './components/Planilha';
+import VisualizarPlanilha from './components/VisualizarPlanilha';
 import AnaliseComprovantes from './components/AnaliseComprovantes';
 import Diligenciar from './components/Diligenciar';
 import Historico from './components/Historico';
@@ -63,6 +64,14 @@ const routes = [
         component: Planilha,
         meta: {
             title: 'Analise da planilha',
+        },
+    },
+    {
+        path: '/visualizar-planilha/:id',
+        name: 'VisualizarPlanilha',
+        component: VisualizarPlanilha,
+        meta: {
+            title: 'Visualizar  Planilha',
         },
     },
     {
