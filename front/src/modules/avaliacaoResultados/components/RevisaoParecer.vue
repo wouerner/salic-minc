@@ -140,7 +140,7 @@
                                                 <v-layout slot="header" class="blue--text">
                                                     <v-icon class="mr-3 blue--text" >insert_drive_file
                                                     </v-icon>
-                                                    <span v-if="revisado.idGrupoAtivo == 125" >Revisão - Coordenador(a) - {{revisado.dtRevisao | date}}</span>
+                                                    <span v-if="revisado.idGrupoAtivo === 125" >Revisão - Coordenador(a) - {{revisado.dtRevisao | date}}</span>
                                                     <span v-if="revisado.idGrupoAtivo == 126">Revisão - Coordenador(a) Geral - {{revisado.dtRevisao | date}}</span>
                                                     <v-spacer></v-spacer>
                                                     <template v-if="revisado.siStatus == 1" :onchange="revisado.siStatus">
@@ -372,67 +372,66 @@ export default {
         };
     },
     methods:
-      {
-          ...mapActions({
-              requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
-              listaRevisoes: 'avaliacaoResultados/obterHistoricoRevisao',
-              salvarRev: 'avaliacaoResultados/salvarRevisao',
+    {
+        ...mapActions({
+            requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
+            listaRevisoes: 'avaliacaoResultados/obterHistoricoRevisao',
+            salvarRev: 'avaliacaoResultados/salvarRevisao',
 
-          }),
-          getConsolidacao(id) {
-              this.requestEmissaoParecer(id);
-              this.parecer.idAvaliacaoFinanceira;
-              this.setStatus();
-          },
-          carregarHistorico() {
-              this.listaRevisoes(this.parecer.idAvaliacaoFinanceira);
-          },
-          setStatus() {
-              this.items.forEach((i) => {
-                  if (i.id === this.parecer.siManifestacao) {
-                      this.item = i.text;
-                  }
-              });
+        }),
+        getConsolidacao(id) {
+            this.requestEmissaoParecer(id);
+            this.setStatus();
+        },
+        carregarHistorico() {
+            this.listaRevisoes(this.parecer.idAvaliacaoFinanceira);
+        },
+        setStatus() {
+            this.items.forEach((i) => {
+                if (i.id === this.parecer.siManifestacao) {
+                    this.item = i.text;
+                }
+            });
 
-              this.carregarHistorico();
+            this.carregarHistorico();
 
-              if (this.grupo.codGrupo == 125) {
-                  /** corrdenador habilitado */
-                  this.perfilAtivo.cordenador = false;
-                  this.perfilAtivo.geral = true;
-                  this.perfilAtivo.revisar = true;
-              } else if (this.grupo.codGrupo == 126) {
-                  /**  cordenador Geral habilitado */
-                  this.perfilAtivo.cordenador = true;
-                  this.perfilAtivo.geral = false;
-                  this.perfilAtivo.revisar = true;
-              } else { /** todos sem editar */
-                  this.perfilAtivo.cordenador = true;
-                  this.perfilAtivo.geral = true;
-                  this.perfilAtivo.revisar = false;
-              }
-          },
-          inputRevisao(e) {
-              this.revisao.dsRevisao = e;
-          },
-          salvar() {
-              this.revisao.idAvaliacaoFinanceira = this.parecer.idAvaliacaoFinanceira;
-              this.revisao.idGrupoAtivo = this.grupo.codGrupo;
-              this.revisao.idAgente = this.agente[0].usu_codigo;
-              this.salvarRev(this.revisao).then((response) => {
-                  if (response.code == 200) {
-                      this.snackbar = true;
-                  }
-              });
-          },
-          background(e) {
-              if (e === false) {
-                  return 'red lighten-4';
-              } else if (e === true) {
-                  return 'green lighten-4';
-              }
-              return '';
-          },
+            if (this.grupo.codGrupo === '125') {
+                /** corrdenador habilitado */
+                this.perfilAtivo.cordenador = false;
+                this.perfilAtivo.geral = true;
+                this.perfilAtivo.revisar = true;
+            } else if (this.grupo.codGrupo === '126') {
+                /**  cordenador Geral habilitado */
+                this.perfilAtivo.cordenador = true;
+                this.perfilAtivo.geral = false;
+                this.perfilAtivo.revisar = true;
+            } else { /** todos sem editar */
+                this.perfilAtivo.cordenador = true;
+                this.perfilAtivo.geral = true;
+                this.perfilAtivo.revisar = false;
+            }
+        },
+        inputRevisao(e) {
+            this.revisao.dsRevisao = e;
+        },
+        salvar() {
+            this.revisao.idAvaliacaoFinanceira = this.parecer.idAvaliacaoFinanceira;
+            this.revisao.idGrupoAtivo = this.grupo.codGrupo;
+            this.revisao.idAgente = this.agente[0].usu_codigo;
+            this.salvarRev(this.revisao).then((response) => {
+                if (response.code === 200) {
+                    this.snackbar = true;
+                }
+            });
+        },
+        background(e) {
+            if (e === false) {
+                return 'red lighten-4';
+            } else if (e === true) {
+                return 'green lighten-4';
+            }
+            return '';
+        },
     },
     computed: {
         ...mapGetters({
