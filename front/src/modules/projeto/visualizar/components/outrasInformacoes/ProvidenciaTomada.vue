@@ -41,16 +41,6 @@
         components: {
             IdentificacaoProjeto,
         },
-        // data() {
-        //     return {
-        //         dados: {
-        //             type: Object,
-        //             default() {
-        //                 return {};
-        //             },
-        //         },
-        //     };
-        // },
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
                 this.buscarProvidenciaTomada(this.dadosProjeto.idPronac);
@@ -63,15 +53,6 @@
             }),
         },
         methods: {
-            // buscar_dados() {
-            //     const self = this;
-            //     /* eslint-disable */
-            //     $3.ajax({
-            //         url: '/projeto/providencia-tomada-rest/index/idPronac/' + self.dadosProjeto.idPronac,
-            //     }).done(function (response) {
-            //         self.dados = response.data;
-            //     });
-            // },
             ...mapActions({
                 buscarProvidenciaTomada: 'projeto/buscarProvidenciaTomada',
             }),
