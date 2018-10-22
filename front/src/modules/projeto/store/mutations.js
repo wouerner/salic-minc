@@ -13,6 +13,7 @@ export const state = {
     documentosAssinados: {},
     dadosComplementares: {},
     localRealizacaoDeslocamento: {},
+    providenciaTomada: {},
 };
 
 export const mutations = {
@@ -51,5 +52,8 @@ export const mutations = {
     },
     [types.SET_LOCAL_REALIZACAO_DESLOCAMENTO](state, localRealizacaoDeslocamento) {
         state.localRealizacaoDeslocamento = localRealizacaoDeslocamento;
+    },
+    [types.SET_PROVIDENCIA_TOMADA](state, providenciaTomada) {
+        state.providenciaTomada = providenciaTomada;
     },
 };

@@ -117,3 +117,11 @@ export const buscarLocalRealizacaoDeslocamento = ({ commit }, idPronac) => {
             commit(types.SET_LOCAL_REALIZACAO_DESLOCAMENTO, data);
         });
 };
+
+export const buscarProvidenciaTomada = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarProvidenciaTomada(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_PROVIDENCIA_TOMADA, data);
+        });
+};

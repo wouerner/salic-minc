@@ -95,3 +95,12 @@ export const buscarLocalRealizacaoDeslocamento = (idPronac) => {
     const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscarProvidenciaTomada = (idPronac) => {
+    const modulo = '/projeto';
+    const controller = '/providencia-tomada-rest';
+    const metodo = '/index';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};

@@ -33,7 +33,7 @@
     </div>
 </template>
 <script>
-    import { mapGetters } from 'vuex';
+    import {  mapActions, mapGetters } from 'vuex';
     import IdentificacaoProjeto from './IdentificacaoProjeto';
 
     export default {
@@ -41,36 +41,40 @@
         components: {
             IdentificacaoProjeto,
         },
-        data() {
-            return {
-                dados: {
-                    type: Object,
-                    default() {
-                        return {};
-                    },
-                },
-            };
-        },
+        // data() {
+        //     return {
+        //         dados: {
+        //             type: Object,
+        //             default() {
+        //                 return {};
+        //             },
+        //         },
+        //     };
+        // },
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-                this.buscar_dados();
+                this.buscarProvidenciaTomada(this.dadosProjeto.idPronac);
             }
         },
         computed: {
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
+                dados: 'projeto/providenciaTomada',
             }),
         },
         methods: {
-            buscar_dados() {
-                const self = this;
-                /* eslint-disable */
-                $3.ajax({
-                    url: '/projeto/providencia-tomada-rest/index/idPronac/' + self.dadosProjeto.idPronac,
-                }).done(function (response) {
-                    self.dados = response.data;
-                });
-            },
+            // buscar_dados() {
+            //     const self = this;
+            //     /* eslint-disable */
+            //     $3.ajax({
+            //         url: '/projeto/providencia-tomada-rest/index/idPronac/' + self.dadosProjeto.idPronac,
+            //     }).done(function (response) {
+            //         self.dados = response.data;
+            //     });
+            // },
+            ...mapActions({
+                buscarProvidenciaTomada: 'projeto/buscarProvidenciaTomada',
+            }),
         },
     }
 </script>

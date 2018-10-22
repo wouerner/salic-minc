@@ -18,7 +18,7 @@ class Projeto_ProvidenciaTomadaRestController extends MinC_Controller_Rest_Abstr
             $ProvidenciaTomadaService = new ProvidenciaTomadaService($this->getRequest(), $this->getResponse());
             $resposta = $ProvidenciaTomadaService->buscaProvidenciaTomada();
 
-            $this->customRenderJsonResponse(['data' => $resposta], 200);
+            $this->RenderJsonResponse($resposta, 200);
 
         } catch (Exception $objException) {
             $this->customRenderJsonResponse([
