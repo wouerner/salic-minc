@@ -1,5 +1,5 @@
-import * as rodapeHelperAPI from '@/helpers/api/navegacao';
-import * as desencapsularResponse from '@/helpers/actions';
+import * as rodapeHelperAPI from '@/helpers/api/Layout';
+import * as desencapsularResponse from '@/helpers/actions/index';
 import * as types from './types';
 
 export const buscarVersao = ({ commit }) => {
