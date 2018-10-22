@@ -135,7 +135,7 @@
                                 </v-card-title>
                                 <v-slide-y-transition>
                                     <v-card-text v-show="show">
-                                        <v-expansion-panel mb-2 focusable v-for="revisado in historico" :key="revisado.idAvaliacaoFinanceiraRevisao">
+                                            <v-expansion-panel mb-2 focusable v-for="revisado in historico" :key="revisado.idAvaliacaoFinanceiraRevisao">
                                             <v-expansion-panel-content>
                                                 <v-layout slot="header" class="blue--text">
                                                     <v-icon class="mr-3 blue--text" >insert_drive_file
@@ -447,9 +447,7 @@ export default {
         }),
     },
     mounted() {
-        console.log(this.$route.params.id);
         this.getConsolidacao(this.$route.params.id);
-        //this.getConsolidacao(195025);
     },
 };
 </script>
