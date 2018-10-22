@@ -37,6 +37,7 @@ export const state = {
     revisaoParecer: {},
     revisao: {},
     projetosRevisao: {},
+    devolverProjeto: {},
 };
 
 export const mutations = {
@@ -156,5 +157,8 @@ export const mutations = {
     },
     [types.SYNC_PROJETOS_REVISAO](state, dados) {
         state.projetosRevisao = dados;
+    },
+    [types.GET_DEVOLVER_PROJETO](state, devolverProjeto) {
+        state.devolverProjeto = devolverProjeto;
     },
 };

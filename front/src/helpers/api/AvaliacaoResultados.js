@@ -99,3 +99,5 @@ export const projetosRevisao = (params) => {
     const data = params;
     return api.getRequest(`/avaliacao-resultados/fluxo-projeto?estadoid=${data.estadoid}&idAgente=${data.idAgente}`);
 };
+
+export const devolverProjeto = params => api.getRequest(`/prestacao-contas/realizar-prestacao-contas/planilha-analise-filtros/idPronac/${params}`);
