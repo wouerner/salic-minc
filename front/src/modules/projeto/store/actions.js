@@ -109,3 +109,11 @@ export const buscarDadosComplementares = ({ commit }, idPronac) => {
             commit(types.SET_DADOS_COMPLEMENTARES, data);
         });
 };
+
+export const buscarDocumentosAnexados = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarDocumentosAnexados(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_DOCUMENTOS_ANEXADOS, data);
+        });
+};

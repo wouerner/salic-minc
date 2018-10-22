@@ -86,3 +86,12 @@ export const buscarDadosComplementares = (idPronac) => {
     const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };
+// url: '/projeto//index/idPronac/' + self.dadosProjeto.idPronac,
+export const buscarDocumentosAnexados = (idPronac) => {
+    const modulo = '/projeto';
+    const controller = '/documentos-anexados-rest';
+    const metodo = '/index';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};

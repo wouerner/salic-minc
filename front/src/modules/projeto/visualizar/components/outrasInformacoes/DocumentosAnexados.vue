@@ -1,10 +1,10 @@
 <template>
-    <div id="conteudo" v-if="dados.documentos">
+    <div id="conteudo" v-if="documentosAnexados.documentos">
         <IdentificacaoProjeto
             :pronac="dadosProjeto.Pronac"
             :nomeProjeto="dadosProjeto.NomeProjeto">
         </IdentificacaoProjeto>
-        <table v-if="Object.keys(dados.documentos).length > 0">
+        <table v-if="Object.keys(documentosAnexados.documentos).length > 0">
             <thead>
             <tr class="destacar">
                 <th class="center">N&ordm;</th>
@@ -14,7 +14,7 @@
                 <th class="center">DOCUMENTO</th>
             </tr>
             </thead>
-            <tbody v-for="(dado, index) in dados.documentos" :key="index">
+            <tbody v-for="(dado, index) in documentosAnexados.documentos" :key="index">
             <tr>
                 <td class="center">{{ index + 1 }}</td>
                 <td class="center">{{ dado.Anexado }}</td>
@@ -40,8 +40,9 @@
         </div>
     </div>
 </template>
+
 <script>
-    import { mapGetters } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
     import IdentificacaoProjeto from './IdentificacaoProjeto';
 
     export default {
@@ -50,20 +51,9 @@
         components: {
             IdentificacaoProjeto,
         },
-        data() {
-            return {
-                dados: {
-                    type: Object,
-                    default() {
-                        return {};
-                    },
-                },
-                informacoes: {},
-            };
-        },
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-                this.buscar_dados();
+                this.buscarDocumentosAnexados(this.dadosProjeto.idPronac);
             }
         },
         watch: {
@@ -74,18 +64,13 @@
         computed: {
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
+                documentosAnexados: 'projeto/documentosAnexados',
             }),
         },
         methods: {
-            buscar_dados() {
-                const self = this;
-                /* eslint-disable */
-                $3.ajax({
-                    url: '/projeto/documentos-anexados-rest/index/idPronac/' + self.dadosProjeto.idPronac,
-                }).done(function (response) {
-                    self.dados = response.data;
-                });
-            },
+            ...mapActions({
+                buscarDocumentosAnexados: 'projeto/buscarDocumentosAnexados',
+            }),
         },
-    }
+    };
 </script>
