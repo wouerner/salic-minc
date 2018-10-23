@@ -453,4 +453,107 @@ describe('Projeto actions', () => {
             expect(commit).toHaveBeenCalledWith('SET_LOCAL_REALIZACAO_DESLOCAMENTO', localRealizacaoDeslocamento.data.items);
         });
     });
+
+    describe('buscarProvidenciaTomada', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        items: {
+                            providenciaTomada: {
+                                Situacao: 'B01',
+                                cnpjcpf: '08887383740',
+                                ProvidenciaTomada: 'Proposta transformada em projeto cultural',
+                            },
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscarProvidenciaTomada');
+            const idPronac = 216941;
+            actions.buscarProvidenciaTomada({ commit }, idPronac);
+        });
+
+        test('it calls projetoHelperAPI.buscarProvidenciaTomada', () => {
+            expect(projetoHelperAPI.buscarProvidenciaTomada).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscarProvidenciaTomada', (done) => {
+            const providenciaTomada = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_PROVIDENCIA_TOMADA', providenciaTomada.data.items);
+        });
+    });
+
+    describe('buscarPlanoDistribuicaoIn2013', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        items: {
+                            idPlanoDistribuicao: 171982,
+                            idProjeto: 207951,
+                            idProduto: 3,
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscarPlanoDistribuicaoIn2013');
+            const idPronac = 194617;
+            actions.buscarPlanoDistribuicaoIn2013({ commit }, idPronac);
+        });
+
+        test('it calls projetoHelperAPI.buscarPlanoDistribuicaoIn2013', () => {
+            expect(projetoHelperAPI.buscarPlanoDistribuicaoIn2013).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscarPlanoDistribuicaoIn2013', (done) => {
+            const planoDistribuicaoIn2013 = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_PLANO_DISTRIBUICAO_IN2013', planoDistribuicaoIn2013.data.items);
+        });
+    });
+
+    describe('buscarHistoricoEncaminhamento', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        items: {
+                            Encaminhamentos: {
+                                Unidade: 'FUNARTE',
+                                DtEnvio: '03/04/2018 00:00:00',
+                                qtDias: 44,
+                            },
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscarHistoricoEncaminhamento');
+            const idPronac = 216941;
+            actions.buscarHistoricoEncaminhamento({ commit }, idPronac);
+        });
+
+        test('it calls projetoHelperAPI.buscarHistoricoEncaminhamento', () => {
+            expect(projetoHelperAPI.buscarHistoricoEncaminhamento).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscarHistoricoEncaminhamento', (done) => {
+            const historicoEncaminhamento = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_HISTORICO_ENCAMINHAMENTO', historicoEncaminhamento.data.items);
+        });
+    });
 });
