@@ -15,3 +15,4 @@ export const providenciaTomada = state => state.providenciaTomada;
 export const planoDistribuicaoIn2013 = state => state.planoDistribuicaoIn2013;
 export const historicoEncaminhamento = state => state.historicoEncaminhamento;
 export const tramitacaoDocumento = state => state.tramitacaoDocumento;
+export const tramitacaoProjeto = state => state.tramitacaoProjeto;

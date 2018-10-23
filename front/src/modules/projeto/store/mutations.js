@@ -18,6 +18,7 @@ export const state = {
     planoDistribuicaoIn2013: [],
     historicoEncaminhamento: {},
     tramitacaoDocumento: {},
+    tramitacaoProjeto: {},
 };
 
 export const mutations = {
@@ -71,5 +72,8 @@ export const mutations = {
     },
     [types.SET_TRAMITACAO_DOCUMENTO](state, tramitacaoDocumento) {
         state.tramitacaoDocumento = tramitacaoDocumento;
+    },
+    [types.SET_TRAMITACAO_PROJETO](state, tramitacaoProjeto) {
+        state.tramitacaoProjeto = tramitacaoProjeto;
     },
 };

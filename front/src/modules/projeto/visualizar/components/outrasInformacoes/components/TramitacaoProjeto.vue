@@ -42,34 +42,44 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
     name: 'TramitacaoProjeto',
     props: ['idPronac'],
-    data() {
-        return {
-            dados: {
-                type: Object,
-                default() {
-                    return {};
-                },
-            },
-        };
-    },
+    // data() {
+    //     return {
+    //         dados: {
+    //             type: Object,
+    //             default() {
+    //                 return {};
+    //             },
+    //         },
+    //     };
+    // },
     mounted() {
         if (typeof this.idPronac !== 'undefined') {
-            this.obterTramitacaoProjeto();
+            this.buscarTramitacaoProjeto(this.idPronac);
         }
     },
+    computed: {
+        ...mapGetters({
+            dados: 'projeto/tramitacaoProjeto',
+        }),
+    },
     methods: {
-        obterTramitacaoProjeto() {
-            const self = this;
-            /* eslint-disable */
-            $3.ajax({
-                url: `/projeto/tramitacao-projeto-rest/get/idPronac/${self.idPronac}`,
-            }).done(function (response) {
-                self.dados = response.data;
-            });
-        },
+        // obterTramitacaoProjeto() {
+        //     const self = this;
+        //     /* eslint-disable */
+        //     $3.ajax({
+        //         url: `/projeto/tramitacao-projeto-rest/get/idPronac/${self.idPronac}`,
+        //     }).done(function (response) {
+        //         self.dados = response.data;
+        //     });
+        // },
+        ...mapActions({
+            buscarTramitacaoProjeto: 'projeto/buscarTramitacaoProjeto',
+        }),
     },
 }
 </script>

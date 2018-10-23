@@ -156,3 +156,11 @@ export const buscarTramitacaoDocumento = ({ commit }, idPronac) => {
             commit(types.SET_TRAMITACAO_DOCUMENTO, data);
         });
 };
+
+export const buscarTramitacaoProjeto = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarTramitacaoProjeto(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_TRAMITACAO_PROJETO, data);
+        });
+};

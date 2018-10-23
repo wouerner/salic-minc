@@ -24,7 +24,7 @@ class Projeto_TramitacaoProjetoRestController extends MinC_Controller_Rest_Abstr
             $tramitacaoService = new TramitacaoProjetoService($this->getRequest(), $this->getResponse());
             $resposta = $tramitacaoService->buscarTramitacaoProjetoProjeto();
 
-            $this->customRenderJsonResponse(['data' => $resposta], 200);
+            $this->RenderJsonResponse($resposta, 200);
 
         } catch (Exception $objException) {
             $this->customRenderJsonResponse([

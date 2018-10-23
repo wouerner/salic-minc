@@ -140,3 +140,12 @@ export const buscarTramitacaoDocumento = (idPronac) => {
     const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscarTramitacaoProjeto = (idPronac) => {
+    const modulo = '/projeto';
+    const controller = '/tramitacao-projeto-rest';
+    const metodo = '/get';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};
