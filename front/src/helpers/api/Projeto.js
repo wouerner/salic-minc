@@ -167,4 +167,3 @@ export const buscarPlanoDistribuicaoIn2017 = (idPreProjeto) => {
     const queryParams = `?idPreProjeto=${idPreProjeto}`;
     return api.getRequest(path, queryParams);
 };
-

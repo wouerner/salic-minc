@@ -274,4 +274,39 @@ describe('Projeto actions', () => {
             expect(commit).toHaveBeenCalledWith('SET_TRANSFERENCIA_RECURSOS', transferenciaRecursos.data);
         });
     });
+
+    describe('buscarCertidoesNegativas', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        items: {
+                            certidoes: {
+                                dsCertidao: 'Quita&ccedil;&atilde;o de Tributos Federais',
+                                CodigoCertidao: 49,
+                                Pronac: 160059,
+                            },
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscarCertidoesNegativas');
+            const idPronac = 216941;
+            actions.buscarCertidoesNegativas({ commit }, idPronac);
+        });
+
+        test('it calls projetoHelperAPI.buscarCertidoesNegativas', () => {
+            expect(projetoHelperAPI.buscarCertidoesNegativas).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscarCertidoesNegativas', (done) => {
+            const certidoesNegativas = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_CERTIDOES_NEGATIVAS', certidoesNegativas.data.items);
+        });
+    });
 });
