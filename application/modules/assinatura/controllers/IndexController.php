@@ -316,14 +316,17 @@ class Assinatura_IndexController extends Assinatura_GenericController
             );
 
             $idDocumentoAssinatura = $this->view->documentoAssinatura['idDocumentoAssinatura'];
-
+            
             $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+            $grupoAtoAdministrativo = $objTbAtoAdministrativo->obterGrupoPorIdDocumentoAssinatura($idDocumentoAssinatura);
+            
             $dadosAtoAdministrativoAtual = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
                 $idTipoDoAtoAdministrativo,
                 $this->grupoAtivo->codGrupo,
-                $this->grupoAtivo->codOrgao
-            );
-
+                $this->grupoAtivo->codOrgao,
+                $grupoAtoAdministrativo
+            );            
+            
             if ($post) {
 
                 try {

@@ -130,7 +130,8 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         $idTipoDoAto,
         $idPerfilDoAssinante,
         $idOrgaoDoAssinante,
-        $idOrgaoSuperiorDoAssinante = null
+        $idOrgaoSuperiorDoAssinante = null,
+        $grupo = null
     ): \MinC_Db_Table_Select{
 
         $objQuery = $this->select();
@@ -143,11 +144,14 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         $objQuery->where('idTipoDoAto = ?', $idTipoDoAto);
         $objQuery->where('idPerfilDoAssinante = ?', $idPerfilDoAssinante);
         $objQuery->where('idOrgaoDoAssinante = ?', $idOrgaoDoAssinante);
-
+        
         if (!is_null($idOrgaoSuperiorDoAssinante)) {
             $objQuery->where('idOrgaoSuperiorDoAssinante = ?', $idOrgaoSuperiorDoAssinante);
         }
-
+        if (!is_null($grupo)) {
+            $objQuery->where('grupo = ?', $grupo);
+        }
+        
         return $objQuery;
     }
 
@@ -161,8 +165,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         $objQuery = $this->obterQueryAtoAdministrativo(
             $idTipoDoAto,
             $idPerfilDoAssinante,
-            $idOrgaoDoAssinante,
-            $idOrgaoSuperiorDoAssinante
+            $idOrgaoDoAssinante
         );
 
         $objQuery->where("idOrdemDaAssinatura = ?", 1);
@@ -170,16 +173,59 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         return $this->_db->fetchRow($objQuery);
     }
 
+    public function obterGrupoPorIdDocumentoAssinatura($idDocumentoAssinatura)
+    {
+        //$dadosPrimeiroAtoAdministrativo = $this->obterPrimeiroAtoPorIdDocumento($idDocumentoAssinatura);
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        $objQuery->from(
+            ['tbAtoAdministrativo', 'tbAtoAdministrativo'],
+            new Zend_Db_Expr('TOP 1 grupo'),
+            $this->_schema
+        );
+
+        $objQuery->joinInner(
+            array('tbAssinatura' => 'tbAssinatura'),
+            'tbAssinatura.idAtoAdministrativo = tbAtoAdministrativo.idAtoAdministrativo',
+            '',
+            $this->_schema
+        );
+
+        $objQuery->where('idDocumentoAssinatura = ?', $idDocumentoAssinatura);        
+
+        $grupo = $this->_db->fetchRow($objQuery);
+        
+        return $grupo['grupo'];
+    }
+    
+    public function obterPrimeiroAtoPorIdDocumento($idDocumentoAssinatura)
+    {
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        $objQuery->from(
+            ['tbAssinatura', 'tbAssinatura'],
+            new Zend_Db_Expr('TOP 1 *'),
+            $this->_schema
+        );
+
+        $objQuery->where('idDocumentoAssinatura = ?', $idDocumentoAssinatura);
+
+        return $this->_db->fetchRow($objQuery);        
+    }
+
     public function obterAtoAdministrativoAtual(
         $idTipoDoAto,
         $idPerfilDoAssinante,
-        $idOrgaoDoAssinante
+        $idOrgaoDoAssinante,
+        $grupo = ''
     ) {
-
+        
         $objQuery = $this->obterQueryAtoAdministrativo(
             $idTipoDoAto,
             $idPerfilDoAssinante,
-            $idOrgaoDoAssinante
+            $idOrgaoDoAssinante,
+            null,
+            $grupo
         );
 
         $objResultado = $this->fetchRow($objQuery);

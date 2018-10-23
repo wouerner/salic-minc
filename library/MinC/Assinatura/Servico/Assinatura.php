@@ -86,7 +86,8 @@ class Assinatura implements IServico
         $dadosAtoAdministrativoAtual = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
             $modeloTbAtoAdministrativo->getIdTipoDoAto(),
             $modeloTbAtoAdministrativo->getIdPerfilDoAssinante(),
-            $modeloTbAtoAdministrativo->getIdOrgaoDoAssinante()
+            $modeloTbAtoAdministrativo->getIdOrgaoDoAssinante(),
+            $objTbAtoAdministrativo->obterGrupoPorIdDocumentoAssinatura($modeloTbAssinatura->idDocumentoAssinatura)
         );
 
         if (!$dadosAtoAdministrativoAtual) {
@@ -116,26 +117,30 @@ class Assinatura implements IServico
             'dsManifestacao' => $modeloTbAssinatura->getDsManifestacao(),
             'idDocumentoAssinatura' => $modeloTbAssinatura->getIdDocumentoAssinatura()
         ];
-        //'grupo' => $modeloTbAtoAdministrativo->getGrupo(),
-
+        
+        $grupoAtoAdministrativo = $objTbAtoAdministrativo->obterGrupoPorIdDocumentoAssinatura($modeloTbAssinatura->getIdDocumentoAssinatura());
+        
+        $atoAdministrativo = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
+            $modeloTbAtoAdministrativo->getIdTipoDoAto(),
+            $modeloTbAtoAdministrativo->getIdPerfilDoAssinante(),
+            $modeloTbAtoAdministrativo->getIdOrgaoDoAssinante(),
+            $grupoAtoAdministrativo
+        );
+        
         $dbTableTbAssinatura->inserir($dadosInclusaoAssinatura);
         $quantidadeAssinaturasRealizadas = $dbTableTbAssinatura->obterQuantidadeAssinaturasRealizadas();
         $quantidadeMinimaAssinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas(
             $modeloTbAtoAdministrativo->getIdTipoDoAto(),
-            $modeloTbAtoAdministrativo->getIdOrgaoDoAssinante(),
+            $modeloTbAtoAdministrativo->getIdOrdemDaAssinatura(),
             $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante(),
-            $dadosAtoAdministrativoAtual['grupo']
+            $grupoAtoAdministrativo
         );
         
         if ($quantidadeAssinaturasRealizadas < $quantidadeMinimaAssinaturas) {
             $this->encaminhar();
         } else {
             $quantidadeAssinaturasRealizadas = $dbTableTbAssinatura->obterQuantidadeAssinaturasRealizadas();
-            $quantidadeMinimaAssinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas(
-                $modeloTbAtoAdministrativo->getIdTipoDoAto(),
-                $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()
-            );
-
+            
             if ($quantidadeAssinaturasRealizadas == $quantidadeMinimaAssinaturas) {
                 $this->finalizar();
             }
