@@ -206,7 +206,7 @@ export default {
             listaAcoesAssinar: [Historico, AssinarButton],
             listaAcoesCoordenador: [Encaminhar, Historico],
             distribuirAcoes: [Encaminhar],
-            revisaoAcoes: [RevisaoButton, VisualizarButton],
+            revisaoAcoes: [RevisaoButton, VisualizarButton, Historico],
         };
     },
     components: {
