@@ -180,4 +180,3 @@ export const buscarPlanoDistribuicaoIn2017 = ({ commit }, idPreProjeto) => {
             commit(types.SET_PLANO_DISTRIBUICAO_IN2017, data);
         });
 };
-

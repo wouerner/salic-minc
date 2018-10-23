@@ -18,4 +18,3 @@ export const tramitacaoDocumento = state => state.tramitacaoDocumento;
 export const tramitacaoProjeto = state => state.tramitacaoProjeto;
 export const ultimaTramitacao = state => state.ultimaTramitacao;
 export const planoDistribuicaoIn2017 = state => state.planoDistribuicaoIn2017;
-

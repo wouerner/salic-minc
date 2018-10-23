@@ -1,6 +1,6 @@
-import * as actions from './actions';
-import * as projetoHelperAPI from '@/helpers/api/Projeto';
 import axios from 'axios';
+import * as projetoHelperAPI from '@/helpers/api/Projeto';
+import * as actions from './actions';
 
 jest.mock('axios');
 

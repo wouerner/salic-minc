@@ -20,7 +20,7 @@ export const state = {
     tramitacaoDocumento: {},
     tramitacaoProjeto: {},
     ultimaTramitacao: {},
-    planoDistribuicaoIn2017: []
+    planoDistribuicaoIn2017: [],
 };
 
 export const mutations = {
