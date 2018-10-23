@@ -87,6 +87,20 @@ class Solicitacao
         return $solicitacoes;
     }
 
+    public function contarSolicitacoes()
+    {
+        $where = $this->obterParametrosDaSolicitacao();
+
+        if (empty($where)) {
+            return [];
+        }
+
+        $tbSolicitacoes = new \Solicitacao_Model_DbTable_TbSolicitacao();
+        $quantidade = $tbSolicitacoes->contarSolicitacoes($where);
+
+        return $quantidade;
+    }
+
     private function removerHtmlTags($string)
     {
         $result = strip_tags($string);

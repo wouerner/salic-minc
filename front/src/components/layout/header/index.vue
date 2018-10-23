@@ -21,6 +21,7 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex';
     import MenuPrincipal from './HeaderMenuPrincipal';
     import InformacoesDaConta from './HeaderInformacoesDaConta';
     import Solicitacoes from './HeaderSolicitacoes';
@@ -36,6 +37,14 @@
             return {
                 dados: this.dadosMenu,
             };
+        },
+        created() {
+            this.buscarDadosLayout();
+        },
+        methods: {
+            ...mapActions({
+                buscarDadosLayout: 'layout/buscarDadosLayout',
+            }),
         },
     };
 </script>

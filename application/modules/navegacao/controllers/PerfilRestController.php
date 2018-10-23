@@ -1,6 +1,6 @@
 <?php
 
-use Application\Modules\Navegacao\Service\Perfil\Perfil as PerfilService;
+use Application\Modules\Navegacao\Service\Perfil as PerfilService;
 
 class Navegacao_PerfilRestController extends MinC_Controller_Rest_Abstract
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Modules\Navegacao\Service\Perfil;
+namespace Application\Modules\Navegacao\Service;
 
 class Perfil
 {

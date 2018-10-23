@@ -14,14 +14,14 @@
                     dark
                 >
                     <v-badge overlap color="orange">
-                        <span slot="badge">2</span>
+                        <span v-if="quantidade" slot="badge">{{quantidade}}</span>
                         <v-icon dark>
                             message
                         </v-icon>
                     </v-badge>
                 </v-btn>
                 <v-card>
-                    <v-layout row wrap style="width: 440px;">
+                    <v-layout row wrap style="width: 450px; max-height: 500px; overflow-y: auto;">
                         <v-layout v-if="loading" align-center justify-center column fill-height style="min-height: 150px;">
                             <v-progress-circular
                                 :width="3"
@@ -95,7 +95,8 @@
         },
         computed: {
             ...mapGetters({
-                solicitacoes: 'layout/solicitacoes'
+                solicitacoes: 'layout/solicitacoes',
+                quantidade: 'layout/quantidadeSolicitacoes',
             }),
         },
         methods: {

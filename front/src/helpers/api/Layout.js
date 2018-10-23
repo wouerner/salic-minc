@@ -1,8 +1,8 @@
 import * as api from './base';
 
-export const buscarVersao = () => {
+export const buscarDadosLayout = () => {
     const module = '/navegacao';
-    const controller = '/footer-rest';
+    const controller = '/dados-rest';
     const action = '/index';
 
     return api.getRequest(`${module}${controller}${action}`);

@@ -26,10 +26,11 @@ export const obterSolicitacoes = ({ commit }) => {
         });
 };
 
-export const buscarVersao = ({ commit }) => {
-    layoutHelperAPI.buscarVersao()
+export const buscarDadosLayout = ({ commit }) => {
+    layoutHelperAPI.buscarDadosLayout()
         .then((response) => {
-            const versao = desencapsularResponse.default(response);
-            commit(types.SET_VERSAO, versao[0]);
+            const data = desencapsularResponse.default(response);
+            commit(types.SET_VERSAO, data.versao[0]);
+            commit(types.SET_QUANTIDADE_SOLICITACOES, data.quantidadeSolicitacoes);
         });
 };
