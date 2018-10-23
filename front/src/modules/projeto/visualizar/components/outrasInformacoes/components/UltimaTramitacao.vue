@@ -35,34 +35,25 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
     name: 'UltimaTramitacao',
     props: ['idPronac'],
-    data() {
-        return {
-            dados: {
-                type: Object,
-                default() {
-                    return {};
-                },
-            },
-        };
-    },
     mounted() {
         if (typeof this.idPronac !== 'undefined') {
-            this.obterUltimaTramitacao();
+            this.buscarUltimaTramitacao(this.idPronac);
         }
     },
+    computed: {
+        ...mapGetters({
+            dados: 'projeto/ultimaTramitacao',
+        }),
+    },
     methods: {
-        obterUltimaTramitacao() {
-            const self = this;
-            /* eslint-disable */
-            $3.ajax({
-                url: `/projeto/ultima-tramitacao-rest/get/idPronac/${self.idPronac}`,
-            }).done(function (response) {
-                self.dados = response.data;
-            });
-        },
+        ...mapActions({
+            buscarUltimaTramitacao: 'projeto/buscarUltimaTramitacao',
+        }),
     },
 }
 </script>

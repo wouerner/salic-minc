@@ -164,3 +164,11 @@ export const buscarTramitacaoProjeto = ({ commit }, idPronac) => {
             commit(types.SET_TRAMITACAO_PROJETO, data);
         });
 };
+
+export const buscarUltimaTramitacao = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarUltimaTramitacao(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_ULTIMA_TRAMITACAO, data);
+        });
+};

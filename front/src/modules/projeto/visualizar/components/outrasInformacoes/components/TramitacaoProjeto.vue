@@ -47,16 +47,6 @@ import { mapActions, mapGetters } from 'vuex';
 export default {
     name: 'TramitacaoProjeto',
     props: ['idPronac'],
-    // data() {
-    //     return {
-    //         dados: {
-    //             type: Object,
-    //             default() {
-    //                 return {};
-    //             },
-    //         },
-    //     };
-    // },
     mounted() {
         if (typeof this.idPronac !== 'undefined') {
             this.buscarTramitacaoProjeto(this.idPronac);
@@ -68,15 +58,6 @@ export default {
         }),
     },
     methods: {
-        // obterTramitacaoProjeto() {
-        //     const self = this;
-        //     /* eslint-disable */
-        //     $3.ajax({
-        //         url: `/projeto/tramitacao-projeto-rest/get/idPronac/${self.idPronac}`,
-        //     }).done(function (response) {
-        //         self.dados = response.data;
-        //     });
-        // },
         ...mapActions({
             buscarTramitacaoProjeto: 'projeto/buscarTramitacaoProjeto',
         }),

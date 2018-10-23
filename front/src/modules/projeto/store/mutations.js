@@ -19,6 +19,7 @@ export const state = {
     historicoEncaminhamento: {},
     tramitacaoDocumento: {},
     tramitacaoProjeto: {},
+    ultimaTramitacao: {},
 };
 
 export const mutations = {
@@ -75,5 +76,8 @@ export const mutations = {
     },
     [types.SET_TRAMITACAO_PROJETO](state, tramitacaoProjeto) {
         state.tramitacaoProjeto = tramitacaoProjeto;
+    },
+    [types.SET_ULTIMA_TRAMITACAO](state, ultimaTramitacao) {
+        state.ultimaTramitacao = ultimaTramitacao;
     },
 };
