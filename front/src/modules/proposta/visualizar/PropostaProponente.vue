@@ -28,8 +28,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import SalicMenuSuspenso from '@/components/SalicMenuSuspenso';
 import CookieMixin from '@/mixins/cookie';
+import SalicMenuSuspenso from '@/components/SalicMenuSuspenso';
 import PropostaFluxo from './components/PropostaFluxo';
 import Proposta from './Proposta';
 
@@ -78,7 +78,7 @@ export default {
                     self.setCookie('qtd_msg_visualizar_proposta', quantidadeExibida, 40)
                 }
             });
-        },
+        }
     }
 };
 </script>
