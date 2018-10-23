@@ -22,26 +22,11 @@
             IdentificacaoProjeto,
             PropostaPlanoDistribuicao,
         },
-//        data() {
-//            return {
-//                dados: {
-//                    type: Object,
-//                    default() {
-//                        return {};
-//                    },
-//                },
-//            };
-//        },
         mounted() {
             if (typeof this.dadosProjeto.idPreProjeto !== 'undefined') {
                 this.buscarPlanoDistribuicaoIn2017(this.dadosProjeto.idPreProjeto);
             }
         },
-//        watch: {
-//            dadosProjeto() {
-//                this.obterDados();
-//            },
-//        },
         computed: {
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
@@ -52,15 +37,6 @@
             ...mapActions({
                 buscarPlanoDistribuicaoIn2017: 'projeto/buscarPlanoDistribuicaoIn2017',
             })
-//            obterDados() {
-//                const self = this;
-//                /* eslint-disable */
-//                $3.ajax({
-//                    url: '/projeto/plano-distribuicao-rest/index/idPreProjeto/' + self.dadosProjeto.idPreProjeto,
-//                }).done(function (response) {
-//                    self.dados = response.data;
-//                });
-//            },
         },
     };
 </script>
