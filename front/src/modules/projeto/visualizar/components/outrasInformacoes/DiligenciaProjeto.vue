@@ -77,7 +77,7 @@
             buscar_dados() {
                 const self = this;
                 self.idPronac = self.$route.params.idPronac,
-                    /* eslint-disable */
+                /* eslint-disable */
                     $3.ajax({
                         url: '/projeto/diligencia-projeto-rest/index/idPronac/' + self.idPronac,
                     }).done(function (response) {
@@ -85,6 +85,6 @@
                     });
             },
         },
-    }
+    };
 </script>
 

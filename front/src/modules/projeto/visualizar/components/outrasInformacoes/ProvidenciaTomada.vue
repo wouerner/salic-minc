@@ -33,7 +33,7 @@
     </div>
 </template>
 <script>
-    import {  mapActions, mapGetters } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
     import IdentificacaoProjeto from './IdentificacaoProjeto';
 
     export default {
@@ -57,6 +57,6 @@
                 buscarProvidenciaTomada: 'projeto/buscarProvidenciaTomada',
             }),
         },
-    }
+    };
 </script>
 

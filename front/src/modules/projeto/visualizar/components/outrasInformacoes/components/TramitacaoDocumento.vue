@@ -55,6 +55,6 @@ export default {
                 buscarTramitacaoDocumento: 'projeto/buscarTramitacaoDocumento',
             }),
     },
-}
+};
 </script>
 

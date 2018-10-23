@@ -44,7 +44,7 @@
 </template>
 <script>
 
-    import {mapActions, mapGetters} from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
     import IdentificacaoProjeto from './IdentificacaoProjeto';
 
     export default {
@@ -60,7 +60,7 @@
         computed: {
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
-                dados: 'projeto/certidoesNegativas'
+                dados: 'projeto/certidoesNegativas',
             }),
         },
         methods: {
@@ -68,6 +68,6 @@
                 buscarCertidoesNegativas: 'projeto/buscarCertidoesNegativas',
             }),
         },
-    }
+    };
 </script>
 

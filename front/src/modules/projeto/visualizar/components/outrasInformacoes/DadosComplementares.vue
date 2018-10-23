@@ -44,7 +44,7 @@
 <script>
     import { mapActions, mapGetters } from 'vuex';
     import IdentificacaoProjeto from './IdentificacaoProjeto';
-    import TabelaDadosComplementares from './TabelaDadosComplementares'
+    import TabelaDadosComplementares from './TabelaDadosComplementares';
 
     export default {
         name: 'DadosComplementares',
@@ -68,6 +68,6 @@
                 buscarDadosComplementares: 'projeto/buscarDadosComplementares',
             }),
         },
-    }
+    };
 </script>
 

@@ -55,6 +55,6 @@ export default {
             buscarUltimaTramitacao: 'projeto/buscarUltimaTramitacao',
         }),
     },
-}
+};
 </script>
 

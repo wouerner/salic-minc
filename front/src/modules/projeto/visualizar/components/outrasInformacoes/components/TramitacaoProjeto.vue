@@ -62,6 +62,6 @@ export default {
             buscarTramitacaoProjeto: 'projeto/buscarTramitacaoProjeto',
         }),
     },
-}
+};
 </script>
 
