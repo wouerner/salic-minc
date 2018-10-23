@@ -309,4 +309,148 @@ describe('Projeto actions', () => {
             expect(commit).toHaveBeenCalledWith('SET_CERTIDOES_NEGATIVAS', certidoesNegativas.data.items);
         });
     });
+
+    describe('buscarDocumentosAssinados', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        items: {
+                            dsAtoAdministrativo: 'Parecer de Aprova&ccedil;&atilde;o Preliminar',
+                            idDocumentoAssinatura: 3564,
+                            pronac: 178894,
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscarDocumentosAssinados');
+            const idPronac = 216941;
+            actions.buscarDocumentosAssinados({ commit }, idPronac);
+        });
+
+        test('it calls projetoHelperAPI.buscarDocumentosAssinados', () => {
+            expect(projetoHelperAPI.buscarDocumentosAssinados).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscarDocumentosAssinados', (done) => {
+            const documentosAssinados = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_DOCUMENTOS_ASSINADOS', documentosAssinados.data.items);
+        });
+    });
+
+    describe('buscarDadosComplementares', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        items: {
+                            CustosVinculados: {
+                                Descricao: 'Custos de Administra&ccedil;&atilde;o',
+                                Percentual: 15,
+                            },
+                            Proposta: {
+                                Objetivos: 'Objetivo espec&iacute;fico do projeto &eacute; a realiza&ccedil;&atilde;o de tr&ecirc;s atra&ccedil;&otilde;es',
+                            },
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscarDadosComplementares');
+            const idPronac = 216941;
+            actions.buscarDadosComplementares({ commit }, idPronac);
+        });
+
+        test('it calls projetoHelperAPI.buscarDadosComplementares', () => {
+            expect(projetoHelperAPI.buscarDadosComplementares).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscarDadosComplementares', (done) => {
+            const dadosComplementares = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_DADOS_COMPLEMENTARES', dadosComplementares.data.items);
+        });
+    });
+
+    describe('buscarDocumentosAnexados', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        items: {
+                            documentos: {
+                                Anexado: 'Documento do Proponente',
+                                idArquivo: 180609,
+                                AgenteDoc: 1,
+                            },
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscarDocumentosAnexados');
+            const idPronac = 216941;
+            actions.buscarDocumentosAnexados({ commit }, idPronac);
+        });
+
+        test('it calls projetoHelperAPI.buscarDocumentosAnexados', () => {
+            expect(projetoHelperAPI.buscarDocumentosAnexados).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscarDocumentosAnexados', (done) => {
+            const documentosAnexados = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_DOCUMENTOS_ANEXADOS', documentosAnexados.data.items);
+        });
+    });
+
+    describe('buscarLocalRealizacaoDeslocamento', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        items: {
+                            localRealizacoes: {
+                                Descricao: 'Brasil',
+                                UF: 'Santa Catarina',
+                                Cidade: 'Conc&oacute;rdia',
+                            },
+                            Deslocamento: {
+                                Qtde: 28,
+                                PaisOrigem: 'Brasil',
+                            },
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscarLocalRealizacaoDeslocamento');
+            const idPronac = 216941;
+            actions.buscarLocalRealizacaoDeslocamento({ commit }, idPronac);
+        });
+
+        test('it calls projetoHelperAPI.buscarLocalRealizacaoDeslocamento', () => {
+            expect(projetoHelperAPI.buscarLocalRealizacaoDeslocamento).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscarLocalRealizacaoDeslocamento', (done) => {
+            const localRealizacaoDeslocamento = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_LOCAL_REALIZACAO_DESLOCAMENTO', localRealizacaoDeslocamento.data.items);
+        });
+    });
 });
