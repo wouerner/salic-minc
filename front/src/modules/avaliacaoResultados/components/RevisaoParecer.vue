@@ -18,7 +18,7 @@
             </v-btn>
             <v-card>
                 <v-toolbar dark color="green darken-3">
-                    <v-btn icon dark :to="{ name: 'Painel'}">
+                    <v-btn icon dark href="#/painel">
                         <v-icon>close</v-icon>
                     </v-btn>
                     <v-toolbar-title>Analise de Resultados - Revisão do Parecer Técnico </v-toolbar-title>
@@ -119,86 +119,103 @@
                                             <v-spacer></v-spacer>
                                             
                                             <v-flex md12 xs12 >
-                                                <div class="subheading"><b>Histórico de Revisões</b></div>
-                                                <v-container v-show="show">
-                                                    <v-expansion-panel mb-2 focusable v-for="revisado in historico" :key="revisado.idAvaliacaoFinanceiraRevisao">
-                                                        <v-expansion-panel-content>
-                                                            <v-layout slot="header" class="blue--text">
-                                                                <v-icon class="mr-3 blue--text" >insert_drive_file
-                                                                </v-icon>
-                                                                <span v-if="revisado.idGrupoAtivo === 125" >Revisão - Coordenador(a) - {{revisado.dtRevisao | date}}</span>
-                                                                <span v-if="revisado.idGrupoAtivo === 126">Revisão - Coordenador(a) Geral - {{revisado.dtRevisao | date}}</span>
-                                                                <v-spacer></v-spacer>
-                                                                <template v-if="revisado.siStatus == 1" :onchange="revisado.siStatus">
-                                                                    <v-chip small color="green" text-color="white" >
-                                                                        <v-avatar>
-                                                                            <v-icon>check_circle</v-icon>
-                                                                        </v-avatar>
-                                                                        Aprovado
-                                                                    </v-chip>
-                                                                </template>
-                                                                <template v-if="revisado.siStatus == 0" :onchange="revisado.siStatus">
-                                                                    <v-chip small color="red" text-color="white">
-                                                                        <v-avatar>
-                                                                            <v-icon>close</v-icon>
-                                                                        </v-avatar>
-                                                                        Reprovado
-                                                                    </v-chip>
-                                                                </template>
-                                                                <template v-if="revisado.siStatus == 2" :onchange="revisado.siStatus">
-                                                                    <v-chip small color="grey" text-color="white">
-                                                                        <v-avatar>
-                                                                            <v-icon>report_problem</v-icon>
-                                                                        </v-avatar>
-                                                                        Não Avaliado
-                                                                    </v-chip>
-                                                                </template>
+                                                <v-card :onchange="historico">
+                                                    <v-card-title primary-title>
+                                                        <div>
+                                                            <div class="black--text"><b>Histórico de Revisões</b></div>
+                                                        </div>
+                                                        <v-spacer></v-spacer>
+                                                        <v-btn icon @click="show = !show">
+                                                            <v-icon>{{ show ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
+                                                        </v-btn>
+                                                    </v-card-title>
+                                                    <v-slide-y-transition>
+                                                        <v-card-text v-show="show">
+                                                            <v-expansion-panel mb-2 focusable v-for="revisado in historico" :key="revisado.idAvaliacaoFinanceiraRevisao">
+                                                                <v-expansion-panel-content>
+                                                                    <v-layout slot="header" class="blue--text">
+                                                                        <v-icon class="mr-3 blue--text" >insert_drive_file
+                                                                        </v-icon>
+                                                                        <span v-if="revisado.idGrupoAtivo == 125" >Revisão - Coordenador(a) - {{revisado.dtRevisao | date}}</span>
+                                                                        <span v-if="revisado.idGrupoAtivo == 126">Revisão - Coordenador(a) Geral - {{revisado.dtRevisao | date}}</span>
+                                                                        <v-spacer></v-spacer>
+                                                                        <template v-if="revisado.siStatus == 1" :onchange="revisado.siStatus">
+                                                                            <v-chip small color="green" text-color="white" >
+                                                                                <v-avatar>
+                                                                                    <v-icon>check_circle</v-icon>
+                                                                                </v-avatar>
+                                                                                Aprovado
+                                                                            </v-chip>
+                                                                        </template>
+                                                                        <template v-if="revisado.siStatus == 0" :onchange="revisado.siStatus">
+                                                                            <v-chip small color="red" text-color="white">
+                                                                                <v-avatar>
+                                                                                    <v-icon>close</v-icon>
+                                                                                </v-avatar>
+                                                                                Reprovado
+                                                                            </v-chip>
+                                                                        </template>
+                                                                        <template v-if="revisado.siStatus == 2" :onchange="revisado.siStatus">
+                                                                            <v-chip small color="grey" text-color="white">
+                                                                                <v-avatar>
+                                                                                    <v-icon>report_problem</v-icon>
+                                                                                </v-avatar>
+                                                                                Não Avaliado
+                                                                            </v-chip>
+                                                                        </template>
 
-                                                            </v-layout>
+                                                                    </v-layout>
 
-                                                            <v-card
-                                                                :color="background(revisado.siStatus)"
-                                                                flat
-                                                                tile
-                                                            >
-                                                                <v-flex >
+                                                                    <v-card
+                                                                        :color="background(revisado.siStatus)"
+                                                                        flat
+                                                                        tile
+                                                                    >
+                                                                        <v-flex >
 
-                                                                    <v-card-text>
-                                                                        <v-card>
-                                                                                <v-data-table
-                                                                                    :items="[]"
-                                                                                    class="elevation-2"
-                                                                                    hide-headers
-                                                                                    hide-actions
-                                                                                >
-                                                                                    <template slot="no-data">
-                                                                                        <tr>
-                                                                                            <th left><b>Revisão:</b></th>
-                                                                                            <td colspan="7">
-                                                                                                <v-radio-group row v-model="revisado.siStatus" :disabled="true">
-                                                                                                    <v-radio label="Aprovado" :value="1" ></v-radio>
-                                                                                                    <v-radio label="Reprovado" :value="0" color="red"></v-radio>
-                                                                                                </v-radio-group>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </template>
-                                                                                </v-data-table>
+                                                                            <v-card-text>
+                                                                                <v-card>
+                                                                                        <v-data-table
+                                                                                            :items="[]"
+                                                                                            class="elevation-2"
+                                                                                            hide-headers
+                                                                                            hide-actions
+                                                                                        >
+                                                                                            <template slot="no-data">
+                                                                                                <tr>
+                                                                                                    <th left><b>Revisão:</b></th>
+                                                                                                    <td colspan="7">
+                                                                                                        <v-radio-group row v-model="revisado.siStatus" :disabled="true">
+                                                                                                            <v-radio label="Aprovado" :value="1" ></v-radio>
+                                                                                                            <v-radio label="Reprovado" :value="0" color="red"></v-radio>
+                                                                                                        </v-radio-group>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </template>
+                                                                                        </v-data-table>
 
-                                                                                <v-textarea
-                                                                                    :disabled="true"
-                                                                                    solo
-                                                                                    no-resize
-                                                                                    :value="revisado.dsRevisao"
-                                                                                    hint="Digite sua avaliação"
-                                                                                    height="180px"
-                                                                                ></v-textarea>
-                                                                        </v-card>
-                                                                    </v-card-text>
-                                                                </v-flex>
-                                                            </v-card>
-                                                        </v-expansion-panel-content>
-                                                    </v-expansion-panel>
-                                                </v-container>
+                                                                                        <v-textarea
+                                                                                            :disabled="true"
+                                                                                            solo
+                                                                                            no-resize
+                                                                                            :value="revisado.dsRevisao"
+                                                                                            hint="Digite sua avaliação"
+                                                                                            height="180px"
+                                                                                        ></v-textarea>
+                                                                                </v-card>
+                                                                            </v-card-text>
+                                                                        </v-flex>
+                                                                    </v-card>
+                                                                </v-expansion-panel-content>
+                                                            </v-expansion-panel>
+
+                                                        </v-card-text>
+                                                    </v-slide-y-transition>
+                                                </v-card>
+                                            </v-flex>
+
+                                            <v-flex md12 xs12 >
+                                                <div class="subheading"><b>Revisão do Coordenador</b></div>
 
                                                 <v-expansion-panel mb-2 v-if="perfilAtivo.revisar">
                                                     <v-expansion-panel-content >
@@ -248,9 +265,10 @@
                                                                             <v-container text-xs-left>
                                                                                     <v-layout row wrap>
 
-                                                                                        <v-flex xs6>
+                                                                                        <v-flex xs1 pa-3 ma-2>
                                                                                             <span class="subheading">Revisão: </span>
-
+                                                                                        </v-flex>
+                                                                                        <v-flex xs10 pa-1>
                                                                                             <v-radio-group row v-model="revisao.siStatus" :disabled="!perfilAtivo.revisar">
                                                                                                 <v-radio label="Aprovado" :value="true" color="green"></v-radio>
                                                                                                 <v-radio label="Reprovado" :value="false" color="red"></v-radio>
@@ -361,14 +379,10 @@ export default {
             requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
             listaRevisoes: 'avaliacaoResultados/obterHistoricoRevisao',
             salvarRev: 'avaliacaoResultados/salvarRevisao',
-
         }),
         getConsolidacao(id) {
             this.requestEmissaoParecer(id);
             this.setStatus();
-        },
-        carregarHistorico() {
-            this.listaRevisoes(this.parecer.idAvaliacaoFinanceira);
         },
         setStatus() {
             this.items.forEach((i) => {
@@ -376,9 +390,7 @@ export default {
                     this.item = i.text;
                 }
             });
-
-            this.carregarHistorico();
-
+            
             if (this.grupo.codGrupo === '125') {
                 /** corrdenador habilitado */
                 this.perfilAtivo.cordenador = false;
@@ -428,9 +440,11 @@ export default {
             agente: 'menuSuperior/usuarioAtivo',
             historico: 'avaliacaoResultados/revisaoParecer',
         }),
+        
     },
     mounted() {
         this.getConsolidacao(this.$route.params.id);
+        
     },
 };
 </script>
