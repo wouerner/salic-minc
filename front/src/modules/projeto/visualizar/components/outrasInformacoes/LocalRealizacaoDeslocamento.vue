@@ -82,6 +82,6 @@ export default {
                 buscarLocalRealizacaoDeslocamento: 'projeto/buscarLocalRealizacaoDeslocamento',
             }),
     },
-}
+};
 </script>
 

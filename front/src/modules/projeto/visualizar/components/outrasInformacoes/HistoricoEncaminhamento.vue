@@ -63,6 +63,6 @@ export default {
             buscarHistoricoEncaminhamento: 'projeto/buscarHistoricoEncaminhamento',
         }),
     },
-}
+};
 </script>
 

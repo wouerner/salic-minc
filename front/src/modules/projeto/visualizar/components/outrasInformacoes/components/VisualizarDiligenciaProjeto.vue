@@ -147,6 +147,6 @@ export default {
             });
         },
     },
-}
+};
 </script>
 
