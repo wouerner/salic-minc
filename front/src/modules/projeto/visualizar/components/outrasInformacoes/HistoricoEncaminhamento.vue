@@ -39,33 +39,34 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import IdentificacaoProjeto from './IdentificacaoProjeto';
 
 export default {
     name: 'HistoricoEncaminhamento',
-    props: ['idPronac'],
+    // props: ['idPronac'],
     components: {
         IdentificacaoProjeto,
     },
-    data() {
-        return {
-            dados: {
-                type: Object,
-                default() {
-                    return {};
-                },
-            },
-        };
-    },
+    // data() {
+    //     return {
+    //         dados: {
+    //             type: Object,
+    //             default() {
+    //                 return {};
+    //             },
+    //         },
+    //     };
+    // },
     computed: {
         ...mapGetters({
             dadosProjeto: 'projeto/projeto',
+            dados: 'projeto/historicoEncaminhamento',
         }),
     },
     mounted() {
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-            this.buscar_dados();
+            this.buscarHistoricoEncaminhamento(this.dadosProjeto.idPronac);
         }
     },
     methods: {
@@ -78,6 +79,9 @@ export default {
                 self.dados = response.data;
             });
         },
+        ...mapActions({
+            buscarHistoricoEncaminhamento: 'projeto/buscarHistoricoEncaminhamento',
+        }),
     },
 }
 </script>

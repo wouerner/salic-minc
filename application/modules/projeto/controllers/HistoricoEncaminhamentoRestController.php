@@ -18,7 +18,7 @@ class Projeto_HistoricoEncaminhamentoRestController extends MinC_Controller_Rest
             $HistoricoEncaminhamentoService = new HistoricoEncaminhamentoService($this->getRequest(), $this->getResponse());
             $resposta = $HistoricoEncaminhamentoService->buscaHistoricoEncaminhamento();
 
-            $this->customRenderJsonResponse(['data' => $resposta], 200);
+            $this->RenderJsonResponse($resposta, 200);
 
         } catch (Exception $objException) {
             $this->customRenderJsonResponse([

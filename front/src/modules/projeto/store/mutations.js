@@ -16,6 +16,7 @@ export const state = {
     localRealizacaoDeslocamento: {},
     providenciaTomada: {},
     planoDistribuicaoIn2013: [],
+    historicoEncaminhamento: {},
 };
 
 export const mutations = {
@@ -63,5 +64,8 @@ export const mutations = {
     },
     [types.SET_PLANO_DISTRIBUICAO_IN2013](state, dados) {
         state.planoDistribuicaoIn2013 = dados;
+    },
+    [types.SET_HISTORICO_ENCAMINHAMENTO](state, historicoEncaminhamento) {
+        state.historicoEncaminhamento = historicoEncaminhamento;
     },
 };

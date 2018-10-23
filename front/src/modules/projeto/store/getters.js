@@ -13,3 +13,4 @@ export const documentosAnexados = state => state.documentosAnexados;
 export const localRealizacaoDeslocamento = state => state.localRealizacaoDeslocamento;
 export const providenciaTomada = state => state.providenciaTomada;
 export const planoDistribuicaoIn2013 = state => state.planoDistribuicaoIn2013;
+export const historicoEncaminhamento = state => state.historicoEncaminhamento;
