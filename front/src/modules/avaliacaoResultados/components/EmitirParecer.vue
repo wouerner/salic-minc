@@ -27,19 +27,81 @@
                             </v-btn>
                         </v-toolbar-items>
                     </v-toolbar>
-                    <v-container grid-list-sm>
-                        <v-layout row wrap>
-                            <v-flex xs12 sm12 md12>
-                                <p><b>Projeto:</b> {{projeto.AnoProjeto}}{{projeto.Sequencial}} - {{projeto.NomeProjeto}}</p>
-                            </v-flex>
-                            <v-flex xs12 sm12 md12>
-                                <p><b>Proponente:</b> {{proponente.CgcCpf | cnpjFilter}} - {{proponente.Nome}}</p>
-                            </v-flex>
-                        </v-layout>
-                        <v-divider></v-divider>
-                    </v-container>
-                    <h4 class="text-sm-center">Quantidade de Comprovantes</h4>
-                    <v-container grid-list-sm>
+
+                    <v-card>
+                        <v-container grid-list-xs text-xs-center ma-0 pa-0>
+                            <v-layout row wrap>
+                                <v-flex xs12 pa-2 mb-2>
+                                    <v-card>
+                                        <v-card-title>
+                                                <p><b>Projeto:</b> {{projeto.AnoProjeto}}{{projeto.Sequencial}} - {{projeto.NomeProjeto}}</p>
+                                        </v-card-title>
+                                        <v-card-title>
+                                                <p><b>Proponente:</b> {{proponente.CgcCpf | cnpjFilter}} - {{proponente.Nome}}</p>
+                                        </v-card-title>
+
+                                        <v-card-text>
+                                            <v-data-table
+                                                :items="[]"
+                                                class="elevation-2"
+                                                hide-headers
+                                                hide-actions
+                                            >
+                                                <template slot="no-data">
+                                                    <tr>
+                                                        <th colspan="6">Quantidade de Comprovantes</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td left><b>Total:</b></td>
+                                                        <td >{{consolidacaoComprovantes.qtTotalComprovante}}</td>
+                                                        <td left><b>Validados:</b></td>
+                                                        <td><font color="#006400">{{consolidacaoComprovantes.qtComprovantesValidadosProjeto}} </font></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td left><b>Não Avaliados:</b></td>
+                                                        <td left>{{consolidacaoComprovantes.qtComprovantesNaoAvaliados}}</td>
+                                                        <td left><b>Recusados:</b></td>
+                                                        <td left><font color="red">{{consolidacaoComprovantes.qtComprovantesRecusadosProjeto}} </font></td>
+                                                    </tr>
+                                                </template>
+                                            </v-data-table>
+                                        </v-card-text>
+                                        <v-card-text>
+                                            <v-data-table
+                                                :items="[]"
+                                                class="elevation-1"
+                                                hide-headers
+                                                hide-actions
+                                            >
+                                                <template slot="no-data">
+                                                    <tr>
+                                                        <th colspan="6">Valores Comprovados</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td left><b>Total:</b></td>
+                                                        <td >{{consolidacaoComprovantes.vlComprovadoProjeto}}</td>
+                                                        <td left><b>Validados:</b></td>
+                                                        <td><font color="#006400">{{consolidacaoComprovantes.vlComprovadoValidado}}</font></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td left><b>Não Avaliados:</b></td>
+                                                        <td left>{{consolidacaoComprovantes.vlNaoComprovado}}</td>
+                                                        <td left><b>Recusados:</b></td>
+                                                        <td left><font color="red">{{consolidacaoComprovantes.vlComprovadoRecusado}}</font></td>
+                                                    </tr>
+                                                </template>
+                                            </v-data-table>
+                                        </v-card-text>
+                                    </v-card>
+                                </v-flex>
+
+
+                            </v-layout>
+                        </v-container>
+                    </v-card>
+
+                    <!-- <h4 class="text-sm-center">Quantidade de Comprovantes</h4> -->
+                    <!-- <v-container grid-list-sm>
                         <v-layout row wrap>
                             <v-flex xs10 sm3 md3 >
                                 <div>
@@ -67,8 +129,8 @@
                             </v-flex>
                         </v-layout>
                         <v-divider></v-divider>
-                    </v-container>
-                    <h4 class="text-sm-center">Valores Comprovados</h4>
+                    </v-container> -->
+                    <!-- <h4 class="text-sm-center">Valores Comprovados</h4>
                     <v-container grid-list-sm>
                         <v-layout row wrap>
                             <v-flex xs10 sm3 md3 >
@@ -91,7 +153,7 @@
                             </v-flex>
                         </v-layout>
                         <v-divider></v-divider>
-                    </v-container>
+                    </v-container> -->
                     <v-container grid-list>
                         <v-layout wrap align-center>
                             <v-flex>
