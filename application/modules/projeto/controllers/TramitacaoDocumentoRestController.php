@@ -24,7 +24,7 @@ class Projeto_TramitacaoDocumentoRestController extends MinC_Controller_Rest_Abs
             $tramitacaoService = new TramitacaoDocumentoService($this->getRequest(), $this->getResponse());
             $resposta = $tramitacaoService->buscarTramitacaoDocumentoProjeto();
 
-            $this->customRenderJsonResponse(['data' => $resposta], 200);
+            $this->RenderJsonResponse($resposta, 200);
 
         } catch (Exception $objException) {
             $this->customRenderJsonResponse([

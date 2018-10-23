@@ -35,34 +35,25 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
     name: 'TramitacaoDocumento',
     props: ['idPronac'],
-    data() {
-        return {
-            dados: {
-                type: Object,
-                default() {
-                    return {};
-                },
-            },
-        };
-    },
     mounted() {
         if (typeof this.idPronac !== 'undefined') {
-            this.obterUltimaTramitacao();
+            this.buscarTramitacaoDocumento(this.idPronac);
         }
     },
+    computed: {
+        ...mapGetters({
+            dados: 'projeto/tramitacaoDocumento',
+        }),
+    },
     methods: {
-        obterUltimaTramitacao() {
-            const self = this;
-            /* eslint-disable */
-            $3.ajax({
-                url: `/projeto/tramitacao-documento-rest/get/idPronac/${self.idPronac}`,
-            }).done(function (response) {
-                self.dados = response.data;
-            });
-        },
+        ...mapActions({
+                buscarTramitacaoDocumento: 'projeto/buscarTramitacaoDocumento',
+            }),
     },
 }
 </script>

@@ -148,3 +148,11 @@ export const buscarHistoricoEncaminhamento = ({ commit }, idPronac) => {
             commit(types.SET_HISTORICO_ENCAMINHAMENTO, data);
         });
 };
+
+export const buscarTramitacaoDocumento = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarTramitacaoDocumento(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_TRAMITACAO_DOCUMENTO, data);
+        });
+};

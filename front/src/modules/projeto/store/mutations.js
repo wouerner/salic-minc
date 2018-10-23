@@ -17,6 +17,7 @@ export const state = {
     providenciaTomada: {},
     planoDistribuicaoIn2013: [],
     historicoEncaminhamento: {},
+    tramitacaoDocumento: {},
 };
 
 export const mutations = {
@@ -67,5 +68,8 @@ export const mutations = {
     },
     [types.SET_HISTORICO_ENCAMINHAMENTO](state, historicoEncaminhamento) {
         state.historicoEncaminhamento = historicoEncaminhamento;
+    },
+    [types.SET_TRAMITACAO_DOCUMENTO](state, tramitacaoDocumento) {
+        state.tramitacaoDocumento = tramitacaoDocumento;
     },
 };

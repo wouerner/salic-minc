@@ -14,3 +14,4 @@ export const localRealizacaoDeslocamento = state => state.localRealizacaoDesloca
 export const providenciaTomada = state => state.providenciaTomada;
 export const planoDistribuicaoIn2013 = state => state.planoDistribuicaoIn2013;
 export const historicoEncaminhamento = state => state.historicoEncaminhamento;
+export const tramitacaoDocumento = state => state.tramitacaoDocumento;

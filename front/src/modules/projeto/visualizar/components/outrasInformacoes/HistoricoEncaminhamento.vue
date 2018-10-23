@@ -44,20 +44,9 @@ import IdentificacaoProjeto from './IdentificacaoProjeto';
 
 export default {
     name: 'HistoricoEncaminhamento',
-    // props: ['idPronac'],
     components: {
         IdentificacaoProjeto,
     },
-    // data() {
-    //     return {
-    //         dados: {
-    //             type: Object,
-    //             default() {
-    //                 return {};
-    //             },
-    //         },
-    //     };
-    // },
     computed: {
         ...mapGetters({
             dadosProjeto: 'projeto/projeto',
@@ -70,15 +59,6 @@ export default {
         }
     },
     methods: {
-        buscar_dados() {
-            const self = this;
-            /* eslint-disable */
-            $3.ajax({
-                url: '/projeto/historico-encaminhamento-rest/index/idPronac/' + self.dadosProjeto.idPronac,
-            }).done(function (response) {
-                self.dados = response.data;
-            });
-        },
         ...mapActions({
             buscarHistoricoEncaminhamento: 'projeto/buscarHistoricoEncaminhamento',
         }),
