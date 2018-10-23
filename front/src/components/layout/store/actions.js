@@ -1,8 +1,8 @@
+import { fnSetCookie, fnGetCookie } from '@/mixins/funcoes/cookie';
 import * as layoutHelperAPI from '@/helpers/api/Layout';
 import * as solicitacaoHelperAPI from '@/helpers/api/Solicitacao';
 import * as desencapsularResponse from '@/helpers/actions';
 import * as types from './types';
-import { fnSetCookie, fnGetCookie } from '@/mixins/funcoes/cookie';
 
 export const buscarPerfisDisponiveis = ({ commit }, params) => {
     layoutHelperAPI.buscarPerfisDisponiveis(params)

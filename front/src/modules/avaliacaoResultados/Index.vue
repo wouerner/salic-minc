@@ -36,6 +36,7 @@ export default {
     methods: {
         ...mapActions({
             setSnackbar: 'noticias/setDados',
+            setUsuario: 'autenticacao/usuarioLogado',
             obterModoNoturno: 'layout/obterModoNoturno',
         }),
         fecharSnackbar() {
@@ -50,6 +51,7 @@ export default {
     },
     mounted() {
         this.setSnackbar({ ativo: false, color: 'success' });
+        this.setUsuario();
         this.obterModoNoturno();
     },
     data() {

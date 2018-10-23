@@ -29,7 +29,10 @@ class Estado
     public function eventos($atual, $params) {
         $estado = new \AvaliacaoResultados_Model_DbTable_Estados();
         $estado = $estado->findBy($atual);
+
         $proximo = json_decode($estado['proximo']);
+        /* var_dump($atual, $params['proximo'], $proximo->proximo->{$params['proximo']});die; */
+        $proximo = $proximo->proximo->{$params['proximo']};
 
         $inc = APPLICATION_PATH . $proximo->path;
         require($inc);
