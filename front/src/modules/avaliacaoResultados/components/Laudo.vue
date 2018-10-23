@@ -12,6 +12,7 @@
                         height="35px"
                 ></v-text-field>
             </v-card-title>
+            {{acao.assinar}}
             <v-data-table
                     :headers="cabecalho"
                     :items="dados.items"
@@ -30,45 +31,39 @@
                     </td>
                     <td class="text-xs-center">{{ props.item.NomeProjeto }}</td>
                     <td class="text-xs-center">
-                        <v-chip
-                                v-if="props.item.siManifestacao == 'A'"
-                                color="green darken-4"
-                                text-color="white"
+                        <v-btn v-if="props.item.dsResutaldoAvaliacaoObjeto == 'APROVADO'"
+                               round
+                               color="green darken-4"
+                               dark
+                               :to="{ name: 'VisualizarParecer', params:{ id:props.item.IdPronac }}"
                         >
-                            <v-avatar>
-                                <v-icon dark>mood</v-icon>
-                            </v-avatar>
-                            Aprovado
-                        </v-chip>
-                        <v-chip
-                                v-if="props.item.siManifestacao == 'P'"
-                                color="green lighten-1"
-                                text-color="white"
+                            <v-icon>mood</v-icon>Aprovado
+                        </v-btn>
+                        <v-btn v-if="props.item.dsResutaldoAvaliacaoObjeto == 'APROVADO COM RESSALVAS'"
+                               round
+                               color="green lighten-1"
+                               dark
+                               :to="{ name: 'VisualizarParecer', params:{ id:props.item.IdPronac }}"
                         >
-                            <v-avatar>
-                                <v-icon>mood</v-icon>
-                            </v-avatar>
-                            Aprovado com ressalva
-                        </v-chip>
-                        <v-chip
-                                v-if="props.item.siManifestacao == 'R'"
-                                color="red"
-                                text-color="white"
+                            <v-icon>sentiment_satisfied_alt</v-icon>Aprovado com ressalva
+                        </v-btn>
+                        <v-btn v-if="props.item.dsResutaldoAvaliacaoObjeto == 'REPROVADO'"
+                               round
+                               color="red"
+                               dark
+                               :to="{ name: 'VisualizarParecer', params:{ id:props.item.IdPronac }}"
                         >
-                            <v-avatar>
-                                <v-icon>sentiment_very_dissatisfied</v-icon>
-                            </v-avatar>
-                            Reprovado
-                        </v-chip>
+                            <v-icon>sentiment_very_dissatisfied</v-icon>Reprovado
+                        </v-btn>
                     </td>
                     <td class="text-xs-center">
                         <v-dialog v-model="dialog" max-width="290">
-                            <v-btn slot="activator" flat icon color="green">
+                            <v-btn slot="activator" flat icon color="green" :disabled="acao !== 'analisar'">
                                 <v-icon>keyboard_return</v-icon>
                             </v-btn>
                             <v-card>
                                 <v-card-title class="headline">Deseja realmente devolver o documento?</v-card-title>
-                                <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>
+                                <v-card-text>Devolver parecer para nova análise.</v-card-text>
                                 <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="red" flat @click.native="dialog = false">Cancelar</v-btn>
@@ -77,7 +72,7 @@
                             </v-card>
                         </v-dialog>
                     </td>
-                    <td v-if="acao" class="text-xs-center">
+                    <td v-if="acao == 'analisar'" class="text-xs-center">
                         <v-btn flat icon color="blue"
                                :to="{ name: 'EmitirLaudoFinal', params:{ id:props.item.IdPronac }}">
                             <v-tooltip bottom>
@@ -86,12 +81,21 @@
                             </v-tooltip>
                         </v-btn>
                     </td>
-                    <td v-else class="text-xs-center">
+                    <td v-if="acao == 'assinar'" class="text-xs-center">
                         <v-btn flat icon color="blue"
                                :href="'/assinatura/index/assinar-projeto?IdPRONAC='+props.item.IdPronac+'&idTipoDoAtoAdministrativo=623'">
                             <v-tooltip bottom>
                                 <v-icon slot="activator" class="material-icons">assignment_turned_in</v-icon>
                                 <span>Assinar Laudo</span>
+                            </v-tooltip>
+                        </v-btn>
+                    </td>
+                    <td v-if="acao == 'visualizar'" class="text-xs-center">
+                        <v-btn flat icon color="blue"
+                               :to="{ name: 'VisualizarLaudo', params:{ id:props.item.IdPronac }}">
+                            <v-tooltip bottom>
+                                <v-icon slot="activator" class="material-icons">visibility</v-icon>
+                                <span>Visualizar Laudo</span>
                             </v-tooltip>
                         </v-btn>
                     </td>
