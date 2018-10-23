@@ -556,4 +556,138 @@ describe('Projeto actions', () => {
             expect(commit).toHaveBeenCalledWith('SET_HISTORICO_ENCAMINHAMENTO', historicoEncaminhamento.data.items);
         });
     });
+
+    describe('buscarTramitacaoDocumento', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        items: {
+                            dsTipoDocumento: 'Comunicado de Mecenato',
+                            idDocumento: 453659,
+                            idLote: 295184,
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscarTramitacaoDocumento');
+            const idPronac = 216941;
+            actions.buscarTramitacaoDocumento({ commit }, idPronac);
+        });
+
+        test('it calls projetoHelperAPI.buscarTramitacaoDocumento', () => {
+            expect(projetoHelperAPI.buscarTramitacaoDocumento).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscarTramitacaoDocumento', (done) => {
+            const tramitacaoDocumento = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_TRAMITACAO_DOCUMENTO', tramitacaoDocumento.data.items);
+        });
+    });
+
+    describe('buscarTramitacaoProjeto', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        items: {
+                            Situacao: 'Cadastrado',
+                            Origem: 'SEFIC/GEAAP/SUAPI/DIAAPI',
+                            Destino: 'SEFIC/GEAR/SACAV',
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscarTramitacaoProjeto');
+            const idPronac = 216941;
+            actions.buscarTramitacaoProjeto({ commit }, idPronac);
+        });
+
+        test('it calls projetoHelperAPI.buscarTramitacaoProjeto', () => {
+            expect(projetoHelperAPI.buscarTramitacaoProjeto).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscarTramitacaoProjeto', (done) => {
+            const tramitacaoProjeto = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_TRAMITACAO_PROJETO', tramitacaoProjeto.data.items);
+        });
+    });
+
+    describe('buscarUltimaTramitacao', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        items: {
+                            Emissor: 'M&ordf; do Socorro Silva',
+                            Receptor: 'Renata L.Oliveira',
+                            Estado: 'Recebido',
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscarUltimaTramitacao');
+            const idPronac = 216941;
+            actions.buscarUltimaTramitacao({ commit }, idPronac);
+        });
+
+        test('it calls projetoHelperAPI.buscarUltimaTramitacao', () => {
+            expect(projetoHelperAPI.buscarUltimaTramitacao).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscarUltimaTramitacao', (done) => {
+            const ultimaTramitacao = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_ULTIMA_TRAMITACAO', ultimaTramitacao.data.items);
+        });
+    });
+
+    describe('buscarPlanoDistribuicaoIn2017', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        items: {
+                            planodistribuicaoproduto: {
+                                idPlanoDistribuicao: 229891,
+                                idProjeto: 273246,
+                                idProduto: 19,
+                            },
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscarPlanoDistribuicaoIn2017');
+            const idPronac = 216941;
+            actions.buscarPlanoDistribuicaoIn2017({ commit }, idPronac);
+        });
+
+        test('it calls projetoHelperAPI.buscarPlanoDistribuicaoIn2017', () => {
+            expect(projetoHelperAPI.buscarPlanoDistribuicaoIn2017).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscarPlanoDistribuicaoIn2017', (done) => {
+            const planoDistribuicaoIn2017 = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_PLANO_DISTRIBUICAO_IN2017', planoDistribuicaoIn2017.data.items);
+        });
+    });
 });
