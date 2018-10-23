@@ -20,16 +20,6 @@ export const atualizarRegistro = params => api.putRequest(path, buildData(params
 
 export const removerRegistro = params => api.deleteRequest(path, params.Codigo);
 
-export const parecerConsolidacao = params => api.getRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${params}`);
-
-export const criarParecer = (params) => {
-    const parametro = params.idPronac;
-    delete params.idPronac;
-    const data = params;
-
-    return api.postRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${parametro}`, buildData(data));
-};
-
 export const getTeste = params => api.postRequest('/realizarprestacaodecontas/carregar-destinatarios/', buildData(params));
 
 export const getTipoAvaliacao = params => api.getRequest(`/avaliacao-resultados/tipo-avaliacao-rest/idPronac/${params}`);
@@ -47,6 +37,34 @@ export const projetoAnalise = params => api.getRequest(`/avaliacao-resultados/pr
 
 export const consolidacaoAnalise = params => api.getRequest(`/prestacao-contas/visualizar-projeto/dados-projeto?idPronac=${params}`);
 
+export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/tecnicos');
+
+export const encaminharParaTecnico = params => api.postRequest('/avaliacao-resultados/estado/', buildData(params));
+
+export const buscarPerfisDisponiveis = () => api.getRequest('/navegacao/perfil-rest/index');
+
+export const obterDadosItemComprovacao = params => api.getRequest(`/avaliacao-resultados/avaliacao-comprovante/${params}`);
+
+export const criarParecerLaudoFinal = params => api.postRequest('/avaliacao-resultados/laudo', buildData(params));
+
+export const finalizarParecerLaudoFinal = params => api.postRequest('/avaliacao-resultados/assinatura', buildData(params));
+
+export const obterProjetosParaDistribuir = () => api.getRequest('/prestacao-contas/prestacao-contas/obter-analise-financeira-virtual');
+
+export const criarDiligencia = params => api.postRequest('/diligencia/diligencia', buildData(params));
+
+/**  PARECER TECNICO */
+
+export const parecerConsolidacao = params => api.getRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${params}`);
+
+export const criarParecer = (params) => {
+    const parametro = params.idPronac;
+    delete params.idPronac;
+    const data = params;
+
+    return api.postRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${parametro}`, buildData(data));
+};
+
 export const finalizarParecer = (params) => {
     // const parametro = params.idPronac;
     // delete params.idPronac;
@@ -55,33 +73,24 @@ export const finalizarParecer = (params) => {
     return api.postRequest('/avaliacao-resultados/estado', buildData(data));
 };
 
-export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/tecnicos');
+/** FIM DO PARECER TECNICO */
 
-export const encaminharParaTecnico = params => api.postRequest('/avaliacao-resultados/estado/', buildData(params));
+/** REVISÃO PARECER TECNICO */
 
-export const obterDadosItemComprovacao = params => api.getRequest(`/avaliacao-resultados/avaliacao-comprovante/${params}`);
+export const getListaRevisoes = params => api.getRequest(`/avaliacao-resultados/revisao?idAvaliacaoFinanceira=${params}`);
 
-export const criarParecerLaudoFinal = (params) => {
-    console.log(params);
-    // const parametro = params.idPronac;
-    // delete params.idPronac;
-    // const data = params;
+export const getRevisao = params => api.getRequest(`/avaliacao-resultados/revisao/idAvaliacaoFinanceiraRevisao/${params}`);
 
-    // return api.postRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${parametro}`, buildData(data));
-};
+export const postRevisao = params => api.postRequest('http://localhost/avaliacao-resultados/revisao/', buildData(params));
 
-export const finalizarParecerLaudoFinal = (params) => {
-    console.log(params);
-    // const parametro = params.idPronac;
-    // delete params.idPronac;
-    // const data = params;
+export const updateRevisao = () => { };
 
-    // return api.postRequest('/avaliacao-resultados/estado', buildData(data));
-};
+/** FIM REVISAO PARECER */
 
-export const obterProjetosParaDistribuir = () => api.getRequest('/prestacao-contas/prestacao-contas/obter-analise-financeira-virtual');
+export const obterLaudoFinal = idPronac => api.getRequest(`/avaliacao-resultados/laudo/get?idPronac=${idPronac}`);
 
-export const criarDiligencia = params => api.postRequest('/diligencia/diligencia', buildData(params));
+export const obterProjetosLaudoFinal = () => api.getRequest('/avaliacao-resultados/laudo/index');
 
-export const obterProjetosParaAssinatura = () => api.getRequest('/avaliacao-resultados/projeto-assinatura');
+export const alterarPerfil = (grupoAtivo, orgaoAtivo) => api.getRequest(`perfil/perfil-rest/index?codGrupo=${grupoAtivo}&codOrgao=${orgaoAtivo}`);
 
+export const obterProjetosAssinatura = params => api.getRequest(`/avaliacao-resultados/projeto-assinatura/estado/${params.estado}`);

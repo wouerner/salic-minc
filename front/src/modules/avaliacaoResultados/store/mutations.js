@@ -22,13 +22,18 @@ export const state = {
     planilha: {},
     projetoAnalise: {},
     consolidacaoAnalise: {},
-    parecerLaudoFinal: {},
-    characterManifestacao: '',
-    characterParecer: '',
+    getParecerLaudoFinal: {},
     projetosFinalizados: {},
     dadosItemComprovacao: {},
     projetosParaDistribuir: {},
     getProjetosAssinatura: [],
+    getProjetosLaudoFinal: [],
+    getProjetosAssinar: {},
+    getProjetosEmAssinatura: {},
+    getProjetosHistorico: {},
+    versao: {},
+    revisaoParecer: {},
+    revisao: {},
 };
 
 export const mutations = {
@@ -39,6 +44,12 @@ export const mutations = {
     },
     [types.GET_PARECER](state, parecer) {
         state.parecer = parecer;
+    },
+    [types.HISTORICO_REVISAO](state, revisaoParecer) {
+        state.revisaoParecer = revisaoParecer;
+    },
+    [types.SET_REVISAO](state, revisao){
+        state.revisaoParecer.push(revisao);
     },
     [types.GET_PROJETO](state, projeto) {
         state.projeto = projeto;
@@ -100,14 +111,8 @@ export const mutations = {
     [types.GET_CONSOLIDACAO_ANALISE](state, consolidacaoAnalise) {
         state.consolidacaoAnalise = consolidacaoAnalise;
     },
-    [types.GET_LAUDO_FINAL](state, data) {
-        state.parecerLaudoFinal = data;
-    },
-    [types.SET_MANIFESTACAO_PROVISORIA](state, characterManifestacao) {
-        state.characterManifestacao = characterManifestacao;
-    },
-    [types.SET_PARECER_PROVISORIO](state, characterParecer) {
-        state.characterParecer = characterParecer;
+    [types.GET_PARECER_LAUDO_FINAL](state, data) {
+        state.getParecerLaudoFinal = data;
     },
     [types.GET_PROJETO_ANALISE](state, projetoAnalise) {
         state.projetoAnalise = projetoAnalise;
@@ -121,10 +126,23 @@ export const mutations = {
     [types.GET_DADOS_ITEM_COMPROVACAO](state, dados) {
         state.dadosItemComprovacao = dados;
     },
-    [types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR](state, dados){
+    [types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR](state, dados) {
         state.projetosParaDistribuir = dados;
     },
-    [types.SET_DADOS_PROJETOS_ASSINATURA](state, dados){
-        state.getProjetosAssinatura = dados;
+
+    [types.SET_DADOS_PROJETOS_ASSINAR](state, dados) {
+        state.getProjetosAssinar = dados;
+    },
+    [types.SET_DADOS_PROJETOS_EM_ASSINATURA](state, dados) {
+        state.getProjetosEmAssinatura = dados;
+    },
+    [types.SET_DADOS_PROJETOS_LAUDO_FINAL](state, dados) {
+        state.getProjetosLaudoFinal = dados;
+    },
+    [types.SET_DADOS_PROJETOS_HISTORICO](state, dados) {
+        state.getProjetosHistorico = dados;
+    },
+    [types.SET_VERSAO](state, dados) {
+        state.versao = dados;
     },
 };

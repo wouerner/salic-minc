@@ -13,11 +13,11 @@ class RevisaoAvaliacaoFinanceira
             'idAvaliacaoFinanceira' => $data
         ];
         $dadosRevisao = $tbAvaliacaoFinanceira->findByAvaliacaoFinanceira($where)->toArray();
-        if(!$dadosRevisao)
+        if(!$dadosRevisao && empty($dadosRevisao))
         {
-            return [$dadosRevisao, 400];
+            return ['dados'=>$dadosRevisao,'code'=> 400];
         }
-        return [$dadosRevisao, 200];
+        return ['dados'=>$dadosRevisao,'code'=> 200];
     }
 
     public function salvar($data)
@@ -26,20 +26,22 @@ class RevisaoAvaliacaoFinanceira
         $arrAuth = array_change_key_case((array)$authInstance->getIdentity());
         $tbAvaliacaoFinanceiraRevisao = new \AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisao($data);
 
-        if(isset($data['idAvaliacaoFinanceiraRevisao'])){
+        if(isset($data['idAvaliacaoFinanceiraRevisao']) && !empty($data['idAvaliacaoFinanceiraRevisao'])){
             $tbAvaliacaoFinanceiraRevisao->setDtAtualizacao(date('Y-m-d h:i:s'));
         }else{
             $tbAvaliacaoFinanceiraRevisao->setDtRevisao(date('Y-m-d h:i:s'));
         }
-        $tbAvaliacaoFinanceiraRevisao->setIdAgente($arrAuth['usu_codigo']);
+        //$tbAvaliacaoFinanceiraRevisao->setIdAgente($arrAuth['idAgente']);
+
         $mapper = new \AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisaoMapper();
         $codigo = $mapper->save($tbAvaliacaoFinanceiraRevisao);
 
         if (!$codigo) {
-            $error = [$mapper->getMessages(), 400];
+            $error = ['dados'=>$mapper->getMessages(),'code'=> 400];
             return $error;
         }
-        $retorno = [$this->buscarRevisao($codigo),200];
+        $retorno = ['dados'=>$this->buscarRevisao($codigo), 'code'=>200];
+
         return $retorno;
     }
 
@@ -51,10 +53,10 @@ class RevisaoAvaliacaoFinanceira
         ];
         $dadosRevisao = $tbAvaliacaoFinanceira->findOneRevisao($where)->toArray();
 
-        if(!$dadosRevisao)
+        if(!$dadosRevisao && empty($dadosRevisao))
         {
-         return [$dadosRevisao, 400];
+         return ['dados'=>$dadosRevisao,'code'=> 400];
         }
-        return [$dadosRevisao, 200];
+        return ['dados'=>$dadosRevisao, 'code'=> 200];
     }
 }
