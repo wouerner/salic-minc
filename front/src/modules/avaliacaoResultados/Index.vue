@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <v-app>
+        <v-app :dark="isModoNoturno">
             <SlNav></SlNav>
             <v-content>
                 <v-container fluid>
@@ -36,6 +36,7 @@ export default {
     methods: {
         ...mapActions({
             setSnackbar: 'noticias/setDados',
+            obterModoNoturno: 'layout/obterModoNoturno',
         }),
         fecharSnackbar() {
             this.setSnackbar({ ativo: false });
@@ -44,13 +45,16 @@ export default {
     computed: {
         ...mapGetters({
             getSnackbar: 'noticias/getDados',
+            isModoNoturno: 'layout/modoNoturno',
         }),
     },
     mounted() {
         this.setSnackbar({ ativo: false, color: 'success' });
+        this.obterModoNoturno();
     },
     data() {
         return {
+            dark: false,
             snackbar: false,
         };
     },
