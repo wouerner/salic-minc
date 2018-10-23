@@ -56,7 +56,7 @@
         },
         computed: {
             ...mapGetters({
-                perfis: 'header/perfisDisponiveis',
+                perfis: 'layout/perfisDisponiveis',
                 usuario: 'autenticacao/getUsuario',
             }),
             perfilAtual() {
@@ -78,8 +78,8 @@
         },
         methods: {
             ...mapActions({
-                buscarPerfisDisponiveis: 'header/buscarPerfisDisponiveis',
-                alterarPerfil: 'header/alterarPerfil',
+                buscarPerfisDisponiveis: 'layout/buscarPerfisDisponiveis',
+                alterarPerfil: 'layout/alterarPerfil',
             }),
             trocarPerfil(perfil) {
                 this.alterarPerfil(perfil);

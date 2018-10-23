@@ -2,8 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import modal from '@/components/modal/store';
-import header from '@/components/layout/header/store';
-import rodape from '@/components/layout/footer/store';
+import layout from '@/components/layout/store';
 import projeto from './modules/projeto/store';
 import foo from './modules/foo/store';
 import avaliacaoResultados from './modules/avaliacaoResultados/store';
@@ -22,8 +21,7 @@ export default new Vuex.Store({
         projeto,
         foo,
         modal,
-        header,
-        rodape,
+        layout,
         avaliacaoResultados,
         proposta,
         autenticacao,

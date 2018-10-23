@@ -25,3 +25,11 @@ export const obterSolicitacoes = ({ commit }) => {
             commit(types.SET_SOLICITACOES, items);
         });
 };
+
+export const buscarVersao = ({ commit }) => {
+    layoutHelperAPI.buscarVersao()
+        .then((response) => {
+            const versao = desencapsularResponse.default(response);
+            commit(types.SET_VERSAO, versao[0]);
+        });
+};

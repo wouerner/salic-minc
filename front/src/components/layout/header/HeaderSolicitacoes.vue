@@ -95,12 +95,12 @@
         },
         computed: {
             ...mapGetters({
-                solicitacoes: 'header/solicitacoes'
+                solicitacoes: 'layout/solicitacoes'
             }),
         },
         methods: {
             ...mapActions({
-                obterSolicitacoes: 'header/obterSolicitacoes',
+                obterSolicitacoes: 'layout/obterSolicitacoes',
             }),
             buscarSolicitacoes() {
                 if (this.menuAtivo === false) {

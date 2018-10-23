@@ -63,7 +63,7 @@
         },
         computed: {
             ...mapGetters({
-                versao: 'rodape/versao',
+                versao: 'layout/versao',
             }),
         },
         created() {
@@ -71,7 +71,7 @@
         },
         methods: {
             ...mapActions({
-                buscarVersao: 'rodape/buscarVersao',
+                buscarVersao: 'layout/buscarVersao',
             }),
         },
     };
