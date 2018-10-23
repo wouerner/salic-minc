@@ -18,7 +18,7 @@ class Projeto_PlanoDistribuicaoRestController extends MinC_Controller_Rest_Abstr
             $planoDistribuicaoService= new PlanoDistribuicaoService($this->getRequest(), $this->getResponse());
             $resposta = $planoDistribuicaoService->buscaPlanoDistribuicao();
 
-            $this->customRenderJsonResponse(['data' => $resposta], 200);
+            $this->renderJsonResponse($resposta, 200);
 
         } catch (Exception $objException) {
             $this->customRenderJsonResponse([

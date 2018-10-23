@@ -5,13 +5,13 @@
             :nomeProjeto="dadosProjeto.NomeProjeto">
         </IdentificacaoProjeto>
         <PropostaPlanoDistribuicao
-                :arrayProdutos="dados.planodistribuicaoproduto"
-                :arrayDetalhamentos="dados.tbdetalhaplanodistribuicao">
+                :arrayProdutos="dadosIn2017.planodistribuicaoproduto"
+                :arrayDetalhamentos="dadosIn2017.tbdetalhaplanodistribuicao">
         </PropostaPlanoDistribuicao>
     </div>
 </template>
 <script>
-    import { mapGetters } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
     import PropostaPlanoDistribuicao from '@/modules/proposta/visualizar/components/PropostaPlanoDistribuicao';
     import IdentificacaoProjeto from './IdentificacaoProjeto';
 
@@ -22,41 +22,45 @@
             IdentificacaoProjeto,
             PropostaPlanoDistribuicao,
         },
-        data() {
-            return {
-                dados: {
-                    type: Object,
-                    default() {
-                        return {};
-                    },
-                },
-            };
-        },
+//        data() {
+//            return {
+//                dados: {
+//                    type: Object,
+//                    default() {
+//                        return {};
+//                    },
+//                },
+//            };
+//        },
         mounted() {
             if (typeof this.dadosProjeto.idPreProjeto !== 'undefined') {
-                this.obterDados();
+                this.buscarPlanoDistribuicaoIn2017(this.dadosProjeto.idPreProjeto);
             }
         },
-        watch: {
-            dadosProjeto() {
-                this.obterDados();
-            },
-        },
+//        watch: {
+//            dadosProjeto() {
+//                this.obterDados();
+//            },
+//        },
         computed: {
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
+                dadosIn2017: 'projeto/planoDistribuicaoIn2017',
             }),
         },
         methods: {
-            obterDados() {
-                const self = this;
-                /* eslint-disable */
-                $3.ajax({
-                    url: '/projeto/plano-distribuicao-rest/index/idPreProjeto/' + self.dadosProjeto.idPreProjeto,
-                }).done(function (response) {
-                    self.dados = response.data;
-                });
-            },
+            ...mapActions({
+                buscarPlanoDistribuicaoIn2017: 'projeto/buscarPlanoDistribuicaoIn2017',
+            })
+//            obterDados() {
+//                const self = this;
+//                /* eslint-disable */
+//                $3.ajax({
+//                    url: '/projeto/plano-distribuicao-rest/index/idPreProjeto/' + self.dadosProjeto.idPreProjeto,
+//                }).done(function (response) {
+//                    self.dados = response.data;
+//                });
+//            },
         },
     }
 </script>

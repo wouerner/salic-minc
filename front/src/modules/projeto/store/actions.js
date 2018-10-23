@@ -172,3 +172,12 @@ export const buscarUltimaTramitacao = ({ commit }, idPronac) => {
             commit(types.SET_ULTIMA_TRAMITACAO, data);
         });
 };
+
+export const buscarPlanoDistribuicaoIn2017 = ({ commit }, idPreProjeto) => {
+    projetoHelperAPI.buscarPlanoDistribuicaoIn2017(idPreProjeto)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_PLANO_DISTRIBUICAO_IN2017, data);
+        });
+};
+

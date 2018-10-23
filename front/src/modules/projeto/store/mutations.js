@@ -20,6 +20,7 @@ export const state = {
     tramitacaoDocumento: {},
     tramitacaoProjeto: {},
     ultimaTramitacao: {},
+    planoDistribuicaoIn2017: []
 };
 
 export const mutations = {
@@ -79,5 +80,8 @@ export const mutations = {
     },
     [types.SET_ULTIMA_TRAMITACAO](state, ultimaTramitacao) {
         state.ultimaTramitacao = ultimaTramitacao;
+    },
+    [types.SET_PLANO_DISTRIBUICAO_IN2017](state, dados) {
+        state.planoDistribuicaoIn2017 = dados;
     },
 };
