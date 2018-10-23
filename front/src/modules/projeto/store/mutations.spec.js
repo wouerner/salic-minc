@@ -47,7 +47,17 @@ describe('Projeto Mutations', () => {
             planilhaAdequada: {
                 Seq: '',
                 idPlanilhaProposta: '',
-                idEtapa: ''
+                idEtapa: '',
+            },
+            transferenciaRecursos: {
+                idPronacTransferidor: '',
+                PronacTransferidor: '',
+                NomeProjetoTranferidor: '',
+                idPronacRecebedor: '',
+                PronacRecebedor: '',
+                NomeProjetoRecedor: '',
+                dtRecebimento: '',
+                vlRecebido: '',
             },
         };
 
@@ -92,7 +102,7 @@ describe('Projeto Mutations', () => {
         planilhaAdequada = {
             Seq: '28',
             idPlanilhaProposta: '4913779',
-            idEtapa: '8'
+            idEtapa: '8',
         };
 
         transferenciaRecursos = {
