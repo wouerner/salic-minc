@@ -34,6 +34,7 @@
                                round
                                color="green darken-4"
                                dark
+                               :to="{ name: 'VisualizarParecer', params:{ id:props.item.IdPronac }}"
                         >
                             <v-icon>mood</v-icon>Aprovado
                         </v-btn>
@@ -41,6 +42,7 @@
                                round
                                color="green lighten-1"
                                dark
+                               :to="{ name: 'VisualizarParecer', params:{ id:props.item.IdPronac }}"
                         >
                             <v-icon>sentiment_satisfied_alt</v-icon>Aprovado com ressalva
                         </v-btn>
@@ -48,8 +50,9 @@
                                round
                                color="red"
                                dark
+                               :to="{ name: 'VisualizarParecer', params:{ id:props.item.IdPronac }}"
                         >
-                            <v-icon>sentiment_very_dissatisfied</v-icon> Reprovado
+                            <v-icon>sentiment_very_dissatisfied</v-icon>Reprovado
                         </v-btn>
                     </td>
                     <td class="text-xs-center">

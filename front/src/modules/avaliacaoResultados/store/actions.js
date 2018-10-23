@@ -31,6 +31,7 @@ export const getDadosEmissaoParecer = ({ commit }, param) => {
                 commit(types.GET_PROJETO, data.projeto);
                 commit(types.GET_PARECER, data.parecer);
                 commit(types.GET_CONSOLIDACAO_PARECER, data.consolidacaoComprovantes);
+                commit(types.GET_OBJETO_PARECER, data.objetoParecer);
                 resolve();
             }).catch(() => { });
     });

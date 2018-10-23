@@ -38,6 +38,7 @@ export const state = {
     revisaoParecer: {},
     revisao: {},
     projetosRevisao: {},
+    objetoParecer: {},
 };
 
 export const mutations = {
@@ -160,5 +161,8 @@ export const mutations = {
     },
     [types.SYNC_PROJETOS_REVISAO](state, dados) {
         state.projetosRevisao = dados;
+    },
+    [types.GET_OBJETO_PARECER](state, dados) {
+        state.objetoParecer = dados;
     },
 };
