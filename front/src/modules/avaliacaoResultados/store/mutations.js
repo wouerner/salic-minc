@@ -36,11 +36,8 @@ export const state = {
     getProjetosHistorico: {},
     versao: {},
     projetosRevisao: {},
-<<<<<<< HEAD
     devolverProjeto: {},
-=======
     objetoParecer: {},
->>>>>>> avaliacao-resultados-fix
 };
 
 export const mutations = {

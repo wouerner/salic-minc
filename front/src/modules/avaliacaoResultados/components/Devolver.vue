@@ -31,7 +31,7 @@
                             block
                             @click="dialog = false"
                         >
-                            Confirmar
+                            Ok
                         </v-btn>
                     </v-card-actions>
                 </v-card>
