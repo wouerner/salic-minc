@@ -48,7 +48,7 @@
                 </v-tab>
 
                 <v-tab-item
-                    :id="'tab-0'"
+                    :value="'tab-0'"
                     :key="0"
                 >
                     <TabelaProjetos
@@ -58,7 +58,7 @@
                     ></TabelaProjetos>
                 </v-tab-item>
                 <v-tab-item
-                    :id="'tab-1'"
+                    :value="'tab-1'"
                     :key="1"
                 >
                     <v-card flat
@@ -82,7 +82,7 @@
                     </v-card>
                 </v-tab-item>
                 <v-tab-item
-                    :id="'tab-2'"
+                    :value="'tab-2'"
                     :key="2"
                 >
                     <v-card flat>
@@ -96,7 +96,7 @@
                 </v-tab-item>
 
                 <v-tab-item
-                    :id="'tab-4'"
+                    :value="'tab-4'"
                     :key="4"
                 >
                     <v-card flat>
@@ -120,8 +120,6 @@ import Historico from './Historico';
 import Encaminhar from './ComponenteEncaminhar';
 import AnaliseButton from './analise/analisarButton';
 import AssinarButton from './analise/AssinarButton';
-import RevisaoButton from './revisao/revisaoButton';
-import VisualizarButton from './analise/visualizarButton';
 import Devolver from './Devolver';
 
 export default {
@@ -173,11 +171,10 @@ export default {
     },
     data() {
         return {
-            listaAcoesTecnico: [Historico, AnaliseButton],
-            listaAcoesAssinar: [Historico, AssinarButton],
-            listaAcoesCoordenador: [Encaminhar, Historico],
-            distribuirAcoes: [Encaminhar],
-            revisaoAcoes: [RevisaoButton, VisualizarButton, Historico, Devolver],
+            listaAcoesTecnico: { atual: '', proximo: '', acoes: [Historico, AnaliseButton] },
+            listaAcoesAssinar: { atual: '6', proximo: '5', acoes: [Historico, AssinarButton, Devolver] },
+            listaAcoesCoordenador: { atual: '', proximo: '', acoes: [Encaminhar, Historico, Devolver] },
+            distribuirAcoes: { atual: '', proximo: '', acoes: [Encaminhar] },
         };
     },
     components: {

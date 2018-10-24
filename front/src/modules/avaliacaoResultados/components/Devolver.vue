@@ -1,44 +1,38 @@
 <template>
-    <div>
-        <div class="text-xs-center">
-            <v-dialog
-                v-model="dialog"
-                width="650"
+    <v-dialog
+        v-model="dialog"
+        width="650"
+    >
+        <v-tooltip slot="activator" bottom>
+            <v-btn 
+                slot="activator"
+                color="green lighten-2"
+                text="white"
+                flat
+                icon
+                light
+                @click.native="setDevolverProjeto({ idPronac: idPronac, atual: atual, proximo: proximo })"
             >
-                <v-tooltip slot="activator" bottom>
-                    <v-btn 
-                        slot="activator"
-                        color="green lighten-2"
-                        text="white"
-                        flat
-                        icon
-                        light
-                        @click.native="setDevolverProjeto({ idpronac: idPronac, atual: 13, proximo: 15 })"
-                    >
-                        <v-icon class="material-icons">replay</v-icon>
-                    </v-btn>
-                    <span>Devolver Projeto</span>
-                </v-tooltip>
-
-                <v-card>
-                    <v-card-text>
-                        Você devolverá o projeto para o técnico.
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-btn
-                            color="success"
-                            flat
-                            block
-                            @click="dialog = false"
-                        >
-                            Ok
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
-                
-            </v-dialog>
-        </div>
-    </div>
+                <v-icon class="material-icons">replay</v-icon>
+            </v-btn>
+            <span>Devolver Projeto</span>
+        </v-tooltip>
+        <v-card>
+            <v-card-text>
+                Você devolverá o projeto para o técnico.
+            </v-card-text>
+            <v-card-actions>
+                <v-btn
+                    color="success"
+                    flat
+                    block
+                    @click="dialog = false"
+                >
+                    Ok
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -54,6 +48,8 @@
         },
         props: {
             idPronac: String,
+            atual: String,
+            proximo: String,
         },
         components: {
             Modal,
