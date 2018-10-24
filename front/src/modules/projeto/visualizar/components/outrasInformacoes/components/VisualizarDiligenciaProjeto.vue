@@ -134,7 +134,7 @@
                     const valor = value.idDiligencia;
                     const idPronac = this.idPronac;
 
-                    this.buscarDiligenciaProjeto({idPronac, valor});
+                    this.buscarDiligenciaProjeto({ idPronac, valor });
                 }
             },
             ...mapActions({
