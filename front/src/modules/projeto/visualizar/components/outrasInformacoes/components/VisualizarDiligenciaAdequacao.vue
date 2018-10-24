@@ -57,6 +57,7 @@
         },
         computed: {
             ...mapGetters({
+                dadosProjeto: 'projeto/projeto',
                 dadosDiligencia: 'projeto/diligenciaAdequacao',
             }),
         },
@@ -69,7 +70,7 @@
                     this.ativo = true;
 
                     const valor = value.idAvaliarAdequacaoProjeto;
-                    const idPronac = this.idPronac;
+                    const idPronac = this.dadosProjeto.idPronac;
 
                     this.buscarDiligenciaAdequacao({ idPronac, valor });
                 }

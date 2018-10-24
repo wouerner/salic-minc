@@ -132,7 +132,7 @@
                     this.ativo = true;
 
                     const valor = value.idDiligencia;
-                    const idPronac = this.idPronac;
+                    const idPronac = this.dadosProjeto.idPronac;
 
                     this.buscarDiligenciaProjeto({ idPronac, valor });
                 }

@@ -21,3 +21,4 @@ export const planoDistribuicaoIn2017 = state => state.planoDistribuicaoIn2017;
 export const diligenciaProposta = state => state.diligenciaProposta;
 export const diligenciaAdequacao = state => state.diligenciaAdequacao;
 export const diligenciaProjeto = state => state.diligenciaProjeto;
+export const diligencia = state => state.diligencia;

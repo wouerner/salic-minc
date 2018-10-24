@@ -194,3 +194,12 @@ export const buscarDiligenciaProjeto = (idPronac, idDiligencia) => {
     const queryParams = `?idPronac=${idPronac}&idDiligencia=${idDiligencia}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscarDiligencia = (idPronac) => {
+    const modulo = '/projeto';
+    const controller = '/diligencia-projeto-rest';
+    const metodo = '/index';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};

@@ -38,7 +38,7 @@
     </div>
 </template>
 <script>
-    import { mapGetters } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
     import IdentificacaoProjeto from './IdentificacaoProjeto';
     import VisualizarDiligenciaProposta from './components/VisualizarDiligenciaProposta';
     import VisualizarDiligenciaAdequacao from './components/VisualizarDiligenciaAdequacao';
@@ -54,36 +54,24 @@
         },
         data() {
             return {
-                dados: {
-                    type: Object,
-                    default() {
-                        return {};
-                    },
-                },
                 idPronac: {},
             };
         },
         mounted() {
-            if (typeof this.$route.params.idPronac !== 'undefined') {
-                this.buscar_dados();
+            if (typeof this.dadosProjeto.idPronac !== 'undefined') {
+                this.buscarDiligencia(this.dadosProjeto.idPronac);
             }
         },
         computed: {
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
+                dados: 'projeto/diligencia',
             }),
         },
         methods: {
-            buscar_dados() {
-                const self = this;
-                self.idPronac = self.$route.params.idPronac,
-                /* eslint-disable */
-                    $3.ajax({
-                        url: '/projeto/diligencia-projeto-rest/index/idPronac/' + self.idPronac,
-                    }).done(function (response) {
-                        self.dados = response.data;
-                    });
-            },
+            ...mapActions({
+                buscarDiligencia: 'projeto/buscarDiligencia',
+            }),
         },
     };
 </script>

@@ -24,6 +24,7 @@ export const state = {
     diligenciaProposta: [],
     diligenciaAdequacao: [],
     diligenciaProjeto: [],
+    diligencia: [],
 };
 
 export const mutations = {
@@ -95,5 +96,8 @@ export const mutations = {
     },
     [types.SET_DILIGENCIA_PROJETO](state, dados) {
         state.diligenciaProjeto = dados;
+    },
+    [types.SET_DILIGENCIA](state, dados) {
+        state.diligencia = dados;
     },
 };
