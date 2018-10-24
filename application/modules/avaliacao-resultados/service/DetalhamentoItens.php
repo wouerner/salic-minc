@@ -14,8 +14,13 @@ class DetalhamentoItens
         $this->response = $response;
     }
 
-    public function ObterDetalhmento()
+    public function obterDetalhamento()
     {
-        xd('AAAAAAAAAAAAAAA');
+        $idPronac = (int) $this->request->idPronac;
+        $planilhaAprovacaoModel = new \PlanilhaAprovacao();
+
+        $resposta = $planilhaAprovacaoModel->parametrosBuscaComprovantes($idPronac);
+
+        return $resposta->toArray();
     }
 }

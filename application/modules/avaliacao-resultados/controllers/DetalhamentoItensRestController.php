@@ -1,5 +1,5 @@
 <?php
-// use Application\Modules\AvaliacaoResultados\Service\TipoAvaliacao as TipoAvaliacao;
+use Application\Modules\AvaliacaoResultados\Service\DetalhamentoItens as DetalhamentoItensService;
 
 class AvaliacaoResultados_DetalhamentoItensRestController extends MinC_Controller_Rest_Abstract
 {
@@ -15,8 +15,10 @@ class AvaliacaoResultados_DetalhamentoItensRestController extends MinC_Controlle
 
     public function indexAction()
     {
-        xd('AAAAAAAAAAAAAAAA');
-        $this->renderJsonResponse([], 200);
+        $detalhamentoItensService = new DetalhamentoItensService($this->getRequest(), $this->getResponse());
+        $resposta = $detalhamentoItensService->obterDetalhamento();
+
+        $this->renderJsonResponse($resposta, 200);
     }
 
     public function getAction()
