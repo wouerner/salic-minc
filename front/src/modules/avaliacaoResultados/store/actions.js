@@ -1,3 +1,4 @@
+import * as desencapsularResponse from '@/helpers/actions';
 import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
 import * as types from './types';
 
@@ -277,10 +278,10 @@ export const projetosRevisao = ({ commit }, params) => {
         });
 };
 
-export const buscarDetalhamentoItens = (_, idPronac) => {
+export const buscarDetalhamentoItens = ({ commit }, idPronac) => {
     avaliacaoResultadosHelperAPI.buscarDetalhamentoItens(idPronac)
         .then((response) => {
-            console.log('AAAAAAAAAAAAAAAAAAAAAAAAAA');
-            console.log(response);
+            const itens = desencapsularResponse.default(response);
+            commit(types.SET_ITENS_BUSCA_COMPROVANTES, itens);
         });
 };
