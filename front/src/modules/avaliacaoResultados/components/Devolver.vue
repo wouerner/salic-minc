@@ -13,6 +13,7 @@
                         flat
                         icon
                         light
+                        @click.native="setDevolverProjeto({ idpronac: idPronac, atual: 13, proximo: 15 })"
                     >
                         <v-icon class="material-icons">replay</v-icon>
                     </v-btn>
@@ -41,7 +42,7 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
+    import { mapActions } from 'vuex';
     import Modal from '@/components/modal';
 
     export default {
@@ -51,13 +52,11 @@
                 dialog: false,
             };
         },
+        props: {
+            idPronac: String,
+        },
         components: {
             Modal,
-        },
-        computed: {
-            ...mapGetters({
-                getDevolverProjeto: 'avaliacaoResultados/devolverProjeto',
-            }),
         },
         methods: {
             ...mapActions({

@@ -273,7 +273,7 @@ export const devolverProjeto = ({ commit }, params) => {
     avaliacaoResultadosHelperAPI.devolverProjeto(params)
         .then((response) => {
             const devolverProjeto = response.data;
-            commit(types.GET_DEVOLVER_PROJETO, devolverProjeto);
+            commit(types.SET_DEVOLVER_PROJETO, devolverProjeto);
         });
 };
 
