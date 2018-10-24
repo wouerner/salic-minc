@@ -41,8 +41,6 @@ export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/te
 
 export const encaminharParaTecnico = params => api.postRequest('/avaliacao-resultados/estado/', buildData(params));
 
-export const buscarPerfisDisponiveis = () => api.getRequest('/navegacao/perfil-rest/index');
-
 export const obterDadosItemComprovacao = params => api.getRequest(`/avaliacao-resultados/avaliacao-comprovante/${params}`);
 
 export const criarParecerLaudoFinal = params => api.postRequest('/avaliacao-resultados/laudo', buildData(params));
@@ -75,17 +73,6 @@ export const finalizarParecer = (params) => {
 
 /** FIM DO PARECER TECNICO */
 
-/** REVISÃO PARECER TECNICO */
-
-export const getListaRevisoes = params => api.getRequest(`/avaliacao-resultados/revisao?idAvaliacaoFinanceira=${params}`);
-
-export const getRevisao = params => api.getRequest(`/avaliacao-resultados/revisao/idAvaliacaoFinanceiraRevisao/${params}`);
-
-export const postRevisao = params => api.postRequest('http://localhost/avaliacao-resultados/revisao/', buildData(params));
-
-export const updateRevisao = () => { };
-
-/** FIM REVISAO PARECER */
 
 export const obterLaudoFinal = idPronac => api.getRequest(`/avaliacao-resultados/laudo/get?idPronac=${idPronac}`);
 

@@ -31,7 +31,7 @@
                     </td>
                     <td class="text-xs-center">{{ props.item.NomeProjeto }}</td>
                     <td class="text-xs-center">
-                        <v-btn v-if="props.item.dsResutaldoAvaliacaoObjeto == 'APROVADO'"
+                        <v-btn v-if="props.item.siManifestacao == 'A'"
                                round
                                color="green darken-4"
                                dark
@@ -40,7 +40,7 @@
                         >
                             <v-icon>mood</v-icon>Aprovado
                         </v-btn>
-                        <v-btn v-if="props.item.dsResutaldoAvaliacaoObjeto == 'APROVADO COM RESSALVAS'"
+                        <v-btn v-if="props.item.siManifestacao == 'P'"
                                round
                                color="green lighten-1"
                                dark
@@ -49,7 +49,7 @@
                         >
                             <v-icon>sentiment_satisfied_alt</v-icon>Aprovado com ressalva
                         </v-btn>
-                        <v-btn v-if="props.item.dsResutaldoAvaliacaoObjeto == 'REPROVADO'"
+                        <v-btn v-if="props.item.siManifestacao == 'R'"
                                round
                                color="red"
                                dark
