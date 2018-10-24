@@ -150,17 +150,17 @@
                     {
                         align: 'center',
                         text: 'PRONAC',
-                        value: 'pronac',
+                        value: 'PRONAC',
                     },
                     {
                         align: 'center',
                         text: 'Nome Do Projeto',
-                        value: 'nomeProjeto',
+                        value: 'NomeProjeto',
                     },
                     {
                         align: 'center',
                         text: 'Manifestação',
-                        value: 'manifestacao',
+                        value: 'dsResutaldoAvaliacaoObjeto',
                     },
                     {
                         align: 'center',
