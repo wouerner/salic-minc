@@ -13,7 +13,8 @@
                 <h2>{{ dadosProjeto.items.pronac }} &#45; {{ dadosProjeto.items.nomeProjeto }}</h2>
             </v-card-title>
             <v-card-text>
-                <p v-if="dadosProjeto.items.diligencia">Existe Diligência para esse projeto. Acesse <a :href="'/proposta/diligenciar/listardiligenciaanalista/idPronac/' + idPronac">aqui</a>.</p>
+                <p v-if="dadosProjeto.items.diligencia">Existe Diligência para esse projeto. Acesse <a
+                    :href="'/proposta/diligenciar/listardiligenciaanalista/idPronac/' + idPronac">aqui</a>.</p>
                 <p v-else-if="documento != 0">Existe Documento para assinar nesse projeto.</p>
                 <p v-else-if="estado.estadoId == 5">Projeto em analise.</p>
                 <p v-else>Sem Observações.</p>
@@ -38,7 +39,8 @@
                     color="success"
                     :href="'/consultardadosprojeto/index?idPronac=' + idPronac" target="_blank"
                     class="mr-2"
-                >VER PROJETO</v-btn>
+                >VER PROJETO
+                </v-btn>
 
                 <consolidacao-analise
                     :idPronac="idPronac"
@@ -109,8 +111,11 @@
                                                     <v-tabs
                                                         slider-color="green"
                                                     >
-                                                        <v-tab ripple v-for="tab in Object.keys(cidade.itens)" :key="tab">{{ tabs[tab] }}</v-tab>
-                                                        <v-tab-item v-for="item in cidade.itens" :key="item.stItemAvaliado">
+                                                        <v-tab ripple v-for="tab in Object.keys(cidade.itens)"
+                                                               :key="tab">{{ tabs[tab] }}
+                                                        </v-tab>
+                                                        <v-tab-item v-for="item in cidade.itens"
+                                                                    :key="item.stItemAvaliado">
                                                             <v-data-table
                                                                 :headers="headers"
                                                                 :items="Object.values(item)"
@@ -120,9 +125,11 @@
                                                                     <td>{{ props.item.item }}</td>
                                                                     <td>{{ moeda(props.item.varlorAprovado) }}</td>
                                                                     <td>{{ moeda(props.item.varlorComprovado) }}</td>
-                                                                    <td>{{ moeda(props.item.varlorAprovado - props.item.varlorComprovado) }}</td>
+                                                                    <td>{{ moeda(props.item.varlorAprovado -
+                                                                        props.item.varlorComprovado) }}
+                                                                    </td>
                                                                     <td>
-                                                                        <Modal></Modal>
+                                                                        <ModalDetalheItens></ModalDetalheItens>
                                                                     </td>
                                                                 </template>
                                                             </v-data-table>
@@ -143,9 +150,7 @@
 </template>
 <script>
     import { mapActions, mapGetters } from 'vuex';
-    import ModalTemplate from '@/components/modal';
-    import DetalheItemCusto from './modal';
-
+    import ModalDetalheItens from './ModalDetalheItens';
     import ConsolidacaoAnalise from './ConsolidacaoAnalise';
     import AnalisarItem from './AnalisarItem';
 
@@ -174,6 +179,7 @@
             ...mapGetters({
                 getPlanilha: 'avaliacaoResultados/planilha',
                 getProjetoAnalise: 'avaliacaoResultados/projetoAnalise',
+                modalVisible: 'modal/default',
             }),
             dadosProjeto() {
                 return this.getProjetoAnalise.data;
@@ -199,15 +205,16 @@
             this.setProjetoAnalise(this.idPronac);
         },
         components: {
-            ModalTemplate,
+            ModalDetalheItens,
             ConsolidacaoAnalise,
             AnalisarItem,
-            Modal,
         },
         methods: {
             ...mapActions({
                 setPlanilha: 'avaliacaoResultados/planilha',
                 setProjetoAnalise: 'avaliacaoResultados/projetoAnalise',
+                modalOpen: 'modal/modalOpen',
+                modalClose: 'modal/modalClose',
             }),
             moeda: (moedaString) => {
                 const moeda = Number(moedaString);
