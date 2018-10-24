@@ -40,11 +40,11 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
-                        color="primary"
+                        color="red lighten-2"
                         flat
                         @click="dialog = false"
                     >
-                        I accept
+                        Fechar
                     </v-btn>
                 </v-card-actions>
             </v-card>
