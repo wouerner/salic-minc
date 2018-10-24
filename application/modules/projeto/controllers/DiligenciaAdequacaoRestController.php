@@ -24,7 +24,7 @@ class Projeto_DiligenciaAdequacaoRestController extends MinC_Controller_Rest_Abs
             $diligenciaService = new DiligenciaAdequacaoService($this->getRequest(), $this->getResponse());
             $resposta = $diligenciaService->visualizarDiligenciaAdequacaoProjeto();
 
-            $this->customRenderJsonResponse(['data' => $resposta], 200);
+            $this->renderJsonResponse($resposta, 200);
 
         } catch (Exception $objException) {
             $this->customRenderJsonResponse([

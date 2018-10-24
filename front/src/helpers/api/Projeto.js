@@ -167,3 +167,30 @@ export const buscarPlanoDistribuicaoIn2017 = (idPreProjeto) => {
     const queryParams = `?idPreProjeto=${idPreProjeto}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscarDiligenciaProposta = (dados) => {
+    const modulo = '/projeto';
+    const controller = '/diligencia-proposta-rest';
+    const metodo = '/get';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPreProjeto=${dados.idPreprojeto}&idAvaliacaoProposta=${dados.idAvaliacaoProposta}`;
+    return api.getRequest(path, queryParams);
+};
+
+export const buscarDiligenciaAdequacao = (idPronac, idAvaliarAdequacaoProjeto) => {
+    const modulo = '/projeto';
+    const controller = '/diligencia-adequacao-rest';
+    const metodo = '/get';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPronac=${idPronac}&idAvaliarAdequacaoProjeto=${idAvaliarAdequacaoProjeto}`;
+    return api.getRequest(path, queryParams);
+};
+//url: `/projeto/diligencia-projeto-rest/get/idPronac/${self.idPronac}/idDiligencia/${idDiligencia}`,
+export const buscarDiligenciaProjeto = (idPronac, idDiligencia) => {
+    const modulo = '/projeto';
+    const controller = '/diligencia-projeto-rest';
+    const metodo = '/get';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPronac=${idPronac}&idDiligencia=${idDiligencia}`;
+    return api.getRequest(path, queryParams);
+};

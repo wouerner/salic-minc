@@ -24,7 +24,7 @@ class Projeto_DiligenciaPropostaRestController extends MinC_Controller_Rest_Abst
             $diligenciaService = new DiligenciaPropostaService($this->getRequest(), $this->getResponse());
             $resposta = $diligenciaService->visualizarDiligenciaProposta();
 
-            $this->customRenderJsonResponse(['data' => $resposta], 200);
+            $this->renderJsonResponse($resposta, 200);
 
         } catch (Exception $objException) {
             $this->customRenderJsonResponse([
