@@ -121,6 +121,9 @@
                                                                     <td>{{ moeda(props.item.varlorAprovado) }}</td>
                                                                     <td>{{ moeda(props.item.varlorComprovado) }}</td>
                                                                     <td>{{ moeda(props.item.varlorAprovado - props.item.varlorComprovado) }}</td>
+                                                                    <td>
+                                                                        <Modal></Modal>
+                                                                    </td>
                                                                 </template>
                                                             </v-data-table>
                                                         </v-tab-item>
@@ -138,8 +141,8 @@
         </template>
     </v-container>
 </template>
-
 <script>
+    import Modal from '@/components/vuetify-modal';
     import { mapActions, mapGetters } from 'vuex';
     import ModalTemplate from '@/components/modal';
     import ConsolidacaoAnalise from './ConsolidacaoAnalise';
@@ -164,6 +167,7 @@
                 },
                 fab: false,
                 idPronac: this.$route.params.id,
+                dialog: false,
             };
         },
         computed: {
@@ -198,6 +202,7 @@
             ModalTemplate,
             ConsolidacaoAnalise,
             AnalisarItem,
+            Modal,
         },
         methods: {
             ...mapActions({
@@ -228,3 +233,4 @@
         },
     };
 </script>
+
