@@ -185,7 +185,7 @@ export const buscarDiligenciaAdequacao = (idPronac, idAvaliarAdequacaoProjeto) =
     const queryParams = `?idPronac=${idPronac}&idAvaliarAdequacaoProjeto=${idAvaliarAdequacaoProjeto}`;
     return api.getRequest(path, queryParams);
 };
-//url: `/projeto/diligencia-projeto-rest/get/idPronac/${self.idPronac}/idDiligencia/${idDiligencia}`,
+
 export const buscarDiligenciaProjeto = (idPronac, idDiligencia) => {
     const modulo = '/projeto';
     const controller = '/diligencia-projeto-rest';

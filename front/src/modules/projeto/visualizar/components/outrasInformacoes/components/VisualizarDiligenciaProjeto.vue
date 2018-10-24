@@ -113,12 +113,6 @@
         props: ['idPronac', 'diligencias'],
         data() {
             return {
-                // dadosDiligencia: {
-                //     type: Object,
-                //     default() {
-                //         return {};
-                //     },
-                // },
                 abaAtiva: -1,
                 ativo: false,
             };
@@ -140,21 +134,12 @@
                     const valor = value.idDiligencia;
                     const idPronac = this.idPronac;
 
-                    this.buscarDiligenciaProjeto({ idPronac, valor });
+                    this.buscarDiligenciaProjeto({idPronac, valor});
                 }
             },
             ...mapActions({
                 buscarDiligenciaProjeto: 'projeto/buscarDiligenciaProjeto',
             }),
-            // obterDadosDiligencia(idDiligencia) {
-            //     const self = this;
-            //     /* eslint-disable */
-            //     $3.ajax({
-            //         url: `/projeto/diligencia-projeto-rest/get/idPronac/${self.idPronac}/idDiligencia/${idDiligencia}`,
-            //     }).done(function (response) {
-            //         self.dadosDiligencia = response.data;
-            //     });
-            // },
         },
     };
 </script>
