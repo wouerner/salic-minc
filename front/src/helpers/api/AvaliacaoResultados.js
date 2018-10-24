@@ -117,5 +117,5 @@ export const buscarComprovantes = (itemBuscaComprovantes) => {
     const url = `${modulo}${controller}`;
     const params = `?${idPronac}&${idPlanilhaItem}&${produto}&${uf}&${idMunicipio}&${stItemAvaliado}&${etapa}`;
 
-    api.getRequest(url + params);
+    return api.getRequest(url + params);
 };

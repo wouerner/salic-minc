@@ -242,8 +242,15 @@
                 }
                 return arr;
             },
-            parseIndexInt(number) {
-                return parseInt(number, 10);
+            parseIndexInt(value) {
+                const number = parseInt(value, 10);
+                let result = 0;
+
+                if (number === parseInt(number, 10)) {
+                    result = number;
+                }
+
+                return result;
             },
         },
     };
