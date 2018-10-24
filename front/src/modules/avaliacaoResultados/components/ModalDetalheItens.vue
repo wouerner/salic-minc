@@ -5,6 +5,7 @@
             width="500"
         >
             <v-btn
+                @click="buscar()"
                 slot="activator"
                 color="blue lighten-2"
                 dark
@@ -42,11 +43,24 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex';
+
     export default {
+        props: {
+            idPronac: Number,
+        },
         data() {
             return {
                 dialog: false,
             };
+        },
+        methods: {
+            ...mapActions({
+                buscarDetalhamentoItens: 'avaliacaoResultados/buscarDetalhamentoItens',
+            }),
+            buscar() {
+                this.buscarDetalhamentoItens(this.idPronac);
+            },
         },
     };
 </script>

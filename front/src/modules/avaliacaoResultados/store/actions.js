@@ -270,11 +270,17 @@ export const salvarRevisao = ({ commit }, params) => {
 };
 
 export const projetosRevisao = ({ commit }, params) => {
-    avaliacaoResultadosHelperAPI
-        .projetosRevisao(params)
+    avaliacaoResultadosHelperAPI.projetosRevisao(params)
         .then((response) => {
             const projetosRevisao = response.data.data;
             commit(types.SYNC_PROJETOS_REVISAO, projetosRevisao);
         });
 };
 
+export const buscarDetalhamentoItens = (_, idPronac) => {
+    avaliacaoResultadosHelperAPI.buscarDetalhamentoItens(idPronac)
+        .then((response) => {
+            console.log('AAAAAAAAAAAAAAAAAAAAAAAAAA');
+            console.log(response);
+        });
+};

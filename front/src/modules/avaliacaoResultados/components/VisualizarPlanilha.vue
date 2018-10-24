@@ -129,7 +129,7 @@
                                                                         props.item.varlorComprovado) }}
                                                                     </td>
                                                                     <td>
-                                                                        <ModalDetalheItens></ModalDetalheItens>
+                                                                        <ModalDetalheItens :idPronac="getPronac"></ModalDetalheItens>
                                                                     </td>
                                                                 </template>
                                                             </v-data-table>
@@ -198,6 +198,9 @@
                 let planilha = this.getPlanilha;
                 planilha = (planilha !== null && Object.keys(planilha).length) ? this.getPlanilha : 0;
                 return planilha;
+            },
+            getPronac() {
+                return parseInt(this.idPronac, 10);
             },
         },
         mounted() {
