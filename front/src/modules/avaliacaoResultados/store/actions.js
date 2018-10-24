@@ -288,12 +288,11 @@ export const buscarDetalhamentoItens = ({ commit }, idPronac) => {
 };
 
 
-export const buscarComprovantes = (_, comprovanteIndex) => {
+export const buscarComprovantes = ({ commit }, comprovanteIndex) => {
     const itemBuscaComprovantes = state.itensBuscaComprovantes[comprovanteIndex];
     avaliacaoResultadosHelperAPI.buscarComprovantes(itemBuscaComprovantes)
         .then((response) => {
-            console.log('EEEEEEEEEEEEEEEe', response);
-            // const itens = desencapsularResponse.default(response);
-            // commit(types.SET_ITENS_BUSCA_COMPROVANTES, itens);
+            const itens = desencapsularResponse.default(response);
+            commit(types.SET_COMPROVANTES, itens);
         });
 };

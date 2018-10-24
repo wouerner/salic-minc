@@ -40,6 +40,7 @@ export const state = {
     projetosRevisao: {},
     objetoParecer: {},
     itensBuscaComprovantes: {},
+    comprovantes: {},
 };
 
 export const mutations = {
@@ -168,5 +169,8 @@ export const mutations = {
     },
     [types.SET_ITENS_BUSCA_COMPROVANTES](state, dados) {
         state.itensBuscaComprovantes = dados;
+    },
+    [types.SET_COMPROVANTES](state, dados) {
+        state.comprovantes = dados;
     },
 };

@@ -129,7 +129,7 @@
                                                                         props.item.varlorComprovado) }}
                                                                     </td>
                                                                     <td>
-                                                                        <ModalDetalheItens :comprovanteIndex="index" :idPronac="getPronac"></ModalDetalheItens>
+                                                                        <ModalDetalheItens :comprovanteIndex="parseIndexInt(index)" :idPronac="getPronac"></ModalDetalheItens>
                                                                     </td>
                                                                 </template>
                                                             </v-data-table>
@@ -241,6 +241,9 @@
                     arr.push(true);
                 }
                 return arr;
+            },
+            parseIndexInt(number) {
+                return parseInt(number, 10);
             },
         },
     };
