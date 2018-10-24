@@ -4,7 +4,7 @@ namespace Application\Modules\Projeto\Service\LocalRealizacaoDeslocamento;
 
 use Seguranca;
 
-class LocalRealizacaoDeslocamento
+class LocalRealizacaoDeslocamento implements \MinC\Servico\IServicoRestZend
 {
     /**
      * @var \Zend_Controller_Request_Abstract $request
