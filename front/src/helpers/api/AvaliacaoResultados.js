@@ -101,3 +101,21 @@ export const projetosRevisao = (params) => {
 };
 
 export const buscarDetalhamentoItens = idPronac => api.getRequest(`/avaliacao-resultados/detalhamento-itens-rest?idPronac=${idPronac}`);
+
+export const buscarComprovantes = (itemBuscaComprovantes) => {
+    const modulo = '/prestacao-contas';
+    const controller = '/comprovante-pagamento';
+
+    const idPronac = `idPronac=${itemBuscaComprovantes.IdPRONAC}`;
+    const idPlanilhaItem = `idPlanilhaItem=${itemBuscaComprovantes.idPlanilhaItens}`;
+    const produto = `produto=${itemBuscaComprovantes.cdProduto}`;
+    const uf = `uf=${itemBuscaComprovantes.Uf}`;
+    const idMunicipio = `idmunicipio=${itemBuscaComprovantes.cdCidade}`;
+    const etapa = `etapa=${itemBuscaComprovantes.cdEtapa}`;
+    const stItemAvaliado = `stItemAvaliado=${itemBuscaComprovantes.stItemAvaliado}`;
+
+    const url = `${modulo}${controller}`;
+    const params = `?${idPronac}&${idPlanilhaItem}&${produto}&${uf}&${idMunicipio}&${stItemAvaliado}&${etapa}`;
+
+    api.getRequest(url + params);
+};

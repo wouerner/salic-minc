@@ -1,6 +1,7 @@
 import * as desencapsularResponse from '@/helpers/actions';
 import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
 import * as types from './types';
+import { state } from './mutations';
 
 export const dadosMenu = ({ commit }) => {
     avaliacaoResultadosHelperAPI.dadosMenu()
@@ -283,5 +284,16 @@ export const buscarDetalhamentoItens = ({ commit }, idPronac) => {
         .then((response) => {
             const itens = desencapsularResponse.default(response);
             commit(types.SET_ITENS_BUSCA_COMPROVANTES, itens);
+        });
+};
+
+
+export const buscarComprovantes = (_, comprovanteIndex) => {
+    const itemBuscaComprovantes = state.itensBuscaComprovantes[comprovanteIndex];
+    avaliacaoResultadosHelperAPI.buscarComprovantes(itemBuscaComprovantes)
+        .then((response) => {
+            console.log('EEEEEEEEEEEEEEEe', response);
+            // const itens = desencapsularResponse.default(response);
+            // commit(types.SET_ITENS_BUSCA_COMPROVANTES, itens);
         });
 };

@@ -114,8 +114,8 @@
                                                         <v-tab ripple v-for="tab in Object.keys(cidade.itens)"
                                                                :key="tab">{{ tabs[tab] }}
                                                         </v-tab>
-                                                        <v-tab-item v-for="item in cidade.itens"
-                                                                    :key="item.stItemAvaliado">
+                                                        <v-tab-item v-for="(item, index) in cidade.itens"
+                                                                    :key="index">
                                                             <v-data-table
                                                                 :headers="headers"
                                                                 :items="Object.values(item)"
@@ -129,7 +129,7 @@
                                                                         props.item.varlorComprovado) }}
                                                                     </td>
                                                                     <td>
-                                                                        <ModalDetalheItens :idPronac="getPronac"></ModalDetalheItens>
+                                                                        <ModalDetalheItens :comprovanteIndex="index" :idPronac="getPronac"></ModalDetalheItens>
                                                                     </td>
                                                                 </template>
                                                             </v-data-table>
@@ -206,6 +206,7 @@
         mounted() {
             this.setPlanilha(this.idPronac);
             this.setProjetoAnalise(this.idPronac);
+            this.buscarDetalhamentoItens(this.idPronac);
         },
         components: {
             ModalDetalheItens,
@@ -218,6 +219,7 @@
                 setProjetoAnalise: 'avaliacaoResultados/projetoAnalise',
                 modalOpen: 'modal/modalOpen',
                 modalClose: 'modal/modalClose',
+                buscarDetalhamentoItens: 'avaliacaoResultados/buscarDetalhamentoItens',
             }),
             moeda: (moedaString) => {
                 const moeda = Number(moedaString);

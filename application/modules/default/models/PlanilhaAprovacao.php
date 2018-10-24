@@ -2855,7 +2855,8 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
                 ISNULL(d.Codigo,0) as cdProduto,
                 a.idMunicipioDespesa as cdCidade,
                 c.idPlanilhaItens,
-                b.idPlanilhaEtapa as cdEtapa
+                b.idPlanilhaEtapa as cdEtapa,
+                g.stItemAvaliado
         ");
 
         $select = $this->select()->distinct();

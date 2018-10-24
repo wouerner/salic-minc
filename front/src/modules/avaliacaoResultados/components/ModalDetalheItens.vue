@@ -47,7 +47,7 @@
 
     export default {
         props: {
-            idPronac: Number,
+            comprovanteIndex: Number,
         },
         data() {
             return {
@@ -56,10 +56,10 @@
         },
         methods: {
             ...mapActions({
-                buscarDetalhamentoItens: 'avaliacaoResultados/buscarDetalhamentoItens',
+                buscarComprovantes: 'avaliacaoResultados/buscarComprovantes',
             }),
             buscar() {
-                this.buscarDetalhamentoItens(this.idPronac);
+                this.buscarComprovantes(this.comprovanteIndex);
             },
         },
     };
