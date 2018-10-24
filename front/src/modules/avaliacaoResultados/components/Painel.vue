@@ -36,18 +36,12 @@
                         <v-icon>gavel</v-icon>
                     </template>
                 </v-tab>
-                <v-tab href="#tab-5">
-                    Revisão 
-                    <v-icon>rate_review</v-icon>
-                </v-tab>
+
                 <v-tab href="#tab-2">
                      Assinar
                     <v-icon>done</v-icon>
                 </v-tab>
-                <v-tab href="#tab-3">
-                     Em assinatura
-                    <v-icon>done_all</v-icon>
-                </v-tab>
+
                 <v-tab href="#tab-4">
                      Historico
                     <v-icon>history</v-icon>
@@ -76,6 +70,7 @@
                                 :analisar="true"
                                 :dados="dadosTabelaTecnico"
                                 :componentes="listaAcoesCoordenador"
+                                :mostrarTecnico="true"
                             ></TabelaProjetos>
                             <TabelaProjetos
                                 v-else
@@ -99,19 +94,7 @@
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
-                <v-tab-item
-                    :id="'tab-3'"
-                    :key="3"
-                >
-                    <v-card flat>
-                        <v-card-text>
-                            <TabelaProjetos
-                                :dados="getProjetosEmAssinatura"
-                                :componentes="listaAcoesTecnico"
-                            ></TabelaProjetos>
-                        </v-card-text>
-                    </v-card>
-                </v-tab-item>
+
                 <v-tab-item
                     :id="'tab-4'"
                     :key="4"
@@ -125,19 +108,7 @@
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
-                <v-tab-item
-                    :id="'tab-5'"
-                    :key="5"
-                >
-                    <v-card flat>
-                        <v-card-text>
-                            <TabelaProjetos
-                                :dados="getProjetosRevisao"
-                                :componentes="revisaoAcoes"
-                            ></TabelaProjetos>
-                        </v-card-text>
-                    </v-card>
-                </v-tab-item>
+
             </v-tabs>
         </v-card>
     </v-container>
@@ -169,10 +140,11 @@ export default {
     },
     watch: {
         getUsuario(val) {
-            if (Object.keys(val).length > 0 && val.usu_codigo !== 0) {
+            if (Object.keys(val).length > 0 && parseInt(val.usu_codigo, 10) !== 0) {
                 let projetosTecnico = {};
                 let projetosFinalizados = {};
-                if (this.getUsuario.grupo_ativo === 125) {
+
+                if (parseInt(this.getUsuario.grupo_ativo, 10) === 125) {
                     projetosTecnico = {
                         estadoid: 5,
                     };
@@ -203,9 +175,9 @@ export default {
         return {
             listaAcoesTecnico: [Historico, AnaliseButton],
             listaAcoesAssinar: [Historico, AssinarButton],
-            listaAcoesCoordenador: [Historico],
+            listaAcoesCoordenador: [Encaminhar, Historico],
             distribuirAcoes: [Encaminhar],
-            revisaoAcoes: [RevisaoButton, VisualizarButton, Devolver],
+            revisaoAcoes: [RevisaoButton, VisualizarButton, Historico, Devolver],
         };
     },
     components: {

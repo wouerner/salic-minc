@@ -74,7 +74,6 @@
                         id: 'proposta_em_enquadramento',
                         label: 'Enquadramento',
                         descricao: 'Sua proposta está em enquadramento.',
-                        link: `/recurso/recurso-proposta/visao-proponente/idPreProjeto/${this.idPreProjeto}`,
                         icon: 'build',
                         childrens: [
                             {

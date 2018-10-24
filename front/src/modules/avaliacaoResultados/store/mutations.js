@@ -30,14 +30,17 @@ export const state = {
     getProjetosLaudoFinal: [],
     getProjetosLaudoAssinar: {},
     getProjetosLaudoEmAssinatura: {},
+    getProjetosLaudoFinalizados: {},
     getProjetosAssinar: {},
     getProjetosEmAssinatura: {},
     getProjetosHistorico: {},
     versao: {},
-    revisaoParecer: {},
-    revisao: {},
     projetosRevisao: {},
+<<<<<<< HEAD
     devolverProjeto: {},
+=======
+    objetoParecer: {},
+>>>>>>> avaliacao-resultados-fix
 };
 
 export const mutations = {
@@ -48,12 +51,6 @@ export const mutations = {
     },
     [types.GET_PARECER](state, parecer) {
         state.parecer = parecer;
-    },
-    [types.HISTORICO_REVISAO](state, revisaoParecer) {
-        state.revisaoParecer = revisaoParecer;
-    },
-    [types.SET_REVISAO](state, revisao) {
-        state.revisaoParecer.push(revisao);
     },
     [types.GET_PROJETO](state, projeto) {
         state.projeto = projeto;
@@ -149,6 +146,9 @@ export const mutations = {
     [types.SET_DADOS_PROJETOS_LAUDO_EM_ASSINATURA](state, dados) {
         state.getProjetosLaudoEmAssinatura = dados;
     },
+    [types.SET_DADOS_PROJETOS_LAUDO_FINALIZADOS](state, dados) {
+        state.getProjetosLaudoFinalizados = dados;
+    },
     [types.SET_DADOS_PROJETOS_HISTORICO](state, dados) {
         state.getProjetosHistorico = dados;
     },
@@ -160,5 +160,8 @@ export const mutations = {
     },
     [types.SET_DEVOLVER_PROJETO](state, devolverProjeto) {
         state.devolverProjeto = devolverProjeto;
+    },
+    [types.GET_OBJETO_PARECER](state, dados) {
+        state.objetoParecer = dados;
     },
 };

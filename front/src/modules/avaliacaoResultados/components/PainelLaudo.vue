@@ -37,6 +37,10 @@
                      Em assinatura
                     <v-icon>done_all</v-icon>
                 </v-tab>
+                <v-tab href="#tab-3">
+                     Finalizados
+                    <v-icon>collections_bookmark</v-icon>
+                </v-tab>
 
                 <v-tab-item
                     :id="'tab-0'"
@@ -44,7 +48,7 @@
                 >
                     <v-card flat>
                         <Laudo :dados="getProjetosLaudoFinal"
-                               :acao="true"
+                               :acao="'analisar'"
                         ></Laudo>
                     </v-card>
                 </v-tab-item>
@@ -54,6 +58,7 @@
                 >
                     <v-card flat>
                         <Laudo :dados="getProjetosLaudoAssinar"
+                               :acao="'assinar'"
                         ></Laudo>
                     </v-card>
                 </v-tab-item>
@@ -64,6 +69,19 @@
                     <v-card flat>
                         <v-card>
                             <Laudo :dados="getProjetosLaudoEmAssinatura"
+                                   :acao="'visualizar'"
+                            ></Laudo>
+                        </v-card>
+                    </v-card>
+                </v-tab-item>
+                <v-tab-item
+                    :id="'tab-3'"
+                    :key="3"
+                >
+                    <v-card flat>
+                        <v-card>
+                            <Laudo :dados="getProjetosLaudoFinalizados"
+                                   :acao="'visualizar'"
                             ></Laudo>
                         </v-card>
                     </v-card>
@@ -84,9 +102,7 @@ export default {
         this.obterProjetosLaudoFinal({ estadoId: 10 });
         this.obterProjetosLaudoAssinar({ estadoId: 14 });
         this.obterProjetosLaudoEmAssinatura({ estadoId: 11 });
-    },
-    data() {
-        return { };
+        this.obterProjetosLaudoFinalizados({ estadoId: 12 });
     },
     components: {
         Laudo,
@@ -96,7 +112,7 @@ export default {
             obterProjetosLaudoFinal: 'avaliacaoResultados/obterProjetosLaudoFinal',
             obterProjetosLaudoAssinar: 'avaliacaoResultados/obterProjetosLaudoAssinar',
             obterProjetosLaudoEmAssinatura: 'avaliacaoResultados/obterProjetosLaudoEmAssinatura',
-            usuarioLogado: 'autenticacao/usuarioLogado',
+            obterProjetosLaudoFinalizados: 'avaliacaoResultados/obterProjetosLaudoFinalizados',
         }),
     },
     computed: {
@@ -104,7 +120,7 @@ export default {
             getProjetosLaudoFinal: 'avaliacaoResultados/getProjetosLaudoFinal',
             getProjetosLaudoAssinar: 'avaliacaoResultados/getProjetosLaudoAssinar',
             getProjetosLaudoEmAssinatura: 'avaliacaoResultados/getProjetosLaudoEmAssinatura',
-            getUsuario: 'autenticacao/getUsuario',
+            getProjetosLaudoFinalizados: 'avaliacaoResultados/getProjetosLaudoFinalizados',
         }),
     },
 };
