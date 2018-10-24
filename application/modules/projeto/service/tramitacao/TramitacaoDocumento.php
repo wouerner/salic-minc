@@ -4,7 +4,7 @@ namespace Application\Modules\Projeto\Service\Tramitacao;
 
 use Seguranca;
 
-class TramitacaoDocumento
+class TramitacaoDocumento implements \MinC\Servico\IServicoRestZend
 {
     /**
      * @var \Zend_Controller_Request_Abstract $request

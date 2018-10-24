@@ -4,7 +4,7 @@ namespace Application\Modules\Projeto\Service\Tramitacao;
 
 use Seguranca;
 
-class UltimaTramitacao
+class UltimaTramitacao implements \MinC\Servico\IServicoRestZend
 {
     /**
      * @var \Zend_Controller_Request_Abstract $request

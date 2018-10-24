@@ -4,7 +4,7 @@ namespace Application\Modules\Projeto\Service\DocumentosAssinados;
 
 use Seguranca;
 
-class DocumentosAssinados
+class DocumentosAssinados implements \MinC\Servico\IServicoRestZend
 {
     /**
      * @var \Zend_Controller_Request_Abstract $request

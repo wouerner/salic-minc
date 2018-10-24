@@ -4,7 +4,7 @@ namespace Application\Modules\Projeto\Service\CertidoesNegativas;
 
 use Seguranca;
 
-class CertidoesNegativas
+class CertidoesNegativas implements \MinC\Servico\IServicoRestZend
 {
     /**
      * @var \Zend_Controller_Request_Abstract $request

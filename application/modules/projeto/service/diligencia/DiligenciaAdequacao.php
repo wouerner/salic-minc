@@ -4,7 +4,7 @@ namespace Application\Modules\Projeto\Service\Diligencia;
 
 use Seguranca;
 
-class DiligenciaAdequacao
+class DiligenciaAdequacao implements \MinC\Servico\IServicoRestZend
 {
     /**
      * @var \Zend_Controller_Request_Abstract $request

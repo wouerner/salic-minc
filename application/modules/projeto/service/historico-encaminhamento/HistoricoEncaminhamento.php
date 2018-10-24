@@ -4,7 +4,7 @@ namespace Application\Modules\Projeto\Service\HistoricoEncaminhamento;
 
 use Seguranca;
 
-class HistoricoEncaminhamento
+class HistoricoEncaminhamento implements \MinC\Servico\IServicoRestZend
 {
     /**
      * @var \Zend_Controller_Request_Abstract $request
@@ -41,7 +41,7 @@ class HistoricoEncaminhamento
         $resultArray = [];
 
         $Encaminhamentos = $this->montaArrayHistoricoEncaminhamento($historicoEncaminhamento);
-       
+
         $resultArray['Encaminhamentos'] = $Encaminhamentos;
 
         return $resultArray;

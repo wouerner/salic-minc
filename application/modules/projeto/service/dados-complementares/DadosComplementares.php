@@ -4,7 +4,7 @@ namespace Application\Modules\Projeto\Service\DadosComplementares;
 
 use Seguranca;
 
-class DadosComplementares
+class DadosComplementares implements \MinC\Servico\IServicoRestZend
 {
     /**
      * @var \Zend_Controller_Request_Abstract $request

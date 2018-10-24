@@ -2,7 +2,7 @@
 
 namespace Application\Modules\Projeto\Service\Diligencia;
 
-class DiligenciaProposta
+class DiligenciaProposta implements \MinC\Servico\IServicoRestZend
 {
     /**
      * @var \Zend_Controller_Request_Abstract $request
