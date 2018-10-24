@@ -35,6 +35,7 @@ class DocumentosAssinados implements \MinC\Servico\IServicoRestZend
         $documentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
         $dados = $documentoAssinatura->obterDocumentosAssinadosPorProjeto($idPronac);
 
+        $itemArray = [];
         foreach ($dados as $dado) {
             $dtCriacao = new \DateTime($dado['dt_criacao']);
 
