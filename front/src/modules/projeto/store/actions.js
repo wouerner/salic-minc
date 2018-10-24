@@ -180,3 +180,29 @@ export const buscarPlanoDistribuicaoIn2017 = ({ commit }, idPreProjeto) => {
             commit(types.SET_PLANO_DISTRIBUICAO_IN2017, data);
         });
 };
+
+export const buscarDiligenciaProposta = ({ commit }, dados) => {
+    projetoHelperAPI.buscarDiligenciaProposta(dados)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_DILIGENCIA_PROPOSTA, data);
+        });
+};
+
+export const buscarDiligenciaAdequacao = ({ commit }, value) => {
+    const { idPronac, valor } = value;
+    projetoHelperAPI.buscarDiligenciaAdequacao(idPronac, valor)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_DILIGENCIA_ADEQUACAO, data);
+        });
+};
+
+export const buscarDiligenciaProjeto = ({ commit }, value) => {
+    const { idPronac, valor } = value;
+    projetoHelperAPI.buscarDiligenciaProjeto(idPronac, valor)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_DILIGENCIA_ADEQUACAO, data);
+        });
+};

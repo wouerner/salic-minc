@@ -21,6 +21,9 @@ export const state = {
     tramitacaoProjeto: {},
     ultimaTramitacao: {},
     planoDistribuicaoIn2017: [],
+    diligenciaProposta: [],
+    diligenciaAdequacao: [],
+    diligenciaProjeto: [],
 };
 
 export const mutations = {
@@ -83,5 +86,14 @@ export const mutations = {
     },
     [types.SET_PLANO_DISTRIBUICAO_IN2017](state, dados) {
         state.planoDistribuicaoIn2017 = dados;
+    },
+    [types.SET_DILIGENCIA_PROPOSTA](state, dados) {
+        state.diligenciaProposta = dados;
+    },
+    [types.SET_DILIGENCIA_ADEQUACAO](state, dados) {
+        state.diligenciaAdequacao = dados;
+    },
+    [types.SET_DILIGENCIA_PROJETO](state, dados) {
+        state.diligenciaProjeto = dados;
     },
 };

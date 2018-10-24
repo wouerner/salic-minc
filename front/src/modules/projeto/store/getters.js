@@ -18,3 +18,6 @@ export const tramitacaoDocumento = state => state.tramitacaoDocumento;
 export const tramitacaoProjeto = state => state.tramitacaoProjeto;
 export const ultimaTramitacao = state => state.ultimaTramitacao;
 export const planoDistribuicaoIn2017 = state => state.planoDistribuicaoIn2017;
+export const diligenciaProposta = state => state.diligenciaProposta;
+export const diligenciaAdequacao = state => state.diligenciaAdequacao;
+export const diligenciaProjeto = state => state.diligenciaProjeto;
