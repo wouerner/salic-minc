@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <v-app @enlarge-text="alert('te')">
+        <v-app>
             <SlNav></SlNav>
             <v-content>
                 <v-container fluid>

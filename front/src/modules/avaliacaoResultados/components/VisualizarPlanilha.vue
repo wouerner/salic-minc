@@ -122,7 +122,11 @@
                                                                     <td>{{ moeda(props.item.varlorComprovado) }}</td>
                                                                     <td>{{ moeda(props.item.varlorAprovado - props.item.varlorComprovado) }}</td>
                                                                     <td>
+<<<<<<< HEAD
                                                                         <DetalheItemCusto></DetalheItemCusto>
+=======
+                                                                        <Modal></Modal>
+>>>>>>> 4427aee12431dd2ad345603bdb84164e1985f912
                                                                     </td>
                                                                 </template>
                                                             </v-data-table>
@@ -141,11 +145,11 @@
         </template>
     </v-container>
 </template>
-
 <script>
     import { mapActions, mapGetters } from 'vuex';
     import ModalTemplate from '@/components/modal';
     import DetalheItemCusto from './modal';
+
     import ConsolidacaoAnalise from './ConsolidacaoAnalise';
     import AnalisarItem from './AnalisarItem';
 
@@ -168,6 +172,10 @@
                 },
                 fab: false,
                 idPronac: this.$route.params.id,
+<<<<<<< HEAD
+=======
+                dialog: false,
+>>>>>>> 4427aee12431dd2ad345603bdb84164e1985f912
             };
         },
         computed: {
@@ -202,7 +210,11 @@
             ModalTemplate,
             ConsolidacaoAnalise,
             AnalisarItem,
+<<<<<<< HEAD
             DetalheItemCusto,
+=======
+            Modal,
+>>>>>>> 4427aee12431dd2ad345603bdb84164e1985f912
         },
         methods: {
             ...mapActions({
@@ -233,3 +245,4 @@
         },
     };
 </script>
+
