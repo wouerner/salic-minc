@@ -18,32 +18,42 @@
                     class="headline grey lighten-2"
                     primary-title
                 >
-                    Privacy Policy
+                    Prestação de Contas: Analise
                 </v-card-title>
 
                 <v-card-text>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    <v-expansion-panel>
+                        <v-expansion-panel-content v-for="(comprovante, index) in comprovantes" :key="index">
+                            <div slot="header">Fornecedor: {{comprovante.nmFornecedor}}</div>
+                            <v-card>
+                                <v-card-text>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                </v-card-text>
+                            </v-card>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
+                    <!--Fornecedor: {{comprovante.nmFornecedor}}-->
                 </v-card-text>
 
                 <v-divider></v-divider>
 
-                <!--<v-card-actions>-->
-                    <!--<v-spacer></v-spacer>-->
-                    <!--<v-btn-->
-                        <!--color="primary"-->
-                        <!--flat-->
-                        <!--@click="dialog = false"-->
-                    <!--&gt;-->
-                        <!--I accept-->
-                    <!--</v-btn>-->
-                <!--</v-card-actions>-->
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        color="primary"
+                        flat
+                        @click="dialog = false"
+                    >
+                        I accept
+                    </v-btn>
+                </v-card-actions>
             </v-card>
         </v-dialog>
     </div>
 </template>
 
 <script>
-    import { mapActions } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
 
     export default {
         props: {
@@ -53,6 +63,11 @@
             return {
                 dialog: false,
             };
+        },
+        computed: {
+            ...mapGetters({
+                comprovantes: 'avaliacaoResultados/comprovantes',
+            }),
         },
         methods: {
             ...mapActions({

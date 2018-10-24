@@ -292,7 +292,9 @@ export const buscarComprovantes = ({ commit }, comprovanteIndex) => {
     const itemBuscaComprovantes = state.itensBuscaComprovantes[comprovanteIndex];
     avaliacaoResultadosHelperAPI.buscarComprovantes(itemBuscaComprovantes)
         .then((response) => {
-            const itens = desencapsularResponse.default(response);
+            const data = response.data;
+            const itens = data.data;
+            console.log('aaaaaaaa', itens);
             commit(types.SET_COMPROVANTES, itens);
         });
 };

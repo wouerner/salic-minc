@@ -29,3 +29,4 @@ export const versao = state => state.versao;
 export const revisaoParecer = state => state.revisaoParecer;
 export const getProjetosRevisao = state => state.projetosRevisao;
 export const objetoParecer = state => state.objetoParecer;
+export const comprovantes = state => state.comprovantes;
