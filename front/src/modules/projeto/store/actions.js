@@ -203,6 +203,6 @@ export const buscarDiligenciaProjeto = ({ commit }, value) => {
     projetoHelperAPI.buscarDiligenciaProjeto(idPronac, valor)
         .then((response) => {
             const data = response.data.data.items;
-            commit(types.SET_DILIGENCIA_ADEQUACAO, data);
+            commit(types.SET_DILIGENCIA_PROJETO, data);
         });
 };
