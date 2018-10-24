@@ -1,8 +1,8 @@
 <template>
     <div id="conteudo" v-if="documentosAnexados.documentos">
         <IdentificacaoProjeto
-            :pronac="dadosProjeto.Pronac"
-            :nomeProjeto="dadosProjeto.NomeProjeto">
+                :pronac="dadosProjeto.Pronac"
+                :nomeProjeto="dadosProjeto.NomeProjeto">
         </IdentificacaoProjeto>
         <table v-if="Object.keys(documentosAnexados.documentos).length > 0">
             <thead>
@@ -21,9 +21,10 @@
                 <td class="center">{{ dado.Data }}</td>
                 <td class="center">{{ dado.Descricao }}</td>
                 <td class="center">
-                    <a class="" :href="`/consultardadosprojeto/abrir-documentos-anexados?id=${dado.idArquivo}&tipo=${dado.AgenteDoc}&idPronac=${dadosProjeto.idPronac}`"
+                    <a class=""
+                       :href="`/consultardadosprojeto/abrir-documentos-anexados?id=${dado.idArquivo}&tipo=${dado.AgenteDoc}&idPronac=${dadosProjeto.idPronac}`"
                        target="_blank"
-                        data-position="top" data-delay="50" data-tooltip="Visualizar">
+                       data-position="top" data-delay="50" data-tooltip="Visualizar">
                         {{ dado.NoArquivo }}
                     </a>
                 </td>
@@ -34,7 +35,7 @@
             <fieldset>
                 <legend>Certid&otilde;es Negativas</legend>
                 <div class="center">
-                    <em>Dados n&atilde;o  informado.</em>
+                    <em>Dados n&atilde;o informado.</em>
                 </div>
             </fieldset>
         </div>

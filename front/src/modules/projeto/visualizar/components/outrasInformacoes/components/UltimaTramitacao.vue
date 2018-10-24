@@ -29,32 +29,32 @@
             </tbody>
         </table>
         <div v-else class="center">
-            <em>Dados n&atilde;o  informado.</em>
+            <em>Dados n&atilde;o informado.</em>
         </div>
     </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+    import  {mapActions, mapGetters } from 'vuex';
 
-export default {
-    name: 'UltimaTramitacao',
-    props: ['idPronac'],
-    mounted() {
-        if (typeof this.idPronac !== 'undefined') {
-            this.buscarUltimaTramitacao(this.idPronac);
-        }
-    },
-    computed: {
-        ...mapGetters({
-            dados: 'projeto/ultimaTramitacao',
-        }),
-    },
-    methods: {
-        ...mapActions({
-            buscarUltimaTramitacao: 'projeto/buscarUltimaTramitacao',
-        }),
-    },
-};
+    export default {
+        name: 'UltimaTramitacao',
+        props: ['idPronac'],
+        mounted() {
+            if (typeof this.idPronac !== 'undefined') {
+                this.buscarUltimaTramitacao(this.idPronac);
+            }
+        },
+        computed: {
+            ...mapGetters({
+                dados: 'projeto/ultimaTramitacao',
+            }),
+        },
+        methods: {
+            ...mapActions({
+                buscarUltimaTramitacao: 'projeto/buscarUltimaTramitacao',
+            }),
+        },
+    };
 </script>
 
