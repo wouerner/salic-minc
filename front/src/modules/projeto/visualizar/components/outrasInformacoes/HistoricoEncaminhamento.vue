@@ -1,6 +1,9 @@
 <template>
     <div id="conteudo">
-        <div v-if="dados.Encaminhamentos">
+        <div v-if="loading">
+            <Carregando :text="'Carregando Historico de Encaminhamentos'"></Carregando>
+        </div>
+        <div v-else-if="dados">
             <IdentificacaoProjeto
                     :pronac="dadosProjeto.Pronac"
                     :nomeProjeto="dadosProjeto.NomeProjeto">
@@ -40,11 +43,18 @@
 </template>
 <script>
     import { mapActions, mapGetters } from 'vuex';
+    import Carregando from '@/components/Carregando';
     import IdentificacaoProjeto from './IdentificacaoProjeto';
 
     export default {
         name: 'HistoricoEncaminhamento',
+        data() {
+            return {
+                loading: true,
+            };
+        },
         components: {
+            Carregando,
             IdentificacaoProjeto,
         },
         computed: {
@@ -56,6 +66,11 @@
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
                 this.buscarHistoricoEncaminhamento(this.dadosProjeto.idPronac);
+            }
+        },
+        watch: {
+            dados(value) {
+                this.loading = false;
             }
         },
         methods: {
