@@ -37,7 +37,7 @@
                     </template>
                 </v-tab>
                 <v-tab href="#tab-5">
-                    Revisão 
+                    Revisão
                     <v-icon>rate_review</v-icon>
                 </v-tab>
                 <v-tab href="#tab-2">

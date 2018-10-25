@@ -24,7 +24,24 @@
                 <v-card-text v-if="Object.keys(comprovantes).length > 0">
                     <v-expansion-panel>
                         <v-expansion-panel-content v-for="(comprovante, index) in comprovantes" :key="index">
-                            <div slot="header">Fornecedor: {{comprovante.nmFornecedor}}</div>
+                            <div slot="header">
+                                <div style="display:inline-block;">
+                                    Fornecedor: {{comprovante.nmFornecedor}}
+                                </div>
+                                <!--<div-->
+                                    <!--style="display: inline-block; float: right; margin-right: 20px;"-->
+                                    <!--:style="{ backgroundColor: badgeCSS(comprovante.stItemAvaliado), color: 'white' }"-->
+                                <!--&gt;-->
+                                    <!--{{situacao(comprovante.stItemAvaliado)}}-->
+                                <!--</div>-->
+                                <v-chip
+                                    style="display: inline-block; float: right; margin-right: 20px;"
+                                    :color="badgeCSS(comprovante.stItemAvaliado)"
+                                    text-color="white"
+                                >
+                                    {{situacao(comprovante.stItemAvaliado)}}
+                                </v-chip>
+                            </div>
                             <v-card>
                                 <v-card-text>
                                     <b>Valor: </b>R$ {{comprovante.vlComprovacao | filtroFormatarParaReal}}
@@ -97,13 +114,44 @@
             buscar() {
                 this.buscarComprovantes(this.comprovanteIndex);
             },
+            badgeCSS(id) {
+                const currentId = parseInt(id, 10);
+
+                if (currentId === 1) {
+                    return 'green';
+                }
+
+                if (currentId === 3) {
+                    return 'red';
+                }
+                if (currentId === 4) {
+                    return 'grey';
+                }
+
+                return 'white';
+            },
+            situacao(id) {
+                let estado = '';
+
+                switch (parseInt(id, 10)) {
+                    case 1:
+                        estado = 'Aprovado';
+                        break;
+                    case 3:
+                        estado = 'Recusado';
+                        break;
+                    default:
+                        estado = 'N\xE3o avaliado';
+                }
+                return estado;
+            },
         },
         filters: {
             filtroFormatarParaReal(value) {
                 const parsedValue = parseFloat(value);
-                return numeral(parsedValue).format('0,0.00');
+                return numeral(parsedValue)
+                    .format('0,0.00');
             },
         },
     };
 </script>
-content_copy
