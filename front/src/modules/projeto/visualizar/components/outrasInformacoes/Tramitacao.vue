@@ -24,26 +24,26 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
-import IdentificacaoProjeto from './IdentificacaoProjeto';
-import UltimaTramitacao from './components/UltimaTramitacao';
-import TramitacaoProjeto from './components/TramitacaoProjeto';
-import TramitacaoDocumento from './components/TramitacaoDocumento';
+    import { mapGetters } from 'vuex';
+    import IdentificacaoProjeto from './IdentificacaoProjeto';
+    import UltimaTramitacao from './components/UltimaTramitacao';
+    import TramitacaoProjeto from './components/TramitacaoProjeto';
+    import TramitacaoDocumento from './components/TramitacaoDocumento';
 
-export default {
-    name: 'Tramitacao',
-    props: ['idPronac'],
-    components: {
-        IdentificacaoProjeto,
-        UltimaTramitacao,
-        TramitacaoProjeto,
-        TramitacaoDocumento,
-    },
-    computed: {
-        ...mapGetters({
-            dadosProjeto: 'projeto/projeto',
-        }),
-    },
-};
+    export default {
+        name: 'Tramitacao',
+        props: ['idPronac'],
+        components: {
+            IdentificacaoProjeto,
+            UltimaTramitacao,
+            TramitacaoProjeto,
+            TramitacaoDocumento,
+        },
+        computed: {
+            ...mapGetters({
+                dadosProjeto: 'projeto/projeto',
+            }),
+        },
+    };
 </script>
 

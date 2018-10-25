@@ -36,7 +36,7 @@
         methods: {
             ...mapActions({
                 buscarPlanoDistribuicaoIn2017: 'projeto/buscarPlanoDistribuicaoIn2017',
-            })
+            }),
         },
     };
 </script>
