@@ -1,17 +1,23 @@
 <template>
     <div id="conteudo">
-        <IdentificacaoProjeto
-            :pronac="dadosProjeto.Pronac"
-            :nomeProjeto="dadosProjeto.NomeProjeto">
-        </IdentificacaoProjeto>
-        <PropostaPlanoDistribuicao
-                :arrayProdutos="dadosIn2017.planodistribuicaoproduto"
-                :arrayDetalhamentos="dadosIn2017.tbdetalhaplanodistribuicao">
-        </PropostaPlanoDistribuicao>
+        <div v-if="loading">
+            <Carregando :text="'Carregando Plano de Distribuicao'"></Carregando>
+        </div>
+        <div v-else>
+            <IdentificacaoProjeto
+                :pronac="dadosProjeto.Pronac"
+                :nomeProjeto="dadosProjeto.NomeProjeto">
+            </IdentificacaoProjeto>
+            <PropostaPlanoDistribuicao
+                    :arrayProdutos="dadosIn2017.planodistribuicaoproduto"
+                    :arrayDetalhamentos="dadosIn2017.tbdetalhaplanodistribuicao">
+            </PropostaPlanoDistribuicao>
+        </div>
     </div>
 </template>
 <script>
     import { mapGetters, mapActions } from 'vuex';
+    import Carregando from '@/components/Carregando';
     import PropostaPlanoDistribuicao from '@/modules/proposta/visualizar/components/PropostaPlanoDistribuicao';
     import IdentificacaoProjeto from './IdentificacaoProjeto';
 
@@ -19,12 +25,18 @@
         name: 'PlanoDistribuicaoIn2017',
         props: ['idPronac'],
         components: {
+            Carregando,
             IdentificacaoProjeto,
             PropostaPlanoDistribuicao,
         },
         mounted() {
             if (typeof this.dadosProjeto.idPreProjeto !== 'undefined') {
                 this.buscarPlanoDistribuicaoIn2017(this.dadosProjeto.idPreProjeto);
+            }
+        },
+        watch: {
+            dadosIn2017(value) {
+                this.loading = false;
             }
         },
         computed: {
