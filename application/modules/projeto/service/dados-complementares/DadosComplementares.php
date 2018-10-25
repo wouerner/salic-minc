@@ -22,7 +22,7 @@ class DadosComplementares implements \MinC\Servico\IServicoRestZend
         $this->response = $response;
     }
 
-    public function buscaDadosComplementares()
+    public function buscarDadosComplementares()
     {
         $idPronac = $this->request->idPronac;
 

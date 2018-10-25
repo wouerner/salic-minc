@@ -371,6 +371,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $this->view->dados = $resultado;
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service > application/modules/projeto/service/dados-complementares/DadosComplementares.php
+     *
+     */
     public function dadosComplementaresAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
