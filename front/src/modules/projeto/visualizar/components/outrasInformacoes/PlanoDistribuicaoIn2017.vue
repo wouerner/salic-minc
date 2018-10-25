@@ -24,6 +24,11 @@
     export default {
         name: 'PlanoDistribuicaoIn2017',
         props: ['idPronac'],
+        data() {
+            return {
+                loading: true,
+            };
+        },
         components: {
             Carregando,
             IdentificacaoProjeto,
