@@ -22,7 +22,7 @@ class DocumentosAnexados implements \MinC\Servico\IServicoRestZend
         $this->response = $response;
     }
 
-    public function buscaDocumentosAnexados()
+    public function buscarDocumentosAnexados()
     {
         $idPronac = $this->request->idPronac;
 

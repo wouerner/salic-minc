@@ -602,6 +602,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service > application/modules/projeto/service/documentos-anexados/DocumentosAnexados.php
+     *
+     */
     public function documentosAnexadosAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
