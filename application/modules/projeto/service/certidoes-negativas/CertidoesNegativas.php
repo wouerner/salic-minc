@@ -22,7 +22,7 @@ class CertidoesNegativas implements \MinC\Servico\IServicoRestZend
         $this->response = $response;
     }
 
-    public function buscaCertidoesNegativas()
+    public function buscarCertidoesNegativas()
     {
         $idPronac = $this->request->idPronac;
 
@@ -37,8 +37,8 @@ class CertidoesNegativas implements \MinC\Servico\IServicoRestZend
         $resultado = $sv->buscarCertidaoNegativa($rs->CgcCpf);
 
         $certidoes = [];
-        $informacoes = [];
         $resultArray = [];
+
         foreach ($resultado as $item) {
             $dsCertidao = html_entity_decode($item['dsCertidao']);
             $situacao = html_entity_decode($item['Situacao']);
