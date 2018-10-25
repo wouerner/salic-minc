@@ -28,12 +28,6 @@
                                 <div style="display:inline-block;">
                                     Fornecedor: {{comprovante.nmFornecedor}}
                                 </div>
-                                <!--<div-->
-                                    <!--style="display: inline-block; float: right; margin-right: 20px;"-->
-                                    <!--:style="{ backgroundColor: badgeCSS(comprovante.stItemAvaliado), color: 'white' }"-->
-                                <!--&gt;-->
-                                    <!--{{situacao(comprovante.stItemAvaliado)}}-->
-                                <!--</div>-->
                                 <v-chip
                                     style="display: inline-block; float: right; margin-right: 20px;"
                                     :color="badgeCSS(comprovante.stItemAvaliado)"
