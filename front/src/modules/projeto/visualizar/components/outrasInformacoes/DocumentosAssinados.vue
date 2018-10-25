@@ -1,6 +1,9 @@
 <template>
     <div id="conteudo">
-        <table v-if="Object.keys(dados).length > 0">
+        <div v-if="loading">
+            <Carregando :text="'Carregando Documentos Assinados'"></Carregando>
+        </div>
+        <table v-else-if="Object.keys(dados).length > 0">
             <thead>
             <tr class="destacar">
                 <th class="center">PRONAC</th>
@@ -44,13 +47,27 @@
 </template>
 <script>
     import { mapActions, mapGetters } from 'vuex';
+    import Carregando from '@/components/Carregando';
 
     export default {
         name: 'DocumentosAssinados',
         props: ['idPronac'],
+        data() {
+            return {
+                loading: true,
+            };
+        },
+        components: {
+            Carregando,
+        },
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
                 this.buscarDocumentosAssinados(this.dadosProjeto.idPronac);
+            }
+        },
+        watch: {
+            dados(value) {
+                this.loading = false;
             }
         },
         computed: {
