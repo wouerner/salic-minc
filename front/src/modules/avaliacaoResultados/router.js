@@ -9,11 +9,9 @@ import VisualizarPlanilha from './components/VisualizarPlanilha';
 import AnaliseComprovantes from './components/AnaliseComprovantes';
 import Diligenciar from './components/Diligenciar';
 import Historico from './components/Historico';
-import ConsolidacaoAnalise from './components/ConsolidacaoAnalise';
 import EmitirLaudoFinal from './components/EmitirLaudoFinal';
 import Laudo from './components/PainelLaudo';
 import AnalisarItem from './components/AnalisarItem';
-import RevisaoParecer from './components/RevisaoParecer';
 import VisualizarParecer from './components/VisualizarParecer';
 import VisualizarLaudo from './components/VisualizarLaudo';
 
@@ -42,14 +40,6 @@ const routes = [
         component: EmitirParecer,
         meta: {
             title: 'Principal',
-        },
-    },
-    {
-        path: '/revisao/:id',
-        name: 'Revisao',
-        component: RevisaoParecer,
-        meta: {
-            title: 'Revisão Parecer',
         },
     },
     {
@@ -98,14 +88,6 @@ const routes = [
         component: Historico,
         meta: {
             title: 'Historico dos encaminhamentos',
-        },
-    },
-    {
-        path: '/consolidacao-analise',
-        name: 'ConsolidacaoAnalise',
-        component: ConsolidacaoAnalise,
-        meta: {
-            title: 'Consolidacao da Analise',
         },
     },
     {

@@ -248,29 +248,6 @@ export const obterProjetosLaudoFinalizados = ({ commit }, param) => {
         });
 };
 
-export const obterHistoricoRevisao = ({ commit }, params) => {
-    const p = new Promise((resolve) => {
-        avaliacaoResultadosHelperAPI.getListaRevisoes(params)
-            .then((response) => {
-                const dados = response.data.data;
-                commit(types.HISTORICO_REVISAO, dados.items);
-                resolve();
-            });
-    });
-    return p;
-};
-
-export const salvarRevisao = ({ commit }, params) => {
-    const p = new Promise((resolve) => {
-        avaliacaoResultadosHelperAPI.postRevisao(params)
-            .then((response) => {
-                commit(types.SET_REVISAO, response.data.data.items.dados[0]);
-                resolve();
-            });
-    });
-    return p;
-};
-
 export const projetosRevisao = ({ commit }, params) => {
     avaliacaoResultadosHelperAPI.projetosRevisao(params)
         .then((response) => {
@@ -295,5 +272,13 @@ export const buscarComprovantes = ({ commit }, comprovanteIndex) => {
             const data = response.data;
             const itens = data.data;
             commit(types.SET_COMPROVANTES, itens);
+        });
+};
+
+export const devolverProjeto = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.devolverProjeto(params)
+        .then((response) => {
+            const devolverProjeto = response.data;
+            commit(types.SET_DEVOLVER_PROJETO, devolverProjeto);
         });
 };

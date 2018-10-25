@@ -35,9 +35,8 @@ export const state = {
     getProjetosEmAssinatura: {},
     getProjetosHistorico: {},
     versao: {},
-    revisaoParecer: {},
-    revisao: {},
     projetosRevisao: {},
+    devolverProjeto: {},
     objetoParecer: {},
     itensBuscaComprovantes: {},
     comprovantes: {},
@@ -51,12 +50,6 @@ export const mutations = {
     },
     [types.GET_PARECER](state, parecer) {
         state.parecer = parecer;
-    },
-    [types.HISTORICO_REVISAO](state, revisaoParecer) {
-        state.revisaoParecer = revisaoParecer;
-    },
-    [types.SET_REVISAO](state, revisao) {
-        state.revisaoParecer.push(revisao);
     },
     [types.GET_PROJETO](state, projeto) {
         state.projeto = projeto;
@@ -163,6 +156,9 @@ export const mutations = {
     },
     [types.SYNC_PROJETOS_REVISAO](state, dados) {
         state.projetosRevisao = dados;
+    },
+    [types.SET_DEVOLVER_PROJETO](state, devolverProjeto) {
+        state.devolverProjeto = devolverProjeto;
     },
     [types.GET_OBJETO_PARECER](state, dados) {
         state.objetoParecer = dados;

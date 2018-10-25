@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <v-app>
+        <v-app :dark="isModoNoturno">
             <SlNav></SlNav>
             <v-content>
                 <v-container fluid>
@@ -27,7 +27,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import Rodape from '@/components/rodape';
+import Rodape from '@/components/layout/footer';
 import SlNav from './components/SlNav';
 
 export default {
@@ -36,6 +36,8 @@ export default {
     methods: {
         ...mapActions({
             setSnackbar: 'noticias/setDados',
+            setUsuario: 'autenticacao/usuarioLogado',
+            obterModoNoturno: 'layout/obterModoNoturno',
         }),
         fecharSnackbar() {
             this.setSnackbar({ ativo: false });
@@ -44,13 +46,17 @@ export default {
     computed: {
         ...mapGetters({
             getSnackbar: 'noticias/getDados',
+            isModoNoturno: 'layout/modoNoturno',
         }),
     },
     mounted() {
         this.setSnackbar({ ativo: false, color: 'success' });
+        this.setUsuario();
+        this.obterModoNoturno();
     },
     data() {
         return {
+            dark: false,
             snackbar: false,
         };
     },

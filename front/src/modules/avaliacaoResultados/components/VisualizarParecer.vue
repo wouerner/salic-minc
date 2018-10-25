@@ -70,22 +70,15 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import cnpjFilter from '@/filters/cnpj';
 
 export default {
     name: 'VisualizarParecer',
     data() {
         return {
-            idPronac: this.$route.params.id,
             dialog: true,
         };
-    },
-    methods:
-    {
-        ...mapActions({
-            requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
-        }),
     },
     computed:
     {
@@ -96,8 +89,11 @@ export default {
             projeto: 'avaliacaoResultados/projeto',
         }),
     },
-    mounted() {
-        this.requestEmissaoParecer(this.idPronac);
+    created() {
+        this.parecerTecnico;
+        this.proponente;
+        this.parecerObjeto;
+        this.projeto;
     },
     filters: {
         cnpjFilter,

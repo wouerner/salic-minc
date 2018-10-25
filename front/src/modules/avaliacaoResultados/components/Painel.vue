@@ -36,25 +36,19 @@
                         <v-icon>gavel</v-icon>
                     </template>
                 </v-tab>
-                <v-tab href="#tab-5">
-                    Revisão
-                    <v-icon>rate_review</v-icon>
-                </v-tab>
+
                 <v-tab href="#tab-2">
                      Assinar
                     <v-icon>done</v-icon>
                 </v-tab>
-                <v-tab href="#tab-3">
-                     Em assinatura
-                    <v-icon>done_all</v-icon>
-                </v-tab>
+
                 <v-tab href="#tab-4">
                      Historico
                     <v-icon>history</v-icon>
                 </v-tab>
 
                 <v-tab-item
-                    :id="'tab-0'"
+                    :value="'tab-0'"
                     :key="0"
                 >
                     <TabelaProjetos
@@ -64,7 +58,7 @@
                     ></TabelaProjetos>
                 </v-tab-item>
                 <v-tab-item
-                    :id="'tab-1'"
+                    :value="'tab-1'"
                     :key="1"
                 >
                     <v-card flat
@@ -88,7 +82,7 @@
                     </v-card>
                 </v-tab-item>
                 <v-tab-item
-                    :id="'tab-2'"
+                    :value="'tab-2'"
                     :key="2"
                 >
                     <v-card flat>
@@ -100,21 +94,9 @@
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
+
                 <v-tab-item
-                    :id="'tab-3'"
-                    :key="3"
-                >
-                    <v-card flat>
-                        <v-card-text>
-                            <TabelaProjetos
-                                :dados="getProjetosEmAssinatura"
-                                :componentes="listaAcoesTecnico"
-                            ></TabelaProjetos>
-                        </v-card-text>
-                    </v-card>
-                </v-tab-item>
-                <v-tab-item
-                    :id="'tab-4'"
+                    :value="'tab-4'"
                     :key="4"
                 >
                     <v-card flat>
@@ -126,19 +108,7 @@
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
-                <v-tab-item
-                    :id="'tab-5'"
-                    :key="5"
-                >
-                    <v-card flat>
-                        <v-card-text>
-                            <TabelaProjetos
-                                :dados="getProjetosRevisao"
-                                :componentes="revisaoAcoes"
-                            ></TabelaProjetos>
-                        </v-card-text>
-                    </v-card>
-                </v-tab-item>
+
             </v-tabs>
         </v-card>
     </v-container>
@@ -150,8 +120,7 @@ import Historico from './Historico';
 import Encaminhar from './ComponenteEncaminhar';
 import AnaliseButton from './analise/analisarButton';
 import AssinarButton from './analise/AssinarButton';
-import RevisaoButton from './revisao/revisaoButton';
-import VisualizarButton from './analise/visualizarButton';
+import Devolver from './Devolver';
 
 export default {
     name: 'Painel',
@@ -202,11 +171,10 @@ export default {
     },
     data() {
         return {
-            listaAcoesTecnico: [Historico, AnaliseButton],
-            listaAcoesAssinar: [Historico, AssinarButton],
-            listaAcoesCoordenador: [Encaminhar, Historico],
-            distribuirAcoes: [Encaminhar],
-            revisaoAcoes: [RevisaoButton, VisualizarButton],
+            listaAcoesTecnico: { atual: '', proximo: '', acoes: [Historico, AnaliseButton] },
+            listaAcoesAssinar: { atual: '6', proximo: '5', acoes: [Historico, AssinarButton, Devolver] },
+            listaAcoesCoordenador: { atual: '', proximo: '', acoes: [Encaminhar, Historico] },
+            distribuirAcoes: { atual: '', proximo: '', acoes: [Encaminhar] },
         };
     },
     components: {
