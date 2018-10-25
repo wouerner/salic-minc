@@ -28,3 +28,4 @@ export const getProjetosHistorico = state => state.getProjetosHistorico;
 export const versao = state => state.versao;
 export const getProjetosRevisao = state => state.projetosRevisao;
 export const objetoParecer = state => state.objetoParecer;
+export const comprovantes = state => state.comprovantes;

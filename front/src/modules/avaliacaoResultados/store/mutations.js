@@ -37,6 +37,8 @@ export const state = {
     versao: {},
     projetosRevisao: {},
     objetoParecer: {},
+    itensBuscaComprovantes: {},
+    comprovantes: {},
 };
 
 export const mutations = {
@@ -156,5 +158,11 @@ export const mutations = {
     },
     [types.GET_OBJETO_PARECER](state, dados) {
         state.objetoParecer = dados;
+    },
+    [types.SET_ITENS_BUSCA_COMPROVANTES](state, dados) {
+        state.itensBuscaComprovantes = dados;
+    },
+    [types.SET_COMPROVANTES](state, dados) {
+        state.comprovantes = dados;
     },
 };
