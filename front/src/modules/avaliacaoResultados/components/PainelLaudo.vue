@@ -43,7 +43,7 @@
                 </v-tab>
 
                 <v-tab-item
-                    :id="'tab-0'"
+                    :value="'tab-0'"
                     :key="0"
                 >
                     <v-card flat>
@@ -53,7 +53,7 @@
                     </v-card>
                 </v-tab-item>
                 <v-tab-item
-                    :id="'tab-1'"
+                    :value="'tab-1'"
                     :key="1"
                 >
                     <v-card flat>
@@ -63,7 +63,7 @@
                     </v-card>
                 </v-tab-item>
                 <v-tab-item
-                    :id="'tab-2'"
+                    :value="'tab-2'"
                     :key="2"
                 >
                     <v-card flat>
@@ -75,7 +75,7 @@
                     </v-card>
                 </v-tab-item>
                 <v-tab-item
-                    :id="'tab-3'"
+                    :value="'tab-3'"
                     :key="3"
                 >
                     <v-card flat>
