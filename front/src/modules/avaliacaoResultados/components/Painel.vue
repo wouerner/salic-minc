@@ -173,7 +173,7 @@ export default {
         return {
             listaAcoesTecnico: { atual: '', proximo: '', acoes: [Historico, AnaliseButton] },
             listaAcoesAssinar: { atual: '6', proximo: '5', acoes: [Historico, AssinarButton, Devolver] },
-            listaAcoesCoordenador: { atual: '', proximo: '', acoes: [Encaminhar, Historico, Devolver] },
+            listaAcoesCoordenador: { atual: '', proximo: '', acoes: [Encaminhar, Historico] },
             distribuirAcoes: { atual: '', proximo: '', acoes: [Encaminhar] },
         };
     },
