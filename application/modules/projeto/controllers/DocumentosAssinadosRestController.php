@@ -17,7 +17,7 @@ class Projeto_DocumentosAssinadosRestController extends MinC_Controller_Rest_Abs
     {
         try {
             $documentoAssinadoService = new DocumentosAssinados($this->getRequest(), $this->getResponse());
-            $resposta = $documentoAssinadoService->buscaDocumentosAssinados();
+            $resposta = $documentoAssinadoService->buscarDocumentosAssinados();
 
             $this->renderJsonResponse( $resposta, 200);
 

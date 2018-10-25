@@ -22,7 +22,7 @@ class DocumentosAssinados implements \MinC\Servico\IServicoRestZend
         $this->response = $response;
     }
 
-    public function buscaDocumentosAssinados()
+    public function buscarDocumentosAssinados()
     {
         $idPronac = $this->request->idPronac;
 
