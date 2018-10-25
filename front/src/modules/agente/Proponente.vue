@@ -243,7 +243,7 @@
                 return string;
             },
             label_sim_ou_nao(valor) {
-                if (valor ) {
+                if (valor  === 1) {
                     return 'Sim';
                 }
                 return 'Não';
