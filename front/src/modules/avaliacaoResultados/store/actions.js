@@ -271,7 +271,6 @@ export const buscarComprovantes = ({ commit }, comprovanteIndex) => {
         .then((response) => {
             const data = response.data;
             const itens = data.data;
-            console.log('aaaaaaaa', itens);
             commit(types.SET_COMPROVANTES, itens);
         });
 };

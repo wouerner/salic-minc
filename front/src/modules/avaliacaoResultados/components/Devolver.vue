@@ -11,7 +11,6 @@
                 flat
                 icon
                 light
-                @click.native="setDevolverProjeto({ idPronac: idPronac, atual: atual, proximo: proximo })"
             >
                 <v-icon class="material-icons">replay</v-icon>
             </v-btn>
@@ -19,16 +18,22 @@
         </v-tooltip>
         <v-card>
             <v-card-text>
-                Você devolverá o projeto para o técnico.
+                Você deseja devolver o projeto '{{ pronac }} - {{ nomeProjeto }}' para análise?
             </v-card-text>
             <v-card-actions>
                 <v-btn
                     color="success"
                     flat
-                    block
+                    @click="devolver()"
+                >
+                    Sim
+                </v-btn>
+                <v-btn
+                    color="error"
+                    flat
                     @click="dialog = false"
                 >
-                    Ok
+                    Não
                 </v-btn>
             </v-card-actions>
         </v-card>
@@ -50,6 +55,8 @@
             idPronac: String,
             atual: String,
             proximo: String,
+            nomeProjeto: String,
+            pronac: String,
         },
         components: {
             Modal,
@@ -58,6 +65,17 @@
             ...mapActions({
                 setDevolverProjeto: 'avaliacaoResultados/devolverProjeto',
             }),
+            devolver() {
+                this.dialog = false;
+                this.setDevolverProjeto(
+                    {
+                        idPronac: this.idPronac,
+                        atual: this.atual,
+                        proximo: this.proximo,
+                        idTipoDoAtoAdministrativo: 622,
+                    });
+                location.reload();
+            },
         },
     };
 </script>

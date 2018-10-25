@@ -107,4 +107,6 @@ export const buscarComprovantes = (itemBuscaComprovantes) => {
     return api.getRequest(url + params);
 };
 
-export const devolverProjeto = params => api.postRequest(`/avaliacao-resultados/estado?idPronac=${params.idPronac}&atual=${params.atual}&proximo=${params.proximo}`);
+export const devolverProjeto = (params) => {
+    api.postRequest('/avaliacao-resultados/estado', buildData(params));
+};
