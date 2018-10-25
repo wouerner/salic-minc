@@ -9,7 +9,7 @@
                         </v-btn>
                         <v-toolbar-title>Avaliação de Resultados - Visualizar Laudo</v-toolbar-title>
                     </v-toolbar>
-                    <v-container grid-list-sm>
+                    <v-container grid-list-sm v-if="projeto && proponente">
                         <v-layout row wrap>
                             <v-flex xs12 sm12 md12>
                                 <p><b>Projeto:</b> {{projeto.AnoProjeto}}{{projeto.Sequencial}} - {{projeto.NomeProjeto}}</p>
@@ -60,11 +60,6 @@
                 projeto: 'avaliacaoResultados/projeto',
                 parecerLaudoFinal: 'avaliacaoResultados/getParecerLaudoFinal',
             }),
-        },
-        created() {
-            this.proponente;
-            this.projeto;
-            this.parecerLaudoFinal;
         },
         filters: {
             cnpjFilter,

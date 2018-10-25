@@ -154,11 +154,6 @@
                 parecerLaudoFinal: 'avaliacaoResultados/getParecerLaudoFinal',
             }),
         },
-        created() {
-            this.parecerLaudoFinal;
-            this.projeto;
-            this.proponente;
-        },
         filters: {
             cnpjFilter,
         },
