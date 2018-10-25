@@ -1,6 +1,9 @@
 <template>
-    <div id="conteudo" v-if="dados.localRealizacoes">
-        <div v-if="Object.keys(dados).length > 0">
+    <div id="conteudo">
+        <div v-if="loading">
+            <Carregando :text="'Carregando Local de Realizacao e Deslocamento'"></Carregando>
+        </div>
+        <div v-else-if="Object.keys(dados).length > 0">
             <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
                                   :nomeProjeto="dadosProjeto.NomeProjeto">
             </IdentificacaoProjeto>
@@ -59,16 +62,28 @@
 </template>
 <script>
     import { mapActions, mapGetters } from 'vuex';
+    import Carregando from '@/components/Carregando';
     import IdentificacaoProjeto from './IdentificacaoProjeto';
 
     export default {
         name: 'LocalRealizacaoDeslocamento',
+        data() {
+            return {
+                loading: true,
+            };
+        },
         components: {
             IdentificacaoProjeto,
+            Carregando,
         },
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
                 this.buscarLocalRealizacaoDeslocamento(this.dadosProjeto.idPronac);
+            }
+        },
+        watch: {
+            dados(value) {
+                this.loading = false;
             }
         },
         computed: {
