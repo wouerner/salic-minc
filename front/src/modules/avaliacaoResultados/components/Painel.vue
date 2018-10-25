@@ -33,24 +33,22 @@
                     </template>
                     <template v-else>
                         Em Analise
-                        <v-icon>how_to_reg</v-icon>
+                        <v-icon>gavel</v-icon>
                     </template>
                 </v-tab>
+
                 <v-tab href="#tab-2">
-                    Assinar
-                    <v-icon>done_all</v-icon>
+                     Assinar
+                    <v-icon>done</v-icon>
                 </v-tab>
-                <v-tab href="#tab-3">
-                    Acompanhamento 
-                    <v-icon>edit</v-icon>
-                </v-tab>
+
                 <v-tab href="#tab-4">
-                    Historico 
-                    <v-icon>edit</v-icon>
+                     Historico
+                    <v-icon>history</v-icon>
                 </v-tab>
 
                 <v-tab-item
-                    :id="'tab-0'"
+                    :value="'tab-0'"
                     :key="0"
                 >
                     <TabelaProjetos
@@ -60,7 +58,7 @@
                     ></TabelaProjetos>
                 </v-tab-item>
                 <v-tab-item
-                    :id="'tab-1'"
+                    :value="'tab-1'"
                     :key="1"
                 >
                     <v-card flat
@@ -72,6 +70,7 @@
                                 :analisar="true"
                                 :dados="dadosTabelaTecnico"
                                 :componentes="listaAcoesCoordenador"
+                                :mostrarTecnico="true"
                             ></TabelaProjetos>
                             <TabelaProjetos
                                 v-else
@@ -83,72 +82,99 @@
                     </v-card>
                 </v-tab-item>
                 <v-tab-item
-                    :id="'tab-2'"
+                    :value="'tab-2'"
                     :key="2"
                 >
                     <v-card flat>
                         <v-card-text>
                             <TabelaProjetos
                                 :dados="getProjetosFinalizados"
-                                :componentes="listaAcoesTecnico"
+                                :componentes="listaAcoesAssinar"
                             ></TabelaProjetos>
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
+
                 <v-tab-item
-                    :id="'tab-3'"
-                    :key="3"
+                    :value="'tab-4'"
+                    :key="4"
                 >
                     <v-card flat>
                         <v-card-text>
                             <TabelaProjetos
-                                :dados="getProjetosAssinatura"
+                                :dados="getProjetosHistorico"
                                 :componentes="listaAcoesTecnico"
                             ></TabelaProjetos>
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
+
             </v-tabs>
         </v-card>
     </v-container>
 </template>
-
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import TabelaProjetos from './TabelaProjetos';
 import Historico from './Historico';
 import Encaminhar from './ComponenteEncaminhar';
-import TipoAvaliacao from './TipoAvaliacao';
 import AnaliseButton from './analise/analisarButton';
+import AssinarButton from './analise/AssinarButton';
+import Devolver from './Devolver';
 
 export default {
     name: 'Painel',
     created() {
-        this.projetosFinalizados({ estadoid: 6 });
-        this.projetosAssinatura();
-        this.obterDadosTabelaTecnico({ estadoid: 5 });
         this.distribuir({ estadoid: 6 });
+
+        this.projetosAssinatura({ estado: 'assinar' });
+        this.projetosAssinatura({ estado: 'em_assinatura' });
+        this.projetosAssinatura({ estado: 'historico' });
+
+        this.syncRevisao({ estadoid: 13 });
         this.usuarioLogado();
     },
     mounted() {
     },
     watch: {
         getUsuario(val) {
-            if (Object.keys(val).length > 0 && val.usu_codigo != 0 ) {
+            if (Object.keys(val).length > 0 && parseInt(val.usu_codigo, 10) !== 0) {
+                let projetosTecnico = {};
+                let projetosFinalizados = {};
 
-                this.projetosFinalizados({ estadoid: 6, idAgente: this.getUsuario.usu_codigo });
-                this.obterDadosTabelaTecnico({ estadoid: 5, idAgente: this.getUsuario.usu_codigo });
+                if (parseInt(this.getUsuario.grupo_ativo, 10) === 125) {
+                    projetosTecnico = {
+                        estadoid: 5,
+                    };
+
+                    projetosFinalizados = {
+                        estadoid: 6,
+                    };
+                } else {
+                    projetosTecnico = {
+                        estadoid: 5,
+                        idAgente: this.getUsuario.usu_codigo,
+                    };
+
+                    projetosFinalizados = {
+                        estadoid: 6,
+                        idAgente: this.getUsuario.usu_codigo,
+                    };
+                }
+
+                this.obterDadosTabelaTecnico(projetosTecnico);
+                this.projetosFinalizados(projetosFinalizados);
                 this.distribuir({ estadoid: 6 });
+                this.syncRevisao({ estadoid: 13 });
             }
         },
     },
     data() {
         return {
-            listaAcoesTecnico: [Historico, AnaliseButton],
-            //listaAcoesTecnico: [Historico, TipoAvaliacao],
-            listaAcoesCoordenador: [Historico],
-            //listaAcoesCoordenador: [Historico, TipoAvaliacao],
-            distribuirAcoes: [Encaminhar],
+            listaAcoesTecnico: { atual: '', proximo: '', acoes: [Historico, AnaliseButton] },
+            listaAcoesAssinar: { atual: '6', proximo: '5', acoes: [Historico, AssinarButton, Devolver] },
+            listaAcoesCoordenador: { atual: '', proximo: '', acoes: [Encaminhar, Historico] },
+            distribuirAcoes: { atual: '', proximo: '', acoes: [Encaminhar] },
         };
     },
     components: {
@@ -160,6 +186,7 @@ export default {
             projetosFinalizados: 'avaliacaoResultados/projetosFinalizados',
             projetosAssinatura: 'avaliacaoResultados/projetosAssinatura',
             distribuir: 'avaliacaoResultados/projetosParaDistribuir',
+            syncRevisao: 'avaliacaoResultados/projetosRevisao',
             usuarioLogado: 'autenticacao/usuarioLogado',
         }),
     },
@@ -167,9 +194,12 @@ export default {
         ...mapGetters({
             dadosTabelaTecnico: 'avaliacaoResultados/dadosTabelaTecnico',
             getProjetosFinalizados: 'avaliacaoResultados/getProjetosFinalizados',
-            getProjetosAssinatura: 'avaliacaoResultados/getProjetosAssinatura',
+            getProjetosAssinar: 'avaliacaoResultados/getProjetosAssinar',
+            getProjetosEmAssinatura: 'avaliacaoResultados/getProjetosEmAssinatura',
+            getProjetosHistorico: 'avaliacaoResultados/getProjetosHistorico',
             getProjetosParaDistribuir: 'avaliacaoResultados/getProjetosParaDistribuir',
             getUsuario: 'autenticacao/getUsuario',
+            getProjetosRevisao: 'avaliacaoResultados/getProjetosRevisao',
         }),
     },
 };

@@ -45,6 +45,7 @@ package-lock.json
 *.swp
 *.save
 .idea
+salic-minc.iml
 
 # dependencias
 node_modules/
