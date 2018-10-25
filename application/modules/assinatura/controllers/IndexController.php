@@ -75,12 +75,28 @@ class Assinatura_IndexController extends Assinatura_GenericController
             'columns' => $columns
         ]);
 
+        $grupo = '';
+        if($idTipoDoAtoAdministrativos) {
+            $serviceAtoAdministrativo =  new \Application\Modules\Assinatura\Service\Assinatura\AtoAdministrativo();
+
+            $atoAdministrativo = $serviceAtoAdministrativo->obterAtoAdministrativoAtual(
+                $idTipoDoAtoAdministrativos,
+                $this->grupoAtivo->codGrupo,
+                $this->grupoAtivo->codOrgao,
+                $this->auth->getIdentity()->usu_org_max_superior
+            );
+            $grupo = (count($atoAdministrativo) > 0) ? $atoAdministrativo['grupo'] : '';
+        }
+
         $tbAssinaturaDbTable->preencherModeloAtoAdministrativo([
             'idOrgaoDoAssinante' => $this->grupoAtivo->codOrgao,
             'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo,
             'idOrgaoSuperiorDoAssinante' => $this->auth->getIdentity()->usu_org_max_superior,
-            'idTipoDoAto' => $idTipoDoAtoAdministrativos
+            'idTipoDoAto' => $idTipoDoAtoAdministrativos,
+            'grupo' => $grupo
         ]);
+
+
 
         $projetosDisponiveis = $tbAssinaturaDbTable->obterAssinaturasDisponiveis();
         $recordsFiltered = 0;
@@ -212,7 +228,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 ]);
 
                 if (!$objAssinatura->isProjetoAssinado()
-                    && (int)$this->view->documentoAssinatura['cdSituacao'] == (int)Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO) {
+                    && (int)$this->view->documentoAssinatura['cdSituacao'] == (int)Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA) {
                     $this->view->isPermitidoAssinar = true;
                 }
             }
@@ -225,6 +241,9 @@ class Assinatura_IndexController extends Assinatura_GenericController
     public function visualizarProjetoAction()
     {
         $get = Zend_Registry::get('get');
+        if (filter_input(INPUT_GET, 'modal')) {
+            $this->_helper->layout->disableLayout();
+        }
         $idDocumentoAssinatura = $get->idDocumentoAssinatura;
 
         $this->obterDocumentoAssinado($idDocumentoAssinatura);
@@ -297,13 +316,16 @@ class Assinatura_IndexController extends Assinatura_GenericController
             );
 
             $idDocumentoAssinatura = $this->view->documentoAssinatura['idDocumentoAssinatura'];
-
+            
             $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+            $grupoAtoAdministrativo = $objTbAtoAdministrativo->obterGrupoPorIdDocumentoAssinatura($idDocumentoAssinatura);
+            
             $dadosAtoAdministrativoAtual = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
                 $idTipoDoAtoAdministrativo,
                 $this->grupoAtivo->codGrupo,
-                $this->grupoAtivo->codOrgao
-            );
+                $this->grupoAtivo->codOrgao,
+                $grupoAtoAdministrativo
+            );            
             
             if ($post) {
 
@@ -320,7 +342,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                         );
                         $tblUsuario = new Autenticacao_Model_DbTable_Usuario();
                         $codOrgaoMaxSuperior = $tblUsuario->recuperarOrgaoMaxSuperior($this->grupoAtivo->codOrgao);
-                        
+
                         $servicoAssinatura = new \MinC\Assinatura\Servico\Assinatura(
                             [
                                 'idPronac' => $idPronac,
@@ -375,7 +397,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 'idDocumentoAssinatura = ?' => $idDocumentoAssinatura
             ));
 
-            if ($assinaturaExistente->current()) {
+            if (count($assinaturaExistente) > 0) {
                 throw new Exception("O documento j&aacute; foi assinado pelo usu&aacute;rio logado nesta fase atual.");
             }
 

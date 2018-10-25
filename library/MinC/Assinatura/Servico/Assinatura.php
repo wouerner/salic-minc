@@ -1,6 +1,7 @@
 <?php
 
 namespace MinC\Assinatura\Servico;
+use Application\Modules\Assinatura\Service\Assinatura\AtoAdministrativo;
 use MinC\Assinatura\Acao\IListaAcoesModulo;
 
 /**
@@ -85,7 +86,8 @@ class Assinatura implements IServico
         $dadosAtoAdministrativoAtual = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
             $modeloTbAtoAdministrativo->getIdTipoDoAto(),
             $modeloTbAtoAdministrativo->getIdPerfilDoAssinante(),
-            $modeloTbAtoAdministrativo->getIdOrgaoDoAssinante()
+            $modeloTbAtoAdministrativo->getIdOrgaoDoAssinante(),
+            $objTbAtoAdministrativo->obterGrupoPorIdDocumentoAssinatura($modeloTbAssinatura->idDocumentoAssinatura)
         );
 
         if (!$dadosAtoAdministrativoAtual) {
@@ -115,22 +117,29 @@ class Assinatura implements IServico
             'dsManifestacao' => $modeloTbAssinatura->getDsManifestacao(),
             'idDocumentoAssinatura' => $modeloTbAssinatura->getIdDocumentoAssinatura()
         ];
-
+        
+        $grupoAtoAdministrativo = $objTbAtoAdministrativo->obterGrupoPorIdDocumentoAssinatura($modeloTbAssinatura->getIdDocumentoAssinatura());
+        
+        $atoAdministrativo = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
+            $modeloTbAtoAdministrativo->getIdTipoDoAto(),
+            $modeloTbAtoAdministrativo->getIdPerfilDoAssinante(),
+            $modeloTbAtoAdministrativo->getIdOrgaoDoAssinante(),
+            $grupoAtoAdministrativo
+        );
+        
         $dbTableTbAssinatura->inserir($dadosInclusaoAssinatura);
-        $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino(
+        $quantidadeAssinaturasRealizadas = $dbTableTbAssinatura->obterQuantidadeAssinaturasRealizadas();
+        $quantidadeMinimaAssinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas(
             $modeloTbAtoAdministrativo->getIdTipoDoAto(),
             $modeloTbAtoAdministrativo->getIdOrdemDaAssinatura(),
-            $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()
+            $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante(),
+            $grupoAtoAdministrativo
         );
-
-        if ($codigoOrgaoDestino) {
+        
+        if ($quantidadeAssinaturasRealizadas < $quantidadeMinimaAssinaturas) {
             $this->encaminhar();
         } else {
             $quantidadeAssinaturasRealizadas = $dbTableTbAssinatura->obterQuantidadeAssinaturasRealizadas();
-            $quantidadeMinimaAssinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas(
-                $modeloTbAtoAdministrativo->getIdTipoDoAto(),
-                $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()
-            );
             
             if ($quantidadeAssinaturasRealizadas == $quantidadeMinimaAssinaturas) {
                 $this->finalizar();
@@ -158,11 +167,20 @@ class Assinatura implements IServico
             throw new \Exception ("O documento precisa ser assinado para que consiga ser movimentado.");
         }
 
+        $servicoAtoAdministrativo = new AtoAdministrativo();
+        $grupo = $servicoAtoAdministrativo->obterGrupoAtoAdministrativoAtual(
+            $modeloTbAtoAdministrativo->getIdTipoDoAto(),
+            $modeloTbAtoAdministrativo->getIdPerfilDoAssinante(),
+            $modeloTbAtoAdministrativo->getIdOrgaoDoAssinante(),
+            $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()
+        );
+
         $objTbAtoAdministrativo = new \Assinatura_Model_DbTable_TbAtoAdministrativo();
         $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino(
             $modeloTbAtoAdministrativo->getIdTipoDoAto(),
             $modeloTbAtoAdministrativo->getIdOrdemDaAssinatura(),
-            $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()
+            $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante(),
+            $grupo
         );
 
         if (!$codigoOrgaoDestino) {
