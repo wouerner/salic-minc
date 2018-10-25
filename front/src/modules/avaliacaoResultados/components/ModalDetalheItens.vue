@@ -41,11 +41,17 @@
                 </v-card-text>
                 <v-card-text v-else>
                     <div style="align: center" class="text-xs-center">
-                        <v-progress-circular
-                            :size="50"
-                            color="primary"
-                            indeterminate
-                        ></v-progress-circular>
+                        <div style="padding-top: 25px">
+                            <v-progress-circular
+                                :size="50"
+                                color="primary"
+                                indeterminate
+                            ></v-progress-circular>
+                        </div>
+                        <br>
+                        <div style="padding-top: 20px">
+                            Carregando...
+                        </div>
                     </div>
                 </v-card-text>
 
