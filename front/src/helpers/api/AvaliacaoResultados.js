@@ -49,7 +49,13 @@ export const finalizarParecerLaudoFinal = params => api.postRequest('/avaliacao-
 
 export const obterProjetosParaDistribuir = () => api.getRequest('/avaliacao-resultados/projeto-inicio');
 
+/** DILIGENCIA */
+
 export const criarDiligencia = params => api.postRequest('/diligencia/diligencia', buildData(params));
+
+export const listarDiligencias = params => api.getRequest();
+
+/** FIM DILIGENCIA */
 
 /**  PARECER TECNICO */
 
