@@ -22,7 +22,7 @@ class LocalRealizacaoDeslocamento implements \MinC\Servico\IServicoRestZend
         $this->response = $response;
     }
 
-    public function buscaLocalRealizacaoDeslocamento()
+    public function buscarLocalRealizacaoDeslocamento()
     {
         $idPronac = $this->request->idPronac;
 

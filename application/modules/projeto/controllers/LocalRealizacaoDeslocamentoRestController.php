@@ -16,7 +16,7 @@ class Projeto_LocalRealizacaoDeslocamentoRestController extends MinC_Controller_
     {
         try {
             $LocalRealizacaoDeslocamentoService = new LocalRealizacaoDeslocamentoService($this->getRequest(), $this->getResponse());
-            $resposta = $LocalRealizacaoDeslocamentoService->buscaLocalRealizacaoDeslocamento();
+            $resposta = $LocalRealizacaoDeslocamentoService->buscarLocalRealizacaoDeslocamento();
 
             $this->renderJsonResponse($resposta, 200);
 
