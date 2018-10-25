@@ -16,7 +16,7 @@ class Projeto_PlanoDistribuicaoRestController extends MinC_Controller_Rest_Abstr
     {
         try {
             $planoDistribuicaoService= new PlanoDistribuicaoService($this->getRequest(), $this->getResponse());
-            $resposta = $planoDistribuicaoService->buscaPlanoDistribuicao();
+            $resposta = $planoDistribuicaoService->buscarPlanoDistribuicao();
 
             $this->renderJsonResponse($resposta, 200);
 

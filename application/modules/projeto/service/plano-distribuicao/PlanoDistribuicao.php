@@ -2,8 +2,6 @@
 
 namespace Application\Modules\Projeto\Service\PlanoDistribuicao;
 
-use Seguranca;
-//vai ser usado para ins2018
 class PlanoDistribuicao implements \MinC\Servico\IServicoRestZend
 {
     /**
@@ -22,7 +20,7 @@ class PlanoDistribuicao implements \MinC\Servico\IServicoRestZend
         $this->response = $response;
     }
 
-    public function buscaPlanoDistribuicao()
+    public function buscarPlanoDistribuicao()
     {
         $idPreProjeto = $this->request->idPreProjeto;
 
