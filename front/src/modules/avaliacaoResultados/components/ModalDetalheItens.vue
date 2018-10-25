@@ -2,7 +2,7 @@
     <div class="text-xs-center">
         <v-dialog
             v-model="dialog"
-            width="500"
+            width="750"
         >
             <v-btn
                 @click="buscar()"
@@ -21,18 +21,32 @@
                     Prestação de Contas: Analise
                 </v-card-title>
 
-                <v-card-text>
+                <v-card-text v-if="Object.keys(comprovantes).length > 0">
                     <v-expansion-panel>
                         <v-expansion-panel-content v-for="(comprovante, index) in comprovantes" :key="index">
                             <div slot="header">Fornecedor: {{comprovante.nmFornecedor}}</div>
                             <v-card>
                                 <v-card-text>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                    <b>Valor: </b>R$ {{comprovante.vlComprovacao | filtroFormatarParaReal}}
+                                </v-card-text>
+                                <v-card-text>
+                                    <b>Arquivo: </b>
+                                    <a :href="'/upload/abrir/id/' + comprovante.arquivo.id">
+                                        {{comprovante.arquivo.nome}}
+                                    </a>
                                 </v-card-text>
                             </v-card>
                         </v-expansion-panel-content>
                     </v-expansion-panel>
-                    <!--Fornecedor: {{comprovante.nmFornecedor}}-->
+                </v-card-text>
+                <v-card-text v-else>
+                    <div style="align: center" class="text-xs-center">
+                        <v-progress-circular
+                            :size="50"
+                            color="primary"
+                            indeterminate
+                        ></v-progress-circular>
+                    </div>
                 </v-card-text>
 
                 <v-divider></v-divider>
@@ -54,6 +68,7 @@
 
 <script>
     import { mapActions, mapGetters } from 'vuex';
+    import numeral from 'numeral';
 
     export default {
         props: {
@@ -75,6 +90,12 @@
             }),
             buscar() {
                 this.buscarComprovantes(this.comprovanteIndex);
+            },
+        },
+        filters: {
+            filtroFormatarParaReal(value) {
+                const parsedValue = parseFloat(value);
+                return numeral(parsedValue).format('0,0.00');
             },
         },
     };
