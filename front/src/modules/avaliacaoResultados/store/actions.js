@@ -275,3 +275,11 @@ export const buscarComprovantes = ({ commit }, comprovanteIndex) => {
             commit(types.SET_COMPROVANTES, itens);
         });
 };
+
+export const devolverProjeto = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.devolverProjeto(params)
+        .then((response) => {
+            const devolverProjeto = response.data;
+            commit(types.SET_DEVOLVER_PROJETO, devolverProjeto);
+        });
+};
