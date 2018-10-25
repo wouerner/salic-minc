@@ -20,6 +20,10 @@ class Assinar implements IAcaoAssinar
             ]
         );
         
+        if (empty($documentoAssinatura)) {
+            return;
+        }
+            
         $tbReadequacaoXParecerDbTable = new \Readequacao_Model_DbTable_TbReadequacaoXParecer();
         $tbReadequacaoXParecer = $tbReadequacaoXParecerDbTable->findBy([
             'idParecer' => $documentoAssinatura['idAtoDeGestao']

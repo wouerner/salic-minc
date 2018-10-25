@@ -134,13 +134,13 @@ class ReadequacaoAssinatura implements IServico
     public function encaminharOuFinalizarReadequacaoChecklist($idReadequacao)
     {
         try {
-            $auth = Zend_Auth::getInstance();
-            $idUsuarioLogado = $auth->getIdentity()->usu_codigo;
-            $reuniao = new Reuniao();
+            $auth = \Zend_Auth::getInstance();
+            $idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
+            $reuniao = new \Reuniao();
             $raberta = $reuniao->buscarReuniaoAberta();
             $idNrReuniao = ($raberta['stPlenaria'] == 'A') ? $raberta['idNrReuniao'] + 1 : $raberta['idNrReuniao'];
 
-            $tbReadequacaoXParecer = new Readequacao_Model_DbTable_TbReadequacaoXParecer();
+            $tbReadequacaoXParecer = new \Readequacao_Model_DbTable_TbReadequacaoXParecer();
             $dadosParecer = $tbReadequacaoXParecer->buscar([
                 'idReadequacao=?' => $idReadequacao
             ]);
@@ -149,84 +149,84 @@ class ReadequacaoAssinatura implements IServico
                 $pareceres[$key] = $dp->idParecer;
             }
 
-            $Parecer = new Parecer();
+            $Parecer = new \Parecer();
             $parecerTecnico = $Parecer->buscar(
                 ['IdParecer = (?)' => $pareceres],
                 ['IdParecer']
             )->current();
 
-            $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+            $tbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
             $read = $tbReadequacao->buscarReadequacao([
                 'idReadequacao =?' => $idReadequacao
             ])->current();
 
             if ($parecerTecnico->ParecerFavoravel == 2) {
                 switch ($read->idTipoReadequacao) {
-                    case  Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO:
-                        $tbPlanoDistribuicaoMapper = new Readequacao_Model_TbPlanoDistribuicaoMapper();
+                    case  \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO:
+                        $tbPlanoDistribuicaoMapper = new \Readequacao_Model_TbPlanoDistribuicaoMapper();
                         $tbPlanoDistribuicaoMapper->finalizarAnaliseReadequacaoPlanoDistribuicao($read->idPronac, $idReadequacao, $parecerTecnico->ParecerFavoravel);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA:
                         $this->finalizarReadequacaoPlanilhaOrcamentaria($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_RAZAO_SOCIAL:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_RAZAO_SOCIAL:
                         $this->finalizarReadequacaoRazaoSocial($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_AGENCIA_BANCARIA:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_AGENCIA_BANCARIA:
                         $this->finalizarReadequacaoAgenciaBancaria($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SINOPSE_OBRA:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SINOPSE_OBRA:
                         $this->finalizarReadequacaoSinopseObra($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_IMPACTO_AMBIENTAL:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_IMPACTO_AMBIENTAL:
                         $this->finalizarReadequacaoImpactoAmbiental($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ESPECIFICACAO_TECNICA:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ESPECIFICACAO_TECNICA:
                         $this->finalizarReadequacaoEspecificacaoTecnica($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ESTRATEGIA_EXECUCAO:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ESTRATEGIA_EXECUCAO:
                         $this->finalizarReadequacaoEstrategiaExecucao($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_LOCAL_REALIZACAO:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_LOCAL_REALIZACAO:
                         $this->finalizarReadequacaoLocalRealizacao($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ALTERACAO_PROPONENTE:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ALTERACAO_PROPONENTE:
                         $this->finalizarReadequacaoAlteracaoProponente($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_NOME_PROJETO:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_NOME_PROJETO:
                         $this->finalizarReadequacaoNomeProjeto($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PERIODO_EXECUCAO:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PERIODO_EXECUCAO:
                         $this->finalizarReadequacaoPeriodoExecucao($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DIVULGACAO:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DIVULGACAO:
                         $this->finalizarReadequacaoPlanoDivulgacao($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_RESUMO_PROJETO:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_RESUMO_PROJETO:
                         $this->finalizarReadequacaoResumoProjeto($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_OBJETIVOS:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_OBJETIVOS:
                         $this->finalizarReadequacaoObjetivos($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_JUSTIFICATIVA:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_JUSTIFICATIVA:
                         $this->finalizarReadequacaoJustificativa($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ACESSIBILIDADE:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ACESSIBILIDADE:
                         $this->finalizarReadequacaoAcessibilidade($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_DEMOCRATIZACAO_ACESSO:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_DEMOCRATIZACAO_ACESSO:
                         $this->finalizarReadequacaoDemocratizacaoAcesso($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ETAPAS_TRABALHO:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ETAPAS_TRABALHO:
                         $this->finalizarReadequacaoEtapasTrabalho($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_FICHA_TECNICA:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_FICHA_TECNICA:
                         $this->finalizarReadequacaoFichaTecnica($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS:
                         $this->finalizarReadequacaoTransferenciaRecursos($read);
                         break;
-                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO:
+                    case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO:
                         $this->finalizarReadequacaoSaldoAplicacao($read);
                         break;
                 }
@@ -234,22 +234,22 @@ class ReadequacaoAssinatura implements IServico
             
             //Atualiza a tabela Readequacao_Model_DbTable_TbReadequacao
             $dados = [];
-            $dados['siEncaminhamento'] = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_FINALIZADA_SEM_PORTARIA;
+            $dados['siEncaminhamento'] = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_FINALIZADA_SEM_PORTARIA;
             $dados['stEstado'] = 1;
 
             $tiposParaChecklist = [
-                Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA,
-                Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_RAZAO_SOCIAL,
-                Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ALTERACAO_PROPONENTE,
-                Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_NOME_PROJETO,
-                Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_RESUMO_PROJETO
+                \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA,
+                \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_RAZAO_SOCIAL,
+                \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ALTERACAO_PROPONENTE,
+                \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_NOME_PROJETO,
+                \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_RESUMO_PROJETO
             ];
 
             if (in_array($read->idTipoReadequacao, $tiposParaChecklist)) {
-                if ($read->idTipoReadequacao != Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA && $TipoDeReadequacao[0]['TipoDeReadequacao'] != 'RM') {
+                if ($read->idTipoReadequacao != \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA && $TipoDeReadequacao[0]['TipoDeReadequacao'] != 'RM') {
                     if ($parecerTecnico->ParecerFavoravel !== '1') { // desfavoravel
                         $dados['stEstado'] = 0;
-                        $dados['siEncaminhamento'] = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CHECKLIST_PUBLICACAO;
+                        $dados['siEncaminhamento'] = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CHECKLIST_PUBLICACAO;
                     }
                 }
             }
@@ -265,19 +265,19 @@ class ReadequacaoAssinatura implements IServico
                 $retorno = false;
             }
 
-            if ($read->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA && $TipoDeReadequacao[0]['TipoDeReadequacao'] == 'RM') {
+            if ($read->idTipoReadequacao == \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA && $TipoDeReadequacao[0]['TipoDeReadequacao'] == 'RM') {
                 // remanejamento: chama sp para trocar planilha ativa (desativa atual e ativa remanejada)
-                $spAtivarPlanilhaOrcamentaria = new spAtivarPlanilhaOrcamentaria();
+                $spAtivarPlanilhaOrcamentaria = new \spAtivarPlanilhaOrcamentaria();
                 $ativarPlanilhaOrcamentaria = $spAtivarPlanilhaOrcamentaria->exec($read->idPronac);
             }
 
             //Atualiza a tabela tbDistribuirReadequacao
             $dados = [];
             $dados['stValidacaoCoordenador'] = 1;
-            $dados['DtValidacaoCoordenador'] = new Zend_Db_Expr('GETDATE()');
+            $dados['DtValidacaoCoordenador'] = new \Zend_Db_Expr('GETDATE()');
             $dados['idCoordenador'] = $idUsuarioLogado;
             $where = "idReadequacao = $idReadequacao";
-            $tbDistribuirReadequacao = new Readequacao_Model_tbDistribuirReadequacao();
+            $tbDistribuirReadequacao = new \Readequacao_Model_tbDistribuirReadequacao();
             $atualizacaoDistribuicaoReadequacao = $tbDistribuirReadequacao->update($dados, $where);
             if (!$atualizacaoDistribuicaoReadequacao) {
                 $retorno = false;
@@ -291,10 +291,10 @@ class ReadequacaoAssinatura implements IServico
         
     protected function finalizarReadequacaoPlanilhaOrcamentaria($read)
     {
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->find(array('IdPRONAC=?' => $read->idPronac))->current();
         
-        $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
+        $tbPlanilhaAprovacao = new \tbPlanilhaAprovacao();
         $PlanilhaAtiva = $tbPlanilhaAprovacao->valorTotalPlanilhaAtiva($read->idPronac);
         
         //BUSCAR VALOR TOTAL DA PLANILHA DE READEQUADA
@@ -304,7 +304,7 @@ class ReadequacaoAssinatura implements IServico
         );
 
         // chama SP que verifica o tipo do remanejamento
-        $spTipoDeReadequacaoOrcamentaria = new spTipoDeReadequacaoOrcamentaria();
+        $spTipoDeReadequacaoOrcamentaria = new \spTipoDeReadequacaoOrcamentaria();
         $TipoDeReadequacao = $spTipoDeReadequacaoOrcamentaria->exec($read->idPronac);
 
         // complementacao
@@ -324,16 +324,16 @@ class ReadequacaoAssinatura implements IServico
         // insere somente em reducao ou complementacao
         if ($TipoDeReadequacao[0]['TipoDeReadequacao'] == 'CO' || $TipoDeReadequacao[0]['TipoDeReadequacao'] == 'RE') {
             $dadosPrj->save();
-            $tbAprovacao = new Aprovacao();
+            $tbAprovacao = new \Aprovacao();
             $dadosAprovacao = [
                 'IdPRONAC' => $read->idPronac,
                 'AnoProjeto' => $dadosPrj->AnoProjeto,
                 'Sequencial' => $dadosPrj->Sequencial,
                 'TipoAprovacao' => $TipoAprovacao,
-                'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
+                'DtAprovacao' => new \Zend_Db_Expr('GETDATE()'),
                 'ResumoAprovacao' => 'Parecer favorável para readequação',
                 'AprovadoReal' => $TipoDeReadequacao[0]['vlReadequado'], //Alterado pelo valor retornado pela Store
-                'Logon' => $auth->getIdentity()->usu_codigo,
+                'Logon' => $this->auth->getIdentity()->usu_codigo,
                 'idReadequacao' => $idReadequacao
             ];
 
@@ -343,16 +343,16 @@ class ReadequacaoAssinatura implements IServico
 
     protected function finalizarReadequacaoRazaoSocial($read)
     {
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->find(array('IdPRONAC=?' => $read->idPronac))->current();
 
-        $tbAprovacao = new Aprovacao();
+        $tbAprovacao = new \Aprovacao();
         $dadosAprovacao = [
             'IdPRONAC' => $read->idPronac,
             'AnoProjeto' => $dadosPrj->AnoProjeto,
             'Sequencial' => $dadosPrj->Sequencial,
             'TipoAprovacao' => 8,
-            'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
+            'DtAprovacao' => new \Zend_Db_Expr('GETDATE()'),
             'ResumoAprovacao' => 'Parecer favorável para readequação',
             'Logon' => $this->auth->getIdentity()->usu_codigo,
             'idReadequacao' => $read->idReadequacao
@@ -363,11 +363,11 @@ class ReadequacaoAssinatura implements IServico
     
     protected function finalizarReadequacaoAgenciaBancaria($read)
     {
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->buscar(array('IdPRONAC=?' => $read->idPronac))->current();
         $agenciaBancaria = str_replace('-', '', $read->dsSolicitacao);
                         
-        $tblContaBancaria = new ContaBancaria();
+        $tblContaBancaria = new \ContaBancaria();
         $arrayDadosBancarios = [
             'Agencia' => $agenciaBancaria,
             'ContaBloqueada' => '000000000000',
@@ -388,10 +388,10 @@ class ReadequacaoAssinatura implements IServico
 
     protected function finalizarReadequacaoSinopseObra($read)
     {
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->buscar(array('IdPRONAC=?' => $read->idPronac))->current();
 
-        $PrePropojeto = new Proposta_Model_DbTable_PreProjeto();
+        $PrePropojeto = new \Proposta_Model_DbTable_PreProjeto();
         $dadosPreProjeto = $PrePropojeto->find([
             'idPreProjeto=?' => $dadosPrj->idProjeto
         ])->current();
@@ -401,12 +401,12 @@ class ReadequacaoAssinatura implements IServico
 
     protected function finalizarReadequacaoImpactoAmbiental($read)
     {
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->buscar([
             'IdPRONAC=?' => $read->idPronac
         ])->current();
 
-        $PrePropojeto = new Proposta_Model_DbTable_PreProjeto();
+        $PrePropojeto = new \Proposta_Model_DbTable_PreProjeto();
         $dadosPreProjeto = $PrePropojeto->find([
             'idPreProjeto=?' => $dadosPrj->idProjeto
         ])->current();
@@ -416,12 +416,12 @@ class ReadequacaoAssinatura implements IServico
 
     protected function finalizarReadequacaoEspecificacaoTecnica($read)
     {
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->buscar([
             'IdPRONAC=?' => $read->idPronac
         ])->current();
         
-        $PrePropojeto = new Proposta_Model_DbTable_PreProjeto();
+        $PrePropojeto = new \Proposta_Model_DbTable_PreProjeto();
         $dadosPreProjeto = $PrePropojeto->find([
             'idPreProjeto=?' => $dadosPrj->idProjeto
         ])->current();
@@ -431,12 +431,12 @@ class ReadequacaoAssinatura implements IServico
 
     protected function finalizarReadequacaoEstrategiaExecucao($read)
     {
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->buscar([
             'IdPRONAC=?' => $read->idPronac
         ])->current();
 
-        $PrePropojeto = new Proposta_Model_DbTable_PreProjeto();
+        $PrePropojeto = new \Proposta_Model_DbTable_PreProjeto();
         $dadosPreProjeto = $PrePropojeto->find([
             'idPreProjeto=?' => $dadosPrj->idProjeto
         ])->current();
@@ -446,14 +446,14 @@ class ReadequacaoAssinatura implements IServico
 
     protected function finalizarReadequacaoLocalRealizacao($read)
     {
-        $Abrangencia = new Proposta_Model_DbTable_Abrangencia();
+        $Abrangencia = new \Proposta_Model_DbTable_Abrangencia();
         
-        $tbAbrangencia = new Readequacao_Model_DbTable_TbAbrangencia();
+        $tbAbrangencia = new \Readequacao_Model_DbTable_TbAbrangencia();
         $abrangencias = $tbAbrangencia->buscar([
             'idReadequacao=?' => $read->idReadequacao
         ]);
         foreach ($abrangencias as $abg) {
-            $Projetos = new Projetos();
+            $Projetos = new \Projetos();
             $dadosPrj = $Projetos->buscar([
                 'IdPRONAC=?' => $read->idPronac
             ])->current();
@@ -495,18 +495,18 @@ class ReadequacaoAssinatura implements IServico
     protected function finalizarReadequacaoAlteracaoProponente($read)
     {
 
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->find([
             'IdPRONAC=?' => $read->idPronac
         ])->current();
 
-        $tbAprovacao = new Aprovacao();
+        $tbAprovacao = new \Aprovacao();
         $dadosAprovacao = [
             'IdPRONAC' => $read->idPronac,
             'AnoProjeto' => $dadosPrj->AnoProjeto,
             'Sequencial' => $dadosPrj->Sequencial,
             'TipoAprovacao' => 8,
-            'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
+            'DtAprovacao' => new \Zend_Db_Expr('GETDATE()'),
             'ResumoAprovacao' => 'Parecer favorável para readequação',
             'Logon' => $this->auth->getIdentity()->usu_codigo,
             'idReadequacao' => $read->idReadequacao
@@ -517,18 +517,18 @@ class ReadequacaoAssinatura implements IServico
     protected function finalizarReadequacaoNomeProjeto($read)
     {
                             
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->find([
             'IdPRONAC=?' => $read->idPronac
         ])->current();
 
-        $tbAprovacao = new Aprovacao();
+        $tbAprovacao = new \Aprovacao();
         $dadosAprovacao = [
             'IdPRONAC' => $read->idPronac,
             'AnoProjeto' => $dadosPrj->AnoProjeto,
             'Sequencial' => $dadosPrj->Sequencial,
             'TipoAprovacao' => 8,
-            'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
+            'DtAprovacao' => new \Zend_Db_Expr('GETDATE()'),
             'ResumoAprovacao' => 'Parecer favorável para readequação',
             'Logon' => $this->auth->getIdentity()->usu_codigo,
             'idReadequacao' => $read->idReadequacao
@@ -539,7 +539,7 @@ class ReadequacaoAssinatura implements IServico
     protected function finalizarReadequacaoPeriodoExecucao($read)
     {             
         $dtFimExecucao = Data::dataAmericana($read->dsSolicitacao);
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->find([
             'IdPRONAC=?' => $read->idPronac
         ])->current();
@@ -549,14 +549,14 @@ class ReadequacaoAssinatura implements IServico
     
     protected function finalizarReadequacaoPlanoDivulgacao($read)
     {
-        $PlanoDeDivulgacao = new PlanoDeDivulgacao();
-        $tbPlanoDivulgacao = new tbPlanoDivulgacao();
+        $PlanoDeDivulgacao = new \PlanoDeDivulgacao();
+        $tbPlanoDivulgacao = new \tbPlanoDivulgacao();
         $planosDivulgacao = $tbPlanoDivulgacao->buscar([
             'idReadequacao=?' => $idReadequacao
         ]);
 
         foreach ($planosDivulgacao as $plano) {
-            $Projetos = new Projetos();
+            $Projetos = new \Projetos();
             $dadosPrj = $Projetos->buscar([
                 'IdPRONAC=?' => $read->idPronac
             ])->current();
@@ -575,7 +575,7 @@ class ReadequacaoAssinatura implements IServico
                         'idPeca = ?' => $plano->idPeca,
                         'idVeiculo = ?' => $plano->idVeiculo
                     ])->current();
-                    $tbLogomarca = new tbLogomarca();
+                    $tbLogomarca = new \tbLogomarca();
                     $dadosLogomarcaDaDivulgacao = $tbLogomarca->buscar([
                         'idPlanoDivulgacao = ?' => $PlanoDivulgacaoEmQuestao->idPlanoDivulgacao
                     ])->current();
@@ -606,18 +606,18 @@ class ReadequacaoAssinatura implements IServico
 
     protected function finalizarReadequacaoResumoProjeto($read)
     {
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->find([
             'IdPRONAC=?' => $read->idPronac
         ])->current();
 
-        $tbAprovacao = new Aprovacao();
+        $tbAprovacao = new \Aprovacao();
         $dadosAprovacao = [
             'IdPRONAC' => $read->idPronac,
             'AnoProjeto' => $dadosPrj->AnoProjeto,
             'Sequencial' => $dadosPrj->Sequencial,
             'TipoAprovacao' => 8,
-            'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
+            'DtAprovacao' => new \Zend_Db_Expr('GETDATE()'),
             'ResumoAprovacao' => 'Parecer favorável para readequação',
             'Logon' => $this->auth->getIdentity()->usu_codigo,
             'idReadequacao' => $read->idReadequacao
@@ -628,12 +628,12 @@ class ReadequacaoAssinatura implements IServico
 
     protected function finalizarReadequacaoObjetivos($read)
     {
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->buscar([
             'IdPRONAC=?' => $read->idPronac
         ])->current();
 
-        $PrePropojeto = new Proposta_Model_DbTable_PreProjeto();
+        $PrePropojeto = new \Proposta_Model_DbTable_PreProjeto();
         $dadosPreProjeto = $PrePropojeto->find([
             'idPreProjeto=?' => $dadosPrj->idProjeto
         ])->current();
@@ -643,12 +643,12 @@ class ReadequacaoAssinatura implements IServico
 
     protected function finalizarReadequacaoJustificativa($read)
     {
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->buscar([
             'IdPRONAC=?' => $read->idPronac
         ])->current();
 
-        $PrePropojeto = new Proposta_Model_DbTable_PreProjeto();
+        $PrePropojeto = new \Proposta_Model_DbTable_PreProjeto();
         $dadosPreProjeto = $PrePropojeto->find([
             'idPreProjeto=?' => $dadosPrj->idProjeto
         ])->current();
@@ -659,12 +659,12 @@ class ReadequacaoAssinatura implements IServico
     protected function finalizarReadequacaoAcessibilidade($read)
     {
                     
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->buscar([
             'IdPRONAC=?' => $read->idPronac
         ])->current();
 
-        $PrePropojeto = new Proposta_Model_DbTable_PreProjeto();
+        $PrePropojeto = new \Proposta_Model_DbTable_PreProjeto();
         $dadosPreProjeto = $PrePropojeto->find([
             'idPreProjeto=?' => $dadosPrj->idProjeto
         ])->current();
@@ -675,12 +675,12 @@ class ReadequacaoAssinatura implements IServico
     protected function finalizarReadequacaoDemocratizacaoAcesso($read)
     {
                     
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->buscar([
             'IdPRONAC=?' => $read->idPronac
         ])->current();
 
-        $PrePropojeto = new Proposta_Model_DbTable_PreProjeto();
+        $PrePropojeto = new \Proposta_Model_DbTable_PreProjeto();
         $dadosPreProjeto = $PrePropojeto->find([
             'idPreProjeto=?' => $dadosPrj->idProjeto
         ])->current();
@@ -691,12 +691,12 @@ class ReadequacaoAssinatura implements IServico
     protected function finalizarReadequacaoEtapasTrabalho($read)
     {
                     
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->buscar([
             'IdPRONAC=?' => $read->idPronac
         ])->current();
 
-        $PrePropojeto = new Proposta_Model_DbTable_PreProjeto();
+        $PrePropojeto = new \Proposta_Model_DbTable_PreProjeto();
         $dadosPreProjeto = $PrePropojeto->find([
             'idPreProjeto=?' => $dadosPrj->idProjeto
         ])->current();
@@ -707,12 +707,12 @@ class ReadequacaoAssinatura implements IServico
     protected function finalizarReadequacaoFichaTecnica($read)
     {
                     
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->buscar([
             'IdPRONAC=?' => $read->idPronac
         ])->current();
 
-        $PrePropojeto = new Proposta_Model_DbTable_PreProjeto();
+        $PrePropojeto = new \Proposta_Model_DbTable_PreProjeto();
         $dadosPreProjeto = $PrePropojeto->find([
             'idPreProjeto=?' => $dadosPrj->idProjeto
         ])->current();
@@ -723,10 +723,10 @@ class ReadequacaoAssinatura implements IServico
     protected function finalizarReadequacaoTransferenciaRecursos($read)
     {
 
-        $TbSolicitacaoTransferenciaRecursos = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
-        $tbProjetoRecebedorRecursoMapper = new Readequacao_Model_TbProjetoRecebedorRecursoMapper();
-        $tbSolicitacaoTransferenciaRecursosMapper = new Readequacao_Model_TbSolicitacaoTransferenciaRecursosMapper();
-        $projetos = new Projetos();
+        $TbSolicitacaoTransferenciaRecursos = new \Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
+        $tbProjetoRecebedorRecursoMapper = new \Readequacao_Model_TbProjetoRecebedorRecursoMapper();
+        $tbSolicitacaoTransferenciaRecursosMapper = new \Readequacao_Model_TbSolicitacaoTransferenciaRecursosMapper();
+        $projetos = new \Projetos();
 
         $projetosRecebedores = $TbSolicitacaoTransferenciaRecursos->obterProjetosRecebedores($idReadequacao);
         $projetoTransferidor = $projetos->buscarProjetoTransferidor($read->idPronac);
@@ -738,7 +738,7 @@ class ReadequacaoAssinatura implements IServico
             $arrData['idPronacTransferidor'] = $projetoTransferidor['idPronac'];
             $arrData['idPronacRecebedor'] = $projetoRecebedor['idPronacRecebedor'];
             $arrData['tpTransferencia'] = $projetoRecebedor['tpTransferencia'];
-            $arrData['dtRecebimento'] = new Zend_Db_Expr('GETDATE()');
+            $arrData['dtRecebimento'] = new \Zend_Db_Expr('GETDATE()');
             $arrData['vlRecebido'] = $projetoRecebedor['vlRecebido'];
 
             $statusProjetoRecebedorRecurso = $tbProjetoRecebedorRecursoMapper->finalizarSolicitacaoReadequacao($arrData);
@@ -760,42 +760,42 @@ class ReadequacaoAssinatura implements IServico
     protected function finalizarReadequacaoSaldoAplicacao($read)
     {
                     
-        $Projetos = new Projetos();
+        $Projetos = new \Projetos();
         $dadosPrj = $Projetos->find([
             'IdPRONAC=?'=>$read->idPronac
         ])->current();
 
-        $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
+        $tbPlanilhaAprovacao = new \tbPlanilhaAprovacao();
         $planilhaReadequada = $tbPlanilhaAprovacao->valorTotalPlanilhaReadequada(
             $read->idPronac,
             $read->idReadequacao,
-            [Proposta_Model_Verificacao::INCENTIVO_FISCAL_FEDERAL]
+            [\Proposta_Model_Verificacao::INCENTIVO_FISCAL_FEDERAL]
         )->current();
 
         $where = array();
         $where['a.IdPRONAC = ?'] = $read->idPronac;
         $where['a.stAtivo = ?'] = 'S';
-        $where['a.nrFonteRecurso = ?'] = Proposta_Model_Verificacao::INCENTIVO_FISCAL_FEDERAL;
+        $where['a.nrFonteRecurso = ?'] = \Proposta_Model_Verificacao::INCENTIVO_FISCAL_FEDERAL;
         $PlanilhaAtiva = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
 
         $valorDaReadequacao = $planilhaReadequada->Total - $PlanilhaAtiva->Total;
 
-        $tbAprovacao = new Aprovacao();
+        $tbAprovacao = new \Aprovacao();
         $dadosAprovacao = [
             'IdPRONAC' => $read->idPronac,
             'AnoProjeto' => $dadosPrj->AnoProjeto,
             'Sequencial' => $dadosPrj->Sequencial,
-            'TipoAprovacao' => Aprovacao::TIPO_APROVACAO_COMPLEMENTACAO,
-            'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
+            'TipoAprovacao' => \Aprovacao::TIPO_APROVACAO_COMPLEMENTACAO,
+            'DtAprovacao' => new \Zend_Db_Expr('GETDATE()'),
             'AprovadoReal' => $valorDaReadequacao,
             'ResumoAprovacao' => $parecerTecnico->ResumoParecer,
             'idParecer' => $parecerTecnico->IdParecer,
-            'Logon' => $auth->getIdentity()->usu_codigo,
+            'Logon' => $this->auth->getIdentity()->usu_codigo,
             'idReadequacao' => $idReadequacao
         ];
         $idAprovacao = $tbAprovacao->inserir($dadosAprovacao);
 
-        $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
+        $tbPlanilhaAprovacao = new \tbPlanilhaAprovacao();
         $dadosReadequacaoAnterior = ['stAtivo' => 'N'];
         $whereReadequacaoAnterior = [
             'IdPRONAC = ?' => $read->idPronac,

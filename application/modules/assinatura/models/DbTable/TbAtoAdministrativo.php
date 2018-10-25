@@ -169,13 +169,12 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         );
 
         $objQuery->where("idOrdemDaAssinatura = ?", 1);
-
+        
         return $this->_db->fetchRow($objQuery);
     }
 
     public function obterGrupoPorIdDocumentoAssinatura($idDocumentoAssinatura)
     {
-        //$dadosPrimeiroAtoAdministrativo = $this->obterPrimeiroAtoPorIdDocumento($idDocumentoAssinatura);
         $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
         $objQuery->from(

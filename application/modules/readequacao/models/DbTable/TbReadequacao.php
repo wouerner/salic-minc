@@ -184,15 +184,15 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
 	     WHEN tbReadequacao.siEncaminhamento = 19
 		   THEN '<b><font color=red>Assinatura do Diretor</font></b>'
 	     WHEN tbReadequacao.siEncaminhamento = 20
-		   THEN '<b><font color=red>Assinatura do Secretário</font></b>'
+		   THEN '<b><font color=red>Assinatura do Secret&atilde;rio</font></b>'
 	     WHEN tbReadequacao.siEncaminhamento = 21
 		   THEN '<b><font color=red>Devolvida pelo Coordenador-Geral</font></b>'
 	     WHEN tbReadequacao.siEncaminhamento = 22
 		   THEN '<b><font color=red>Devolvida pelo Diretor</font></b>'
 	     WHEN tbReadequacao.siEncaminhamento = 23
-		   THEN '<b><font color=red>Devolvida pelo Secretário</font></b>'
+		   THEN '<b><font color=red>Devolvida pelo Secret&atilde;rio</font></b>'
          WHEN tbReadequacao.siEncaminhamento = 26
-		   THEN '<b><font color=red>Solicitação devolvida ao Coordenador após completar o ciclo de assinaturas</font></b>'
+		   THEN '<b><font color=red>Solicita&ccedil;&atilde;o devolvida ao Coordenador ap&otilde;s completar o ciclo de assinaturas</font></b>'
 		   ELSE usuarios.usu_nome
 
 	   END"),
@@ -1675,7 +1675,7 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
         $idTipoReadequacao
     )
     {
-        $auth = Zend_Auth::getInstance();
+        $auth = \Zend_Auth::getInstance();
         $tblAgente = new Agente_Model_DbTable_Agentes();
         $rsAgente = $tblAgente->buscar(array('CNPJCPF=?'=>$auth->getIdentity()->Cpf))->current();
 

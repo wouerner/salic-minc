@@ -80,14 +80,17 @@ class Assinatura implements IServico
         if (!$metodoAutenticacao->autenticar()) {
             throw new \Exception ("Os dados utilizados para autentica&ccedil;&atilde;o s&atilde;o inv&aacute;lidos.");
         }
-
+        
         $usuario = $metodoAutenticacao->obterInformacoesAssinante();
         $objTbAtoAdministrativo = new \Assinatura_Model_DbTable_TbAtoAdministrativo();
+        
+        $grupoAtoAdministrativo = $objTbAtoAdministrativo->obterGrupoPorIdDocumentoAssinatura($modeloTbAssinatura->getIdDocumentoAssinatura());
+        
         $dadosAtoAdministrativoAtual = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
             $modeloTbAtoAdministrativo->getIdTipoDoAto(),
             $modeloTbAtoAdministrativo->getIdPerfilDoAssinante(),
             $modeloTbAtoAdministrativo->getIdOrgaoDoAssinante(),
-            $objTbAtoAdministrativo->obterGrupoPorIdDocumentoAssinatura($modeloTbAssinatura->idDocumentoAssinatura)
+            $grupoAtoAdministrativo
         );
 
         if (!$dadosAtoAdministrativoAtual) {
@@ -117,9 +120,7 @@ class Assinatura implements IServico
             'dsManifestacao' => $modeloTbAssinatura->getDsManifestacao(),
             'idDocumentoAssinatura' => $modeloTbAssinatura->getIdDocumentoAssinatura()
         ];
-        
-        $grupoAtoAdministrativo = $objTbAtoAdministrativo->obterGrupoPorIdDocumentoAssinatura($modeloTbAssinatura->getIdDocumentoAssinatura());
-        
+                
         $atoAdministrativo = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
             $modeloTbAtoAdministrativo->getIdTipoDoAto(),
             $modeloTbAtoAdministrativo->getIdPerfilDoAssinante(),
