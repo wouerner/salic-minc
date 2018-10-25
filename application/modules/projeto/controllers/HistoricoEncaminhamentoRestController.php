@@ -16,7 +16,7 @@ class Projeto_HistoricoEncaminhamentoRestController extends MinC_Controller_Rest
     {
         try {
             $HistoricoEncaminhamentoService = new HistoricoEncaminhamentoService($this->getRequest(), $this->getResponse());
-            $resposta = $HistoricoEncaminhamentoService->buscaHistoricoEncaminhamento();
+            $resposta = $HistoricoEncaminhamentoService->buscarHistoricoEncaminhamento();
 
             $this->RenderJsonResponse($resposta, 200);
 

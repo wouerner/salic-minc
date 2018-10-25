@@ -22,7 +22,7 @@ class HistoricoEncaminhamento implements \MinC\Servico\IServicoRestZend
         $this->response = $response;
     }
 
-    public function buscaHistoricoEncaminhamento()
+    public function buscarHistoricoEncaminhamento()
     {
         $idPronac = $this->request->idPronac;
 
