@@ -33,8 +33,7 @@
     <th>Assinar</th>
     <?php endif; ?>
     <?php if (
-    $this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO ||
-    $this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO_PRESTACAO_DE_CONTAS): ?>
+    $this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO): ?>
     <th>Finalizar</th>
     <?php endif; ?>
 </tr>
@@ -118,8 +117,7 @@ foreach ($this->dados as $d): ?>
         </td>
 	<?php endif; ?>
 	<?php if (
-	$this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO ||
-	$this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO_PRESTACAO_DE_CONTAS): ?>	
+	$this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO): ?>	
 	<td style="text-align: center">
 	    <?php if ($this->disponivelParaFinalizar($d->siEncaminhamento, $d->idPronac)): ?>
             <a href="javascript:void(0)"
