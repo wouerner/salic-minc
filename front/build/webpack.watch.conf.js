@@ -1,4 +1,5 @@
 'use strict'
+process.env.NODE_ENV = 'watch'
 const utils = require('./utils')
 const webpack = require('webpack')
 const config = require('../config')

@@ -42,6 +42,15 @@ class IndexController extends MinC_Controller_Action_Abstract
         if (empty($this->autenticacao)) {
             $this->redirect("/autenticacao/index/index");
         }
+
+        if (!$this->autenticacao['usu_codigo']) {
+            $this->redirect("/default/principalproponente");
+        }
+
+        header('Content-type: text/html; charset=UTF-8');
+        Zend_Layout::startMvc(array('layout' => 'vue'));
+        $this->_helper->viewRenderer->setNoRender();
+
     }
 
     public function indisponivelAction()
@@ -336,7 +345,7 @@ class IndexController extends MinC_Controller_Action_Abstract
     public function montarPlanilhaOrcamentariaAction()
     {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-        
+
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
         $this->view->idPerfil = $GrupoAtivo->codGrupo;
 

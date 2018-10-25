@@ -9,7 +9,7 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: '',
-    assetsPublicPath: '/public/dist/',
+    assetsPublicPath: '',
     proxyTable: {
         path: /./,
         target: "http://localhost"
@@ -49,7 +49,8 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../../application/modules/default/views/scripts/index/index.phtml'),
+    // index: path.resolve(__dirname, '../../application/modules/default/views/scripts/index/index.phtml'),
+    index: path.resolve(__dirname, '../../application/layouts/scripts/vue.phtml'),
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../../public/dist'),

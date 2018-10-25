@@ -19,7 +19,6 @@ const createLintingRule = () => ({
     }
 })
 
-
 module.exports = {
     context: path.resolve(__dirname, '../'),
     entry: {
@@ -30,11 +29,11 @@ module.exports = {
     },
     output: {
         path: config.build.assetsRoot,
-        filename: utils.assetsPath('js/[name].[hash].js'),
-        publicPath: process.env.NODE_ENV === 'production'
+        filename: utils.assetsPath('js/[name].js'),
+        publicPath: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'watch'
             ? config.build.assetsPublicPath
             : config.dev.assetsPublicPath,
-        chunkFilename: utils.assetsPath('js/[id].[name].[chunkhash].js'),
+        chunkFilename: utils.assetsPath('js/[id].[name].js'),
     },
     resolve: {
         extensions: ['.js', '.vue', '.json'],

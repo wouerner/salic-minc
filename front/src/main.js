@@ -2,24 +2,27 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 // Vue.config.productionTip = false
 // import 'es6-promise/auto';
+import 'vuetify/dist/vuetify.min.css';
+import Vuetify from 'vuetify';
 import Vue from 'vue';
 import App from './App';
-import Vuetify from 'vuetify'
 
 import {
     store,
     router,
 } from './config';
 
-
-// asset imports
-// import VueMaterial from 'vue-material'
-// import 'vue-material/dist/vue-material.min.css'
-// import './assets/scss/material-dashboard.scss'
-
-import 'vuetify/dist/vuetify.min.css'
-
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+    theme: {
+        primary: '#0A420E',
+        secondary: '#00838F',
+        accent: '#9c27b0',
+        error: '#f44336',
+        warning: '#ffeb3b',
+        info: '#2196f3',
+        success: '#4caf50',
+    },
+});
 
 Vue.config.productionTip = false;
 
