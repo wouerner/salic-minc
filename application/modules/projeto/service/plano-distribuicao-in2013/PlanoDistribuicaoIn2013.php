@@ -22,7 +22,7 @@ class PlanoDistribuicaoIn2013 implements \MinC\Servico\IServicoRestZend
         $this->response = $response;
     }
 
-    public function buscaPlanoDistribuicaoIn2013()
+    public function buscarPlanoDistribuicaoIn2013()
     {
         $idPronac = $this->request->idPronac;
 
