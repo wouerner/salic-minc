@@ -135,31 +135,6 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
         return $diligenciaProjeto;
     }
 
-    private function obterDiligenciaProposta($diligenciasProposta)
-    {
-        $resultArray = [];
-
-        foreach ($diligenciasProposta as $diligencia) {
-            $Solicitacao = html_entity_decode(utf8_encode($diligencia['Solicitacao']));
-            $Resposta = html_entity_decode(utf8_encode($diligencia['Resposta']));
-            $nomeProjeto = html_entity_decode(utf8_encode($diligencia['nomeProjeto']));
-
-            $objDateTimedataSolicitacao = new \DateTime($diligencia['dataSolicitacao']);
-            $objDateTimedataResposta = new \DateTime($diligencia['dataResposta']);
-
-            $resultArray[] = [
-                'idPreprojeto' => $diligencia['pronac'],
-                'dataSolicitacao' => $objDateTimedataSolicitacao->format('d/m/Y'),
-                'dataResposta' => $objDateTimedataResposta->format('d/m/Y'),
-                'nomeProjeto' => $nomeProjeto,
-                'Solicitacao' => $Solicitacao,
-                'Resposta' => $Resposta,
-            ];
-        }
-
-        return $resultArray;
-    }
-
     private function obterDiligenciaProjeto($diligencia)
     {
         $objDateTimedataSolicitacao = new \DateTime($diligencia['dataSolicitacao']);

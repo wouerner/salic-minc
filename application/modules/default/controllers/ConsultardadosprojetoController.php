@@ -3100,6 +3100,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/diligencia/DiligenciaProjeto.php
+     *
+     */
     public function diligenciasAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
