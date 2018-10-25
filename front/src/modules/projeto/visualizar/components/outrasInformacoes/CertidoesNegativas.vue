@@ -1,6 +1,9 @@
 <template>
     <div id="conteudo">
-        <div v-if="dados.certidoes">
+        <div v-if="loading">
+            <Carregando :text="'Carregando Certidoes Negativas'"></Carregando>
+        </div>
+        <div v-else-if="dados">
             <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
                                   :nomeProjeto="dadosProjeto.NomeProjeto">
             </IdentificacaoProjeto>
@@ -45,16 +48,28 @@
 <script>
 
     import { mapActions, mapGetters } from 'vuex';
+    import Carregando from '@/components/Carregando';
     import IdentificacaoProjeto from './IdentificacaoProjeto';
 
     export default {
         name: 'CertidoesNegativas',
+        data() {
+            return {
+                loading: true,
+            };
+        },
         components: {
             IdentificacaoProjeto,
+            Carregando,
         },
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
                 this.buscarCertidoesNegativas(this.dadosProjeto.idPronac);
+            }
+        },
+        watch: {
+            dados(value) {
+                this.loading = false;
             }
         },
         computed: {
