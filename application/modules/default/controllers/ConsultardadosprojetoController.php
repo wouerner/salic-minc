@@ -1027,6 +1027,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/providencia-tomada/ProvidenciaTomada.php
+     */
     public function providenciaTomadaAction()
     {
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
@@ -3114,7 +3118,6 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
     /**
      * @deprecated migrado para nova estrutura de Rest e Service >
      * application/modules/projeto/service/diligencia/DiligenciaProjeto.php
-     *
      */
     public function diligenciasAction()
     {

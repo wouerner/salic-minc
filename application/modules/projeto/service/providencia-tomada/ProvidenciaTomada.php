@@ -2,8 +2,6 @@
 
 namespace Application\Modules\Projeto\Service\ProvidenciaTomada;
 
-use Seguranca;
-
 class ProvidenciaTomada implements \MinC\Servico\IServicoRestZend
 {
     /**
@@ -22,7 +20,7 @@ class ProvidenciaTomada implements \MinC\Servico\IServicoRestZend
         $this->response = $response;
     }
 
-    public function buscaProvidenciaTomada()
+    public function buscarProvidenciaTomada()
     {
         $idPronac = $this->request->idPronac;
 
