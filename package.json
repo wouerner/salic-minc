@@ -16,6 +16,8 @@
     "test": "npm run unit",
     "unit": "jest --config front/test/unit/jest.conf.js --coverage",
     "e2e": "node front/test/e2e/runner.js",
+    "cypress:open": "cypress open",
+    "cypress": "cypress run",
     "lint": "eslint --ext .js,.vue src front/test/unit"
   },
   "husky": {
