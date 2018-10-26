@@ -213,7 +213,7 @@
             dados(value) {
                 this.informacoes = value.informacoes;
             },
-            dadosIn2013(value) {
+            dadosIn2013() {
                 this.loading = false;
             }
         },

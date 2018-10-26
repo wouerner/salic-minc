@@ -40,7 +40,7 @@
             }
         },
         watch: {
-            dadosIn2017(value) {
+            dadosIn2017() {
                 this.loading = false;
             }
         },

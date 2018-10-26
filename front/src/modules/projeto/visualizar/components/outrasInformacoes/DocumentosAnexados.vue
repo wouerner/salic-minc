@@ -73,7 +73,7 @@
             dados(value) {
                 this.informacoes = value.informacoes;
             },
-            documentosAnexados(value) {
+            documentosAnexados() {
                 this.loading = false;
             }
         },

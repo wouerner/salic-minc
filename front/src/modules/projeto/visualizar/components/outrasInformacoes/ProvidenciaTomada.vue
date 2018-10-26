@@ -59,7 +59,7 @@
             }
         },
         watch: {
-            dados(value) {
+            dados() {
                 this.loading = false;
             }
         },
