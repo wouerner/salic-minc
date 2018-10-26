@@ -80,4 +80,20 @@ describe('PrestacaoDeContas types', () => {
     test('SET_PLANO_DISTRIBUICAO_IN2017', () => {
         expect(types.SET_PLANO_DISTRIBUICAO_IN2017).toEqual('SET_PLANO_DISTRIBUICAO_IN2017');
     });
+
+    test('SET_DILIGENCIA_PROPOSTA', () => {
+        expect(types.SET_DILIGENCIA_PROPOSTA).toEqual('SET_DILIGENCIA_PROPOSTA');
+    });
+
+    test('SET_DILIGENCIA_ADEQUACAO', () => {
+        expect(types.SET_DILIGENCIA_ADEQUACAO).toEqual('SET_DILIGENCIA_ADEQUACAO');
+    });
+
+    test('SET_DILIGENCIA_PROJETO', () => {
+        expect(types.SET_DILIGENCIA_PROJETO).toEqual('SET_DILIGENCIA_PROJETO');
+    });
+
+    test('SET_DILIGENCIA', () => {
+        expect(types.SET_DILIGENCIA).toEqual('SET_DILIGENCIA');
+    });
 });
