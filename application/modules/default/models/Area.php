@@ -1,20 +1,21 @@
 <?php
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+class Area extends MinC_Db_Table_Abstract
+{
+    protected $_banco = 'SAC';
+    protected $_schema = 'SAC';
+    protected $_name = 'Area';
 
-/**
- * Description of Area
- *
- * @author augusto
- */
-class Area extends MinC_Db_Table_Abstract {
-    protected  $_banco = 'SAC';
-    protected  $_schema = 'SAC';
-    protected  $_name = 'Area';
-
-    public function  BuscarAreaProjeto($idpronac=false){
+    const AREA_ARTES_CENICAS = 1;
+    const AREA_AUDIOVISUAL = 2;
+    const AREA_MUSICA = 3;
+    const AREA_ARTES_VISUAIS = 4;
+    const AREA_PATRIMONIO_CULTURAL = 5;
+    const AREA_HUMANIDADES = 6;
+    const AREA_ARTES_INTEGRADAS = 7;
+    const AREA_MUSEUS_MEMORIA = 9;
+    
+    public function BuscarAreaProjeto($idpronac=false)
+    {
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from(
@@ -25,7 +26,7 @@ class Area extends MinC_Db_Table_Abstract {
                             array('pr'=>'Projetos'),
                             'pr.Area = a.Codigo'
                           );
-        if($idpronac){
+        if ($idpronac) {
             $select->where('pr.IdPRONAC = ?', $idpronac);
         }
 
@@ -33,7 +34,8 @@ class Area extends MinC_Db_Table_Abstract {
     }
 
 
-    public function  BuscarAreas(){
+    public function BuscarAreas()
+    {
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from(
@@ -43,6 +45,4 @@ class Area extends MinC_Db_Table_Abstract {
 
         return $this->fetchAll($select);
     }
-
 }
-?>

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class Proposta_Model_TbDocumentosAgentesMapper
+ * @todo mover para o módulo de agentes
+ */
+
 class Proposta_Model_TbDocumentosAgentesMapper extends MinC_Db_Mapper
 {
     public function __construct()
@@ -36,7 +41,7 @@ class Proposta_Model_TbDocumentosAgentesMapper extends MinC_Db_Mapper
 
                 $where = array();
                 $where['codigodocumento'] = $arrPost['documento'];
-                if($arrPost['tipoDocumento'] == 1){
+                if ($arrPost['tipoDocumento'] == 1) {
                     $where['idagente'] = $dadosProjeto['idAgente'];
                 } else {
                     $where['idprojeto'] = $arrPost['idPreProjeto'];
@@ -65,7 +70,7 @@ class Proposta_Model_TbDocumentosAgentesMapper extends MinC_Db_Mapper
 
                 $docCadastrado = $table->findBy($where);
 
-                if($table->findBy($where)){
+                if ($table->findBy($where)) {
                     $this->setMessage('Tipo de documento j&aacute; cadastrado!');
                     $booResult = false;
                 }
@@ -73,7 +78,7 @@ class Proposta_Model_TbDocumentosAgentesMapper extends MinC_Db_Mapper
                     $dadosArquivo['imdocumento'] = new Zend_Db_Expr("CONVERT(varbinary(MAX), {$arquivoBinario})");
                     //$dadosArquivo['imDocumento'] = new Zend_Db_Expr("CONVERT(varbinary(MAX), {$arquivoBinario})");
                     try {
-                        if($booResult) {
+                        if ($booResult) {
                             $model->setOptions($dadosArquivo);
                             $table->save($model);
                         }
@@ -86,7 +91,7 @@ class Proposta_Model_TbDocumentosAgentesMapper extends MinC_Db_Mapper
                     $fileName = $strId . '.' . array_pop(explode('.', $file->getFileName()));
                     $dadosArquivo['imdocumento'] = $strPath . $fileName;
                     try {
-                        if($booResult) {
+                        if ($booResult) {
                             $model->setOptions($dadosArquivo);
                             $table->save($model);
                             $file->receive();
@@ -113,7 +118,7 @@ class Proposta_Model_TbDocumentosAgentesMapper extends MinC_Db_Mapper
         return $booResult;
     }
 
-    public function save(Proposta_Model_TbDocumentosAgentes $model)
+    public function save($model)
     {
         return parent::save($model);
     }

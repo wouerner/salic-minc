@@ -983,7 +983,7 @@ class PDFBarcode {
 		switch(strtoupper($type)) {
 			case 'A': {
 				$startid = 103;
-				$keys = ' !"#$%&\'()*+,-./0***REMOVED***789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_';
+				$keys = ' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_';
 				for ($i = 0; $i < 32; ++$i) {
 					$keys .= chr($i);
 				}
@@ -991,7 +991,7 @@ class PDFBarcode {
 			}
 			case 'B': {
 				$startid = 104;
-				$keys = ' !"#$%&\'()*+,-./0***REMOVED***789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'.chr(127);
+				$keys = ' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'.chr(127);
 				break;
 			}
 			case 'C': {

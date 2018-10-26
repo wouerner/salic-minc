@@ -17,7 +17,6 @@ if (getenv('APPLICATION_ENV') != 'production') {
     $strEnv = false;
 }
 ?>
-
 <div id="container-progress-part" style="display: none;" class="preloader-wrapper big active">
     <div class="spinner-layer spinner-green">
         <div class="circle-clipper left">
@@ -56,69 +55,61 @@ if (getenv('APPLICATION_ENV') != 'production') {
         </div>
     </div>
 </div>
-<div id="container-progress" class="progress" style="margin: 0; position: fixed; bottom: 0; display: none;">
+<div id="container-progress" class="progress" style="margin: 0; position: fixed; display: none;">
     <div class="indeterminate"></div>
 </div>
-<footer class="page-footer green darken-4">
-    <!--    <div class="container">-->
-    <!--        <div class="row">-->
-    <!--            <div class="col l6 s12">-->
-    <!--                <h5 class="white-text">Company Bio</h5>-->
-    <!--                <p class="grey-text text-lighten-4">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>-->
-    <!---->
-    <!---->
-    <!--            </div>-->
-    <!--            <div class="col l3 s12">-->
-    <!--                <h5 class="white-text">Settings</h5>-->
-    <!--                <ul>-->
-    <!--                    <li><a class="white-text" href="#!">Link 1</a></li>-->
-    <!--                    <li><a class="white-text" href="#!">Link 2</a></li>-->
-    <!--                    <li><a class="white-text" href="#!">Link 3</a></li>-->
-    <!--                    <li><a class="white-text" href="#!">Link 4</a></li>-->
-    <!--                </ul>-->
-    <!--            </div>-->
-    <!--            <div class="col l3 s12">-->
-    <!--                <h5 class="white-text">Connect</h5>-->
-    <!--                <ul>-->
-    <!--                    <li><a class="white-text" href="#!">Link 1</a></li>-->
-    <!--                    <li><a class="white-text" href="#!">Link 2</a></li>-->
-    <!--                    <li><a class="white-text" href="#!">Link 3</a></li>-->
-    <!--                    <li><a class="white-text" href="#!">Link 4</a></li>-->
-    <!--                </ul>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
+<div id="container-loading" style="display: none">
+    <div class="sk-cube-grid">
+        <div class="sk-cube sk-cube1"></div>
+        <div class="sk-cube sk-cube2"></div>
+        <div class="sk-cube sk-cube3"></div>
+        <div class="sk-cube sk-cube4"></div>
+        <div class="sk-cube sk-cube5"></div>
+        <div class="sk-cube sk-cube6"></div>
+        <div class="sk-cube sk-cube7"></div>
+        <div class="sk-cube sk-cube8"></div>
+        <div class="sk-cube sk-cube9"></div>
+    </div>
+    <div id="loading-message">carregando ...</div>
+</div>
+
+<footer class="page-footer">
     <div class="footer-copyright">
         <div class="container">
-            <div class="row">
-                <div class="col s4 l4">
-                    <a class="orange-text text-lighten-3 tooltipped" data-position="top" data-delay="50" data-tooltip="Ir para o portal do Minist&eacute;rio da Cultura" " target="_blank" href="http://cultura.gov.br">MINIST&Eacute;RIO DA CULTURA</a>
+            <div class="row" style="margin: 0">
+                <div class="col s12 m3 l3 offset-m1 offset-l1">
+                    <a
+                        class="orange-text text-lighten-3 tooltipped"
+                        data-position="top"
+                        data-delay="50"
+                        data-tooltip="Ir para o portal de not&iacute;cias, tutoriais e legisla&ccedil;&otilde;es da Lei Rouanet"
+                        target="_blank"
+                        href="http://rouanet.cultura.gov.br/">LEI ROUANET</a>
                 </div>
-                <div class="col s4 l4">
+                <div class="col s12 m3 l3">
                     <div class="center-align">
                         <?php if ($strDb): ?>
                             <?php echo $arrEnv[$strEnv]; ?> | <?php echo $arrDb[$strDb]; ?>
                         <?php endif; ?>
                     </div>
                 </div>
-                <div class="col s4 l4">
+                <div class="col s12 m3 l3">
                     <div class="center-align">
                         <?php echo $this->vcs(); ?>
+                    </div>
+                </div>
+                <div class="col s12 m2 l2">
+                    <div class="center-align">
+                        <a
+                            class="orange-text text-lighten-3 tooltipped"
+                            data-position="top"
+                            data-delay="50"
+                            data-tooltip="Ir para o Site: Desenvolvimento Salic MinC"
+                            target="_blank"
+                            href="https://github.com/culturagovbr/salic-minc">Desenvolvimento</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </footer>
-<!-- ========== IN�CIO RODAP� ========== -->
-<!--        <div id="rodape">-->
-<!--            <div><strong>MINIST&Eacute;RIO DA CULTURA</strong><!-- - Atendimento ao Usu&aacute;rio: (61) 2024-2115 - <a href="mailto:suporte.salic@cultura.gov.br?Subject=Suporte%20Salic" title="Enviar e-mail para suporte.salic@cultura.gov.br">suporte.salic@cultura.gov.br</a><br /></div>-->
-<!--        </div>-->
-<!-- ========== FIM RODAP� ========== -->
-
-<!--        <div id="barra-brasil" style="background:#7F7F7F; height: 20px; padding:0 0 0 10px;display:block;">-->
-<!--            <ul id="menu-barra-temp" style="list-style:none;">-->
-<!--                <li style="display:inline; float:left;padding-right:10px; margin-right:10px; border-right:1px solid #EDEDED"><a href="http://brasil.gov.br" style="font-family:sans,sans-serif; text-decoration:none; color:white;">Portal do Governo Brasileiro</a></li>-->
-<!--                <li><a style="font-family:sans,sans-serif; text-decoration:none; color:white;" href="http://epwg.governoeletronico.gov.br/barra/atualize.html">Atualize sua Barra de Governo</a></li>-->
-<!--            </ul>-->
-<!--        </div>-->

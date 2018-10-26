@@ -9,7 +9,8 @@
  * @link http://www.cultura.gov.br
  */
 
-class vwUsuariosOrgaosGrupos extends MinC_Db_Table_Abstract {
+class vwUsuariosOrgaosGrupos extends MinC_Db_Table_Abstract
+{
 
     /* dados da tabela */
     protected $_banco  = 'TABELAS';
@@ -21,10 +22,10 @@ class vwUsuariosOrgaosGrupos extends MinC_Db_Table_Abstract {
     /**
      * Metodo para buscar as unidades autorizadas do usuario do sistema
      * @access public
-     * @param @usu_codigo (c?digo do usu?rio)
-     * @param @sis_codigo (c?digo sistema)
-     * @param @gru_codigo (c?digo do grupo)
-     * @param @uog_orgao  (c?digo do ?rg?o)
+     * @param @usu_codigo (codigo do usuario)
+     * @param @sis_codigo (codigo sistema)
+     * @param @gru_codigo (codigo do grupo)
+     * @param @uog_orgao  (codigo do Orgao)
      * @return object
      */
     public function carregarPorAdmissibilidade()
@@ -33,8 +34,7 @@ class vwUsuariosOrgaosGrupos extends MinC_Db_Table_Abstract {
         $sql->setIntegrityCheck(false);
         $sql->from(
             'vwusuariosorgaosgrupos',
-            array
-            (
+            array(
                 'usu_codigo',
                 'usu_nome',
                 'usu_orgao'
@@ -86,8 +86,7 @@ class vwUsuariosOrgaosGrupos extends MinC_Db_Table_Abstract {
         $sql->setIntegrityCheck(false);
         $sql->from(
             'vwusuariosorgaosgrupos',
-            array
-            (
+            array(
                 'usu_codigo',
                 'usu_nome',
                 'usu_orgao'
@@ -121,7 +120,7 @@ class vwUsuariosOrgaosGrupos extends MinC_Db_Table_Abstract {
         $arrResult = self::carregarPorPareceristaGrupo($intIdUnidade);
         $arrNew = array();
         foreach ($arrResult as $strKey => $arrGrupo) {
-            foreach($arrGrupo as $arrValue) {
+            foreach ($arrGrupo as $arrValue) {
                 $arrNew[$strKey][$arrValue['usu_codigo']] = utf8_encode($arrValue['usu_nome']);
             }
         }
@@ -144,8 +143,7 @@ class vwUsuariosOrgaosGrupos extends MinC_Db_Table_Abstract {
         $sql->setIntegrityCheck(false);
         $sql->from(
             'Orgaos',
-            array
-            (
+            array(
                 'Codigo',
                 'Sigla',
             ),
@@ -169,13 +167,11 @@ class vwUsuariosOrgaosGrupos extends MinC_Db_Table_Abstract {
 
     public function carregarUsuariosPorUnidade($intIdUnidade)
     {
-
         $sql = $this->select();
         $sql->setIntegrityCheck(false);
         $sql->from(
             'vwusuariosorgaosgrupos',
-            array
-            (
+            array(
                 'usu_codigo',
                 'usu_nome',
                 'usu_orgao',
@@ -199,13 +195,11 @@ class vwUsuariosOrgaosGrupos extends MinC_Db_Table_Abstract {
 
     public function carregarUsuariosPorUnidadeIphan($intIdUnidade)
     {
-
         $sql = $this->select();
         $sql->setIntegrityCheck(false);
         $sql->from(
             'vwusuariosorgaosgrupos',
-            array
-            (
+            array(
                 'usu_codigo',
                 'usu_nome',
                 'usu_orgao',
@@ -227,7 +221,8 @@ class vwUsuariosOrgaosGrupos extends MinC_Db_Table_Abstract {
         return $arrNew;
     }
 
-    public function buscarUsuarios($codPerfil, $codOrgao){
+    public function buscarUsuarios($codPerfil, $codOrgao)
+    {
         $sql = "exec SAC.dbo.paUsuariosDoPerfil $codPerfil, $codOrgao ";
         $db= Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
@@ -240,8 +235,7 @@ class vwUsuariosOrgaosGrupos extends MinC_Db_Table_Abstract {
         $sql->setIntegrityCheck(false);
         $sql->from(
             'vwusuariosorgaosgrupos',
-            array
-            (
+            array(
                 'usu_codigo',
                 'usu_nome',
                 'usu_orgao',
@@ -259,5 +253,27 @@ class vwUsuariosOrgaosGrupos extends MinC_Db_Table_Abstract {
         $arrResult = $this->fetchAll($sql);
         return $arrResult;
     }
-}
 
+    public function carregarTecnicosPorUnidade($idUnidade)
+    {
+        $sql = $this->select();
+        $sql->setIntegrityCheck(false);
+        $sql->distinct();
+        $sql->from(
+            'vwusuariosorgaosgrupos',
+            array
+            (
+                'usu_codigo',
+                'usu_nome',
+            ),
+            $this->_schema
+        );
+        $sql->where("uog_status = ?", 1);
+        $sql->where("sis_codigo = ?", 21);
+        $sql->where("uog_orgao = ?", $idUnidade);
+
+        $sql->order(2);
+        $arrResult = $this->fetchAll($sql);
+        return $arrResult;
+    }
+}

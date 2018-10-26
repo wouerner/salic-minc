@@ -19,7 +19,7 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
         parent::init();
 
         //recupera ID do pre projeto (proposta)
-        if (!empty ($this->idPreProjeto)) {
+        if (!empty($this->idPreProjeto)) {
             $this->view->idPreProjeto = $this->idPreProjeto;
         }
     }
@@ -50,7 +50,6 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
      */
     public function produtosetapasitensAction()
     {
-
         $tbproduto = MantertabelaitensDAO::buscaproduto();
         $this->view->produto = $tbproduto;
 
@@ -78,7 +77,6 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
 
         $tbitem = new Proposta_Model_DbTable_TbPlanilhaItens();
         $this->view->item = $tbitem->listarItens();
-
     }
 
     /**
@@ -89,9 +87,7 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
      */
     public function salvarsolicitacaoitemAction()
     {
-
         if ($this->getRequest()->isPost()) {
-
             $params = $this->getRequest()->getParams();
 
             $justificativa = substr(trim($params['justificativa']), 0, 1000);
@@ -103,13 +99,14 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
             $hoje = MinC_Db_Expr::date();
 
             try {
-
-                if (empty($justificativa))
+                if (empty($justificativa)) {
                     throw new Exception("Informe a justificativa!");
+                }
 
 
-                if (strlen($justificativa) > 1000)
+                if (strlen($justificativa) > 1000) {
                     throw new Exception("A justificativa n&atilde;o pode conter mais de 1000 caracteres!");
+                }
 
                 $tbSolicitarItem = new Proposta_Model_DbTable_TbSolicitarItem();
 
@@ -125,12 +122,13 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
                 );
 
                 if ($tipoSolicitacao == "novoitem") {
-
-                    if (empty($params['Descricao']))
+                    if (empty($params['Descricao'])) {
                         throw new Exception("Descri&ccedil;&atilde;o do item &eacute; obrigat&oacute;ria!");
+                    }
 
-                    if (strlen($params['Descricao']) > 100)
+                    if (strlen($params['Descricao']) > 100) {
                         throw new Exception("O nome do Item n&atilde;o pode conter mais de 100 caracteres!");
+                    }
 
                     $tbPlanilhaItens = new Proposta_Model_DbTable_TbPlanilhaItens();
                     $descricao = $tbPlanilhaItens->buscarDescricao($descricaoItem);
@@ -154,7 +152,6 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
                 }
 
                 if ($tipoSolicitacao == "associacao") {
-
                     if (empty($params['idPlanilhaItens'])) {
                         throw new Exception("Item não informado!");
                     }
@@ -202,11 +199,8 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
                             "CONFIRM"
                         );
                     }
-
                 }
-
             } catch (Exception $e) {
-
                 parent::message(
                     $e->getMessage(),
                     "proposta/mantertabelaitens/solicitaritens/idPreProjeto/" . $this->idPreProjeto,
@@ -259,7 +253,6 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
             $campo = $this->_request->getParam("campo");
             $order = array($campo . " " . $ordem);
             $ordenacao = "&campo=" . $campo . "&ordem=" . $ordem;
-
         } else {
             $campo = null;
             $order = array(2, 4, 6);
@@ -268,9 +261,12 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
 
         $pag = 1;
         $get = Zend_Registry::get('get');
+        $params = $this->getRequest()->getParams();
 //        $this->view->idPreProjeto = $this->idPreProjeto;
 
-        if (isset($get->pag)) $pag = $get->pag;
+        if (isset($get->pag)) {
+            $pag = $get->pag;
+        }
         $inicio = ($pag > 1) ? ($pag - 1) * $this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
@@ -279,8 +275,8 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
         $where['sol.idAgente = ?'] = $auth->getIdentity()->IdUsuario;
         $where['sol.stEstado = ?'] = 1; // Atendido
 
-        if (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])) {
-            $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
+        if (isset($params['tipoFiltro'])) {
+            $filtro = isset($params['tipoFiltro']) ? $params['tipoFiltro'] : '';
             $this->view->filtro = $filtro;
             switch ($filtro) {
                 case '':
@@ -331,6 +327,7 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
         $this->view->qtdRegistros = $total;
         $this->view->dados = $busca;
         $this->view->intTamPag = $this->intTamPag;
+        $this->view->tipoFiltro = $params['tipoFiltro'];
 
         $tbsolicitacao = $mantertbitens->solicitacoes($this->idUsuario);
         $this->view->solicitacao = $tbsolicitacao;
@@ -370,7 +367,6 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
             $campo = $this->_request->getParam("campo");
             $order = array($campo . " " . $ordem);
             $ordenacao = "&campo=" . $campo . "&ordem=" . $ordem;
-
         } else {
             $campo = null;
             $order = array(2, 4, 6);
@@ -379,9 +375,12 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
 
         $pag = 1;
         $get = Zend_Registry::get('get');
+        $params = $this->getRequest()->getParams();
 //        $this->view->idPreProjeto = $get->idPreProjeto;
 
-        if (isset($get->pag)) $pag = $get->pag;
+        if (isset($get->pag)) {
+            $pag = $get->pag;
+        }
         $inicio = ($pag > 1) ? ($pag - 1) * $this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
@@ -390,8 +389,8 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
         $where['sol.idAgente = ?'] = $auth->getIdentity()->IdUsuario;
         $where['sol.stEstado = ?'] = 1; // Atendido
 
-        if (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])) {
-            $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
+        if (isset($params['tipoFiltro'])) {
+            $filtro = isset($params['tipoFiltro']) ? $params['tipoFiltro'] : '';
             $this->view->filtro = $filtro;
             switch ($filtro) {
                 case '':
@@ -424,7 +423,6 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
         $this->view->qtdRegistros = $total;
         $this->view->dados = $busca;
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
-
     }
 
 
@@ -436,7 +434,6 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
      */
     public function exibirdadosAction()
     {
-
         if ($this->getRequest()->isPost()) {
 
             // recebe os dados via post
@@ -451,9 +448,9 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
             $this->view->item = $post->NomeDoItem;
 
             try {
-
-                if(strlen($itemBuscado) < 3)
+                if (strlen($itemBuscado) < 3) {
                     throw new Exception("Informe uma palavra de pelo menos 3 caracteres na pesquisa!");
+                }
 
                 $where = null;
                 switch ($tipoPesquisa) {
@@ -481,7 +478,6 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
                 } else {
                     throw new Exception("Dados n&atilde;o localizados");
                 }
-
             } catch (Exception $e) {
                 parent::message($e->getMessage(), "proposta/mantertabelaitens/index/idPreProjeto/" . $this->idPreProjeto, "ERROR");
             }
@@ -496,14 +492,13 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
      */
     public function imprimirAction()
     {
-
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
         $post = Zend_Registry::get('post');
 
         if (empty($post->tipoPesquisa) && empty($post->item) && empty($post->etapa) && empty($post->produto)) {
-            $this->_redirect("mantertabelaitens/exibirdados/idPreProjeto/" . $this->idPreProjeto);
+            $this->redirect("mantertabelaitens/exibirdados/idPreProjeto/" . $this->idPreProjeto);
         }
         $tipoPesquisa = $post->tipoPesquisa;
         $item = $post->item;
@@ -529,7 +524,6 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
         foreach ($tbpretitem as $item) {
             $arr[$item->idProduto][$item->idEtapa][] = $item;
             $arrNomeProduto[$item->idProduto] = $item->Produto;
-
         }
 
         $html = '
@@ -544,7 +538,6 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
         if (!empty($arr)) {
             $ct = 0;
             foreach ($arr as $chaveProduto => $Produto) {
-
                 $html .= '
                             <tr>
                                 <td colspan="3" align="left" style="background-color: #cccccc; font-size:14px; font-weight:bold;">

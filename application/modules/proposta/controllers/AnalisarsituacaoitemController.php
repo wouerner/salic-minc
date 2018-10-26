@@ -10,8 +10,8 @@
  * @link http://www.cultura.gov.br
  * @copyright 2010 - Ministerio da Cultura - Todos os direitos reservados.
  */
-class Proposta_AnalisarsituacaoitemController extends MinC_Controller_Action_Abstract {
-
+class Proposta_AnalisarsituacaoitemController extends MinC_Controller_Action_Abstract
+{
     private $getIdAgente  = 0;
     private $getIdGrupo   = 0;
     private $getIdOrgao   = 0;
@@ -23,16 +23,17 @@ class Proposta_AnalisarsituacaoitemController extends MinC_Controller_Action_Abs
      * @param void
      * @return void
      */
-    public function init() {
+    public function init()
+    {
         // verifica as permissoes
         $PermissoesGrupo = array();
         $PermissoesGrupo[] = 97;  // Gestor do SALIC
         parent::perfil(1, $PermissoesGrupo);
 
-        $Usuario = new Autenticacao_Model_Usuario(); // objeto usuario
+        $Usuario = new Autenticacao_Model_DbTable_Usuario(); // objeto usuario
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $idagente = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
         $this->getIdAgente = $idagente['idAgente'];
         $this->getIdGrupo = $GrupoAtivo->codGrupo;
         $this->getIdOrgao = $GrupoAtivo->codOrgao;
@@ -40,42 +41,44 @@ class Proposta_AnalisarsituacaoitemController extends MinC_Controller_Action_Abs
         parent::init();
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
-        if($this->_request->getParam("qtde")) {
+        if ($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
         }
         $order = array();
 
         //==== parametro de ordenacao  ======//
-        if($this->_request->getParam("ordem")) {
+        if ($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
-            if($ordem == "ASC") {
+            if ($ordem == "ASC") {
                 $novaOrdem = "DESC";
-            }else {
+            } else {
                 $novaOrdem = "ASC";
             }
-        }else {
+        } else {
             $ordem = "ASC";
             $novaOrdem = "ASC";
         }
 
         //==== campo de ordenacao  ======//
-        if($this->_request->getParam("campo")) {
+        if ($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
             $ordenacao = "&campo=".$campo."&ordem=".$ordem;
-
-        }else {
+        } else {
             $campo = null;
-            $order = array(4);
+            $order = array('Produto', 'Estado');
             $ordenacao = null;
         }
 
         $pag = 1;
         $get = Zend_Registry::get('get');
-        if (isset($get->pag)) $pag = $get->pag;
+        if (isset($get->pag)) {
+            $pag = $get->pag;
+        }
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
@@ -111,9 +114,10 @@ class Proposta_AnalisarsituacaoitemController extends MinC_Controller_Action_Abs
         $this->view->intTamPag     = $this->intTamPag;
     }
 
-    public function detalharAction() {
+    public function detalharAction()
+    {
         $item = 0;
-        if($this->_request->getParam("item")) {
+        if ($this->_request->getParam("item")) {
             $item = $this->_request->getParam("item");
         } else {
             parent::message("Item n&atilde;o encontrado!", "/proposta/analisarsituacaoitem", "ERROR");
@@ -122,29 +126,46 @@ class Proposta_AnalisarsituacaoitemController extends MinC_Controller_Action_Abs
         $where = array();
         $where['s.idSolicitarItem = ?'] = $item;
 
+        $this->view->jaCadastrado  = false;
+
         $tbSolicitarItem = new Proposta_Model_DbTable_TbSolicitarItem();
-        $busca = $tbSolicitarItem->listaSolicitacoesItens($where, array(), null, null);
-        $this->view->dados = $busca;
+        $solicitacao = $tbSolicitarItem->listaSolicitacoesItens($where, array(), null, null);
+
+        # Associacao
+        if ($solicitacao[0]->idPlanilhaItens > 0) {
+            $itemPesquisa = [];
+            $itemPesquisa['idProduto'] = $solicitacao[0]->idProduto;
+            $itemPesquisa['idPlanilhaEtapa'] = $solicitacao[0]->idPlanilhaEtapa;
+            $itemPesquisa['idPlanilhaItens'] = $solicitacao[0]->idPlanilhaItens;
+
+            $tbItensPlanilhaProduto = new tbItensPlanilhaProduto();
+            $itemProduto = $tbItensPlanilhaProduto->findBy($itemPesquisa);
+            $this->view->jaCadastrado = empty($itemProduto) ? false : true;
+        }
+
+        $this->view->dados = $solicitacao;
     }
 
-    public function avaliarItemAction() {
-        $tbSolicitarItem = new Proposta_Model_DbTable_TbSolicitarItem();
-        $busca = $tbSolicitarItem->buscarDadosItem($_POST['idItem']);
+    public function avaliarItemAction()
+    {
+        $params = $this->getRequest()->getParams();
 
-        $busca->Resposta = $_POST['resposta'];
+        $tbSolicitarItem = new Proposta_Model_DbTable_TbSolicitarItem();
+        $busca = $tbSolicitarItem->buscarDadosItem($params['idItem']);
+
+        $busca->Resposta = $params['resposta'];
         $busca->DtResposta = new Zend_Db_Expr('GETDATE()');
-        $busca->stEstado = $_POST['avaliacao'];
+        $busca->stEstado = $params['avaliacao'];
         $busca->save();
 
-        if($_POST['avaliacao']){
+        if ($params['avaliacao']) {
             $msg = 'rejeitado';
         } else {
             $msg = 'aprovado';
         }
 
         $pa = new Proposta_Model_PaIncluirRecusarItem();
-        $pa->incluirRecusarItem($_POST['idItem'], $this->getIdUsuario, $_POST['avaliacao']);
+        $pa->incluirRecusarItem($params['idItem'], $this->getIdUsuario, $params['avaliacao']);
         parent::message("Item $msg com sucesso!", "/proposta/analisarsituacaoitem", "CONFIRM");
     }
-
 }

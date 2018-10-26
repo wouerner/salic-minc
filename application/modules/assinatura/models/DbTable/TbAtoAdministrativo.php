@@ -1,14 +1,27 @@
 <?php
 
+/**
+ * Class Assinatura_Model_DbTable_TbAtoAdministrativo
+ * @var Assinatura_Model_TbAtoAdministrativo $dbTableTbAtoAdministrativo
+ */
 class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstract
 {
+    public $modelAtoAdministrativo;
     protected $_schema = 'sac';
     protected $_name = 'tbAtoAdministrativo';
     protected $_primary = 'idAtoAdministrativo';
 
-    public function obterPerfilAssinante($idOrgaoDoAssinante, $idPerfilDoAssinante, $idTipoDoAto)
-    {
+    public function definirModeloAssinatura(array $dados) {
+        $this->modelAtoAdministrativo = new Assinatura_Model_TbAtoAdministrativo($dados);
+        return $this;
+    }
 
+    public function obterPerfilAssinante(
+        $idOrgaoDoAssinante,
+        $idPerfilDoAssinante,
+        $idTipoDoAto
+    )
+    {
         $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
         $objQuery->from(
@@ -45,7 +58,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         }
     }
 
-    public function obterQuantidadeMinimaAssinaturas($idTipoDoAto, $idOrgaoSuperiorDoAssinante, $idOrgaoDoAssinante = NULL)
+    public function obterQuantidadeMinimaAssinaturas($idTipoDoAto, $idOrgaoSuperiorDoAssinante, $idOrgaoDoAssinante = null)
     {
         $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
@@ -58,7 +71,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
             ),
             $this->_schema
         );
-        $objQuery->where('idTipoDoAto = ?', $idTipoDoAto);
+        $objQuery->where('idTipoDoAto in (?)', $idTipoDoAto);
         $objQuery->where('idOrgaoSuperiorDoAssinante = ?', $idOrgaoSuperiorDoAssinante);
         $objQuery->where('stEstado = ?', true);
         if ($idOrgaoDoAssinante) {
@@ -79,9 +92,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         $idTipoDoAto,
         $idOrdemDaAssinaturaAtual,
         $idOrgaoSuperiorDoAssinante
-    )
-    {
-
+    ) {
         $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
         $objQuery->from(
@@ -94,7 +105,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         $objQuery->where('idOrgaoSuperiorDoAssinante = ?', $idOrgaoSuperiorDoAssinante);
         $objQuery->order('idOrdemDaAssinatura asc');
         $objQuery->limit(1);
-
+        
         $objResultado = $this->fetchRow($objQuery);
         if ($objResultado) {
             $arrayResultado = $objResultado->toArray();
@@ -189,6 +200,8 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
             $this->_schema
         );
         $objQuery->where('stEstado = ?', 1);
+        $objQuery->where('idTipo= ?', 24);
+        $objQuery->order(2);
 
         return $this->fetchAll($objQuery)->toArray();
     }
@@ -224,7 +237,8 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
             $this->_schema
         );
         $objQuery->where('Codigo = idSecretaria');
-        $objQuery->order('Sigla asc');
+        $objQuery->where('Status = ?', 0);
+        $objQuery->order(2);
 
         return $this->fetchAll($objQuery)->toArray();
     }
@@ -241,8 +255,9 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
             ),
             $this->_schema
         );
-        $objQuery->where('Codigo = idSecretaria');
-        $objQuery->where('idSecretaria = ?', $idOrgaoSuperior);
+        $objQuery->where('(idSecretaria = ?)', $idOrgaoSuperior);
+        $objQuery->where('Status = ?', 0);
+        $objQuery->order(2);
 
         return $this->fetchAll($objQuery)->toArray();
     }
@@ -259,6 +274,8 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
             ),
             'tabelas'
         );
+        $objQuery->where('gru_sistema = ?', 21);
+
         return $this->fetchAll($objQuery)->toArray();
     }
 

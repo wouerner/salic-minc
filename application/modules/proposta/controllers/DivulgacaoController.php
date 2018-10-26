@@ -13,12 +13,12 @@
  */
 class Proposta_DivulgacaoController extends Proposta_GenericController
 {
-    private $idUsuario = null;
+    protected $idUsuario = null;
 
     /**
      * @var Proposta_Model_DbTable_PlanoDeDivulgacao
      */
-    var $table;
+    public $table;
 
     /**
      * Reescreve o metodo init()
@@ -35,7 +35,6 @@ class Proposta_DivulgacaoController extends Proposta_GenericController
         parent::init();
 
         $this->table = new Proposta_Model_DbTable_PlanoDeDivulgacao();
-
     }
 
     /**
@@ -51,7 +50,7 @@ class Proposta_DivulgacaoController extends Proposta_GenericController
     public function indexAction()
     {
         $this->verificarPermissaoAcesso(true, false, false);
-        $this->_redirect("/proposta/divulgacao/planodivulgacao?idPreProjeto=" . $this->idPreProjeto);
+        $this->redirect("/proposta/divulgacao/planodivulgacao?idPreProjeto=" . $this->idPreProjeto);
     }
 
     /**
@@ -60,6 +59,7 @@ class Proposta_DivulgacaoController extends Proposta_GenericController
      *
      * @author Ruy Junior Ferreira Silva <ruyjfs@gmail.com>
      * @since  21/09/2016
+     * @deprecated
      */
     public function planodivulgacaoAction()
     {

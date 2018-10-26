@@ -50,7 +50,8 @@ if (count($this->readequacoes) > 0):
                     <table class='tabela'>
                         <tr class="destacar">
                             <td align="center"><b>Arquivo</b></td>
-                            <td align="center"><b>Dt. Solicitação</b></td>
+                            <td align="center"><b>Dt. Envio</b></td>
+			    <td align="center"><b>Dt. Solicita&ccedil;&atilde;o</b></td>
                         </tr>
                         <tr>
                             <td align="center">
@@ -58,19 +59,20 @@ if (count($this->readequacoes) > 0):
                                 <a href="<?php echo $this->url(array('controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php echo $r->idArquivo; ?>"><?php echo $r->nmArquivo; ?></a>
                             <?php } else { echo '-'; } ?>
                             </td>
-                            <td align="center"><?php echo Data::tratarDataZend($r->dtSolicitacao, 'brasileira'); ?></td>
+                            <td align="center"><?php echo Data::tratarDataZend($r->dtEnvio, 'brasileira'); ?></td>
+			    <td align="center"><?php echo Data::tratarDataZend($r->dtSolicitacao, 'brasileira'); ?></td>
                         </tr>
                         <tr class="destacar">
-                            <td colspan="2" align="center"><b>Dados da Solicitação</b></td>
+                            <td colspan="3" align="center"><b>Dados da Solicita&ccedil;&atilde;o</b></td>
                         </tr>
                         <tr>
-                            <td colspan="2"><?php echo $r->dsSolicitacao; ?></td>
+                            <td colspan="3"><?php echo $r->dsSolicitacao; ?></td>
                         </tr>
                         <tr class="destacar">
-                            <td colspan="2" align="center"><b>Justificativa da Solicitação</b></td>
+                            <td colspan="3" align="center"><b>Justificativa da Solicita&ccedil;&atilde;o</b></td>
                         </tr>
                         <tr>
-                            <td colspan="2"><?php echo $r->dsJustificativa; ?></td>
+                            <td colspan="3"><?php echo $r->dsJustificativa; ?></td>
                         </tr>
                     </table>
                     
@@ -99,13 +101,13 @@ if (count($this->readequacoes) > 0):
                     ?>
                     <table class="tabela">
                         <tr>
-                            <td align="right" class="destacar bold w150">Parecer Favorável?</td>
-                            <td><?php echo (isset($parecer->ParecerFavoravel) && ($parecer->ParecerFavoravel == 2)) ? 'Sim' : 'Não'; ?></td>
+                            <td align="right" class="destacar bold w150">Parecer Favor&aacute;vel?</td>
+                            <td><?php echo (isset($parecer->ParecerFavoravel) && ($parecer->ParecerFavoravel == 2)) ? 'Sim' : 'N&atilde;o'; ?></td>
                             <td align="right" class="destacar bold w150">Dt. Parecer</td>
                             <td><?php echo (isset($parecer->DtParecer) && !empty($parecer->DtParecer)) ? Data::tratarDataZend($parecer->DtParecer, 'Brasileira') : ''; ?></td>
                         </tr>
                         <tr>
-                            <td colspan="4" class="destacar bold w150">Descriçao do Parecer - <?php echo $parecer->tpAvaliador; ?></td>
+                            <td colspan="4" class="destacar bold w150">Descri&ccedil;&atilde;o do Parecer - <?php echo $parecer->tpAvaliador; ?></td>
                         </tr>
                         <tr>
                             <td colspan="4"><?php echo (isset($parecer->ResumoParecer) && !empty($parecer->ResumoParecer)) ? $parecer->ResumoParecer : ''; ?></td>

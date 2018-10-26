@@ -13,7 +13,6 @@
  */
 class Admissibilidade_Model_TbMensagemProjetoMapper extends MinC_Db_Mapper
 {
-
     public function __construct()
     {
         $this->setDbTable('Admissibilidade_Model_DbTable_TbMensagemProjeto');
@@ -35,7 +34,8 @@ class Admissibilidade_Model_TbMensagemProjetoMapper extends MinC_Db_Mapper
                 $auth = Zend_Auth::getInstance(); // pega a autenticacao
                 $arrAuth = array_change_key_case((array)$auth->getIdentity());
                 $model->setStAtivo(1);
-                if ($intId = parent::save($model)) {
+                $intId = parent::save($model);
+                if ($intId) {
                     $booStatus = 1;
                     $this->setMessage('Mensagem encaminhada com sucesso!');
                 } else {
@@ -72,7 +72,8 @@ class Admissibilidade_Model_TbMensagemProjetoMapper extends MinC_Db_Mapper
                 if (empty($model->getIdPRONAC())) {
                     $model->setIdPRONAC($arrMensagemOrigem['IdPRONAC']);
                 }
-                if ($intId = parent::save($model)) {
+                $intId = parent::save($model);
+                if ($intId) {
                     $booStatus = 1;
                     $this->setMessage('Pergunta respondida com sucesso!');
                 } else {
@@ -93,7 +94,7 @@ class Admissibilidade_Model_TbMensagemProjetoMapper extends MinC_Db_Mapper
     {
         $booStatus = true;
         $arrData = $model->toArray();
-        if (empty($arrData['idMensagemProjeto'])){
+        if (empty($arrData['idMensagemProjeto'])) {
             $arrRequired = array(
                 'idDestinatarioUnidade',
                 'IdPRONAC',
@@ -131,7 +132,8 @@ class Admissibilidade_Model_TbMensagemProjetoMapper extends MinC_Db_Mapper
 //                $model->setIdDestinatario($arrAuth['usu_codigo']);
                 $model->setCdTipoMensagem('E');
                 $model->setStAtivo(1);
-                if ($intId = parent::save($model)) {
+                $intId = parent::save($model);
+                if ($intId) {
                     $booStatus = 1;
                     $this->setMessage('Pergunta enviada com sucesso!');
                 } else {

@@ -38,7 +38,9 @@ class Agente_Model_DbTable_Visao extends MinC_Db_Table_Abstract
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         if ($todasVisoes) {
-            $sql = "select distinct idVerificacao, Descricao from  " . GenericModel::getStaticTableName('agentes', 'verificacao') . "  where idtipo = 16 and sistema = 21 ";
+            $sql = "select distinct idVerificacao, Descricao from "
+                . $this->_schema.'.'.'verificacao'
+                . " where idtipo = 16 and sistema = 21";
             $dados = $db->fetchAll($sql);
         } else {
             $db = Zend_Db_Table::getDefaultAdapter();
@@ -81,7 +83,6 @@ class Agente_Model_DbTable_Visao extends MinC_Db_Table_Abstract
             }
             $objSelect->order("2");
             $dados = $db->fetchAll($objSelect);
-
         }
         return $dados;
     }
@@ -95,6 +96,30 @@ class Agente_Model_DbTable_Visao extends MinC_Db_Table_Abstract
         $insert = $db->insert($schema, $dados);
 
         return $insert ? true : false;
+    }
+
+    public function buscarVisoes($visao = null)
+    {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->setFetchMode(Zend_DB::FETCH_ASSOC);
+
+        $objSelect = $db->select();
+        $objSelect->from(
+            array('ver' => 'verificacao'),
+            array('idVerificacao', 'Descricao'),
+            $this->getSchema('agentes')
+        );
+
+        if (!empty($visao)) {
+            $objSelect->where('idVerificacao = ? ', $visao);
+        } else {
+            $objSelect->where('idtipo = ? ', 16);
+            $objSelect->where('sistema = ? ', 21);
+        }
+
+        $objSelect->limit(100);
+
+        return $db->fetchAll($objSelect);
     }
 
     /**

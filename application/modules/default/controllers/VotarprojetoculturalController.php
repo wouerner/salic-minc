@@ -1,7 +1,7 @@
 <?php
 
-class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
-
+class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract
+{
     private $bln_readequacao = "false";
 
     /**
@@ -10,7 +10,8 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
      * @param void
      * @return void
      */
-    public function init() {
+    public function init()
+    {
         $this->view->title = "Salic - Sistema de Apoio &agrave;s Leis de Incentivo &agrave; Cultura"; // titulo da pagina
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $Usuario = new UsuarioDAO(); // objeto usuario
@@ -42,7 +43,7 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
 
         parent::init(); // chama o init() do pai GenericControllerNew
 
-		/**** CODIGO DE READEQUACAO ****/
+        /**** CODIGO DE READEQUACAO ****/
         $this->view->bln_readequacao = "false";
 
         $idpronac = null;
@@ -66,7 +67,8 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
 
     // fecha metodo init()
 
-    public function parecerconsolidadoAction() {
+    public function parecerconsolidadoAction()
+    {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
         $idpronac = $_POST['idpronac'];
         $projeto = new Projetos();
@@ -82,8 +84,8 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
         //antiga busca
         //$analiseparecer = $parecer->buscarParecer(array(1, 6), $idpronac);
         //nova busca
-        $parecerAtivo = $tblParecer->buscar(array('idPronac=?'=>$idpronac,'stAtivo=?'=>'1'))->current();
-        $analiseparecer = $tblParecer->buscar(array('idTipoAgente in (?)'=>array('1','6'), 'TipoParecer=?'=>$parecerAtivo->TipoParecer, 'idPronac=?'=>$idpronac));
+        $parecerAtivo = $tblParecer->buscar(array('idPronac=?' => $idpronac, 'stAtivo=?' => '1'))->current();
+        $analiseparecer = $tblParecer->buscar(array('idTipoAgente in (?)' => array('1', '6'), 'TipoParecer=?' => $parecerAtivo->TipoParecer, 'idPronac=?' => $idpronac));
 
         $dadosparecerconsolidado = array();
         $buscarPauta = $pt->buscar(array('idPronac = ?' => $idpronac), array('dtEnvioPauta DESC'))->current()->toArray();
@@ -113,52 +115,52 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
         //$this->view->valorparecerista = $valorparecerista['soma'];
         /********** FIM - MODO ANTIGO ***************/
 
-		/**** CODIGO DE READEQUACAO ****/
+        /**** CODIGO DE READEQUACAO ****/
 
         /********** MODO NOVO ***************/
         //TRATANDO SOMA DE PROJETO QUANDO ESTE FOR DE READEQUACAO
         $arrWhereSomaPlanilha = array();
-        $arrWhereSomaPlanilha['idPronac = ?']=$idpronac;
-        if($this->bln_readequacao == "false"){
+        $arrWhereSomaPlanilha['idPronac = ?'] = $idpronac;
+        if ($this->bln_readequacao == "false") {
             $fonteincentivo = $planilhaproposta->somarPlanilhaProposta($idprojeto, 109);
-            $outrasfontes   = $planilhaproposta->somarPlanilhaProposta($idprojeto, false, 109);
+            $outrasfontes = $planilhaproposta->somarPlanilhaProposta($idprojeto, false, 109);
             $valorparecerista = $planilhaprojeto->somarPlanilhaProjeto($idpronac, false);
             //$valorplanilha = $planilhaAprovacao->somarPlanilhaAprovacao($idpronac, 206, 'CO');
-        }else{
+        } else {
             $arrWhereFontesIncentivo = $arrWhereSomaPlanilha;
-            $arrWhereFontesIncentivo['idPlanilhaItem <> ? ']='206'; //elaboracao e agenciamento
-            $arrWhereFontesIncentivo['tpPlanilha = ? ']='SR';
-            $arrWhereFontesIncentivo['stAtivo = ? ']='N';
-            $arrWhereFontesIncentivo['NrFonteRecurso = ? ']='109';
+            $arrWhereFontesIncentivo['idPlanilhaItem <> ? '] = '206'; //elaboracao e agenciamento
+            $arrWhereFontesIncentivo['tpPlanilha = ? '] = 'SR';
+            $arrWhereFontesIncentivo['stAtivo = ? '] = 'N';
+            $arrWhereFontesIncentivo['NrFonteRecurso = ? '] = '109';
             $arrWhereFontesIncentivo["idPedidoAlteracao = (?)"] = new Zend_Db_Expr("(SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idpronac}')");
-            $arrWhereFontesIncentivo["tpAcao <> ('E') OR tpAcao IS NULL "]   = '(?)';
+            $arrWhereFontesIncentivo["tpAcao <> ('E') OR tpAcao IS NULL "] = '(?)';
             $fonteincentivo = $planilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereFontesIncentivo);
 
             $arrWhereOutrasFontes = $arrWhereSomaPlanilha;
-            $arrWhereOutrasFontes['idPlanilhaItem <> ? ']='206'; //elaboracao e agenciamento
-            $arrWhereOutrasFontes['tpPlanilha = ? ']='SR';
-            $arrWhereOutrasFontes['stAtivo = ? ']='N';
-            $arrWhereOutrasFontes['NrFonteRecurso <> ? ']='109';
+            $arrWhereOutrasFontes['idPlanilhaItem <> ? '] = '206'; //elaboracao e agenciamento
+            $arrWhereOutrasFontes['tpPlanilha = ? '] = 'SR';
+            $arrWhereOutrasFontes['stAtivo = ? '] = 'N';
+            $arrWhereOutrasFontes['NrFonteRecurso <> ? '] = '109';
             $arrWhereOutrasFontes["idPedidoAlteracao = (?)"] = new Zend_Db_Expr("(SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idpronac}')");
-            $arrWhereOutrasFontes["tpAcao <> ('E') OR tpAcao IS NULL "]   = '(?)';
+            $arrWhereOutrasFontes["tpAcao <> ('E') OR tpAcao IS NULL "] = '(?)';
             $outrasfontes = $planilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereOutrasFontes);
 
             $arrWherePlanilhaPA = $arrWhereSomaPlanilha;
-            $arrWherePlanilhaPA['idPlanilhaItem <> ? ']='206'; //elaboracao e agenciamento
-            $arrWherePlanilhaPA['tpPlanilha = ? ']='PA';
-            $arrWherePlanilhaPA['stAtivo = ? ']='N';
-            $arrWherePlanilhaPA['NrFonteRecurso = ? ']='109';
+            $arrWherePlanilhaPA['idPlanilhaItem <> ? '] = '206'; //elaboracao e agenciamento
+            $arrWherePlanilhaPA['tpPlanilha = ? '] = 'PA';
+            $arrWherePlanilhaPA['stAtivo = ? '] = 'N';
+            $arrWherePlanilhaPA['NrFonteRecurso = ? '] = '109';
             $arrWherePlanilhaPA["idPedidoAlteracao = (?)"] = new Zend_Db_Expr("(SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idpronac}')");
-            $arrWherePlanilhaPA["tpAcao <> ('E') OR tpAcao IS NULL "]   = '(?)';
+            $arrWherePlanilhaPA["tpAcao <> ('E') OR tpAcao IS NULL "] = '(?)';
             $valorparecerista = $planilhaAprovacao->somarItensPlanilhaAprovacao($arrWherePlanilhaPA);
         }
 
         $arrWhereSomaPlanilha = array();
-        $arrWhereSomaPlanilha['idPronac = ?']=$idpronac;
-        $arrWhereSomaPlanilha['idPlanilhaItem <> ? ']='206'; //elaboracao e agenciamento
-        $arrWhereSomaPlanilha['tpPlanilha = ? ']='CO';
-        $arrWhereSomaPlanilha['NrFonteRecurso = ? ']='109';
-        $arrWhereSomaPlanilha['stAtivo = ? ']='S';
+        $arrWhereSomaPlanilha['idPronac = ?'] = $idpronac;
+        $arrWhereSomaPlanilha['idPlanilhaItem <> ? '] = '206'; //elaboracao e agenciamento
+        $arrWhereSomaPlanilha['tpPlanilha = ? '] = 'CO';
+        $arrWhereSomaPlanilha['NrFonteRecurso = ? '] = '109';
+        $arrWhereSomaPlanilha['stAtivo = ? '] = 'S';
         $valorplanilha = $planilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereSomaPlanilha);
 
         $this->view->fontesincentivo = $fonteincentivo['soma'];
@@ -175,7 +177,7 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
         if (count($verificaEnquadramento) > 0) {
             if ($verificaEnquadramento[0]->stArtigo18 == true) {
                 $this->view->enquadramento = 'Artigo 18';
-            } else if ($verificaEnquadramento[0]->stArtigo26 == true) {
+            } elseif ($verificaEnquadramento[0]->stArtigo26 == true) {
                 $this->view->enquadramento = 'Artigo 26';
             } else {
                 $this->view->enquadramento = 'NAO ENQUADRADO';
@@ -185,7 +187,8 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
         }
     }
 
-    public function analisedecontaAction() {
+    public function analisedecontaAction()
+    {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
         $planilhaaprovacao = new PlanilhaAprovacao();
         $pt = new Pauta();
@@ -194,9 +197,8 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
         $idpronac = $this->_request->getParam("idpronac");
         $buscarprojeto = $projeto->buscar(array('IdPRONAC = ?' => $idpronac))->current()->toArray();
 
-        if($this->bln_readequacao == "false")
-        {
-            $buscarAnaliseConta = $planilhaaprovacao->buscarAnaliseConta($idpronac, 'CO', array('pap.stAtivo=?'=>'S'));
+        if ($this->bln_readequacao == "false") {
+            $buscarAnaliseConta = $planilhaaprovacao->buscarAnaliseConta($idpronac, 'CO', array('pap.stAtivo=?' => 'S'));
             // ===== TOTAL VALOR REDUZIDO E TOTAL DE ITENS =====
             $itemReduzido = false;
             $itemRetirado = false;
@@ -249,11 +251,10 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
 
                     $itemReduzido = true;
                     $reduzido = $valorproponente - $valorcomponente;
-                    $totalValorReduzido += (float) $reduzido;
+                    $totalValorReduzido += (float)$reduzido;
                     $totalItemReduzido++;
                 }
                 if ($valorcomponente == 0 and $valorproponente > 0) {
-
                     $valores['retirado'][$totalItemRetirado]['idPlanilhaAprovacao'] = $b->idPlanilhaAprovacao;
                     $valores['retirado'][$totalItemRetirado]['nrFonteRecurso'] = $b->nrFonteRecurso;
                     $valores['retirado'][$totalItemRetirado]['idProduto'] = $b->idProduto;
@@ -291,17 +292,17 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
 
                     $itemRetirado = true;
                     $retirado = $valorproponente - $valorcomponente;
-                    $totalValorRetirado += (float) $retirado;
+                    $totalValorRetirado += (float)$retirado;
                     $totalItemRetirado++;
                 }
             }
-
-      }else{
+        } else {
 
             /**** CODIGO DE READEQUACAO ****/
-            $buscarplanilhaCO = $planilhaaprovacao->buscarAnaliseContaPlanilhaAprovacao($idpronac,'CO', array('pap.stAtivo=?'=>'S'));
-            $buscarAnaliseConta = array(); $cont = 0;
-            foreach($buscarplanilhaCO as $resuplanilha){
+            $buscarplanilhaCO = $planilhaaprovacao->buscarAnaliseContaPlanilhaAprovacao($idpronac, 'CO', array('pap.stAtivo=?' => 'S'));
+            $buscarAnaliseConta = array();
+            $cont = 0;
+            foreach ($buscarplanilhaCO as $resuplanilha) {
                 $buscarAnaliseConta[$cont]['qtdRelator'] = $resuplanilha->qtItem;
                 $buscarAnaliseConta[$cont]['nrFonteRecurso'] = $resuplanilha->nrFonteRecurso;
                 $buscarAnaliseConta[$cont]['diasRelator'] = $resuplanilha->qtDias;
@@ -325,25 +326,27 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
             $arrBuscaPlanilha["pap.stAtivo = ? "] = 'N';
             $arrBuscaPlanilha["pap.idPedidoAlteracao = (SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idpronac}')"] = '(?)';
 
-            $resuplanilha = null;  $cont = 0;
+            $resuplanilha = null;
+            $cont = 0;
             $buscarplanilhaSR = $planilhaaprovacao->buscarAnaliseContaPlanilhaAprovacao($idpronac, 'SR', $arrBuscaPlanilha);
-            foreach($buscarplanilhaSR as $resuplanilha){
-                $buscarAnaliseConta[$cont]['qtdSolicitado']  = $resuplanilha->qtItem;
-                $buscarAnaliseConta[$cont]['ocoSolicitado']  = $resuplanilha->nrOcorrencia;
-                $buscarAnaliseConta[$cont]['vlSolicitado']   = $resuplanilha->vlUnitario;
+            foreach ($buscarplanilhaSR as $resuplanilha) {
+                $buscarAnaliseConta[$cont]['qtdSolicitado'] = $resuplanilha->qtItem;
+                $buscarAnaliseConta[$cont]['ocoSolicitado'] = $resuplanilha->nrOcorrencia;
+                $buscarAnaliseConta[$cont]['vlSolicitado'] = $resuplanilha->vlUnitario;
                 $buscarAnaliseConta[$cont]['diasSolicitado'] = $resuplanilha->qtDias;
                 $buscarAnaliseConta[$cont]['UnidadeProposta'] = $resuplanilha->Unidade;
                 $cont++;
             }
 
             /******** Planilha aprovacao PA (Parecerista) ****************/
-            $resuplanilha = null;  $cont = 0;
+            $resuplanilha = null;
+            $cont = 0;
             $buscarplanilhaPA = $planilhaaprovacao->buscarAnaliseContaPlanilhaAprovacao($idpronac, 'PA', $arrBuscaPlanilha);
-            foreach($buscarplanilhaPA as $resuplanilha){
-                $buscarAnaliseConta[$cont]['qtdParecer']   = $resuplanilha->qtItem;
-                $buscarAnaliseConta[$cont]['ocoParecer']   = $resuplanilha->nrOcorrencia;
-                $buscarAnaliseConta[$cont]['vlParecer']    = $resuplanilha->vlUnitario;
-                $buscarAnaliseConta[$cont]['JSParecerista']   = $resuplanilha->dsJustificativa;
+            foreach ($buscarplanilhaPA as $resuplanilha) {
+                $buscarAnaliseConta[$cont]['qtdParecer'] = $resuplanilha->qtItem;
+                $buscarAnaliseConta[$cont]['ocoParecer'] = $resuplanilha->nrOcorrencia;
+                $buscarAnaliseConta[$cont]['vlParecer'] = $resuplanilha->vlUnitario;
+                $buscarAnaliseConta[$cont]['JSParecerista'] = $resuplanilha->dsJustificativa;
                 $buscarAnaliseConta[$cont]['diasParecerista'] = $resuplanilha->qtDias;
                 $buscarAnaliseConta[$cont]['UnidadeProjeto'] = $resuplanilha->Unidade;
                 $cont++;
@@ -352,108 +355,103 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
             /********************************************************************************/
 
             // ===== TOTAL VALOR REDUZIDO E TOTAL DE ITENS =====
-            $itemReduzido       = false;
-            $itemRetirado       = false;
+            $itemReduzido = false;
+            $itemRetirado = false;
             $totalValorReduzido = 0;
-            $totalItemReduzido  = 0;
+            $totalItemReduzido = 0;
 
             $totalValorRetirado = 0;
-            $totalItemRetirado  = 0;
+            $totalItemRetirado = 0;
             $valores['reduzido'] = array();
             $valores['retirado'] = array();
 
-            foreach ($buscarAnaliseConta as $b){
+            foreach ($buscarAnaliseConta as $b) {
+                $valorproponente = ($b['qtdSolicitado'] * $b['ocoSolicitado'] * $b['vlSolicitado']);
+                $valorcomponente = ($b['ocorrenciaRelator'] * $b['vlunitarioRelator'] * $b['qtdRelator']);
+                $valorparecerista = ($b['ocoParecer'] * $b['vlParecer'] * $b['qtdParecer']);
+                if ($valorcomponente < $valorproponente and $valorcomponente != 0) {
+                    $valores['reduzido'][$totalItemReduzido]['idPlanilhaAprovacao'] = $b['idPlanilhaAprovacao'];
+                    $valores['reduzido'][$totalItemReduzido]['nrFonteRecurso'] = $b['nrFonteRecurso'];
+                    $valores['reduzido'][$totalItemReduzido]['idProduto'] = $b['idProduto'];
+                    $valores['reduzido'][$totalItemReduzido]['item'] = $b['Item'];
+                    $valores['reduzido'][$totalItemReduzido]['idEtapa'] = $b['idEtapa'];
+                    $valores['reduzido'][$totalItemReduzido]['Etapa'] = $b['Etapa'];
+                    $valores['reduzido'][$totalItemReduzido]['Produto'] = $b['produto'];
+                    $valores['reduzido'][$totalItemReduzido]['vlreduzidoComp'] = $valorproponente - $valorcomponente;
+                    $valores['reduzido'][$totalItemReduzido]['VlReduzidoParecerista'] = $valorparecerista - $valorproponente;
 
-                    $valorproponente = ($b['qtdSolicitado'] * $b['ocoSolicitado'] * $b['vlSolicitado']);
-                    $valorcomponente  = ($b['ocorrenciaRelator'] * $b['vlunitarioRelator'] * $b['qtdRelator']);
-                    $valorparecerista = ($b['ocoParecer'] * $b['vlParecer'] * $b['qtdParecer']);
-                    if ($valorcomponente < $valorproponente and $valorcomponente != 0 )
-                    {
-                            $valores['reduzido'][$totalItemReduzido]['idPlanilhaAprovacao']         = $b['idPlanilhaAprovacao'];
-                            $valores['reduzido'][$totalItemReduzido]['nrFonteRecurso']              = $b['nrFonteRecurso'];
-                            $valores['reduzido'][$totalItemReduzido]['idProduto']                   = $b['idProduto'];
-                            $valores['reduzido'][$totalItemReduzido]['item']                        = $b['Item'];
-                            $valores['reduzido'][$totalItemReduzido]['idEtapa']                     = $b['idEtapa'];
-                            $valores['reduzido'][$totalItemReduzido]['Etapa']                       = $b['Etapa'];
-                            $valores['reduzido'][$totalItemReduzido]['Produto']                     = $b['produto'];
-                            $valores['reduzido'][$totalItemReduzido]['vlreduzidoComp']              = $valorproponente - $valorcomponente ;
-                            $valores['reduzido'][$totalItemReduzido]['VlReduzidoParecerista']       = $valorparecerista - $valorproponente;
+                    $valores['reduzido'][$totalItemReduzido]['vltotalsolicitado'] = $valorproponente;
+                    $valores['reduzido'][$totalItemReduzido]['UnidadeProposta'] = $b['UnidadeProposta'];
+                    $valores['reduzido'][$totalItemReduzido]['qtdSolicitado'] = $b['qtdSolicitado'];
+                    $valores['reduzido'][$totalItemReduzido]['ocoSolicitado'] = $b['ocoSolicitado'];
+                    $valores['reduzido'][$totalItemReduzido]['vlunitarioSolicitado'] = $b['vlSolicitado'];
+                    $valores['reduzido'][$totalItemReduzido]['diasSolicitado'] = $b['diasSolicitado'];
 
-                            $valores['reduzido'][$totalItemReduzido]['vltotalsolicitado']           = $valorproponente;
-                            $valores['reduzido'][$totalItemReduzido]['UnidadeProposta']             = $b['UnidadeProposta'];
-                            $valores['reduzido'][$totalItemReduzido]['qtdSolicitado']               = $b['qtdSolicitado'];
-                            $valores['reduzido'][$totalItemReduzido]['ocoSolicitado']               = $b['ocoSolicitado'];
-                            $valores['reduzido'][$totalItemReduzido]['vlunitarioSolicitado']        = $b['vlSolicitado'];
-                            $valores['reduzido'][$totalItemReduzido]['diasSolicitado']              = $b['diasSolicitado'];
+                    $valores['reduzido'][$totalItemReduzido]['idUnidade'] = $b['idUnidade'];
+                    $valores['reduzido'][$totalItemReduzido]['Unidade'] = $b['Unidade'];
+                    $valores['reduzido'][$totalItemReduzido]['diasRelator'] = $b['diasRelator'];
+                    $valores['reduzido'][$totalItemReduzido]['ocorrenciaRelator'] = $b['ocorrenciaRelator'];
+                    $valores['reduzido'][$totalItemReduzido]['vlunitarioRelator'] = $b['vlunitarioRelator'];
+                    $valores['reduzido'][$totalItemReduzido]['diasRelator'] = $b['diasRelator'];
+                    $valores['reduzido'][$totalItemReduzido]['qtdRelator'] = $b['qtdRelator'];
+                    $valores['reduzido'][$totalItemReduzido]['vltotalcomponente'] = $valorcomponente;
+                    $valores['reduzido'][$totalItemReduzido]['justcomponente'] = $b['JSComponente'];
 
-                            $valores['reduzido'][$totalItemReduzido]['idUnidade']                   = $b['idUnidade'];
-                            $valores['reduzido'][$totalItemReduzido]['Unidade']                     = $b['Unidade'];
-                            $valores['reduzido'][$totalItemReduzido]['diasRelator']                 = $b['diasRelator'];
-                            $valores['reduzido'][$totalItemReduzido]['ocorrenciaRelator']           = $b['ocorrenciaRelator'];
-                            $valores['reduzido'][$totalItemReduzido]['vlunitarioRelator']           = $b['vlunitarioRelator'];
-                            $valores['reduzido'][$totalItemReduzido]['diasRelator']                 = $b['diasRelator'];
-                            $valores['reduzido'][$totalItemReduzido]['qtdRelator']                  = $b['qtdRelator'];
-                            $valores['reduzido'][$totalItemReduzido]['vltotalcomponente']           = $valorcomponente;
-                            $valores['reduzido'][$totalItemReduzido]['justcomponente']              = $b['JSComponente'];
+                    $valores['reduzido'][$totalItemReduzido]['UnidadeProjeto'] = $b['UnidadeProjeto'];
+                    $valores['reduzido'][$totalItemReduzido]['qtdParecer'] = $b['qtdParecer'];
+                    $valores['reduzido'][$totalItemReduzido]['ocoParecer'] = $b['ocoParecer'];
+                    $valores['reduzido'][$totalItemReduzido]['diasParecerista'] = $b['diasParecerista'];
+                    $valores['reduzido'][$totalItemReduzido]['vltotalparecerista'] = $valorparecerista;
+                    $valores['reduzido'][$totalItemReduzido]['vlunitarioparecerista'] = $b['vlParecer'];
+                    $valores['reduzido'][$totalItemReduzido]['justparecerista'] = $b['JSParecerista'];
 
-                            $valores['reduzido'][$totalItemReduzido]['UnidadeProjeto']              = $b['UnidadeProjeto'];
-                            $valores['reduzido'][$totalItemReduzido]['qtdParecer']                  = $b['qtdParecer'];
-                            $valores['reduzido'][$totalItemReduzido]['ocoParecer']                  = $b['ocoParecer'];
-                            $valores['reduzido'][$totalItemReduzido]['diasParecerista']             = $b['diasParecerista'];
-                            $valores['reduzido'][$totalItemReduzido]['vltotalparecerista']          = $valorparecerista;
-                            $valores['reduzido'][$totalItemReduzido]['vlunitarioparecerista']       = $b['vlParecer'];
-                            $valores['reduzido'][$totalItemReduzido]['justparecerista']             = $b['JSParecerista'];
+                    $itemReduzido = true;
+                    $reduzido = $valorproponente - $valorcomponente;
+                    $totalValorReduzido += (float)$reduzido;
+                    $totalItemReduzido++;
+                }
+                if ($valorcomponente == 0 and $valorproponente > 0) {
+                    $valores['retirado'][$totalItemRetirado]['idPlanilhaAprovacao'] = $b['idPlanilhaAprovacao'];
+                    $valores['retirado'][$totalItemRetirado]['nrFonteRecurso'] = $b['nrFonteRecurso'];
+                    $valores['retirado'][$totalItemRetirado]['idProduto'] = $b['idProduto'];
+                    $valores['retirado'][$totalItemRetirado]['item'] = $b['Item'];
+                    $valores['retirado'][$totalItemRetirado]['idEtapa'] = $b['idEtapa'];
+                    $valores['retirado'][$totalItemRetirado]['Etapa'] = $b['Etapa'];
+                    $valores['retirado'][$totalItemRetirado]['Produto'] = $b['produto'];
+                    $valores['retirado'][$totalItemRetirado]['vlretiradoComp'] = $valorproponente - $valorcomponente;
+                    $valores['retirado'][$totalItemRetirado]['VlretiradoParecerista'] = $valorparecerista - $valorproponente;
 
-                            $itemReduzido = true;
-                            $reduzido = $valorproponente - $valorcomponente;
-                            $totalValorReduzido += (float) $reduzido;
-                            $totalItemReduzido++;
-                    }
-                    if ($valorcomponente == 0 and $valorproponente > 0)
-                    {
+                    $valores['retirado'][$totalItemRetirado]['vltotalsolicitado'] = $valorproponente;
+                    $valores['retirado'][$totalItemRetirado]['UnidadeProposta'] = $b['UnidadeProposta'];
+                    $valores['retirado'][$totalItemRetirado]['qtdSolicitado'] = $b['qtdSolicitado'];
+                    $valores['retirado'][$totalItemRetirado]['ocoSolicitado'] = $b['ocoSolicitado'];
+                    $valores['retirado'][$totalItemRetirado]['vlunitarioSolicitado'] = $b['vlSolicitado'];
+                    $valores['retirado'][$totalItemRetirado]['diasSolicitado'] = $b['diasSolicitado'];
 
-                            $valores['retirado'][$totalItemRetirado]['idPlanilhaAprovacao']         = $b['idPlanilhaAprovacao'];
-                            $valores['retirado'][$totalItemRetirado]['nrFonteRecurso']              = $b['nrFonteRecurso'];
-                            $valores['retirado'][$totalItemRetirado]['idProduto']                   = $b['idProduto'];
-                            $valores['retirado'][$totalItemRetirado]['item']                        = $b['Item'];
-                            $valores['retirado'][$totalItemRetirado]['idEtapa']                     = $b['idEtapa'];
-                            $valores['retirado'][$totalItemRetirado]['Etapa']                       = $b['Etapa'];
-                            $valores['retirado'][$totalItemRetirado]['Produto']                     = $b['produto'];
-                            $valores['retirado'][$totalItemRetirado]['vlretiradoComp']              = $valorproponente - $valorcomponente ;
-                            $valores['retirado'][$totalItemRetirado]['VlretiradoParecerista']       = $valorparecerista - $valorproponente;
+                    $valores['retirado'][$totalItemRetirado]['idUnidade'] = $b['idUnidade'];
+                    $valores['retirado'][$totalItemRetirado]['Unidade'] = $b['Unidade'];
+                    $valores['retirado'][$totalItemRetirado]['diasRelator'] = $b['diasRelator'];
+                    $valores['retirado'][$totalItemRetirado]['qtdRelator'] = $b['qtdRelator'];
+                    $valores['retirado'][$totalItemRetirado]['ocorrenciaRelator'] = $b['ocorrenciaRelator'];
+                    $valores['retirado'][$totalItemRetirado]['vlunitarioRelator'] = $b['vlunitarioRelator'];
+                    $valores['retirado'][$totalItemRetirado]['diasRelator'] = $b['diasRelator'];
+                    $valores['retirado'][$totalItemRetirado]['vltotalcomponente'] = $valorcomponente;
+                    $valores['retirado'][$totalItemRetirado]['justcomponente'] = $b['JSComponente'];
 
-                            $valores['retirado'][$totalItemRetirado]['vltotalsolicitado']           = $valorproponente;
-                            $valores['retirado'][$totalItemRetirado]['UnidadeProposta']             = $b['UnidadeProposta'];
-                            $valores['retirado'][$totalItemRetirado]['qtdSolicitado']               = $b['qtdSolicitado'];
-                            $valores['retirado'][$totalItemRetirado]['ocoSolicitado']               = $b['ocoSolicitado'];
-                            $valores['retirado'][$totalItemRetirado]['vlunitarioSolicitado']        = $b['vlSolicitado'];
-                            $valores['retirado'][$totalItemRetirado]['diasSolicitado']              = $b['diasSolicitado'];
+                    $valores['retirado'][$totalItemRetirado]['UnidadeProjeto'] = $b['UnidadeProjeto'];
+                    $valores['retirado'][$totalItemRetirado]['qtdParecer'] = $b['qtdParecer'];
+                    $valores['retirado'][$totalItemRetirado]['ocoParecer'] = $b['ocoParecer'];
+                    $valores['retirado'][$totalItemRetirado]['diasParecerista'] = $b['diasParecerista'];
+                    $valores['retirado'][$totalItemRetirado]['vltotalparecerista'] = $valorparecerista;
+                    $valores['retirado'][$totalItemRetirado]['vlunitarioparecerista'] = $b['vlParecer'];
+                    $valores['retirado'][$totalItemRetirado]['justparecerista'] = $b['JSParecerista'];
 
-                            $valores['retirado'][$totalItemRetirado]['idUnidade']                   = $b['idUnidade'];
-                            $valores['retirado'][$totalItemRetirado]['Unidade']                     = $b['Unidade'];
-                            $valores['retirado'][$totalItemRetirado]['diasRelator']                 = $b['diasRelator'];
-                            $valores['retirado'][$totalItemRetirado]['qtdRelator']                 = $b['qtdRelator'];
-                            $valores['retirado'][$totalItemRetirado]['ocorrenciaRelator']           = $b['ocorrenciaRelator'];
-                            $valores['retirado'][$totalItemRetirado]['vlunitarioRelator']           = $b['vlunitarioRelator'];
-                            $valores['retirado'][$totalItemRetirado]['diasRelator']                 = $b['diasRelator'];
-                            $valores['retirado'][$totalItemRetirado]['vltotalcomponente']           = $valorcomponente;
-                            $valores['retirado'][$totalItemRetirado]['justcomponente']              = $b['JSComponente'];
-
-                            $valores['retirado'][$totalItemRetirado]['UnidadeProjeto']              = $b['UnidadeProjeto'];
-                            $valores['retirado'][$totalItemRetirado]['qtdParecer']                  = $b['qtdParecer'];
-                            $valores['retirado'][$totalItemRetirado]['ocoParecer']                  = $b['ocoParecer'];
-                            $valores['retirado'][$totalItemRetirado]['diasParecerista']             = $b['diasParecerista'];
-                            $valores['retirado'][$totalItemRetirado]['vltotalparecerista']          = $valorparecerista;
-                            $valores['retirado'][$totalItemRetirado]['vlunitarioparecerista']       = $b['vlParecer'];
-                            $valores['retirado'][$totalItemRetirado]['justparecerista']             = $b['JSParecerista'];
-
-                            $itemRetirado = true;
-                            $retirado = $valorproponente - $valorcomponente;
-                            $totalValorRetirado += (float) $retirado;
-                            $totalItemRetirado++;
-                    }
+                    $itemRetirado = true;
+                    $retirado = $valorproponente - $valorcomponente;
+                    $totalValorRetirado += (float)$retirado;
+                    $totalItemRetirado++;
+                }
             }//fecha foreach
-
         }//fecha if bln_readequacao
 
         $buscarPlanilhaUnidade = PlanilhaUnidadeDAO::buscar();
@@ -465,31 +463,31 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
         //NOVO MODELO DE SOMA
         /**********************************/
         $arrWhereSomaPlanilha = array();
-        $arrWhereSomaPlanilha['idPronac = ?']=$idpronac;
-        $arrWhereSomaPlanilha['idPlanilhaItem <> ? ']='206'; //elaboracao e agenciamento
-        $arrWhereSomaPlanilha['NrFonteRecurso = ? ']='109';
+        $arrWhereSomaPlanilha['idPronac = ?'] = $idpronac;
+        $arrWhereSomaPlanilha['idPlanilhaItem <> ? '] = '206'; //elaboracao e agenciamento
+        $arrWhereSomaPlanilha['NrFonteRecurso = ? '] = '109';
 
-        if($this->bln_readequacao == "false"){
+        if ($this->bln_readequacao == "false") {
             //proponente
             $buscarsomaproposta = $tblPlanilhaProposta->somarPlanilhaProposta($buscarprojeto['idProjeto']);
 
             //componente
-            $arrWhereSomaPlanilha['stAtivo = ? ']='S';
-            $arrWhereSomaPlanilha['tpPlanilha = ? ']='CO';
+            $arrWhereSomaPlanilha['stAtivo = ? '] = 'S';
+            $arrWhereSomaPlanilha['tpPlanilha = ? '] = 'CO';
             $buscarsomaaprovacao = $planilhaaprovacao->somarItensPlanilhaAprovacao($arrWhereSomaPlanilha);
-        }else{
+        } else {
             //proponente
             $arrWhereSomaSR = array();
             $arrWhereSomaSR = $arrWhereSomaPlanilha;
-            $arrWhereSomaSR['tpPlanilha = ? ']= 'SR';
-            $arrWhereSomaSR['stAtivo = ? ']='N';
+            $arrWhereSomaSR['tpPlanilha = ? '] = 'SR';
+            $arrWhereSomaSR['stAtivo = ? '] = 'N';
             $arrWhereSomaSR["idPedidoAlteracao = (?)"] = new Zend_Db_Expr("(SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idpronac}')");
-            $arrWhereSomaSR["tpAcao <> ('E') OR tpAcao IS NULL "]   = '(?)';
+            $arrWhereSomaSR["tpAcao <> ('E') OR tpAcao IS NULL "] = '(?)';
             $buscarsomaproposta = $planilhaaprovacao->somarItensPlanilhaAprovacao($arrWhereSomaSR);
 
             //componente
-            $arrWhereSomaPlanilha['tpPlanilha = ? ']='CO';
-            $arrWhereSomaPlanilha['stAtivo = ? ']='S';
+            $arrWhereSomaPlanilha['tpPlanilha = ? '] = 'CO';
+            $arrWhereSomaPlanilha['stAtivo = ? '] = 'S';
             $buscarsomaaprovacao = $planilhaaprovacao->somarItensPlanilhaAprovacao($arrWhereSomaPlanilha);
         }
         /************************************/
@@ -517,7 +515,8 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
      * @param void
      * @return void
      */
-    public function analisedeconteudoAction() {
+    public function analisedeconteudoAction()
+    {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
         $idPronac = $_POST['idpronac'];
         $pt = new Pauta();
@@ -538,7 +537,8 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
     // fecha metodo analisedeconteudoAction()
 
 
-    public function analisedecustosAction() {
+    public function analisedecustosAction()
+    {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
         // recebe os dados via get
         $idpronac = $this->_request->getParam("idpronac");
@@ -551,12 +551,11 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
         $buscaReadAprovacadoCnic = $pt->buscar(array('IdPRONAC = ?' => $idpronac, 'stAnalise = ?' => "AS"));
         $tipoplanilha = $buscaReadAprovacadoCnic->count() > 0 ? 'SE' : 'CO';*/
 
-        $rsPlanilhaAtual = $tblPlanilhaAprovacao->buscar(array('IdPRONAC = ?'=>$idpronac), array('dtPlanilha DESC'))->current();
+        $rsPlanilhaAtual = $tblPlanilhaAprovacao->buscar(array('IdPRONAC = ?' => $idpronac), array('dtPlanilha DESC'))->current();
         $tipoplanilha = (!empty($rsPlanilhaAtual) && $rsPlanilhaAtual->tpPlanilha == 'SE') ? 'SE' : 'CO';
 
-        if($this->bln_readequacao == "false")
-        {
-            $buscarplanilha = $tblPlanilhaAprovacao->buscarAnaliseCustos($idpronac, $tipoplanilha, array('PAP.stAtivo=?'=>'S'));
+        if ($this->bln_readequacao == "false") {
+            $buscarplanilha = $tblPlanilhaAprovacao->buscarAnaliseCustos($idpronac, $tipoplanilha, array('PAP.stAtivo=?' => 'S'));
 
             $planilhaaprovacao = array();
             $count = 0;
@@ -600,31 +599,30 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
             //$buscarsomaaprovacao = $pa->somarPlanilhaAprovacao($idpronac, 206, $tipoplanilha);
             $buscarsomaproposta = $tblPlanilhaProposta->somarPlanilhaProposta($buscarprojeto->idProjeto);
             $buscarsomaprojeto = $tblPlanilhaProjeto->somarPlanilhaProjeto($idpronac);
-
-        }else{
+        } else {
 
             /**** CODIGO DE READEQUACAO ****/
-            $buscarplanilhaCO = $tblPlanilhaAprovacao->buscarAnaliseCustosPlanilhaAprovacao($idpronac, 'CO', array('PAP.stAtivo=?'=>'S'));
+            $buscarplanilhaCO = $tblPlanilhaAprovacao->buscarAnaliseCustosPlanilhaAprovacao($idpronac, 'CO', array('PAP.stAtivo=?' => 'S'));
 
             $planilhaaprovacao = array();
             $count = 0;
             $fonterecurso = null;
-            foreach($buscarplanilhaCO as $resuplanilha){
-                    $produto = $resuplanilha->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['idPlanilhaAprovacao'] = $resuplanilha->idPlanilhaAprovacao;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['idUnidade'] = $resuplanilha->idUnidade;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['nrFonteRecurso'] = $resuplanilha->nrFonteRecurso;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['item'] = $resuplanilha->Item;
+            foreach ($buscarplanilhaCO as $resuplanilha) {
+                $produto = $resuplanilha->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['idPlanilhaAprovacao'] = $resuplanilha->idPlanilhaAprovacao;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['idUnidade'] = $resuplanilha->idUnidade;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['nrFonteRecurso'] = $resuplanilha->nrFonteRecurso;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['item'] = $resuplanilha->Item;
 
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['Unidade'] = $resuplanilha->Unidade;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['qtitemcomp'] = $resuplanilha->qtItem;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['nrocorrenciacomp'] = $resuplanilha->nrOcorrencia;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['vlunitariocomp'] = $resuplanilha->vlUnitario;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['qtdiascomp'] = $resuplanilha->qtDias;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['Unidadecomp'] = $resuplanilha->Unidade;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['vlconselheiro'] = $resuplanilha->vlTotal;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['justificativaconselheiro'] = $resuplanilha->dsJustificativa;
-                    //$planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['reducao'] = $resuplanilha->VlSugeridoConselheiro < $resuplanilha->VlSolicitado ? 1 : 0;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['Unidade'] = $resuplanilha->Unidade;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['qtitemcomp'] = $resuplanilha->qtItem;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['nrocorrenciacomp'] = $resuplanilha->nrOcorrencia;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['vlunitariocomp'] = $resuplanilha->vlUnitario;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['qtdiascomp'] = $resuplanilha->qtDias;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['Unidadecomp'] = $resuplanilha->Unidade;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['vlconselheiro'] = $resuplanilha->vlTotal;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['justificativaconselheiro'] = $resuplanilha->dsJustificativa;
+                //$planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['reducao'] = $resuplanilha->VlSugeridoConselheiro < $resuplanilha->VlSolicitado ? 1 : 0;
                 $count++;
             }
 
@@ -633,67 +631,68 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
             $arrBuscaPlanilha["pap.stAtivo = ? "] = 'N';
             $arrBuscaPlanilha["pap.idPedidoAlteracao = (SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idpronac}')"] = '(?)';
 
-            $resuplanilha = null; $count = 0;
+            $resuplanilha = null;
+            $count = 0;
             $buscarplanilhaSR = $tblPlanilhaAprovacao->buscarAnaliseCustosPlanilhaAprovacao($idpronac, 'SR', $arrBuscaPlanilha);
 
-            foreach($buscarplanilhaSR as $resuplanilha){
-                    $produto = $resuplanilha->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
+            foreach ($buscarplanilhaSR as $resuplanilha) {
+                $produto = $resuplanilha->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
 
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['diasprop'] = $resuplanilha->qtDias;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['quantidadeprop'] = $resuplanilha->qtItem;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['ocorrenciaprop'] = $resuplanilha->nrOcorrencia;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['valorUnitarioprop'] = $resuplanilha->vlUnitario;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['UnidadeProposta'] = $resuplanilha->Unidade;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['vlproponente'] = $resuplanilha->vlTotal;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['justificitivaproponente'] = $resuplanilha->dsJustificativa;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['diasprop'] = $resuplanilha->qtDias;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['quantidadeprop'] = $resuplanilha->qtItem;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['ocorrenciaprop'] = $resuplanilha->nrOcorrencia;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['valorUnitarioprop'] = $resuplanilha->vlUnitario;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['UnidadeProposta'] = $resuplanilha->Unidade;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['vlproponente'] = $resuplanilha->vlTotal;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['justificitivaproponente'] = $resuplanilha->dsJustificativa;
 
-                    $valorConselheiro = $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['vlconselheiro'];
-                    $valorSolicitado  = $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['vlproponente'];
-                    $reducao = $valorConselheiro < $valorSolicitado ? 1 : 0;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['reducao'] = $reducao;
+                $valorConselheiro = $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['vlconselheiro'];
+                $valorSolicitado = $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['vlproponente'];
+                $reducao = $valorConselheiro < $valorSolicitado ? 1 : 0;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['reducao'] = $reducao;
                 $count++;
             }
 
             /******** Planilha aprovacao PA (Parecerista) ****************/
-            $resuplanilha = null; $count = 0;
+            $resuplanilha = null;
+            $count = 0;
             $buscarplanilhaPA = $tblPlanilhaAprovacao->buscarAnaliseCustosPlanilhaAprovacao($idpronac, 'PA', $arrBuscaPlanilha);
 
-            foreach($buscarplanilhaPA as $resuplanilha){
-                    $produto = $resuplanilha->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['UnidadeProjeto'] = $resuplanilha->Unidade;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['quantidadeparc'] = $resuplanilha->qtItem;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['ocorrenciaparc'] = $resuplanilha->nrOcorrencia;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['diasparc'] = $resuplanilha->qtDias;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['valorUnitarioparc'] = $resuplanilha->vlUnitario;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['vlparecerista'] = $resuplanilha->vlTotal;
-                    $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['justificativaparecerista'] = $resuplanilha->dsJustificativa;
+            foreach ($buscarplanilhaPA as $resuplanilha) {
+                $produto = $resuplanilha->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['UnidadeProjeto'] = $resuplanilha->Unidade;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['quantidadeparc'] = $resuplanilha->qtItem;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['ocorrenciaparc'] = $resuplanilha->nrOcorrencia;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['diasparc'] = $resuplanilha->qtDias;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['valorUnitarioparc'] = $resuplanilha->vlUnitario;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['vlparecerista'] = $resuplanilha->vlTotal;
+                $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['justificativaparecerista'] = $resuplanilha->dsJustificativa;
                 $count++;
             }
 
-             $buscarprojeto = $tblProjetos->buscar(array('IdPRONAC = ?'=>$idpronac))->current();
+            $buscarprojeto = $tblProjetos->buscar(array('IdPRONAC = ?' => $idpronac))->current();
 
-             $arrWhereSomaPlanilha = array();
-             $arrWhereSomaPlanilha['idPronac = ?']=$idpronac;
-             $arrWhereSomaPlanilha['idPlanilhaItem <> ? ']='206'; //elaboracao e agenciamento
-             $arrWhereSomaPlanilha['NrFonteRecurso = ? ']='109';
-             $arrWhereSomaPlanilha['stAtivo = ? ']='N';
-             $arrWhereSomaPlanilha["idPedidoAlteracao = (?)"] = new Zend_Db_Expr("(SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idpronac}')");
-             $arrWhereSomaPlanilha["tpAcao <> ('E') OR tpAcao IS NULL "]   = '(?)';
+            $arrWhereSomaPlanilha = array();
+            $arrWhereSomaPlanilha['idPronac = ?'] = $idpronac;
+            $arrWhereSomaPlanilha['idPlanilhaItem <> ? '] = '206'; //elaboracao e agenciamento
+            $arrWhereSomaPlanilha['NrFonteRecurso = ? '] = '109';
+            $arrWhereSomaPlanilha['stAtivo = ? '] = 'N';
+            $arrWhereSomaPlanilha["idPedidoAlteracao = (?)"] = new Zend_Db_Expr("(SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idpronac}')");
+            $arrWhereSomaPlanilha["tpAcao <> ('E') OR tpAcao IS NULL "] = '(?)';
 
-             $arrWhereSomaPlanilha['tpPlanilha = ? ']='SR';
-             $buscarsomaproposta = $tblPlanilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereSomaPlanilha);
-             $arrWhereSomaPlanilha['tpPlanilha = ? ']='PA';
-             $buscarsomaprojeto = $tblPlanilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereSomaPlanilha);
-
+            $arrWhereSomaPlanilha['tpPlanilha = ? '] = 'SR';
+            $buscarsomaproposta = $tblPlanilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereSomaPlanilha);
+            $arrWhereSomaPlanilha['tpPlanilha = ? '] = 'PA';
+            $buscarsomaprojeto = $tblPlanilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereSomaPlanilha);
         }//feacha if bln_readequacao
         /**** fim - CODIGO DE READEQUACAO ****/
 
         $arrWhereSomaPlanilha = array();
-        $arrWhereSomaPlanilha['idPronac = ?']=$idpronac;
-        $arrWhereSomaPlanilha['idPlanilhaItem <> ? ']='206'; //elaboracao e agenciamento
-        $arrWhereSomaPlanilha['tpPlanilha = ? ']='CO';
-        $arrWhereSomaPlanilha['NrFonteRecurso = ? ']='109';
-        $arrWhereSomaPlanilha['stAtivo = ? ']='S';
+        $arrWhereSomaPlanilha['idPronac = ?'] = $idpronac;
+        $arrWhereSomaPlanilha['idPlanilhaItem <> ? '] = '206'; //elaboracao e agenciamento
+        $arrWhereSomaPlanilha['tpPlanilha = ? '] = 'CO';
+        $arrWhereSomaPlanilha['NrFonteRecurso = ? '] = '109';
+        $arrWhereSomaPlanilha['stAtivo = ? '] = 'S';
         $buscarsomaaprovacao = $tblPlanilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereSomaPlanilha);
 
         $buscarPlanilhaUnidade = PlanilhaUnidadeDAO::buscar();
@@ -707,7 +706,8 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
 
     // fecha metodo analisedecustosAction()
 
-    public function dadosproponenteAction() {
+    public function dadosproponenteAction()
+    {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
         $idpronac = $this->_request->getParam("idpronac");
 
@@ -737,13 +737,14 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
         $this->view->idpronac = $idpronac;*/
     }
 
-    public function votacaoAction() {
+    public function votacaoAction()
+    {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $idagente = GerenciarPautaReuniaoDAO::consultaAgenteUsuario($auth->getIdentity()->usu_codigo);
         $idagente = $idagente['idAgente'];
         if (isset($_POST['voto'])) {
-            try{
+            try {
                 $votacao = new Votacao();
                 $reuniao = new Reuniao();
                 $raberta = $reuniao->buscarReuniaoAberta();
@@ -763,12 +764,10 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
                 $where = "IdPRONAC = $idpronac and idAgente = $idagente and idNrReuniao = $reuniaoaberta";
                 $votar = $votacao->alterar($dadosupdate, $where);
                 $this->_helper->json(array('error' => false));
-            }
-            catch (Exception $e)
-            {
+            } catch (Exception $e) {
                 $this->_helper->json(array('error' => true, 'descricao' => $e->getMessage()));
             }
-            $this->_helper->viewRenderer->setNoRender(TRUE);
+            $this->_helper->viewRenderer->setNoRender(true);
         }
         $idpronac = $this->_request->getParam("idpronac");
         $dpc = new DistribuicaoProjetoComissao();
@@ -780,27 +779,28 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
         $this->view->dadosprojeto = $buscarProjeto;
     }
 
-    public static function VerificarCpfCnpj($dado) {
+    public static function VerificarCpfCnpj($dado)
+    {
         $qtdcarecteres = strlen($dado);
         switch ($qtdcarecteres) {
-            case 11 : {
-                    $retorno = Mascara::addMaskCPF($dado);
-                }
-            case 14: {
-                    $retorno = Mascara::addMaskCNPJ($dado);
-                }
+            case 11:
+                $retorno = Mascara::addMaskCPF($dado);
+                break;
+            case 14:
+                $retorno = Mascara::addMaskCNPJ($dado);
+                break;
         }
         return $retorno;
     }
 
-    public function verificarvotacaoAction() {
-
+    public function verificarvotacaoAction()
+    {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
         $this->view->idpronac = $_POST['idpronac'];
         $idpronac = explode('_', $_POST['idpronac']);
 
         $tipoReadequacao = null;
-        if(isset($idpronac[1]) && !empty($idpronac[1])){
+        if (isset($idpronac[1]) && !empty($idpronac[1])) {
             $tipoReadequacao = $idpronac[1];
         }
         $idpronac = $idpronac[0];
@@ -816,18 +816,18 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
         $abstencao = $votacao->resultadovotacao($reuniaoaberta, $idpronac, 'B', $tipoReadequacao);
         $total = $votacao->resultadovotacao($reuniaoaberta, $idpronac, null, $tipoReadequacao);
         $descricao = $votacao->votantesjustificativavoto($reuniaoaberta, $idpronac, $tipoReadequacao);
-        if($descricao->count() <= 0){
+        if ($descricao->count() <= 0) {
             $valores = array(
-            'dsjustificativa' => utf8_encode("<table class='tabela'><tr class='centro'><td><font color='red'><b>A vota��o deste projeto foi cancelada pelo presidente da mesa.</b></font></td></tr></table> <script>window.location.reload();</script>"),
-            'aprovados' => '',
-            'indeferidos' => '',
-            'abstencao' => '',
-            'total' => '',
-            'totalvotos' => '',
+                'dsjustificativa' => utf8_encode("<table class='tabela'><tr class='centro'><td><font color='red'><b>A vota��o deste projeto foi cancelada pelo presidente da mesa.</b></font></td></tr></table> <script>window.location.reload();</script>"),
+                'aprovados' => '',
+                'indeferidos' => '',
+                'abstencao' => '',
+                'total' => '',
+                'totalvotos' => '',
             );
             $json = json_encode($valores);
             echo $json;
-            $this->_helper->viewRenderer->setNoRender(TRUE);
+            $this->_helper->viewRenderer->setNoRender(true);
         }
         $justificativa = "<table class='tabela'>";
         $justificativa .= "<tr class='centro'>";
@@ -838,17 +838,17 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
         foreach ($descricao as $resultado) {
             $justificativa .= "<tr>";
             if ($resultado->justificativa == null) {
-                if($resultado->stVoto == 'I'){
+                if ($resultado->stVoto == 'I') {
                     $justificativa .= "<td><strong> <font color='red'>" . $resultado->nome . "</font></strong></td>";
-                }else{
+                } else {
                     $justificativa .= "<td><strong> " . $resultado->nome . "</strong></td>";
                 }
                 $justificativa .= "<td>";
                 if ($resultado->stVoto == 'A') {
                     $justificativa .= "Aprovar projeto cultural";
-                } else if ($resultado->stVoto == 'I') {
+                } elseif ($resultado->stVoto == 'I') {
                     $justificativa .= "<font color='red'>Indeferir Projeto Cultural</font>";
-                } else if ($resultado->stVoto == 'B') {
+                } elseif ($resultado->stVoto == 'B') {
                     $justificativa .= "Absteve o voto";
                 } else {
                     $justificativa .= "Aguardando voto do componente";
@@ -888,8 +888,8 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
         echo $json;
     }
 
-    public function resultadovotoAction() {
-
+    public function resultadovotoAction()
+    {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
         $auth = Zend_Auth::getInstance(); // pega a autenticao
         $reuniao = new Reuniao();
@@ -904,11 +904,10 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
         $st = new Situacao();
         $dpc = new DistribuicaoProjetoComissao();
 
-        if (isset($_POST['idpronac']))
-        {
+        if (isset($_POST['idpronac'])) {
             $idpronac = explode('_', $_POST['idpronac']);
-            $idTipoReadequacao = NULL;
-            if(isset($idpronac[1])){
+            $idTipoReadequacao = null;
+            if (isset($idpronac[1])) {
                 $idTipoReadequacao = $idpronac[1];
             }
             $idpronac = $idpronac[0];
@@ -921,8 +920,8 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
             $this->view->situacaoindeferimento = $buscarSituacao;
             $this->view->qtdVotantes = $qtdVotantes;
             $this->view->idpronac = $idpronac;
-            if(isset($idpronac[1])){
-                $this->view->idpronac = $idpronac.'_'.$idTipoReadequacao;
+            if (isset($idpronac[1])) {
+                $this->view->idpronac = $idpronac . '_' . $idTipoReadequacao;
             }
             $this->view->idTipoReadequacao = $idTipoReadequacao;
             $this->view->dadosprojeto = $buscardadosprojeto;
@@ -930,9 +929,9 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
             $this->view->componente = isset($buscarcomponente) ? $buscarcomponente->nome : '';
 
             //verifica se o projeto e de plano anual
-            $rsProjeto = $tblProjetos->buscar(array('idPronac=?'=>$idpronac))->current();
+            $rsProjeto = $tblProjetos->buscar(array('idPronac=?' => $idpronac))->current();
             $tbPreProjeto = new Proposta_Model_DbTable_PreProjeto();
-            $rsPreProjeto = $tbPreProjeto->buscar(array('idPreProjeto=?'=>$rsProjeto->idProjeto))->current();
+            $rsPreProjeto = $tbPreProjeto->buscar(array('idPreProjeto=?' => $rsProjeto->idProjeto))->current();
             $this->view->stPlanoAnual = $rsPreProjeto->stPlanoAnual;
         }
         /*
@@ -1089,8 +1088,8 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
         }*/
     }
 
-    public function consolidarVotacaoAction() {
-
+    public function consolidarVotacaoAction()
+    {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
         $auth = Zend_Auth::getInstance(); // pega a autenticao
 
@@ -1100,10 +1099,10 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
         $idReuniaoatual = $reuniaoatual['idNrReuniao'];
         $nrReuniaoatual = $reuniaoatual['NrReuniao'];
         $tpresultadovotacao = $_POST['tpresultadovotacao'];
-        $resultado          = $_POST['resultadovotacao'];
+        $resultado = $_POST['resultadovotacao'];
         $tpConsolidacaoVotacao = $_POST['tpconsolidacaovotacao'];
-        $idTipoReadequacao          = $_POST['resultadovotacao'];
-        $parecerSecretario  = Seguranca::tratarVarAjaxUFT8($_POST['parecerconsolidado']);
+        $idTipoReadequacao = $_POST['resultadovotacao'];
+        $parecerSecretario = Seguranca::tratarVarAjaxUFT8($_POST['parecerconsolidado']);
 
         //$idAbrangencia = $post->cod;
         $pauta = new Pauta();
@@ -1115,31 +1114,31 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
         $dpc = new DistribuicaoProjetoComissao();
 
         $idPronac = explode('_', $post->idpronac);
-        $idTipoReadequacao = NULL;
-        if(isset($idPronac[1]) && !empty($idPronac[1])){
+        $idTipoReadequacao = null;
+        if (isset($idPronac[1]) && !empty($idPronac[1])) {
             $idTipoReadequacao = $idPronac[1];
         }
         $idPronac = $idPronac[0];
 
-        $idNrReuniao            = $idReuniaoatual;
-        $nrReuniao              = $nrReuniaoatual;
-        $tpResultadoVotacao     = $tpresultadovotacao;
-        $resultadoVotacao       = $resultado;
-        $dsParecerConsolidado   = $parecerSecretario;
-        $blnReadequacao         = ($this->bln_readequacao == "false") ? 0 : 1;
-        $situacao               = ($_POST['situacao'] != null) ? $_POST['situacao'] : "NUL"; //a sp espera apenas 3 digitos para verificar se a situacao e null
+        $idNrReuniao = $idReuniaoatual;
+        $nrReuniao = $nrReuniaoatual;
+        $tpResultadoVotacao = $tpresultadovotacao;
+        $resultadoVotacao = $resultado;
+        $dsParecerConsolidado = $parecerSecretario;
+        $blnReadequacao = ($this->bln_readequacao == "false") ? 0 : 1;
+        $situacao = ($_POST['situacao'] != null) ? $_POST['situacao'] : "NUL"; //a sp espera apenas 3 digitos para verificar se a situacao e null
 
         try {
             // executa a sp
             $sp = new paConsolidarProjetoVotadoNaCnic();
             $arr = $sp->consolidarVotacaoProjeto($idPronac, $idNrReuniao, $nrReuniao, $tpResultadoVotacao, $resultadoVotacao, $dsParecerConsolidado, $blnReadequacao, $situacao, $tpConsolidacaoVotacao, $idTipoReadequacao);
 
-            if(!is_array($arr)) {
+            if (!is_array($arr)) {
                 //x('com erro');
-                throw new Exception ($sp);
-            }else{
+                throw new Exception($sp);
+            } else {
                 //x('sem erro');
-                if(count($arr) > 0 && $arr[0]->Tipo == 1){ //sucesso
+                if (count($arr) > 0 && $arr[0]->Tipo == 1) { //sucesso
 
                     /************** APAGA ARQUIVO DA VOTACAO DO PROJETO ********************/
                     $arquivo = getcwd() . "/public/plenaria/votacao.txt";
@@ -1147,33 +1146,29 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
                         unlink($arquivo);
                     }
                     $this->_helper->json(array('error' => false));
-                    $this->_helper->viewRenderer->setNoRender(TRUE);
-
-                }else{
-                    throw new Exception ($sp);
+                    $this->_helper->viewRenderer->setNoRender(true);
+                } else {
+                    throw new Exception($sp);
                 }
             }
-
         } // fecha try
         catch (Exception $e) {
-
-            $this->_helper->json(array('error' => true, 'descricao' => "N&atilde;o foi poss&iacute;vel consolidar a vota&ccedil;&atilde;o do Projeto. <br />".$e->getMessage()));
-            $this->_helper->viewRenderer->setNoRender(TRUE);
+            $this->_helper->json(array('error' => true, 'descricao' => "N&atilde;o foi poss&iacute;vel consolidar a vota&ccedil;&atilde;o do Projeto. <br />" . $e->getMessage()));
+            $this->_helper->viewRenderer->setNoRender(true);
         }
 
 
         //GRAVA CONSOLIDACAO DO VOTACAO
-        if (isset($_POST['resultadovotacao']))
-        {
+        if (isset($_POST['resultadovotacao'])) {
             $this->_helper->viewRenderer->setNoRender(true);
-            $tblConsolidacao    = new Consolidacaovotacao();
+            $tblConsolidacao = new Consolidacaovotacao();
             $tpresultadovotacao = $_POST['tpresultadovotacao'];
-            $resultado          = $_POST['resultadovotacao'];
-            $parecerSecretario  = Seguranca::tratarVarAjaxUFT8($_POST['parecerconsolidado']);
+            $resultado = $_POST['resultadovotacao'];
+            $parecerSecretario = Seguranca::tratarVarAjaxUFT8($_POST['parecerconsolidado']);
             //$idpronac           = $_POST['dadosidpronac'];
             //$parecerSecretario = $_POST['parecerconsolidadoAtual']; //foi necessario essa alteracao pq o parecer nao estava sendo recuperado quando o salvamento era feito com ajax
 
-            try{
+            try {
                 /************** SETA VALOR FINAL DA VOTACAO DO PROJETO *****************/
                 $where = "IdPRONAC = " . $idpronac . " and IdNrReuniao=" . $reuniaoatual;
                 $pauta->alterar(array('stAnalise' => $resultado), $where);
@@ -1196,16 +1191,14 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
 
                 /************** ALTERA SITUACAO DO PROJETO *****************************/
                 $situacao = null;
-                if ($resultado == 'AS' and $_POST['situacao'] == null)
-                {
+                if ($resultado == 'AS' and $_POST['situacao'] == null) {
                     //TRATANDO SITUACAO DO PROJETO QUANDO ESTE FOR DE READEQUACAO
-                    if($this->bln_readequacao == "false"){
+                    if ($this->bln_readequacao == "false") {
                         $situacao = 'D03';
-                    }else{
+                    } else {
                         $situacao = 'D02';
                     }
-
-                } else if ($_POST['situacao'] != null) {
+                } elseif ($_POST['situacao'] != null) {
                     $situacao = $_POST['situacao'];
 
                     $dtsituacao = date('Y-m-d H:i:s');
@@ -1225,29 +1218,24 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
 
                 /************** COPIA PLANILHAS *****************************************/
                 $arrBuscaPlanilha = array();
-                $arrBuscaPlanilha["idPronac = ?"]         = $idpronac;
-                $arrBuscaPlanilha["tpPlanilha = ? "]      = 'CO';
-                $arrBuscaPlanilha["stAtivo = ? "]         = 'S';
+                $arrBuscaPlanilha["idPronac = ?"] = $idpronac;
+                $arrBuscaPlanilha["tpPlanilha = ? "] = 'CO';
+                $arrBuscaPlanilha["stAtivo = ? "] = 'S';
                 //TRATANDO QUANDO o PROJETO FOR DE READEQUACAO
-                if($this->bln_readequacao != "false"){
+                if ($this->bln_readequacao != "false") {
                     $arrBuscaPlanilha["idPedidoAlteracao = (SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idpronac}')"] = '(?)';
                 }
                 $planilhaaprovacao = $pa->buscar($arrBuscaPlanilha);
 
                 //Manteve o resultado igual
-                if ($tpresultadovotacao == 1 and $resultado == 'AS')
-                {
+                if ($tpresultadovotacao == 1 and $resultado == 'AS') {
                     $consolidacao = $parecer->buscar(array('IdPRONAC = ?' => $idpronac, 'stAtivo = ?' => 1))->current()->toArray();
                     $consolidacao = $consolidacao['ResumoParecer'];
-
                 }//Projeto deferido pelo componente a reprovado pela plenaria
-                else if ($tpresultadovotacao == 2 and $resultado == 'AS')
-                {
+                elseif ($tpresultadovotacao == 2 and $resultado == 'AS') {
                     $consolidacao = Seguranca::tratarVarAjaxUFT8($_POST['parecerconsolidado']);
-
                 }//Projeto indeferido pelo componente a aprovado pela plenaria
-                else if ($tpresultadovotacao == 3 and $resultado == 'AS')
-                {
+                elseif ($tpresultadovotacao == 3 and $resultado == 'AS') {
                     foreach ($planilhaaprovacao as $resu) {
                         $data = array(
                             'tpPlanilha' => 'SE',
@@ -1279,11 +1267,11 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
                     }
                     //$where = "IdPRONAC = $idpronac and tpPlanilha = 'CO' and stAtivo = 'S'";
                     $where = "IdPRONAC = '{$idpronac}'";
-                    $where.= " AND tpPlanilha = 'CO'";
-                    $where.= " AND stAtivo    = 'S'";
+                    $where .= " AND tpPlanilha = 'CO'";
+                    $where .= " AND stAtivo    = 'S'";
                     //TRATANDO QUANDO o PROJETO FOR DE READEQUACAO
-                    if($this->bln_readequacao != "false"){
-                        $where.= " AND idPedidoAlteracao = (SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idpronac}')";
+                    if ($this->bln_readequacao != "false") {
+                        $where .= " AND idPedidoAlteracao = (SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idpronac}')";
                     }
                     $dados = array('stAtivo' => 'N');
                     $pa->alterar($dados, $where);
@@ -1323,10 +1311,8 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
                 }
 
                 $this->_helper->json(array('error' => false));
-
             }// fecha try
-            catch (Exception $e)
-            {
+            catch (Exception $e) {
                 $this->_helper->json(array('error' => true, 'descricao' => $e->getMessage()));
                 //parent::message("", "gerenciarpautareuniao/gerenciaradministrativo", "ALERT");
             }
@@ -1346,6 +1332,4 @@ class VotarProjetoCulturalController extends MinC_Controller_Action_Abstract {
             //echo "<script>msg();</script>";
         }
     }
-
 }
-

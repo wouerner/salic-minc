@@ -5,15 +5,19 @@
 
 class Zend_View_Helper_IsProdutosSecundariosAnalisados
 {
-	/**
-	 * Método para verificar se há produtos secundários analisados
-	 * @access public
-	 * @param integer $idPronac
-	 * @param integer $idTipoDoAtoAdministrativo
-	 * @return string
-	 */
-	public function IsProdutosSecundariosAnalisados($idPronac)
+    /**
+     * Método para verificar se há produtos secundários analisados
+     * @access public
+     * @param integer $idPronac
+     * @param integer $idTipoDoAtoAdministrativo
+     * @return string
+     */
+    public function IsProdutosSecundariosAnalisados($idPronac)
     {
+
+//        $tbDistribuirParecer = new tbDistribuirParecer();
+//        return $tbDistribuirParecer->checarValidacaoProdutosSecundarios($idPronac);
+
         $tbDistribuirParecerDAO = new tbDistribuirParecer();
         $dadosWhere["t.stEstado = ?"] = 0;
         $dadosWhere["t.FecharAnalise = ?"] = 0;
@@ -22,14 +26,14 @@ class Zend_View_Helper_IsProdutosSecundariosAnalisados
         $dadosWhere["p.IdPRONAC = ?"] = $idPronac;
         $dadosWhere["t.stPrincipal = ?"] = 0;
         $dadosWhere["t.DtDevolucao is null"] = '';
-        
+
         $SecundariosAtivos = $tbDistribuirParecerDAO->dadosParaDistribuir($dadosWhere);
         $secundariosCount = count($SecundariosAtivos);
-        
+
         if ($secundariosCount > 0) {
             return false;
         } else {
             return true;
-        }        
+        }
     }
 }

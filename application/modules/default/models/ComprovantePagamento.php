@@ -1,7 +1,4 @@
 <?php
-/**
- * @author Caio Lucena <caioflucena@gmail.com>
- */
 class ComprovantePagamento extends MinC_Db_Table_Abstract
 {
     protected $comprovantePagamento;
@@ -19,16 +16,10 @@ class ComprovantePagamento extends MinC_Db_Table_Abstract
     protected $comprovanteNumero;
     protected $comprovanteJustificativa;
 
-    /**
-     * Zend Table
-     */
     protected $_banco = 'bdcorporativo';
     protected $_schema = 'bdcorporativo.scSAC';
     protected $_name = 'tbComprovantePagamento';
 
-    /**
-     *
-     */
     public function __construct(
         $comprovantePagamento = null,
         $fornecedor = null,
@@ -43,8 +34,7 @@ class ComprovantePagamento extends MinC_Db_Table_Abstract
         $comprovanteValor = null,
         $comprovanteNumero = null,
         $comprovanteJustificativa = null
-    )
-    {
+    ) {
         parent::__construct();
         $this->comprovantePagamento = $comprovantePagamento;
         $this->fornecedor = $fornecedor;
@@ -194,7 +184,8 @@ class ComprovantePagamento extends MinC_Db_Table_Abstract
     /**
      *
      */
-    public function inserirComprovantePagamento($data){
+    public function inserirComprovantePagamento($data)
+    {
         $insert = $this->insert($data);
         return $insert;
     }
@@ -202,7 +193,8 @@ class ComprovantePagamento extends MinC_Db_Table_Abstract
     /**
      *
      */
-    public function alterarComprovantePagamento($data, $where){
+    public function alterarComprovantePagamento($data, $where)
+    {
         $update = $this->update($data, $where);
         return $update;
     }
@@ -210,7 +202,8 @@ class ComprovantePagamento extends MinC_Db_Table_Abstract
     /**
      *
      */
-    public function deletarComprovantePagamento($where){
+    public function deletarComprovantePagamento($where)
+    {
         $delete = $this->delete($where);
         return $delete;
     }
@@ -265,8 +258,8 @@ class ComprovantePagamento extends MinC_Db_Table_Abstract
     public function cadastrar()
     {
         $this->validarCadastrar();
-        $this->comprovantePagamento = $this->insert(
-            array(
+
+        $dados =[
                 'idFornecedor' => $this->fornecedor,
                 'tpDocumento' => $this->tipo,
                 'nrComprovante' => $this->numero,
@@ -278,8 +271,8 @@ class ComprovantePagamento extends MinC_Db_Table_Abstract
                 'dsJustificativa' => $this->comprovanteJustificativa,
                 'tpFormaDePagamento' => $this->comprovanteTipo,
                 'nrDocumentoDePagamento' => $this->comprovanteNumero,
-            )
-        );
+            ];
+        $this->comprovantePagamento = $this->insert($dados);
         $this->comprovarPlanilhaCadastrar();
     }
 
@@ -288,7 +281,7 @@ class ComprovantePagamento extends MinC_Db_Table_Abstract
      */
     public function atualizar($status = 4, $atualizarArquivo = false)
     {
-    	$this->validarCadastrar();
+        $this->validarCadastrar();
         // somente mexer no arquivo se houver um arquivo
         if ($atualizarArquivo) {
             $arquivoModel = new ArquivoModel();
@@ -300,20 +293,20 @@ class ComprovantePagamento extends MinC_Db_Table_Abstract
         }
 
         $this->update(
-        	array(
-        		'idFornecedor' => $this->fornecedor,
-        		'tpDocumento' => $this->tipo,
-        		'nrComprovante' => $this->numero,
-        		'nrSerie' => $this->serie,
-        		'dtEmissao' => $this->dataEmissao->format('Y-m-d h:i:s'),
-        		'idArquivo' => is_object($arquivoModel) ? $arquivoModel->getId() : $this->arquivo,
-        		'vlComprovacao' => $this->comprovanteValor,
-        		'dtPagamento' => $this->comprovanteData->format('Y-m-d h:i:s'),
-        		'dsJustificativa' => $this->comprovanteJustificativa,
-        		'tpFormaDePagamento' => $this->comprovanteTipo,
-        		'nrDocumentoDePagamento' => $this->comprovanteNumero,
-        	),
-        	array('idComprovantePagamento = ?' => $this->comprovantePagamento)
+            array(
+                'idFornecedor' => $this->fornecedor,
+                'tpDocumento' => $this->tipo,
+                'nrComprovante' => $this->numero,
+                'nrSerie' => $this->serie,
+                'dtEmissao' => $this->dataEmissao->format('Y-m-d h:i:s'),
+                'idArquivo' => is_object($arquivoModel) ? $arquivoModel->getId() : $this->arquivo,
+                'vlComprovacao' => $this->comprovanteValor,
+                'dtPagamento' => $this->comprovanteData->format('Y-m-d h:i:s'),
+                'dsJustificativa' => $this->comprovanteJustificativa,
+                'tpFormaDePagamento' => $this->comprovanteTipo,
+                'nrDocumentoDePagamento' => $this->comprovanteNumero,
+            ),
+            array('idComprovantePagamento = ?' => $this->comprovantePagamento)
         );
         $this->comprovarPlanilhaAtualizarStatus($status, $this->comprovanteValor, $this->comprovantePagamento);
     }
@@ -348,7 +341,7 @@ class ComprovantePagamento extends MinC_Db_Table_Abstract
     /**
      * @return Zend_Db_Table_Rowset_Abstract
      */
-    public function pesquisarComprovante($idComprovante)
+    public function pesquisarComprovante($idComprovante, $fetchMode = Zend_DB::FETCH_ASSOC)
     {
         $select = "SELECT
                     comp.tpDocumento,
@@ -368,6 +361,7 @@ class ComprovantePagamento extends MinC_Db_Table_Abstract
                     comp.tbComprovantePagamento,
                     arq.nmArquivo,
                     convert(char(10), comp.dtEmissao, 103) as dtEmissao,
+                    convert(char(10), comp.dtPagamento, 103) as dtPagamento,
                     (
                         CASE pa.idProduto
                             WHEN 0 THEN ('Administra&ccedil;&atilde;o do projeto')
@@ -412,7 +406,7 @@ class ComprovantePagamento extends MinC_Db_Table_Abstract
                 WHERE
                     cpxpa.idComprovantePagamento = ?";
         $db = $this->getAdapter();
-        $db->setFetchMode(Zend_DB::FETCH_ASSOC);
+        $db->setFetchMode($fetchMode);
         $statement = $this->getAdapter()->query($select, array($idComprovante));
         return $statement->fetchAll();
     }
@@ -425,12 +419,10 @@ class ComprovantePagamento extends MinC_Db_Table_Abstract
      */
     public function pesquisarComprovantePorItem($item, $idPronac=false, $idEtapa=false, $idProduto = false, $idUFDespesa=false, $idMunicipioDespesa=false)
     {
-
-
-
         $select = $this->select();
         $select->setIntegrityCheck(false);
-        $select->from(array('comp' => $this->_name),
+        $select->from(
+            array('comp' => $this->_name),
             array('*',
                 'tpDocumento',
                 new Zend_Db_Expr('convert(char(10), comp.dtEmissao, 103) as dtEmissao'),
@@ -468,51 +460,64 @@ class ComprovantePagamento extends MinC_Db_Table_Abstract
                                             GROUP BY a1.idPlanilhaAprovacao
                                    ) AS valorComprovado')
             ),
-            'bdcorporativo.scSAC')
-            ->joinInner(array('cpxpa' => 'tbComprovantePagamentoxPlanilhaAprovacao'),
+            'bdcorporativo.scSAC'
+        )
+            ->joinInner(
+                array('cpxpa' => 'tbComprovantePagamentoxPlanilhaAprovacao'),
                 'cpxpa.idComprovantePagamento = comp.idComprovantePagamento',
                 array('cpxpa.stItemAvaliado'),
-                'bdcorporativo.scSAC')
-            ->joinInner(array('pa' => 'tbPlanilhaAprovacao'),
+                'bdcorporativo.scSAC'
+            )
+            ->joinInner(
+                array('pa' => 'tbPlanilhaAprovacao'),
                 'pa.idPlanilhaAprovacao = cpxpa.idPlanilhaAprovacao',
                 array(''),
-                'SAC.dbo')
-            ->joinInner(array('pit' => 'tbPlanilhaItens'),
+                'SAC.dbo'
+            )
+            ->joinInner(
+                array('pit' => 'tbPlanilhaItens'),
                 'pit.idPlanilhaItens = pa.idPlanilhaItem',
                 array(''),
-                'SAC.dbo')
-            ->joinInner(array('pEtapa' => 'tbPlanilhaEtapa'),
+                'SAC.dbo'
+            )
+            ->joinInner(
+                array('pEtapa' => 'tbPlanilhaEtapa'),
                 'pa.idEtapa = pEtapa.idPlanilhaEtapa',
                 array(''),
-                'SAC.dbo')
-            ->joinInner(array('arq' => 'tbArquivo'),
+                'SAC.dbo'
+            )
+            ->joinInner(
+                array('arq' => 'tbArquivo'),
                 'arq.idArquivo = comp.idArquivo',
                 array('nmArquivo'),
-                'BDCORPORATIVO.scCorp')
-            ->joinLeft(array('prod' => 'Produto'),
+                'BDCORPORATIVO.scCorp'
+            )
+            ->joinLeft(
+                array('prod' => 'Produto'),
                 'pa.idProduto = prod.Codigo',
                 array(''),
-                'SAC.dbo')
+                'SAC.dbo'
+            )
             ->where('pa.idPlanilhaItem = ?', $item)
             ->where('pa.nrFonteRecurso = 109'); //BATIZADO: Incentivo Fiscal Federal
 
-        if($idPronac){
+        if ($idPronac) {
             $select->where('pa.idPronac = ?', $idPronac);
         }
 
-        if($idEtapa){
+        if ($idEtapa) {
             $select->where('pa.idEtapa = ?', $idEtapa);
         }
 
-        if($idProduto){
+        if ($idProduto) {
             $select->where('pa.idProduto = ?', $idProduto);
         }
 
-        if($idUFDespesa){
+        if ($idUFDespesa) {
             $select->where('pa.idUFDespesa = ?', $idUFDespesa);
         }
 
-        if($idMunicipioDespesa){
+        if ($idMunicipioDespesa) {
             $select->where('pa.idMunicipioDespesa = ?', $idMunicipioDespesa);
         }
 
@@ -569,19 +574,19 @@ class ComprovantePagamento extends MinC_Db_Table_Abstract
     protected function comprovarPlanilhaCadastrar()
     {
         $comprovantePlanilha = new ComprovantePagamentoxPlanilhaAprovacao();
-        $comprovantePlanilha->insert(
-            array(
+        $dados =
+           [
                 'idComprovantePagamento' => $this->comprovantePagamento,
                 'idPlanilhaAprovacao' => $this->item,
                 'vlComprovado' => $this->comprovanteValor,
-            )
-        );
+            ];
+        $comprovantePlanilha->insert($dados);
     }
 
     /**
      * @todo remover esse metodo apos implementacao ideal planilha comprovacao
      */
-    function comprovarPlanilhaAtualizarStatus($status, $vlComprovado, $idComprovantePagamento)
+    public function comprovarPlanilhaAtualizarStatus($status, $vlComprovado, $idComprovantePagamento)
     {
         $comprovantePlanilha = new ComprovantePagamentoxPlanilhaAprovacao();
         $comprovantePlanilha->update(

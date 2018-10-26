@@ -33,7 +33,7 @@ class Agente_Model_TbTitulacaoConselheiroMapper extends MinC_Db_Mapper
         if ((int) $intVisao == 210 && ((int)$titular == 0 || (int)$titular == 1) && !empty($areaCultural)) {
             # busca a titulacao do agente (titular/suplente de area cultural)
             $arrTitulacaoConselheiro = $this->findBy(array('idagente' => $idAgente));
-            $arrData = array (
+            $arrData = array(
                 'cdarea' => $areaCultural,
                 'cdsegmento' => $segmentoCultural,
                 'sttitular' => $titular,
@@ -49,7 +49,7 @@ class Agente_Model_TbTitulacaoConselheiroMapper extends MinC_Db_Mapper
         return false;
     }
 
-    public function save(Agente_Model_TbTitulacaoConselheiro $model)
+    public function save($model)
     {
         return parent::save($model);
     }

@@ -63,7 +63,7 @@
                 title: "Confirmação",
                 resizable: true,
                 width:350,
-                height:150,
+                height:220,
                 modal: true,
                 autoOpen:true,
                 draggable:false,
@@ -117,7 +117,7 @@
                             <?php echo $this->escape($projeto['pronac']); ?>
                         </a>
                     </td>
-                    <td><?php echo $this->escape($projeto['NomeProjeto']); ?></td>
+                    <td><?php echo $projeto['NomeProjeto']; ?></td>
                     <td class="centro"><?php echo $this->escape($projeto['NrReuniao']); ?></td>
                     <td class="centro"><?php echo date('d/m/Y',  strtotime($projeto['dtRecebido'])); ?></td>
                     <td align="center"><?php echo $this->escape($projeto['tempoAnalise']); ?> dias</td>
@@ -126,10 +126,10 @@
                         <?php //if($projeto['stAnaliseProjeto'] == '2') $bg = '#D3D300';?>
                         <?php if($projeto['stAnaliseProjeto'] == '2') $bg = '#16C0C9';?>
                         <?php if($projeto['stAnaliseProjeto'] == '3') $bg = '#66B20A';?>
-                        <span style="font-weight: bold; color: <?php echo $bg;?>"><?php echo $this->escape($projeto['status']); ?></span>
+                        <span style="font-weight: bold; color: <?php echo $bg;?>"><?php echo $projeto['status']; ?></span>
                     </td>
                     <td align="center">
-                        <?php echo $this->escape($projeto['NomeTecnico']); ?>
+                        <?php echo $projeto['NomeTecnico']; ?>
                     </td>
                 </tr>
                 <?php

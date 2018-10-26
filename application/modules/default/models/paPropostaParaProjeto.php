@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -9,9 +9,9 @@
  *
  * @author 01129075125
  */
-class paPropostaParaProjeto extends MinC_Db_Table_Abstract {
-        
-    protected $_banco = 'SAC';
+class paPropostaParaProjeto extends MinC_Db_Table_Abstract
+{
+    protected $_schema = 'SAC';
     protected $_name  = 'paPropostaParaProjeto';
 
     #public function execSP($idProposta, $CNPJCPF, $idOrgao, $idUsuario){
@@ -25,14 +25,13 @@ class paPropostaParaProjeto extends MinC_Db_Table_Abstract {
      * @param $nrProcesso
      * @return string|Zend_Db_Statement_Interface
      */
-    public function execSP($idProposta, $CNPJCPF, $idOrgao, $idUsuario, $nrProcesso){
-        try{
-            $rodar = "exec " . $this->_banco .".". $this->_name . ' ' . $idProposta .',"'. $CNPJCPF.'",'. $idOrgao.','. $idUsuario.',"'. $nrProcesso . '"';
+    public function execSP($idProposta, $CNPJCPF, $idOrgao, $idUsuario, $nrProcesso)
+    {
+        try {
+            $rodar = "exec " . $this->_schema .".". $this->_name . ' ' . $idProposta .',"'. $CNPJCPF.'",'. $idOrgao.','. $idUsuario.',"'. $nrProcesso . '"';
             return  $this->getAdapter()->query($rodar);
-        }
-        catch(Zend_Exception $e){
+        } catch (Zend_Exception $e) {
             return $e->getMessage();
         }
     }
 }
-?>

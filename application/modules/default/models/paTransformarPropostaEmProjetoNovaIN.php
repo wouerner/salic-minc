@@ -1,15 +1,8 @@
 <?php
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- * Description of paTransformarPropostaEmProjetoNovaIN
- */
-class paTransformarPropostaEmProjetoNovaIN extends MinC_Db_Table_Abstract {
-
-    protected $_banco = 'SAC';
+class paTransformarPropostaEmProjetoNovaIN extends MinC_Db_Table_Abstract
+{
+    protected $_schema = 'SAC';
     protected $_name  = 'paTransformarPropostaEmProjetoNovoIN';
 
     #public function execSP($idProposta, $CNPJCPF, $idOrgao, $idUsuario){
@@ -24,15 +17,14 @@ class paTransformarPropostaEmProjetoNovaIN extends MinC_Db_Table_Abstract {
      * @return string|Zend_Db_Statement_Interface
      */
     #public function execSP($idProposta, $CNPJCPF, $idOrgao, $idUsuario){
-    public function execSP($idProposta, $CNPJCPF, $idOrgao, $idUsuario, $nrProcesso){
-        try{
-            $rodar = "exec " . $this->_banco .".". $this->_name . ' ' . $idProposta .',"'. $CNPJCPF.'",'. $idOrgao.','. $idUsuario.',"'. $nrProcesso . '"';
+    public function execSP($idProposta, $CNPJCPF, $idOrgao, $idUsuario, $nrProcesso)
+    {
+        try {
+            $rodar = "exec " . $this->_schema .".". $this->_name . ' ' . $idProposta .',"'. $CNPJCPF.'",'. $idOrgao.','. $idUsuario.',"'. $nrProcesso . '"';
             
             return  $this->getAdapter()->query($rodar);
-        }
-        catch(Zend_Exception $e){
+        } catch (Zend_Exception $e) {
             return $e->getMessage();
         }
     }
 }
-?>

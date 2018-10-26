@@ -1,0 +1,22 @@
+<div class="container-fluid">
+        <?= $this->pageTitle(
+            'Responder solicita&ccedil;&atilde;o',
+            [
+                ['Solicita&ccedil;&otilde;es' => 
+                    ['module' => 'solicitacao',
+                    'controller' => 'mensagem',
+                    'action', 'index'
+                    ]
+                ],
+                ['Responder solicita&ccedil;&atilde;o' => '']
+            ]
+        ); ?>
+
+        <div class="content">
+            <div class="card-panel">
+                <div class="row">
+                    <?= $this->partial('/mensagem/partials/form.phtml', $this->arrPartial); ?>
+                </div>
+            </div>
+        </div>
+</div>

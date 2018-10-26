@@ -16,6 +16,7 @@ class Agente_Model_ManterAgentesDAO extends MinC_Db_Table_Abstract
         $db= Zend_Db_Table::getDefaultAdapter();
         $schemaAgentes = parent::getStaticTableName('agentes');
         $schemaSac = parent::getStaticTableName('sac');
+        $schemaAcesso = parent::getStaticTableName('ControleDeAcesso');
 
         $a = array(
             'a.idagente'
@@ -57,18 +58,23 @@ class Agente_Model_ManterAgentesDAO extends MinC_Db_Table_Abstract
             ->joinLeft(array('v' => 'visao'), 'v.idagente = a.idagente', '*', $schemaAgentes)
             ->joinLeft(array('sa' => 'area'), 'sa.codigo = t.cdarea', 'sa.descricao as dsarea', $schemaSac)
             ->joinLeft(array('ss' => 'segmento'), 'ss.codigo = t.cdsegmento', 'ss.descricao as dssegmento', $schemaSac)
+            ->joinLeft(array('so' => 'SGCacesso'), 'a.Usuario= so.IdUsuario',
+                ['so.IdUsuario as idResponsavel', 'so.Cpf as cpfResponsavel', 'so.Nome as nomeResponsavel'],
+                $schemaAcesso)
             ->where('a.tipopessoa = 0 or a.tipopessoa = 1')
             ;
 
         if (!empty($cnpjcpf)) {
             # busca pelo cpf/cnpj
             $sql->where('a.cnpjcpf = ?', $cnpjcpf);
-        } if (!empty($nome)) {
+        }
+        if (!empty($nome)) {
             # filtra pelo nome
             $sql->where('n.descricao LIKE ?', '%'.$nome.'%');
-        } if (!empty($idAgente)) {
+        }
+        if (!empty($idAgente)) {
             # busca de acordo com o id do agente
-            $sql->where('a.idagente = ?',$idAgente);
+            $sql->where('a.idagente = ?', $idAgente);
         }
 
         $sql->order(array('e.status Desc', 'n.descricao Asc'));
@@ -105,25 +111,24 @@ class Agente_Model_ManterAgentesDAO extends MinC_Db_Table_Abstract
             ->joinLeft(array('ver' => 'Verificacao'), 'ver.idVerificacao = vis.Visao', null, 'AGENTES.dbo')
             ->joinLeft(array('vin' => 'Vinculacao'), 'a.idAgente = vin.idAgente', null, 'AGENTES.dbo')
             ->joinLeft(array('tp' => 'Tipo'), 'tp.idTipo = ver.IdTipo', null, 'AGENTES.dbo')
+            ->joinLeft(array('so' => 'SGCacesso'), 'a.Usuario= so.IdUsuario',
+                ['so.IdUsuario as idResponsavel', 'so.Cpf as cpfResponsavel', 'so.Nome as nomeResponsavel'],
+                'ControleDeAcesso.dbo')
             ->where('a.TipoPessoa = 0 OR a.TipoPessoa = 1')
             ->where('n.TipoNome = 18 OR n.TipoNome = 19')
             ->where('vis.Visao = 198')
             ;
 
-        if (!empty($cnpjcpfSuperior)) // busca pelo cnpj/cpf com o vinculo principal
-        {
+        if (!empty($cnpjcpfSuperior)) { // busca pelo cnpj/cpf com o vinculo principal
             $sql->where('a.CNPJCPFSuperior = ?', $cnpjcpfSuperior);
         }
-        if (!empty($nome)) // filtra pelo nome
-        {
+        if (!empty($nome)) { // filtra pelo nome
             $sql->where('n.Descricao LIKE ?', "$nome%");
         }
-        if (!empty($idAgente)) // busca pelo idAgente
-        {
+        if (!empty($idAgente)) { // busca pelo idAgente
             $sql->where('vin.idAgente =  ?', $idAgente);
         }
-        if (!empty($idVinculado)) // busca pelo idVinculado
-        {
+        if (!empty($idVinculado)) { // busca pelo idVinculado
             $sql->where('vin.idVinculado =  ?', $idVinculado);
         }
         if (!empty($idVinculoPrincipal)) {// busca pelo idVinculoPrincipal
@@ -281,14 +286,11 @@ class Agente_Model_ManterAgentesDAO extends MinC_Db_Table_Abstract
         $db= Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
 
-        $insert = $db->insert(GenericModel::getStaticTableName('agentes', 'agentes'), $dados); // cadastra
+        $insert = $db->insert(MinC_Db_Table_Abstract::getStaticTableName('agentes', 'agentes'), $dados); // cadastra
 
-        if ($insert)
-        {
+        if ($insert) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -308,20 +310,28 @@ class Agente_Model_ManterAgentesDAO extends MinC_Db_Table_Abstract
         $rsAgente = $Agentes->createRow();
 
         //ATRIBUINDO VALORES AOS CAMPOS QUE FORAM PASSADOS
-        if(isset($dados['stTipoRespPergunta'])){ $rsAgente->stTipoRespPergunta = $dados['stTipoRespPergunta']; }
+        if (isset($dados['stTipoRespPergunta'])) {
+            $rsAgente->stTipoRespPergunta = $dados['stTipoRespPergunta'];
+        }
 
-        if(isset($dados['dsPergunta'])){ $rsAgente->dsPergunta = $dados['dsPergunta']; }
+        if (isset($dados['dsPergunta'])) {
+            $rsAgente->dsPergunta = $dados['dsPergunta'];
+        }
 
-        if(isset($dados['dtCadastramento'])){ $rsAgente->dtCadastramento = $dados['dtCadastramento']; }
+        if (isset($dados['dtCadastramento'])) {
+            $rsAgente->dtCadastramento = $dados['dtCadastramento'];
+        }
 
-        if(isset($dados['idPessoaCadastro'])){ $rsAgente->idPessoaCadastro = $dados['idPessoaCadastro']; }
+        if (isset($dados['idPessoaCadastro'])) {
+            $rsAgente->idPessoaCadastro = $dados['idPessoaCadastro'];
+        }
 
         //SALVANDO O OBJETO CRIADO
         $id = $rsAgente->save();
 
-        if($id){
+        if ($id) {
             return $id;
-        }else{
+        } else {
             return false;
         }
     }
@@ -347,12 +357,9 @@ class Agente_Model_ManterAgentesDAO extends MinC_Db_Table_Abstract
 
         $update = $db->update('AGENTES.dbo.Agentes', $dados, $where); // altera
 
-        if ($update)
-        {
+        if ($update) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }

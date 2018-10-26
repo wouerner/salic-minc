@@ -1,9 +1,8 @@
-function remarcarferias(id, diasmarcados) 
+function remarcarferias(id, diasmarcados)
 {
-	
     $("#dtinicioalteracao").val('');
     $("#dtfimalteracao").val('');
-	
+
     $("#modal").dialog({
         title : 'Altera&ccedil;&atilde;o / Cancelamento de f&eacute;rias',
         resizable: false,
@@ -23,43 +22,41 @@ function remarcarferias(id, diasmarcados)
             }
         }
     });
-	
-    $("#modal").dialog('open');
-	
-    CKEDITOR.replace('justificativa');
-    
-	
 
-	
-	
-	
-	
+    $("#modal").dialog('open');
+
+    CKEDITOR.replace('justificativa');
+
+
+
+
+
+
+
     $("#idferias").val(id);
     $("#diasmarcados").val(diasmarcados);
-	
+
     var dias 			= $("#dias").val();
     var diminuidias 	= ((parseInt(dias)) - (parseInt(diasmarcados)));
     var disponiveis 	= (60) - (parseInt(diminuidias));
-    $("#diassubtraidos").html('Total de dias disponíveis: ' + disponiveis);
-	
-	
+    $("#diassubtraidos").html('Total de dias dispon&iacute;veis: ' + disponiveis);
+
+
 
 }
-
-
 
 function novo()
 {
     $("#formNovo").show();
     $("#salvos").hide();
-	
+
 }
 
 function salvo()
 {
     $("#formNovo").hide();
     $("#salvos").show();
-	
+
 }
 
 
@@ -73,7 +70,7 @@ function confirmaExclusao(msg, dados)
     {
         $("#confirma").html(msg);
     }
-	
+
     $("#confirma").dialog({
         title : 'Alerta!',
         resizable: false,
@@ -91,7 +88,7 @@ function confirmaExclusao(msg, dados)
         }
     });
     $("#confirma").dialog('open');
-	
+
 }
 
 /**
@@ -99,60 +96,62 @@ function confirmaExclusao(msg, dados)
  */
 function validaAgenteNovo()
 {
-	
-	
-	
-    cpf              = document.getElementById('cpf').value;
-    nome             = document.getElementById('nome').value;
+    cpf              = $3('#cpf').val();
+    nome             = $3('#nome').val();
     visao            = document.getElementById('visao').options[document.getElementById('visao').selectedIndex].value;
     areaCultural     = document.getElementById('areaCultural').options[document.getElementById('areaCultural').selectedIndex].value;
 //    segmentoCultural = document.getElementById('segmentoCultural').options[document.getElementById('segmentoCultural').selectedIndex].value;
-    grupologado      = document.getElementById("grupologado").value;
-    
-    cep             = document.getElementById('cep').value;
-    uf              = document.getElementById('uf').value; 
-    cidade          = document.getElementById('cidade').value; 
-    tipoEndereco    = document.getElementById('tipoEndereco').value;
-    tipoLogradouro  = document.getElementById("tipoLogradouro").value;
-    logradouro      = document.getElementById('logradouro').value;
-    numero          = document.getElementById('numero').value;
-    complemento     = document.getElementById('complemento').value;
-    bairro          = document.getElementById('bairro').value;
-    
-    if ( document.getElementById('movimentacaobancaria').value == '' ){
-        tipoFone 		= document.getElementById('tipoFone').value;
-        ufFone   		= document.getElementById('ufFone').value;
-        dddFone  		= document.getElementById('dddFone').value;
-        fone     		= document.getElementById('fone').value;
+    grupologado      = $3("#grupologado").val();
 
-        tipoEmail     	= document.getElementById('tipoEmail').value;
-        email         	= document.getElementById('email').value;
-    }else{
+    cep             = $3('#cep').val();
+    uf              = $3('#uf').val();
+    cidade          = $3('#cidade').val();
+    tipoEndereco    = $3('#tipoEndereco').val();
+    tipoLogradouro  = $3("#tipoLogradouro").val();
+    logradouro      = $3('#logradouro').val();
+    numero          = $3('#numero').val();
+    complemento     = $3('#complemento').val();
+    bairro          = $3('#bairro').val();
+    tipoFone = null;
+
+    if ( $3('exibirTelefone').val() ==  's' ) {
+        tipoFone 		= $3('#tipoFone').val();
+        ufFone   		= $3('#ufFone').val();
+        dddFone  		= $3('#dddFone').val();
+        fone     		= $3('#fone').val();
+
+    } else {
         tipoFone 	= "";
         ufFone   	= "";
         dddFone  	= "";
         fone     	= "";
+    }
+
+    if ($3('exibirEmail').val() == 's' ) {
+        tipoEmail     	= $3('#tipoEmail').val();
+        email         	= $3('#email').val();
+    }else {
         tipoEmail     	= "";
-        email         	= "";  
-    }  
+        email         	= "";
+    }
+
+
     var verifica = false;
     $('[name=titular]').each(function(){
         if(!$(this).attr('disabled'))
             verifica = true;
     });
-    
-    if (cpf == '')          
+
+    if (cpf == '')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o CNPJ/CPF!", "cpf");
         exibirMsgErro('cpf','erroCpf');
     }
-    else if (nome == '')        
+    else if (nome == '')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o nome!", "nome");
         exibirMsgErro('nome','erroNome');
-    }
-
-    // valida&ccedil;&atilde;o da vis&atilde;o
+    } // validacao da visao
     else if ((visao == '0') && (grupologado != '118'))
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe a vis&atilde;o!", "visao");
@@ -173,10 +172,9 @@ function validaAgenteNovo()
 //        alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o Segmento Cultural!", "area");
 //        exibirMsgErro('area','erroSegmentoCultural');
 //    }
-    
-    
+
+
     // valida&ccedil;&atilde;o para endere&ccedil;os
-    
     else if ((cep == 0 || cep == null || cep == ' ' || cep == '' ))
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe um CEP!", "cep");
@@ -207,70 +205,97 @@ function validaAgenteNovo()
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, preencha o campo bairro!", "bairro");
         exibirMsgErro('bairro','erroBairro');
     }
-   
+
     // valida&ccedil;&atilde;o para telefones
-    else if (tipoFone == "" && document.getElementById('movimentacaobancaria').value == '')
+    if ($3('#tipoFone').val() == "" && $3('#exibirTelefone').val() == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione o Tipo de Telefone!", "tipoFone");
         exibirMsgErro('tipoFone','erroTipoFone');
+        return;
     }
-    else if (ufFone == 0 && document.getElementById('movimentacaobancaria').value == '')
+
+    if ($3('#ufFone') == 0 && $3('#exibirTelefone').val() == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione a UF!", "ufFone");
         exibirMsgErro('ufFone','erroUfFone');
     }
-    else if (dddFone == "" && document.getElementById('movimentacaobancaria').value == '')
+    else if ($3('#dddFone') == "" && $3('#exibirTelefone').val() == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione o DDD do telefone!", "dddFone");
         exibirMsgErro('dddFone','erroDddFone');
     }
-    else if (fone == "" && document.getElementById('movimentacaobancaria').value == '')
+    else if ($3('#fone') == "" && $3('#exibirTelefone').val() == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o Telefone!", "fone");
         exibirMsgErro('fone','erroFone');
     }
-    else if ((fone.length < 9 || !(/\d{4}\-\d{4}/.test(fone)) || fone == "0000-0000" ||
-        fone == "1111-1111" || fone == "2222-2222" || fone == "3333-3333" ||
-        fone == "4444-4444" || fone == "5555-5555" || fone == "6666-6666" ||
-        fone == "7777-7777" || fone == "8888-8888" || fone == "9999-9999") && document.getElementById('movimentacaobancaria').value == '')
-        {
+
+    if (
+        $3('#exibirTelefone').val() == 's'
+        && (
+            $3('#fone').val().length < 9
+            || !(/\d{4}\-\d{4}/.test($3('#fone').val()))
+            || $3('#fone').val() == "0000-0000"
+            || $3('#fone').val() == "1111-1111"
+            || $3('#fone').val() == "2222-2222"
+            || $3('#fone').val() == "3333-3333"
+            || $3('#fone').val() == "4444-4444"
+            || $3('#fone').val() == "5555-5555"
+            || $3('#fone').val() == "6666-6666"
+            || $3('#fone').val() == "7777-7777"
+            || $3('#fone').val() == "8888-8888"
+            || $3('#fone').val() == "9999-9999"
+        )
+    ) {
         alertar("O n&uacute;mero do Telefone &eacute; inv&aacute;lido!", "fone");
         exibirMsgErro('fone','erroFone');
+        return;
     }
-    
+
     // valida&ccedil;&atilde;o para emails
-    else if (tipoEmail == 0 && document.getElementById('movimentacaobancaria').value == '')
-    {
+    if (
+        $3('#tipoEmail').val() == 0
+        && $3('#exibirEmail').val() == 's'
+    ) {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione o Tipo de E-mail!", "tipoEmail");
         exibirMsgErro('tipoEmail','erroTipoEmail');
+        return;
     }
-    else if (email == "" && document.getElementById('movimentacaobancaria').value == '')
+    else if ($3('#email').val() == "" && $3('#exibirEmail').val() == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o E-mail!", "email");
         exibirMsgErro('email','erroEmail');
+        return;
     }
-    else if (((email.indexOf("@") < 1) || (email.lastIndexOf(".") <= email.indexOf("@")) || (email.indexOf("@") == email.length) || !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) && document.getElementById('movimentacaobancaria').value == '')
-    {
+    if (
+        $3('#exibirEmail').val() == 's'
+        && (
+            ($3('#email').val().indexOf("@") < 1)
+            || ($3('#email').val().lastIndexOf(".") <= $3('#email').val().indexOf("@"))
+            || ($3('#email').val().indexOf("@") == $3('#email').val().length)
+            || !(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/i.test($3('#email').val()))
+        )
+    ) {
         alertar("E-mail inv&aacute;lido!", "email");
         exibirMsgErro('email','erroEmail');
+        return;
     }
     else
     {
-        $("#logradouro").attr("disabled" , "");
-        $("#tipoLogradouro").attr("disabled" , "");
-        $("#bairro").attr("disabled" , "");
-        $("#cidade").attr("disabled" , "");
-        $("#uf").attr("disabled" , "");
-	
-        if( document.getElementById('movimentacaobancaria').value != '' ){
-            jqAjaxForm( document.getElementById('formCadAgentes'), "divDinamicaAgentes");
-        }else{
-            $("#formCadAgentes").submit();
-        }
+        $("#nome").removeAttr("disabled");
+        $("#logradouro").removeAttr("disabled");
+        $("#tipoLogradouro").removeAttr("disabled");
+        $("#bairro").removeAttr("disabled");
+        $("#cidade").removeAttr("disabled");
+        $("#uf").removeAttr("disabled");
 
+        if( $3('#modal').val() == 's' ){
+            jqAjaxForm( formCadAgentes, "divDinamicaAgentes");
+        }else{
+           $("#formCadAgentes").submit();
+        }
     }
-    
-} // fecha fun&ccedil;&atilde;o validaAgente()
+}
 
 /**
  * Efetua a valida&ccedil;&atilde;o do formul&aacute;rio de agentes
@@ -281,39 +306,39 @@ function validaDirigenteNovo()
     nome             = document.getElementById('nome').value;
     visao            = document.getElementById('visao').options[document.getElementById('visao').selectedIndex].value;
     grupologado      = document.getElementById("grupologado").value;
-	
+
     cep             = document.getElementById('cep').value;
-    uf              = document.getElementById('uf').value; 
-    cidade          = document.getElementById('cidade').value; 
+    uf              = document.getElementById('uf').value;
+    cidade          = document.getElementById('cidade').value;
     tipoEndereco    = document.getElementById('tipoEndereco').value;
     tipoLogradouro  = document.getElementById("tipoLogradouro").value;
     logradouro      = document.getElementById('logradouro').value;
     numero          = document.getElementById('numero').value;
     complemento     = document.getElementById('complemento').value;
     bairro          = document.getElementById('bairro').value;
-	
+
     tipoFone 	= document.getElementById('tipoFone').value;
     ufFone   	= document.getElementById('ufFone').value;
     dddFone  	= document.getElementById('dddFone').value;
     fone     	= document.getElementById('fone').value;
     tipoEmail     	= document.getElementById('tipoEmail').value;
-    email         	= document.getElementById('email').value;        
+    email         	= document.getElementById('email').value;
 
 
-    
-    if (cpf == '')         
+
+    if (cpf == '')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o CNPJ/CPF!", "cpf");
         exibirMsgErro('cpf','erroCpf');
     }
-    else if (nome == '')        
+    else if (nome == '')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o nome!", "nome");
         exibirMsgErro('nome','erroNome');
     }
-	
+
     // valida&ccedil;&atilde;o para endere&ccedil;os
-	
+
     else if ((cep == 0 || cep == null || cep == ' ' || cep == '' ))
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe um CEP!", "cep");
@@ -344,24 +369,24 @@ function validaDirigenteNovo()
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, preencha o campo bairro!", "bairro");
         exibirMsgErro('bairro','erroBairro');
     }
-	
+
     // valida&ccedil;&atilde;o para telefones
     else if (tipoFone == "" )
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione o Tipo de Telefone!", "tipoFone");
         exibirMsgErro('tipoFone','erroTipoFone');
     }
-    else if (ufFone == 0 && document.getElementById('movimentacaobancaria').value == '')
+    else if (ufFone == 0 && document.getElementById('exibirTelefone').value == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione a UF!", "ufFone");
         exibirMsgErro('ufFone','erroUfFone');
     }
-    else if (dddFone == "" && document.getElementById('movimentacaobancaria').value == '')
+    else if (dddFone == "" && document.getElementById('exibirTelefone').value == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione o DDD do telefone!", "dddFone");
         exibirMsgErro('dddFone','erroDddFone');
     }
-    else if (fone == "" && document.getElementById('movimentacaobancaria').value == '')
+    else if (fone == "" && document.getElementById('exibirTelefone').value == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o Telefone!", "fone");
         exibirMsgErro('fone','erroFone');
@@ -369,51 +394,50 @@ function validaDirigenteNovo()
     else if ((fone.length < 9 || !(/\d{4}\-\d{4}/.test(fone)) || fone == "0000-0000" ||
         fone == "1111-1111" || fone == "2222-2222" || fone == "3333-3333" ||
         fone == "4444-4444" || fone == "5555-5555" || fone == "6666-6666" ||
-        fone == "7777-7777" || fone == "8888-8888" || fone == "9999-9999") && document.getElementById('movimentacaobancaria').value == '')
+        fone == "7777-7777" || fone == "8888-8888" || fone == "9999-9999") && document.getElementById('exibirTelefone').value == 's')
         {
         alertar("O n&uacute;mero do Telefone &eacute; inv&aacute;lido!", "fone");
         exibirMsgErro('fone','erroFone');
     }
-    
+
     // valida&ccedil;&atilde;o para emails
     else if (tipoEmail == 0 )
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione o Tipo de E-mail!", "tipoEmail");
         exibirMsgErro('tipoEmail','erroTipoEmail');
     }
-    else if (email == "" && document.getElementById('movimentacaobancaria').value == '')
+    else if (email == "" && document.getElementById('exibirEmail').value == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o E-mail!", "email");
         exibirMsgErro('email','erroEmail');
     }
-    else if (((email.indexOf("@") < 1) || (email.lastIndexOf(".") <= email.indexOf("@")) || (email.indexOf("@") == email.length) || !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) && document.getElementById('movimentacaobancaria').value == '')
+    else if (((email.indexOf("@") < 1) || (email.lastIndexOf(".") <= email.indexOf("@")) || (email.indexOf("@") == email.length) || !(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/i.test(email))) && document.getElementById('exibirTelefone').value == 's')
     {
         alertar("E-mail inv&aacute;lido!", "email");
         exibirMsgErro('email','erroEmail');
     }
     else
     {
-        $("#logradouro").attr("disabled" , "");
-        $("#tipoLogradouro").attr("disabled" , "");
-        $("#bairro").attr("disabled" , "");
-        $("#cidade").attr("disabled" , "");
-        $("#uf").attr("disabled" , "");
-                
+        $("#logradouro").removeAttr("disabled");
+        $("#tipoLogradouro").removeAttr("disabled");
+        $("#bairro").removeAttr("disabled");
+        $("#cidade").removeAttr("disabled");
+        $("#uf").removeAttr("disabled");
+
         $("#formCadAgentes").submit();
 
     }
-	
+
 } // fecha fun&ccedil;&atilde;o validaAgente()
 
 function validaTelefone()
 {
-   
-    tipoFone = $("#tipoFone").val();
-    ufFone   = $("#ufFone").val();
-    dddFone  = $("#dddFone").val();
-    fone     = $("#fone").val();
 
-   
+    tipoFone = $3("#tipoFone").val();
+    ufFone   = $3("#ufFone").val();
+    dddFone  = $3("#dddFone").val();
+    fone     = $3("#fone").val();
+
     if (tipoFone == "")
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione o Tipo de Telefone!", "tipoFone");
@@ -446,7 +470,6 @@ function validaTelefone()
 
 function validaEmail()
 {
-	
     tipoEmail     = document.getElementById("tipoEmail").value;
     email         = document.getElementById("email").value;
 
@@ -458,7 +481,7 @@ function validaEmail()
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o E-mail!", "email");
     }
-    else if (((email.indexOf("@") < 1) || (email.lastIndexOf(".") <= email.indexOf("@")) || (email.indexOf("@") == email.length) || !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))))
+    else if (((email.indexOf("@") < 1) || (email.lastIndexOf(".") <= email.indexOf("@")) || (email.indexOf("@") == email.length) || !(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/i.test(email))))
     {
         alertar("E-mail inv&aacute;lido!", "email");
     }
@@ -470,7 +493,7 @@ function validaEmail()
 
 function validaEndereco()
 {
-	
+
     cep             = document.getElementById('cep').value;//
     uf              = document.getElementById('uf').value; //
     cidade          = document.getElementById('cidade').value; //

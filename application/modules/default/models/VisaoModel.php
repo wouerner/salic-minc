@@ -4,24 +4,27 @@
  * Description of VisaoModel
  *
  * @author colaborador
+ * @todo migrar para o módulo de agentes
  */
 class VisaoModel implements ModelInterface
 {
-
-    /**
-     *
-     */
     const SITUACAO_ATIVO = 'A';
 
-    /**
-     *
-     * @var Situacao
-     */
+    const PROPONENTE = 144;
+    const INCENTIVADOR = 145;
+    const SERVIDOR = 146;
+    const DIRIGENTE_DE_INSTITUICAO = 198;
+    const PARECERISTA_DE_PROJETO_CULTURAL = 209;
+    const COMPONENTE_DA_COMISSAO = 210;
+    const TECNICO = 216;
+    const VOTANTES_DA_CNIC = 217;
+    const PROCURADOR  = 247;
+    const FORNECEDOR = 248;
+    const SERVIDOR_COMISSIONADO = 266;
+    const BENEFICIARIO_DE_PRODUTOS = 199;
+
     private $table = null;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->table = new Visao();
@@ -33,7 +36,7 @@ class VisaoModel implements ModelInterface
      */
     public function atualizar()
     {
-        throw new Exception('M�todo n�o implementado');
+        throw new Exception('M&eacute;todo n&atilde;o implementado');
     }
 
     /**
@@ -43,7 +46,7 @@ class VisaoModel implements ModelInterface
      */
     public function buscar($id = null)
     {
-        throw new Exception('M�todo n�o implementado');
+        throw new Exception('M&eacute;todo n&atilde;o implementado');
     }
 
     /**
@@ -53,7 +56,7 @@ class VisaoModel implements ModelInterface
      */
     public function deletar($id)
     {
-        throw new Exception('M�todo n�o implementado');
+        throw new Exception('M&eacute;todo n&atilde;o implementado');
     }
 
     /**
@@ -62,7 +65,7 @@ class VisaoModel implements ModelInterface
      */
     public function salvar()
     {
-        throw new Exception('M�todo n�o implementado');
+        throw new Exception('M&eacute;todo n&atilde;o implementado');
     }
 
     /**
@@ -95,5 +98,4 @@ class VisaoModel implements ModelInterface
             );
         }
     }
-
 }

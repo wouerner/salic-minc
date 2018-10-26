@@ -212,8 +212,8 @@ mpdf-->
 <!-- ITEMS HERE -->
 <tr>
 <td align="center">IMB</td>
-<td>Intelligent Mail Barcode - also known as: USPS OneCode 4-State Customer Barcode, OneCode 4CB, USPS 4CB, 4-CB, 4-State Customer Barcode, USPS OneCode Solution Barcode. (0***REMOVED***7094987654321-0***REMOVED***7891) Accepts: Up to 31 digits (required 20-digit Tracking Code, and up to 11-digit Routing Code; this may be 0, 5, 9, or 11 digits). If the Routing code is included, it should be spearated by a hyphen - like this example.</td>
-<td class="barcodecell"><barcode code="0***REMOVED***7094987654321-0***REMOVED***7891" type="IMB" class="barcode" /></td>
+<td>Intelligent Mail Barcode - also known as: USPS OneCode 4-State Customer Barcode, OneCode 4CB, USPS 4CB, 4-CB, 4-State Customer Barcode, USPS OneCode Solution Barcode. (01234567094987654321-01234567891) Accepts: Up to 31 digits (required 20-digit Tracking Code, and up to 11-digit Routing Code; this may be 0, 5, 9, or 11 digits). If the Routing code is included, it should be spearated by a hyphen - like this example.</td>
+<td class="barcodecell"><barcode code="01234567094987654321-01234567891" type="IMB" class="barcode" /></td>
 </tr>
 <tr>
 <td align="center">RM4SCC</td>
@@ -228,12 +228,12 @@ mpdf-->
 <tr>
 <td align="center">POSTNET</td>
 <td>POSTNET barcode. Accepts 5, 9 or 11 digits. Valid characters: [0-9]. Checksum digit: automatic.</td>
-<td class="barcodecell"><barcode code="***REMOVED***789" type="POSTNET" class="barcode" /></td>
+<td class="barcodecell"><barcode code="123456789" type="POSTNET" class="barcode" /></td>
 </tr>
 <tr>
 <td align="center">PLANET</td>
 <td>PLANET barcode. Accepts 11 or 13 digits. Valid characters: [0-9]. Checksum digit: automatic.</td>
-<td class="barcodecell"><barcode code="00***REMOVED***789" type="PLANET" class="barcode" /></td>
+<td class="barcodecell"><barcode code="00123456789" type="PLANET" class="barcode" /></td>
 </tr>
 </tbody>
 </table>
@@ -265,13 +265,13 @@ mpdf-->
 <tr>
 <td align="center">C128C</td>
 <td>CODE 128 C. Valid characters: [0-9]. Must be an even number of digits. Checksum digit: automatic.</td>
-<td class="barcodecell"><barcode code="0***REMOVED***789" type="C128C" class="barcode" /></td>
+<td class="barcodecell"><barcode code="0123456789" type="C128C" class="barcode" /></td>
 </tr>
 
 <tr>
 <td align="center">EAN128C [A/B/C]</td>
 <td>EAN128 (A, B, and C). Specified variant of Code 128, utilising an FNC1 start code. Also known as UCC/EAN-128 or GS1-128. Valid characters: [cf. Code 128]. Checksum digit: automatic.</td>
-<td class="barcodecell"><barcode code="01***REMOVED***78912343" type="EAN128C" class="barcode" /></td>
+<td class="barcodecell"><barcode code="0112345678912343" type="EAN128C" class="barcode" /></td>
 </tr>
 
 <tr>
@@ -318,12 +318,12 @@ mpdf-->
 <tr>
 <td align="center">I25B</td>
 <td>Interleaved 2 of 5 with bearer bars. Valid characters: [0-9]</td>
-<td class="barcodecell"><barcode code="***REMOVED***7" type="I25B" class="barcode" /></td>
+<td class="barcodecell"><barcode code="1234567" type="I25B" class="barcode" /></td>
 </tr>
 <tr>
 <td align="center">I25B+</td>
 <td>Interleaved 2 of 5 + CHECKSUM with bearer bars. Valid characters: [0-9]. Checksum digit: automatic.</td>
-<td class="barcodecell"><barcode code="***REMOVED***7" type="I25B+" class="barcode" /></td>
+<td class="barcodecell"><barcode code="1234567" type="I25B+" class="barcode" /></td>
 </tr>
 
 <tr>
@@ -335,12 +335,12 @@ mpdf-->
 <tr>
 <td align="center">MSI</td>
 <td>MSI. Modified Plessey. Valid characters: [0-9]</td>
-<td class="barcodecell"><barcode code="0***REMOVED***7897" type="MSI" class="barcode" /></td>
+<td class="barcodecell"><barcode code="01234567897" type="MSI" class="barcode" /></td>
 </tr>
 <tr>
 <td align="center">MSI+</td>
 <td>MSI + CHECKSUM (module 11). Checksum digit: automatic.</td>
-<td class="barcodecell"><barcode code="0***REMOVED***789" type="MSI+" class="barcode" /></td>
+<td class="barcodecell"><barcode code="0123456789" type="MSI+" class="barcode" /></td>
 </tr>
 
 <tr>

@@ -13,7 +13,7 @@ body, p { font-family: irannastaliq; font-size: 15pt; }
 <br />
 &#x660;.&#x661;.&#x662;.&#x663;.&#x664;.&#x665;.&#x666;.&#x667;.&#x668;.&#x669;
 <br />
-!\"#$%&'()*+,-./0***REMOVED***789:;<=>?<br />
+!\"#$%&'()*+,-./0123456789:;<=>?<br />
 @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_<br />
 `abcdefghijklmnopqrstuvwxyz{|}~
 </p>
@@ -25,7 +25,7 @@ body, p { font-family: irannastaliq; font-size: 15pt; }
 <br />
 &#x660;.&#x661;.&#x662;.&#x663;.&#x664;.&#x665;.&#x666;.&#x667;.&#x668;.&#x669;
 <br />
-!\"#$%&'()*+,-./0***REMOVED***789:;<=>?<br />
+!\"#$%&'()*+,-./0123456789:;<=>?<br />
 @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_<br />
 `abcdefghijklmnopqrstuvwxyz{|}~
 </p>
@@ -36,7 +36,7 @@ body, p { font-family: irannastaliq; font-size: 15pt; }
 <p style=\"font-family: sans;\">Arabic<br />
 &#x660;.&#x661;.&#x662;.&#x663;.&#x664;.&#x665;.&#x666;.&#x667;.&#x668;.&#x669;
 <br />
-!\"#$%&'()*+,-./0***REMOVED***789:;<=>?<br />
+!\"#$%&'()*+,-./0123456789:;<=>?<br />
 @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_<br />
 `abcdefghijklmnopqrstuvwxyz{|}~
 <br />
@@ -57,7 +57,7 @@ body, p { font-family: irannastaliq; font-size: 15pt; }
 <p style=\"font-family: serif;\">Arabic<br />
 &#x660;.&#x661;.&#x662;.&#x663;.&#x664;.&#x665;.&#x666;.&#x667;.&#x668;.&#x669;
 <br />
-!\"#$%&'()*+,-./0***REMOVED***789:;<=>?<br />
+!\"#$%&'()*+,-./0123456789:;<=>?<br />
 @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_<br />
 `abcdefghijklmnopqrstuvwxyz{|}~
 <br />
@@ -130,7 +130,7 @@ body, p { font-family: irannastaliq; font-size: 15pt; }
 <br />
 &#x660;.&#x661;.&#x662;.&#x663;.&#x664;.&#x665;.&#x666;.&#x667;.&#x668;.&#x669;
 <br />
-!\"#$%&'()*+,-./0***REMOVED***789:;<=>?<br />
+!\"#$%&'()*+,-./0123456789:;<=>?<br />
 @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_<br />
 `abcdefghijklmnopqrstuvwxyz{|}~
 </p>
@@ -143,7 +143,7 @@ body, p { font-family: irannastaliq; font-size: 15pt; }
 <br />
 &#x660;.&#x661;.&#x662;.&#x663;.&#x664;.&#x665;.&#x666;.&#x667;.&#x668;.&#x669;
 <br />
-!\"#$%&'()*+,-./0***REMOVED***789:;<=>?<br />
+!\"#$%&'()*+,-./0123456789:;<=>?<br />
 @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_<br />
 `abcdefghijklmnopqrstuvwxyz{|}~
 </p>

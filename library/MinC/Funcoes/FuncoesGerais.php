@@ -44,6 +44,7 @@ HTML;
     for ($i = 0; $i < func_num_args(); $i++) {
         $value = func_get_arg($i);
         var_dump($value);
+        echo "<br /><br />";
         print_r($value);
     }
     echo <<<HTML
@@ -204,7 +205,7 @@ function aplicaMascara($valor, $mascara) {
     return $novoValor;
 }
 
-function gerarBreadCrumb($links = array()) {
+function gerarBreadCrumb($links = array(), $breadcrumbId = 'breadcrumb') {
     try {
         $router = Zend_Controller_Front::getInstance()->getRouter();
         $primeiroLink = null;
@@ -215,7 +216,54 @@ function gerarBreadCrumb($links = array()) {
             $primeiroLink =  $router->assemble(array('module' => 'default', 'controller' => 'principal', 'action' => ''));
         }
 
-        $guia = "<div id='breadcrumb'><ul>";
+        $guia = "<div id='{$breadcrumbId}'><ul>";
+        $guia .= "<li class='first'><a href='{$primeiroLink}' title='In&iacute;cio'>In&iacute;cio</a></li>";
+        $qtdLinks = count($links);
+
+        $contador = 0;
+        if ($qtdLinks > 0) {
+            foreach ($links as $link) {
+                foreach ($link as $nomeLink => $val) {
+                    $contador++;
+                    if ($contador == $qtdLinks) {
+                        $guia .= "<li class='last'>{$nomeLink}</li>";
+                    } else {
+                        $url = $val;
+                        if (is_array($val)) {
+                            $arrayLink = array('controller' => $val['controller'], 'action' => $val['action']);
+                            if(isset($val['module']) && !empty($val['module'])) {
+                                $arrayLink['module'] = $val['module'];
+                            }
+
+                            // @todo: não é possivel nesse momento otimizar essa rotina.
+                            $url = $router->assemble($arrayLink);
+                            $url = explode('/', $url);
+                            $url = ('/'.$url[1] . '/' . $url[2] .'/'.$url[3]);
+                        }
+                        $guia .= "<li><a href='" . $url . "' title='{$nomeLink}'>" . $nomeLink . "</a></li>";
+                    }
+                }
+            }
+        }
+        $guia .= "</ul></div>";
+        print $guia;
+    } catch (Zend_Exception $objException) {
+        throw new Exception("Erro ao montar guia de links", 0, $objException);
+    }
+}
+
+function gerarNovoBreadCrumb($links = array()) {
+    try {
+        $router = Zend_Controller_Front::getInstance()->getRouter();
+        $primeiroLink = null;
+
+        $auth = Zend_Auth::getInstance();
+        $primeiroLink =  $router->assemble(array('module' => 'default', 'controller' => 'principalproponente', 'action' => ''));
+        if( isset($auth->getIdentity()->usu_codigo ) ) {
+            $primeiroLink =  $router->assemble(array('module' => 'default', 'controller' => 'principal', 'action' => ''));
+        }
+
+        $guia = "<div id='migalhas'><ul>";
         $guia .= "<li class='first'><a href='{$primeiroLink}' title='In&iacute;cio'>In&iacute;cio</a></li>";
         $qtdLinks = count($links);
 
@@ -415,13 +463,13 @@ function isCnpjValid($cnpj) {
     }
 }
 
-function strConvertCharset($str) {
+function converterParaUTF8($str) {
 
     if (mb_detect_encoding($str, 'UTF-8', true) === false) {
         $str = utf8_encode($str);
     }
 
-    return utf8_decode($str);
+    return $str;
 }
 
 function converterArrayParaObjetos($array)

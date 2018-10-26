@@ -11,20 +11,35 @@ function mascara($mask,$str){
 ?>
 <script type="text/javascript" src="<?php echo $this->baseUrl();?>/public/js/tinymce/js/tinymce/tinymce.min.js"></script>
 <?php echo $this->partial("realizarprestacaodecontas/inc/menu.inc.php", $this); ?>
+<?php //var_dump( $this->projeto); ?>
+
 <div id="breadcrumb">
     <ul>
        <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => ''), '', true); ?>" title="Ir para p&aacute;gina inicial">Início</a></li>
         <?php if ($this->grupoAtivo != 121) { //Tecnico de Acompanhamento ?>
             <li class=""><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas'));?>">Analisar presta&ccedil;&atilde;o de contas</a></li>
         <?php } ?>
-        <li class=""><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'planilhaorcamentaria', 'idPronac' => $this->projeto->IdPRONAC, 'idPlanilhaAprovacao' => $this->projeto->idPlanilhaAprovacao, 'idPlanilhaItem' => $this->projeto->idPlanilhaItens), '', true); ?>">Planilha or&ccedil;amentária comprovada</a></li>
+        <li class=""><a href="<?php //echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'planilhaorcamentaria', 'idPronac' => $this->projeto->IdPRONAC, 'idPlanilhaAprovacao' => $this->projeto->idPlanilhaAprovacao, 'idPlanilhaItem' => $this->projeto->idPlanilhaItens), '', true); ?>">Planilha or&ccedil;amentária comprovada</a></li>
         <li class="last">Analisar item</li>
     </ul>
 </div>
 <div id="titulo">
     <div>
-        Consultar item
-        <span class="voltar" style="float:right;"><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'planilhaorcamentaria', 'idPronac' => $this->projeto->IdPRONAC, 'idPlanilhaAprovacao' => $this->projeto->idPlanilhaAprovacao, 'idPlanilhaItem' => $this->projeto->idPlanilhaItens, 'idRelatorio' => $this->idRelatorio ), '', true); ?>?itemAvaliadoFilter=<?php echo Zend_Controller_Front::getInstance()->getRequest()->getParam('itemAvaliadoFilter'); ?>" title="Ir para p&aacute;gina anterior">Voltar</a></span>
+        Consultar item:
+        <?php switch($this->stItemAvaliado):case 4:  ?>
+            <strong>Aguardando Analise</strong>
+            <?php break;  ?>
+        <?php case 1:  ?>
+            <strong>Avaliado</strong>
+            <?php break;  ?>
+        <?php case 3:  ?>
+            <strong>Impugnados</strong>
+            <?php break;  ?>
+        <?php default:  ?>
+            <strong>Todos</strong>
+            <?php break;  ?>
+        <?php endswitch;  ?>
+        <span class="voltar" style="float:right;"><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'planilhaorcamentaria', 'idPronac' => $this->projeto->IdPRONAC, /*'idPlanilhaAprovacao' => $this->projeto->idPlanilhaAprovacao,*/ 'idPlanilhaItem' => $this->projeto->idPlanilhaItens, 'idRelatorio' => $this->idRelatorio ), '', true); ?>?itemAvaliadoFilter=<?php echo Zend_Controller_Front::getInstance()->getRequest()->getParam('itemAvaliadoFilter'); ?>" title="Ir para p&aacute;gina anterior">Voltar</a></span>
     </div>
 </div>
 <div id="conteudo">
@@ -35,6 +50,11 @@ function mascara($mask,$str){
                 'idPronac' => $this->idPronac,
                 'idPlanilhaAprovacao' => $this->idPlanilhaAprovacao,
                 'idPlanilhaItem' => $this->idPlanilhaItem,
+
+                'stItemAvaliado' => $this->stItemAvaliado,
+                'produto' => $this->codigoProduto,
+                'uf' => $this->uf,
+                'idmunicipio' => $this->municipio
             ),
             '',
             true
@@ -203,29 +223,25 @@ function mascara($mask,$str){
                             }
 
                         ?>
-                        <td colspan="3"><?php echo $cnpjcpf; ?></td>
+                        <td colspan="5"><?php echo $cnpjcpf; ?></td>
                     </tr>
                     <tr>
                         <td class="destacar" align="right"><b>Comprovante</b></td>
-                        <td style="width: 175px;"><?php echo $this->tipoComprovante[$comprovante->tpDocumento];?></td>
+                        <td style="width: 175px;"><?php echo $comprovante->tpDocumento;?></td>
                         <td class="destacar" align="right"><b>Número</b></td>
                         <td><?php echo $comprovante->nrComprovante;?></td>
                         <td class="destacar" align="right"><b id="nmSerieTxt">S&eacute;rie</b></td>
-                        <td><?php echo $comprovante->nrSerie;?></td>
+                        <td colspan="3"><?php echo $comprovante->nrSerie;?></td>
                     </tr>
                     <tr>
-                        <td class="destacar" align="right"><b>Data do Documento</td>
+                        <td class="destacar" align="right"><b>Dt. Emiss&atilde;o do comprovante de despesa</td>
                         <td><?php echo date_format(new DateTime($comprovante->dtEmissao), "d/m/Y") ?></td>
                         <td class="destacar" align="right"><b>Forma de Pagamento</td>
                         <td>
-                            <?php
-                                switch ($comprovante->tpFormaDePagamento) {
-                                    case 1: echo 'Cheque'; break;
-                                    case 2: echo 'Transferência Bancária'; break;
-                                    case 3: echo 'Saque/Dinheiro'; break;
-                                }
-                            ?>
+                            <?php echo $comprovante->tpFormaDePagamento; ?>
                         </td>
+                        <td class="destacar" align="right"><b>Data do Pagamento</td>
+                        <td><?php echo date_format(new DateTime($comprovante->dtPagamento), "d/m/Y") ?></td>
                         <td class="destacar" align="right" style="width: 155px;"><b>N&ordm; Documento Pagamento</td>
                         <td><?php echo $comprovante->nrDocumentoDePagamento;?></td>
                     </tr>
@@ -233,7 +249,7 @@ function mascara($mask,$str){
                         <td class="destacar" align="right"><b>Valor</b></td>
                         <td>R$ <?php echo number_format($comprovante->vlComprovacao, 2, ',', '.'); ?></td>
                         <td class="destacar" align="right"><b>Arquivo</b></td>
-                        <td colspan="3">
+                        <td colspan="5">
                             <?php
                                 $urlComprovanteAnexo = $this->url(
                                     array('controller' => 'upload', 'action' => 'abrir', 'id' => $comprovante->idArquivo)
@@ -244,11 +260,11 @@ function mascara($mask,$str){
                     </tr>
                     <tr>
                         <td class="destacar" align="right"><b>Justificativa do Proponente</b></td>
-                        <td colspan="5"><?php echo $comprovante->dsJustificativa;?></td>
+                        <td colspan="7"><?php echo $comprovante->dsJustificativa;?></td>
                     </tr>
                     <tr>
                         <td class="destacar" align="right"><b>Status</b></td>
-                        <td colspan="5">
+                        <td colspan="7">
                                 <input
                                     type="radio"
                                     id="situacao-1-<?php echo $comprovanteNodeId; ?>"
@@ -269,16 +285,17 @@ function mascara($mask,$str){
                     </tr>
                     <tr>
                         <td class="destacar" align="right"><b>Ocorrência do Técnico</b></td>
-                        <td colspan="5">
+                        <td colspan="7">
                                 <textarea
                                     name="comprovantePagamento[<?php echo $comprovante->idPlanilhaAprovacao; ?>][observacao]"
-				    id="comprovantePagamento_<?php echo $comprovante->idPlanilhaAprovacao; ?>_observacao"
+                                    id="comprovantePagamento_<?php echo $comprovante->idPlanilhaAprovacao; ?>_observacao"
                                     rows="10" cols="100"
                                     class="input_simples"><?php echo $comprovante->ocorrencia; ?></textarea>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="6">
+                        <td colspan="8">
+                            <input type="hidden" value="<?php echo $this->stItemAvaliado; ?>" name="stItemAvaliado">
                             <input type="submit" class="btn_salvar" value="" style="margin: 0px 480px;">
                         </td>
                     </tr>
@@ -306,7 +323,6 @@ function mascara($mask,$str){
 <br clear="all" />
 
 <div id="rodapeConteudo" ><span></span></div>
-<!-- ========== FIM RODAPÉ DO CONTEÚDO ========== -->
 <br clear="all" />
 
 <style>

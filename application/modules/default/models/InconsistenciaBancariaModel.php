@@ -9,7 +9,7 @@ class InconsistenciaBancariaModel
 {
 
     /**
-     * 
+     *
      * @param string $cpfCnpj
      * @param int $idInconsistencia
      * @throws Exception
@@ -19,7 +19,7 @@ class InconsistenciaBancariaModel
         try {
             $tbTmpCaptacao = new tbTmpCaptacao();
             $captacaoTemporaria = $tbTmpCaptacao->fetchRow($tbTmpCaptacao->select()->where('idTmpCaptacao = ?', $idInconsistencia));
-            $captacaoTemporaria->nrCpfCnpjIncentivador = $cpfCnpj;
+            $captacaoTemporaria->nrCpfCnpjIncentivador =  "000" . $cpfCnpj; //@todo verificar com o romulo qual eh essa rotina que necessita de zero a esquerda
             $captacaoTemporaria->save();
 
             $tbTmpInconsistencia = new tbTmpInconsistenciaCaptacao();
@@ -35,5 +35,4 @@ class InconsistenciaBancariaModel
             throw new Exception('Não foi possível resolver a inconsistência de incentivador e proponente iguais', null, $exception);
         }
     }
-
 }

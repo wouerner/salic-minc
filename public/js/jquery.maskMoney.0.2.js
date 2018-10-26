@@ -72,7 +72,7 @@
 			function maskValue(v) {
 				v = v.replace(settings.symbol,"");
 				var a = '';
-				var strCheck = '0***REMOVED***789';
+				var strCheck = '0123456789';
 				var len = v.length;
 				var t = "";
 				if (len== 0) {

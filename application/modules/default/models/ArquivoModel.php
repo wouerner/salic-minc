@@ -1,13 +1,6 @@
 <?php
-
-/**
- * Description of ArquivoModel
- *
- * @author xti
- */
 class ArquivoModel
 {
-
     private $id;
 
     public function getId()
@@ -21,7 +14,7 @@ class ArquivoModel
     }
 
     /**
-     * 
+     *
      * @throws Exception
      */
     public function cadastrar($inputName)
@@ -59,19 +52,11 @@ class ArquivoModel
         }
     }
 
-    /**
-     * 
-     */
     public function deletar($idArquivo)
     {
         ArquivoDAO::deletar($idArquivo);
     }
 
-    /**
-     * 
-     * @return Zend_Db_Table_Row
-     * @throws BadMethodCallException
-     */
     public function buscar()
     {
         if (null === $this->getId()) {
@@ -83,5 +68,4 @@ class ArquivoModel
             return $arquivoRowset->current();
         }
     }
-
 }
