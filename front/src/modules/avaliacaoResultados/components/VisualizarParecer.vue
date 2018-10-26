@@ -14,7 +14,7 @@
                             <v-flex xs12 sm12 md12>
                                 <p><b>Projeto:</b> {{projeto.AnoProjeto}}{{projeto.Sequencial}} -- {{projeto.NomeProjeto}}</p>
                             </v-flex>
-                            <v-flex xs12 sm12 md12>
+                            <v-flex xs12 sm12 md12 v-if="proponente.CgcCpf || proponente.Nome">
                                 <p><b>Proponente:</b> {{proponente.CgcCpf | cnpjFilter}} -- {{proponente.Nome}}</p>
                             </v-flex>
                         </v-layout>
@@ -55,13 +55,6 @@
                             </v-flex>
                         </v-layout>
                         <v-divider></v-divider>
-                    </v-container>
-                    <v-container grid-list-sm>
-                        <v-layout wrap align-center>
-                            <v-flex xs1 offset-xs6>
-                                <v-btn dark color="green">IMPRIMIR</v-btn>
-                            </v-flex>
-                        </v-layout>
                     </v-container>
                 </v-card>
             </v-dialog>

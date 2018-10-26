@@ -9,18 +9,18 @@
                         </v-btn>
                         <v-toolbar-title>Avaliação de Resultados - Visualizar Laudo</v-toolbar-title>
                     </v-toolbar>
-                    <v-container grid-list-sm v-if="projeto && proponente">
+                    <v-container grid-list-sm>
                         <v-layout row wrap>
                             <v-flex xs12 sm12 md12>
                                 <p><b>Projeto:</b> {{projeto.AnoProjeto}}{{projeto.Sequencial}} - {{projeto.NomeProjeto}}</p>
                             </v-flex>
-                            <v-flex xs12 sm12 md12>
+                            <v-flex xs12 sm12 md12 v-if="proponente.CgcCpf || proponente.Nome">
                                 <p><b>Proponente:</b> {{proponente.CgcCpf | cnpjFilter}} - {{proponente.Nome}}</p>
                             </v-flex>
                         </v-layout>
                         <v-divider></v-divider>
                     </v-container>
-                    <v-container grid-list-sm>
+                    <v-container grid-list-sm v-if="parecerLaudoFinal.items">
                         <v-layout wrap align-center>
                             <v-flex xs12 sm12 md12 >
                                 <div>
