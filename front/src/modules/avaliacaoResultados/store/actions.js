@@ -282,3 +282,5 @@ export const devolverProjeto = ({ commit }, params) => {
             commit(types.SET_DEVOLVER_PROJETO, devolverProjeto);
         });
 };
+
+export const salvarAvaliacaoComprovante = (_, params) => avaliacaoResultadosHelperAPI.salvarAvaliacaoComprovante(params);

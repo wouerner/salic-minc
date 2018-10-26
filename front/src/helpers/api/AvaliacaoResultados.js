@@ -108,5 +108,7 @@ export const buscarComprovantes = (itemBuscaComprovantes) => {
 };
 
 export const devolverProjeto = (params) => {
-    api.postRequest('/avaliacao-resultados/estado', buildData(params));
+    return api.postRequest('/avaliacao-resultados/estado', buildData(params));
 };
+
+export const salvarAvaliacaoComprovante = params => api.postRequest('/avaliacao-resultados/avaliacao-comprovante/', buildData(params));
