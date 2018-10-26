@@ -122,8 +122,6 @@
                                                                 hide-actions
                                                             >
                                                                 <template slot="items" slot-scope="props">
-                                                                    <!--{{props.item}}<br>-->
-                                                                    <!--{{etapa.cdEtapa}}<br>-->
                                                                     <td>{{ props.item.item }}</td>
                                                                     <td>{{ moeda(props.item.varlorAprovado) }}</td>
                                                                     <td>{{ moeda(props.item.varlorComprovado) }}</td>
@@ -136,7 +134,7 @@
                                                                             :uf="uf.Uf"
                                                                             :codigoCidade="cidade.cdCidade"
                                                                             :codigoProduto="produto.cdProduto"
-                                                                            :stItemAvaliado="props.item.stItemAvaliado"
+                                                                            :stItemAvaliado="codigoStItemAvaliado(tabs[index])"
                                                                             :codigoEtapa="etapa.cdEtapa"
                                                                             :idPlanilhaItens="props.item.idPlanilhaItens"
                                                                             :item="props.item.item "
@@ -254,17 +252,25 @@
                 }
                 return arr;
             },
-            parseIndexInt(value) {
-                const number = parseInt(value, 10);
-                let result = 0;
+            codigoStItemAvaliado(stItemAvaliado) {
+                let response = null;
 
-                if (number === parseInt(number, 10)) {
-                    result = number;
+                switch (stItemAvaliado) {
+                case 'AVALIADO':
+                    response = '1';
+                    break;
+                case 'IMPUGNADOS':
+                    response = '3';
+                    break;
+                case 'AGUARDANDO ANÁLISE':
+                    response = '4';
+                    break;
+                default:
+                    response = '';
                 }
 
-                return result;
+                return response;
             },
         },
     };
 </script>
-

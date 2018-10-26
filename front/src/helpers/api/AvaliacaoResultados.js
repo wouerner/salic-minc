@@ -99,8 +99,8 @@ export const buscarComprovantes = (params) => {
     const produto = `produto=${params.codigoProduto}`;
     const idMunicipio = `idmunicipio=${params.codigoCidade}`;
     const etapa = `etapa=${params.codigoEtapa}`;
-    const stItemAvaliado = 'stItemAvaliado=';
-    console.log(params);
+    const stItemAvaliado = `stItemAvaliado=${params.stItemAvaliado}`;
+
     const url = `${modulo}${controller}`;
     const queryParams = `?${idPronac}&${idPlanilhaItem}&${produto}&${uf}&${idMunicipio}&${stItemAvaliado}&${etapa}`;
 
