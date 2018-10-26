@@ -122,6 +122,8 @@
                                                                 hide-actions
                                                             >
                                                                 <template slot="items" slot-scope="props">
+                                                                    <!--{{props.item}}<br>-->
+                                                                    <!--{{etapa.cdEtapa}}<br>-->
                                                                     <td>{{ props.item.item }}</td>
                                                                     <td>{{ moeda(props.item.varlorAprovado) }}</td>
                                                                     <td>{{ moeda(props.item.varlorComprovado) }}</td>
@@ -129,7 +131,17 @@
                                                                         props.item.varlorComprovado) }}
                                                                     </td>
                                                                     <td>
-                                                                        <ModalDetalheItens :item="props.item.item" :comprovanteIndex="parseIndexInt(index)" :idPronac="getPronac"></ModalDetalheItens>
+                                                                        <ModalDetalheItens
+                                                                            :idPronac="idPronac"
+                                                                            :uf="uf.Uf"
+                                                                            :codigoCidade="cidade.cdCidade"
+                                                                            :codigoProduto="produto.cdProduto"
+                                                                            :stItemAvaliado="props.item.stItemAvaliado"
+                                                                            :codigoEtapa="etapa.cdEtapa"
+                                                                            :idPlanilhaItens="props.item.idPlanilhaItens"
+                                                                            :item="props.item.item "
+                                                                        >
+                                                                        </ModalDetalheItens>
                                                                     </td>
                                                                 </template>
                                                             </v-data-table>
@@ -206,7 +218,7 @@
         mounted() {
             this.setPlanilha(this.idPronac);
             this.setProjetoAnalise(this.idPronac);
-            this.buscarDetalhamentoItens(this.idPronac);
+            // this.buscarDetalhamentoItens(this.idPronac);
         },
         components: {
             ModalDetalheItens,
@@ -219,7 +231,7 @@
                 setProjetoAnalise: 'avaliacaoResultados/projetoAnalise',
                 modalOpen: 'modal/modalOpen',
                 modalClose: 'modal/modalClose',
-                buscarDetalhamentoItens: 'avaliacaoResultados/buscarDetalhamentoItens',
+                // buscarDetalhamentoItens: 'avaliacaoResultados/buscarDetalhamentoItens',
             }),
             moeda: (moedaString) => {
                 const moeda = Number(moedaString);

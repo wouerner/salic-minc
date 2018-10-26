@@ -265,9 +265,8 @@ export const buscarDetalhamentoItens = ({ commit }, idPronac) => {
 };
 
 
-export const buscarComprovantes = ({ commit }, comprovanteIndex) => {
-    const itemBuscaComprovantes = state.itensBuscaComprovantes[comprovanteIndex];
-    avaliacaoResultadosHelperAPI.buscarComprovantes(itemBuscaComprovantes)
+export const buscarComprovantes = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.buscarComprovantes(params)
         .then((response) => {
             const data = response.data;
             const itens = data.data;
