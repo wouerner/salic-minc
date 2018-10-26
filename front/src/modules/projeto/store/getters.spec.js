@@ -25,6 +25,10 @@ describe('Projeto getters', () => {
             tramitacaoProjeto: {},
             ultimaTramitacao: {},
             planoDistribuicaoIn2017: [],
+            diligenciaProposta: {},
+            diligenciaAdequacao: {},
+            diligenciaProjeto: {},
+            diligencia: {},
         };
     });
 
@@ -126,5 +130,25 @@ describe('Projeto getters', () => {
     test('planoDistribuicaoIn2017', () => {
         const result = getters.planoDistribuicaoIn2017(state);
         expect(result).toEqual(state.planoDistribuicaoIn2017);
+    });
+
+    test('diligenciaProposta', () => {
+        const result = getters.diligenciaProposta(state);
+        expect(result).toEqual(state.diligenciaProposta);
+    });
+
+    test('diligenciaAdequacao', () => {
+        const result = getters.diligenciaAdequacao(state);
+        expect(result).toEqual(state.diligenciaAdequacao);
+    });
+
+    test('diligenciaProjeto', () => {
+        const result = getters.diligenciaProjeto(state);
+        expect(result).toEqual(state.diligenciaProjeto);
+    });
+
+    test('diligencia', () => {
+        const result = getters.diligencia(state);
+        expect(result).toEqual(state.diligencia);
     });
 });
