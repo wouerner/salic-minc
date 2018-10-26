@@ -178,125 +178,125 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { mapActions, mapGetters } from "vuex";
-import ModalTemplate from "@/components/modal";
-import cnpjFilter from "@/filters/cnpj";
-import VueCurrencyFilter from "vue-currency-filter";
+import Vue from 'vue';
+import { mapActions, mapGetters } from 'vuex';
+import ModalTemplate from '@/components/modal';
+import cnpjFilter from '@/filters/cnpj';
+import VueCurrencyFilter from 'vue-currency-filter';
 
 Vue.use(VueCurrencyFilter, {
-  symbol: "R$",
-  thousandsSeparator: ".",
-  fractionCount: 2
+    symbol: 'R$',
+    thousandsSeparator: '.',
+    fractionCount: 2,
 });
 
 export default {
-  name: "EmitirParecer",
-  data() {
-    return {
-      tipo: true,
-      idPronac: this.$route.params.id,
-      redirectLink: "#/planilha/",
-      confirmarSalvar: false,
-      valid: false,
-      dialog: true,
-      itemRules: [v => !!v || "Tipo de manifestação e obrigatório!"],
-      parecerRules: [
-        v => !!v || "Parecer e obrigatório!",
-        v => v.length >= 10 || "Parecer deve conter mais que 10 characteres"
-      ],
-      items: [
-        {
-          id: "R",
-          text: "Reprovação"
+    name: 'EmitirParecer',
+    data() {
+        return {
+            tipo: true,
+            idPronac: this.$route.params.id,
+            redirectLink: '#/planilha/',
+            confirmarSalvar: false,
+            valid: false,
+            dialog: true,
+            itemRules: [v => !!v || 'Tipo de manifestação e obrigatório!'],
+            parecerRules: [
+                v => !!v || 'Parecer e obrigatório!',
+                v => v.length >= 10 || 'Parecer deve conter mais que 10 characteres',
+            ],
+            items: [
+                {
+                    id: 'R',
+                    text: 'Reprovação',
+                },
+                {
+                    id: 'A',
+                    text: 'Aprovação',
+                },
+                {
+                    id: 'P',
+                    text: 'Aprovação com Ressalva',
+                },
+            ],
+            parecerData: {},
+        };
+    },
+    components: {
+        ModalTemplate,
+    },
+    methods: {
+        ...mapActions({
+            requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
+            salvar: 'avaliacaoResultados/salvarParecer',
+            finalizar: 'avaliacaoResultados/finalizarParecer',
+            alterarParecer: 'avaliacaoResultados/alterarParecer',
+        }),
+        fecharModal() {
+            this.modalClose();
         },
-        {
-          id: "A",
-          text: "Aprovação"
+        getConsolidacao(id) {
+            this.requestEmissaoParecer(id);
         },
-        {
-          id: "P",
-          text: "Aprovação com Ressalva"
-        }
-      ],
-      parecerData: {}
-    };
-  },
-  components: {
-    ModalTemplate
-  },
-  methods: {
-    ...mapActions({
-      requestEmissaoParecer: "avaliacaoResultados/getDadosEmissaoParecer",
-      salvar: "avaliacaoResultados/salvarParecer",
-      finalizar: "avaliacaoResultados/finalizarParecer",
-      alterarParecer: "avaliacaoResultados/alterarParecer"
-    }),
-    fecharModal() {
-      this.modalClose();
-    },
-    getConsolidacao(id) {
-      this.requestEmissaoParecer(id);
-    },
-    salvarParecer() {
-      const data = {
-        idPronac: this.idPronac,
-        tpAvaliacaoFinanceira: this.tipo,
-        siManifestacao: this.getParecer.siManifestacao,
-        dsParecer: this.getParecer.dsParecer
-      };
+        salvarParecer() {
+            const data = {
+                idPronac: this.idPronac,
+                tpAvaliacaoFinanceira: this.tipo,
+                siManifestacao: this.getParecer.siManifestacao,
+                dsParecer: this.getParecer.dsParecer,
+            };
 
-      if (this.parecer.idAvaliacaoFinanceira) {
-        data.idAvaliacaoFinanceira = this.parecer.idAvaliacaoFinanceira;
-      }
+            if (this.parecer.idAvaliacaoFinanceira) {
+                data.idAvaliacaoFinanceira = this.parecer.idAvaliacaoFinanceira;
+            }
 
-      if (this.parecerData.siManifestacao) {
-        data.siManifestacao = this.parecerData.siManifestacao;
-      }
+            if (this.parecerData.siManifestacao) {
+                data.siManifestacao = this.parecerData.siManifestacao;
+            }
 
-      if (this.parecerData.dsParecer) {
-        data.dsParecer = this.parecerData.dsParecer;
-      }
+            if (this.parecerData.dsParecer) {
+                data.dsParecer = this.parecerData.dsParecer;
+            }
 
-      this.salvar(data);
-      /** Descomentar linha após migração da lista para o VUEJS */
-      // this.dialog = false;
+            this.salvar(data);
+            /** Descomentar linha após migração da lista para o VUEJS */
+            // this.dialog = false;
+        },
+        finalizarParecer() {
+            const data = {
+                idPronac: this.idPronac,
+                tpAvaliacaoFinanceira: this.tipo,
+                siManifestacao: this.parecer.siManifestacao,
+                dsParecer: this.parecer.dsParecer,
+                atual: 5,
+                proximo: 6,
+            };
+
+            this.finalizar(data);
+        },
+        inputParecer(e) {
+            this.parecerData.dsParecer = e;
+        },
+        inputManifestacao(e) {
+            this.parecerData.siManifestacao = e;
+        },
     },
-    finalizarParecer() {
-      const data = {
-        idPronac: this.idPronac,
-        tpAvaliacaoFinanceira: this.tipo,
-        siManifestacao: this.parecer.siManifestacao,
-        dsParecer: this.parecer.dsParecer,
-        atual: 5,
-        proximo: 6
-      };
-
-      this.finalizar(data);
+    computed: {
+        ...mapGetters({
+            modalVisible: 'modal/default',
+            consolidacaoComprovantes: 'avaliacaoResultados/consolidacaoComprovantes',
+            proponente: 'avaliacaoResultados/proponente',
+            parecer: 'avaliacaoResultados/parecer',
+            projeto: 'avaliacaoResultados/projeto',
+            getParecer: 'avaliacaoResultados/parecer',
+        }),
     },
-    inputParecer(e) {
-      this.parecerData.dsParecer = e;
+    mounted() {
+        this.redirectLink = this.redirectLink + this.idPronac;
+        this.getConsolidacao(this.idPronac);
     },
-    inputManifestacao(e) {
-      this.parecerData.siManifestacao = e;
-    }
-  },
-  computed: {
-    ...mapGetters({
-      modalVisible: "modal/default",
-      consolidacaoComprovantes: "avaliacaoResultados/consolidacaoComprovantes",
-      proponente: "avaliacaoResultados/proponente",
-      parecer: "avaliacaoResultados/parecer",
-      projeto: "avaliacaoResultados/projeto",
-      getParecer: "avaliacaoResultados/parecer"
-    })
-  },
-  mounted() {
-    this.redirectLink = this.redirectLink + this.idPronac;
-    this.getConsolidacao(this.idPronac);
-  },
-  filters: {
-    cnpjFilter
-  }
+    filters: {
+        cnpjFilter,
+    },
 };
 </script>
