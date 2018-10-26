@@ -23,8 +23,16 @@ class AvaliacaoResultados_DiligenciaController extends MinC_Controller_Rest_Abst
 
     public function indexAction()
     {
-        $data = array(1 => "to", 12 => 2);
-        $this->renderJsonResponse($data, 400);
+
+        if (!isset($this->_request->idPronac) || !isset($this->_request->situacao) || !isset($this->_request->tpDiligencia)){
+            $this->renderJsonResponse([message=>'Erro de requisição'], 400);
+        }else{
+            $this->_request->idPronac;
+            $this->_request->situacao;
+            $this->_request->tpDiligencia;
+
+            $this->renderJsonResponse([message=>'Erro de requisição'], 200);
+        }
     }
 
     public function getAction()
