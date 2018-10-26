@@ -690,4 +690,151 @@ describe('Projeto actions', () => {
             expect(commit).toHaveBeenCalledWith('SET_PLANO_DISTRIBUICAO_IN2017', planoDistribuicaoIn2017.data.items);
         });
     });
+
+    describe('buscarDiligenciaProposta', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        items: {
+                            nomeProjeto: 'FOTOATIVIDADES',
+                            dataSolicitacao: '04/04/2017',
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscarDiligenciaProposta');
+            const idPreProjeto = 245047;
+            const idAvaliacaoProposta = 407842;
+            const value = { idPreProjeto, idAvaliacaoProposta };
+
+            actions.buscarDiligenciaProposta({ commit }, value);
+        });
+
+        test('it calls projetoHelperAPI.buscarDiligenciaProposta', () => {
+            expect(projetoHelperAPI.buscarDiligenciaProposta).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscarDiligenciaProposta', (done) => {
+            const diligenciaProposta = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_DILIGENCIA_PROPOSTA', diligenciaProposta.data.items);
+        });
+    });
+
+    describe('buscarDiligenciaAdequacao', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        items: {
+                            idAvaliarAdequacaoProjeto: 1452,
+                            dtAvaliacao: '06/06/2018',
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscarDiligenciaAdequacao');
+            const idPronac = 209561;
+            const idAvaliarAdequacaoProjeto = 1452;
+            const value = { idPronac, idAvaliarAdequacaoProjeto };
+            actions.buscarDiligenciaAdequacao({ commit }, value);
+        });
+
+        test('it calls projetoHelperAPI.buscarDiligenciaAdequacao', () => {
+            expect(projetoHelperAPI.buscarDiligenciaAdequacao).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscarDiligenciaAdequacao', (done) => {
+            const diligenciaAdequacao = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_DILIGENCIA_ADEQUACAO', diligenciaAdequacao.data.items);
+        });
+    });
+
+    describe('buscarDiligenciaProjeto', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        items: {
+                            arquivos: {
+                                idArquivo: 1272611,
+                            },
+                            nomeProjeto: 'FOTOATIVIDADES',
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscarDiligenciaProjeto');
+            const idPronac = 209561;
+            const idDiligencia = 72427;
+            const value = { idPronac, idDiligencia };
+            actions.buscarDiligenciaProjeto({ commit }, value);
+        });
+
+        test('it calls projetoHelperAPI.buscarDiligenciaProjeto', () => {
+            expect(projetoHelperAPI.buscarDiligenciaProjeto).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscarDiligenciaProjeto', (done) => {
+            const diligenciaProjeto = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_DILIGENCIA_PROJETO', diligenciaProjeto.data.items);
+        });
+    });
+
+    describe('buscarDiligencia', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        items: {
+                            diligenciaAdequacao: {
+                                tipoDiligencia: 'Diligência na Análise da adequação à realidade do projeto.',
+                                idAvaliarAdequacaoProjeto: 1452,
+                            },
+                            diligenciaProjeto: {
+                                tipoDiligencia: 'Diligência de Checklist - Análise',
+                                idDiligencia: 72427,
+                            },
+                            diligenciaProposta: {
+                                idAvaliacaoProposta: 401888,
+                                idPreprojeto: 245047,
+                            },
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscarDiligencia');
+            const idPronac = 216941;
+            actions.buscarDiligencia({ commit }, idPronac);
+        });
+
+        test('it calls projetoHelperAPI.buscarDiligencia', () => {
+            expect(projetoHelperAPI.buscarDiligencia).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscarDiligencia', (done) => {
+            const diligencia = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_DILIGENCIA', diligencia.data.items);
+        });
+    });
 });
