@@ -1,3 +1,6 @@
+import Vue from 'vue';
+import Router from 'vue-router';
+
 import Visualizar from './visualizar/Visualizar';
 import PlanilhaPropostaOriginal from './visualizar/components/incentivo/planilha/PlanilhaPropostaOriginal';
 import PlanilhaPropostaAutorizada from './visualizar/components/incentivo/planilha/PlanilhaPropostaAutorizada';
@@ -8,6 +11,8 @@ import RelacaoDePagamentos from './visualizar/components/incentivo/RelacaoDePaga
 import Convenente from './visualizar/components/convenio/Convenente';
 import Proposta from './visualizar/components/incentivo/Proposta';
 
+Vue.use(Router);
+
 const DadosProjeto = () => import(/* webpackChunkName: "dados-projeto" */ './visualizar/components/DadosProjeto');
 const Proponente = () => import(/* webpackChunkName: "proponente" */ './visualizar/components/incentivo/Proponente');
 
@@ -15,9 +20,9 @@ const templateAjax = {
     template: '<div id="conteudo"></div>',
 };
 
-export default [
+const routes = [
     {
-        path: '/projeto/:idPronac',
+        path: '/:idPronac',
         component: Visualizar,
         children: [
             {
@@ -116,3 +121,5 @@ export default [
         ],
     },
 ];
+
+export default new Router({ routes });

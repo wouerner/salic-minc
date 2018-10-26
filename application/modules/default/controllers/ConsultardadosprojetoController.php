@@ -169,7 +169,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             }
 
             if (empty($debug)) {
-                $this->redirect('/#/projeto/' . $idPronacHash);
+                $this->redirect('/projeto/#/' . $idPronacHash);
             }
 
             $dbTableProjetos = new Projeto_Model_DbTable_Projetos();
