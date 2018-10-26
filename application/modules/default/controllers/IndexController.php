@@ -47,10 +47,16 @@ class IndexController extends MinC_Controller_Action_Abstract
             $this->redirect("/default/principalproponente");
         }
 
+        $validator = new Zend_Validate_File_Exists();
+        $validator->addDirectory('application/layouts/scripts');
+        if (!$validator->isValid('vue.phtml')) {
+            echo "Aguarde, atualizando o sistema...";
+            die;
+        }
+
         header('Content-type: text/html; charset=UTF-8');
         Zend_Layout::startMvc(array('layout' => 'vue'));
         $this->_helper->viewRenderer->setNoRender();
-
     }
 
     public function indisponivelAction()
