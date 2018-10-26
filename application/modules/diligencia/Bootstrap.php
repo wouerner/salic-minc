@@ -19,6 +19,19 @@ class Diligencia_Bootstrap extends Zend_Application_Module_Bootstrap
         $restRoute = new Zend_Rest_Route($frontController, array(), array('diligencia'));
         $frontController->getRouter()->addRoute('rest', $restRoute);
 
+//        $restRoute = new Zend_Rest_Route(
+//            $frontController,
+//            [],
+//            [
+//                'diligencia' => [
+//                    'index',
+//                    'diligencia',
+//                    'gerenciar'
+//                ]
+//            ]
+//        );
+//
+//        $frontController->getRouter()->addRoute('rest-diligencia', $restRoute);
 
     }
 }

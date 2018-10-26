@@ -18,7 +18,7 @@ class Zend_View_Helper_PrazoRespostaDiligencia
     public function prazoRespostaDiligencia($idPronac = null, $idTipoDiligencia = null, $idDiligencia = null, $blnPrazoPadrao=false, $blnPrazoResposta=false)
     {
         //inicializando vetores
-        $arrRetorno= array();
+        $arrRetorno = array();
         $arrRetorno['prazoPadrao'] = null;
         $arrRetorno['prazoRespostaCrescente'] = null;
         $arrRetorno['prazoRespostaDecrescente'] = null;
@@ -129,13 +129,13 @@ class Zend_View_Helper_PrazoRespostaDiligencia
                 $arrIcones['title'] = "Diligenciado";
             } else {
                 $arrIcones['icone'] = "notice3.png";
-                $arrIcones['title']  = "Diligencia respondida";
+                $arrIcones['title'] = "Diligencia respondida";
             }
         }
         //a diligenciar
         else {
             $arrIcones['icone'] = "notice1.png";
-            $arrIcones['title']  = "A Diligenciar";
+            $arrIcones['title'] = "A Diligenciar";
         }
         return $arrIcones;
     }

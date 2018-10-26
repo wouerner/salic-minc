@@ -1,26 +1,42 @@
 <?php
 
-class Diligencia_DiligenciaController extends Zend_Rest_Controller
+class Diligencia_DiligenciaController extends MinC_Controller_Rest_Abstract
 {
     public function init()
     {
         $this->_helper->getHelper('contextSwitch')
-            ->addActionContext('index', 'json')
-            ->addActionContext('post', 'json')
-            ->initContext('json');
+             ->addActionContext('index', 'json')
+             ->addActionContext('post', 'json')
+             ->initContext('json');
     }
 
     public function headAction(){}
 
     public function indexAction()
     {
-         $data = array(1 => "to", 12 => 2);
-         $this->view->assign('nozes', $data);
-         $this->getResponse()->setHttpResponseCode(200);
+        $data = array(1 => "to", 12 => 2);
+        $this->view->assign('nozes', $data);
+        $this->getResponse()->setHttpResponseCode(200);
     }
 
     public function getAction()
-    {}
+    {
+        $id = $this->getRequest()->getParam('idPronac');
+        $data =  [1 => "deu ruim", 2 => 'sem idPronac' ];
+
+        if (!isset($this->_request->idPronac)){
+
+            $this->renderJsonResponse($data, 400);
+        }
+
+        $this->view->assign('nozes', $data);
+        $this->getResponse()->setHttpResponseCode(200);
+        // $situacao = E17;
+        // $tipoDiligencia = 174;
+
+        // projeto->idPronac
+        // listardiligenciaanalista ?idPronac
+    }
 
     public function postAction()
     {
