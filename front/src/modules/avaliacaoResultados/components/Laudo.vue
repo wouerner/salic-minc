@@ -57,25 +57,16 @@
                         <v-icon>sentiment_very_dissatisfied</v-icon>Reprovado
                     </v-btn>
                 </td>
-                <td class="text-xs-center" v-if="acao == 'analisar'">
+                <td class="text-xs-center">
                     <Devolver :idPronac="props.item.IdPronac"
-                              :atual="Const.ESTADO_ANALISE_LAUDO"
-                              :proximo="'5'"
+                              :atual="estado"
+                              :proximo="proximoEstado()"
                               :nomeProjeto="props.item.NomeProjeto"
                               :pronac="props.item.PRONAC"
                     >
                     </Devolver>
                 </td>
-                <td class="text-xs-center" v-else>
-                    <Devolver :idPronac="props.item.IdPronac"
-                              :atual="Const.ESTADO_AGUARDANDO_ASSINATURA_LAUDO"
-                              :proximo="Const.ESTADO_ANALISE_LAUDO"
-                              :nomeProjeto="props.item.NomeProjeto"
-                              :pronac="props.item.PRONAC"
-                    >
-                    </Devolver>
-                </td>
-                <td v-if="acao == 'analisar'" class="text-xs-center">
+                <td v-if="estado == Const.ESTADO_ANALISE_LAUDO" class="text-xs-center">
                     <v-btn flat icon color="blue"
                             @click.native="sincState(props.item.IdPronac)"
                             :to="{ name: 'EmitirLaudoFinal', params:{ id:props.item.IdPronac }}">
@@ -85,7 +76,7 @@
                         </v-tooltip>
                     </v-btn>
                 </td>
-                <td v-if="acao == 'assinar'" class="text-xs-center">
+                <td v-if="estado == Const.ESTADO_LAUDO_FINALIZADO" class="text-xs-center">
                     <v-btn flat icon color="blue"
                             :href="'/assinatura/index/assinar-projeto?IdPRONAC='+props.item.IdPronac+'&idTipoDoAtoAdministrativo=623'">
                         <v-tooltip bottom>
@@ -94,7 +85,10 @@
                         </v-tooltip>
                     </v-btn>
                 </td>
-                <td v-if="acao == 'visualizar'" class="text-xs-center">
+                <td v-if="estado == Const.ESTADO_AGUARDANDO_ASSINATURA_LAUDO ||
+                          estado == Const.ESTADO_AVALIACAO_RESULTADOS_FINALIZADA"
+                    class="text-xs-center"
+                >
                     <v-btn flat icon color="blue"
                             @click.native="sincState(props.item.IdPronac)"
                             :to="{ name: 'VisualizarLaudo', params:{ id:props.item.IdPronac }}">
@@ -136,7 +130,7 @@
 
     export default {
         name: 'Painel',
-        props: ['dados', 'acao'],
+        props: ['dados', 'estado'],
         data() {
             return {
                 pagination: {
@@ -193,6 +187,27 @@
             sincState(id) {
                 this.requestEmissaoParecer(id);
                 this.getLaudoFinal(id);
+            },
+            proximoEstado() {
+                let proximo = '';
+
+                switch (this.estado) {
+                case Const.ESTADO_ANALISE_LAUDO:
+                    proximo = Const.ESTADO_ANALISE_PARECER;
+                    break;
+                case Const.ESTADO_LAUDO_FINALIZADO:
+                    proximo = Const.ESTADO_ANALISE_LAUDO;
+                    break;
+                case Const.ESTADO_AGUARDANDO_ASSINATURA_LAUDO:
+                    proximo = Const.ESTADO_ANALISE_LAUDO;
+                    break;
+                case Const.ESTADO_AVALIACAO_RESULTADOS_FINALIZADA:
+                    proximo = Const.ESTADO_ANALISE_LAUDO;
+                    break;
+                default:
+                    proximo = '';
+                }
+                return proximo;
             },
         },
         computed: {

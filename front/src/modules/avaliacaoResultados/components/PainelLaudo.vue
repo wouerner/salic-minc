@@ -46,7 +46,7 @@
                     :key="0"
                 >
                     <Laudo :dados="getProjetosLaudoFinal"
-                            :acao="'analisar'"
+                           :estado="Const.ESTADO_ANALISE_LAUDO"
                     ></Laudo>
                 </v-tab-item>
                 <v-tab-item
@@ -54,7 +54,7 @@
                     :key="1"
                 >
                     <Laudo :dados="getProjetosLaudoAssinar"
-                            :acao="'assinar'"
+                           :estado="Const.ESTADO_LAUDO_FINALIZADO"
                     ></Laudo>
                 </v-tab-item>
                 <v-tab-item
@@ -62,7 +62,7 @@
                     :key="2"
                 >
                     <Laudo :dados="getProjetosLaudoEmAssinatura"
-                            :acao="'visualizar'"
+                           :estado="Const.ESTADO_AGUARDANDO_ASSINATURA_LAUDO"
                     ></Laudo>
                 </v-tab-item>
                 <v-tab-item
@@ -70,7 +70,7 @@
                     :key="3"
                 >
                     <Laudo :dados="getProjetosLaudoFinalizados"
-                            :acao="'visualizar'"
+                           :estado="Const.ESTADO_AVALIACAO_RESULTADOS_FINALIZADA"
                     ></Laudo>
                 </v-tab-item>
             </v-tabs>
