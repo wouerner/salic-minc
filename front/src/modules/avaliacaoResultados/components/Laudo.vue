@@ -57,21 +57,23 @@
                         <v-icon>sentiment_very_dissatisfied</v-icon>Reprovado
                     </v-btn>
                 </td>
-                <td class="text-xs-center">
-                    <v-dialog v-model="dialog" max-width="290">
-                        <v-btn slot="activator" flat icon color="green" :disabled="acao !== 'analisar'">
-                            <v-icon>keyboard_return</v-icon>
-                        </v-btn>
-                        <v-card>
-                            <v-card-title class="headline">Deseja realmente devolver o documento?</v-card-title>
-                            <v-card-text>Devolver parecer para nova análise.</v-card-text>
-                            <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="red" flat @click.native="dialog = false">Cancelar</v-btn>
-                            <v-btn color="green" flat @click.native="dialog = false">Devolver</v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
+                <td class="text-xs-center" v-if="acao == 'analisar'">
+                    <Devolver :idPronac="props.item.IdPronac"
+                              :atual="Const.ESTADO_ANALISE_LAUDO"
+                              :proximo="'5'"
+                              :nomeProjeto="props.item.NomeProjeto"
+                              :pronac="props.item.PRONAC"
+                    >
+                    </Devolver>
+                </td>
+                <td class="text-xs-center" v-else>
+                    <Devolver :idPronac="props.item.IdPronac"
+                              :atual="Const.ESTADO_AGUARDANDO_ASSINATURA_LAUDO"
+                              :proximo="Const.ESTADO_ANALISE_LAUDO"
+                              :nomeProjeto="props.item.NomeProjeto"
+                              :pronac="props.item.PRONAC"
+                    >
+                    </Devolver>
                 </td>
                 <td v-if="acao == 'analisar'" class="text-xs-center">
                     <v-btn flat icon color="blue"
@@ -127,8 +129,10 @@
 </template>
 
 <script>
-    import { mapActions } from 'vuex';
     import ModalTemplate from '@/components/modal';
+    import { mapActions } from 'vuex';
+    import Const from '../const';
+    import Devolver from './Devolver';
 
     export default {
         name: 'Painel',
@@ -174,10 +178,12 @@
                         sortable: false,
                     },
                 ],
+                Const,
             };
         },
         components: {
             ModalTemplate,
+            Devolver,
         },
         methods: {
             ...mapActions({

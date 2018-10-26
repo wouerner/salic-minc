@@ -51,7 +51,7 @@
             };
         },
         props: {
-            idPronac: String,
+            idPronac: Number,
             atual: String,
             proximo: String,
             nomeProjeto: String,
