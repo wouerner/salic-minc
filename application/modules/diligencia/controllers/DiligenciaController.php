@@ -1,42 +1,26 @@
 <?php
 
-class Diligencia_DiligenciaController extends MinC_Controller_Rest_Abstract
+class Diligencia_DiligenciaController extends Zend_Rest_Controller
 {
     public function init()
     {
         $this->_helper->getHelper('contextSwitch')
-             ->addActionContext('index', 'json')
-             ->addActionContext('post', 'json')
-             ->initContext('json');
+            ->addActionContext('index', 'json')
+            ->addActionContext('post', 'json')
+            ->initContext('json');
     }
 
     public function headAction(){}
 
     public function indexAction()
     {
-        $data = array(1 => "to", 12 => 2);
-        $this->view->assign('nozes', $data);
-        $this->getResponse()->setHttpResponseCode(200);
+         $data = array(1 => "to", 12 => 2);
+         $this->view->assign('nozes', $data);
+         $this->getResponse()->setHttpResponseCode(200);
     }
 
     public function getAction()
-    {
-        $id = $this->getRequest()->getParam('idPronac');
-        $data =  [1 => "deu ruim", 2 => 'sem idPronac' ];
-
-        if (!isset($this->_request->idPronac)){
-
-            $this->renderJsonResponse($data, 400);
-        }
-
-        $this->view->assign('nozes', $data);
-        $this->getResponse()->setHttpResponseCode(200);
-        // $situacao = E17;
-        // $tipoDiligencia = 174;
-
-        // projeto->idPronac
-        // listardiligenciaanalista ?idPronac
-    }
+    {}
 
     public function postAction()
     {
@@ -52,7 +36,17 @@ class Diligencia_DiligenciaController extends MinC_Controller_Rest_Abstract
         $diligenciaDAO = new Diligencia();
         $auth = Zend_Auth::getInstance();
 
-        if ($diligenciaDAO->existeDiligenciaAberta($idPronac)) {
+        /* @todo implementar regras */
+        // caso ja tenha diligencia para o pronac
+        $buscarDiligenciaResp = $diligenciaDAO->buscar(
+            array(
+                'idPronac = ?' => $idPronac,
+                'DtResposta ?' => array(new Zend_Db_Expr('IS NULL')),
+                'stEnviado = ?'=>'S' ),
+            array('idDiligencia DESC'), 0, 0,
+            $this->getRequest()->getParam('idProduto')
+        );
+        if (count($buscarDiligenciaResp) > 0) {
             $this->view->assign('data',['message' => 'Existe dilig&ecirc;ncia aguardando resposta!']);
             $this->getResponse()->setHttpResponseCode(405);
             return;
@@ -70,9 +64,6 @@ class Diligencia_DiligenciaController extends MinC_Controller_Rest_Abstract
         );
 
         $rowDiligencia = $diligenciaDAO->inserir($dados);
-
-        $projeto = new Projetos();
-        $projeto->alterarSituacao($idPronac, null, 'E17', 'Diligência na prestação de contas');
 
         $this->view->assign('data',['message' => 'criado!']);
         $this->getResponse()->setHttpResponseCode(201);
