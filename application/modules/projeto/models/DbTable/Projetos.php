@@ -10,7 +10,7 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
     protected $_primary = 'IdPRONAC';
 
 
-    public function buscarProjeto($where = [])
+    public function buscarProjeto($where = [], $order = null, $count = 0, $offset = 20)
     {
         $query = $this->select()
             ->setIntegrityCheck(false)
@@ -41,6 +41,18 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
         foreach ($where as $coluna => $valor) {
             $query->where($coluna, $valor);
         }
+
+        if ($order) {
+            $query->order($order);
+        }
+
+
+        if (!is_null($offset) && $count) {
+            $start = (int)$offset;
+            $limit = (int)$count;
+            $query->limit($limit, $start);
+        }
+
         return $this->fetchAll($query);
     }
 

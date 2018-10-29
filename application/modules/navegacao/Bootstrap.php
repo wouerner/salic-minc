@@ -13,7 +13,8 @@ class Navegacao_Bootstrap extends Zend_Application_Module_Bootstrap
                     'menu-principal',
                     'perfil-rest',
                     'dados-rest',
-                    'comunicados-rest'
+                    'comunicados-rest',
+                    'projeto-rest'
                 ]
             ]
         );
