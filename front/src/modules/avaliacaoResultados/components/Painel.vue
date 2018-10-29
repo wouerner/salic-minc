@@ -85,7 +85,7 @@
                     >
                         <v-card-text>
                             <TabelaProjetos
-                                v-if="getUsuario.grupo_ativo == 125"
+                                v-if="(getUsuario.grupo_ativo == 125 || getUsuario.grupo_ativo == 126)"
                                 :analisar="true"
                                 :dados="dadosTabelaTecnico"
                                 :componentes="listaAcoesCoordenador"
@@ -112,6 +112,11 @@
                                 :componentes="listaAcoesAssinar"
                             ></TabelaProjetos>
                             <TabelaProjetos
+                                v-else-if="getUsuario.grupo_ativo == 126"
+                                :dados="getProjetosAssinarCoordenadorGeral"
+                                :componentes="listaAcoesAssinar"
+                            ></TabelaProjetos>
+                            <TabelaProjetos
                                 v-else
                                 :dados="getProjetosFinalizados"
                                 :componentes="listaAcoesAssinar"
@@ -128,7 +133,7 @@
                         <v-card-text>
                             <TabelaProjetos
                                 :dados="getProjetosHistorico"
-                                :componentes="listaAcoesTecnico"
+                                :componentes="historicoAcoes"
                             ></TabelaProjetos>
                         </v-card-text>
                     </v-card>
@@ -167,7 +172,10 @@ export default {
                 let projetosTecnico = {};
                 let projetosFinalizados = {};
 
-                if (parseInt(this.getUsuario.grupo_ativo, 10) === 125) {
+                if (
+                    parseInt(this.getUsuario.grupo_ativo, 10) === 125
+                    || parseInt(this.getUsuario.grupo_ativo, 10) === 126
+                ) {
                     projetosTecnico = {
                         estadoid: 5,
                     };
@@ -191,6 +199,7 @@ export default {
                 this.projetosFinalizados(projetosFinalizados);
                 this.distribuir();
                 this.projetosAssinarCoordenador();
+                this.projetosAssinarCoordenadorGeral();
             }
         },
     },
@@ -200,6 +209,7 @@ export default {
             listaAcoesAssinar: { atual: '6', proximo: '5', acoes: [Historico, AssinarButton, Devolver, VisualizarPlanilhaButtton] },
             listaAcoesCoordenador: { atual: '', proximo: '', acoes: [Encaminhar, Historico, VisualizarPlanilhaButtton] },
             distribuirAcoes: { atual: '', proximo: '', acoes: [Encaminhar] },
+            historicoAcoes: { atual: '', proximo: '', acoes: [Historico, VisualizarPlanilhaButtton] },
         };
     },
     components: {
@@ -213,6 +223,7 @@ export default {
             distribuir: 'avaliacaoResultados/projetosParaDistribuir',
             usuarioLogado: 'autenticacao/usuarioLogado',
             projetosAssinarCoordenador: 'avaliacaoResultados/projetosAssinarCoordenador',
+            projetosAssinarCoordenadorGeral: 'avaliacaoResultados/projetosAssinarCoordenadorGeral',
         }),
     },
     computed: {
@@ -226,6 +237,7 @@ export default {
             getUsuario: 'autenticacao/getUsuario',
             getProjetosRevisao: 'avaliacaoResultados/getProjetosRevisao',
             getProjetosAssinarCoordenador: 'avaliacaoResultados/getProjetosAssinarCoordenador',
+            getProjetosAssinarCoordenadorGeral: 'avaliacaoResultados/getProjetosAssinarCoordenadorGeral',
         }),
     },
 };
