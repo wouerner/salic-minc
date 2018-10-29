@@ -141,8 +141,16 @@ export const finalizarParecer = (_, params) => {
         });
 };
 
-export const encaminharParaTecnico = (_, params) => {
-    avaliacaoResultadosHelperAPI.encaminharParaTecnico(params);
+export const encaminharParaTecnico = ({ commit, dispatch }, params) => {
+    commit(types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR, {});
+    commit(types.PROJETOS_AVALIACAO_TECNICA, {});
+    avaliacaoResultadosHelperAPI
+        .encaminharParaTecnico(params)
+        .then(() => {
+            dispatch('projetosParaDistribuir');
+            dispatch('obterDadosTabelaTecnico', { estadoid: 5 });
+        })
+    ;
 };
 
 export const alterarParecer = ({ commit }, param) => {
@@ -274,10 +282,28 @@ export const buscarComprovantes = ({ commit }, params) => {
         });
 };
 
-export const devolverProjeto = ({ commit }, params) => {
+export const devolverProjeto = ({ commit, dispatch }, params) => {
     avaliacaoResultadosHelperAPI.devolverProjeto(params)
         .then((response) => {
             const devolverProjeto = response.data;
+            commit(types.SET_DADOS_PROJETOS_FINALIZADOS, {});
             commit(types.SET_DEVOLVER_PROJETO, devolverProjeto);
+            dispatch('projetosFinalizados', { estadoid: 6 });
+        });
+};
+
+export const projetosAssinarCoordenador = ({ commit }) => {
+    avaliacaoResultadosHelperAPI.projetosPorEstado({ estadoid: 9 })
+        .then((response) => {
+            const dados = response.data;
+            commit(types.SYNC_PROJETOS_ASSINAR_COORDENADOR, dados.data);
+        });
+};
+
+export const projetosAssinarCoordenadorGeral = ({ commit }) => {
+    avaliacaoResultadosHelperAPI.projetosPorEstado({ estadoid: 15 })
+        .then((response) => {
+            const dados = response.data;
+            commit(types.SYNC_PROJETOS_ASSINAR_COORDENADOR_GERAL, dados.data);
         });
 };

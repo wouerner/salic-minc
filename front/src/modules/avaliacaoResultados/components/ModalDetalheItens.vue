@@ -89,6 +89,7 @@
     import numeral from 'numeral';
 
     export default {
+        name: 'ModalDetalheItens',
         props: {
             item: String,
             idPronac: String,

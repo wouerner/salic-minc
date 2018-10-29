@@ -12,7 +12,7 @@
                 icon
                 light
             >
-                <v-icon class="material-icons">replay</v-icon>
+                <v-icon color="error" class="material-icons">undo</v-icon>
             </v-btn>
             <span>Devolver Projeto</span>
         </v-tooltip>
@@ -42,7 +42,6 @@
 
 <script>
     import { mapActions } from 'vuex';
-    import Modal from '@/components/modal';
 
     export default {
         name: 'Devolver',
@@ -51,16 +50,13 @@
                 dialog: false,
             };
         },
-        props: {
-            idPronac: String,
-            atual: String,
-            proximo: String,
-            nomeProjeto: String,
-            pronac: String,
-        },
-        components: {
-            Modal,
-        },
+        props:[
+            'idPronac',
+            'atual',
+            'proximo',
+            'nomeProjeto',
+            'pronac',
+        ],
         methods: {
             ...mapActions({
                 setDevolverProjeto: 'avaliacaoResultados/devolverProjeto',
@@ -74,7 +70,6 @@
                         proximo: this.proximo,
                         idTipoDoAtoAdministrativo: 622,
                     });
-                location.reload();
             },
         },
     };
