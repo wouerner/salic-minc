@@ -18,8 +18,9 @@
                     class="headline grey lighten-2"
                     primary-title
                 >
-                    Prestação de Contas: Analise
+                    Visualizar Comprovantes
                 </v-card-title>
+                <v-subheader>Item de custo: {{item}}</v-subheader>
 
                 <v-card-text v-if="Object.keys(comprovantes).length > 0">
                     <v-expansion-panel>
@@ -88,8 +89,10 @@
     import numeral from 'numeral';
 
     export default {
+        name: 'ModalDetalheItens',
         props: {
             comprovanteIndex: Number,
+            item: String,
         },
         data() {
             return {
@@ -128,14 +131,14 @@
                 let estado = '';
 
                 switch (parseInt(id, 10)) {
-                    case 1:
-                        estado = 'Aprovado';
-                        break;
-                    case 3:
-                        estado = 'Recusado';
-                        break;
-                    default:
-                        estado = 'N\xE3o avaliado';
+                case 1:
+                    estado = 'Aprovado';
+                    break;
+                case 3:
+                    estado = 'Recusado';
+                    break;
+                default:
+                    estado = 'N\xE3o avaliado';
                 }
                 return estado;
             },

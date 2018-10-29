@@ -107,6 +107,12 @@
                     <v-card flat>
                         <v-card-text>
                             <TabelaProjetos
+                                v-if="getUsuario.grupo_ativo == 125"
+                                :dados="getProjetosAssinarCoordenador"
+                                :componentes="listaAcoesAssinar"
+                            ></TabelaProjetos>
+                            <TabelaProjetos
+                                v-else
                                 :dados="getProjetosFinalizados"
                                 :componentes="listaAcoesAssinar"
                             ></TabelaProjetos>
@@ -140,6 +146,7 @@ import Encaminhar from './ComponenteEncaminhar';
 import AnaliseButton from './analise/analisarButton';
 import AssinarButton from './analise/AssinarButton';
 import Devolver from './Devolver';
+import VisualizarPlanilhaButtton from './analise/VisualizarPlanilhaButtton';
 
 export default {
     name: 'Painel',
@@ -183,14 +190,15 @@ export default {
                 this.obterDadosTabelaTecnico(projetosTecnico);
                 this.projetosFinalizados(projetosFinalizados);
                 this.distribuir();
+                this.projetosAssinarCoordenador();
             }
         },
     },
     data() {
         return {
             listaAcoesTecnico: { atual: '', proximo: '', acoes: [Historico, AnaliseButton] },
-            listaAcoesAssinar: { atual: '6', proximo: '5', acoes: [Historico, AssinarButton, Devolver] },
-            listaAcoesCoordenador: { atual: '', proximo: '', acoes: [Encaminhar, Historico] },
+            listaAcoesAssinar: { atual: '6', proximo: '5', acoes: [Historico, AssinarButton, Devolver, VisualizarPlanilhaButtton] },
+            listaAcoesCoordenador: { atual: '', proximo: '', acoes: [Encaminhar, Historico, VisualizarPlanilhaButtton] },
             distribuirAcoes: { atual: '', proximo: '', acoes: [Encaminhar] },
         };
     },
@@ -204,6 +212,7 @@ export default {
             projetosAssinatura: 'avaliacaoResultados/projetosAssinatura',
             distribuir: 'avaliacaoResultados/projetosParaDistribuir',
             usuarioLogado: 'autenticacao/usuarioLogado',
+            projetosAssinarCoordenador: 'avaliacaoResultados/projetosAssinarCoordenador',
         }),
     },
     computed: {
@@ -216,6 +225,7 @@ export default {
             getProjetosParaDistribuir: 'avaliacaoResultados/getProjetosParaDistribuir',
             getUsuario: 'autenticacao/getUsuario',
             getProjetosRevisao: 'avaliacaoResultados/getProjetosRevisao',
+            getProjetosAssinarCoordenador: 'avaliacaoResultados/getProjetosAssinarCoordenador',
         }),
     },
 };

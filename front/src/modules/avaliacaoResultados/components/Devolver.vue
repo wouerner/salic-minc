@@ -12,7 +12,7 @@
                 icon
                 light
             >
-                <v-icon class="material-icons">replay</v-icon>
+                <v-icon color="error" class="material-icons">undo</v-icon>
             </v-btn>
             <span>Devolver Projeto</span>
         </v-tooltip>
@@ -50,13 +50,13 @@
                 dialog: false,
             };
         },
-        props: {
-            idPronac: String,
-            atual: String,
-            proximo: String,
-            nomeProjeto: String,
-            pronac: String,
-        },
+        props:[
+            'idPronac',
+            'atual',
+            'proximo',
+            'nomeProjeto',
+            'pronac',
+        ],
         methods: {
             ...mapActions({
                 setDevolverProjeto: 'avaliacaoResultados/devolverProjeto',
