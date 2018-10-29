@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import HelloWorld from '@/components/HelloWorld';
+import PaginaInicial from '@/modules/paginaInicial';
 import Pagina404 from '@/components/404';
 import RotasFoo from '@/modules/foo/router';
 
@@ -9,8 +9,8 @@ Vue.use(Router);
 const baseRoutes = [
     {
         path: '/',
-        name: 'HelloWorld',
-        component: HelloWorld,
+        name: 'Página Inicial',
+        component: PaginaInicial,
     },
     {
         path: '*',

@@ -3,11 +3,7 @@
         <v-app :dark="isModoNoturno">
             <Cabecalho></Cabecalho>
             <v-content>
-                <v-container fluid>
-                    <v-layout>
-                        <router-view></router-view>
-                    </v-layout>
-                </v-container>
+                <router-view></router-view>
             </v-content>
 
             <v-snackbar
