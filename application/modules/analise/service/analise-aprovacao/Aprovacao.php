@@ -37,12 +37,36 @@ class Aprovacao implements \MinC\Servico\IServicoRestZend
         $tblAprovacao = new \Aprovacao();
         $rsAprovacao = $tblAprovacao->buscaCompleta(array('a.AnoProjeto + a.Sequencial = ?'=>$pronac), array('a.idAprovacao ASC'));
 
-        // $Projetos = new \Projetos();
-        // $rs = $Projetos->buscar(array('IdPRONAC = ?' => $idPronac))->current();
+        $Aprovacao = $this->montaArrayAprovacao($rsAprovacao);
+        $resultArray['Aprovacao'] = $Aprovacao;
 
+        return $resultArray;
+    }
 
-
+    private function montaArrayAprovacao($aprovacoes)
+    {
         $resultArray = [];
+
+        foreach ($aprovacoes as $aprovacao) {
+            $TipoAprovacao = html_entity_decode(utf8_encode($aprovacao['TipoAprovacao']));
+            $ResumoAprovacao = html_entity_decode(utf8_encode($aprovacao['ResumoAprovacao']));
+            $objDateTimeDtAprovacao = new \DateTime($aprovacao['DtAprovacao']);
+            $objDateTimeDtPortariaAprovacao = new \DateTime($aprovacao['DtPortariaAprovacao']);
+            $objDateTimeDtPublicacaoAprovacao = new \DateTime($aprovacao['DtPublicacaoAprovacao']);
+            $objDateTimeDtInicioCaptacao = new \DateTime($aprovacao['DtInicioCaptacao']);
+            $objDateTimeDtFimCaptacao = new \DateTime($aprovacao['DtFimCaptacao']);
+            $resultArray[] = [
+                'TipoAprovacao' => $TipoAprovacao,
+                'DtAprovacao' => $objDateTimeDtAprovacao->format('d/m/Y'),
+                'DtPortariaAprovacao' => $objDateTimeDtPortariaAprovacao->format('d/m/Y'),
+                'PortariaAprovacao' => $aprovacao['PortariaAprovacao'],
+                'DtPublicacaoAprovacao' => $objDateTimeDtPublicacaoAprovacao->format('d/m/Y'),
+                'DtInicioCaptacao' => $objDateTimeDtInicioCaptacao->format('d/m/Y'),
+                'DtFimCaptacao' => $objDateTimeDtFimCaptacao->format('d/m/Y'),
+                'Mecanismo' => $aprovacao['Mecanismo'],
+                'ResumoAprovacao' => $ResumoAprovacao
+            ];
+        }
 
         return $resultArray;
     }
