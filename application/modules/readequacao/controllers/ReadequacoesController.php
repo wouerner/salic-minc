@@ -1956,27 +1956,6 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             }
 
             if (isset($params['finalizarAvaliacao']) && $params['finalizarAvaliacao'] == 1) {
-                $tbDistribuirReadequacao = new Readequacao_Model_tbDistribuirReadequacao();
-                $dDP = $tbDistribuirReadequacao->buscar(array('idReadequacao = ?' => $idReadequacao));
-
-                if (count($dDP) > 0) {
-                    //ATUALIZA A TABELA tbDistribuirReadequacao
-                    $dadosDP = array();
-                    $dadosDP['DtRetornoAvaliador'] = new Zend_Db_Expr('GETDATE()');
-                    $whereDP = "idDistribuirReadequacao = " . $dDP[0]->idDistribuirReadequacao;
-                    $x = $tbDistribuirReadequacao->update($dadosDP, $whereDP);
-
-                    $siEncaminhamento = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_DEVOLVIDO_ANALISE_TECNICA;
-                    if ($this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
-                        $siEncaminhamento = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_DEVOLVIDA_COORDENADOR_TECNICO;
-                    }
-                    //ATUALIZA A TABELA Readequacao_Model_DbTable_TbReadequacao
-                    $dados = array();
-                    $dados['siEncaminhamento'] = $siEncaminhamento;
-                    $where = "idReadequacao = $idReadequacao";
-                    $tbReadequacao->update($dados, $where);
-                }
-                
                 $servicoReadequacaoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\ReadequacaoAssinatura(
                     $this->grupoAtivo,
                     $this->auth
@@ -2805,7 +2784,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             $this->auth
         );
         
-        $servicoReadequacaoAssinatura->encaminharOuFinalizarReadequacaoChecklist(
+        $retorno = $servicoReadequacaoAssinatura->encaminharOuFinalizarReadequacaoChecklist(
             $idReadequacao
         );
 
