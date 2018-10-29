@@ -24,6 +24,7 @@ import PlanoDistribuicaoIn2017 from './visualizar/components/outrasInformacoes/P
 import ProvidenciaTomada from './visualizar/components/outrasInformacoes/ProvidenciaTomada';
 import DiligenciaProjeto from './visualizar/components/outrasInformacoes/DiligenciaProjeto';
 import Tramitacao from './visualizar/components/outrasInformacoes/Tramitacao';
+import Recursos from './visualizar/components/analiseAprovacao/Recursos';
 
 Vue.use(Router);
 
@@ -225,6 +226,14 @@ const routes = [
                 component: Tramitacao,
                 meta: {
                     title: 'Tramita&ccedil;&atilde;o',
+                },
+            },
+            {
+                path: 'recursos',
+                name: 'Recursos',
+                component: Recursos,
+                meta: {
+                    title: 'Recursos',
                 },
             },
         ],

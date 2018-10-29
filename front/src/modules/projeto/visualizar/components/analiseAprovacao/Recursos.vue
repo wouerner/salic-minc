@@ -1,6 +1,6 @@
 <template>
     <div id="conteudo">
-
+ola
     </div>
 </template>
 <script>
@@ -28,7 +28,7 @@
         methods: {
             buscar_dados() {
                 const self = this;
-                const idPronac = self.$route.params.idPronac,
+                const idPronac = self.$route.params.idPronac;
                 /* eslint-disable */
                 $3.ajax({
                     url: '/analise/recursos-rest/index/idPronac/' + idPronac,
