@@ -28,12 +28,18 @@ export const state = {
     projetosParaDistribuir: {},
     getProjetosAssinatura: [],
     getProjetosLaudoFinal: [],
+    getProjetosLaudoAssinar: {},
+    getProjetosLaudoEmAssinatura: {},
+    getProjetosLaudoFinalizados: {},
     getProjetosAssinar: {},
     getProjetosEmAssinatura: {},
     getProjetosHistorico: {},
     versao: {},
-    revisaoParecer: {},
-    revisao: {},
+    projetosRevisao: {},
+    devolverProjeto: {},
+    objetoParecer: {},
+    itensBuscaComprovantes: {},
+    comprovantes: {},
 };
 
 export const mutations = {
@@ -44,12 +50,6 @@ export const mutations = {
     },
     [types.GET_PARECER](state, parecer) {
         state.parecer = parecer;
-    },
-    [types.HISTORICO_REVISAO](state, revisaoParecer) {
-        state.revisaoParecer = revisaoParecer;
-    },
-    [types.SET_REVISAO](state, revisao){
-        state.revisaoParecer.push(revisao);
     },
     [types.GET_PROJETO](state, projeto) {
         state.projeto = projeto;
@@ -139,10 +139,34 @@ export const mutations = {
     [types.SET_DADOS_PROJETOS_LAUDO_FINAL](state, dados) {
         state.getProjetosLaudoFinal = dados;
     },
+    [types.SET_DADOS_PROJETOS_LAUDO_ASSINAR](state, dados) {
+        state.getProjetosLaudoAssinar = dados;
+    },
+    [types.SET_DADOS_PROJETOS_LAUDO_EM_ASSINATURA](state, dados) {
+        state.getProjetosLaudoEmAssinatura = dados;
+    },
+    [types.SET_DADOS_PROJETOS_LAUDO_FINALIZADOS](state, dados) {
+        state.getProjetosLaudoFinalizados = dados;
+    },
     [types.SET_DADOS_PROJETOS_HISTORICO](state, dados) {
         state.getProjetosHistorico = dados;
     },
     [types.SET_VERSAO](state, dados) {
         state.versao = dados;
+    },
+    [types.SYNC_PROJETOS_REVISAO](state, dados) {
+        state.projetosRevisao = dados;
+    },
+    [types.SET_DEVOLVER_PROJETO](state, devolverProjeto) {
+        state.devolverProjeto = devolverProjeto;
+    },
+    [types.GET_OBJETO_PARECER](state, dados) {
+        state.objetoParecer = dados;
+    },
+    [types.SET_ITENS_BUSCA_COMPROVANTES](state, dados) {
+        state.itensBuscaComprovantes = dados;
+    },
+    [types.SET_COMPROVANTES](state, dados) {
+        state.comprovantes = dados;
     },
 };

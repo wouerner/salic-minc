@@ -8,7 +8,8 @@
                 icons-and-text
             >
                 <v-tabs-slider color="deep-orange accent-3"></v-tabs-slider>
-                <v-tab href="#tab-0"
+                <v-tab 
+                    href="#tab-0"
                     v-if="getUsuario.grupo_ativo == 125"
                 >
                     <template v-if="Object.keys(getProjetosParaDistribuir).length == 0">
@@ -33,24 +34,40 @@
                     </template>
                     <template v-else>
                         Em Analise
-                        <v-icon>how_to_reg</v-icon>
+                        <v-icon>gavel</v-icon>
                     </template>
                 </v-tab>
+
                 <v-tab href="#tab-2">
-                     Assinar
-                    <v-icon>done</v-icon>
+                    <template v-if="Object.keys(getProjetosFinalizados).length == 0">
+                        <v-progress-circular
+                            indeterminate
+                            color="primary"
+                            dark
+                        ></v-progress-circular>
+                    </template>
+                    <template v-else>
+                         Assinar
+                        <v-icon>done</v-icon>
+                    </template>
                 </v-tab>
-                <v-tab href="#tab-3">
-                     Em assinatura
-                    <v-icon>done_all</v-icon>
-                </v-tab>
+
                 <v-tab href="#tab-4">
-                     Historico
-                    <v-icon>history</v-icon>
+                    <template v-if="Object.keys(getProjetosHistorico).length == 0">
+                        <v-progress-circular
+                            indeterminate
+                            color="primary"
+                            dark
+                        ></v-progress-circular>
+                    </template>
+                    <template v-else>
+                        Historico
+                        <v-icon>history</v-icon>
+                    </template>
                 </v-tab>
 
                 <v-tab-item
-                    :id="'tab-0'"
+                    :value="'tab-0'"
                     :key="0"
                 >
                     <TabelaProjetos
@@ -60,7 +77,7 @@
                     ></TabelaProjetos>
                 </v-tab-item>
                 <v-tab-item
-                    :id="'tab-1'"
+                    :value="'tab-1'"
                     :key="1"
                 >
                     <v-card flat
@@ -72,6 +89,7 @@
                                 :analisar="true"
                                 :dados="dadosTabelaTecnico"
                                 :componentes="listaAcoesCoordenador"
+                                :mostrarTecnico="true"
                             ></TabelaProjetos>
                             <TabelaProjetos
                                 v-else
@@ -83,7 +101,7 @@
                     </v-card>
                 </v-tab-item>
                 <v-tab-item
-                    :id="'tab-2'"
+                    :value="'tab-2'"
                     :key="2"
                 >
                     <v-card flat>
@@ -95,21 +113,9 @@
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
+
                 <v-tab-item
-                    :id="'tab-3'"
-                    :key="3"
-                >
-                    <v-card flat>
-                        <v-card-text>
-                            <TabelaProjetos
-                                :dados="getProjetosEmAssinatura"
-                                :componentes="listaAcoesTecnico"
-                            ></TabelaProjetos>
-                        </v-card-text>
-                    </v-card>
-                </v-tab-item>
-                <v-tab-item
-                    :id="'tab-4'"
+                    :value="'tab-4'"
                     :key="4"
                 >
                     <v-card flat>
@@ -121,24 +127,24 @@
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
+
             </v-tabs>
         </v-card>
     </v-container>
 </template>
-
 <script>
-
 import { mapActions, mapGetters } from 'vuex';
 import TabelaProjetos from './TabelaProjetos';
 import Historico from './Historico';
 import Encaminhar from './ComponenteEncaminhar';
 import AnaliseButton from './analise/analisarButton';
 import AssinarButton from './analise/AssinarButton';
+import Devolver from './Devolver';
 
 export default {
     name: 'Painel',
     created() {
-        this.distribuir({ estadoid: 6 });
+        this.distribuir();
 
         this.projetosAssinatura({ estado: 'assinar' });
         this.projetosAssinatura({ estado: 'em_assinatura' });
@@ -150,11 +156,11 @@ export default {
     },
     watch: {
         getUsuario(val) {
-            if (Object.keys(val).length > 0 && val.usu_codigo != 0 ) {
-
+            if (Object.keys(val).length > 0 && parseInt(val.usu_codigo, 10) !== 0) {
                 let projetosTecnico = {};
                 let projetosFinalizados = {};
-                if (this.getUsuario.grupo_ativo == 125) {
+
+                if (parseInt(this.getUsuario.grupo_ativo, 10) === 125) {
                     projetosTecnico = {
                         estadoid: 5,
                     };
@@ -176,17 +182,16 @@ export default {
 
                 this.obterDadosTabelaTecnico(projetosTecnico);
                 this.projetosFinalizados(projetosFinalizados);
-                this.distribuir({ estadoid: 6 });
+                this.distribuir();
             }
         },
     },
     data() {
         return {
-            listaAcoesTecnico: [Historico, AnaliseButton],
-            listaAcoesAssinar: [Historico, AssinarButton],
-            listaAcoesCoordenador: [Historico],
-            distribuirAcoes: [Encaminhar],
-
+            listaAcoesTecnico: { atual: '', proximo: '', acoes: [Historico, AnaliseButton] },
+            listaAcoesAssinar: { atual: '6', proximo: '5', acoes: [Historico, AssinarButton, Devolver] },
+            listaAcoesCoordenador: { atual: '', proximo: '', acoes: [Encaminhar, Historico] },
+            distribuirAcoes: { atual: '', proximo: '', acoes: [Encaminhar] },
         };
     },
     components: {
@@ -210,6 +215,7 @@ export default {
             getProjetosHistorico: 'avaliacaoResultados/getProjetosHistorico',
             getProjetosParaDistribuir: 'avaliacaoResultados/getProjetosParaDistribuir',
             getUsuario: 'autenticacao/getUsuario',
+            getProjetosRevisao: 'avaliacaoResultados/getProjetosRevisao',
         }),
     },
 };
