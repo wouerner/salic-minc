@@ -3880,10 +3880,12 @@ class Projetos extends MinC_Db_Table_Abstract
         $select->joinInner(array('ver' => 'Verificacao'), 'ver.idVerificacao = dil.idTipoDiligencia', array('tipoDiligencia' => 'ver.Descricao'));
         $select->joinLeft(array('prod' => 'Produto'), 'prod.Codigo = dil.idProduto', array('produto' => 'prod.Descricao'));
 
+
         foreach ($consulta as $coluna => $valor) {
             $select->where($coluna, $valor);
+            var_dump($select);
+            die;
         }
-
 
         if ($retornaSelect) {
             return $select;
