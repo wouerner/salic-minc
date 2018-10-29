@@ -283,4 +283,5 @@ export const devolverProjeto = ({ commit }, params) => {
         });
 };
 
-export const salvarAvaliacaoComprovante = (_, params) => avaliacaoResultadosHelperAPI.salvarAvaliacaoComprovante(params);
+export const salvarAvaliacaoComprovante = (_, params) =>
+    avaliacaoResultadosHelperAPI.salvarAvaliacaoComprovante(params);

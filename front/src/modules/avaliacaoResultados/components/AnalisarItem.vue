@@ -30,7 +30,7 @@
             </v-btn>
             <v-card>
                 <v-toolbar dark color="green darken-3">
-                    <v-btn icon dark @click.native="dialog = false">
+                    <v-btn icon dark @click.native="fecharModal">
                         <v-icon>close</v-icon>
                     </v-btn>
                     <v-toolbar-title>Avaliar itens</v-toolbar-title>
@@ -334,6 +334,7 @@
         },
         methods: {
             ...mapActions({
+                setPlanilha: 'avaliacaoResultados/planilha',
                 salvarAvaliacaoComprovante: 'avaliacaoResultados/salvarAvaliacaoComprovante',
                 obterDadosItemComprovacao: 'avaliacaoResultados/obterDadosItemComprovacao',
             }),
@@ -384,8 +385,9 @@
                     this.obterDadosItemComprovacao(`idPronac/${this.idPronac}/uf/${this.uf}/produto/${this.produto}/idmunicipio/${this.idmunicipio}/idPlanilhaItem/${this.idPlanilhaItem}/etapa/${this.etapa}`);
                 }
             },
-            console(val) {
-                console.log(val);
+            fecharModal() {
+                this.dialog = false;
+                this.setPlanilha(this.idPronac);
             },
         },
         computed: {
