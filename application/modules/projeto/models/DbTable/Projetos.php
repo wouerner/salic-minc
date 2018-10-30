@@ -38,6 +38,13 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
             $this->getSchema('agentes')
         );
 
+        $query->joinInner(
+            ['s' => 'Situacao'],
+            's.Codigo = p.Situacao',
+            ['Descricao as descricaoSituacao'],
+            $this->_schema
+        );
+
         foreach ($where as $coluna => $valor) {
             $query->where($coluna, $valor);
         }

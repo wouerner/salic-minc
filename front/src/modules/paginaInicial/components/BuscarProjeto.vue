@@ -1,6 +1,6 @@
 <template>
-    <v-card>
-        <v-card-title class="headline ">
+    <v-card color="blue-grey darken-2" class="white--text" dark>
+        <v-card-title class="subheading">
             Buscar projeto
         </v-card-title>
         <v-card-text>
@@ -9,52 +9,48 @@
                 :items="items"
                 :loading="isLoading"
                 :search-input.sync="campoDeBusca"
-                hide-no-data
                 hide-selected
-                color="black"
+                hide-no-data
+                cache-items
+                chips
+                deletable-chips
+                color="white"
                 item-text="Description"
                 item-value="API"
                 label="Projetos"
                 placeholder="Escreva o pronac ou nome do projeto"
-                prepend-icon="mdi-database-search"
+                prepend-icon="style"
                 return-object
             ></v-autocomplete>
         </v-card-text>
         <v-divider></v-divider>
         <v-expand-transition>
-            <v-list v-if="model" class="red lighten-3">
+            <v-list v-if="model" color="blue-grey darken-1" class="white--text py-0">
                 <v-list-tile
                     v-for="(field, i) in fields"
                     :key="i"
+                    :href="`/projeto/#/${model.idPronac}`"
                 >
                     <v-list-tile-content>
-                        <v-list-tile-title v-text="field.value"></v-list-tile-title>
                         <v-list-tile-sub-title v-text="field.key"></v-list-tile-sub-title>
+                        <v-list-tile-title v-text="field.value"></v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
             </v-list>
         </v-expand-transition>
-        <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-                :disabled="!model"
-                @click="model = null"
-            >
-                Clear
-                <v-icon right>mdi-close-circle</v-icon>
-            </v-btn>
-        </v-card-actions>
     </v-card>
 </template>
 
 <script>
     import axios from 'axios';
     import _ from 'lodash';
+    import formatarCPNJ from '@/filters/cnpj';
 
     export default {
         name: 'buscarProjeto',
         data: () => ({
             descriptionLimit: 60,
+            description: 60,
             entries: [],
             isLoading: false,
             model: null,
@@ -62,14 +58,17 @@
         }),
         computed: {
             fields() {
-                if (!this.model) return [];
+                if (!this.model) {
+                    return [];
+                }
 
-                return Object.keys(this.model).map((key) => {
-                    return {
-                        key,
-                        value: this.model[key] || 'n/a',
-                    };
-                });
+                return [
+                    { key: 'Pronac', value: this.model.Pronac },
+                    { key: 'Nome Projeto', value: this.model.NomeProjeto },
+                    { key: 'Situação', value: `${this.model.Situacao}: ${this.model.descricaoSituacao}` },
+                    { key: 'Proponente', value: this.model.NomeProponente },
+                    { key: 'Cpf/Cnpj', value: formatarCPNJ(this.model.CgcCPf) },
+                ];
             },
             items() {
                 return this.entries.map((entry) => {
@@ -92,7 +91,7 @@
         methods: {
             buscarProjetos() {
                 // Items have already been loaded
-                if (this.campoDeBusca.length < 5) return;
+                if (!this.campoDeBusca || this.campoDeBusca.length < 5) return;
 
                 // Items have already been requested
                 if (this.isLoading) return;
@@ -106,13 +105,11 @@
                         this.count = count;
                         this.entries = projetos;
                     })
-                    .catch((error) => {
-                        console.log(error);
-                    })
                     .finally(() => {
                         this.isLoading = false;
                     });
             },
+            formatarCPNJ,
         },
     };
 </script>
