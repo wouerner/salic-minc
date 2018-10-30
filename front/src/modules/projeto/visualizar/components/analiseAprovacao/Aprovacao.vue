@@ -24,8 +24,8 @@
                             <table class="tabela">
                                 <tbody>
                                     <tr>
-                                        <th>Portaria / Datas</th>
-                                        <th>Per&iacute;odo de Capta&ccedil;&atilde;o</th>
+                                        <th align="center">Portaria / Datas</th>
+                                        <th align="center">Per&iacute;odo de Capta&ccedil;&atilde;o</th>
                                     </tr>
                                     <tr>
                                         <td>
@@ -45,7 +45,7 @@
                                             <table>
                                                 <tbody>
                                                     <tr>
-                                                            <td>{{dado.DtInicioCaptacao}}</td>
+                                                        <td>{{dado.DtInicioCaptacao}}</td>
                                                         <td>{{dado.DtFimCaptacao}}</td>
                                                     </tr>
                                                 </tbody>
@@ -57,7 +57,7 @@
                             <table v-if="dado.ResumoAprovacao" class="tabela">
                                 <tbody>
                                     <tr>
-                                        <th>S&iacute;ntese Aprova&ccedil;&atilde;o</th>
+                                        <th align="center">S&iacute;ntese Aprova&ccedil;&atilde;o</th>
                                     </tr>
                                     <tr>
                                         <td style="padding-left: 20px" v-html="dado.ResumoAprovacao"></td>
@@ -67,10 +67,13 @@
                             <table v-if="dado.AprovadoReal > 0" class="tabela">
                                 <tbody>
                                     <tr>
-                                        <th>{{dado.Mecanismo}}</th>
+                                        <th align="center">{{dado.Mecanismo}}</th>
                                     </tr>
                                     <tr>
-                                        <td>{{dado.AprovadoReal}}</td>
+                                        <td>
+                                            <b>Vl. Aprova&ccedil;&atilde;o</b> <br>
+                                            <b>R$ {{dado.AprovadoReal | filtroFormatarParaReal}}</b>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -86,6 +89,7 @@
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/Carregando';
     import IdentificacaoProjeto from '@/components/Projeto/IdentificacaoProjeto'
+    import planilhas from '@/mixins/planilhas'
     export default {
         name: 'Aprovacao',
         props: ['idPronac'],
@@ -106,6 +110,7 @@
             Carregando,
             IdentificacaoProjeto,
         },
+        mixins: [planilhas],
         mounted() {
             if (typeof this.$route.params.idPronac !== 'undefined') {
                 this.buscar_dados();
