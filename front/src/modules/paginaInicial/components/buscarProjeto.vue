@@ -1,26 +1,21 @@
 <template>
-    <v-card
-        dark
-    >
+    <v-card>
         <v-card-title class="headline ">
             Buscar projeto
         </v-card-title>
-        <v-card-text>
-            Busque pelo Pronac ou Nome do Projeto
-        </v-card-text>
         <v-card-text>
             <v-autocomplete
                 v-model="model"
                 :items="items"
                 :loading="isLoading"
-                :search-input.sync="search"
-                color="white"
+                :search-input.sync="campoDeBusca"
                 hide-no-data
                 hide-selected
+                color="black"
                 item-text="Description"
                 item-value="API"
-                label="Public APIs"
-                placeholder="Start typing to Search"
+                label="Projetos"
+                placeholder="Escreva o pronac ou nome do projeto"
                 prepend-icon="mdi-database-search"
                 return-object
             ></v-autocomplete>
@@ -43,7 +38,6 @@
             <v-spacer></v-spacer>
             <v-btn
                 :disabled="!model"
-                color="grey darken-3"
                 @click="model = null"
             >
                 Clear
@@ -55,6 +49,7 @@
 
 <script>
     import axios from 'axios';
+    import _ from 'lodash';
 
     export default {
         name: 'buscarProjeto',
@@ -63,51 +58,60 @@
             entries: [],
             isLoading: false,
             model: null,
-            search: null,
+            campoDeBusca: null,
         }),
-
         computed: {
             fields() {
-                if (!this.model) return []
+                if (!this.model) return [];
 
-                return Object.keys(this.model).map(key => {
+                return Object.keys(this.model).map((key) => {
                     return {
-                        key: key,
-                        value: this.model[key] || 'n/a'
-                    }
+                        key,
+                        value: this.model[key] || 'n/a',
+                    };
                 });
             },
             items() {
-                return this.entries.map(entry => {
+                return this.entries.map((entry) => {
                     let Description = entry.NomeProjeto.length > this.descriptionLimit
-                        ? entry.NomeProjeto.slice(0, this.descriptionLimit) + '...'
+                        ? `${entry.NomeProjeto.slice(0, this.descriptionLimit)} ...`
                         : entry.NomeProjeto;
                     Description = `${entry.Pronac} - ${Description}`;
                     return Object.assign({}, entry, { Description });
                 });
             },
         },
+        created() {
+            this.debouncedObterProjetos = _.debounce(this.buscarProjetos, 500);
+        },
         watch: {
-            search(val) {
+            campoDeBusca() {
+                this.debouncedObterProjetos();
+            },
+        },
+        methods: {
+            buscarProjetos() {
                 // Items have already been loaded
-                if (val.length < 5) return;
+                if (this.campoDeBusca.length < 5) return;
 
                 // Items have already been requested
                 if (this.isLoading) return;
 
                 this.isLoading = true;
+                const self = this;
 
-                // Lazily load input items
-                axios.get(`navegacao/projeto-rest/?pronac=${val}`)
-                    .then(res => {
-                        const { count, projetos } = res.data;
+                axios.get(`/navegacao/projeto-rest/?pronac=${self.campoDeBusca}`)
+                    .then((response) => {
+                        const { count, projetos } = response.data;
                         this.count = count;
                         this.entries = projetos;
                     })
-                    .catch(err => {
-                        console.log(err);
+                    .catch((error) => {
+                        console.log(error);
                     })
-                    .finally(() => (this.isLoading = false));
+                    .finally(() => {
+                        this.isLoading = false;
+                    });
             },
         },
     };
