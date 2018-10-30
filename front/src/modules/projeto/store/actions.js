@@ -1,4 +1,5 @@
 import * as projetoHelperAPI from '@/helpers/api/Projeto';
+import * as analiseHelperAPI from '@/helpers/api/Analise';
 import { state } from './mutations';
 import * as types from './types';
 
@@ -212,5 +213,13 @@ export const buscarDiligencia = ({ commit }, idPronac) => {
         .then((response) => {
             const data = response.data.data.items;
             commit(types.SET_DILIGENCIA, data);
+        });
+};
+
+export const buscarAprovacao = ({ commit }, idPronac) => {
+    analiseHelperAPI.buscarAprovacao(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_APROVACAO, data);
         });
 };

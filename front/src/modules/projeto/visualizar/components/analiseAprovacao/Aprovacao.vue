@@ -95,12 +95,6 @@
         props: ['idPronac'],
         data() {
             return {
-                dados: {
-                    type: Object,
-                    default() {
-                        return {};
-                    },
-                },
                 loading: true,
                 abaAtiva: -1,
                 ativo: false,
@@ -112,8 +106,8 @@
         },
         mixins: [planilhas],
         mounted() {
-            if (typeof this.$route.params.idPronac !== 'undefined') {
-                this.buscar_dados();
+            if (typeof this.dadosProjeto.idPronac !== 'undefined') {
+                this.buscarAprovacao(this.dadosProjeto.idPronac);
             }
         },
         watch: {
@@ -123,6 +117,7 @@
         },
         computed: {
             ...mapGetters({
+                dados: 'projeto/aprovacao',
                 dadosProjeto: 'projeto/projeto',
             }),
         },
@@ -133,18 +128,11 @@
                 } else {
                     this.abaAtiva = index;
                     this.ativo = true;
-                    // this.buscarDiligenciaProposta(value);
                 }
             },
-            buscar_dados() {
-                const self = this;
-                /* eslint-disable */
-                $3.ajax({
-                    url: '/analise/aprovacao-rest/index/idPronac/' + self.dadosProjeto.idPronac,
-                }).done(function (response) {
-                    self.dados = response.data.items;
-                });
-            },
+            ...mapActions({
+                buscarAprovacao: 'projeto/buscarAprovacao',
+            }),
         },
     };
 </script>
