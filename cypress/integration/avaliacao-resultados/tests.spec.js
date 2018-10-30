@@ -1,5 +1,5 @@
 describe('Testes da Análise de Resultados', function() {
-    beforeEach(function () { // Inicia todos os testes na Tela de Análise de Resultados - Perfil Técnico
+    before(function () { // Inicia todos os testes na Tela de Análise de Resultados - Perfil Técnico
       cy.visit('localhost');
     
       var login = cy.get('form div div').find('input').eq(0).type('239.691.561-49'); // Login
