@@ -25,6 +25,7 @@ import ProvidenciaTomada from './visualizar/components/outrasInformacoes/Provide
 import DiligenciaProjeto from './visualizar/components/outrasInformacoes/DiligenciaProjeto';
 import Tramitacao from './visualizar/components/outrasInformacoes/Tramitacao';
 import Recursos from './visualizar/components/analiseAprovacao/Recursos';
+import Aprovacao from './visualizar/components/analiseAprovacao/Aprovacao';
 
 Vue.use(Router);
 
@@ -234,6 +235,14 @@ const routes = [
                 component: Recursos,
                 meta: {
                     title: 'Recursos',
+                },
+            },
+            {
+                path: 'aprovacao',
+                name: 'Aprovacao',
+                component: Aprovacao,
+                meta: {
+                    title: 'Aprova&ccedil;&atilde;o',
                 },
             },
         ],

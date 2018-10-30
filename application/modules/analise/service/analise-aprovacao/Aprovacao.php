@@ -64,7 +64,8 @@ class Aprovacao implements \MinC\Servico\IServicoRestZend
                 'DtInicioCaptacao' => $objDateTimeDtInicioCaptacao->format('d/m/Y'),
                 'DtFimCaptacao' => $objDateTimeDtFimCaptacao->format('d/m/Y'),
                 'Mecanismo' => $aprovacao['Mecanismo'],
-                'ResumoAprovacao' => $ResumoAprovacao
+                'ResumoAprovacao' => $ResumoAprovacao,
+                'AprovadoReal' => $aprovacao['AprovadoReal']
             ];
         }
 
