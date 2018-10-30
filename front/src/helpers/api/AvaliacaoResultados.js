@@ -47,13 +47,12 @@ export const consolidacaoAnalise = params => api.getRequest(`/prestacao-contas/v
 
 export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/tecnicos');
 
-export const encaminharParaTecnico = params => api.postRequest('/avaliacao-resultados/estado/', buildData(params));
+export const alterarEstado = params => api.postRequest('/avaliacao-resultados/estado/', buildData(params));
 
 export const obterDadosItemComprovacao = params => api.getRequest(`/avaliacao-resultados/avaliacao-comprovante/${params}`);
 
 export const criarParecerLaudoFinal = params => api.postRequest('/avaliacao-resultados/laudo', buildData(params));
 
-export const finalizarParecerLaudoFinal = params => api.postRequest('/avaliacao-resultados/estado', buildData(params));
 
 export const obterProjetosParaDistribuir = () => api.getRequest('/avaliacao-resultados/projeto-inicio');
 
@@ -71,16 +70,7 @@ export const criarParecer = (params) => {
     return api.postRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${parametro}`, buildData(data));
 };
 
-export const finalizarParecer = (params) => {
-    // const parametro = params.idPronac;
-    // delete params.idPronac;
-    const data = params;
-
-    return api.postRequest('/avaliacao-resultados/estado', buildData(data));
-};
-
 /** FIM DO PARECER TECNICO */
-
 
 export const obterLaudoFinal = idPronac => api.getRequest(`/avaliacao-resultados/laudo/get?idPronac=${idPronac}`);
 
@@ -115,8 +105,6 @@ export const buscarComprovantes = (params) => {
     return api.getRequest(url + queryParams);
 };
 
-export const devolverProjeto = params => api.postRequest('/avaliacao-resultados/estado', buildData(params));
-
 export const projetosPorEstado = (params) => {
     let data = '?';
 
@@ -129,3 +117,5 @@ export const projetosPorEstado = (params) => {
     }
     return api.getRequest(`/avaliacao-resultados/fluxo-projeto${data}`);
 };
+
+export const salvarAvaliacaoComprovante = params => api.postRequest('/avaliacao-resultados/avaliacao-comprovante/', buildData(params));
