@@ -10,24 +10,24 @@
 * Na página de Avaliação de Resultados: Parecer Técnico é necessário selecionar a aba ENCAMINHAR.
 * Há uma lista dos projetos a serem encaminhados, havendo a possibilidade de visualizar os dados do projeto ao clicar no número do Pronac e a possibilidade de encaminhar o projeto a um técnico de prestação de contas.
 
-![Parecer técnico aba Encaminhar](https://github.com/culturagovbr/salic-minc/blob/develop-fix/application/modules/avaliacao-resultados/docs/imagens/parecer_tecnico_encaminhar.png)
+![Parecer técnico aba Encaminhar](./imagens/parecer_tecnico_encaminhar.png)
 
 #### Encaminhar Projeto
 * Primeiro passo, é necessário clicar na ação Encaminhar Projeto.
 * Após a abertura do formulário de encaminhamento é preciso selecionar um técnico de prestação de contas e digitar uma justificativa de encaminhamento, para finalizar clique em ENCAMINHAR.
 
-![Encaminhar projeto](https://github.com/culturagovbr/salic-minc/blob/develop-fix/application/modules/avaliacao-resultados/docs/imagens/parecer_tecnico_encaminhar_encaminhar.png)
+![Encaminhar projeto](./imagens/parecer_tecnico_encaminhar_encaminhar.png)
 
 ## Em Analise
 
 * Na página de Avaliação de Resultados: Parecer Técnico é necessário selecionar a aba EM ANALISE.
 * Há uma lista dos projetos aguardando a assinatura do técnico de prestação de contas.
 
-![Parecer técnico aba Em Análise](https://github.com/culturagovbr/salic-minc/blob/develop-fix/application/modules/avaliacao-resultados/docs/imagens/parecer_tecnico_emanalise.png)
+![Parecer técnico aba Em Análise](./imagens/parecer_tecnico_emanalise.png)
 
 
 * É possível realizar as seguintes ações:
-    #### [Encaminhar Projeto](https://github.com/culturagovbr/salic-minc/blob/develop-fix/application/modules/avaliacao-resultados/docs/parecer-tecnico.md#encaminhar-projeto)
+    #### [Encaminhar Projeto](#encaminhar-projeto)
     Esta ação tem como objetivo reencaminhar o projeto a outro técnico de prestação de contas.
 
     #### Histórico de Encaminhamentos
@@ -36,7 +36,7 @@
     #### Visualizar Projeto
     Ao clicar na ação, é aberta a planilha orçamentaria do projeto.
 
-    ![Visualizar Projeto](https://github.com/culturagovbr/salic-minc/blob/develop-fix/application/modules/avaliacao-resultados/docs/imagens/parecer_tecnico_emanalise_visualizar.png)
+    ![Visualizar Projeto](./imagens/parecer_tecnico_emanalise_visualizar.png)
 
     Dentro da planilha é possível(de acordo com a numeração da imagem acima):
     1. Visualizar dados sobre o projeto.
@@ -44,6 +44,5 @@
     3. Visualizar os comprovantes dos items de custo quando disponíveis.
 
 ## Assinar
-
 
 ## Historico
