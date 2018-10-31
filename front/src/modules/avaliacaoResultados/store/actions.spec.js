@@ -371,4 +371,51 @@ describe('Testes Actions - Avaliação de Resultados', () => {
             expect(API.consolidacaoAnalise).toHaveBeenCalled();
         });
     });
+
+    // describe('Devolver Projeto', () => {
+    //     beforeEach(() => {
+    //         mockReponse = {
+    //             data: {
+    //                 data: 
+    //                     {
+    //                         idPronac: '138419',
+    //                         atual: '6',
+    //                         proximo: '5',
+    //                         idTipoDoAtoAdministrativo: '622',
+    //                     },
+    //             },
+    //         };
+
+    //         axios.post.mockResolvedValue(mockReponse);
+            
+    //         function FormDataMock() {
+    //             this.append = jest.fn();
+    //         }
+
+    //         global.FormData = FormDataMock;
+            
+    //         params = {
+    //             idPronac: '138419',
+    //             atual: '6',
+    //             proximo: '5',
+    //             idTipoDoAtoAdministrativo: '622',
+    //         };
+
+    //         commit = jest.fn();
+            
+    //         jest.spyOn(API, 'devolverProjeto');
+    //         actions.devolverProjeto({ commit }, params);
+
+    //     });
+
+    //     test('it is commit to devolverProjeto', (done) => {
+    //         done();
+    //         expect(commit).toHaveBeenCalledWith('SET_DEVOLVER_PROJETO', params);
+    //     });
+
+    //     test('it calls API.devolverProjeto', () => {
+    //         expect(API.devolverProjeto).toHaveBeenCalled();
+    //     });
+    // });
+
 });
