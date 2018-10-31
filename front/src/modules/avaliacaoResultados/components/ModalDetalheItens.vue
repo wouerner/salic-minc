@@ -18,12 +18,13 @@
                     class="headline grey lighten-2"
                     primary-title
                 >
-                    Prestação de Contas: Analise
+                    Visualizar Comprovantes
                 </v-card-title>
+                <v-subheader>Item de custo: {{item}}</v-subheader>
 
-                <v-card-text v-if="Object.keys(comprovantes).length > 0">
+                <v-card-text v-if="Object.keys(currentComprovantes).length > 0">
                     <v-expansion-panel>
-                        <v-expansion-panel-content v-for="(comprovante, index) in comprovantes" :key="index">
+                        <v-expansion-panel-content v-for="(comprovante, index) in currentComprovantes" :key="index">
                             <div slot="header">
                                 <div style="display:inline-block;">
                                     Fornecedor: {{comprovante.nmFornecedor}}
@@ -88,12 +89,21 @@
     import numeral from 'numeral';
 
     export default {
+        name: 'ModalDetalheItens',
         props: {
-            comprovanteIndex: Number,
+            item: String,
+            idPronac: String,
+            uf: String,
+            codigoCidade: Number,
+            codigoProduto: Number,
+            stItemAvaliado: String,
+            codigoEtapa: Number,
+            idPlanilhaItens: Number,
         },
         data() {
             return {
                 dialog: false,
+                currentComprovantes: {},
             };
         },
         computed: {
@@ -101,12 +111,29 @@
                 comprovantes: 'avaliacaoResultados/comprovantes',
             }),
         },
+        watch: {
+            comprovantes(value) {
+                this.currentComprovantes = value;
+            },
+        },
         methods: {
             ...mapActions({
                 buscarComprovantes: 'avaliacaoResultados/buscarComprovantes',
             }),
             buscar() {
-                this.buscarComprovantes(this.comprovanteIndex);
+                this.currentComprovantes = {};
+
+                const params = {
+                    uf: this.uf,
+                    idPronac: this.idPronac,
+                    codigoCidade: this.codigoCidade,
+                    codigoProduto: this.codigoProduto,
+                    stItemAvaliado: this.stItemAvaliado,
+                    codigoEtapa: this.codigoEtapa,
+                    idPlanilhaItens: this.idPlanilhaItens,
+                };
+
+                this.buscarComprovantes(params);
             },
             badgeCSS(id) {
                 const currentId = parseInt(id, 10);
@@ -128,14 +155,14 @@
                 let estado = '';
 
                 switch (parseInt(id, 10)) {
-                    case 1:
-                        estado = 'Aprovado';
-                        break;
-                    case 3:
-                        estado = 'Recusado';
-                        break;
-                    default:
-                        estado = 'N\xE3o avaliado';
+                case 1:
+                    estado = 'Aprovado';
+                    break;
+                case 3:
+                    estado = 'Recusado';
+                    break;
+                default:
+                    estado = 'N\xE3o avaliado';
                 }
                 return estado;
             },

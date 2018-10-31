@@ -6,7 +6,9 @@
                         <v-toolbar-title>Diligenciar</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                            <v-btn v-if="tpDiligencia && solicitacao" dark flat @click.native="enviarDiligencia()">Enviar</v-btn>
+                            <v-btn v-if="tpDiligencia && solicitacao"
+                                   dark flat @click.native="enviarDiligencia()"
+                                   :to="{ name: 'AnalisePlanilha', params:{ id:this.$route.params.id }}">Enviar</v-btn>
                             <v-btn v-else dark flat disabled>Enviar</v-btn>
                             <v-btn dark flat :to="{ name: 'AnalisePlanilha', params:{ id:this.$route.params.id }}">Cancelar</v-btn>
                         </v-toolbar-items>
@@ -29,8 +31,8 @@
                     <v-layout wrap align-center>
                         <v-flex>
                             <v-radio-group v-model="tpDiligencia">
-                                <v-radio color="success" label="Somente itens recusados" value="174"></v-radio>
-                                <v-radio color="success" label="Todos os itens orçamentários" value="645"></v-radio>
+                                <v-radio color="success" label="Somente itens recusados" value="645"></v-radio>
+                                <v-radio color="success" label="Todos os itens orçamentários" value="174"></v-radio>
                             </v-radio-group>
                         </v-flex>
                     </v-layout>
@@ -80,8 +82,6 @@
                 };
 
                 this.salvar(data);
-                /** Descomentar linha após migração da lista para o VUEJS */
-                // this.dialog = false;
             },
         },
         computed:
