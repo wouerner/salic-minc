@@ -52,7 +52,6 @@
                     {
                         text: 'DT. SITUAÇÃO',
                         align: 'left',
-                        sortable: false,
                         value: 'DtSituacao',
                     },
                     {

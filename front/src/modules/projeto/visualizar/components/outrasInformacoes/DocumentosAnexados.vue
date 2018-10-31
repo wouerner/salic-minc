@@ -33,6 +33,11 @@
                         <span>{{ props.item.NoArquivo }}</span>
                     </v-tooltip>
                 </template>
+                <template slot="no-data">
+                    <v-alert :value="true" color="error" icon="warning">
+                        Nenhum dado encontrado ¯\_(ツ)_/¯
+                    </v-alert>
+                </template>
                 <template slot="pageText" slot-scope="props">
                     Itens {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
                 </template>
@@ -103,10 +108,6 @@
             ...mapActions({
                 buscarDocumentosAnexados: 'projeto/buscarDocumentosAnexados',
             }),
-            iterador(index) {
-                this.indexDocumentosAnexados = index + 1;
-                return this.indexDocumentosAnexados;
-            },
         },
         computed: {
             ...mapGetters({
