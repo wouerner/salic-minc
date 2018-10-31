@@ -4,7 +4,8 @@
                 :headers="headers"
                 :items="dados.providenciaTomada"
                 class="elevation-1"
-        >
+                rows-per-page-text="Itens por Página"
+       >
             <template slot="items" slot-scope="props">
                 <td style="width: 190px">{{ props.item.DtSituacao }}</td>
                 <td style="width: 50px">{{ props.item.Situacao }}</td>
@@ -13,7 +14,7 @@
                 <td>{{ props.item.usuario }}</td>
             </template>
             <template slot="pageText" slot-scope="props">
-                Lignes {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                Itens {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
             </template>
         </v-data-table>
     </div>
@@ -84,15 +85,6 @@
             }),
         },
         methods: {
-            toggleOrder() {
-                this.pagination.descending = !this.pagination.descending;
-            },
-            nextSort() {
-                let index = this.headers.findIndex(h => h.value === this.pagination.sortBy);
-                index = (index + 1) % this.headers.length;
-                index = index === 0 ? index + 1 : index;
-                this.pagination.sortBy = this.headers[index].value;
-            },
             ...mapActions({
                 buscarProvidenciaTomada: 'projeto/buscarProvidenciaTomada',
             }),
