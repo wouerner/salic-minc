@@ -178,13 +178,13 @@
 </template>
 
 <script>
-    import Vue from 'vue';
-    import { mapActions, mapGetters } from 'vuex';
-    import ModalTemplate from '@/components/modal';
-    import cnpjFilter from '@/filters/cnpj';
-    import VueCurrencyFilter from 'vue-currency-filter';
+import Vue from 'vue';
+import { mapActions, mapGetters } from 'vuex';
+import ModalTemplate from '@/components/modal';
+import cnpjFilter from '@/filters/cnpj';
+import VueCurrencyFilter from 'vue-currency-filter';
 
-    Vue.use(VueCurrencyFilter, {
+Vue.use(VueCurrencyFilter, {
     symbol: 'R$',
     thousandsSeparator: '.',
     fractionCount: 2,
