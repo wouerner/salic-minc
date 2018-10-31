@@ -5,10 +5,15 @@ import EmitirParecer from './components/EmitirParecer';
 import Painel from './components/Painel';
 import TipoAvaliacao from './components/TipoAvaliacao';
 import Planilha from './components/Planilha';
+import VisualizarPlanilha from './components/VisualizarPlanilha';
 import AnaliseComprovantes from './components/AnaliseComprovantes';
 import Diligenciar from './components/Diligenciar';
 import Historico from './components/Historico';
-import ConsolidacaoAnalise from './components/ConsolidacaoAnalise';
+import EmitirLaudoFinal from './components/EmitirLaudoFinal';
+import Laudo from './components/PainelLaudo';
+import AnalisarItem from './components/AnalisarItem';
+import VisualizarParecer from './components/VisualizarParecer';
+import VisualizarLaudo from './components/VisualizarLaudo';
 
 Vue.use(Router);
 
@@ -46,11 +51,19 @@ const routes = [
         },
     },
     {
-        path: '/planilha',
-        name: 'Analise Planilha',
+        path: '/planilha/:id',
+        name: 'AnalisePlanilha',
         component: Planilha,
         meta: {
             title: 'Analise da planilha',
+        },
+    },
+    {
+        path: '/visualizar-planilha/:id',
+        name: 'VisualizarPlanilha',
+        component: VisualizarPlanilha,
+        meta: {
+            title: 'Visualizar Planilha',
         },
     },
     {
@@ -62,7 +75,7 @@ const routes = [
         },
     },
     {
-        path: '/diligenciar',
+        path: '/diligenciar/:id',
         name: 'Diligenciar',
         component: Diligenciar,
         meta: {
@@ -78,11 +91,43 @@ const routes = [
         },
     },
     {
-        path: '/consolidacao-analise',
-        name: 'ConsolidacaoAnalise',
-        component: ConsolidacaoAnalise,
+        path: '/emitir-laudo-final/:id',
+        name: 'EmitirLaudoFinal',
+        component: EmitirLaudoFinal,
         meta: {
-            title: 'Consolidacao da Analise',
+            title: 'Emitir Laudo Final',
+        },
+    },
+    {
+        path: '/laudo',
+        name: 'Laudo',
+        component: Laudo,
+        meta: {
+            title: 'Avaliação de Resultados: Laudo Final',
+        },
+    },
+    {
+        path: '/analisar-item/*',
+        name: 'AnalisarItem',
+        component: AnalisarItem,
+        meta: {
+            title: 'Análise de itens',
+        },
+    },
+    {
+        path: '/visualizar-parecer/:id',
+        name: 'VisualizarParecer',
+        component: VisualizarParecer,
+        meta: {
+            title: 'Visualizar parecer',
+        },
+    },
+    {
+        path: '/visualizar-laudo/:id',
+        name: 'VisualizarLaudo',
+        component: VisualizarLaudo,
+        meta: {
+            title: 'Visualizar laudo',
         },
     },
     {
@@ -90,7 +135,7 @@ const routes = [
         name: 'Painel',
         component: Painel,
         meta: {
-            title: 'Painel',
+            title: 'Avaliação de Resultados: Parecer Técnico',
         },
     },
 ];

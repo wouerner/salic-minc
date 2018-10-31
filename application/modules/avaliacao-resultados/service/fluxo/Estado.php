@@ -29,12 +29,35 @@ class Estado
     public function eventos($atual, $params) {
         $estado = new \AvaliacaoResultados_Model_DbTable_Estados();
         $estado = $estado->findBy($atual);
+
         $proximo = json_decode($estado['proximo']);
+        /* var_dump($atual, $params['proximo'], $proximo->proximo->{$params['proximo']});die; */
+        $proximo = $proximo->proximo->{$params['proximo']};
 
-        include(APPLICATION_PATH . $proximo->path);
+        $inc = APPLICATION_PATH . $proximo->path;
+        require($inc);
 
-        $eventClass = new $proximo->class();
+        $class = '\\' . $proximo->class;
+
+        $eventClass = new $class();
 
         $eventClass->run($params);
+    }
+
+    public function alterarEstado($params){
+
+        $model = new \AvaliacaoResultados_Model_FluxosProjeto();
+        $mapper = new \AvaliacaoResultados_Model_FluxosProjetoMapper();
+
+        $row = $mapper->find(['idPronac = ?' => $params['idPronac']]);
+
+        if (!empty($row)) {
+            $model->setId($row['id']);
+        }
+
+        $model->setIdPronac($params['idPronac']);
+        $model->setEstadoId($params['proximo']);
+
+        $mapper->save($model);
     }
 }

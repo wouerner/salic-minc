@@ -10,7 +10,7 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
     protected $_primary = 'IdPRONAC';
 
 
-    public function buscarProjeto($where = [])
+    public function buscarProjeto($where = [], $order = null, $count = 0, $offset = 20)
     {
         $query = $this->select()
             ->setIntegrityCheck(false)
@@ -38,9 +38,28 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
             $this->getSchema('agentes')
         );
 
+        $query->joinInner(
+            ['s' => 'Situacao'],
+            's.Codigo = p.Situacao',
+            ['Descricao as descricaoSituacao'],
+            $this->_schema
+        );
+
         foreach ($where as $coluna => $valor) {
             $query->where($coluna, $valor);
         }
+
+        if ($order) {
+            $query->order($order);
+        }
+
+
+        if (!is_null($offset) && $count) {
+            $start = (int)$offset;
+            $limit = (int)$count;
+            $query->limit($limit, $start);
+        }
+
         return $this->fetchAll($query);
     }
 
@@ -64,6 +83,8 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
                 'projetos' => $this->_name
             ),
             array(
+                "Pronac" => new Zend_Db_Expr("projetos.AnoProjeto + projetos.Sequencial"),
+                "NomeProjeto" => new Zend_Db_Expr("projetos.NomeProjeto"),
                 "ValorProposta" => new Zend_Db_Expr("sac.dbo.fnValorSolicitado(projetos.AnoProjeto,projetos.Sequencial)"),
                 "ValorSolicitado" => new Zend_Db_Expr("sac.dbo.fnValorSolicitado(projetos.AnoProjeto,projetos.Sequencial)"),
                 "OutrasFontes" => new Zend_Db_Expr("sac.dbo.fnOutrasFontes(projetos.idPronac)"),
@@ -86,7 +107,24 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
                     + sac.dbo.fnVlRecebido(projetos.idPronac) 
                     - sac.dbo.fnVlTransferido(projetos.idPronac)) 
                     / sac.dbo.fnTotalAprovadoProjeto(projetos.AnoProjeto,projetos.Sequencial)) * 100) as PercentualCaptado"
-                )
+                ),
+                new Zend_Db_Expr("sac.dbo.fnVlComprovadoProjeto(projetos.idPronac) as ValorComprovado"),
+                new Zend_Db_Expr("CONVERT(DECIMAL(18,2),
+                ((sac.dbo.fnTotalCaptadoProjeto (projetos.AnoProjeto,projetos.Sequencial) 
+                    + sac.dbo.fnVlRecebido(projetos.idPronac) 
+                    - sac.dbo.fnVlComprovadoProjeto(projetos.idPronac))) ) as ValorAComprovar"
+                ),
+                new Zend_Db_Expr("
+                    CASE
+	                    WHEN sac.dbo.fnTotalCaptadoProjeto (projetos.AnoProjeto,projetos.Sequencial) > 0 
+	                        THEN CONVERT(DECIMAL(18,2), (
+	                        sac.dbo.fnVlComprovadoProjeto(projetos.idPronac) 
+	                        / (sac.dbo.fnTotalCaptadoProjeto (projetos.AnoProjeto,projetos.Sequencial) 
+	                        + sac.dbo.fnVlRecebido(projetos.idPronac) 
+	                        - sac.dbo.fnVlTransferido(projetos.idPronac))) * 100)  
+                        ELSE 0 
+                    END as PercentualComprovado
+                ")
             )
         );
         $objQuery->where('projetos.IdPRONAC = ?', $idPronac);
@@ -695,5 +733,37 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
         $sql->where('a.idPronac = ?', $idPronac);
 
         return $this->fetchRow($sql);
+    }
+
+    public function obterProjetosESituacao($where)
+    {
+        $query = $this->select();
+        $query->setIntegrityCheck(false);
+        $query->from(
+            ['projeto' => $this->_name],
+            [
+                new Zend_Db_Expr('projeto.AnoProjeto+projeto.Sequencial AS pronac'),
+                'IdPRONAC as idPronac',
+                'NomeProjeto as nomeProjeto',
+                'Cgccpf as cgcCpf',
+                'Situacao as situacao',
+                'DtSituacao as dtSituacao',
+                'diasSituacao' => new Zend_Db_Expr('DATEDIFF(DAY, DtSituacao, GETDATE())')
+            ],
+            $this->_schema
+        );
+
+        $query->joinInner(
+            ['situacao' => 'Situacao'],
+            'situacao.Codigo = projeto.Situacao',
+            ['Descricao as descricaoSituacao'],
+            $this->_schema
+        );
+
+        foreach ($where as $coluna => $valor) {
+            $query->where($coluna, $valor);
+        }
+
+        return $this->fetchAll($query);
     }
 }

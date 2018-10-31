@@ -105,13 +105,16 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         }
 
         # Proponente
-        if (isset($this->usuario['cpf'])) {
+        if (empty($where)) {
 
-            if (!empty($this->idAgente)) {
-                $whereAgente =  "OR a.idAgente = {$this->idAgente}";
+            if (isset($this->usuario['cpf'])) {
+
+                if (!empty($this->idAgente)) {
+                    $whereAgente = "OR a.idAgente = {$this->idAgente}";
+                }
+
+                $where["(a.idSolicitante = {$this->idUsuario} {$whereAgente})"] = '';
             }
-
-            $where["(a.idSolicitante = {$this->idUsuario} {$whereAgente})"] = '';
         }
 
         # funcionarios do minc
@@ -595,7 +598,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             if ($this->usuario['usu_codigo']) {
                 $resultado = $tbSolicitacao->contarSolicitacoesNaoRespondidasTecnico($this->idUsuario, $this->grupoAtivo->codOrgao);
             } else {
-                $resultado = $tbSolicitacao->contarSolicitacoesNaoRespondidasTecnico($this->idUsuario, $this->idAgente);
+                $resultado = $tbSolicitacao->contarSolicitacoesNaoLidasUsuario($this->idUsuario, $this->idAgente);
             }
 
             $this->_helper->json(array('status' => true, 'msg' => $resultado));
