@@ -86,6 +86,11 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         }
     }
 
+    public function gerenciarAssinaturasAction()
+    {
+        $this->redirect("/readequacao/readequacoes/painel?tipoFiltro=analisados");
+    }
+    
     /**
      * Método privado para carregar lista de cidades
      *
@@ -1213,9 +1218,21 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         /* ================== PAGINACAO ======================*/
         $where = array();
 
+        $filtrosAceitos = [
+            'aguardando_distribuicao',
+            'em_analise',
+            'analisados',
+            'aguardando_publicacao'
+        ];
+
         $filtro = null;
+        
         if ($this->_request->getParam('tipoFiltro')) {
             $filtro = $this->_request->getParam('tipoFiltro');
+            $filtro = preg_replace('/\/gerenciar\-assinaturas/', '', $filtro);
+            if (!in_array($filtro, $filtrosAceitos)) {
+                $filtro = 'aguardando_distribuicao';
+            }
         } else {
             $filtro = 'aguardando_distribuicao';
         }
