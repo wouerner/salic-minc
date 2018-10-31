@@ -3883,8 +3883,6 @@ class Projetos extends MinC_Db_Table_Abstract
 
         foreach ($consulta as $coluna => $valor) {
             $select->where($coluna, $valor);
-            var_dump($select);
-            die;
         }
 
         if ($retornaSelect) {

@@ -1,5 +1,7 @@
 <?php
 
+use Application\Modules\AvaliacaoResultados\Service\ParecerTecnico\Diligencia as DiligenciaService;
+
 class AvaliacaoResultados_DiligenciaController extends MinC_Controller_Rest_Abstract
 {
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
@@ -31,12 +33,16 @@ class AvaliacaoResultados_DiligenciaController extends MinC_Controller_Rest_Abst
             $this->_request->situacao;
             $this->_request->tpDiligencia;
 
-            $this->renderJsonResponse([message=>'Erro de requisição'], 200);
+            $this->renderJsonResponse([message=>'Requisição'], 200);
         }
     }
 
     public function getAction()
     {
+        $diligencia = new DiligenciaService();
+        $coisa = $diligencia->listaDiligenciaPainel();
+        var_dump($coisa);
+        die;
         if (!isset($this->_request->idPronac)){
             $this->renderJsonResponse([1=>'aqui',2=>'ali'], 400);
         }else{
