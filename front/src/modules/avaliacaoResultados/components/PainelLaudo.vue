@@ -1,6 +1,8 @@
 <template>
     <v-container fluid>
-        <h1 class="font-weight-regular">Laudo final</h1>
+        <v-subheader>
+            <h2>{{route.meta.title}}</h2>
+        </v-subheader>
         <v-card>
             <v-tabs
                 centered
@@ -9,7 +11,9 @@
                 icons-and-text
             >
                 <v-tabs-slider color="deep-orange accent-3"></v-tabs-slider>
-                <v-tab href="#tab-0">
+                <v-tab href="#tab-0"
+                       v-if="getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL"
+                >
                     <template v-if="Object.keys(getProjetosLaudoFinal).length == 0">
                         <v-progress-circular
                             indeterminate
@@ -22,7 +26,9 @@
                         <v-icon>how_to_reg</v-icon>
                     </template>
                 </v-tab>
-                <v-tab href="#tab-1">
+                <v-tab href="#tab-1"
+                       v-if="getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL"
+                >
                      Assinar
                     <v-icon>done</v-icon>
                 </v-tab>
@@ -30,7 +36,9 @@
                      Em assinatura
                     <v-icon>done_all</v-icon>
                 </v-tab>
-                <v-tab href="#tab-3">
+                <v-tab href="#tab-3"
+                       v-if="getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL"
+                >
                      Finalizados
                     <v-icon>collections_bookmark</v-icon>
                 </v-tab>
@@ -40,7 +48,7 @@
                     :key="0"
                 >
                     <Laudo :dados="getProjetosLaudoFinal"
-                            :acao="'analisar'"
+                           :estado="Const.ESTADO_ANALISE_LAUDO"
                     ></Laudo>
                 </v-tab-item>
                 <v-tab-item
@@ -48,7 +56,7 @@
                     :key="1"
                 >
                     <Laudo :dados="getProjetosLaudoAssinar"
-                            :acao="'assinar'"
+                           :estado="Const.ESTADO_LAUDO_FINALIZADO"
                     ></Laudo>
                 </v-tab-item>
                 <v-tab-item
@@ -56,7 +64,7 @@
                     :key="2"
                 >
                     <Laudo :dados="getProjetosLaudoEmAssinatura"
-                            :acao="'visualizar'"
+                           :estado="Const.ESTADO_AGUARDANDO_ASSINATURA_LAUDO"
                     ></Laudo>
                 </v-tab-item>
                 <v-tab-item
@@ -64,7 +72,7 @@
                     :key="3"
                 >
                     <Laudo :dados="getProjetosLaudoFinalizados"
-                            :acao="'visualizar'"
+                           :estado="Const.ESTADO_AVALIACAO_RESULTADOS_FINALIZADA"
                     ></Laudo>
                 </v-tab-item>
             </v-tabs>
@@ -75,10 +83,16 @@
 <script>
 
 import { mapActions, mapGetters } from 'vuex';
+import Const from '../const';
 import Laudo from './Laudo';
 
 export default {
     name: 'PainelLaudo',
+    data() {
+        return {
+            Const,
+        };
+    },
     created() {
         this.obterProjetosLaudoFinal({ estadoId: 10 });
         this.obterProjetosLaudoAssinar({ estadoId: 14 });
@@ -102,6 +116,8 @@ export default {
             getProjetosLaudoAssinar: 'avaliacaoResultados/getProjetosLaudoAssinar',
             getProjetosLaudoEmAssinatura: 'avaliacaoResultados/getProjetosLaudoEmAssinatura',
             getProjetosLaudoFinalizados: 'avaliacaoResultados/getProjetosLaudoFinalizados',
+            getUsuario: 'autenticacao/getUsuario',
+            route: 'route',
         }),
     },
 };

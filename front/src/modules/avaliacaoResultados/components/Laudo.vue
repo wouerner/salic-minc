@@ -58,22 +58,18 @@
                     </v-btn>
                 </td>
                 <td class="text-xs-center">
-                    <v-dialog v-model="dialog" max-width="290">
-                        <v-btn slot="activator" flat icon color="green" :disabled="acao !== 'analisar'">
-                            <v-icon>keyboard_return</v-icon>
-                        </v-btn>
-                        <v-card>
-                            <v-card-title class="headline">Deseja realmente devolver o documento?</v-card-title>
-                            <v-card-text>Devolver parecer para nova análise.</v-card-text>
-                            <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="red" flat @click.native="dialog = false">Cancelar</v-btn>
-                            <v-btn color="green" flat @click.native="dialog = false">Devolver</v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
+                    <Devolver
+                        v-if="usuario"
+                        :idPronac="props.item.IdPronac"
+                        :atual="estado"
+                        :proximo="proximoEstado()"
+                        :nomeProjeto="props.item.NomeProjeto"
+                        :pronac="props.item.PRONAC"
+                        :idTipoDoAtoAdministrativo="atoAdministrativo"
+                    >
+                    </Devolver>
                 </td>
-                <td v-if="acao == 'analisar'" class="text-xs-center">
+                <td v-if="estado == Const.ESTADO_ANALISE_LAUDO" class="text-xs-center">
                     <v-btn flat icon color="blue"
                             @click.native="sincState(props.item.IdPronac)"
                             :to="{ name: 'EmitirLaudoFinal', params:{ id:props.item.IdPronac }}">
@@ -83,7 +79,7 @@
                         </v-tooltip>
                     </v-btn>
                 </td>
-                <td v-if="acao == 'assinar'" class="text-xs-center">
+                <td v-if="estado == Const.ESTADO_LAUDO_FINALIZADO" class="text-xs-center">
                     <v-btn flat icon color="blue"
                             :href="'/assinatura/index/assinar-projeto?IdPRONAC='+props.item.IdPronac+'&idTipoDoAtoAdministrativo=623'">
                         <v-tooltip bottom>
@@ -92,7 +88,10 @@
                         </v-tooltip>
                     </v-btn>
                 </td>
-                <td v-if="acao == 'visualizar'" class="text-xs-center">
+                <td v-if="estado == Const.ESTADO_AGUARDANDO_ASSINATURA_LAUDO ||
+                          estado == Const.ESTADO_AVALIACAO_RESULTADOS_FINALIZADA"
+                    class="text-xs-center"
+                >
                     <v-btn flat icon color="blue"
                             @click.native="sincState(props.item.IdPronac)"
                             :to="{ name: 'VisualizarLaudo', params:{ id:props.item.IdPronac }}">
@@ -127,12 +126,14 @@
 </template>
 
 <script>
-    import { mapActions } from 'vuex';
     import ModalTemplate from '@/components/modal';
+    import { mapActions, mapGetters } from 'vuex';
+    import Const from '../const';
+    import Devolver from './Devolver';
 
     export default {
         name: 'Painel',
-        props: ['dados', 'acao'],
+        props: ['dados', 'estado'],
         data() {
             return {
                 pagination: {
@@ -174,10 +175,12 @@
                         sortable: false,
                     },
                 ],
+                Const,
             };
         },
         components: {
             ModalTemplate,
+            Devolver,
         },
         methods: {
             ...mapActions({
@@ -188,13 +191,55 @@
                 this.requestEmissaoParecer(id);
                 this.getLaudoFinal(id);
             },
+            proximoEstado() {
+                let proximo = '';
+
+                switch (this.estado) {
+                case Const.ESTADO_ANALISE_LAUDO:
+                    proximo = Const.ESTADO_ANALISE_PARECER;
+                    break;
+                case Const.ESTADO_LAUDO_FINALIZADO:
+                    proximo = Const.ESTADO_ANALISE_LAUDO;
+                    break;
+                case Const.ESTADO_AGUARDANDO_ASSINATURA_LAUDO:
+                    proximo = Const.ESTADO_ANALISE_LAUDO;
+                    break;
+                case Const.ESTADO_AVALIACAO_RESULTADOS_FINALIZADA:
+                    proximo = Const.ESTADO_ANALISE_LAUDO;
+                    break;
+                default:
+                    proximo = '';
+                }
+                return proximo;
+            },
         },
         computed: {
+            ...mapGetters({
+                getUsuario: 'autenticacao/getUsuario',
+            }),
             pages() {
                 if (this.pagination.rowsPerPage == null ||
                     this.pagination.totalItems == null
                 ) return 0;
                 return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
+            },
+            atoAdministrativo() {
+                let ato = Const.ATO_ADMINISTRATIVO_PARECER_TECNICO;
+
+                if (
+                    this.usuario &&
+                    (
+                        Const.PERFIL_DIRETOR === this.getUsuario.grupo_ativo
+                        || Const.PERFIL_SECRETARIO === this.getUsuario.grupo_ativo
+                    )
+                ) {
+                    ato = Const.ATO_ADMINISTRATIVO_LAUDO_FINAL;
+                }
+
+                return ato;
+            },
+            usuario() {
+                return (this.getUsuario !== undefined && Object.keys(this.getUsuario).length > 0);
             },
         },
         watch: {
