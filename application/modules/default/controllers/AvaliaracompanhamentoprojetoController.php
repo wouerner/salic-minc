@@ -44,14 +44,22 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
             $this->usu_orgao = $GrupoAtivo->codOrgao;
 
             $this->getIdOrgao = $GrupoAtivo->codOrgao;
-        } 
+        }
         else { // caso o usuario n&atilde;o esteja autenticado
             return $this->_helper->redirector->goToRoute(array('controller' => 'index', 'action' => 'logout'), null, true);
         }
 
+
+        $idPronac = $this->_request->getParam("idPronac");
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
+        }
+        $this->view->idPronac = $idPronac;
+
+
         //recupera ID do pre projeto (proposta)
         parent::init(); // chama o init() do pai GenericControllerNew
-    } 
+    }
 
     public function indexAction()
     {
@@ -344,55 +352,55 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
 
     public function visualizarRelatorioAction()
     {
-        $idpronac = $this->_request->getParam("idPronac");
-        $this->view->idPronac = $idpronac;
-        if (strlen($idpronac) > 7) {
-            $idpronac = Seguranca::dencrypt($idpronac);
+        $idPronac = $this->_request->getParam("idPronac");
+        $this->view->idPronac = $idPronac;
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
         }
 
         //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
-        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
+        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
         $tbCumprimentoObjeto = new tbCumprimentoObjeto();
-        $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idpronac, 'siCumprimentoObjeto in (?)'=>array(2,5)));
+        $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idPronac, 'siCumprimentoObjeto in (?)'=>array(2,5)));
         $this->view->DadosRelatorio = $DadosRelatorio;
         $this->view->cumprimentoDoObjeto = $tbCumprimentoObjeto;
         if (count($DadosRelatorio)==0) {
             parent::message("Relat&aacute;rio n&atilde;o encontrado!", "avaliaracompanhamentoprojeto/index", "ALERT");
         }
 
-        $LocaisDeRealizacao = $projetos->buscarLocaisDeRealizacao($idpronac);
+        $LocaisDeRealizacao = $projetos->buscarLocaisDeRealizacao($idPronac);
         $this->view->LocaisDeRealizacao = $LocaisDeRealizacao;
 
-        $PlanoDeDivulgacao = $projetos->buscarPlanoDeDivulgacao($idpronac);
+        $PlanoDeDivulgacao = $projetos->buscarPlanoDeDivulgacao($idPronac);
         $this->view->PlanoDeDivulgacao = $PlanoDeDivulgacao;
 
         $PlanoDistribuicaoProduto = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
-        $PlanoDeDistribuicao = $PlanoDistribuicaoProduto->buscarPlanoDeDistribuicao($idpronac);
+        $PlanoDeDistribuicao = $PlanoDistribuicaoProduto->buscarPlanoDeDistribuicao($idPronac);
         $this->view->PlanoDeDistribuicao = $PlanoDeDistribuicao;
 
         $tbBeneficiarioProdutoCultural = new tbBeneficiarioProdutoCultural();
-        $PlanosCadastrados = $tbBeneficiarioProdutoCultural->buscarPlanosCadastrados($idpronac);
+        $PlanosCadastrados = $tbBeneficiarioProdutoCultural->buscarPlanosCadastrados($idPronac);
         $this->view->PlanosCadastrados = $PlanosCadastrados;
 
-        $DadosCompMetas = $projetos->buscarMetasComprovadas($idpronac);
+        $DadosCompMetas = $projetos->buscarMetasComprovadas($idPronac);
         $this->view->DadosCompMetas = $DadosCompMetas;
 
-        $DadosItensOrcam = $projetos->buscarItensComprovados($idpronac);
+        $DadosItensOrcam = $projetos->buscarItensComprovados($idPronac);
         $this->view->DadosItensOrcam = $DadosItensOrcam;
 
         $Arquivo = new Arquivo();
-        $dadosComprovantes = $Arquivo->buscarComprovantesExecucao($idpronac);
+        $dadosComprovantes = $Arquivo->buscarComprovantesExecucao($idPronac);
         $this->view->DadosComprovantes = $dadosComprovantes;
 
         $tbTermoAceiteObra = new tbTermoAceiteObra();
-        $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idpronac));
+        $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idPronac));
         $this->view->AceiteObras = $AceiteObras;
 
         $tbBensDoados = new tbBensDoados();
-        $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idpronac), array('b.Descricao'));
+        $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idPronac), array('b.Descricao'));
         $this->view->BensCadastrados = $BensCadastrados;
 
         if ($DadosRelatorio->siCumprimentoObjeto >= 5) {
@@ -406,53 +414,53 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
 
     public function imprimirAction()
     {
-        $idpronac = $this->_request->getParam("pronac");
-        if (strlen($idpronac) > 7) {
-            $idpronac = Seguranca::dencrypt($idpronac);
+        $idPronac = $this->_request->getParam("pronac");
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
         }
 
         //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
-        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
+        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
         $tbCumprimentoObjeto = new tbCumprimentoObjeto();
-        $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idpronac, 'siCumprimentoObjeto!=?'=>1));
+        $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idPronac, 'siCumprimentoObjeto!=?'=>1));
         $this->view->DadosRelatorio = $DadosRelatorio;
         if (count($DadosRelatorio)==0) {
             parent::message("Relat&aacute;rio n&atilde;o encontrado!", "avaliaracompanhamentoprojeto/index", "ALERT");
         }
 
-        $LocaisDeRealizacao = $projetos->buscarLocaisDeRealizacao($idpronac);
+        $LocaisDeRealizacao = $projetos->buscarLocaisDeRealizacao($idPronac);
         $this->view->LocaisDeRealizacao = $LocaisDeRealizacao;
 
-        $PlanoDeDivulgacao = $projetos->buscarPlanoDeDivulgacao($idpronac);
+        $PlanoDeDivulgacao = $projetos->buscarPlanoDeDivulgacao($idPronac);
         $this->view->PlanoDeDivulgacao = $PlanoDeDivulgacao;
 
         $PlanoDistribuicaoProduto = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
-        $PlanoDeDistribuicao = $PlanoDistribuicaoProduto->buscarPlanoDeDistribuicao($idpronac);
+        $PlanoDeDistribuicao = $PlanoDistribuicaoProduto->buscarPlanoDeDistribuicao($idPronac);
         $this->view->PlanoDeDistribuicao = $PlanoDeDistribuicao;
 
         $tbBeneficiarioProdutoCultural = new tbBeneficiarioProdutoCultural();
-        $PlanosCadastrados = $tbBeneficiarioProdutoCultural->buscarPlanosCadastrados($idpronac);
+        $PlanosCadastrados = $tbBeneficiarioProdutoCultural->buscarPlanosCadastrados($idPronac);
         $this->view->PlanosCadastrados = $PlanosCadastrados;
 
-        $DadosCompMetas = $projetos->buscarMetasComprovadas($idpronac);
+        $DadosCompMetas = $projetos->buscarMetasComprovadas($idPronac);
         $this->view->DadosCompMetas = $DadosCompMetas;
 
-        $DadosItensOrcam = $projetos->buscarItensComprovados($idpronac);
+        $DadosItensOrcam = $projetos->buscarItensComprovados($idPronac);
         $this->view->DadosItensOrcam = $DadosItensOrcam;
 
         $Arquivo = new Arquivo();
-        $dadosComprovantes = $Arquivo->buscarComprovantesExecucao($idpronac);
+        $dadosComprovantes = $Arquivo->buscarComprovantesExecucao($idPronac);
         $this->view->DadosComprovantes = $dadosComprovantes;
 
         $tbTermoAceiteObra = new tbTermoAceiteObra();
-        $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idpronac));
+        $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idPronac));
         $this->view->AceiteObras = $AceiteObras;
 
         $tbBensDoados = new tbBensDoados();
-        $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idpronac), array('b.Descricao'));
+        $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idPronac), array('b.Descricao'));
         $this->view->BensCadastrados = $BensCadastrados;
 
         if ($DadosRelatorio->siCumprimentoObjeto >= 5) {
@@ -622,14 +630,14 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
             parent::message("Voc&ecirc; n&atilde;o tem permissao para acessar essa funcionalidade!", "principal", "ALERT");
         }
 
-        $idpronac = $this->_request->getParam("idpronac");
+        $idPronac = $this->_request->getParam("idPronac");
         $idrelatorio = $this->_request->getParam("relatorio");
-        if (strlen($idpronac) > 7) {
-            $idpronac = Seguranca::dencrypt($idpronac);
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
         }
 
         $where = array();
-        $where['a.idPronac = ?'] = $idpronac;
+        $where['a.idPronac = ?'] = $idPronac;
         $where['a.idTecnicoAvaliador = ?'] = $idusuario;
         $where['a.siCumprimentoObjeto in (?)'] = array(3,4);
         $where['b.Orgao = ?'] = $codOrgao;
@@ -642,17 +650,17 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
         }
 
         $this->view->DadosRelatorio = $DadosRelatorio;
-        $this->view->idPronac = $idpronac;
+        $this->view->idPronac = $idPronac;
         $this->view->idRelatorio = $idrelatorio;
         $this->view->idusuario = $idusuario;
         $this->view->nmusuario = $nmusuario;
 
         //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
-        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
+        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        $dadosParecer = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac=?'=>$idpronac,'idTecnicoAvaliador=?'=>$idusuario));
+        $dadosParecer = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac=?'=>$idPronac,'idTecnicoAvaliador=?'=>$idusuario));
         $this->view->DadosParecer = $dadosParecer;
 
         $pa = new paCoordenadorDoPerfil();
@@ -665,21 +673,21 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
         //** Verifica se o usuario logado tem permissao de acesso **//
         $this->verificarPermissaoAcesso(false, true, false);
 
-        $idpronac = $this->_request->getParam("idpronac");
-        if (strlen($idpronac) > 7) {
-            $idpronac = Seguranca::dencrypt($idpronac);
+        $idPronac = $this->_request->getParam("idPronac");
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
         }
 
         //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
-        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
+        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
         $tbCumprimentoObjeto = new tbCumprimentoObjeto();
-        $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac=?'=>$idpronac));
+        $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac=?'=>$idPronac));
         $this->view->DadosRelatorio = $DadosRelatorio;
         $this->view->cumprimentoDoObjeto = $tbCumprimentoObjeto;
-        $this->view->idPronac = $idpronac;
+        $this->view->idPronac = $idPronac;
     }
 
     public function localDeRealizacaoFinalAction()
@@ -688,19 +696,19 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
         //** Verifica se o usuario logado tem permissao de acesso **//
         $this->verificarPermissaoAcesso(false, true, false);
 
-        $idpronac = $this->_request->getParam("idpronac");
-        if (strlen($idpronac) > 7) {
-            $idpronac = Seguranca::dencrypt($idpronac);
+        $idPronac = $this->_request->getParam("idPronac");
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
         }
 
         //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
-        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
+        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        $LocaisDeRealizacao = $projetos->buscarLocaisDeRealizacao($idpronac);
+        $LocaisDeRealizacao = $projetos->buscarLocaisDeRealizacao($idPronac);
         $this->view->LocaisDeRealizacao = $LocaisDeRealizacao;
-        $this->view->idPronac = $idpronac;
+        $this->view->idPronac = $idPronac;
     }
 
     public function planoDeDivulgacaoFinalAction()
@@ -709,17 +717,17 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
         //** Verifica se o usuario logado tem permissao de acesso **//
         $this->verificarPermissaoAcesso(false, true, false);
 
-        $idpronac = $this->_request->getParam("idpronac");
-        if (strlen($idpronac) > 7) {
-            $idpronac = Seguranca::dencrypt($idpronac);
+        $idPronac = $this->_request->getParam("idPronac");
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
         }
 
         //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
-        $dadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
+        $dadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $dadosProjeto;
 
-        $PlanoDeDivulgacao = $projetos->buscarPlanoDeDivulgacao($idpronac);
+        $PlanoDeDivulgacao = $projetos->buscarPlanoDeDivulgacao($idPronac);
         $this->view->PlanoDeDivulgacao = $PlanoDeDivulgacao;
 
         $Verificacao = new Verificacao();
@@ -728,7 +736,7 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
 
         $Veiculo = $Verificacao->buscar(array('idTipo =?'=>2,'stEstado =?'=>1));
         $this->view->Veiculo = $Veiculo;
-        $this->view->idPronac = $idpronac;
+        $this->view->idPronac = $idPronac;
 
         $tbArquivoImagem = new tbArquivoImagem();
         $this->view->marcas = $tbArquivoImagem->marcasAnexadas($dadosProjeto->pronac);
@@ -740,24 +748,24 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
         //** Verifica se o usuario logado tem permissao de acesso **//
         $this->verificarPermissaoAcesso(false, true, false);
 
-        $idpronac = $this->_request->getParam("idpronac");
-        if (strlen($idpronac) > 7) {
-            $idpronac = Seguranca::dencrypt($idpronac);
+        $idPronac = $this->_request->getParam("idPronac");
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
         }
 
         //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
-        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
+        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
         $PlanoDistribuicaoProduto = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
-        $PlanoDeDistribuicao = $PlanoDistribuicaoProduto->buscarPlanoDeDistribuicao($idpronac);
+        $PlanoDeDistribuicao = $PlanoDistribuicaoProduto->buscarPlanoDeDistribuicao($idPronac);
         $this->view->PlanoDeDistribuicao = $PlanoDeDistribuicao;
 
         $tbBeneficiarioProdutoCultural = new tbBeneficiarioProdutoCultural();
-        $PlanosCadastrados = $tbBeneficiarioProdutoCultural->buscarPlanosCadastrados($idpronac);
+        $PlanosCadastrados = $tbBeneficiarioProdutoCultural->buscarPlanosCadastrados($idPronac);
         $this->view->PlanosCadastrados = $PlanosCadastrados;
-        $this->view->idPronac = $idpronac;
+        $this->view->idPronac = $idPronac;
     }
 
     public function metasComprovadasFinalAction()
@@ -766,20 +774,20 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
         //** Verifica se o usuario logado tem permissao de acesso **//
         $this->verificarPermissaoAcesso(false, true, false);
 
-        $idpronac = $this->_request->getParam("idpronac");
-        if (strlen($idpronac) > 7) {
-            $idpronac = Seguranca::dencrypt($idpronac);
+        $idPronac = $this->_request->getParam("idPronac");
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
         }
 
         //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
-        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
+        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
         //****** Dados da Comprova��o de Metas *****//
-        $DadosCompMetas = $projetos->buscarMetasComprovadas($idpronac);
+        $DadosCompMetas = $projetos->buscarMetasComprovadas($idPronac);
         $this->view->DadosCompMetas = $DadosCompMetas;
-        $this->view->idPronac = $idpronac;
+        $this->view->idPronac = $idPronac;
     }
 
     public function itensComprovadosFinalAction()
@@ -788,19 +796,19 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
         //** Verifica se o usuario logado tem permissao de acesso **//
         $this->verificarPermissaoAcesso(false, true, false);
 
-        $idpronac = $this->_request->getParam("idpronac");
-        if (strlen($idpronac) > 7) {
-            $idpronac = Seguranca::dencrypt($idpronac);
+        $idPronac = $this->_request->getParam("idPronac");
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
         }
 
         //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
-        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
+        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        $DadosItensOrcam = $projetos->buscarItensComprovados($idpronac);
+        $DadosItensOrcam = $projetos->buscarItensComprovados($idPronac);
         $this->view->DadosItensOrcam = $DadosItensOrcam;
-        $this->view->idPronac = $idpronac;
+        $this->view->idPronac = $idPronac;
     }
 
     public function comprovantesDeExecucaoFinalAction()
@@ -809,20 +817,20 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
         //** Verifica se o usuario logado tem permissao de acesso **//
         $this->verificarPermissaoAcesso(false, true, false);
 
-        $idpronac = $this->_request->getParam("idpronac");
-        if (strlen($idpronac) > 7) {
-            $idpronac = Seguranca::dencrypt($idpronac);
+        $idPronac = $this->_request->getParam("idPronac");
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
         }
 
         //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
-        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
+        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
         $Arquivo = new Arquivo();
-        $dadosComprovantes = $Arquivo->buscarComprovantesExecucao($idpronac);
+        $dadosComprovantes = $Arquivo->buscarComprovantesExecucao($idPronac);
         $this->view->DadosComprovantes = $dadosComprovantes;
-        $this->view->idPronac = $idpronac;
+        $this->view->idPronac = $idPronac;
     }
 
     public function aceiteDeObraFinalAction()
@@ -830,20 +838,20 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
         //** Verifica se o usuario logado tem permissao de acesso **//
         $this->verificarPermissaoAcesso(false, true, false);
 
-        $idpronac = $this->_request->getParam("idpronac");
-        if (strlen($idpronac) > 7) {
-            $idpronac = Seguranca::dencrypt($idpronac);
+        $idPronac = $this->_request->getParam("idPronac");
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
         }
 
         //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
-        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
+        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
         $tbTermoAceiteObra = new tbTermoAceiteObra();
-        $DadosRelatorio = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idpronac));
+        $DadosRelatorio = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idPronac));
         $this->view->DadosRelatorio = $DadosRelatorio;
-        $this->view->idPronac = $idpronac;
+        $this->view->idPronac = $idPronac;
     }
 
     public function bensFinalAction()
@@ -851,24 +859,24 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
         //** Verifica se o usuario logado tem permissao de acesso **//
         $this->verificarPermissaoAcesso(false, true, false);
 
-        $idpronac = $this->_request->getParam("idpronac");
-        if (strlen($idpronac) > 7) {
-            $idpronac = Seguranca::dencrypt($idpronac);
+        $idPronac = $this->_request->getParam("idPronac");
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
         }
 
         //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
-        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
+        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-        $DadosItens = $tbPlanilhaAprovacao->buscarItensOrcamentarios(array('a.idPronac=?'=>$idpronac), array('b.Descricao'));
+        $DadosItens = $tbPlanilhaAprovacao->buscarItensOrcamentarios(array('a.idPronac=?'=>$idPronac), array('b.Descricao'));
         $this->view->DadosItens = $DadosItens;
 
         $tbBensDoados = new tbBensDoados();
-        $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idpronac), array('b.Descricao'));
+        $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idPronac), array('b.Descricao'));
         $this->view->BensCadastrados = $BensCadastrados;
-        $this->view->idPronac = $idpronac;
+        $this->view->idPronac = $idPronac;
     }
 
     public function avaliarRelatorioAction()
@@ -881,13 +889,13 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
         $codOrgao           = $GrupoAtivo->codOrgao; //  orgao ativo na sessao
         /******************************************************************/
 
-        $idpronac = $this->_request->getParam("idpronac");
-        if (strlen($idpronac) > 7) {
-            $idpronac = Seguranca::dencrypt($idpronac);
+        $idPronac = $this->_request->getParam("idPronac");
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
         }
 
         $where = array();
-        $where['idPronac = ?'] = $idpronac;
+        $where['idPronac = ?'] = $idPronac;
         $where['idTecnicoAvaliador = ?'] = $idusuario;
         $where['siCumprimentoObjeto in (?)'] = array(3,4);
 
@@ -900,7 +908,7 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
 
         $siComprovante = 4;
         $msg = 'Relat&aacute;rio salvo com sucesso!';
-        $controller = "avaliaracompanhamentoprojeto/parecer-tecnico?idpronac=".$idpronac;
+        $controller = "avaliaracompanhamentoprojeto/parecer-tecnico?idPronac=".$idPronac;
         if (isset($_POST['finalizar']) && !empty($_POST['finalizar'])) {
             $siComprovante = 5;
             $msg = 'Relat&aacute;rio finalizado com sucesso!';
@@ -954,8 +962,8 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
     {
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
         $this->view->recursosPorFonte = $planilhaAprovacaoModel
-                ->buscarRecursosDaFonte($this->getRequest()->getParam('idpronac'));
+                ->buscarRecursosDaFonte($this->getRequest()->getParam('idPronac'));
         //Passando o pronac para ser usada no menu lateral esquerdo
-        $this->view->idPronac = $this->getRequest()->getParam('idpronac');
+        $this->view->idPronac = $this->getRequest()->getParam('idPronac');
     }
 }

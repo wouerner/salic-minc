@@ -53,27 +53,27 @@
                 clear: both;
             }
         </style>
-        
+
         <div id="menuContexto">
             <div class="top"></div>
             <div id="qm0" class="qmmc sanfona">
-                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/parecer-tecnico?idpronac=<?php echo $this->idPronac; ?>" title="Parecer T&eacute;cnico" class="no_seta">Parecer T&eacute;cnico</a>
-                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/etapas-de-trabalho-final?idpronac=<?php echo $this->idPronac; ?>" title="Etapas de Trabalho" class="no_seta">Etapas de Trabalho</a>
-                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/local-de-realizacao-final?idpronac=<?php echo $this->idPronac; ?>" title="Local de Realiza&ccedil;&atilde;o" class="no_seta">Local de Realiza&ccedil;&atilde;o</a>
-                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/plano-de-divulgacao-final?idpronac=<?php echo $this->idPronac; ?>" title="Plano de Divulga&ccedil;&atilde;o" class="no_seta">Plano de Divulga&ccedil;&atilde;o</a>
-                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/plano-de-distribuicao-final?idpronac=<?php echo $this->idPronac; ?>" title="Plano de Distribui&ccedil;&atilde;o" class="no_seta">Plano de Distribui&ccedil;&atilde;o</a>
-                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/metas-comprovadas-final?idpronac=<?php echo $this->idPronac; ?>" title="Metas Comprovadas" class="no_seta">Metas Comprovadas</a>
-                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/itens-comprovados-final?idpronac=<?php echo $this->idPronac; ?>" title="Itens Comprovados" class="no_seta">Itens Comprovados</a>
-                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/comprovantes-de-execucao-final?idpronac=<?php echo $this->idPronac; ?>" title="Comprovantes de Execu&ccedil;&atilde;o" class="no_seta">Comprovantes de Execu&ccedil;&atilde;o</a>
-                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/aceite-de-obra-final?idpronac=<?php echo $this->idPronac; ?>" title="Aceite de Obra" class="no_seta">Aceite de Obra</a>
-                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/bens-final?idpronac=<?php echo $this->idPronac; ?>" title="Bens Doados" class="no_seta">Bens Doados</a>
+                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/parecer-tecnico?idPronac=<?php echo $this->idPronac; ?>" title="Parecer T&eacute;cnico" class="no_seta">Parecer T&eacute;cnico</a>
+                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/etapas-de-trabalho-final?idPronac=<?php echo $this->idPronac; ?>" title="Etapas de Trabalho" class="no_seta">Etapas de Trabalho</a>
+                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/local-de-realizacao-final?idPronac=<?php echo $this->idPronac; ?>" title="Local de Realiza&ccedil;&atilde;o" class="no_seta">Local de Realiza&ccedil;&atilde;o</a>
+                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/plano-de-divulgacao-final?idPronac=<?php echo $this->idPronac; ?>" title="Plano de Divulga&ccedil;&atilde;o" class="no_seta">Plano de Divulga&ccedil;&atilde;o</a>
+                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/plano-de-distribuicao-final?idPronac=<?php echo $this->idPronac; ?>" title="Plano de Distribui&ccedil;&atilde;o" class="no_seta">Plano de Distribui&ccedil;&atilde;o</a>
+                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/metas-comprovadas-final?idPronac=<?php echo $this->idPronac; ?>" title="Metas Comprovadas" class="no_seta">Metas Comprovadas</a>
+                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/itens-comprovados-final?idPronac=<?php echo $this->idPronac; ?>" title="Itens Comprovados" class="no_seta">Itens Comprovados</a>
+                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/comprovantes-de-execucao-final?idPronac=<?php echo $this->idPronac; ?>" title="Comprovantes de Execu&ccedil;&atilde;o" class="no_seta">Comprovantes de Execu&ccedil;&atilde;o</a>
+                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/aceite-de-obra-final?idPronac=<?php echo $this->idPronac; ?>" title="Aceite de Obra" class="no_seta">Aceite de Obra</a>
+                <a href="<?php echo $this->baseUrl(); ?>/avaliaracompanhamentoprojeto/bens-final?idPronac=<?php echo $this->idPronac; ?>" title="Bens Doados" class="no_seta">Bens Doados</a>
                 <a href="
                     <?php
                     echo $this->url(
                             array(
                                 'controller' => 'avaliaracompanhamentoprojeto',
                                 'action' => 'recursos-por-fonte',
-                                'idpronac' => $this->idPronac,
+                                'idPronac' => $this->idPronac,
                             ),
                             null,
                             true

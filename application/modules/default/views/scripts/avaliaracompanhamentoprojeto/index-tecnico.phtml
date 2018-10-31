@@ -19,7 +19,7 @@
                         $("#pergunta").dialog('close');
                         $.ajax({
                             type: 'POST',
-                            url: '<?php echo $this->url(array('controller' => 'avaliaracompanhamentoprojeto', 'action' => 'devolver-relatorio'), '', true); ?>?idpronac=<?php echo $this->idPronac; ?>',
+                            url: '<?php echo $this->url(array('controller' => 'avaliaracompanhamentoprojeto', 'action' => 'devolver-relatorio'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
                             data: {
                                 pronac: pronac
                             },
@@ -57,7 +57,7 @@
     });
 
     function avaliarRelatorio(pronac){
-        location.href="<?php echo $this->baseUrl()."/avaliaracompanhamentoprojeto/parecer-tecnico?idpronac="; ?>"+pronac;
+        location.href="<?php echo $this->baseUrl()."/avaliaracompanhamentoprojeto/parecer-tecnico?idPronac="; ?>"+pronac;
     }
 
     function alertaModal(msg){
@@ -174,7 +174,7 @@
             <td class="destacar bold" align="center">Diligência</td>
             <td class="destacar bold" align="center">Avaliar</td>
             <td class="destacar bold" align="center" width="1%">Devolver</td>
-            
+
         </tr>
         <?php foreach($this->dados as $dp) : ?>
         <tr>
