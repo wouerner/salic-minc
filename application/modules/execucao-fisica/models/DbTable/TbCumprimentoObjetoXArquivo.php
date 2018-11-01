@@ -1,6 +1,6 @@
 <?php
 
-class CumprimentoObjetoXArquivo extends MinC_Db_Table_Abstract
+class ExecucaoFisica_Model_DbTable_TbCumprimentoObjetoXArquivo extends MinC_Db_Table_Abstract
 {
     const ACESSIBILIDADE_FISICA = 0;
     const FRUICAO_DE_DEMOCRATIZACAO_AO_ACESSO_PUBLICO = 1;

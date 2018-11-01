@@ -1891,7 +1891,7 @@ class ExecucaoFisica_ComprovarexecucaofisicaController extends MinC_Controller_A
             $this->getRequest()->getParam('idpronac');
         try {
             Seguranca::encrypt($this->getRequest()->getParam('idpronac'));
-            $cumprimentoObjetoArquivoModel = new CumprimentoObjetoXArquivo(
+            $cumprimentoObjetoArquivoModel = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjetoXArquivo(
                     null,
                     $this->getRequest()->getParam('idCumprimentoDoObjeto'),
                     $this->getRequest()->getParam('idArquivo')

@@ -129,10 +129,10 @@ class ExecucaoFisica_Model_TbCumprimentoObjeto extends MinC_Db_Table_Abstract
                 $this->setMedidasAcessibilidadeImagens(new ArrayObject());
                 return $this->medidasAcessibilidadeImagens;
             }
-            $cumprimentoObjetoArquivoModel = new CumprimentoObjetoXArquivo();
+            $cumprimentoObjetoArquivoModel = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjetoXArquivo();
             $cumprimentoObjetoArquivoModel->setIdCumprimentoObjeto($this->getIdCumprimentoObjeto());
             $cumprimentoObjetoArquivoModel->setPosicao(
-                    CumprimentoObjetoXArquivo::ACESSIBILIDADE_FISICA
+                    ExecucaoFisica_Model_DbTable_TbCumprimentoObjetoXArquivo::ACESSIBILIDADE_FISICA
                     );
             $this->setMedidasAcessibilidadeImagens($cumprimentoObjetoArquivoModel->buscar());
         }
@@ -146,10 +146,10 @@ class ExecucaoFisica_Model_TbCumprimentoObjeto extends MinC_Db_Table_Abstract
                 $this->setMedidasFruicaoImagens(new ArrayObject());
                 return $this->medidasFruicaoImagens;
             }
-            $cumprimentoObjetoArquivoModel = new CumprimentoObjetoXArquivo();
+            $cumprimentoObjetoArquivoModel = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjetoXArquivo();
             $cumprimentoObjetoArquivoModel->setIdCumprimentoObjeto($this->getIdCumprimentoObjeto());
             $cumprimentoObjetoArquivoModel->setPosicao(
-                    CumprimentoObjetoXArquivo::FRUICAO_DE_DEMOCRATIZACAO_AO_ACESSO_PUBLICO
+                    ExecucaoFisica_Model_DbTable_TbCumprimentoObjetoXArquivo::FRUICAO_DE_DEMOCRATIZACAO_AO_ACESSO_PUBLICO
                     );
             $this->setMedidasFruicaoImagens($cumprimentoObjetoArquivoModel->buscar());
         }
@@ -163,10 +163,10 @@ class ExecucaoFisica_Model_TbCumprimentoObjeto extends MinC_Db_Table_Abstract
                 $this->setMedidasPreventivasImagens(new ArrayObject());
                 return $this->medidasPreventivasImagens;
             }
-            $cumprimentoObjetoArquivoModel = new CumprimentoObjetoXArquivo();
+            $cumprimentoObjetoArquivoModel = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjetoXArquivo();
             $cumprimentoObjetoArquivoModel->setIdCumprimentoObjeto($this->getIdCumprimentoObjeto());
             $cumprimentoObjetoArquivoModel->setPosicao(
-                    CumprimentoObjetoXArquivo::IMPACTOS_AMBIENTAIS
+                    ExecucaoFisica_Model_DbTable_TbCumprimentoObjetoXArquivo::IMPACTOS_AMBIENTAIS
                     );
             $this->setMedidasPreventivasImagens($cumprimentoObjetoArquivoModel->buscar());
         }
@@ -315,7 +315,7 @@ class ExecucaoFisica_Model_TbCumprimentoObjeto extends MinC_Db_Table_Abstract
         $cumprimentoObjetoRow->dsGeracaoEmpregos = $cumprimentoObjetoClone->getEmpregosGerados();
 
         $idCumprimentoDoObjeto = $cumprimentoObjetoRow->save();
-        $cumprimentoObjetoXArquivoModel = new CumprimentoObjetoXArquivo();
+        $cumprimentoObjetoXArquivoModel = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjetoXArquivo();
         $cumprimentoObjetoXArquivoModel->save($idCumprimentoDoObjeto);
     }
 
