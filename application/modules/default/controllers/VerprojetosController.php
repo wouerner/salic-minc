@@ -2097,7 +2097,7 @@ class VerProjetosController extends MinC_Controller_Action_Abstract
         $this->view->DadosProjeto = $DadosProjeto;
         $this->view->idPronac = $idpronac;
 
-        $tbCumprimentoObjeto = new tbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ExecucaoFisica_Model_TbCumprimentoObjeto();
         $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idpronac));
 
         if (!empty($DadosRelatorio)) {
@@ -2158,7 +2158,7 @@ class VerProjetosController extends MinC_Controller_Action_Abstract
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        $tbCumprimentoObjeto = new tbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ExecucaoFisica_Model_TbCumprimentoObjeto();
         $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idpronac));
         $this->view->DadosRelatorio = $DadosRelatorio;
 
