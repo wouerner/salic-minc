@@ -62,40 +62,9 @@
         </template>
     </div>
 </template>
-<!--<div v-if="dados.diligenciaProposta">-->
-<!--<fieldset style="margin: 0px;">-->
-<!--<legend>Dilig&ecirc;ncia Proposta</legend>-->
-<!--<VisualizarDiligenciaProposta-->
-<!--:idPronac="idPronac"-->
-<!--:diligencias="dados.diligenciaProposta"-->
-<!--&gt;-->
-<!--</VisualizarDiligenciaProposta>-->
-<!--</fieldset>-->
-<!--</div>-->
-<!--<div v-if="dados.diligenciaAdequacao">-->
-<!--<fieldset style="margin: 0px;">-->
-<!--<legend>Dilig&ecirc;ncias da Adequa&ccedil;&atilde;o do Projeto</legend>-->
-<!--<VisualizarDiligenciaAdequacao-->
-<!--:idPronac="idPronac"-->
-<!--:diligencias="dados.diligenciaAdequacao"-->
-<!--&gt;-->
-<!--</VisualizarDiligenciaAdequacao>-->
-<!--</fieldset>-->
-<!--</div>-->
-<!--<div v-if="dados.diligenciaProjeto">-->
-<!--<fieldset style="margin: 0px;">-->
-<!--<legend>Dilig&ecirc;ncia Projeto</legend>-->
-<!--<VisualizarDiligenciaProjeto-->
-<!--:idPronac="idPronac"-->
-<!--:diligencias="dados.diligenciaProjeto"-->
-<!--&gt;-->
-<!--</VisualizarDiligenciaProjeto>-->
-<!--</fieldset>-->
-<!--</div>-->
-
 
 <script>
-    import {mapGetters, mapActions} from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
     import Carregando from '@/components/Carregando';
     import IdentificacaoProjeto from './IdentificacaoProjeto';
     import VisualizarDiligenciaProposta from './components/VisualizarDiligenciaProposta';
