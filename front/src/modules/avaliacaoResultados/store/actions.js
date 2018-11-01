@@ -181,7 +181,7 @@ export const salvarLaudoFinal = ({ commit }, data) => {
 export const finalizarLaudoFinal = ({ commit }, data) => {
     avaliacaoResultadosHelperAPI.alterarEstado(data)
         .then(() => {
-            commit('noticias/SET_DADOS', { ativo: true, color: 'success', text: 'Finalizado com sucesso!' }, { root: true });
+            commit('noticias/SET_DADOS', { ativo: true, color: 'success', text: 'Finalizado com sucesso!'}, { root: true });
         });
 };
 
@@ -261,15 +261,6 @@ export const projetosRevisao = ({ commit }, params) => {
             commit(types.SYNC_PROJETOS_REVISAO, projetosRevisao);
         });
 };
-
-export const buscarDetalhamentoItens = ({ commit }, idPronac) => {
-    avaliacaoResultadosHelperAPI.buscarDetalhamentoItens(idPronac)
-        .then((response) => {
-            const itens = desencapsularResponse.default(response);
-            commit(types.SET_ITENS_BUSCA_COMPROVANTES, itens);
-        });
-};
-
 
 export const buscarComprovantes = ({ commit }, params) => {
     avaliacaoResultadosHelperAPI.buscarComprovantes(params)
