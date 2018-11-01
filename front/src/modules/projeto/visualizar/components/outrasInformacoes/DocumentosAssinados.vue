@@ -1,50 +1,53 @@
 <template>
-    <div id="conteudo">
+    <div>
         <div v-if="loading">
             <Carregando :text="'Carregando Documentos Assinados'"></Carregando>
         </div>
-        <table v-else-if="Object.keys(dados).length > 0">
-            <thead>
-            <tr class="destacar">
-                <th class="center">PRONAC</th>
-                <th class="center">NOME DO PROJETO</th>
-                <th class="center">ATO ADMINISTRATIVO</th>
-                <th class="center">DATA</th>
-                <th class="center">VER</th>
-            </tr>
-            </thead>
-            <tbody v-for="(dado, index) in dados" :key="index">
-            <tr>
-                <td class="center">
-                    <router-link :to="{ name: 'dadosprojeto', params: { idPronac: dado.IdPRONAC }}"
-                                 class='waves-effect waves-dark btn white black-text'>
-                        <u>{{ dado.pronac }}</u>
-                    </router-link>
-                </td>
-                <td class="center">{{ dado.nomeProjeto }}</td>
-                <td class="center">{{ dado.dsAtoAdministrativo }}</td>
-                <td class="center">{{ dado.dt_criacao }}</td>
-                <td class="center">
-                    <a class="btn waves-effect waves-light tooltipped small white-text"
-                       :href="`/assinatura/index/visualizar-documento-assinado/idPronac/${dado.IdPRONAC}?idDocumentoAssinatura=${dado.idDocumentoAssinatura}`"
-                       target="_blank"
-                       data-position="top" data-delay="50" data-tooltip="Visualizar">
-                        <i class="material-icons">search</i>
-                    </a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <div v-else>
-            <fieldset>
-                <legend>Documentos assinados</legend>
-                <div class="center">
-                    <em>Sem documentos assinados para este projeto.</em>
-                </div>
-            </fieldset>
-        </div>
+        <v-data-table
+                :headers="headers"
+                :items="dados"
+                :search="search"
+                :pagination.sync="pagination"
+                class="elevation-1"
+                rows-per-page-text="Items por Página"
+        >
+            <template slot="items" slot-scope="props">
+                <v-btn
+                        slot="activator"
+                        class="center"
+                        color="primary"
+                        :to="{ name: 'dadosprojeto', params: { idPronac: dadosProjeto.idPronac }}">
+                    <u>{{ props.item.pronac }}</u>
+                </v-btn>
+                <td class="center">{{ props.item.nomeProjeto }}</td>
+                <td class="center">{{ props.item.dsAtoAdministrativo }}</td>
+                <td class="center">{{ props.item.dt_criacao }}</td>
+                <v-tooltip left>
+                    <v-btn
+                            fab dark small
+                            slot="activator"
+                            color="teal"
+                            target="_blank"
+                            :href="`/assinatura/index/visualizar-documento-assinado/idPronac/${props.item.IdPRONAC}?idDocumentoAssinatura=${props.item.idDocumentoAssinatura}`"
+                            dark
+                    >
+                        <v-icon dark>search</v-icon>
+                    </v-btn>
+                    <span>Visualizar</span>
+                </v-tooltip>
+            </template>
+            <template slot="no-data">
+                <v-alert :value="true" color="error" icon="warning">
+                    Nenhum dado encontrado ¯\_(ツ)_/¯
+                </v-alert>
+            </template>
+            <template slot="pageText" slot-scope="props">
+                Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+            </template>
+        </v-data-table>
     </div>
 </template>
+
 <script>
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/Carregando';
@@ -52,13 +55,46 @@
     export default {
         name: 'DocumentosAssinados',
         props: ['idPronac'],
+        components: {
+            Carregando,
+        },
         data() {
             return {
                 loading: true,
+                search: '',
+                pagination: {
+                    sortBy: 'fat',
+                },
+                selected: [],
+                headers: [
+                    {
+                        align: 'center',
+                        text: 'PRONAC',
+                        sortable: false,
+                        value: 'pronac',
+                    },
+                    {
+                        align: 'center',
+                        text: 'NOME DO PROJETO',
+                        value: 'nomeProjeto',
+                    },
+                    {
+                        align: 'center',
+                        text: 'ATO ADMINISTRATIVO',
+                        value: 'dsAtoAdministrativo',
+                    },
+                    {
+                        align: 'center',
+                        text: 'DATA',
+                        value: 'dt_criacao',
+                    },
+                    {
+                        align: 'center',
+                        sortable: false,
+                        text: 'VER',
+                    },
+                ],
             };
-        },
-        components: {
-            Carregando,
         },
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
