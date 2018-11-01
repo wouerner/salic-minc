@@ -12,8 +12,8 @@
                     :items="indexItems"
                     item-key="id"
                     :search="search"
-                    :pagination.sync="pagination"
                     class="elevation-1"
+                    :pagination.sync="pagination"
                     rows-per-page-text="Items por Página"
             >
                 <template slot="items" slot-scope="props">
