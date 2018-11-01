@@ -2,58 +2,57 @@
 
 namespace Application\Modules\AvaliacaoResultados\Service\ParecerTecnico;
 
-
 class Diligencia
 {
     /** modules/proposta/controllers/DiligenciarController -> listardiligenciaanalistaAction */
-        public function listaDiligenciaPainel (Array $params = null) {
-              $Projetosdao = new Projetos();
-              $PreProjetodao = new Proposta_Model_DbTable_PreProjeto();
+        public function listaDiligenciaPainel ($params) {
+             $Projetosdao = new \Projetos();
+             $PreProjetodao = new \Proposta_Model_DbTable_PreProjeto();
 
-              var_dump('EEEIIII' + $params);
-              die;
+              $idPronac = $params['idPronac'];
+              $idPreProjeto = $params['idPreProjeto'];
+              $situacao = $params['situacao'];
+              $idProduto = $params['idProduto'];
+              $tpDiligencia = $params['tpDiligencia'];
+              $dao = '';
 
-              $this->view->idPronac = $this->idPronac;
-              $this->view->idPreProjeto = $this->idPreProjeto;
-              $this->view->situacao = $this->situacao;
-              $this->view->idProduto = $this->idProduto;
-              $this->view->tpDiligencia = $this->tpDiligencia;
-
-               if ($this->view->idPronac) {
-                   if ($this->idProduto) {
-                       $this->view->diligencias = $Projetosdao->listarDiligencias(
+               if ($idPronac) {
+                   if ($idProduto) {
+                       $diligencias = $Projetosdao->listarDiligencias(
                             array(
-                                'pro.IdPRONAC = ?' => $this->idPronac,
-                                'dil.idProduto = ?' => $this->idProduto,
+                                'pro.IdPRONAC = ?' => $idPronac,
+                                'dil.idProduto = ?' => $idProduto,
                                 'dil.stEnviado = ?' => 'S'
                             )
                         );
+
+                       var_dump('aqui');
+                       die;
                    } else {
-                         $projeto = $Projetosdao->buscar(array('IdPRONAC = ?' => $this->idPronac));
+                         $projeto = $Projetosdao->buscar(array('IdPRONAC = ?' => $idPronac));
                          $_idProjeto = isset($projeto[0]->idProjeto) && !empty($projeto[0]->idProjeto) ? $projeto[0]->idProjeto : 0;
-                         $this->view->diligenciasProposta = $PreProjetodao->listarDiligenciasPreProjeto(
+                         $diligenciasProposta = $PreProjetodao->listarDiligenciasPreProjeto(
                                 array(
                                     'pre.idPreProjeto = ?' => $_idProjeto,
                                     'aval.ConformidadeOK = ?' => 0
                                 )
                          );
 
-                         $this->view->diligencias = $Projetosdao->listarDiligencias(array('pro.IdPRONAC = ?' => $this->idPronac));
+                         $diligencias = $Projetosdao->listarDiligencias(array('pro.IdPRONAC = ?' => $idPronac));
+                       xd($diligencias);
+                       die;
                    }
                } else {
-                    if ($this->view->idPreProjeto) {
-            //          $this->view->diligenciasProposta = $dao->listarDiligenciasPreProjeto(array('pre.idPreProjeto = ?' => $this->idPreProjeto, 'aval.ConformidadeOK = ? ' => 0));
+                    if ($idPreProjeto) {
+                     $diligenciasProposta = $dao->listarDiligenciasPreProjeto(array('pre.idPreProjeto = ?' => $this->idPreProjeto, 'aval.ConformidadeOK = ? ' => 0));
                     }
                }
-        }
-
-        public function coisinha(){
-            return 'teste';
         }
 
         /** module/default/models/projetos.php */
     public function listarDiligencias($consulta = array(), $retornaSelect = false)
     {
+
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from(
