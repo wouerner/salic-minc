@@ -11,10 +11,10 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
         }
 
         countChars  = CountCharacters(fieldName);
-        //Atualização para os contadores de caracteres
+        //AtualizaÃ§Ã£o para os contadores de caracteres
         document.getElementById("contador" + fieldName).innerHTML = "Caracteres: " + countChars;
                      
-        //mudança de cor caso ultrapasse o numero de caracteres
+        //mudanÃ§a de cor caso ultrapasse o numero de caracteres
         if (countChars <= minchar){
 	    document.getElementById("contador" + fieldName).style.color = "red";
         }else{
@@ -24,7 +24,7 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
 
    $(document).ready(function(){    
 
-        //inicializaao e configuração do editor tinyMCE
+        //inicializaao e configuraÃ§Ã£o do editor tinyMCE
 
         tinymce.init({
 	    plugins:"paste,textcolor",
@@ -78,7 +78,7 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
         });
 
 
-        // associa botões a funcoes
+        // associa botÃµes a funcoes
 
         $('#btn_salvar').click(function() { 
             SalvarFormulario();
@@ -90,14 +90,14 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
 
     });
     
-    //Onde é feita a contagem do elemento do contador
+    //Onde Ã© feita a contagem do elemento do contador
     function CountCharacters(contador) {
         var body = tinymce.get(contador).getBody();
         var content = tinymce.trim(body.innerText || body.textContent);
         return content.length;
     };
  
-    //Validação de acordo com o numero maximo de caracteres
+    //ValidaÃ§Ã£o de acordo com o numero maximo de caracteres
     function Validacao(valido) {
 	var minchar = 49;
 	var valido = true;  
@@ -108,12 +108,12 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
  
         if (count <=minchar) {
 	     $("#camposObrigatorios").dialog("destroy");
-                $("#camposObrigatorios").html("Preencha corretamente o número de caracteres no campo PARECER DE AVALIAÇÃO TÉCNICA! Mínimo 50.");
+                $("#camposObrigatorios").html("Preencha corretamente o n&uacute;mero de caracteres no campo PARECER DE AVALIA&Ccedil;&Atilde;O T&Eacute;CNICA! M&iacute;nimo 50.");
                 $("#camposObrigatorios").dialog({
                     resizable: false,
                     title: 'Alerta!',
                     width:370,
-                    height:180,
+                    height:200,
                     modal: true,
                     buttons : {
                         'OK' : function(){
@@ -126,12 +126,12 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
 	}
 	if (count3 <= minchar) {
 	    $("#camposObrigatorios").dialog("destroy");
-                $("#camposObrigatorios").html("Preencha corretamente o número de caracteres no campo CONCLUSÃO! Mínimo 50.");
+                $("#camposObrigatorios").html("Preencha corretamente o n&uacute;mero de caracteres no campo CONCLUS&Atilde;O! M&iacute;nimo 50.");
                 $("#camposObrigatorios").dialog({
                     resizable: false,
                     title: 'Alerta!',
                     width:370,
-                    height:170,
+                    height:200,
                     modal: true,
                     buttons : {
                         'OK' : function(){
@@ -145,17 +145,14 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
     }
 
 
-  // Salvar Formulário
+  // Salvar FormulÃ¡rio
 
 
    function SalvarFormulario(){
-       var valido = Validacao();
-       if (valido == true){
-           $('#formParecer').submit();	
-       }
+       $('#formParecer').submit();
    }
    
-//Enviar Fomulário 
+//Enviar FomulÃ¡rio 
 
    function EnviarFormulario(){
        var valido = Validacao();
@@ -200,7 +197,7 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
                     height:160,
                     modal: true,
                     buttons : {
-                        'Não' : function(){
+                        'NÃ£o' : function(){
                             $(this).dialog('close');
                         },
                         'Sim' : function(){
@@ -226,21 +223,21 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
 <div id="breadcrumb">
     <ul>
         <li class="first"><a href="#" title="In&iacute;cio">In&iacute;cio</a></li>
-        <li class="second"><a href="<?php echo $this->baseUrl(); ?>/execucao-fisica/avaliaracompanhamentoprojeto/index-tecnico" title="Lista de Relatórios">Lista de Relatórios</a></li>
-        <li class="last">Parecer Técnico</li>
+        <li class="second"><a href="<?php echo $this->baseUrl(); ?>/execucao-fisica/avaliaracompanhamentoprojeto/index-tecnico" title="Lista de RelatÃ³rios">Lista de Relat&oacute;rios</a></li>
+        <li class="last">Parecer T&eacute;cnico</li>
     </ul>
 </div>
 
 
 <div id="titulo">
-    <div>Parecer Técnico <span class="voltar"><a href="<?php echo $this->baseUrl(); ?>/execucao-fisica/avaliaracompanhamentoprojeto/index-tecnico" title="Voltar">Voltar</a></span></div>
+    <div>Parecer T&eacute;cnico <span class="voltar"><a href="<?php echo $this->baseUrl(); ?>/execucao-fisica/avaliaracompanhamentoprojeto/index-tecnico" title="Voltar">Voltar</a></span></div>
 </div>
 
 
 <div id="conteudo">
     <table class="tabela">
         <tr>
-            <th align="center" width="30%">Nº PRONAC:</th>
+            <th align="center" width="30%">N&ordm; PRONAC:</th>
             <th align="center">Nome do Projeto:</th>
         </tr>
         <tr class="linha">
@@ -259,10 +256,10 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
 
     <br clear="all" />
 
-    <form id="formParecer" action="<?php echo $this->url(array('module' => 'execucao-fisica', 'controller' => 'avaliaracompanhamentoprojeto', 'action' => 'avaliar-relatorio'), '', true); ?>?idpronac=<?php echo $this->idPronac; ?>" method="post">
+    <form id="formParecer" action="<?php echo $this->url(array('module' => 'execucao-fisica', 'controller' => 'avaliaracompanhamentoprojeto', 'action' => 'avaliar-relatorio'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>" method="post">
         <table class="tabela">
             <tr align="center">
-                <td class="destacar bold">PARECER DE AVALIAÇÃO TÉCNICA<font color="red"> *</td>
+                <td class="destacar bold">PARECER DE AVALIA&Ccedil;&Atilde;O T&Eacute;CNICA<font color="red"> *</td>
             </tr>
             <tr>
                 <td>
@@ -272,7 +269,7 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
  	   	</td>
             </tr>
             <tr align="center">
-                <td class="destacar bold">RECOMENDAÇÕES</td>
+                <td class="destacar bold">RECOMENDA&Ccedil;&Otilde;ES</td>
             </tr>
             <tr>
                 <td>
@@ -282,7 +279,7 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
 		</td>
             </tr>
             <tr align="center">
-                <td class="destacar bold">CONCLUSÃO <span style="color: red;">*</span></td>
+                <td class="destacar bold">CONCLUS&Atilde;O <span style="color: red;">*</span></td>
             </tr>
             <tr>
                 <td>
@@ -295,7 +292,7 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
 
         <table class="tabela">
             <tr>
-                <th colspan="2">Avaliação</th>
+                <th colspan="2">Avalia&ccedil;&atilde;o</th>
             </tr>
             <tr>
                 <td class="destacar bold w100" align="right">Resultado <span style="color: red;">*</span></td>
@@ -307,7 +304,7 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
                         name="resultadoAvaliacao"
                         <?php echo ($this->DadosParecer->stResultadoAvaliacao == 'A') ? 'checked="checked"' : ''; ?>
                         />
-                    <label for="cumpriuObjetivos">Cumpriu os objetos e objetivos</label>
+                    <label for="cumpriuObjetivos">Cumpriu o objeto e objetivos</label>
                     <input
                         type="radio"
                         id="naoCumpriuObjetivos"
@@ -316,7 +313,7 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
                         <?php echo ($this->DadosParecer->stResultadoAvaliacao == 'R') ? 'checked="checked"' : ''; ?>
                         style="margin-left: 25px;"
                         />
-                    <label for="naoCumpriuObjetivos">Não cumprimento dos objetos e objetivos</label>
+                    <label for="naoCumpriuObjetivos">N&atilde;o cumpriu o objeto e objetivos</label>
                     <input
                         type="radio"
                         id="cumpriuParcialmenteObjetivos"
@@ -325,7 +322,7 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
                         <?php echo ($this->DadosParecer->stResultadoAvaliacao == 'P') ? 'checked="checked"' : ''; ?>
                         style="margin-left: 25px;"
                         />
-                    <label for="cumpriuParcialmenteObjetivos">Cumpriu parcialmente os objetos e objetivos</label>
+                    <label for="cumpriuParcialmenteObjetivos">Cumpriu parcialmente o objeto e objetivos</label>
                 </td>
             </tr>
             <tr>
@@ -358,7 +355,7 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
 </div>
 
 
-<!-- inï¿½cio: detalhe final da div conteudo #rodapeConteudo -->
+<!-- inÃ¯Â¿Â½cio: detalhe final da div conteudo #rodapeConteudo -->
 <div id="rodapeConteudo"><span></span></div>
 <!-- final: detalhe final da div conteudo #rodapeConteudo -->
 
