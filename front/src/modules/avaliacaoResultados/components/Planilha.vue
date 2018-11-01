@@ -110,7 +110,7 @@
                                                         <v-tabs
                                                             slider-color="green"
                                                         >
-                                                            <v-tab ripple v-for="tab in Object.keys(cidade.itens)" :key="i">{{ tabs[tab] }}</v-tab>
+                                                            <v-tab ripple v-for="(tab, index) in Object.keys(cidade.itens)" :key="index">{{ tabs[tab] }}</v-tab>
                                                             <v-tab-item v-for="item in cidade.itens" :key="item.stItemAvaliado">
                                                                 <v-data-table
                                                                     :headers="headers"
