@@ -363,7 +363,6 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
                 $this->view->arrayGrupoProponente = array("gru_codigo" => 1111, "uog_orgao" => 2222, "gru_nome" => "Proponente");
             }
         }
-
     }
 
     /**
