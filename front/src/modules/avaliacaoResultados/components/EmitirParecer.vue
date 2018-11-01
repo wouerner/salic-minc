@@ -93,15 +93,15 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td left><b>Total:</b></td>
-                                                                    <td >{{consolidacaoComprovantes.qtTotalComprovante | currency}}</td>
+                                                                    <td >{{consolidacaoComprovantes.qtTotalComprovante}}</td>
                                                                     <td left><b>Validados:</b></td>
-                                                                    <td><font color="#006400">{{consolidacaoComprovantes.qtComprovantesValidadosProjeto | currency}} </font></td>
+                                                                    <td><font color="#006400">{{consolidacaoComprovantes.qtComprovantesValidadosProjeto}} </font></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td left><b>Não Avaliados:</b></td>
-                                                                    <td left>{{consolidacaoComprovantes.qtComprovantesNaoAvaliados | currency}}</td>
+                                                                    <td left>{{consolidacaoComprovantes.qtComprovantesNaoAvaliados}}</td>
                                                                     <td left><b>Recusados:</b></td>
-                                                                    <td left><font color="red">{{consolidacaoComprovantes.qtComprovantesRecusadosProjeto | currency}} </font></td>
+                                                                    <td left><font color="red">{{consolidacaoComprovantes.qtComprovantesRecusadosProjeto}} </font></td>
                                                                 </tr>
                                                             </template>
                                                         </v-data-table>
