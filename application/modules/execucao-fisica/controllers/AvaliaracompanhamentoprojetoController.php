@@ -144,7 +144,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
             $where['a.siCumprimentoObjeto = ?'] = 2;
         }
 
-        $tbCumprimentoObjeto = new ExecucaoFisica_Model_TbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
         $total = $tbCumprimentoObjeto->listaRelatorios($where, $order, null, null, true);
         $fim = $inicio + $this->intTamPag;
 
@@ -263,7 +263,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
             $where['a.siCumprimentoObjeto = ?'] = 2;
         }
 
-        $tbCumprimentoObjeto = new ExecucaoFisica_Model_TbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
         $total = $tbCumprimentoObjeto->listaRelatorios($where, $order, null, null, true);
         $fim = $inicio + $this->intTamPag;
 
@@ -363,7 +363,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        $tbCumprimentoObjeto = new ExecucaoFisica_Model_TbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
         $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idPronac, 'siCumprimentoObjeto in (?)'=>array(2,5)));
         $this->view->DadosRelatorio = $DadosRelatorio;
         $this->view->cumprimentoDoObjeto = $tbCumprimentoObjeto;
@@ -424,7 +424,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        $tbCumprimentoObjeto = new ExecucaoFisica_Model_TbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
         $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idPronac, 'siCumprimentoObjeto!=?'=>1));
         $this->view->DadosRelatorio = $DadosRelatorio;
         if (count($DadosRelatorio)==0) {
@@ -484,7 +484,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $dados['siCumprimentoObjeto'] = 3;
         $where = "idPronac = $idPronac";
 
-        $tbCumprimentoObjeto = new ExecucaoFisica_Model_TbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
         $return = $tbCumprimentoObjeto->update($dados, $where);
 
         if ($return) {
@@ -557,7 +557,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
             $this->view->pronacProjeto = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
         }
 
-        $tbCumprimentoObjeto = new ExecucaoFisica_Model_TbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
         $total = $tbCumprimentoObjeto->listaRelatorios($where, $order, null, null, true);
         $fim = $inicio + $this->intTamPag;
 
@@ -603,7 +603,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $dados['siCumprimentoObjeto'] = 2;
         $where = "idPronac = $idPronac";
 
-        $tbCumprimentoObjeto = new ExecucaoFisica_Model_TbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
         $return = $tbCumprimentoObjeto->update($dados, $where);
 
         if ($return) {
@@ -642,7 +642,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $where['a.siCumprimentoObjeto in (?)'] = array(3,4);
         $where['b.Orgao = ?'] = $codOrgao;
 
-        $tbCumprimentoObjeto = new ExecucaoFisica_Model_TbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
         $DadosRelatorio = $tbCumprimentoObjeto->listaRelatorios($where, array(), null, null, false);
 
         if (count($DadosRelatorio)==0) {
@@ -683,7 +683,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        $tbCumprimentoObjeto = new ExecucaoFisica_Model_TbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
         $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac=?'=>$idPronac));
         $this->view->DadosRelatorio = $DadosRelatorio;
         $this->view->cumprimentoDoObjeto = $tbCumprimentoObjeto;
@@ -899,7 +899,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $where['idTecnicoAvaliador = ?'] = $idusuario;
         $where['siCumprimentoObjeto in (?)'] = array(3,4);
 
-        $tbCumprimentoObjeto = new ExecucaoFisica_Model_TbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
         $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto($where);
 
         if (empty($DadosRelatorio)) {
@@ -945,7 +945,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $dados['siCumprimentoObjeto'] = 6;
         $where = "idPronac = $idPronac";
 
-        $tbCumprimentoObjeto = new ExecucaoFisica_Model_TbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
         $projetoModel = new Projetos();
         $return = $tbCumprimentoObjeto->update($dados, $where);
         $projetoModel->mudarSituacao($idPronac, 'E68', 'E24');

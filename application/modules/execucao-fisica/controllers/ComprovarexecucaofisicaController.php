@@ -1197,11 +1197,11 @@ class ExecucaoFisica_ComprovarexecucaofisicaController extends MinC_Controller_A
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        $tbCumprimentoObjeto = new ExecucaoFisica_Model_TbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
         $tbCumprimentoObjeto->buscarCumprimentoObjeto(
                 array(
                     'idPronac=?' => $idpronac,
-                    'siCumprimentoObjeto=?' => ExecucaoFisica_Model_TbCumprimentoObjeto::SITUACAO_PROPONENTE
+                    'siCumprimentoObjeto=?' => ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto::SITUACAO_PROPONENTE
                 )
             );
         $this->view->cumprimentoDoObjeto = $tbCumprimentoObjeto;
@@ -1792,10 +1792,10 @@ class ExecucaoFisica_ComprovarexecucaofisicaController extends MinC_Controller_A
             }
 
             $post = filter_input_array(INPUT_POST);
-            $tbCumprimentoObjeto = new ExecucaoFisica_Model_TbCumprimentoObjeto(
+            $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto(
                     $idpronac,
                     $this->IdUsuario,
-                    ExecucaoFisica_Model_TbCumprimentoObjeto::SITUACAO_PROPONENTE,
+                    ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto::SITUACAO_PROPONENTE,
                     $post['etapasConcluidas'],
                     $post['medidasAcessibilidade'],
                     $post['medidasFruicao'],
@@ -1871,7 +1871,7 @@ class ExecucaoFisica_ComprovarexecucaofisicaController extends MinC_Controller_A
                 $dados['DtEnvioDaPrestacaoContas'] = new Zend_Db_Expr('GETDATE()');
                 $where = "idPronac = $idpronac ";
 
-                $tbCumprimentoObjeto = new ExecucaoFisica_Model_TbCumprimentoObjeto();
+                $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
                 $return = $tbCumprimentoObjeto->update($dados, $where);
 
                 if ($return) {

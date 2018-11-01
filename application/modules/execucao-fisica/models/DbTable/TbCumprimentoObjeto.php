@@ -1,6 +1,6 @@
 <?php
 
-class ExecucaoFisica_Model_TbCumprimentoObjeto extends MinC_Db_Table_Abstract
+class ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto extends MinC_Db_Table_Abstract
 {
     const SITUACAO_PROPONENTE = 1;
 
