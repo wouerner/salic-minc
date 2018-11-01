@@ -108,4 +108,4 @@
 * Segundo passo vá em Avaliação de Resultados->Analisar laudo final.
 
 ### Avaliação de Resultados: Laudo Final 
-#### [Segue da mesma forma que o perfil do secretário](#avaliacao-de-resultados-laudo-final)
+ [`Segue da mesma forma que o perfil do secretário`](#avaliacao-de-resultados-laudo-final-1)
