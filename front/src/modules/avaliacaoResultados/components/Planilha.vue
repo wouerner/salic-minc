@@ -126,7 +126,7 @@
                                                         <v-tabs
                                                             slider-color="green"
                                                         >
-                                                            <v-tab ripple v-for="tab in Object.keys(cidade.itens)" :key="tab">{{ tabs[tab] }}</v-tab>
+                                                            <v-tab ripple v-for="(tab, index) in Object.keys(cidade.itens)" :key="index">{{ tabs[tab] }}</v-tab>
                                                             <v-tab-item v-for="item in cidade.itens" :key="item.stItemAvaliado">
                                                                 <v-data-table
                                                                     :headers="headers"
@@ -139,6 +139,7 @@
                                                                         <td>{{ moeda(props.item.varlorComprovado) }}</td>
                                                                         <td>{{ moeda(props.item.varlorAprovado - props.item.varlorComprovado) }}</td>
                                                                         <td >
+
                                                                             <template
                                                                                 v-if="podeEditar(props.item.varlorComprovado)"
                                                                             >
@@ -149,6 +150,9 @@
                                                                                      :idmunicipio="cidade.cdCidade"
                                                                                      :id-planilha-item="props.item.idPlanilhaItens"
                                                                                      :etapa="etapa.cdEtapa"
+                                                                                     :cd-produto="produto.cdProduto"
+                                                                                     :cd-uf="uf.cdUF"
+                                                                                     :st-item-avaliado="props.item.stItemAvaliado"
                                                                                  >
                                                                                  </analisar-item>
                                                                             </template>
