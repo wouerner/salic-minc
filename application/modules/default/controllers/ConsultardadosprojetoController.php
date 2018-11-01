@@ -1851,7 +1851,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             $qtdRelatorioEsperado = ceil($intervalo/90);
             $this->view->qtdRelatorioEsperado = $qtdRelatorioEsperado;
 
-            $tbComprovanteTrimestral = new tbComprovanteTrimestral();
+            $tbComprovanteTrimestral = new ExecucaoFisica_Model_DbTable_TbComprovanteTrimestral();
             $qtdRelatorioCadastrados = $tbComprovanteTrimestral->buscarComprovantes(array('idPronac=?'=>$idpronac), true, array('nrComprovanteTrimestral')); //busca todos os relatorios
             $qtdRelCadastrados = !empty($qtdRelatorioCadastrados) ? $qtdRelatorioCadastrados->count() : 0;
             $this->view->qtdRelatorioCadastrados = $qtdRelCadastrados;
@@ -1877,7 +1877,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        $tbComprovanteTrimestral = new tbComprovanteTrimestral();
+        $tbComprovanteTrimestral = new ExecucaoFisica_Model_DbTable_TbComprovanteTrimestral();
         $DadosRelatorio = $tbComprovanteTrimestral->buscarComprovantes(array('IdPRONAC = ?' => $idpronac, 'nrComprovanteTrimestral=?'=>$nrrelatorio));
         $this->view->DadosRelatorio = $DadosRelatorio;
 
@@ -1920,7 +1920,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        $tbComprovanteTrimestral = new tbComprovanteTrimestral();
+        $tbComprovanteTrimestral = new ExecucaoFisica_Model_DbTable_TbComprovanteTrimestral();
         $DadosRelatorio = $tbComprovanteTrimestral->buscarComprovantes(array('IdPRONAC = ?' => $idpronac, 'nrComprovanteTrimestral=?'=>$nrrelatorio));
         $this->view->DadosRelatorio = $DadosRelatorio;
 
