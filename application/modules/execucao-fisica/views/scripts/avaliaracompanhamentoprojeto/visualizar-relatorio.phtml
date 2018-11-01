@@ -1,3 +1,9 @@
+<style>
+    #conteudo ul li{ display: inline; float: left; width: 33%; text-align: center; }
+    #conteudo ul li label{ display:block; }
+    #conteudo ul li input{ border: 1px solid #cecece; text-align: center;  height: 31px; width: 150px; }
+    #empregosGerados { margin-top: 10px; }
+</style>
 <script type="text/javascript">
     $(document).ready(function(){
         $('.iconeJustificativa').click(function(){
@@ -8,9 +14,9 @@
             $('#justificativaModalVisualizar').html(valor);
             $("#justificativaModalVisualizar").dialog({
                 resizable: true,
-                modal: true,
-                EscClose:false,
                 title: 'Justificativa cadastrada!',
+                width:350,
+                modal: true,
                 buttons : {
                     'OK' : function(){
                         $(this).dialog('close');
@@ -24,6 +30,24 @@
             $('#formImprimir').submit();
         });
 
+        $('.visualizarObs').click(function(){
+            var texto = $(this).children().attr('dsObservacao');
+            $("#justificativaModalVisualizar").dialog("destroy");
+            $("#justificativaModalVisualizar").html(texto);
+            $("#justificativaModalVisualizar").dialog({
+                resizable: true,
+                title: 'Observa√ß√µes',
+                width:350,
+                modal: true,
+                buttons : {
+                    'OK' : function(){
+                        $(this).dialog('close');
+                    }
+                }
+            });
+            $('.ui-dialog-titlebar-close').remove();
+            return false;
+        });
     });
 </script>
 
@@ -34,21 +58,22 @@
 <div id="breadcrumb">
     <ul>
         <li class="first"><a href="#" title="In&iacute;cio">In&iacute;cio</a></li>
-        <li class="second"><a href="<?php echo $this->baseUrl(); ?>/execucao-fisica/analisarexecucaofisica/projetos" title="Lista de RelatÛrios">Lista de RelatÛrios</a></li>
-        <li class="last">Visualizar RelatÛrio Trimestral</li>
+        <li class="second"><a href="<?php echo $this->baseUrl(); ?>/consultardadosprojeto/index?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>" title="Consultar dados do Projeto">Consultar dados do Projeto</a></li>
+        <li class="second"><a href="<?php echo $this->baseUrl(); ?>/execucao-fisica/avaliaracompanhamentoprojeto/index?idpronac=<?php echo Seguranca::encrypt($this->idPronac); ?>" title="Lista de Relat&oacute;rios">Lista de Relat&oacute;rios</a></li>
+        <li class="last">Visualizar Relat&oacute;rio</li>
     </ul>
 </div>
 
 
 <div id="titulo">
-    <div>Visualizar RelatÛrio Trimestral <span class="voltar"><a href="<?php echo $this->baseUrl(); ?>/analisarexecucaofisica/projetos" title="Voltar">Voltar</a></span></div>
+    <div>Visualizar Relat√≥rio <span class="voltar"><a href="<?php echo $this->baseUrl(); ?>/execucao-fisica/avaliaracompanhamentoprojeto/index?idpronac=<?php echo Seguranca::encrypt($this->idPronac); ?>" title="Voltar">Voltar</a></span></div>
 </div>
 
 
 <div id="conteudo">
     <table class="tabela">
         <tr>
-            <th align="center" width="30%">N∫ PRONAC:</th>
+            <th align="center" width="30%">N¬∫ PRONAC:</th>
             <th align="center">Nome do Projeto:</th>
         </tr>
         <tr class="linha">
@@ -67,48 +92,24 @@
 
     <br clear="all" />
 
-    <table class="tabela">
-        <tr align="center">
-            <th>Etapas de Trabalho</th>
-        </tr>
-        <tr>
-            <td class="destacar bold">ETAPAS DE TRABALHO EXECUTADAS</td>
-        </tr>
-        <tr>
-            <td style="text-align: justify;"><?php echo $this->DadosRelatorio->dsEtapasExecutadas; ?><br /><br /></td>
-        </tr>
-        <tr>
-            <td class="destacar bold">MEDIDAS DE ACESSIBILIDADE FÕSICA</td>
-        </tr>
-        <tr>
-            <td style="text-align: justify;"><?php echo $this->DadosRelatorio->dsAcessibilidade; ?><br /><br /></td>
-        </tr>
-        <tr>
-            <td class="destacar bold">MEDIDAS DE ESTÕMULO ¿ FRUÕ«√O DE DEMOCRATIZA«√O AO ACESSO P⁄BLICO</td>
-        </tr>
-        <tr>
-            <td style="text-align: justify;"><?php echo $this->DadosRelatorio->dsDemocratizacaoAcesso; ?><br /><br /></td>
-        </tr>
-        <tr>
-            <td class="destacar bold">MEDIDAS PREVENTIVAS QUANTO A IMPACTOS AMBIENTAIS</td>
-        </tr>
-        <tr>
-            <td style="text-align: justify;"><?php echo $this->DadosRelatorio->dsImpactoAmbiental; ?><br /><br /></td>
-        </tr>
-    </table>
+    <?php echo $this->partial(
+            '/avaliaracompanhamentoprojeto/partial/exibir-cumprimento-do-objeto.phtml',
+            array('cumprimentoDoObjeto' => $this->cumprimentoDoObjeto)
+            );
+    ?>
 
     <br clear="all" />
 
     <table class="tabela">
         <tr align="center">
-            <th colspan="6">Local de RealizaÁ„o</th>
+            <th colspan="6">Local de Realiza√ß√£o</th>
         </tr>
         <tr align="center">
-            <td class="destacar bold">PaÌs</td>
+            <td class="destacar bold">Pa√≠s</td>
             <td class="destacar bold">UF</td>
-            <td class="destacar bold">MunicÌpio</td>
+            <td class="destacar bold">Munic√≠pio</td>
             <td class="destacar bold" width="120px">Realizado</td>
-            <td class="destacar bold" width="120px" nowrap>Dt.&nbsp;RealizaÁ„o</td>
+            <td class="destacar bold" width="120px" nowrap>Dt.&nbsp;Realiza√ß√£o</td>
             <td class="destacar bold" width="120px">Justificativa</td>
         </tr>
         <?php foreach ($this->LocaisDeRealizacao as $LocaisDeRealizacao) { ?>
@@ -119,9 +120,9 @@
             <td nowrap>
                 <?php
                     if($LocaisDeRealizacao->siAbrangencia == 0) {
-                        echo 'Sem InformaÁ„o';
+                        echo 'Sem Informa√ß√£o';
                     } else if($LocaisDeRealizacao->siAbrangencia == 1) {
-                        echo 'N„o Realizado';
+                        echo 'N√£o Realizado';
                     } else if($LocaisDeRealizacao->siAbrangencia == 2) {
                         echo 'Realizado';
                     } else if($LocaisDeRealizacao->siAbrangencia == 3) {
@@ -148,15 +149,15 @@
 
     <table class="tabela">
         <tr align="center">
-            <th colspan="6">Plano de DivulgaÁ„o</th>
+            <th colspan="6">Plano de Divulga√ß√£o</th>
         </tr>
         <tr align="center">
-            <td class="destacar bold">PeÁa</td>
-            <td class="destacar bold">VeÌculo</td>
+            <td class="destacar bold">Pe√ßa</td>
+            <td class="destacar bold">Ve√≠culo</td>
             <td class="destacar bold" width="120px">Realizado</td>
             <td class="destacar bold" width="120px">Comprovado</td>
-            <td class="destacar bold" width="120px">Arquivo</td>
-            <td class="destacar bold" width="120px">Data da AnexaÁ„o</td>
+            <td class="destacar bold" width="120px" nowrap>Arquivo</td>
+            <td class="destacar bold" width="120px">Data da Anexa√ß√£o</td>
         </tr>
         <?php foreach ($this->PlanoDeDivulgacao as $PlanoDeDivulgacao) { ?>
         <tr>
@@ -165,9 +166,9 @@
             <td nowrap>
                 <?php
                     if($PlanoDeDivulgacao->siPlanoDeDivulgacao == 0) {
-                        echo 'Sem InformaÁ„o';
+                        echo 'Sem Informa√ß√£o';
                     } else if($PlanoDeDivulgacao->siPlanoDeDivulgacao == 1) {
-                        echo 'N„o Realizado';
+                        echo 'N√£o Realizado';
                     } else if($PlanoDeDivulgacao->siPlanoDeDivulgacao == 2) {
                         echo 'Realizado';
                     } else if($PlanoDeDivulgacao->siPlanoDeDivulgacao == 3) {
@@ -177,12 +178,11 @@
             </td>
             <td align="center">
                 <span id="spanArquivo<?php echo $PlanoDeDivulgacao->idPlanoDivulgacao; ?>" class="<?php echo($PlanoDeDivulgacao->siPlanoDeDivulgacao < 2)?'sumir':''; ?>">
-                    <!--<a href="<?php //echo $this->url(array('controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php //echo $PlanoDeDivulgacao->idArquivo; ?>"><?php //echo $PlanoDeDivulgacao->nmArquivo; ?></a>-->
                     <img src="<?php  echo $this->baseUrl().'/public/img/passed.gif'; ?>" />
                 </span>
                 <input type="file" class="sumir" id="arquivo<?php echo $PlanoDeDivulgacao->idPlanoDivulgacao; ?>" name="arquivo<?php echo $PlanoDeDivulgacao->idPlanoDivulgacao; ?>" />
             </td>
-            <td><a href="<?php echo $this->url(array('controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php echo $PlanoDeDivulgacao->idArquivo; ?>"><?php echo $PlanoDeDivulgacao->nmArquivo; ?></a></td>
+            <td nowrap><a href="<?php echo $this->url(array('controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php echo $PlanoDeDivulgacao->idArquivo; ?>"><?php echo $PlanoDeDivulgacao->nmArquivo; ?></a></td>
             <td><?php echo !empty($PlanoDeDivulgacao->dtEnvio) ? Data::tratarDataZend($PlanoDeDivulgacao->dtEnvio, 'Brasileira', true) : ''; ?></td>
         </tr>
         <?php } ?>
@@ -192,13 +192,13 @@
 
     <table class="tabela">
         <tr align="center">
-            <th colspan="4">Plano de DistribuiÁ„o</th>
+            <th colspan="4">Plano de Distribui√ß√£o</th>
         </tr>
         <tr align="center">
             <td class="destacar bold">Produto</td>
             <td class="destacar bold">Patrocionador</td>
-            <td class="destacar bold">DivulgaÁ„o</td>
-            <td class="destacar bold">Benefici·rios</td>
+            <td class="destacar bold">Divulga√ß√£o</td>
+            <td class="destacar bold">Benefici√°rios</td>
         </tr>
         <?php foreach ($this->PlanoDeDistribuicao as $PlanoDeDistribuicao) { ?>
         <tr>
@@ -223,11 +223,11 @@
 
     <table class="tabela">
         <tr align="center">
-            <th colspan="6">Benefici·rios de Produto Cultural</th>
+            <th colspan="6">Benefici√°rios de Produto Cultural</th>
         </tr>
         <tr align="center">
             <td class="destacar bold">Produto</td>
-            <td class="destacar bold">Tipo Benefici·rio</td>
+            <td class="destacar bold">Tipo Benefici√°rio</td>
             <td class="destacar bold">CNPJ/CPF</td>
             <td class="destacar bold">Nome</td>
             <td class="destacar bold">Quantidade</td>
@@ -242,10 +242,10 @@
                         echo 'Patrocinador';
                         $classNomeCampo = 'qtdPatrocinador'.$PlanosCadastrados->idPlanoDistribuicao;
                     } else if($PlanosCadastrados->idTipoBeneficiario == 20){
-                        echo 'DivulgaÁ„o';
+                        echo 'Divulga√ß√£o';
                         $classNomeCampo = 'qtdDivulgacao'.$PlanosCadastrados->idPlanoDistribuicao;
                     } else {
-                        echo 'Benefici·rio';
+                        echo 'Benefici√°rio';
                         $classNomeCampo = 'qtdBeneficiario'.$PlanosCadastrados->idPlanoDistribuicao;
                     }
                 ?>
@@ -262,11 +262,11 @@
 
     <table class="tabela">
         <tr align="center">
-            <th colspan="8" class="titulo_tabela">COMPROVA«√O DE METAS</th>
+            <th colspan="8" class="titulo_tabela">COMPROVA√á√ÉO DE METAS</th>
         </tr>
         <tr align="center">
             <th>&nbsp;</th>
-            <th colspan="3">Meta FÌsica</th>
+            <th colspan="3">Meta F√≠sica</th>
             <th colspan="3">Meta Financeira</th>
             <th>&nbsp;</th>
         </tr>
@@ -278,7 +278,7 @@
             <td class="destacar bold">Aprovada</td>
             <td class="destacar bold">Executada</td>
             <td class="destacar bold">% Executado</td>
-            <td class="destacar bold">Saldo ‡ Executar</td>
+            <td class="destacar bold">Saldo √† Executar</td>
         </tr>
         <?php foreach ($this->DadosCompMetas as $DadosCompMetas) { ?>
         <tr>
@@ -298,11 +298,11 @@
 
     <table class="tabela">
         <tr align="center">
-            <th colspan="8" class="titulo_tabela">COMPROVA«√O DE ITENS OR«AMENT¡RIOS</th>
+            <th colspan="8" class="titulo_tabela">COMPROVA√á√ÉO DE ITENS OR√áAMENT√ÅRIOS</th>
         </tr>
         <tr align="center">
             <th>&nbsp;</th>
-            <th colspan="3">FÌsica</th>
+            <th colspan="3">F√≠sica</th>
             <th colspan="3">Financeira</th>
             <th>&nbsp;</th>
         </tr>
@@ -314,7 +314,7 @@
             <td class="destacar bold">Aprovada</td>
             <td class="destacar bold">Executada</td>
             <td class="destacar bold">% Executado</td>
-            <td class="destacar bold">Saldo ‡ Executar</td>
+            <td class="destacar bold">Saldo √† Executar</td>
         </tr>
         <?php foreach ($this->DadosItensOrcam as $DadosItensOrcam) { ?>
         <tr>
@@ -340,7 +340,7 @@
             <td class="destacar bold">Tipo de Comprovante</td>
             <td class="destacar bold">Nome do Arquivo</td>
             <td class="destacar bold">Data de Envio</td>
-            <td class="destacar bold">ObservaÁıes</td>
+            <td class="destacar bold">Observa√ß√µes</td>
         </tr>
         <?php foreach ($this->DadosComprovantes as $DadosComprovantes) { ?>
         <tr>
@@ -349,7 +349,7 @@
                     if($DadosComprovantes->idTipoDocumento == 22){
                         echo 'Fotos';
                     } else if($DadosComprovantes->idTipoDocumento == 23){
-                        echo 'VÌdeos';
+                        echo 'V√≠deos';
                     } else if($DadosComprovantes->idTipoDocumento == 24){
                         echo 'Arquivo';
                     }
@@ -364,19 +364,126 @@
 
     <br clear="all" />
 
-    <?php if($this->DadosRelatorio->siComprovanteTrimestral == 5){ ?>
     <table class="tabela">
         <tr>
-            <th>PARECER T…CNICO</th>
+            <th colspan="6">Aceite de Obra</th>
         </tr>
         <tr>
-            <td style="text-align: justify;"><?php echo $this->DadosRelatorio->dsParecerTecnico; ?><br /><br /></td>
+            <td class="destacar bold">Prev√™ constru√ß√£o, reforma, restauro ou similares?</td>
+            <td class="destacar bold">Descri√ß√£o do Termo</td>
+            <td class="destacar bold">Arquivo</td>
+            <td class="destacar bold">Extens√£o do Arquivo</td>
+            <td class="destacar bold">Data de Envio</td>
+        </tr>
+        <?php if(!empty($this->AceiteObras)){ ?>
+        <tr>
+            <td><?php echo $this->AceiteObras->stConstrucaoCriacaoRestauro ? 'Sim' : 'N√£o'; ?></td>
+            <td><?php echo $this->AceiteObras->dsDescricaoTermoAceite; ?></td>
+            <td><a href="<?php echo $this->url(array('controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php echo $this->AceiteObras->idArquivo; ?>"><?php echo $this->AceiteObras->nmArquivo; ?></a></td>
+            <td><?php echo $this->AceiteObras->sgExtensao; ?></td>
+            <td><?php echo Data::tratarDataZend($this->AceiteObras->dtEnvio, 'Brasileira', true); ?></td>
+        </tr>
+        <?php } ?>
+    </table>
+
+    <br clear="all" />
+    
+    <table class="tabela">
+        <tr align="center">
+            <th colspan="8">Bens M√≥veis / Im√≥veis Doados</th>
+        </tr>
+        <?php if(count($this->BensCadastrados)>0) { ?>
+        <tr align="center">
+            <td class="destacar bold">Tipo do Bem</td>
+            <td class="destacar bold">Item Or√ßament√°rio</td>
+            <td class="destacar bold">CNPJ/CPF</td>
+            <td class="destacar bold">Nome</td>
+            <td class="destacar bold">Arquivo Doa√ß√£o</td>
+            <td class="destacar bold">Arquivo Aceite</td>
+            <td class="destacar bold">Quantidade</td>
+            <td class="destacar bold">Observa√ß√£o</td>
+        </tr>
+        <?php foreach ($this->BensCadastrados as $bens) { ?>
+        <tr>
+            <td><?php echo ($bens->tpBem == 'M') ? 'M√≥vel' : 'Im√≥vel'; ?></td>
+            <td><?php echo $bens->ItemOrcamentario; ?></td>
+            <td align="center"><?php echo (strlen($bens->CNPJCPF) == 11) ? Mascara::addMaskCPF($bens->CNPJCPF) : Mascara::addMaskCNPJ($bens->CNPJCPF); ?></td>
+            <td><?php echo $bens->NomeAgente; ?></td>
+            <td><a href="<?php echo $this->url(array('controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php echo $bens->idArquivoDoacao; ?>"><?php echo $bens->nmArquivoDoacao; ?></a></td>
+            <td><a href="<?php echo $this->url(array('controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php echo $bens->idArquivoAceite; ?>"><?php echo $bens->nmArquivoAceite; ?></a></td>
+            <td><?php echo $bens->qtBensDoados; ?></td>
+            <td align="center">
+                <a href="#" class="visualizarObs"><img src="<?php echo $this->baseUrl(); ?>/public/img/table_multiple.png" dsObservacao="<?php echo $bens->dsObservacao; ?>" /></a>
+            </td>
+        </tr>
+        <?php } ?>
+        <?php } else { ?>
+        <tr>
+            <td colspan="8" align="center">Nenhum registro encontrado.</td>
+        </tr>
+        <?php } ?>
+    </table>
+
+    <br clear="all" />
+
+    <?php if($this->DadosRelatorio->siCumprimentoObjeto >= 5){ ?>
+    <table class="tabela">
+        <?php if(trim($this->DadosRelatorio->dsInformacaoAdicional)){ ?>
+        <tr>
+            <th>PARECER DE AVALIA√á√ÉO T√âCNICA</th>
         </tr>
         <tr>
-            <th>RECOMENDA«’ES</th>
+            <td style="text-align: justify;"><?php echo $this->DadosRelatorio->dsInformacaoAdicional; ?><br /><br /></td>
+        </tr>
+        <?php } ?>
+        <?php if(trim($this->DadosRelatorio->dsOrientacao)){ ?>
+        <tr>
+            <th>RECOMENDA√á√ïES</th>
         </tr>
         <tr>
-            <td style="text-align: justify;"><?php echo $this->DadosRelatorio->dsRecomendacao; ?><br /><br /></td>
+            <td style="text-align: justify;"><?php echo $this->DadosRelatorio->dsOrientacao; ?><br /><br /></td>
+        </tr>
+        <?php } ?>
+        <tr>
+            <th>CONCLUS√ÉO</th>
+        </tr>
+        <tr>
+            <td style="text-align: justify;"><?php echo $this->DadosRelatorio->dsConclusao; ?><br /><br /></td>
+        </tr>
+    </table>
+
+    <br clear="all" />
+
+    <table class="tabela">
+        <tr>
+            <th colspan="2">Avalia√ß√£o</th>
+        </tr>
+        <tr>
+            <td class="destacar bold w100" align="right">Resultado</td>
+            <td colspan="2">
+                <?php                                
+                    switch ($this->DadosRelatorio->stResultadoAvaliacao) {
+                        case 'A':
+                            echo 'Cumpriu os objetos e objetivos';
+                            break;
+                        case 'R':
+                            echo 'N√£o cumprimento dos objetos e objetivos';
+                            break;
+                        case 'P':
+                            echo 'Cumpriu parcialmente os objetos e objetivos';
+                            break;
+                        default:
+                            break;
+                    }
+                ?>
+            </td>
+        </tr>
+        <tr>
+            <td class="destacar bold" rowspan="2" align="right">Avaliadores</td>
+            <td><?php echo Mascara::addMaskCPF($this->TecnicoAvaliador[0]->usu_identificacao).' - '.$this->TecnicoAvaliador[0]->usu_nome; ?></td>
+        </tr>
+        <tr>
+            <td><?php echo Mascara::addMaskCPF($this->ChefiaImediata[0]->usu_identificacao).' - '.$this->ChefiaImediata[0]->usu_nome; ?></td>
         </tr>
     </table>
 
@@ -384,18 +491,18 @@
     <?php } ?>
 
     <div align="center">
-        <form action="<?php echo $this->url(array('controller' => 'analisarexecucaofisica', 'action' => 'imprimir')); ?>" method="post" id="formImprimir" name="formImprimir" target="_blank">
+        <form action="<?php echo $this->url(array('module' => 'execucao-fisica', 'controller' => 'avaliaracompanhamentoprojeto', 'action' => 'imprimir'), '', true); ?>?idpronac=<?php echo Seguranca::encrypt($this->idPronac); ?>" method="post" id="formImprimir" name="formImprimir" target="_blank">
             <input type="hidden" name="pronac" value="<?php echo $this->DadosProjeto->IdPRONAC; ?>" />
-            <input type="hidden" name="relatorio" value="<?php echo $_GET['relatorio']; ?>" />
         </form>
-        <input type="button" style="width: 88px" class="btn_imprimir" id="btn_imprimir" />
+        <input type="button" class="btn_imprimir" id="btn_imprimir" />
     </div>
+    
     <br clear="all" />
-
+    
 </div>
 
 
-<!-- inÔøΩcio: detalhe final da div conteudo #rodapeConteudo -->
+<!-- in√Ø¬ø¬Ωcio: detalhe final da div conteudo #rodapeConteudo -->
 <div id="rodapeConteudo"><span></span></div>
 <!-- final: detalhe final da div conteudo #rodapeConteudo -->
 
