@@ -395,7 +395,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $dadosComprovantes = $Arquivo->buscarComprovantesExecucao($idPronac);
         $this->view->DadosComprovantes = $dadosComprovantes;
 
-        $tbTermoAceiteObra = new tbTermoAceiteObra();
+        $tbTermoAceiteObra = new ExecucaoFisica_Model_DbTable_TbTermoAceiteObra();
         $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idPronac));
         $this->view->AceiteObras = $AceiteObras;
 
@@ -455,7 +455,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $dadosComprovantes = $Arquivo->buscarComprovantesExecucao($idPronac);
         $this->view->DadosComprovantes = $dadosComprovantes;
 
-        $tbTermoAceiteObra = new tbTermoAceiteObra();
+        $tbTermoAceiteObra = new ExecucaoFisica_Model_DbTable_TbTermoAceiteObra();
         $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idPronac));
         $this->view->AceiteObras = $AceiteObras;
 
@@ -848,7 +848,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        $tbTermoAceiteObra = new tbTermoAceiteObra();
+        $tbTermoAceiteObra = new ExecucaoFisica_Model_DbTable_TbTermoAceiteObra();
         $DadosRelatorio = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idPronac));
         $this->view->DadosRelatorio = $DadosRelatorio;
         $this->view->idPronac = $idPronac;

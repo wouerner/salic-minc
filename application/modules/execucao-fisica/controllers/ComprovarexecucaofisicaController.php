@@ -1388,7 +1388,7 @@ class ExecucaoFisica_ComprovarexecucaofisicaController extends MinC_Controller_A
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        $tbTermoAceiteObra = new tbTermoAceiteObra();
+        $tbTermoAceiteObra = new ExecucaoFisica_Model_DbTable_TbTermoAceiteObra();
         $DadosRelatorio = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idpronac));
         $this->view->DadosRelatorio = $DadosRelatorio;
     }
@@ -1449,7 +1449,7 @@ class ExecucaoFisica_ComprovarexecucaofisicaController extends MinC_Controller_A
                 $dadosDocumento = $DocumentoProjeto->buscar(array('idPronac =?'=>$idpronac,'idTipoDocumento =?'=>25), array('idDocumento DESC'));
             }
 
-            $tbTermoAceiteObra = new tbTermoAceiteObra();
+            $tbTermoAceiteObra = new ExecucaoFisica_Model_DbTable_TbTermoAceiteObra();
             $rs = $tbTermoAceiteObra->buscarTermoAceiteObra(array('idPronac=?'=>$idpronac));
 
             $arrayDados = array();

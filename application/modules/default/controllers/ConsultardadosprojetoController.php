@@ -1990,7 +1990,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             $dadosComprovantes = $Arquivo->buscarComprovantesExecucao($idpronac);
             $this->view->DadosComprovantes = $dadosComprovantes;
 
-            $tbTermoAceiteObra = new tbTermoAceiteObra();
+            $tbTermoAceiteObra = new ExecucaoFisica_Model_DbTable_TbTermoAceiteObra();
             $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idpronac));
             $this->view->AceiteObras = $AceiteObras;
 
@@ -2051,7 +2051,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $dadosComprovantes = $Arquivo->buscarComprovantesExecucao($idpronac);
         $this->view->DadosComprovantes = $dadosComprovantes;
 
-        $tbTermoAceiteObra = new tbTermoAceiteObra();
+        $tbTermoAceiteObra = new ExecucaoFisica_Model_DbTable_TbTermoAceiteObra();
         $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idpronac));
         $this->view->AceiteObras = $AceiteObras;
 

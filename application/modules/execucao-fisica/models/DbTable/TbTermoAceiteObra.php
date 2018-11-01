@@ -1,6 +1,6 @@
 <?php
 
-class tbTermoAceiteObra extends MinC_Db_Table_Abstract
+class ExecucaoFisica_Model_DbTable_TbTermoAceiteObra extends MinC_Db_Table_Abstract
 {
     protected $_banco  = "SAC";
     protected $_schema = "SAC";
