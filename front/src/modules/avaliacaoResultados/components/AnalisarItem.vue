@@ -80,7 +80,7 @@
                         >
                             <v-layout slot="header" class="blue--text">
                                 <v-icon class="mr-3 blue--text" >local_shipping</v-icon>
-                                Fornecedor: {{comprovante.fornecedor.nome}} - R$ {{comprovante.vlComprovacao}}
+                                Fornecedor: {{comprovante.fornecedor.nome}} - R$ {{moeda(comprovante.vlComprovacao)}}
                                 <v-spacer></v-spacer>
                                 <v-chip v-if="comprovante.stItemAvaliado == 1" small color="green" text-color="white">
                                     <v-avatar>
@@ -170,12 +170,12 @@
                                                                 <td left><b>Avaliação:</b></td>
                                                                 <td colspan="7">
                                                                     <v-radio-group
-                                                                            v-model="stItemAvaliado[comprovante.idComprovantePagamento]"
+                                                                            v-model="stItemAvaliadoModel[comprovante.idComprovantePagamento]"
                                                                             :rules="[rules.required]"
                                                                             row
                                                                     >
-                                                                        <v-radio label="Aprovado" value="1" name="stItemAvaliado" color="green"></v-radio>
-                                                                        <v-radio label="Reprovado" value="3" name="stItemAvaliado" color="red"></v-radio>
+                                                                        <v-radio label="Aprovado" value="1" name="stItemAvaliadoModel" color="green"></v-radio>
+                                                                        <v-radio label="Reprovado" value="3" name="stItemAvaliadoModel" color="red"></v-radio>
                                                                     </v-radio-group>
                                                                 </td>
                                                             </tr>
@@ -200,8 +200,9 @@
                                                                 :disabled="!form[comprovante.idComprovantePagamento] && !loading"
                                                                 :loading="loading"
                                                                 @click.native="salvarAvaliacao({
+                                                                index: i,
                                                                 idComprovantePagamento: comprovante.idComprovantePagamento,
-                                                                stItemAvaliado: stItemAvaliado[comprovante.idComprovantePagamento] || '',
+                                                                stItemAvaliado: stItemAvaliadoModel[comprovante.idComprovantePagamento] || '',
                                                                 dsJustificativa: dsJustificativa[comprovante.idComprovantePagamento] || '',
                                                             }); loader = 'loading'"
                                                         >
@@ -249,6 +250,9 @@
             'idmunicipio',
             'idPlanilhaItem',
             'etapa',
+            'stItemAvaliado',
+            'cdProduto',
+            'cdUf',
         ],
         filters: {
             formatarData(date) {
@@ -259,19 +263,19 @@
             },
         },
         watch: {
-            dialog() {
-                this.atualizarComprovantes(true);
+            dialog(val) {
+                if (val) this.atualizarComprovantes(true);
             },
-            stItemAvaliado: {
+            stItemAvaliadoModel: {
                 handler(novoValor) {
-                    this.stItemAvaliado = novoValor;
+                    this.stItemAvaliadoModel = novoValor;
                 },
                 deep: true,
             },
             dadosItemComprovacao() {
-                this.copia = this.dadosItemComprovacao;
-                this.copia.comprovantes.forEach((comp) => {
-                    this.stItemAvaliado[comp.idComprovantePagamento] = comp.stItemAvaliado;
+                this.dadosItemComprovacaoCopia = this.dadosItemComprovacao;
+                this.dadosItemComprovacaoCopia.comprovantes.forEach((comp) => {
+                    this.stItemAvaliadoModel[comp.idComprovantePagamento] = comp.stItemAvaliado;
                     this.dsJustificativa[comp.idComprovantePagamento] = comp.dsOcorrenciaDoTecnico;
                 });
             },
@@ -281,14 +285,14 @@
                 renderDadosComprovante: [],
                 comprovantesIsLoading: null,
                 painelComprovantes: [],
-                copia: this.dadosItemComprovacao,
+                dadosItemComprovacaoCopia: this.dadosItemComprovacao,
                 loader: null,
                 loading: false,
                 form: {},
                 snackbarAlerta: false,
                 snackbarTexto: '',
                 dsJustificativa: {},
-                stItemAvaliado: {},
+                stItemAvaliadoModel: {},
                 rules: {
                     required: v => !!v || 'É necessário preencher este campo',
                 },
@@ -364,7 +368,8 @@
         },
         methods: {
             ...mapActions({
-                setPlanilha: 'avaliacaoResultados/planilha',
+                alterarAvaliacaoComprovante: 'avaliacaoResultados/alterarAvaliacaoComprovante',
+                alterarPlanilha: 'avaliacaoResultados/alterarPlanilha',
                 salvarAvaliacaoComprovante: 'avaliacaoResultados/salvarAvaliacaoComprovante',
                 obterDadosItemComprovacao: 'avaliacaoResultados/obterDadosItemComprovacao',
             }),
@@ -392,6 +397,7 @@
                 if (params.stItemAvaliado.length > 0 && params.dsJustificativa.length > 0) {
                     this.loading = true;
                     this.salvarAvaliacaoComprovante({
+                        index: params.index,
                         idPronac: this.idPronac,
                         dsJustificativa: params.dsJustificativa,
                         stItemAvaliado: params.stItemAvaliado,
@@ -399,8 +405,20 @@
                     }).then(() => {
                         this.snackbarTexto = 'Salvo com sucesso!';
                         this.snackbarAlerta = true;
-                        this.atualizarComprovantes(false);
-                    }).catch(() => {
+                        this.alterarAvaliacaoComprovante(params);
+
+                        this.alterarPlanilha({
+                            idComprovantePagamento: params.idComprovantePagamento,
+                            cdProduto: this.cdProduto,
+                            etapa: this.etapa,
+                            cdUf: this.cdUf,
+                            idmunicipio: this.idmunicipio,
+                            stItemAvaliado: this.stItemAvaliado,
+                            idPlanilhaItem: this.idPlanilhaItem,
+                            stItemAvaliadoAlterado:
+                                this.stItemAvaliadoModel[params.idComprovantePagamento],
+                        });
+                    }).catch((a) => {
                         this.snackbarTexto = 'Houve algum problema ao salvar!';
                         this.snackbarAlerta = true;
                     }).then(() => {
@@ -428,11 +446,10 @@
             },
             fecharModal() {
                 this.dialog = false;
-                this.setPlanilha(this.idPronac);
                 this.painelComprovantes = [];
             },
-            carregarDadosComprovante(v, i) {
-                this.renderDadosComprovante[i] = true;
+            carregarDadosComprovante(event, index) {
+                this.renderDadosComprovante[index] = true;
             },
         },
         computed: {
