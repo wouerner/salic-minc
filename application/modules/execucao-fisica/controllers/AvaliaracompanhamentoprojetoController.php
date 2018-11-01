@@ -279,8 +279,8 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
 
             $html = '';
             $html .= '<table style="border: 1px">';
-            $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 16; font-weight: bold;" colspan="'.$colspan.'">Analisar Comprova&ccedil;&atilde;o do Objeto - '.$filtro.'</td></tr>';
-            $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 10" colspan="'.$colspan.'">Data do Arquivo: '. Data::mostraData() .'</td></tr>';
+            $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 16px; font-weight: bold;" colspan="'.$colspan.'">Analisar Comprova&ccedil;&atilde;o do Objeto - '.$filtro.'</td></tr>';
+            $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 10px" colspan="'.$colspan.'">Data do Arquivo: '. Data::mostraData() .'</td></tr>';
             $html .='<tr><td colspan="'.$colspan.'"></td></tr>';
 
             $html .= '<tr>';
