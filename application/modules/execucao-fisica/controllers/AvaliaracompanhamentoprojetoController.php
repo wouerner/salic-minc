@@ -399,7 +399,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idPronac));
         $this->view->AceiteObras = $AceiteObras;
 
-        $tbBensDoados = new tbBensDoados();
+        $tbBensDoados = new ExecucaoFisica_Model_DbTable_TbBensDoados();
         $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idPronac), array('b.Descricao'));
         $this->view->BensCadastrados = $BensCadastrados;
 
@@ -459,7 +459,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idPronac));
         $this->view->AceiteObras = $AceiteObras;
 
-        $tbBensDoados = new tbBensDoados();
+        $tbBensDoados = new ExecucaoFisica_Model_DbTable_TbBensDoados();
         $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idPronac), array('b.Descricao'));
         $this->view->BensCadastrados = $BensCadastrados;
 
@@ -873,7 +873,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $DadosItens = $tbPlanilhaAprovacao->buscarItensOrcamentarios(array('a.idPronac=?'=>$idPronac), array('b.Descricao'));
         $this->view->DadosItens = $DadosItens;
 
-        $tbBensDoados = new tbBensDoados();
+        $tbBensDoados = new ExecucaoFisica_Model_DbTable_TbBensDoados();
         $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idPronac), array('b.Descricao'));
         $this->view->BensCadastrados = $BensCadastrados;
         $this->view->idPronac = $idPronac;

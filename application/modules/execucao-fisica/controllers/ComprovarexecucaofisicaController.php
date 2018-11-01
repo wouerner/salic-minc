@@ -1497,7 +1497,7 @@ class ExecucaoFisica_ComprovarexecucaofisicaController extends MinC_Controller_A
         $DadosItens = $tbPlanilhaAprovacao->buscarItensOrcamentarios(array('a.idPronac=?'=>$idpronac), array('b.Descricao'));
         $this->view->DadosItens = $DadosItens;
 
-        $tbBensDoados = new tbBensDoados();
+        $tbBensDoados = new ExecucaoFisica_Model_DbTable_TbBensDoados();
         $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idpronac), array('b.Descricao'));
         $this->view->BensCadastrados = $BensCadastrados;
     }
@@ -1615,7 +1615,7 @@ class ExecucaoFisica_ComprovarexecucaofisicaController extends MinC_Controller_A
                 'idUsuarioCadastrador' => $this->IdUsuario
             );
 
-            $tbBensDoados = new tbBensDoados();
+            $tbBensDoados = new ExecucaoFisica_Model_DbTable_TbBensDoados();
             $insert = $tbBensDoados->inserir($dadosItem);
 
             parent::message("Dados salvos com sucesso!", "execucao-fisica/comprovarexecucaofisica/bens-final/idpronac/".Seguranca::encrypt($idpronac), "CONFIRM");
@@ -1737,7 +1737,7 @@ class ExecucaoFisica_ComprovarexecucaofisicaController extends MinC_Controller_A
                 'idUsuarioCadastrador' => $this->IdUsuario
             );
 
-            $tbBensDoados = new tbBensDoados();
+            $tbBensDoados = new ExecucaoFisica_Model_DbTable_TbBensDoados();
             $insert = $tbBensDoados->inserir($dadosItem);
 
             parent::message("Dados salvos com sucesso!", "execucao-fisica/comprovarexecucaofisica/bens-final/idpronac/".Seguranca::encrypt($idpronac), "CONFIRM");
@@ -1756,7 +1756,7 @@ class ExecucaoFisica_ComprovarexecucaofisicaController extends MinC_Controller_A
         $aceite = (int) $post->aceite;
 
         $where = 'idBensDoados = '.$idBensDoados;
-        $tbBensDoados = new tbBensDoados();
+        $tbBensDoados = new ExecucaoFisica_Model_DbTable_TbBensDoados();
         $exclusaoDoBem = $tbBensDoados->delete($where);
 
         $vw = new vwAnexarComprovantes();

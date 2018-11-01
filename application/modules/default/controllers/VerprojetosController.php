@@ -2131,7 +2131,7 @@ class VerProjetosController extends MinC_Controller_Action_Abstract
             $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idpronac));
             $this->view->AceiteObras = $AceiteObras;
 
-            $tbBensDoados = new tbBensDoados();
+            $tbBensDoados = new ExecucaoFisica_Model_DbTable_TbBensDoados();
             $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idpronac), array('b.Descricao'));
             $this->view->BensCadastrados = $BensCadastrados;
 
@@ -2191,7 +2191,7 @@ class VerProjetosController extends MinC_Controller_Action_Abstract
         $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idpronac));
         $this->view->AceiteObras = $AceiteObras;
 
-        $tbBensDoados = new tbBensDoados();
+        $tbBensDoados = new ExecucaoFisica_Model_DbTable_TbBensDoados();
         $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idpronac), array('b.Descricao'));
         $this->view->BensCadastrados = $BensCadastrados;
 
