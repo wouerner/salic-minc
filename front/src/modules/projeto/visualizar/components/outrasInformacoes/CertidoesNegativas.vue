@@ -1,5 +1,5 @@
 <template>
-    <div id="conteudo">
+    <!-- <div id="conteudo">
         <div v-if="loading">
             <Carregando :text="'Carregando Certidoes Negativas'"></Carregando>
         </div>
@@ -43,6 +43,38 @@
                 </fieldset>
             </div>
         </div>
+    </div> -->
+    <div>
+        <div v-if="loading">
+            <Carregando :text="'Carregando Certidoes Negativas'"></Carregando>
+        </div>
+        <div v-else-if="dados.certidoes">
+            <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
+                                  :nomeProjeto="dadosProjeto.NomeProjeto">
+            </IdentificacaoProjeto>
+           <v-data-table
+                    :headers="headers"
+                    :items="dados.certidoes"
+                    class="elevation-1 container-fluid"
+                    rows-per-page-text="Itens por Página"
+           >
+                <template slot="items" slot-scope="props">
+                    <td>{{ props.item.dsCertidao }}</td>
+                    <td>{{ props.item.DtEmissao }}</td>
+                    <td>{{ props.item.DtValidade }}</td>
+                    <td>{{ props.item.Pronac }}</td>
+                    <td v-if="props.item.Situacao">
+                        {{ props.item.Situacao }}
+                    </td>
+                    <td v-else>
+                        Vencida
+                    </td>
+                </template>
+                <template slot="pageText" slot-scope="props">
+                    Itens {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                </template>
+            </v-data-table>
+        </div>
     </div>
 </template>
 <script>
@@ -55,7 +87,35 @@
         name: 'CertidoesNegativas',
         data() {
             return {
+                search: '',
+                pagination: {
+                    sortBy: 'fat',
+                },
+                selected: [],
                 loading: true,
+                headers: [
+                    {
+                        text: 'CERTIDÕES',
+                        align: 'left',
+                        value: 'dsCertidao',
+                    },
+                    {
+                        text: 'DATA DE EMISSÃO',
+                        value: 'DtEmissao',
+                    },
+                    {
+                        text: 'DATA DE VALIDADE',
+                        value: 'DtValidade',
+                    },
+                    {
+                        text: 'PRONAC',
+                        value: 'Pronac',
+                    },
+                    {
+                        text: 'SITUAÇÃO',
+                        value: 'Situacao',
+                    },
+                ],
             };
         },
         components: {
