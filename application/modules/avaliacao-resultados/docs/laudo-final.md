@@ -99,7 +99,7 @@
     ![Painel do Laudo secundário](./imagens/painel_laudo_Sec_Dir.png)
 ### Tabela de listagem
 * A [tabela](#tabela-dos-projetos) é a mesma do perfil do Coordenador geral.
-* No campo ['Devolver'](#devolver), o Secretário vai poder estar devolvendo o [Laudo final](#laudo-final).
+* No campo _Devolver_, o Secretário vai poder estar devolvendo o [Laudo final](#laudo-final).
 * Na 'Ação', é possível [Visualizar o laudo](#visualizar-laudo) emitido.
 
 ## Como acessar o Laudo Final no perfil Diretor
@@ -108,4 +108,4 @@
 * Segundo passo vá em Avaliação de Resultados->Analisar laudo final.
 
 ### Avaliação de Resultados: Laudo Final 
- [`Segue da mesma forma que o perfil do secretário`](#avaliacao-de-resultados-laudo-final-1)
+ [Segue da mesma forma que o perfil do secretário](#avaliação-de-resultados-laudo-final-1)
