@@ -14,7 +14,7 @@
                     :search="search"
                     :pagination.sync="pagination"
                     class="elevation-1"
-                    rows-per-page-text="Itens por Página"
+                    rows-per-page-text="Items por Página"
             >
                 <template slot="items" slot-scope="props">
                     <td>{{ props.item.id + 1 }}</td>
@@ -39,7 +39,7 @@
                     </v-alert>
                 </template>
                 <template slot="pageText" slot-scope="props">
-                    Itens {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                    Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
                 </template>
             </v-data-table>
         </div>
