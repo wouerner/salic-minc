@@ -27,8 +27,8 @@
                             fab dark small
                             slot="activator"
                             color="teal"
-                            target="_blank"
                             :href="`/assinatura/index/visualizar-documento-assinado/idPronac/${props.item.IdPRONAC}?idDocumentoAssinatura=${props.item.idDocumentoAssinatura}`"
+                            target="_blank"
                             dark
                     >
                         <v-icon dark>search</v-icon>
