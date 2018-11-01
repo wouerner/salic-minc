@@ -1,7 +1,6 @@
 import * as desencapsularResponse from '@/helpers/actions';
 import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
 import * as types from './types';
-import { state } from './mutations';
 
 export const dadosMenu = ({ commit }) => {
     avaliacaoResultadosHelperAPI.dadosMenu()
@@ -136,26 +135,33 @@ export const consolidacaoAnalise = ({ commit }, params) => {
 };
 
 export const finalizarParecer = (_, params) => {
-    avaliacaoResultadosHelperAPI.finalizarParecer(params)
+    avaliacaoResultadosHelperAPI.alterarEstado(params)
         .then(() => {
         });
 };
 
-export const encaminharParaTecnico = (_, params) => {
-    avaliacaoResultadosHelperAPI.encaminharParaTecnico(params);
+export const encaminharParaTecnico = ({ commit, dispatch }, params) => {
+    commit(types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR, {});
+    commit(types.PROJETOS_AVALIACAO_TECNICA, {});
+    avaliacaoResultadosHelperAPI
+        .alterarEstado(params)
+        .then(() => {
+            dispatch('projetosParaDistribuir');
+            dispatch('obterDadosTabelaTecnico', { estadoid: 5 });
+        })
+    ;
 };
 
 export const alterarParecer = ({ commit }, param) => {
     commit(types.SET_PARECER, param);
 };
 
-export const obterDadosItemComprovacao = ({ commit }, params) => {
-    avaliacaoResultadosHelperAPI.obterDadosItemComprovacao(params)
-        .then((response) => {
-            const itemComprovacao = response.data.data;
-            commit(types.GET_DADOS_ITEM_COMPROVACAO, itemComprovacao.items);
-        });
-};
+export const obterDadosItemComprovacao = ({ commit }, params) => avaliacaoResultadosHelperAPI
+    .obterDadosItemComprovacao(params)
+    .then((response) => {
+        const itemComprovacao = response.data.data;
+        commit(types.GET_DADOS_ITEM_COMPROVACAO, itemComprovacao.items);
+    });
 
 export const getLaudoFinal = ({ commit }, params) => {
     avaliacaoResultadosHelperAPI.obterLaudoFinal(params)
@@ -173,7 +179,7 @@ export const salvarLaudoFinal = ({ commit }, data) => {
 };
 
 export const finalizarLaudoFinal = ({ commit }, data) => {
-    avaliacaoResultadosHelperAPI.finalizarParecerLaudoFinal(data)
+    avaliacaoResultadosHelperAPI.alterarEstado(data)
         .then(() => {
             commit('noticias/SET_DADOS', { ativo: true, color: 'success', text: 'Finalizado com sucesso!' }, { root: true });
         });
@@ -265,9 +271,8 @@ export const buscarDetalhamentoItens = ({ commit }, idPronac) => {
 };
 
 
-export const buscarComprovantes = ({ commit }, comprovanteIndex) => {
-    const itemBuscaComprovantes = state.itensBuscaComprovantes[comprovanteIndex];
-    avaliacaoResultadosHelperAPI.buscarComprovantes(itemBuscaComprovantes)
+export const buscarComprovantes = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.buscarComprovantes(params)
         .then((response) => {
             const data = response.data;
             const itens = data.data;
@@ -275,10 +280,37 @@ export const buscarComprovantes = ({ commit }, comprovanteIndex) => {
         });
 };
 
-export const devolverProjeto = ({ commit }, params) => {
-    avaliacaoResultadosHelperAPI.devolverProjeto(params)
+export const devolverProjeto = ({ commit, dispatch }, params) => {
+    avaliacaoResultadosHelperAPI.alterarEstado(params)
         .then((response) => {
             const devolverProjeto = response.data;
+            commit(types.SET_DADOS_PROJETOS_FINALIZADOS, {});
             commit(types.SET_DEVOLVER_PROJETO, devolverProjeto);
+            dispatch('projetosFinalizados', { estadoid: 6 });
         });
 };
+
+export const projetosAssinarCoordenador = ({ commit }) => {
+    avaliacaoResultadosHelperAPI.projetosPorEstado({ estadoid: 9 })
+        .then((response) => {
+            const dados = response.data;
+            commit(types.SYNC_PROJETOS_ASSINAR_COORDENADOR, dados.data);
+        });
+};
+
+export const projetosAssinarCoordenadorGeral = ({ commit }) => {
+    avaliacaoResultadosHelperAPI.projetosPorEstado({ estadoid: 15 })
+        .then((response) => {
+            const dados = response.data;
+            commit(types.SYNC_PROJETOS_ASSINAR_COORDENADOR_GERAL, dados.data);
+        });
+};
+
+export const salvarAvaliacaoComprovante = (_, params) =>
+    avaliacaoResultadosHelperAPI.salvarAvaliacaoComprovante(params);
+
+export const alterarAvaliacaoComprovante = ({ commit }, params) =>
+    commit(types.ALTERAR_DADOS_ITEM_COMPROVACAO, params);
+
+export const alterarPlanilha = ({ commit }, params) =>
+    commit(types.ALTERAR_PLANILHA, params);

@@ -6,6 +6,9 @@ coverage
 cypress/screenshots/
 cypress/videos/
 
+# arquivo que o webpack injeta os scripts
+application/layouts/scripts/vue.phtml
+
 # configs do salic
 application/configs/bancos_*.ini
 application/configs/config.ini

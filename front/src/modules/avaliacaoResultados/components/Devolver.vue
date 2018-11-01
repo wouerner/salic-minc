@@ -12,7 +12,7 @@
                 icon
                 light
             >
-                <v-icon class="material-icons">replay</v-icon>
+                <v-icon color="error" class="material-icons">undo</v-icon>
             </v-btn>
             <span>Devolver Projeto</span>
         </v-tooltip>
@@ -41,41 +41,40 @@
 </template>
 
 <script>
-    import { mapActions } from 'vuex';
-    import Modal from '@/components/modal';
 
-    export default {
-        name: 'Devolver',
-        data() {
-            return {
-                dialog: false,
+import { mapActions } from 'vuex';
+
+export default {
+    name: 'Devolver',
+    data() {
+        return {
+            dialog: false,
+        };
+    },
+    props: [
+        'idPronac',
+        'atual',
+        'proximo',
+        'nomeProjeto',
+        'pronac',
+        'idTipoDoAtoAdministrativo',
+    ],
+    methods: {
+        ...mapActions({
+            setDevolverProjeto: 'avaliacaoResultados/devolverProjeto',
+        }),
+        devolver() {
+            this.dialog = false;
+
+            const dados = {
+                idPronac: this.idPronac,
+                atual: this.atual,
+                proximo: this.proximo,
+                idTipoDoAtoAdministrativo: this.idTipoDoAtoAdministrativo,
             };
+
+            this.setDevolverProjeto(dados);
         },
-        props: {
-            idPronac: String,
-            atual: String,
-            proximo: String,
-            nomeProjeto: String,
-            pronac: String,
-        },
-        components: {
-            Modal,
-        },
-        methods: {
-            ...mapActions({
-                setDevolverProjeto: 'avaliacaoResultados/devolverProjeto',
-            }),
-            devolver() {
-                this.dialog = false;
-                this.setDevolverProjeto(
-                    {
-                        idPronac: this.idPronac,
-                        atual: this.atual,
-                        proximo: this.proximo,
-                        idTipoDoAtoAdministrativo: 622,
-                    });
-                location.reload();
-            },
-        },
-    };
+    },
+};
 </script>
