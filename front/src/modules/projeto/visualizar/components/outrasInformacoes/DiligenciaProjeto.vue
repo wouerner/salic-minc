@@ -1,65 +1,57 @@
 <template>
-    <div v-if="loading">
-        <Carregando :text="'Carregando Diligências do Projeto'"></Carregando>
-    </div>
-    <div v-else>
+    <div>
+        <div v-if="loading">
+            <Carregando :text="'Carregando Diligências do Projeto'"></Carregando>
+        </div>
         <IdentificacaoProjeto
                 :pronac="dadosProjeto.Pronac"
                 :nomeProjeto="dadosProjeto.NomeProjeto"
         >
         </IdentificacaoProjeto>
-        <template>
-            <v-expansion-panel popout>
-                <v-expansion-panel-content
-                >
-                    <div slot="header">Diligência Proposta</div>
-                    <v-card>
-                        <v-card-text class="grey lighten-3">
-                            <VisualizarDiligenciaProposta
-                                    :idPronac="idPronac"
-                                    :diligencias="dados.diligenciaProposta"
-                            >
-                            </VisualizarDiligenciaProposta>
-                        </v-card-text>
-                    </v-card>
-                </v-expansion-panel-content>
-            </v-expansion-panel>
-        </template>
-        <template>
-            <v-expansion-panel popout>
-                <v-expansion-panel-content
-                >
-                    <div slot="header">Diligência Adeqação Projeto</div>
-                    <v-card>
-                        <v-card-text class="grey lighten-3">
-                            <VisualizarDiligenciaAdequacao
-                                    :idPronac="idPronac"
-                                    :diligencias="dados.diligenciaAdequacao"
-                            >
-                            </VisualizarDiligenciaAdequacao>
-                        </v-card-text>
-                    </v-card>
-                </v-expansion-panel-content>
-            </v-expansion-panel>
-        </template>
+        <ul class="collapsible collapsible-produto no-padding" data-collapsible="expandable">
+            <li>
+                <div class="collapsible-header green-text">
+                    <i class="material-icons">perm_media</i> Diligência Proposta
+                </div>
+                <div class="collapsible-body no-padding margin10 scroll-x">
+                    <VisualizarDiligenciaProposta
+                            :idPronac="idPronac"
+                            :diligencias="dados.diligenciaProposta"
+                    >
+                    </VisualizarDiligenciaProposta>
+                </div>
+            </li>
+        </ul>
 
-        <template>
-            <v-expansion-panel popout>
-                <v-expansion-panel-content
-                >
-                    <div slot="header">Diligência Projeto</div>
-                    <v-card>
-                        <v-card-text class="grey lighten-3">
-                            <VisualizarDiligenciaProjeto
-                                    :idPronac="idPronac"
-                                    :diligencias="dados.diligenciaProjeto"
-                            >
-                            </VisualizarDiligenciaProjeto>
-                        </v-card-text>
-                    </v-card>
-                </v-expansion-panel-content>
-            </v-expansion-panel>
-        </template>
+        <ul class="collapsible collapsible-produto no-padding" data-collapsible="expandable">
+            <li>
+                <div class="collapsible-header green-text">
+                    <i class="material-icons">perm_media</i> Diligência Adeqação Projeto
+                </div>
+                <div class="collapsible-body no-padding margin10 scroll-x">
+                    <VisualizarDiligenciaAdequacao
+                            :idPronac="idPronac"
+                            :diligencias="dados.diligenciaAdequacao"
+                    >
+                    </VisualizarDiligenciaAdequacao>
+                </div>
+            </li>
+        </ul>
+        <ul class="collapsible collapsible-produto no-padding" data-collapsible="expandable">
+            <li>
+                <div class="collapsible-header green-text">
+                    <i class="material-icons">perm_media</i> Diligência Projeto
+                </div>
+                <div class="collapsible-body no-padding margin10 scroll-x">
+                    <VisualizarDiligenciaProjeto
+                            :idPronac="idPronac"
+                            :diligencias="dados.diligenciaProjeto"
+                    >
+                    </VisualizarDiligenciaProjeto>
+                </div>
+            </li>
+        </ul>
+
     </div>
 </template>
 
