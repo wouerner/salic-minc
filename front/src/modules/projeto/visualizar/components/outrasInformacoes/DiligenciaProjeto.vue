@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="conteudo">
         <div v-if="loading">
             <Carregando :text="'Carregando Diligências do Projeto'"></Carregando>
         </div>
