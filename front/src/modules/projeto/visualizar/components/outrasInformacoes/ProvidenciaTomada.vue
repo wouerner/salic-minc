@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="loading">
-            <Carregando :text="'Carregando Certidoes Negativas'"></Carregando>
+            <Carregando :text="'Carregando Providência Tomada'"></Carregando>
         </div>
         <div v-else-if="dados.providenciaTomada">
             <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
