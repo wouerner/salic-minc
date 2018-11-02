@@ -15,12 +15,14 @@
             <tbody v-for="(diligencia, index) in diligencias" :key="index">
             <tr>
                 <td class="center">
-                    <button
-                            class="waves-effect waves-darken btn white black-text"
-                            @click="setAbaAtiva(diligencia, index);"
+                    <v-btn
+                            outline
+                            slot="activator"
+                            @click="setAbaAtiva(diligencia, index)"
+                            color="green"
                     >
                         <i class="material-icons">visibility</i>
-                    </button>
+                    </v-btn>
                 </td>
                 <td v-if="diligencia.produto">
                     {{ diligencia.produto }}
