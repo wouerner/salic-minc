@@ -24,9 +24,11 @@
                     <td class="center">
                         <v-tooltip left>
                             <v-btn
+                                    :loading="parseInt(props.item.id) === loadingButton"
                                     style="text-decoration: none"
                                     slot="activator"
                                     color="blue"
+                                    @click.native="loadingButton = parseInt(props.item.id)"
                                     :href="`/consultardadosprojeto/abrir-documentos-anexados?id=${props.item.idArquivo}&tipo=${props.item.AgenteDoc}&idPronac=${dadosProjeto.idPronac}`"
                                     dark
                             >
@@ -69,6 +71,7 @@
                 indexDocumentosAnexados: 0,
                 selected: [],
                 loading: true,
+                loadingButton: -1,
                 headers: [
                     {
                         text: 'N°',
@@ -109,6 +112,9 @@
             },
             documentosAnexados() {
                 this.loading = false;
+            },
+            loadingButton() {
+                setTimeout(() => (this.loadingButton = -1), 2000);
             },
         },
         methods: {

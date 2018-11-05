@@ -12,7 +12,7 @@
 
             <v-card-actions>
                 <v-btn flat color="green">
-                    <router-link :to="{ name: 'dadosprojeto', params: { idPronac: dadosProjeto.IdPRONAC }}">
+                    <router-link :to="{ name: 'dadosprojeto', params: { idPronac: dadosProjeto.idPronac }}">
                         <h6>Ver Projeto</h6>
                     </router-link>
                 </v-btn>

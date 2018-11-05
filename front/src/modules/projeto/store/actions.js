@@ -181,8 +181,9 @@ export const buscarPlanoDistribuicaoIn2017 = ({ commit }, idPreProjeto) => {
         });
 };
 
-export const buscarDiligenciaProposta = ({ commit }, dados) => {
-    projetoHelperAPI.buscarDiligenciaProposta(dados)
+export const buscarDiligenciaProposta = ({ commit }, value) => {
+    const { idPreprojeto, valor } = value;
+    projetoHelperAPI.buscarDiligenciaProposta(idPreprojeto, valor)
         .then((response) => {
             const data = response.data.data.items;
             commit(types.SET_DILIGENCIA_PROPOSTA, data);
