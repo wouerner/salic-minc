@@ -1,8 +1,8 @@
 before( () => {
     cy.visit('localhost');
         
-    var login = cy.get('form div div').find('input').eq(0).type('239.691.561-49'); // Login
-    var senha = cy.get('form div div').find('input').eq(1).type('123456'); // Senha
+    var login = cy.get('#Login').type('239.691.561-49'); // Login
+    var senha = cy.get('#Senha').type('123456'); // Senha
     cy.get('form').submit();
 
     cy.visit('http://localhost/principal');

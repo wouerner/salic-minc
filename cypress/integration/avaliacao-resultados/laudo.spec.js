@@ -1,13 +1,15 @@
 describe('Testes da Avaliação de Resultados: Laudo Final', () => {
-    it('Alterando perfil e acessando o menu', () => {
-      cy.get('#combousuario div input').click() //Abrindo o compo do perfil
-      .get(':nth-child(55) > span').click(); //Selecionando o perfil Coordenador Geral
+    it('Alterando perfil', () => {
+      cy.mudarPerfil(126, 303); //perfil Coordenador Geral
  
       cy.wait(1000);
+    });
 
-      cy.get('ul li a.dropdown-button').contains('Avaliação de Resultados').click() //Selecionando o menu
-        .get('#prestacao-contas li a').contains('Analisar Laudo Final (Novo)').click(); //Selecionando o item do menu
-    
+    it('Acesso ao menu de Avaliação de Resultados', () => {
+      cy.get('.left > :nth-child(4) > .dropdown-button').contains('Avaliação de Resultados').click(); //Selecionando o menu
+      cy.wait(1000);
+      cy.get('#prestacao-contas > :nth-child(5) > a').contains('Analisar Laudo Final (Novo)').click(); //Selecionando o item do menu
+
       cy.wait(1000);
       
     });
@@ -17,7 +19,7 @@ describe('Testes da Avaliação de Resultados: Laudo Final', () => {
     });
     
     it('Verifica se há pelo menos um item na tabela - Aba "Em análise" ', () => {
-      cy.get(':nth-child(2) > .v-tabs__item').click();
+      cy.get('#emAnalise a').click();
       cy.get('tbody > :nth-child(1) > .text-xs-right').should('not.be.empty');
       
       cy.wait(1000);
