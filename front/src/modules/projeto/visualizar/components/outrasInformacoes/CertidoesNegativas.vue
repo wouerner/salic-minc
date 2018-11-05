@@ -4,9 +4,6 @@
             <Carregando :text="'Carregando Certidoes Negativas'"></Carregando>
         </div>
         <div v-else-if="dados.certidoes">
-            <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
-                                  :nomeProjeto="dadosProjeto.NomeProjeto">
-            </IdentificacaoProjeto>
             <v-data-table
                     :headers="headers"
                     :items="dados.certidoes"
@@ -41,7 +38,6 @@
 
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/Carregando';
-    import IdentificacaoProjeto from './IdentificacaoProjeto';
 
     export default {
         name: 'CertidoesNegativas',
@@ -79,7 +75,6 @@
             };
         },
         components: {
-            IdentificacaoProjeto,
             Carregando,
         },
         mounted() {
