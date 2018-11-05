@@ -60,7 +60,7 @@ export const obterProjetosParaDistribuir = () => api.getRequest('/avaliacao-resu
 
 export const criarDiligencia = params => api.postRequest('/diligencia/diligencia', buildData(params));
 
-export const listarDiligencias = params => api.getRequest();
+export const listarDiligencias = params => api.getRequest(`/avaliacao-resultados/diligencia/${params}`);
 
 /** FIM DILIGENCIA */
 
