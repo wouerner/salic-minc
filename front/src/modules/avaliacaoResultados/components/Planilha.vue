@@ -13,10 +13,26 @@
                 <h2>{{ dadosProjeto.items.pronac }} &#45; {{ dadosProjeto.items.nomeProjeto }}</h2>
             </v-card-title>
             <v-card-text>
-                <p v-if="dadosProjeto.items.diligencia">Existe Diligência para esse projeto. Acesse <a :href="'/proposta/diligenciar/listardiligenciaanalista/idPronac/' + idPronac">aqui</a>.</p>
-                <p v-else-if="documento != 0">Existe Documento para assinar nesse projeto.</p>
-                <p v-else-if="estado.estadoId == 5">Projeto em analise.</p>
-                <p v-else>Sem Observações.</p>
+                <v-alert
+                    v-if="dadosProjeto.items.diligencia"
+                    :value="true"
+                    color="info"
+                >
+                    Existe Diligência para esse projeto. Acesse <a :href="'/proposta/diligenciar/listardiligenciaanalista/idPronac/' + idPronac">aqui</a>.
+                </v-alert>
+                <v-alert
+                    v-if="documento != 0"
+                    :value="true"
+                    color="info"
+                >
+                    Existe Documento para assinar nesse projeto.
+                </v-alert>
+                <v-alert
+                   v-if="estado.estadoId == 5"
+                    :value="true"
+                    color="info"
+                >Projeto em analise.
+                </v-alert>
                 <div class="mt-4 mb-3">
                     <div class="d-inline-block">
                         <h4>Valor Aprovado</h4>
@@ -110,7 +126,7 @@
                                                         <v-tabs
                                                             slider-color="green"
                                                         >
-                                                            <v-tab ripple v-for="tab in Object.keys(cidade.itens)" :key="tab">{{ tabs[tab] }}</v-tab>
+                                                            <v-tab ripple v-for="(tab, index) in Object.keys(cidade.itens)" :key="index">{{ tabs[tab] }}</v-tab>
                                                             <v-tab-item v-for="item in cidade.itens" :key="item.stItemAvaliado">
                                                                 <v-data-table
                                                                     :headers="headers"
@@ -123,6 +139,7 @@
                                                                         <td>{{ moeda(props.item.varlorComprovado) }}</td>
                                                                         <td>{{ moeda(props.item.varlorAprovado - props.item.varlorComprovado) }}</td>
                                                                         <td >
+
                                                                             <template
                                                                                 v-if="podeEditar(props.item.varlorComprovado)"
                                                                             >
@@ -133,6 +150,9 @@
                                                                                      :idmunicipio="cidade.cdCidade"
                                                                                      :id-planilha-item="props.item.idPlanilhaItens"
                                                                                      :etapa="etapa.cdEtapa"
+                                                                                     :cd-produto="produto.cdProduto"
+                                                                                     :cd-uf="uf.cdUF"
+                                                                                     :st-item-avaliado="props.item.stItemAvaliado"
                                                                                  >
                                                                                  </analisar-item>
                                                                             </template>
