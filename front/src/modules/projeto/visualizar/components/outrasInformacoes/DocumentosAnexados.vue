@@ -4,9 +4,6 @@
             <Carregando :text="'Documentos Anexados'"></Carregando>
         </div>
         <div v-else-if="documentosAnexados.documentos">
-            <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
-                                  :nomeProjeto="dadosProjeto.NomeProjeto">
-            </IdentificacaoProjeto>
             <v-data-table
                     :headers="headers"
                     :items="indexItems"
@@ -53,14 +50,12 @@
 <script>
     import { mapGetters, mapActions } from 'vuex';
     import Carregando from '@/components/Carregando';
-    import IdentificacaoProjeto from './IdentificacaoProjeto';
 
     export default {
         name: 'DocumentosAnexados',
         props: ['idPronac'],
         components: {
             Carregando,
-            IdentificacaoProjeto,
         },
         data() {
             return {

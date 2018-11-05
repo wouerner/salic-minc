@@ -4,10 +4,6 @@
             <Carregando :text="'Carregando Plano de Distribuicao'"></Carregando>
         </div>
         <div v-else>
-            <IdentificacaoProjeto
-                :pronac="dadosProjeto.Pronac"
-                :nomeProjeto="dadosProjeto.NomeProjeto">
-            </IdentificacaoProjeto>
             <PropostaPlanoDistribuicao
                     :arrayProdutos="dadosIn2017.planodistribuicaoproduto"
                     :arrayDetalhamentos="dadosIn2017.tbdetalhaplanodistribuicao">
@@ -19,7 +15,6 @@
     import { mapGetters, mapActions } from 'vuex';
     import Carregando from '@/components/Carregando';
     import PropostaPlanoDistribuicao from '@/modules/proposta/visualizar/components/PropostaPlanoDistribuicao';
-    import IdentificacaoProjeto from './IdentificacaoProjeto';
 
     export default {
         name: 'PlanoDistribuicaoIn2017',
@@ -31,7 +26,6 @@
         },
         components: {
             Carregando,
-            IdentificacaoProjeto,
             PropostaPlanoDistribuicao,
         },
         mounted() {

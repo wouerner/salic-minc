@@ -3,11 +3,6 @@
         <div v-if="loading">
             <Carregando :text="'Carregando Diligências do Projeto'"></Carregando>
         </div>
-        <IdentificacaoProjeto
-                :pronac="dadosProjeto.Pronac"
-                :nomeProjeto="dadosProjeto.NomeProjeto"
-        >
-        </IdentificacaoProjeto>
         <div v-if="dados.diligenciaProposta">
             <fieldset style="margin: 0px;">
                 <legend>Dilig&ecirc;ncia Proposta</legend>
@@ -43,7 +38,6 @@
 <script>
     import { mapGetters, mapActions } from 'vuex';
     import Carregando from '@/components/Carregando';
-    import IdentificacaoProjeto from './IdentificacaoProjeto';
     import VisualizarDiligenciaProposta from './components/VisualizarDiligenciaProposta';
     import VisualizarDiligenciaAdequacao from './components/VisualizarDiligenciaAdequacao';
     import VisualizarDiligenciaProjeto from './components/VisualizarDiligenciaProjeto';
@@ -52,7 +46,6 @@
         name: 'DiligenciaProjeto',
         components: {
             Carregando,
-            IdentificacaoProjeto,
             VisualizarDiligenciaProposta,
             VisualizarDiligenciaAdequacao,
             VisualizarDiligenciaProjeto,
