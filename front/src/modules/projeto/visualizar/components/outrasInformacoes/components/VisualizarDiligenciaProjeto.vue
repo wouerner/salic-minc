@@ -22,7 +22,7 @@
                 <td class="text-xs-center" v-if="props.item.produto">
                     {{ props.item.produto }}
                 </td>
-                <td v-else class="text-xs-center"> - </td>
+                <td v-else class="text-xs-center"> -</td>
                 <td class="text-xs-center">{{ props.item.tipoDiligencia }}</td>
                 <td class="text-xs-center">{{ props.item.dataSolicitacao }}</td>
                 <td class="text-xs-center">{{ props.item.dataResposta }}</td>
@@ -112,119 +112,11 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-
-        <!--<v-dialog v-model="dialog" max-width="1500px">-->
-        <!--<tr>-->
-        <!--<td colspan="7">-->
-        <!--<table class="tabela">-->
-        <!--<tbody>-->
-        <!--<tr>-->
-        <!--<th>PRONAC</th>-->
-        <!--<th>NOME DA PROPOSTA</th>-->
-        <!--</tr>-->
-        <!--<tr>-->
-        <!--<td>{{ dadosProjeto.Pronac }}</td>-->
-        <!--<td>{{ dadosProjeto.NomeProjeto }}</td>-->
-        <!--</tr>-->
-        <!--<tr>-->
-        <!--<th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>-->
-        <!--<th>DATA DA RESPOSTA</th>-->
-        <!--</tr>-->
-        <!--<tr>-->
-        <!--<td>{{ dadosDiligencia.dataSolicitacao }}</td>-->
-        <!--<td>{{ dadosDiligencia.dataResposta }}</td>-->
-        <!--</tr>-->
-        <!--</tbody>-->
-        <!--</table>-->
-        <!--<table v-if="dadosDiligencia.Solicitacao" class="tabela">-->
-        <!--<tbody>-->
-        <!--<tr>-->
-        <!--<th>SOLICITA&Ccedil;&Atilde;O</th>-->
-        <!--</tr>-->
-        <!--<tr>-->
-        <!--<td style="padding-left: 20px" v-html="dadosDiligencia.Solicitacao"></td>-->
-        <!--</tr>-->
-        <!--</tbody>-->
-        <!--</table>-->
-        <!--<table v-if="dadosDiligencia.Resposta" class="tabela">-->
-        <!--<tbody>-->
-        <!--<tr>-->
-        <!--<th>Resposta:</th>-->
-        <!--</tr>-->
-        <!--<tr>-->
-        <!--<td style="padding-left: 20px" v-html="dadosDiligencia.Resposta"></td>-->
-        <!--</tr>-->
-        <!--</tbody>-->
-        <!--</table>-->
-        <!--<table class="tabela"-->
-        <!--v-if="dadosDiligencia.arquivos && Object.keys(dadosDiligencia.arquivos).length > 0">-->
-        <!--<tbody>-->
-        <!--<tr>-->
-        <!--<th colspan="3">Arquivos Anexados</th>-->
-        <!--</tr>-->
-        <!--<tr>-->
-        <!--<td class="destacar bold" align="center">Arquivo</td>-->
-        <!--<td class="destacar bold" align="center">Dt.Envio</td>-->
-        <!--</tr>-->
-        <!--<tr v-for="arquivo of dadosDiligencia.arquivos" :key="arquivo.idArquivo">-->
-        <!--<td>-->
-        <!--<a :href="`/upload/abrir?id=${arquivo.idArquivo}`" target="_blank">-->
-        <!--{{ arquivo.nmArquivo }}-->
-        <!--</a>-->
-        <!--</td>-->
-        <!--<td align="center">-->
-        <!--{{ arquivo.dtEnvio }}-->
-        <!--</td>-->
-        <!--</tr>-->
-        <!--</tbody>-->
-        <!--</table>-->
-        <!--</td>-->
-        <!--</tr>-->
-        <!--</v-dialog>-->
     </div>
 
-    <!--<div>-->
-    <!--<table class="tabela" v-if="Object.keys(diligencias).length > 0">-->
-    <!--<thead>-->
-    <!--<tr class="destacar">-->
-    <!--<th>VISUALIZAR</th>-->
-    <!--<th>PRODUTO</th>-->
-    <!--<th>TIPO DE DILIG&Ecirc;NCIA</th>-->
-    <!--<th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>-->
-    <!--<th>DATA DA RESPOSTA</th>-->
-    <!--<th>PRAZO DA RESPOSTA</th>-->
-    <!--<th>PRORROGADO</th>-->
-    <!--</tr>-->
-    <!--</thead>-->
-    <!--<tbody v-for="(diligencia, index) in diligencias" :key="index">-->
-    <!--<tr>-->
-    <!--<td class="center">-->
-    <!--<v-btn-->
-    <!--outline-->
-    <!--slot="activator"-->
-    <!--@click="setAbaAtiva(diligencia, index)"-->
-    <!--color="green"-->
-    <!--&gt;-->
-    <!--<i class="material-icons">visibility</i>-->
-    <!--</v-btn>-->
-    <!--</td>-->
-    <!--<td v-if="diligencia.produto">-->
-    <!--{{ diligencia.produto }}-->
-    <!--</td>-->
-    <!--<td v-else class="center"> -</td>-->
-    <!--<td>{{ diligencia.tipoDiligencia }}</td>-->
-    <!--<td>{{ diligencia.dataSolicitacao }}</td>-->
-    <!--<td>{{ diligencia.dataResposta }}</td>-->
-    <!--<td>{{ diligencia.prazoResposta }}</td>-->
-    <!--<td>Prorrogado</td>-->
-    <!--</tr>-->
-
-
-    <!--</tbody>-->
-    <!--</table>-->
 </template>
 <script>
-    import {mapGetters, mapActions} from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
 
     export default {
         name: 'VisualizarDiligenciaProjeto',
