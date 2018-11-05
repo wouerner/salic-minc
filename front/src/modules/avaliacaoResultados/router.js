@@ -9,7 +9,7 @@ import AnaliseComprovantes from './components/AnaliseComprovantes';
 import Diligenciar from './components/Diligenciar';
 import Historico from './components/Historico';
 import EmitirLaudoFinal from './components/EmitirLaudoFinal';
-import Laudo from './components/PainelLaudo';
+import Laudo from './components/LaudoFinal/PainelLaudo';
 import AnalisarItem from './components/AnalisarItem';
 import VisualizarParecer from './components/VisualizarParecer';
 import VisualizarLaudo from './components/VisualizarLaudo';
