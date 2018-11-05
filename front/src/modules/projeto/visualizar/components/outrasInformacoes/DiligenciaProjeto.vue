@@ -3,10 +3,14 @@
         <div v-if="loading">
             <Carregando :text="'Carregando Diligências do Projeto'"></Carregando>
         </div>
+
+
         <v-flex>
             <v-expansion-panel popout focusable>
                 <v-expansion-panel-content>
-                    <div slot="header">Diligência Proposta</div>
+                    <div slot="header" class="green-text">
+                        Diligência Proposta
+                    </div>
                     <v-card>
                         <v-card-text>
                             <VisualizarDiligenciaProposta
@@ -17,38 +21,38 @@
                         </v-card-text>
                     </v-card>
                 </v-expansion-panel-content>
+
+                <v-expansion-panel-content>
+                    <div slot="header" class="green-text">
+                        Diligências da Adequação do Projeto
+                    </div>
+                    <v-card>
+                        <v-card-text>
+                            <VisualizarDiligenciaAdequacao
+                                    :idPronac="idPronac"
+                                    :diligencias="dados.diligenciaAdequacao"
+                            >
+                            </VisualizarDiligenciaAdequacao>
+                        </v-card-text>
+                    </v-card>
+                </v-expansion-panel-content>
+
+                <v-expansion-panel-content>
+                    <div slot="header" class="green-text">
+                        Diligência Projeto
+                    </div>
+                    <v-card>
+                        <v-card-text>
+                            <VisualizarDiligenciaProjeto
+                                    :idPronac="idPronac"
+                                    :diligencias="dados.diligenciaProjeto"
+                            >
+                            </VisualizarDiligenciaProjeto>
+                        </v-card-text>
+                    </v-card>
+                </v-expansion-panel-content>
             </v-expansion-panel>
         </v-flex>
-
-        <v-expansion-panel popout focusable>
-            <v-expansion-panel-content>
-                <div slot="header">Diligências da Adequação do Projeto</div>
-                <v-card>
-                    <v-card-text>
-                        <VisualizarDiligenciaAdequacao
-                                :idPronac="idPronac"
-                                :diligencias="dados.diligenciaAdequacao"
-                        >
-                        </VisualizarDiligenciaAdequacao>
-                    </v-card-text>
-                </v-card>
-            </v-expansion-panel-content>
-        </v-expansion-panel>
-
-        <v-expansion-panel popout focusable>
-            <v-expansion-panel-content>
-                <div slot="header">Diligência Projeto</div>
-                <v-card>
-                    <v-card-text>
-                        <VisualizarDiligenciaProjeto
-                                :idPronac="idPronac"
-                                :diligencias="dados.diligenciaProjeto"
-                        >
-                        </VisualizarDiligenciaProjeto>
-                    </v-card-text>
-                </v-card>
-            </v-expansion-panel-content>
-        </v-expansion-panel>
     </div>
 
 </template>
