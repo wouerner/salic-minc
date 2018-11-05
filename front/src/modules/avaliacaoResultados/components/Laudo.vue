@@ -23,7 +23,7 @@
                 <td class="text-xs-center">
                     <v-flex>
                         <div>
-                            <v-btn :to="{ name: 'dadosprojeto', params: { idPronac:props.item.IdPronac}}">{{ props.item.PRONAC }}</v-btn>
+                            <v-btn flat :href="'/projeto/#/'+ props.item.idPronac">{{ props.item.PRONAC }}</v-btn>
                         </div>
                     </v-flex>
                 </td>
