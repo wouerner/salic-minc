@@ -93,15 +93,15 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td left><b>Total:</b></td>
-                                                                    <td >{{consolidacaoComprovantes.qtTotalComprovante | currency}}</td>
+                                                                    <td >{{consolidacaoComprovantes.qtTotalComprovante}}</td>
                                                                     <td left><b>Validados:</b></td>
-                                                                    <td><font color="#006400">{{consolidacaoComprovantes.qtComprovantesValidadosProjeto | currency}} </font></td>
+                                                                    <td><font color="#006400">{{consolidacaoComprovantes.qtComprovantesValidadosProjeto}} </font></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td left><b>Não Avaliados:</b></td>
-                                                                    <td left>{{consolidacaoComprovantes.qtComprovantesNaoAvaliados | currency}}</td>
+                                                                    <td left>{{consolidacaoComprovantes.qtComprovantesNaoAvaliados}}</td>
                                                                     <td left><b>Recusados:</b></td>
-                                                                    <td left><font color="red">{{consolidacaoComprovantes.qtComprovantesRecusadosProjeto | currency}} </font></td>
+                                                                    <td left><font color="red">{{consolidacaoComprovantes.qtComprovantesRecusadosProjeto}} </font></td>
                                                                 </tr>
                                                             </template>
                                                         </v-data-table>
@@ -178,13 +178,12 @@
 </template>
 
 <script>
-    import Vue from 'vue';
-    import { mapActions, mapGetters } from 'vuex';
-    import ModalTemplate from '@/components/modal';
-    import cnpjFilter from '@/filters/cnpj';
-    import VueCurrencyFilter from 'vue-currency-filter';
+import Vue from 'vue';
+import { mapActions, mapGetters } from 'vuex';
+import cnpjFilter from '@/filters/cnpj';
+import VueCurrencyFilter from 'vue-currency-filter';
 
-    Vue.use(VueCurrencyFilter, {
+Vue.use(VueCurrencyFilter, {
     symbol: 'R$',
     thousandsSeparator: '.',
     fractionCount: 2,
@@ -221,9 +220,6 @@ export default {
             ],
             parecerData: {},
         };
-    },
-    components: {
-        ModalTemplate,
     },
     methods: {
         ...mapActions({

@@ -6,7 +6,7 @@
         <v-card>
             <v-tabs
                 centered
-                color="green"
+                color="primary"
                 dark
                 icons-and-text
             >
@@ -18,7 +18,7 @@
                     <template v-if="Object.keys(getProjetosParaDistribuir).length == 0">
                         <v-progress-circular
                             indeterminate
-                            color="primary"
+                            color="secondary"
                             dark
                         ></v-progress-circular>
                     </template>
@@ -31,7 +31,7 @@
                     <template v-if="Object.keys(dadosTabelaTecnico).length == 0">
                         <v-progress-circular
                             indeterminate
-                            color="primary"
+                            color="secondary"
                             dark
                         ></v-progress-circular>
                     </template>
@@ -45,13 +45,13 @@
                     <template v-if="Object.keys(getProjetosFinalizados).length == 0">
                         <v-progress-circular
                             indeterminate
-                            color="primary"
+                            color="secondary"
                             dark
                         ></v-progress-circular>
                     </template>
                     <template v-else>
                         Assinar
-                        <v-icon>done</v-icon>
+                        <v-icon>edit</v-icon>
                     </template>
                 </v-tab>
 
@@ -59,7 +59,7 @@
                     <template v-if="Object.keys(getProjetosHistorico).length == 0">
                         <v-progress-circular
                             indeterminate
-                            color="primary"
+                            color="secondary"
                             dark
                         ></v-progress-circular>
                     </template>
@@ -141,7 +141,6 @@
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
-
             </v-tabs>
         </v-card>
     </v-container>
@@ -149,14 +148,14 @@
 <script>
 
 import { mapActions, mapGetters } from 'vuex';
-import TabelaProjetos from './TabelaProjetos';
-import Historico from './Historico';
-import Encaminhar from './ComponenteEncaminhar';
-import AnaliseButton from './analise/analisarButton';
-import AssinarButton from './analise/AssinarButton';
-import Devolver from './Devolver';
-import VisualizarPlanilhaButtton from './analise/VisualizarPlanilhaButtton';
-import CONST from '../const';
+import CONST from '../../const';
+import TabelaProjetos from '../TabelaProjetos';
+import Historico from '../components/Historico';
+import Encaminhar from '../ComponenteEncaminhar';
+import AnaliseButton from '../analise/analisarButton';
+import AssinarButton from '../analise/AssinarButton';
+import Devolver from '../components/Devolver';
+import VisualizarPlanilhaButtton from '../analise/VisualizarPlanilhaButtton';
 
 export default {
     name: 'Painel',
@@ -169,8 +168,6 @@ export default {
 
         this.usuarioLogado();
         this.CONST = CONST;
-    },
-    mounted() {
     },
     watch: {
         getUsuario(val) {
