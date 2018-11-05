@@ -17,7 +17,8 @@
                     <td style="width: 190px" class="text-xs-center">{{ props.item.DtSituacao }}</td>
                     <td style="width: 50px"  class="text-xs-center">{{ props.item.Situacao }}</td>
                     <td style="width: 700px" class="text-xs-center">{{ props.item.ProvidenciaTomada }}</td>
-                    <td style="width: 190px" class="text-xs-center">{{ props.item.cnpjcpf | cnpjFilter }}</td>
+                    <td style="width: 190px" class="text-xs-center" v-if="props.item.cnpjcpf">{{ props.item.cnpjcpf | cnpjFilter }}</td>
+                    <td style="width: 190px" class="text-xs-center" v-else>Nao se aplica.</td>
                     <td class="text-xs-center">{{ props.item.usuario }}</td>
                 </template>
                 <template slot="pageText" slot-scope="props">
