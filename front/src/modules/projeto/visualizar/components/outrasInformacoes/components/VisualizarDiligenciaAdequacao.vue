@@ -23,8 +23,8 @@
                 <td class="text-xs-center">{{ props.item.tipoDiligencia }}</td>
             </template>
             <template slot="no-data">
-                <v-alert :value="true" color="error" icon="warning">
-                    Nenhum dado encontrado ¯\_(ツ)_/¯
+                <v-alert :value="true" color="info" icon="warning">
+                    Nenhum dado encontrado
                 </v-alert>
             </template>
             <template slot="pageText" slot-scope="props">
