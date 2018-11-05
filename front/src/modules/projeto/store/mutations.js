@@ -10,7 +10,7 @@ export const state = {
     planilhaAdequada: {},
     transferenciaRecursos: [],
     certidoesNegativas: {},
-    documentosAssinados: {},
+    documentosAssinados: [],
     dadosComplementares: {},
     documentosAnexados: [],
     localRealizacaoDeslocamento: {},

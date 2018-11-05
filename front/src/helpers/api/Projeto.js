@@ -168,12 +168,12 @@ export const buscarPlanoDistribuicaoIn2017 = (idPreProjeto) => {
     return api.getRequest(path, queryParams);
 };
 
-export const buscarDiligenciaProposta = (dados) => {
+export const buscarDiligenciaProposta = (idPreprojeto, idAvaliacaoProposta) => {
     const modulo = '/projeto';
     const controller = '/diligencia-proposta-rest';
     const metodo = '/get';
     const path = `${modulo}${controller}${metodo}`;
-    const queryParams = `?idPreProjeto=${dados.idPreprojeto}&idAvaliacaoProposta=${dados.idAvaliacaoProposta}`;
+    const queryParams = `?idPreProjeto=${idPreprojeto}&idAvaliacaoProposta=${idAvaliacaoProposta}`;
     return api.getRequest(path, queryParams);
 };
 
