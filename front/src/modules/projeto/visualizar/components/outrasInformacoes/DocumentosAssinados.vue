@@ -12,7 +12,7 @@
                 rows-per-page-text="Items por Página"
         >
             <template slot="items" slot-scope="props">
-                <td class="text-xs-right">
+                <td class="text-xs-center">
                     <v-btn
                             style="text-decoration: none"
                             slot="activator"
@@ -25,7 +25,7 @@
                 <td class="text-xs-left">{{ props.item.nomeProjeto }}</td>
                 <td class="text-xs-left">{{ props.item.dsAtoAdministrativo }}</td>
                 <td class="text-xs-right">{{ props.item.dt_criacao }}</td>
-                <td class="text-xs-right">
+                <td class="text-xs-center">
                     <v-tooltip left>
                         <v-btn
                                 style="text-decoration: none"
