@@ -4,10 +4,9 @@ import EmitirParecer from './components/ParecerTecnico/EmitirParecer';
 import Painel from './components/ParecerTecnico/Painel';
 import TipoAvaliacao from './components/TipoAvaliacao';
 import Planilha from './components/ParecerTecnico/Planilha';
-import VisualizarPlanilha from './components/VisualizarPlanilha';
+import VisualizarPlanilha from './components/components/VisualizarPlanilha';
 import AnaliseComprovantes from './components/ParecerTecnico/AnaliseComprovantes';
-import Diligenciar from './components/Diligenciar';
-import Historico from './components/Historico';
+import Diligenciar from './components/ParecerTecnico/Diligenciar';
 import EmitirLaudoFinal from './components/EmitirLaudoFinal';
 import Laudo from './components/LaudoFinal/PainelLaudo';
 import AnalisarItem from './components/ParecerTecnico/AnalisarItem';
@@ -63,14 +62,6 @@ const routes = [
         component: Diligenciar,
         meta: {
             title: 'Dilengiar o proponente',
-        },
-    },
-    {
-        path: '/historico',
-        name: 'historico',
-        component: Historico,
-        meta: {
-            title: 'Historico dos encaminhamentos',
         },
     },
     {

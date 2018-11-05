@@ -244,7 +244,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import ConsolidacaoAnalise from '../ConsolidacaoAnalise';
+import ConsolidacaoAnalise from '../components/ConsolidacaoAnalise';
 import AnalisarItem from './AnalisarItem';
 
 export default {

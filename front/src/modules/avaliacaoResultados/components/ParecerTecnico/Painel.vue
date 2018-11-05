@@ -150,7 +150,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import CONST from '../../const';
 import TabelaProjetos from '../TabelaProjetos';
-import Historico from '../Historico';
+import Historico from '../components/Historico';
 import Encaminhar from '../ComponenteEncaminhar';
 import AnaliseButton from '../analise/analisarButton';
 import AssinarButton from '../analise/AssinarButton';
