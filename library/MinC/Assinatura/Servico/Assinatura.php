@@ -168,31 +168,36 @@ class Assinatura implements IServico
             throw new \Exception ("O documento precisa ser assinado para que consiga ser movimentado.");
         }
 
-        $servicoAtoAdministrativo = new AtoAdministrativo();
-        $grupo = $servicoAtoAdministrativo->obterGrupoAtoAdministrativoAtual(
-            $modeloTbAtoAdministrativo->getIdTipoDoAto(),
-            $modeloTbAtoAdministrativo->getIdPerfilDoAssinante(),
-            $modeloTbAtoAdministrativo->getIdOrgaoDoAssinante(),
-            $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()
-        );
-
-        $objTbAtoAdministrativo = new \Assinatura_Model_DbTable_TbAtoAdministrativo();
-        $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino(
-            $modeloTbAtoAdministrativo->getIdTipoDoAto(),
-            $modeloTbAtoAdministrativo->getIdOrdemDaAssinatura(),
-            $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante(),
-            $grupo
-        );
-
-        if (!$codigoOrgaoDestino) {
-            throw new \Exception("A fase atual do projeto n&atilde;o permite movimentar o projeto.");
+        $objAtoAdministrativoMetodoEncaminhamento = new \Assinatura_Model_DbTable_TbAtoAdministrativoMetodoEncaminhamento();
+        $encaminhaProjeto = $objAtoAdministrativoMetodoEncaminhamento->obterEncaminhaProjeto($modeloTbAtoAdministrativo->getIdTipoDoAto());
+        
+        if ($encaminhaProjeto) {
+            $servicoAtoAdministrativo = new AtoAdministrativo();
+            $grupo = $servicoAtoAdministrativo->obterGrupoAtoAdministrativoAtual(
+                $modeloTbAtoAdministrativo->getIdTipoDoAto(),
+                $modeloTbAtoAdministrativo->getIdPerfilDoAssinante(),
+                $modeloTbAtoAdministrativo->getIdOrgaoDoAssinante(),
+                $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()
+            );
+            
+            $objTbAtoAdministrativo = new \Assinatura_Model_DbTable_TbAtoAdministrativo();
+            $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino(
+                $modeloTbAtoAdministrativo->getIdTipoDoAto(),
+                $modeloTbAtoAdministrativo->getIdOrdemDaAssinatura(),
+                $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante(),
+                $grupo
+            );
+            
+            if (!$codigoOrgaoDestino) {
+                throw new \Exception("A fase atual do projeto n&atilde;o permite movimentar o projeto.");
+            }
+            
+            $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
+            $objTbProjetos->alterarOrgao(
+                $codigoOrgaoDestino,
+                $modeloTbAssinatura->getIdPronac()
+            );
         }
-
-        $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
-        $objTbProjetos->alterarOrgao(
-            $codigoOrgaoDestino,
-            $modeloTbAssinatura->getIdPronac()
-        );
 
         $this->executarAcoes('\MinC\Assinatura\Acao\IAcaoEncaminhar');
     }
