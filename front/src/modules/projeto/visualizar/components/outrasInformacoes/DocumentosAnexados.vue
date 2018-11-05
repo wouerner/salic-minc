@@ -74,7 +74,7 @@
                         value: 'id',
                     },
                     {
-                        align: 'center',
+                        align: 'left',
                         text: 'CLASSIFICAÇÃO',
                         value: 'Anexado',
                     },
@@ -84,7 +84,7 @@
                         value: 'Data',
                     },
                     {
-                        align: 'center',
+                        align: 'left',
                         text: 'TIPO DE DOCUMENTO',
                         value: 'Descricao',
                     },
