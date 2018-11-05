@@ -5,10 +5,10 @@
     } // menu lateral
     ?>
     <div class="col s12 m10 l10">
-        <!-- ========== INÍCIO BREADCRUMB (LINKS TOPO) ========== -->
+        <!-- ========== INÃCIO BREADCRUMB (LINKS TOPO) ========== -->
         <div id="breadcrumb">
             <ul>
-                <li class="first"><a href="<?php echo $this->baseUrl(); ?>" title="Ir para Início">Início</a></li>
+                <li class="first"><a href="<?php echo $this->baseUrl(); ?>" title="Ir para InÃ­cio">InÃ­cio</a></li>
                 <li class="last">Manter Agentes</li>
             </ul>
         </div>
@@ -18,7 +18,7 @@
             function excluir(idAgentexVerificacao) {
 
                 var dados = '<?php echo $this->url(array('module' => 'agente', 'controller' => 'agentes', 'action' => 'excluirmandato'));?>/idAgentexVerificacao/' + idAgentexVerificacao;
-                confirmaExclusao('Você tem certeza que deseja excluir o mandato?', dados)
+                confirmaExclusao('VocÃª tem certeza que deseja excluir o mandato?', dados)
 
             }
 
@@ -29,39 +29,39 @@
                 var dtfim = $("#dtTerminoVigencia").val();
                 var arquivo = $("#idArquivo").val();
 
-                //validação campos do mandato
+                //validaÃ§Ã£o campos do mandato
                 if (documento == 0) {
-                    $("#lbTipoDocumento").html("Dados obrigatórios não informados!");
+                    $("#lbTipoDocumento").html("Dados obrigatÃ³rios nÃ£o informados!");
                     return false;
                 } else {
                     $("#lbTipoDocumento").html("");
                 }
                 if (documento == "") {
-                    $("#lbTipoDocumento").html("Dados obrigatórios não informados!");
+                    $("#lbTipoDocumento").html("Dados obrigatÃ³rios nÃ£o informados!");
                     return false;
                 } else {
                     $("#lbTipoDocumento").html("");
                 }
                 if (numeroDocumento == "") {
-                    $("#lbNumeroDoc").html("Dados obrigatórios não informados!");
+                    $("#lbNumeroDoc").html("Dados obrigatÃ³rios nÃ£o informados!");
                     return false;
                 } else {
                     $("#lbNumeroDoc").html("");
                 }
                 if (dtinicio == "") {
-                    $("#lbPeriodo").html("Dados obrigatórios não informados!");
+                    $("#lbPeriodo").html("Dados obrigatÃ³rios nÃ£o informados!");
                     return false;
                 } else {
                     $("#lbPeriodo").html("");
                 }
                 if (dtfim == "") {
-                    $("#lbPeriodo").html("Dados obrigatórios não informados!");
+                    $("#lbPeriodo").html("Dados obrigatÃ³rios nÃ£o informados!");
                     return false;
                 } else {
                     $("#lbPeriodo").html("");
                 }
                 if ((!validarData(dtinicio)) || (!validarData(dtfim))) {
-                    $("#lbPeriodo").html("Data inválida!");
+                    $("#lbPeriodo").html("Data invÃ¡lida!");
                     return false;
                 } else {
                     $("#lbPeriodo").html("");
@@ -73,7 +73,7 @@
                     $("#lbPeriodo").html("");
                 }
                 if (arquivo == "") {
-                    $("#lbDocumentoAnexo").html("Dados obrigatórios não informados!");
+                    $("#lbDocumentoAnexo").html("Dados obrigatÃ³rios nÃ£o informados!");
                     return false;
                 } else {
                     $("#lbDocumentoAnexo").html("");
@@ -85,12 +85,12 @@
 
             $(document).ready(function () {
 
-                // máscaras dos campos
+                // mÃ¡scaras dos campos
                 $("#periodo1, #periodo2").keyup(function () {
                     mascara(this, format_data); // data
                 });
 
-                // calendário
+                // calendÃ¡rio
                 $.datepicker.regional['pt-BR'] =
                 {
                     closeText: 'Fechar',
@@ -111,26 +111,26 @@
                 };
                 $.datepicker.setDefaults($.datepicker.regional['pt-BR']);
 
-                // id dos campos que utilizarão o calendário
+                // id dos campos que utilizarÃ£o o calendÃ¡rio
                 $("#dtInicioVigencia, #dtTerminoVigencia").datepicker($.datepicker.regional['pt-BR']);
 
 
             }); // fim $(document).ready()
         </script>
 
-        <!-- ========== INÍCIO TÍTULO ========== -->
+        <!-- ========== INÃCIO TÃTULO ========== -->
         <div id="titulo">
             <div>Visualiza Dirigente <span class="voltar"><a href="#" onclick="voltar();">Voltar</a>	</span></div>
         </div>
-        <!-- ========== FIM TÍTULO ========== -->
+        <!-- ========== FIM TÃTULO ========== -->
 
-        <!-- ========== INÍCIO CONTEÚDO ========== -->
+        <!-- ========== INÃCIO CONTEÃšDO ========== -->
         <div id="conteudo">
             <div id="confirma"></div>
             <?php if ($this->vinculado == 'sim'): ?>
                 <center>
                     <div class="msgALERT" style="width: 96%;">
-                        <div style="float: left;">Dirigente já vinculado a instituição!</div>
+                        <div style="float: left;">Dirigente jÃ¡ vinculado a instituiÃ§Ã£o!</div>
                     </div>
                 </center>
             <?php endif; ?>
@@ -145,7 +145,7 @@
                             <?php endif; ?>
                         </td>
                         <td width="250"><b>NOME:</b> <?php echo $this->dadosD[0]->nome; ?></td>
-                        <td><b>VISÕES:</b><?php
+                        <td><b>VISÃ•ES:</b><?php
                             foreach ($this->visoesD as $v) {
                                 echo " | " . $v->Descricao;
                             }
@@ -154,7 +154,7 @@
                 </table>
                 <table id="tabEndereco" class="tabela ">
                     <tr>
-                        <th colspan="5">ENDEREÇOS</th>
+                        <th colspan="5">ENDEREÃ‡OS</th>
                     </tr>
                     <tr>
                         <td><label>CEP:</label> <?php echo Mascara::addMaskCep($this->dadosD[0]->cep); ?></td>
@@ -162,24 +162,24 @@
                         <td><label>Cidade:</label> <?php echo $this->dadosD[0]->dscidade; ?></td>
                     </tr>
                     <tr>
-                        <td colspan="2"><label>Tipo de Endereço:</label> <?php echo $this->dadosD[0]->dstipoendereco; ?>
+                        <td colspan="2"><label>Tipo de EndereÃ§o:</label> <?php echo $this->dadosD[0]->dstipoendereco; ?>
                         </td>
                         <td><label>Tipo de Logradouro:</label> <?php echo $this->dadosD[0]->dstipologradouro; ?></td>
                     </tr>
                     <tr>
                         <td colspan="2"><label>Logradouro:</label> <?php echo $this->dadosD[0]->logradouro; ?></td>
-                        <td><label>Número:</label> <?php echo $this->dadosD[0]->numero; ?></td>
+                        <td><label>NÃºmero:</label> <?php echo $this->dadosD[0]->numero; ?></td>
                     </tr>
                     <tr>
                         <td colspan="2"><label>Complemento:</label> <?php echo $this->dadosD[0]->complemento; ?></td>
                         <td><label>Bairro:</label> <?php echo $this->dadosD[0]->bairro; ?></td>
                     </tr>
                     <tr>
-                        <td><label>Endereço para
-                                correspondência:</label> <?php echo $this->dadosD[0]->status == "1" ? "SIM" : "NÃO"; ?>
+                        <td><label>EndereÃ§o para
+                                correspondÃªncia:</label> <?php echo $this->dadosD[0]->status == "1" ? "SIM" : "NÃƒO"; ?>
                         </td>
                         <td colspan="2"><label>Autorizo divulgar o
-                                endereço:</label> <?php echo $this->dadosD[0]->divulgarendereco == "1" ? "SIM" : "NÃO"; ?>
+                                endereÃ§o:</label> <?php echo $this->dadosD[0]->divulgarendereco == "1" ? "SIM" : "NÃƒO"; ?>
                         </td>
                     </tr>
                 </table>
@@ -200,7 +200,7 @@
                             <td align="center"><?php echo $t->ufsigla; ?></td>
                             <td align="center"><?php echo $t->ddd; ?></td>
                             <td><?php echo $t->numero; ?></td>
-                            <td><?php echo $t->divulgar == "1" ? "SIM" : "NÃO"; ?></td>
+                            <td><?php echo $t->divulgar == "1" ? "SIM" : "NÃƒO"; ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </table>
@@ -212,18 +212,18 @@
                         <td><label>Tipo</label></td>
                         <td><label>E-mail</label></td>
                         <td><label>Divulgar?</label></td>
-                        <td><label>Para correpondência?</label></td>
+                        <td><label>Para correpondÃªncia?</label></td>
                     </tr>
                     <?php foreach ($this->emailsD as $e): ?>
                         <tr>
                             <td><?php echo $e->tipo; ?></td>
                             <td><?php echo $e->descricao; ?></td>
-                            <td><?php echo $e->divulgar == "1" ? "SIM" : "NÃO"; ?></td>
-                            <td><?php echo $e->status == "1" ? "SIM" : "NÃO"; ?></td>
+                            <td><?php echo $e->divulgar == "1" ? "SIM" : "NÃƒO"; ?></td>
+                            <td><?php echo $e->status == "1" ? "SIM" : "NÃƒO"; ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </table>
-                <!-- ========== INICIO DO FORMULÁRIO DE MANDATO ========== -->
+                <!-- ========== INICIO DO FORMULÃRIO DE MANDATO ========== -->
                 <form name="formmandato" id="formmandato" enctype="multipart/form-data"
                       action="<?php echo $this->url(array('module' => 'agente', 'controller' => 'agentes', 'action' => 'mandato')); ?>"
                       method="POST">
@@ -238,11 +238,11 @@
                             <td class="destacar bold">Tipo de Documento<p><span class="red" id="lbTipoDocumento"></span>
                             </td>
                             <td class="destacar bold">Num. Documento<p><span class="red" id="lbNumeroDoc"></span></td>
-                            <td class="destacar bold">Período de Vigência<p><span class="red" id="lbPeriodo"></span>
+                            <td class="destacar bold">PerÃ­odo de VigÃªncia<p><span class="red" id="lbPeriodo"></span>
                             </td>
                             <td class="destacar bold">Documento anexo<p><span class="red" id="lbDocumentoAnexo"></span>
                             </td>
-                            <td class="destacar bold">Ação</td>
+                            <td class="destacar bold">AÃ§Ã£o</td>
                         </tr>
                         <!--?php foreach ($this->mandatoM as $m): ?-->
                         <tr>
@@ -264,7 +264,7 @@
                             <td align="">
                                 <input class="select_simples" type="text" name="dtInicioVigencia" id="dtInicioVigencia"
                                        maxlength="10" class="input_simples btn_calendario"
-                                       onkeypress="mascara(this,format_num)" style="width: 5em"> à
+                                       onkeypress="mascara(this,format_num)" style="width: 5em"> Ã 
                                 <input class="select_simples" type="text" name="dtTerminoVigencia"
                                        id="dtTerminoVigencia" maxlength="10" class="input_simples btn_calendario"
                                        onkeypress="mascara(this,format_num)" style="width: 5em">
@@ -291,7 +291,7 @@
                             <tr>
                                 <td><?php echo $m->Descricao; ?></td>
                                 <td><?php echo $m->dsNumeroDocumento; ?></td>
-                                <td><?php echo date('d/m/Y', strtotime($m->dtInicioMandato)) . ' à ' . date('d/m/Y', strtotime($m->dtFimMandato)); ?></td>
+                                <td><?php echo date('d/m/Y', strtotime($m->dtInicioMandato)) . ' Ã  ' . date('d/m/Y', strtotime($m->dtFimMandato)); ?></td>
                                 <td href="#"><a
                                         href="<?php echo $this->url(array('module' => 'default', 'controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php echo $m->idArquivo; ?>"><?php echo $m->nmArquivo ?>
                                 </td>
@@ -308,7 +308,7 @@
                 </form>
 
                 <form
-                    action="<?php echo $this->url(array('module' => 'agente', 'controller' => 'Agentes', 'action' => 'salvar-avaliacao-execucao-fisica')); ?>?idPronac=<?php echo $_GET['idPronac']; ?>"
+                    action="<?php echo $this->url(array('module' => 'agente', 'controller' => 'Agentes', 'action' => 'salvar-avaliacao-comprovacao-objeto')); ?>?idPronac=<?php echo $_GET['idPronac']; ?>"
                     name="frmAvaliacaoRelatorioFinal" id="frmAvaliacaoRelatorioFinal" method="post">
                 </form>
 

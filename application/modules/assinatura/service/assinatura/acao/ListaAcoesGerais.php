@@ -12,7 +12,7 @@ use \Assinatura_Model_DbTable_TbAssinatura as TbAssinaturaDbTable,
     \Application\Modules\Admissibilidade\Service\Assinatura\Acao\ListaAcoesModulo as ListaAcoesEnquadramento,
     \Application\Modules\AvaliacaoResultados\Service\Assinatura\Parecer\Acao\ListaAcoesModulo as ListaAcoesParecerAvaliacaoResultados,
     \Application\Modules\AvaliacaoResultados\Service\Assinatura\Laudo\Acao\ListaAcoesModulo as ListaAcoesLaudoAvaliacaoResultados,
-    \Application\Modules\ExecucaoFisica\Service\Assinatura\Acao\ListaAcoesModulo as ListaAcoesParecerAvaliacaoObjeto;
+    \Application\Modules\ComprovacaoObjeto\Service\Assinatura\Acao\ListaAcoesModulo as ListaAcoesParecerAvaliacaoObjeto;
 
 class ListaAcoesGerais implements IListaAcoesGerais
 {
