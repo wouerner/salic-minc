@@ -1,10 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import ComponenteEncaminhar from './components/ComponenteEncaminhar';
-import EmitirParecer from './components/EmitirParecer';
-import Painel from './components/Painel';
+import EmitirParecer from './components/ParecerTecnico/EmitirParecer';
+import Painel from './components/ParecerTecnico/Painel';
 import TipoAvaliacao from './components/TipoAvaliacao';
-import Planilha from './components/Planilha';
+import Planilha from './components/ParecerTecnico/Planilha';
 import VisualizarPlanilha from './components/VisualizarPlanilha';
 import AnaliseComprovantes from './components/AnaliseComprovantes';
 import Diligenciar from './components/Diligenciar';
@@ -19,24 +18,8 @@ Vue.use(Router);
 
 const routes = [
     {
-        path: '/componente-encaminhar',
-        name: 'ListBar',
-        component: ComponenteEncaminhar,
-        meta: {
-            title: 'Principal',
-        },
-    },
-    {
         path: '/emitir-parecer/:id',
         name: 'EmitirEditar',
-        component: EmitirParecer,
-        meta: {
-            title: 'Principal',
-        },
-    },
-    {
-        path: '/emitir-parecer',
-        name: 'Emitir',
         component: EmitirParecer,
         meta: {
             title: 'Principal',
