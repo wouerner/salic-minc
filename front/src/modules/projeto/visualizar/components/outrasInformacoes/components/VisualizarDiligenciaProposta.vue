@@ -11,12 +11,49 @@
             <tbody v-for="(diligencia, index) in diligencias" :key="index">
             <tr>
                 <td class="center">
-                    <button
-                            class="waves-effect waves-darken btn white black-text"
-                            @click="setAbaAtiva(diligencia, index)"
-                    >
-                        <i class="material-icons">visibility</i>
-                    </button>
+                    <v-layout row justify-center>
+                        <v-dialog v-model="dialog"
+                                  max-width="1350"
+                                  transition="dialog-bottom-transition"
+                        >
+                            <v-btn outline
+                                   slot="activator"
+                                   color="green"
+                            >
+                                {{ dadosProjeto.NomeProjeto }}
+                            </v-btn>
+                            <v-card>
+                                <v-card-title class="headline">{{ dadosProjeto.NomeProjeto }}</v-card-title>
+                                <v-card-text>
+
+                                    <!--Let Google help apps determine location. This means sending anonymous location data to-->
+                                    <!--Google, even when no apps are running.-->
+
+                                    <!--Let Google help apps determine location. This means sending anonymous location data to-->
+                                    <!--Google, even when no apps are running.-->
+
+                                    <!--Let Google help apps determine location. This means sending anonymous location data to-->
+                                    <!--Google, even when no apps are running.-->
+
+                                    <!--Let Google help apps determine location. This means sending anonymous location data to-->
+                                    <!--Google, even when no apps are running.-->
+
+                                    <!--Let Google help apps determine location. This means sending anonymous location data to-->
+                                    <!--Google, even when no apps are running.-->
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="green darken-1" flat @click.native="dialog = false">OK</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </v-layout>
+                    <!--<button-->
+                            <!--class="waves-effect waves-darken btn white black-text"-->
+                            <!--@click="setAbaAtiva(diligencia, index)"-->
+                    <!--&gt;-->
+                        <!--<i class="material-icons">visibility</i>-->
+                    <!--</button>-->
                 </td>
                 <td>{{ diligencia.idPreprojeto }}</td>
                 <td>{{ diligencia.dataSolicitacao }}</td>
@@ -83,6 +120,7 @@
         props: ['idPronac', 'diligencias'],
         data() {
             return {
+                dialog: false,
                 abaAtiva: -1,
                 ativo: false,
             };

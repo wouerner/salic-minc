@@ -12,29 +12,35 @@
                 rows-per-page-text="Items por Página"
         >
             <template slot="items" slot-scope="props">
-                <v-btn
-                        slot="activator"
-                        class="center"
-                        color="primary"
-                        :to="{ name: 'dadosprojeto', params: { idPronac: dadosProjeto.idPronac }}">
-                    <u>{{ props.item.pronac }}</u>
-                </v-btn>
+                <td class="center">
+                    <v-btn
+                            style="text-decoration: none"
+                            slot="activator"
+                            color="primary"
+                            class="center"
+                            :to="{ name: 'dadosprojeto', params: { idPronac: dadosProjeto.idPronac }}">
+                        {{ props.item.pronac }}
+                    </v-btn>
+                </td>
                 <td class="center">{{ props.item.nomeProjeto }}</td>
                 <td class="center">{{ props.item.dsAtoAdministrativo }}</td>
                 <td class="center">{{ props.item.dt_criacao }}</td>
-                <v-tooltip left>
-                    <v-btn
-                            fab dark small
-                            slot="activator"
-                            color="teal"
-                            :href="`/assinatura/index/visualizar-documento-assinado/idPronac/${props.item.IdPRONAC}?idDocumentoAssinatura=${props.item.idDocumentoAssinatura}`"
-                            target="_blank"
-                            dark
-                    >
-                        <v-icon dark>search</v-icon>
-                    </v-btn>
-                    <span>Visualizar</span>
-                </v-tooltip>
+                <td class="center">
+                    <v-tooltip left>
+                        <v-btn
+                                style="text-decoration: none"
+                                fab dark small
+                                slot="activator"
+                                color="teal"
+                                :href="`/assinatura/index/visualizar-documento-assinado/idPronac/${props.item.IdPRONAC}?idDocumentoAssinatura=${props.item.idDocumentoAssinatura}`"
+                                target="_blank"
+                                dark
+                        >
+                            <v-icon dark>search</v-icon>
+                        </v-btn>
+                        <span>Visualizar</span>
+                    </v-tooltip>
+                </td>
             </template>
             <template slot="no-data">
                 <v-alert :value="true" color="error" icon="warning">
@@ -49,7 +55,7 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
+    import {mapActions, mapGetters} from 'vuex';
     import Carregando from '@/components/Carregando';
 
     export default {

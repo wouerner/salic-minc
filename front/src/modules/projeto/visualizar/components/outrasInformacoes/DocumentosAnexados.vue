@@ -17,21 +17,24 @@
                     rows-per-page-text="Items por Página"
             >
                 <template slot="items" slot-scope="props">
-                    <td>{{ props.item.id + 1 }}</td>
-                    <td class="text-xs">{{ props.item.Anexado }}</td>
-                    <td class="text-xs">{{ props.item.Data }}</td>
-                    <td class="text-xs">{{ props.item.Descricao }}</td>
-                    <v-tooltip left>
-                        <v-btn
-                            slot="activator"
-                            color="blue"
-                            :href="`/consultardadosprojeto/abrir-documentos-anexados?id=${props.item.idArquivo}&tipo=${props.item.AgenteDoc}&idPronac=${dadosProjeto.idPronac}`"
-                            dark
-                        >
-                            <v-icon dark>cloud_download</v-icon>
-                        </v-btn>
-                        <span>{{ props.item.NoArquivo }}</span>
-                    </v-tooltip>
+                    <td class="center">{{ props.item.id + 1 }}</td>
+                    <td class="center">{{ props.item.Anexado }}</td>
+                    <td class="center">{{ props.item.Data }}</td>
+                    <td class="text-xs-left">{{ props.item.Descricao }}</td>
+                    <td class="center">
+                        <v-tooltip left>
+                            <v-btn
+                                    style="text-decoration: none"
+                                    slot="activator"
+                                    color="blue"
+                                    :href="`/consultardadosprojeto/abrir-documentos-anexados?id=${props.item.idArquivo}&tipo=${props.item.AgenteDoc}&idPronac=${dadosProjeto.idPronac}`"
+                                    dark
+                            >
+                                <v-icon dark>cloud_download</v-icon>
+                            </v-btn>
+                            <span>{{ props.item.NoArquivo }}</span>
+                        </v-tooltip>
+                    </td>
                 </template>
                 <template slot="no-data">
                     <v-alert :value="true" color="error" icon="warning">
@@ -46,7 +49,7 @@
     </div>
 </template>
 <script>
-    import { mapGetters, mapActions } from 'vuex';
+    import {mapGetters, mapActions} from 'vuex';
     import Carregando from '@/components/Carregando';
     import IdentificacaoProjeto from './IdentificacaoProjeto';
 
@@ -69,22 +72,26 @@
                 headers: [
                     {
                         text: 'N°',
-                        align: 'left',
+                        align: 'center',
                         value: 'id',
                     },
                     {
+                        align: 'center',
                         text: 'CLASSIFICAÇÃO',
                         value: 'Anexado',
                     },
                     {
+                        align: 'center',
                         text: 'DATA',
                         value: 'Data',
                     },
                     {
+                        align: 'center',
                         text: 'TIPO DE DOCUMENTO',
                         value: 'Descricao',
                     },
                     {
+                        align: 'center',
                         text: 'DOCUMENTO',
                         value: 'NoArquivo',
                     },
