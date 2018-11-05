@@ -1,47 +1,60 @@
 <template>
     <div id="conteudo">
         <div v-if="loading">
-            <Carregando :text="'Carregando Diligencias do Projeto'"></Carregando>
+            <Carregando :text="'Carregando Diligências do Projeto'"></Carregando>
         </div>
-        <div v-else>
-            <IdentificacaoProjeto
-                    :pronac="dadosProjeto.Pronac"
-                    :nomeProjeto="dadosProjeto.NomeProjeto"
-            >
-            </IdentificacaoProjeto>
-            <div v-if="dados.diligenciaProposta">
-                <fieldset style="margin: 0px;">
-                    <legend>Dilig&ecirc;ncia Proposta</legend>
+        <IdentificacaoProjeto
+                :pronac="dadosProjeto.Pronac"
+                :nomeProjeto="dadosProjeto.NomeProjeto"
+        >
+        </IdentificacaoProjeto>
+        <ul class="collapsible collapsible-produto no-padding" data-collapsible="expandable">
+            <li>
+                <div class="collapsible-header green-text">
+                    <i class="material-icons">perm_media</i> Diligência Proposta
+                </div>
+                <div class="collapsible-body no-padding margin10 scroll-x">
                     <VisualizarDiligenciaProposta
                             :idPronac="idPronac"
                             :diligencias="dados.diligenciaProposta"
                     >
                     </VisualizarDiligenciaProposta>
-                </fieldset>
-            </div>
-            <div v-if="dados.diligenciaAdequacao">
-                <fieldset style="margin: 0px;">
-                    <legend>Dilig&ecirc;ncias da Adequa&ccedil;&atilde;o do Projeto</legend>
+                </div>
+            </li>
+        </ul>
+
+        <ul class="collapsible collapsible-produto no-padding" data-collapsible="expandable">
+            <li>
+                <div class="collapsible-header green-text">
+                    <i class="material-icons">perm_media</i> Diligência Adeqação Projeto
+                </div>
+                <div class="collapsible-body no-padding margin10 scroll-x">
                     <VisualizarDiligenciaAdequacao
                             :idPronac="idPronac"
                             :diligencias="dados.diligenciaAdequacao"
                     >
                     </VisualizarDiligenciaAdequacao>
-                </fieldset>
-            </div>
-            <div v-if="dados.diligenciaProjeto">
-                <fieldset style="margin: 0px;">
-                    <legend>Dilig&ecirc;ncia Projeto</legend>
+                </div>
+            </li>
+        </ul>
+        <ul class="collapsible collapsible-produto no-padding" data-collapsible="expandable">
+            <li>
+                <div class="collapsible-header green-text">
+                    <i class="material-icons">perm_media</i> Diligência Projeto
+                </div>
+                <div class="collapsible-body no-padding margin10 scroll-x">
                     <VisualizarDiligenciaProjeto
                             :idPronac="idPronac"
                             :diligencias="dados.diligenciaProjeto"
                     >
                     </VisualizarDiligenciaProjeto>
-                </fieldset>
-            </div>
-        </div>
+                </div>
+            </li>
+        </ul>
+
     </div>
 </template>
+
 <script>
     import { mapGetters, mapActions } from 'vuex';
     import Carregando from '@/components/Carregando';

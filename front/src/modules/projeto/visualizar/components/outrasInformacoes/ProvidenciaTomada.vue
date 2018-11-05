@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="loading">
-            <Carregando :text="'Carregando Certidoes Negativas'"></Carregando>
+            <Carregando :text="'Carregando Providência Tomada'"></Carregando>
         </div>
         <div v-else-if="dados.providenciaTomada">
             <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
@@ -11,17 +11,17 @@
                     :headers="headers"
                     :items="dados.providenciaTomada"
                     class="elevation-1 container-fluid"
-                    rows-per-page-text="Itens por Página"
+                    rows-per-page-text="Items por Página"
            >
                 <template slot="items" slot-scope="props">
-                    <td style="width: 190px">{{ props.item.DtSituacao }}</td>
-                    <td style="width: 50px">{{ props.item.Situacao }}</td>
-                    <td style="width: 700px">{{ props.item.ProvidenciaTomada }}</td>
-                    <td style="width: 190px">{{ props.item.cnpjcpf | cnpjFilter }}</td>
-                    <td>{{ props.item.usuario }}</td>
+                    <td style="width: 190px" class="text-xs-center">{{ props.item.DtSituacao }}</td>
+                    <td style="width: 50px"  class="text-xs-center">{{ props.item.Situacao }}</td>
+                    <td style="width: 700px" class="text-xs-center">{{ props.item.ProvidenciaTomada }}</td>
+                    <td style="width: 190px" class="text-xs-center">{{ props.item.cnpjcpf | cnpjFilter }}</td>
+                    <td class="text-xs-center">{{ props.item.usuario }}</td>
                 </template>
                 <template slot="pageText" slot-scope="props">
-                    Itens {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                    Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
                 </template>
             </v-data-table>
         </div>
@@ -51,23 +51,27 @@
                 headers: [
                     {
                         text: 'DT. SITUAÇÃO',
-                        align: 'left',
+                        align: 'center',
                         value: 'DtSituacao',
                     },
                     {
                         text: 'SITUAÇÃO',
+                        align: 'center',
                         value: 'Situacao',
                     },
                     {
                         text: 'PROVIDÊNCIA TOMADA',
+                        align: 'center',
                         value: 'ProvidenciaTomada',
                     },
                     {
                         text: 'CPF',
+                        align: 'center',
                         value: 'cnpjcpf',
                     },
                     {
                         text: 'NOME',
+                        align: 'center',
                         value: 'usuario',
                     },
                 ],
