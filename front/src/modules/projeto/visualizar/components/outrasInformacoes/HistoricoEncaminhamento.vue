@@ -19,8 +19,8 @@
                     <td class="text-xs-right">{{ props.item.qtDias }}</td>
                 </template>
                 <template slot="no-data">
-                    <v-alert :value="true" color="error" icon="warning">
-                        Nenhum dado encontrado ¯\_(ツ)_/¯
+                    <v-alert :value="true" color="info" icon="warning">
+                        Nenhum dado encontrado
                     </v-alert>
                 </template>
                 <template slot="pageText" slot-scope="props">
