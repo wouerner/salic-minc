@@ -25,9 +25,7 @@ class Diligencia
                                 'dil.stEnviado = ?' => 'S'
                             )
                         );
-
-                       var_dump('aqui');
-                       die;
+                       return $diligencias;
                    } else {
                          $projeto = $Projetosdao->buscar(array('IdPRONAC = ?' => $idPronac));
                          $_idProjeto = isset($projeto[0]->idProjeto) && !empty($projeto[0]->idProjeto) ? $projeto[0]->idProjeto : 0;
@@ -39,12 +37,12 @@ class Diligencia
                          );
 
                          $diligencias = $Projetosdao->listarDiligencias(array('pro.IdPRONAC = ?' => $idPronac));
-                       xd($diligencias);
-                       die;
+                   return $diligencias;
                    }
                } else {
                     if ($idPreProjeto) {
                      $diligenciasProposta = $dao->listarDiligenciasPreProjeto(array('pre.idPreProjeto = ?' => $this->idPreProjeto, 'aval.ConformidadeOK = ? ' => 0));
+                     return $diligenciasProposta;
                     }
                }
         }
