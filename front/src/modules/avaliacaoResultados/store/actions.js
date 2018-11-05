@@ -55,9 +55,16 @@ export const obterDestinatarios = ({ commit }) => {
 export const obterDadosTabelaTecnico = ({ commit }, params) => {
     avaliacaoResultadosHelperAPI.obterDadosTabelaTecnico(params)
         .then((response) => {
-            const data = response.data;
-            const dadosTabela = data.data;
-            commit(types.PROJETOS_AVALIACAO_TECNICA, dadosTabela);
+            const data = response.data.data;
+            commit(types.PROJETOS_AVALIACAO_TECNICA, data);
+            data.then( data.items.forEach(a => {
+                avaliacaoResultadosHelperAPI.listarDiligenciasAvaliacao(a.idPronac).then(
+                    (response) => {
+                        const  data = response.data.data;
+                        console.info(data);
+                    }
+                )
+            }));
         });
 };
 
