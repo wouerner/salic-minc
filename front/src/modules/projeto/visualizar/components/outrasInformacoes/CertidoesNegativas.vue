@@ -7,12 +7,12 @@
             <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
                                   :nomeProjeto="dadosProjeto.NomeProjeto">
             </IdentificacaoProjeto>
-           <v-data-table
+            <v-data-table
                     :headers="headers"
                     :items="dados.certidoes"
                     class="elevation-1 container-fluid"
-                    rows-per-page-text="Itens por Página"
-           >
+                    rows-per-page-text="Items por Página"
+            >
                 <template slot="items" slot-scope="props">
                     <td>{{ props.item.dsCertidao }}</td>
                     <td>{{ props.item.DtEmissao }}</td>
@@ -25,8 +25,13 @@
                         Vencida
                     </td>
                 </template>
+                <template slot="no-data">
+                    <v-alert :value="true" color="error" icon="warning">
+                        Nenhum dado encontrado ¯\_(ツ)_/¯
+                    </v-alert>
+                </template>
                 <template slot="pageText" slot-scope="props">
-                    Itens {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                    Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
                 </template>
             </v-data-table>
         </div>
