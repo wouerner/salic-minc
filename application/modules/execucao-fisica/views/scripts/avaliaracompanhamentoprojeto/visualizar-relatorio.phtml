@@ -51,7 +51,6 @@
     });
 </script>
 
-<?php //require_once "scripts/comprovarexecucaofisica/inc/menu-cadastro.php"; ?>
 <div id="camposObrigatorios" class="sumir"></div>
 <div id="justificativaModalVisualizar" class="sumir"></div>
 
@@ -66,14 +65,14 @@
 
 
 <div id="titulo">
-    <div>Visualizar Relatório <span class="voltar"><a href="<?php echo $this->baseUrl(); ?>/execucao-fisica/avaliaracompanhamentoprojeto/index?idpronac=<?php echo Seguranca::encrypt($this->idPronac); ?>" title="Voltar">Voltar</a></span></div>
+    <div>Visualizar Relat&oacute;rio <span class="voltar"><a href="<?php echo $this->baseUrl(); ?>/execucao-fisica/avaliaracompanhamentoprojeto/index?idpronac=<?php echo Seguranca::encrypt($this->idPronac); ?>" title="Voltar">Voltar</a></span></div>
 </div>
 
 
 <div id="conteudo">
     <table class="tabela">
         <tr>
-            <th align="center" width="30%">Nº PRONAC:</th>
+            <th align="center" width="30%">N&ordm; PRONAC:</th>
             <th align="center">Nome do Projeto:</th>
         </tr>
         <tr class="linha">
@@ -102,14 +101,14 @@
 
     <table class="tabela">
         <tr align="center">
-            <th colspan="6">Local de Realização</th>
+            <th colspan="6">Local de Realiza&ccedil;&atilde;o</th>
         </tr>
         <tr align="center">
-            <td class="destacar bold">País</td>
+            <td class="destacar bold">Pa&iacute;s</td>
             <td class="destacar bold">UF</td>
-            <td class="destacar bold">Município</td>
+            <td class="destacar bold">Munic&iacute;pio</td>
             <td class="destacar bold" width="120px">Realizado</td>
-            <td class="destacar bold" width="120px" nowrap>Dt.&nbsp;Realização</td>
+            <td class="destacar bold" width="120px" nowrap>Dt.&nbsp;Realiza&ccedil;&atilde;o</td>
             <td class="destacar bold" width="120px">Justificativa</td>
         </tr>
         <?php foreach ($this->LocaisDeRealizacao as $LocaisDeRealizacao) { ?>
@@ -149,15 +148,15 @@
 
     <table class="tabela">
         <tr align="center">
-            <th colspan="6">Plano de Divulgação</th>
+            <th colspan="6">Plano de Divulga&ccedil;&atilde;o</th>
         </tr>
         <tr align="center">
-            <td class="destacar bold">Peça</td>
-            <td class="destacar bold">Veículo</td>
+            <td class="destacar bold">Pe&ccedil;a</td>
+            <td class="destacar bold">Ve&iacute;culo</td>
             <td class="destacar bold" width="120px">Realizado</td>
             <td class="destacar bold" width="120px">Comprovado</td>
             <td class="destacar bold" width="120px" nowrap>Arquivo</td>
-            <td class="destacar bold" width="120px">Data da Anexação</td>
+            <td class="destacar bold" width="120px">Data da Anexa&ccedil;&atilde;o</td>
         </tr>
         <?php foreach ($this->PlanoDeDivulgacao as $PlanoDeDivulgacao) { ?>
         <tr>
@@ -166,9 +165,9 @@
             <td nowrap>
                 <?php
                     if($PlanoDeDivulgacao->siPlanoDeDivulgacao == 0) {
-                        echo 'Sem Informação';
+                        echo 'Sem Informa&ccedil;&atilde;o';
                     } else if($PlanoDeDivulgacao->siPlanoDeDivulgacao == 1) {
-                        echo 'Não Realizado';
+                        echo 'N&atilde;o Realizado';
                     } else if($PlanoDeDivulgacao->siPlanoDeDivulgacao == 2) {
                         echo 'Realizado';
                     } else if($PlanoDeDivulgacao->siPlanoDeDivulgacao == 3) {
@@ -192,13 +191,13 @@
 
     <table class="tabela">
         <tr align="center">
-            <th colspan="4">Plano de Distribuição</th>
+            <th colspan="4">Plano de Distribui&ccedil;&atilde;o</th>
         </tr>
         <tr align="center">
             <td class="destacar bold">Produto</td>
             <td class="destacar bold">Patrocionador</td>
-            <td class="destacar bold">Divulgação</td>
-            <td class="destacar bold">Beneficiários</td>
+            <td class="destacar bold">Divulga&ccedil;&atilde;o</td>
+            <td class="destacar bold">Benefici&aacute;rios</td>
         </tr>
         <?php foreach ($this->PlanoDeDistribuicao as $PlanoDeDistribuicao) { ?>
         <tr>
@@ -223,11 +222,11 @@
 
     <table class="tabela">
         <tr align="center">
-            <th colspan="6">Beneficiários de Produto Cultural</th>
+            <th colspan="6">Benefici&aacute;rios de Produto Cultural</th>
         </tr>
         <tr align="center">
             <td class="destacar bold">Produto</td>
-            <td class="destacar bold">Tipo Beneficiário</td>
+            <td class="destacar bold">Tipo Benefici&aacute;rio</td>
             <td class="destacar bold">CNPJ/CPF</td>
             <td class="destacar bold">Nome</td>
             <td class="destacar bold">Quantidade</td>
@@ -262,11 +261,11 @@
 
     <table class="tabela">
         <tr align="center">
-            <th colspan="8" class="titulo_tabela">COMPROVAÇÃO DE METAS</th>
+            <th colspan="8" class="titulo_tabela">COMPROVA&Ccedil;&Atilde;O DE METAS</th>
         </tr>
         <tr align="center">
             <th>&nbsp;</th>
-            <th colspan="3">Meta Física</th>
+            <th colspan="3">Meta F&iacute;sica</th>
             <th colspan="3">Meta Financeira</th>
             <th>&nbsp;</th>
         </tr>
@@ -278,7 +277,7 @@
             <td class="destacar bold">Aprovada</td>
             <td class="destacar bold">Executada</td>
             <td class="destacar bold">% Executado</td>
-            <td class="destacar bold">Saldo à Executar</td>
+            <td class="destacar bold">Saldo &agrave; Executar</td>
         </tr>
         <?php foreach ($this->DadosCompMetas as $DadosCompMetas) { ?>
         <tr>
@@ -298,11 +297,11 @@
 
     <table class="tabela">
         <tr align="center">
-            <th colspan="8" class="titulo_tabela">COMPROVAÇÃO DE ITENS ORÇAMENTÁRIOS</th>
+            <th colspan="8" class="titulo_tabela">COMPROVA&Ccedil;&Atilde;O DE ITENS OR&Ccedil;AMENT&Aacute;RIOS</th>
         </tr>
         <tr align="center">
             <th>&nbsp;</th>
-            <th colspan="3">Física</th>
+            <th colspan="3">F&iacute;sica</th>
             <th colspan="3">Financeira</th>
             <th>&nbsp;</th>
         </tr>
@@ -314,7 +313,7 @@
             <td class="destacar bold">Aprovada</td>
             <td class="destacar bold">Executada</td>
             <td class="destacar bold">% Executado</td>
-            <td class="destacar bold">Saldo à Executar</td>
+            <td class="destacar bold">Saldo &agrave; Executar</td>
         </tr>
         <?php foreach ($this->DadosItensOrcam as $DadosItensOrcam) { ?>
         <tr>
@@ -340,7 +339,7 @@
             <td class="destacar bold">Tipo de Comprovante</td>
             <td class="destacar bold">Nome do Arquivo</td>
             <td class="destacar bold">Data de Envio</td>
-            <td class="destacar bold">Observações</td>
+            <td class="destacar bold">Observa&ccedil;&otilde;es</td>
         </tr>
         <?php foreach ($this->DadosComprovantes as $DadosComprovantes) { ?>
         <tr>
@@ -369,10 +368,10 @@
             <th colspan="6">Aceite de Obra</th>
         </tr>
         <tr>
-            <td class="destacar bold">Prevê construção, reforma, restauro ou similares?</td>
-            <td class="destacar bold">Descrição do Termo</td>
+            <td class="destacar bold">Prev&ecirc; constru&ccedil;&atilde;o, reforma, restauro ou similares?</td>
+            <td class="destacar bold">Descri&ccedil;&atilde;o do Termo</td>
             <td class="destacar bold">Arquivo</td>
-            <td class="destacar bold">Extensão do Arquivo</td>
+            <td class="destacar bold">Extens&atilde;o do Arquivo</td>
             <td class="destacar bold">Data de Envio</td>
         </tr>
         <?php if(!empty($this->AceiteObras)){ ?>
@@ -390,18 +389,18 @@
     
     <table class="tabela">
         <tr align="center">
-            <th colspan="8">Bens Móveis / Imóveis Doados</th>
+            <th colspan="8">Bens M&oacute;veis / Im&oacute;veis Doados</th>
         </tr>
         <?php if(count($this->BensCadastrados)>0) { ?>
         <tr align="center">
             <td class="destacar bold">Tipo do Bem</td>
-            <td class="destacar bold">Item Orçamentário</td>
+            <td class="destacar bold">Item Or&ccedil;ament&aacute;rio</td>
             <td class="destacar bold">CNPJ/CPF</td>
             <td class="destacar bold">Nome</td>
-            <td class="destacar bold">Arquivo Doação</td>
+            <td class="destacar bold">Arquivo Doa&ccedil;&atilde;o</td>
             <td class="destacar bold">Arquivo Aceite</td>
             <td class="destacar bold">Quantidade</td>
-            <td class="destacar bold">Observação</td>
+            <td class="destacar bold">Observa&ccedil;&atilde;o</td>
         </tr>
         <?php foreach ($this->BensCadastrados as $bens) { ?>
         <tr>
@@ -430,7 +429,7 @@
     <table class="tabela">
         <?php if(trim($this->DadosRelatorio->dsInformacaoAdicional)){ ?>
         <tr>
-            <th>PARECER DE AVALIAÇÃO TÉCNICA</th>
+            <th>PARECER DE AVALIA&Ccedil;&Atilde;O T&Eacute;CNICA</th>
         </tr>
         <tr>
             <td style="text-align: justify;"><?php echo $this->DadosRelatorio->dsInformacaoAdicional; ?><br /><br /></td>
@@ -438,14 +437,14 @@
         <?php } ?>
         <?php if(trim($this->DadosRelatorio->dsOrientacao)){ ?>
         <tr>
-            <th>RECOMENDAÇÕES</th>
+            <th>RECOMENDA&Ccedil;&Otilde;ES</th>
         </tr>
         <tr>
             <td style="text-align: justify;"><?php echo $this->DadosRelatorio->dsOrientacao; ?><br /><br /></td>
         </tr>
         <?php } ?>
         <tr>
-            <th>CONCLUSÃO</th>
+            <th>CONCLUS&Atilde;O</th>
         </tr>
         <tr>
             <td style="text-align: justify;"><?php echo $this->DadosRelatorio->dsConclusao; ?><br /><br /></td>
@@ -456,7 +455,7 @@
 
     <table class="tabela">
         <tr>
-            <th colspan="2">Avaliação</th>
+            <th colspan="2">Avalia&ccedil;&atilde;o</th>
         </tr>
         <tr>
             <td class="destacar bold w100" align="right">Resultado</td>
@@ -467,7 +466,7 @@
                             echo 'Cumpriu os objetos e objetivos';
                             break;
                         case 'R':
-                            echo 'Não cumprimento dos objetos e objetivos';
+                            echo 'N&atilde;o cumprimento dos objetos e objetivos';
                             break;
                         case 'P':
                             echo 'Cumpriu parcialmente os objetos e objetivos';
@@ -496,14 +495,4 @@
         </form>
         <input type="button" class="btn_imprimir" id="btn_imprimir" />
     </div>
-    
-    <br clear="all" />
-    
 </div>
-
-
-<!-- inï¿½cio: detalhe final da div conteudo #rodapeConteudo -->
-<div id="rodapeConteudo"><span></span></div>
-<!-- final: detalhe final da div conteudo #rodapeConteudo -->
-
-<br clear="all" />

@@ -4,6 +4,11 @@ class ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto extends MinC_Db_Table_Abs
 {
     const SITUACAO_PROPONENTE = 1;
 
+    const SI_COM_PROPONENTE = 1;
+    const SI_AGUARDANDO_ANALISE = 2;
+    const SI_EM_AVALIACAO_TECNICO = 3;
+    const SI_EM_AVALIACAO_COORDENADOR = 5;
+
     protected $_banco = "SAC";
     protected $_schema = "SAC";
     protected $_name = "tbCumprimentoObjeto";
@@ -319,7 +324,7 @@ class ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto extends MinC_Db_Table_Abs
         $cumprimentoObjetoXArquivoModel->save($idCumprimentoDoObjeto);
     }
 
-    public function buscarCumprimentoObjeto($where, $all = false, $order = array())
+    public function buscarCumprimentoObjeto($where = [], $all = false, $order = array())
     {
         // criando objeto do tipo select
         $select = $this

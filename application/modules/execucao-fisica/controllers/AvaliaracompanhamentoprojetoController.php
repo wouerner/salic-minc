@@ -44,8 +44,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
             $this->usu_orgao = $GrupoAtivo->codOrgao;
 
             $this->getIdOrgao = $GrupoAtivo->codOrgao;
-        }
-        else { // caso o usuario n&atilde;o esteja autenticado
+        } else { // caso o usuario n&atilde;o esteja autenticado
             return $this->_helper->redirector->goToRoute(array('controller' => 'index', 'action' => 'logout'), null, true);
         }
 
@@ -63,15 +62,13 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
 
     public function indexAction()
     {
-        //** Usuario Logado ************************************************/
-        $auth               = Zend_Auth::getInstance(); // pega a autenticacao
-        $idusuario          = isset($auth->getIdentity()->usu_codigo) ? $auth->getIdentity()->usu_codigo : $auth->getIdentity()->IdUsuario;
-        $GrupoAtivo         = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
-        $codOrgao           = $GrupoAtivo->codOrgao; //  orgao ativo na sessao
-        $codPerfil          = $GrupoAtivo->codGrupo; //  orgao ativo na sessao
+        $auth = Zend_Auth::getInstance(); // pega a autenticacao
+        $idusuario = isset($auth->getIdentity()->usu_codigo) ? $auth->getIdentity()->usu_codigo : $auth->getIdentity()->IdUsuario;
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
+        $codOrgao = $GrupoAtivo->codOrgao; //  orgao ativo na sessao
+        $codPerfil = $GrupoAtivo->codGrupo; //  orgao ativo na sessao
         $this->view->codOrgao = $codOrgao;
         $this->view->idUsuarioLogado = $idusuario;
-        /******************************************************************/
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
         if ($this->_request->getParam("qtde")) {
@@ -95,8 +92,8 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         //==== campo de ordenacao  ======//
         if ($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
-            $order = array($campo." ".$ordem);
-            $ordenacao = "&campo=".$campo."&ordem=".$ordem;
+            $order = array($campo . " " . $ordem);
+            $ordenacao = "&campo=" . $campo . "&ordem=" . $ordem;
         } else {
             $campo = null;
             $order = array(2); //Pronac
@@ -108,7 +105,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         if (isset($get->pag)) {
             $pag = $get->pag;
         }
-        $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
+        $inicio = ($pag > 1) ? ($pag - 1) * $this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
         $where = array();
@@ -122,23 +119,23 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         if (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])) {
             $tipoFiltro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
             switch ($tipoFiltro) {
-                case 'emanalise': //Em an&aacute;lise
+                case 'emanalise':
                     $tipoFiltro = 'emanalise';
                     $filtro = 'Em an&aacute;lise';
                     $where['a.siCumprimentoObjeto = ?'] = 3;
                     break;
-                case 'analisados': //Analisados
+                case 'analisados':
                     $tipoFiltro = 'analisados';
                     $filtro = 'Analisados';
                     $where['a.siCumprimentoObjeto = ?'] = 5;
                     break;
-                default: //Aguardando An&aacute;lise
+                default:
                     $tipoFiltro = 'aguardando';
                     $filtro = 'Aguardando An&aacute;lise';
                     $where['a.siCumprimentoObjeto = ?'] = 2;
                     break;
             }
-        } else { //Aguardando An&aacute;lise
+        } else {
             $tipoFiltro = 'aguardando';
             $filtro = 'Aguardando An&aacute;lise';
             $where['a.siCumprimentoObjeto = ?'] = 2;
@@ -148,31 +145,31 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $total = $tbCumprimentoObjeto->listaRelatorios($where, $order, null, null, true);
         $fim = $inicio + $this->intTamPag;
 
-        $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
+        $totalPag = (int)(($total % $this->intTamPag == 0) ? ($total / $this->intTamPag) : (($total / $this->intTamPag) + 1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
         $busca = $tbCumprimentoObjeto->listaRelatorios($where, $order, $tamanho, $inicio);
 
         $paginacao = array(
-            "pag"=>$pag,
-            "qtde"=>$this->intTamPag,
-            "campo"=>$campo,
-            "ordem"=>$ordem,
-            "ordenacao"=>$ordenacao,
-            "novaOrdem"=>$novaOrdem,
-            "total"=>$total,
-            "inicio"=>($inicio+1),
-            "fim"=>$fim,
-            "totalPag"=>$totalPag,
-            "Itenspag"=>$this->intTamPag,
-            "tamanho"=>$tamanho
-         );
+            "pag" => $pag,
+            "qtde" => $this->intTamPag,
+            "campo" => $campo,
+            "ordem" => $ordem,
+            "ordenacao" => $ordenacao,
+            "novaOrdem" => $novaOrdem,
+            "total" => $total,
+            "inicio" => ($inicio + 1),
+            "fim" => $fim,
+            "totalPag" => $totalPag,
+            "Itenspag" => $this->intTamPag,
+            "tamanho" => $tamanho
+        );
 
-        $this->view->paginacao      = $paginacao;
-        $this->view->qtdRegistros   = $total;
-        $this->view->dados          = $busca;
-        $this->view->intTamPag      = $this->intTamPag;
-        $this->view->filtro         = $filtro;
-        $this->view->tipoFiltro     = $tipoFiltro;
+        $this->view->paginacao = $paginacao;
+        $this->view->qtdRegistros = $total;
+        $this->view->dados = $busca;
+        $this->view->intTamPag = $this->intTamPag;
+        $this->view->filtro = $filtro;
+        $this->view->tipoFiltro = $tipoFiltro;
 
         $vw = new vwUsuariosOrgaosGrupos();
         $usuarios = $vw->buscarUsuarios($codPerfil, $codOrgao);
@@ -184,11 +181,11 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
 
         //** Usuario Logado ************************************************/
-        $auth               = Zend_Auth::getInstance(); // pega a autenticacao
-        $idusuario          = isset($auth->getIdentity()->usu_codigo) ? $auth->getIdentity()->usu_codigo : $auth->getIdentity()->IdUsuario;
-        $GrupoAtivo         = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
-        $codOrgao           = $GrupoAtivo->codOrgao; //  orgao ativo na sessao
-        $codPerfil          = $GrupoAtivo->codGrupo; //  orgao ativo na sessao
+        $auth = Zend_Auth::getInstance(); // pega a autenticacao
+        $idusuario = isset($auth->getIdentity()->usu_codigo) ? $auth->getIdentity()->usu_codigo : $auth->getIdentity()->IdUsuario;
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
+        $codOrgao = $GrupoAtivo->codOrgao; //  orgao ativo na sessao
+        $codPerfil = $GrupoAtivo->codGrupo; //  orgao ativo na sessao
         $this->view->codOrgao = $codOrgao;
         $this->view->idUsuarioLogado = $idusuario;
         /******************************************************************/
@@ -215,8 +212,8 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         //==== campo de ordenacao  ======//
         if ($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
-            $order = array($campo." ".$ordem);
-            $ordenacao = "&campo=".$campo."&ordem=".$ordem;
+            $order = array($campo . " " . $ordem);
+            $ordenacao = "&campo=" . $campo . "&ordem=" . $ordem;
         } else {
             $campo = null;
             $order = array(2); //Pronac
@@ -228,7 +225,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         if (isset($post->pag)) {
             $pag = $post->pag;
         }
-        $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
+        $inicio = ($pag > 1) ? ($pag - 1) * $this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
         $where = array();
@@ -267,7 +264,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $total = $tbCumprimentoObjeto->listaRelatorios($where, $order, null, null, true);
         $fim = $inicio + $this->intTamPag;
 
-        $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
+        $totalPag = (int)(($total % $this->intTamPag == 0) ? ($total / $this->intTamPag) : (($total / $this->intTamPag) + 1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
         $busca = $tbCumprimentoObjeto->listaRelatorios($where, $order, $tamanho, $inicio);
 
@@ -279,9 +276,9 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
 
             $html = '';
             $html .= '<table style="border: 1px">';
-            $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 16px; font-weight: bold;" colspan="'.$colspan.'">Analisar Comprova&ccedil;&atilde;o do Objeto - '.$filtro.'</td></tr>';
-            $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 10px" colspan="'.$colspan.'">Data do Arquivo: '. Data::mostraData() .'</td></tr>';
-            $html .='<tr><td colspan="'.$colspan.'"></td></tr>';
+            $html .= '<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 16px; font-weight: bold;" colspan="' . $colspan . '">Analisar Comprova&ccedil;&atilde;o do Objeto - ' . $filtro . '</td></tr>';
+            $html .= '<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 10px" colspan="' . $colspan . '">Data do Arquivo: ' . Data::mostraData() . '</td></tr>';
+            $html .= '<tr><td colspan="' . $colspan . '"></td></tr>';
 
             $html .= '<tr>';
             $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">#</th>';
@@ -300,7 +297,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
             $vw = new vwUsuariosOrgaosGrupos();
             $usuarios = $vw->buscarUsuarios($codPerfil, $codOrgao);
 
-            $i=1;
+            $i = 1;
             foreach ($busca as $dp) {
                 if ($dp->Mecanismo == 1) {
                     $mecanismo = 'Incentivo Fiscal Federal';
@@ -319,15 +316,15 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
                 }
 
                 $html .= '<tr>';
-                $html .= '<td style="border: 1px dotted black;">'.$i.'</td>';
-                $html .= '<td style="border: 1px dotted black;">'.$dp->Pronac.'</td>';
-                $html .= '<td style="border: 1px dotted black;">'.$dp->NomeProjeto.'</td>';
-                $html .= '<td style="border: 1px dotted black;">'.$dp->UfProjeto.'</td>';
-                $html .= '<td style="border: 1px dotted black;">'.$mecanismo.'</td>';
-                $html .= '<td style="border: 1px dotted black;">'.$dp->Situacao.' - '.$dp->dsSituacao.'</td>';
-                $html .= '<td style="border: 1px dotted black;">'.Data::tratarDataZend($dp->dtCadastro, 'Brasileiro').'</td>';
+                $html .= '<td style="border: 1px dotted black;">' . $i . '</td>';
+                $html .= '<td style="border: 1px dotted black;">' . $dp->Pronac . '</td>';
+                $html .= '<td style="border: 1px dotted black;">' . $dp->NomeProjeto . '</td>';
+                $html .= '<td style="border: 1px dotted black;">' . $dp->UfProjeto . '</td>';
+                $html .= '<td style="border: 1px dotted black;">' . $mecanismo . '</td>';
+                $html .= '<td style="border: 1px dotted black;">' . $dp->Situacao . ' - ' . $dp->dsSituacao . '</td>';
+                $html .= '<td style="border: 1px dotted black;">' . Data::tratarDataZend($dp->dtCadastro, 'Brasileiro') . '</td>';
                 if (isset($tipoFiltro) && $tipoFiltro != 'aguardando') {
-                    $html .= '<td style="border: 1px dotted black;">'.$nomeTec.'</td>';
+                    $html .= '<td style="border: 1px dotted black;">' . $nomeTec . '</td>';
                 }
                 $html .= '</tr>';
                 $i++;
@@ -358,16 +355,15 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
             $idPronac = Seguranca::dencrypt($idPronac);
         }
 
-        //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
         $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
-        $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idPronac, 'siCumprimentoObjeto in (?)'=>array(2,5)));
+        $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idPronac, 'siCumprimentoObjeto in (?)' => array(2, 5)));
         $this->view->DadosRelatorio = $DadosRelatorio;
         $this->view->cumprimentoDoObjeto = $tbCumprimentoObjeto;
-        if (count($DadosRelatorio)==0) {
+        if (count($DadosRelatorio) == 0) {
             parent::message("Relat&aacute;rio n&atilde;o encontrado!", "execucao-fisica/avaliaracompanhamentoprojeto/index", "ALERT");
         }
 
@@ -396,11 +392,11 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $this->view->DadosComprovantes = $dadosComprovantes;
 
         $tbTermoAceiteObra = new ExecucaoFisica_Model_DbTable_TbTermoAceiteObra();
-        $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idPronac));
+        $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?' => $idPronac));
         $this->view->AceiteObras = $AceiteObras;
 
         $tbBensDoados = new ExecucaoFisica_Model_DbTable_TbBensDoados();
-        $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idPronac), array('b.Descricao'));
+        $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?' => $idPronac), array('b.Descricao'));
         $this->view->BensCadastrados = $BensCadastrados;
 
         if ($DadosRelatorio->siCumprimentoObjeto >= 5) {
@@ -425,9 +421,9 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $this->view->DadosProjeto = $DadosProjeto;
 
         $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
-        $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idPronac, 'siCumprimentoObjeto!=?'=>1));
+        $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idPronac, 'siCumprimentoObjeto!=?' => 1));
         $this->view->DadosRelatorio = $DadosRelatorio;
-        if (count($DadosRelatorio)==0) {
+        if (count($DadosRelatorio) == 0) {
             parent::message("Relat&aacute;rio n&atilde;o encontrado!", "execucao-fisica/avaliaracompanhamentoprojeto/index", "ALERT");
         }
 
@@ -442,26 +438,26 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $this->view->PlanoDeDistribuicao = $PlanoDeDistribuicao;
 
         $tbBeneficiarioProdutoCultural = new tbBeneficiarioProdutoCultural();
-        $PlanosCadastrados = $tbBeneficiarioProdutoCultural->buscarPlanosCadastrados($idPronac);
-        $this->view->PlanosCadastrados = $PlanosCadastrados;
+        $planosCadastrados = $tbBeneficiarioProdutoCultural->buscarPlanosCadastrados($idPronac);
+        $this->view->PlanosCadastrados = $planosCadastrados;
 
         $DadosCompMetas = $projetos->buscarMetasComprovadas($idPronac);
         $this->view->DadosCompMetas = $DadosCompMetas;
 
-        $DadosItensOrcam = $projetos->buscarItensComprovados($idPronac);
-        $this->view->DadosItensOrcam = $DadosItensOrcam;
+        $dadosItensOrcam = $projetos->buscarItensComprovados($idPronac);
+        $this->view->DadosItensOrcam = $dadosItensOrcam;
 
         $Arquivo = new Arquivo();
         $dadosComprovantes = $Arquivo->buscarComprovantesExecucao($idPronac);
         $this->view->DadosComprovantes = $dadosComprovantes;
 
         $tbTermoAceiteObra = new ExecucaoFisica_Model_DbTable_TbTermoAceiteObra();
-        $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idPronac));
-        $this->view->AceiteObras = $AceiteObras;
+        $aceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?' => $idPronac));
+        $this->view->AceiteObras = $aceiteObras;
 
         $tbBensDoados = new ExecucaoFisica_Model_DbTable_TbBensDoados();
-        $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idPronac), array('b.Descricao'));
-        $this->view->BensCadastrados = $BensCadastrados;
+        $bensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?' => $idPronac), array('b.Descricao'));
+        $this->view->BensCadastrados = $bensCadastrados;
 
         if ($DadosRelatorio->siCumprimentoObjeto >= 5) {
             $Usuario = new UsuarioDAO();
@@ -477,10 +473,10 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
     public function encaminharRelatorioAction()
     {
         $post = Zend_Registry::get('post');
-        $idPronac = (int) $post->pronac;
+        $idPronac = (int)$post->pronac;
 
         $dados = array();
-        $dados['idTecnicoAvaliador'] = (int) $post->tecnico;
+        $dados['idTecnicoAvaliador'] = (int)$post->tecnico;
         $dados['siCumprimentoObjeto'] = 3;
         $where = "idPronac = $idPronac";
 
@@ -497,15 +493,15 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
     public function indexTecnicoAction()
     {
         //** Usuario Logado ************************************************/
-        $auth               = Zend_Auth::getInstance(); // pega a autenticacao
-        $idusuario          = $auth->getIdentity()->usu_codigo;
-        $GrupoAtivo         = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
-        $codOrgao           = $GrupoAtivo->codOrgao; //  orgao ativo na sessao
-        $codPerfil          = $GrupoAtivo->codGrupo; //  orgao ativo na sessao
+        $auth = Zend_Auth::getInstance(); // pega a autenticacao
+        $idusuario = $auth->getIdentity()->usu_codigo;
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
+        $codOrgao = $GrupoAtivo->codOrgao; //  orgao ativo na sessao
+        $codPerfil = $GrupoAtivo->codGrupo; //  orgao ativo na sessao
         $this->view->codOrgao = $codOrgao;
         $this->view->idUsuarioLogado = $idusuario;
         /******************************************************************/
-        if ($codPerfil!=139 && $codPerfil!=148 && $codPerfil!=151) {
+        if ($codPerfil != 139 && $codPerfil != 148 && $codPerfil != 151) {
             parent::message("Voc&ecirc; n&atilde;o tem permissao para acessar essa funcionalidade!", "principal", "ALERT");
         }
 
@@ -531,8 +527,8 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         //==== campo de ordenacao  ======//
         if ($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
-            $order = array($campo." ".$ordem);
-            $ordenacao = "&campo=".$campo."&ordem=".$ordem;
+            $order = array($campo . " " . $ordem);
+            $ordenacao = "&campo=" . $campo . "&ordem=" . $ordem;
         } else {
             $campo = null;
             $order = array('NomeProjeto');
@@ -544,12 +540,12 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         if (isset($get->pag)) {
             $pag = $get->pag;
         }
-        $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
+        $inicio = ($pag > 1) ? ($pag - 1) * $this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
         $where = array();
         $where['b.Orgao = ?'] = $codOrgao;
-        $where['a.siCumprimentoObjeto in (?)'] = array(3,4);
+        $where['a.siCumprimentoObjeto in (?)'] = array(3, 4);
         $where['a.idTecnicoAvaliador = ?'] = $idusuario;
 
         if ((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))) {
@@ -561,30 +557,30 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $total = $tbCumprimentoObjeto->listaRelatorios($where, $order, null, null, true);
         $fim = $inicio + $this->intTamPag;
 
-        $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
+        $totalPag = (int)(($total % $this->intTamPag == 0) ? ($total / $this->intTamPag) : (($total / $this->intTamPag) + 1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
 
         $busca = $tbCumprimentoObjeto->listaRelatorios($where, $order, $tamanho, $inicio);
 
         $paginacao = array(
-                "pag"=>$pag,
-                "qtde"=>$this->intTamPag,
-                "campo"=>$campo,
-                "ordem"=>$ordem,
-                "ordenacao"=>$ordenacao,
-                "novaOrdem"=>$novaOrdem,
-                "total"=>$total,
-                "inicio"=>($inicio+1),
-                "fim"=>$fim,
-                "totalPag"=>$totalPag,
-                "Itenspag"=>$this->intTamPag,
-                "tamanho"=>$tamanho
-         );
+            "pag" => $pag,
+            "qtde" => $this->intTamPag,
+            "campo" => $campo,
+            "ordem" => $ordem,
+            "ordenacao" => $ordenacao,
+            "novaOrdem" => $novaOrdem,
+            "total" => $total,
+            "inicio" => ($inicio + 1),
+            "fim" => $fim,
+            "totalPag" => $totalPag,
+            "Itenspag" => $this->intTamPag,
+            "tamanho" => $tamanho
+        );
 
-        $this->view->paginacao     = $paginacao;
+        $this->view->paginacao = $paginacao;
         $this->view->qtdRelatorios = $total;
-        $this->view->dados         = $busca;
-        $this->view->intTamPag     = $this->intTamPag;
+        $this->view->dados = $busca;
+        $this->view->intTamPag = $this->intTamPag;
     }
 
     public function devolverRelatorioAction()
@@ -592,11 +588,11 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
 
         //** Usuario Logado ************************************************/
-        $auth               = Zend_Auth::getInstance(); // pega a autenticacao
+        $auth = Zend_Auth::getInstance(); // pega a autenticacao
         /******************************************************************/
 
         $post = Zend_Registry::get('post');
-        $idPronac = (int) $post->pronac;
+        $idPronac = (int)$post->pronac;
 
         $dados = array();
         $dados['idTecnicoAvaliador'] = null;
@@ -607,31 +603,28 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $return = $tbCumprimentoObjeto->update($dados, $where);
 
         if ($return) {
-            $this->_helper->json(array('resposta'=>true));
+            $this->_helper->json(array('resposta' => true));
         } else {
-            $this->_helper->json(array('resposta'=>false));
+            $this->_helper->json(array('resposta' => false));
         }
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
     public function parecerTecnicoAction()
     {
+        $auth = Zend_Auth::getInstance(); // pega a autenticacao
+        $idusuario = $auth->getIdentity()->usu_codigo;
+        $nmusuario = $auth->getIdentity()->usu_nome;
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
+        $codOrgao = $GrupoAtivo->codOrgao; //  orgao ativo na sessao
+        $codPerfil = $GrupoAtivo->codGrupo; //  orgao ativo na sessao
 
-        //** Usuario Logado ************************************************/
-        $auth               = Zend_Auth::getInstance(); // pega a autenticacao
-        $idusuario          = $auth->getIdentity()->usu_codigo;
-        $nmusuario          = $auth->getIdentity()->usu_nome;
-        $GrupoAtivo         = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
-        $codOrgao           = $GrupoAtivo->codOrgao; //  orgao ativo na sessao
-        $codPerfil          = $GrupoAtivo->codGrupo; //  orgao ativo na sessao
-        /******************************************************************/
-
-        if ($codPerfil!=139) {
+        if ($codPerfil != Autenticacao_Model_Grupos::TECNICO_AVALIACAO) {
             parent::message("Voc&ecirc; n&atilde;o tem permissao para acessar essa funcionalidade!", "principal", "ALERT");
         }
 
         $idPronac = $this->_request->getParam("idPronac");
-        $idrelatorio = $this->_request->getParam("relatorio");
+        $idRelatorio = $this->_request->getParam("relatorio");
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
@@ -639,28 +632,27 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $where = array();
         $where['a.idPronac = ?'] = $idPronac;
         $where['a.idTecnicoAvaliador = ?'] = $idusuario;
-        $where['a.siCumprimentoObjeto in (?)'] = array(3,4);
+        $where['a.siCumprimentoObjeto in (?)'] = array(3, 4);
         $where['b.Orgao = ?'] = $codOrgao;
 
         $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
         $DadosRelatorio = $tbCumprimentoObjeto->listaRelatorios($where, array(), null, null, false);
 
-        if (count($DadosRelatorio)==0) {
+        if (count($DadosRelatorio) == 0) {
             parent::message('Relat&oacute;rio n&atilde;o encontrado!', "execucao-fisica/avaliaracompanhamentoprojeto/index-tecnico", "ALERT");
         }
 
         $this->view->DadosRelatorio = $DadosRelatorio;
         $this->view->idPronac = $idPronac;
-        $this->view->idRelatorio = $idrelatorio;
+        $this->view->idRelatorio = $idRelatorio;
         $this->view->idusuario = $idusuario;
         $this->view->nmusuario = $nmusuario;
 
-        //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        $dadosParecer = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac=?'=>$idPronac,'idTecnicoAvaliador=?'=>$idusuario));
+        $dadosParecer = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac=?' => $idPronac, 'idTecnicoAvaliador=?' => $idusuario));
         $this->view->DadosParecer = $dadosParecer;
 
         $pa = new paCoordenadorDoPerfil();
@@ -684,7 +676,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $this->view->DadosProjeto = $DadosProjeto;
 
         $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
-        $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac=?'=>$idPronac));
+        $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac=?' => $idPronac));
         $this->view->DadosRelatorio = $DadosRelatorio;
         $this->view->cumprimentoDoObjeto = $tbCumprimentoObjeto;
         $this->view->idPronac = $idPronac;
@@ -731,10 +723,10 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $this->view->PlanoDeDivulgacao = $PlanoDeDivulgacao;
 
         $Verificacao = new Verificacao();
-        $Peca = $Verificacao->buscar(array('idTipo =?'=>1,'stEstado =?'=>1));
+        $Peca = $Verificacao->buscar(array('idTipo =?' => 1, 'stEstado =?' => 1));
         $this->view->Peca = $Peca;
 
-        $Veiculo = $Verificacao->buscar(array('idTipo =?'=>2,'stEstado =?'=>1));
+        $Veiculo = $Verificacao->buscar(array('idTipo =?' => 2, 'stEstado =?' => 1));
         $this->view->Veiculo = $Veiculo;
         $this->view->idPronac = $idPronac;
 
@@ -849,7 +841,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $this->view->DadosProjeto = $DadosProjeto;
 
         $tbTermoAceiteObra = new ExecucaoFisica_Model_DbTable_TbTermoAceiteObra();
-        $DadosRelatorio = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idPronac));
+        $DadosRelatorio = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?' => $idPronac));
         $this->view->DadosRelatorio = $DadosRelatorio;
         $this->view->idPronac = $idPronac;
     }
@@ -870,24 +862,21 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $this->view->DadosProjeto = $DadosProjeto;
 
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-        $DadosItens = $tbPlanilhaAprovacao->buscarItensOrcamentarios(array('a.idPronac=?'=>$idPronac), array('b.Descricao'));
+        $DadosItens = $tbPlanilhaAprovacao->buscarItensOrcamentarios(array('a.idPronac=?' => $idPronac), array('b.Descricao'));
         $this->view->DadosItens = $DadosItens;
 
         $tbBensDoados = new ExecucaoFisica_Model_DbTable_TbBensDoados();
-        $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idPronac), array('b.Descricao'));
+        $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?' => $idPronac), array('b.Descricao'));
         $this->view->BensCadastrados = $BensCadastrados;
         $this->view->idPronac = $idPronac;
     }
 
     public function avaliarRelatorioAction()
     {
-
-        //** Usuario Logado ************************************************/
-        $auth               = Zend_Auth::getInstance(); // pega a autenticacao
-        $idusuario          = $auth->getIdentity()->usu_codigo;
-        $GrupoAtivo         = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
-        $codOrgao           = $GrupoAtivo->codOrgao; //  orgao ativo na sessao
-        /******************************************************************/
+        $auth = Zend_Auth::getInstance();
+        $idusuario = $auth->getIdentity()->usu_codigo;
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $codOrgao = $GrupoAtivo->codOrgao;
 
         $idPronac = $this->_request->getParam("idPronac");
         if (strlen($idPronac) > 7) {
@@ -897,7 +886,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $where = array();
         $where['idPronac = ?'] = $idPronac;
         $where['idTecnicoAvaliador = ?'] = $idusuario;
-        $where['siCumprimentoObjeto in (?)'] = array(3,4);
+        $where['siCumprimentoObjeto in (?)'] = array(3, 4);
 
         $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
         $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto($where);
@@ -908,7 +897,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
 
         $siComprovante = 4;
         $msg = 'Relat&aacute;rio salvo com sucesso!';
-        $controller = "execucao-fisica/avaliaracompanhamentoprojeto/parecer-tecnico?idPronac=".$idPronac;
+        $controller = "execucao-fisica/avaliaracompanhamentoprojeto/parecer-tecnico?idPronac=" . $idPronac;
         if (isset($_POST['finalizar']) && !empty($_POST['finalizar'])) {
             $siComprovante = 5;
             $msg = 'Relat&aacute;rio finalizado com sucesso!';
@@ -924,7 +913,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
             'siCumprimentoObjeto' => $siComprovante
         );
 
-        $whereFinal = 'idCumprimentoObjeto = '.$DadosRelatorio->idCumprimentoObjeto;
+        $whereFinal = 'idCumprimentoObjeto = ' . $DadosRelatorio->idCumprimentoObjeto;
         $resultado = $tbCumprimentoObjeto->alterar($dados, $whereFinal);
 
         if ($resultado) {
@@ -939,21 +928,39 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
 
         $post = Zend_Registry::get('post');
-        $idPronac = (int) $post->pronac;
-
+        $idPronac = (int)$post->pronac;
         $dados = array();
         $dados['siCumprimentoObjeto'] = 6;
-        $where = "idPronac = $idPronac";
 
         $tbCumprimentoObjeto = new ExecucaoFisica_Model_DbTable_TbCumprimentoObjeto();
-        $projetoModel = new Projetos();
-        $return = $tbCumprimentoObjeto->update($dados, $where);
-        $projetoModel->mudarSituacao($idPronac, 'E68', 'E24');
 
-        if ($return) {
-            $this->_helper->json(array('resposta'=>true));
+        $where = [];
+        $where['idPronac = ?'] = $idPronac;
+        $where['siCumprimentoObjeto in (?)'] = array(5);
+        $dadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto($where);
+
+        $where = "idPronac = $idPronac";
+//        $tbProjetos->mudarSituacao(
+//            $idPronac,
+//            Projeto_Model_Situacao::AGUARDA_ANALISE_FINANCEIRA,
+//            Projeto_Model_Situacao::APRESENTOU_PRESTACAO_DE_CONTAS
+//        );
+
+
+        $retorno = false;
+        if ($dadosRelatorio->stResultadoAvaliacao == 'A') {
+            $retorno = $tbCumprimentoObjeto->update($dados, $where);
+            $tbProjetos = new Projetos();
+
+            $situacao = Projeto_Model_Situacao::AGUARDA_ANALISE_FINANCEIRA;
+            $providenciaTomada = 'Projeto encaminhado para an&aacute;lise financeira';
+            $tbProjetos->alterarSituacao($idPronac, '', $situacao, $providenciaTomada);
+        }
+
+        if ($retorno) {
+            $this->_helper->json(array('resposta' => true));
         } else {
-            $this->_helper->json(array('resposta'=>false));
+            $this->_helper->json(array('resposta' => false));
         }
         $this->_helper->viewRenderer->setNoRender(true);
     }
@@ -962,7 +969,7 @@ class ExecucaoFisica_AvaliaracompanhamentoprojetoController extends MinC_Control
     {
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
         $this->view->recursosPorFonte = $planilhaAprovacaoModel
-                ->buscarRecursosDaFonte($this->getRequest()->getParam('idPronac'));
+            ->buscarRecursosDaFonte($this->getRequest()->getParam('idPronac'));
         //Passando o pronac para ser usada no menu lateral esquerdo
         $this->view->idPronac = $this->getRequest()->getParam('idPronac');
     }
