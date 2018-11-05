@@ -34,7 +34,7 @@ Há uma lista dos projetos a serem encaminhados, havendo a possibilidade de visu
 
 Para visualizar a lista dos projetos aguardando a assinatura do técnico de prestação de contas é necessário selecionar a aba EM ANALISE.
 
-![Parecer técnico aba Em Análise](./imagens/parecer_tecnico_emanalise.png)
+![Parecer técnico aba Em Análise](./imagens/parecer_tecnico_emanalise_coord.png)
 
 ### Ações disponíveis:
 
@@ -105,4 +105,56 @@ Visualizar o histórico de encaminhamentos do projeto.
 #### 2. [Visualizar Projeto](#3.-visualizar-projeto)
 
 Ao clicar na ação, é aberta a planilha orçamentaria do projeto.
+
+## Como acessar os Pareceres Técnicos no perfil de Técnico de Prestação de Contas
+
+* Primeiro passo, é necessário estar logado em um perfil de Técnico de Prestação de Contas.
+* Segundo passo selecione a aba Avaliação de Resultados e clique na opção Analisar Parecer.
+
+## Abas
+
+1. [EM ANALISE](#)
+2. [ASSINAR](#)
+3. [HISTORICO](#)
+
+## Em Análise
+
+Para visualizar a lista dos projetos aguardando a análise do técnico logado é necessário selecionar a aba EM ANALISE.
+
+![Parecer técnico aba Em Análise](./imagens/parecer_tecnico_emanalise_tec.png)
+
+### Ações disponíveis:
+
+#### 1. Histórico de Encaminhamentos
+Visualizar o histórico de encaminhamentos do projeto.
+
+#### 2. Analisar Projeto
+
+## Assinar
+
+### Ações disponíveis:
+
+#### 1. Histórico de Encaminhamentos
+
+Visualizar o histórico de encaminhamentos do projeto.
+
+#### 2. Assinar
+
+#### 3. Devolver Projeto
+
+#### 4. [Visualizar Projeto](#3.-visualizar-projeto)
+
+## Historico
+
+### Ações disponíveis:
+
+#### 1. Histórico de Encaminhamentos
+
+Visualizar o histórico de encaminhamentos do projeto.
+
+#### 2. [Visualizar Projeto](#3.-visualizar-projeto)
+
+Ao clicar na ação, é aberta a planilha orçamentaria do projeto.
+
+
 
