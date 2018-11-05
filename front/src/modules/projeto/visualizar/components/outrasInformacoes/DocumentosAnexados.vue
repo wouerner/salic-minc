@@ -14,11 +14,11 @@
                     rows-per-page-text="Items por Página"
             >
                 <template slot="items" slot-scope="props">
-                    <td class="center">{{ props.item.id + 1 }}</td>
-                    <td class="center">{{ props.item.Anexado }}</td>
+                    <td class="text-xs-right">{{ props.item.id + 1 }}</td>
+                    <td class="text-xs-left">{{ props.item.Anexado }}</td>
                     <td class="center">{{ props.item.Data }}</td>
                     <td class="text-xs-left">{{ props.item.Descricao }}</td>
-                    <td class="center">
+                    <td class="text-xs-right">
                         <v-tooltip left>
                             <v-btn
                                     :loading="parseInt(props.item.id) === loadingButton"

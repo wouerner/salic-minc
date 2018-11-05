@@ -3,56 +3,57 @@
         <div v-if="loading">
             <Carregando :text="'Carregando Diligências do Projeto'"></Carregando>
         </div>
-        <div v-else>
-            <v-flex>
-                <v-expansion-panel popout focusable>
-                    <v-expansion-panel-content>
-                        <div slot="header" class="green-text">
-                            Diligência Proposta
-                        </div>
-                        <v-card>
-                            <v-card-text>
-                                <VisualizarDiligenciaProposta
-                                        :idPronac="idPronac"
-                                        :diligencias="dados.diligenciaProposta"
-                                >
-                                </VisualizarDiligenciaProposta>
-                            </v-card-text>
-                        </v-card>
-                    </v-expansion-panel-content>
+        <v-flex v-else>
+            <v-expansion-panel popout focusable>
+                <v-expansion-panel-content class="elevation-1">
+                    <v-layout slot="header" class="green--text">
+                        <v-icon class="mr-3 green--text">perm_media</v-icon>
+                        Diligência Proposta
+                    </v-layout>
+                    <v-card>
+                        <v-card-text>
+                            <VisualizarDiligenciaProposta
+                                    :idPronac="idPronac"
+                                    :diligencias="dados.diligenciaProposta"
+                            >
+                            </VisualizarDiligenciaProposta>
+                        </v-card-text>
+                    </v-card>
+                </v-expansion-panel-content>
 
-                    <v-expansion-panel-content>
-                        <div slot="header" class="green-text">
-                            Diligências da Adequação do Projeto
-                        </div>
-                        <v-card>
-                            <v-card-text>
-                                <VisualizarDiligenciaAdequacao
-                                        :idPronac="idPronac"
-                                        :diligencias="dados.diligenciaAdequacao"
-                                >
-                                </VisualizarDiligenciaAdequacao>
-                            </v-card-text>
-                        </v-card>
-                    </v-expansion-panel-content>
+                <v-expansion-panel-content class="elevation-1">
+                    <v-layout slot="header" class="green--text">
+                        <v-icon class="mr-3 green--text">perm_media</v-icon>
+                        Diligências da Adequação do Projeto
+                    </v-layout>
+                    <v-card>
+                        <v-card-text>
+                            <VisualizarDiligenciaAdequacao
+                                    :idPronac="idPronac"
+                                    :diligencias="dados.diligenciaAdequacao"
+                            >
+                            </VisualizarDiligenciaAdequacao>
+                        </v-card-text>
+                    </v-card>
+                </v-expansion-panel-content>
 
-                    <v-expansion-panel-content>
-                        <div slot="header" class="green-text">
-                            Diligência Projeto
-                        </div>
-                        <v-card>
-                            <v-card-text>
-                                <VisualizarDiligenciaProjeto
-                                        :idPronac="idPronac"
-                                        :diligencias="dados.diligenciaProjeto"
-                                >
-                                </VisualizarDiligenciaProjeto>
-                            </v-card-text>
-                        </v-card>
-                    </v-expansion-panel-content>
-                </v-expansion-panel>
-            </v-flex>
-        </div>
+                <v-expansion-panel-content class="elevation-1">
+                    <v-layout slot="header" class="green--text">
+                        <v-icon class="mr-3 green--text">perm_media</v-icon>
+                        Diligência Projeto
+                    </v-layout>
+                    <v-card>
+                        <v-card-text>
+                            <VisualizarDiligenciaProjeto
+                                    :idPronac="idPronac"
+                                    :diligencias="dados.diligenciaProjeto"
+                            >
+                            </VisualizarDiligenciaProjeto>
+                        </v-card-text>
+                    </v-card>
+                </v-expansion-panel-content>
+            </v-expansion-panel>
+        </v-flex>
     </div>
 
 </template>

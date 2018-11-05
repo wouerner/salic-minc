@@ -39,7 +39,7 @@
             </template>
         </v-data-table>
 
-        <v-dialog v-model="dialog" width="1000px">
+        <v-dialog v-model="dialog" width="90%">
             <v-card>
                 <v-card-text>
                     <tr>

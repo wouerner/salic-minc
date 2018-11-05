@@ -1,28 +1,30 @@
 <template>
     <div>
         <div v-if="loading">
-            <Carregando :text="'Carregando Certidoes Negativas'"></Carregando>
+            <Carregando :text="'Carregando Histórico Encaminhamento'"></Carregando>
         </div>
         <div v-else-if="dados.Encaminhamentos">
-            <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
-                                  :nomeProjeto="dadosProjeto.NomeProjeto">
-            </IdentificacaoProjeto>
-           <v-data-table
+            <v-data-table
                     :headers="headers"
                     :items="dados.Encaminhamentos"
                     class="elevation-1 container-fluid"
-                    rows-per-page-text="Itens por Página"
-           >
+                    rows-per-page-text="Items por Página"
+            >
                 <template slot="items" slot-scope="props">
-                    <td style="width: 190px">{{ props.item.Produto }}</td>
-                    <td style="width: 50px">{{ props.item.Unidade }}</td>
-                    <td style="width: 700px" v-html="props.item.Observacao"></td>
-                    <td style="width: 190px">{{ props.item.DtEnvio }}</td>
-                    <td style="width: 190px">{{ props.item.DtRetorno }}</td>
-                    <td>{{ props.item.qtDias }}</td>
+                    <td class="text-xs-right">{{ props.item.Produto }}</td>
+                    <td class="text-xs-right">{{ props.item.Unidade }}</td>
+                    <td class="text-xs-left" v-html="props.item.Observacao"></td>
+                    <td class="text-xs-right">{{ props.item.DtEnvio }}</td>
+                    <td class="text-xs-right">{{ props.item.DtRetorno }}</td>
+                    <td class="text-xs-right">{{ props.item.qtDias }}</td>
+                </template>
+                <template slot="no-data">
+                    <v-alert :value="true" color="error" icon="warning">
+                        Nenhum dado encontrado ¯\_(ツ)_/¯
+                    </v-alert>
                 </template>
                 <template slot="pageText" slot-scope="props">
-                    Itens {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                    Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
                 </template>
             </v-data-table>
         </div>
@@ -31,7 +33,6 @@
 <script>
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/Carregando';
-    import IdentificacaoProjeto from './IdentificacaoProjeto';
 
     export default {
         name: 'HistoricoEncaminhamento',
@@ -46,27 +47,32 @@
                 headers: [
                     {
                         text: 'PRODUTO',
-                        align: 'left',
+                        align: 'center',
                         value: 'Produto',
                     },
                     {
                         text: 'UNIDADE',
+                        align: 'center',
                         value: 'Unidade',
                     },
                     {
                         text: 'OBSERVAÇÃO',
+                        align: 'left',
                         value: 'Observacao',
                     },
                     {
                         text: 'DT. ENVIO',
+                        align: 'center',
                         value: 'DtEnvio',
                     },
                     {
                         text: 'DT. RETORNO',
+                        align: 'center',
                         value: 'DtRetorno',
                     },
                     {
                         text: 'QT. DIAS',
+                        align: 'center',
                         value: 'qtDias',
                     },
                 ],
@@ -74,7 +80,6 @@
         },
         components: {
             Carregando,
-            IdentificacaoProjeto,
         },
         computed: {
             ...mapGetters({

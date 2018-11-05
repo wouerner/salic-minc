@@ -21,6 +21,11 @@
                     <td style="width: 190px" class="text-xs-center" v-else>Nao se aplica.</td>
                     <td class="text-xs-center">{{ props.item.usuario }}</td>
                 </template>
+               <template slot="no-data">
+                   <v-alert :value="true" color="error" icon="warning">
+                       Nenhum dado encontrado ¯\_(ツ)_/¯
+                   </v-alert>
+               </template>
                 <template slot="pageText" slot-scope="props">
                     Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
                 </template>

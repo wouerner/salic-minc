@@ -12,7 +12,7 @@
                 rows-per-page-text="Items por Página"
         >
             <template slot="items" slot-scope="props">
-                <td class="center">
+                <td class="text-xs-right">
                     <v-btn
                             style="text-decoration: none"
                             slot="activator"
@@ -22,10 +22,10 @@
                         {{ props.item.pronac }}
                     </v-btn>
                 </td>
-                <td class="center">{{ props.item.nomeProjeto }}</td>
-                <td class="center">{{ props.item.dsAtoAdministrativo }}</td>
-                <td class="center">{{ props.item.dt_criacao }}</td>
-                <td class="center">
+                <td class="text-xs-left">{{ props.item.nomeProjeto }}</td>
+                <td class="text-xs-left">{{ props.item.dsAtoAdministrativo }}</td>
+                <td class="text-xs-right">{{ props.item.dt_criacao }}</td>
+                <td class="text-xs-right">
                     <v-tooltip left>
                         <v-btn
                                 style="text-decoration: none"
@@ -80,12 +80,12 @@
                         value: 'pronac',
                     },
                     {
-                        align: 'center',
+                        align: 'left',
                         text: 'NOME DO PROJETO',
                         value: 'nomeProjeto',
                     },
                     {
-                        align: 'center',
+                        align: 'left',
                         text: 'ATO ADMINISTRATIVO',
                         value: 'dsAtoAdministrativo',
                     },

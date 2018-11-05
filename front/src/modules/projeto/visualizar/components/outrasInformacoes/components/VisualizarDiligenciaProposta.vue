@@ -35,7 +35,6 @@
                 v-model="dialog"
                 width="1200px"
                 transition="scale-transition"
-
         >
             <v-card>
                 <v-card-text>
