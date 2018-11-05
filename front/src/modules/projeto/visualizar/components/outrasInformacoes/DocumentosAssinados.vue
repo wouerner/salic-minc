@@ -55,7 +55,7 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/Carregando';
 
     export default {
