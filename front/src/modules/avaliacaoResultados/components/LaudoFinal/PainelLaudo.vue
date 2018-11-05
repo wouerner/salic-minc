@@ -84,7 +84,7 @@
 
 import { mapActions, mapGetters } from 'vuex';
 import Const from '../../const';
-import Laudo from './../Laudo';
+import Laudo from './Laudo';
 
 export default {
     name: 'PainelLaudo',
