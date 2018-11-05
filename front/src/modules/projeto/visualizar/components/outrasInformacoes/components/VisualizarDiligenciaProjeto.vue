@@ -181,20 +181,6 @@
                 this.buscarDiligenciaProjeto({ idPronac, valor });
                 this.dialog = true;
             },
-            // setAbaAtiva(value, index) {
-            //     console.log(value, index);
-            //     if (this.abaAtiva === index) {
-            //         this.ativo = !this.ativo;
-            //     } else {
-            //         this.abaAtiva = index;
-            //         this.ativo = true;
-            //
-            //         const valor = value.idDiligencia;
-            //         const idPronac = this.dadosProjeto.idPronac;
-            //
-            //         this.buscarDiligenciaProjeto({idPronac, valor});
-            //     }
-            // },
             ...mapActions({
                 buscarDiligenciaProjeto: 'projeto/buscarDiligenciaProjeto',
             }),
