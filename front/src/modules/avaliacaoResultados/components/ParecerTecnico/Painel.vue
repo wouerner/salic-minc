@@ -154,7 +154,7 @@ import Historico from '../Historico';
 import Encaminhar from '../ComponenteEncaminhar';
 import AnaliseButton from '../analise/analisarButton';
 import AssinarButton from '../analise/AssinarButton';
-import Devolver from '../Devolver';
+import Devolver from '../components/Devolver';
 import VisualizarPlanilhaButtton from '../analise/VisualizarPlanilhaButtton';
 
 export default {

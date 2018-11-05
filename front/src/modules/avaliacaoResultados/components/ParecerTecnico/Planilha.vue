@@ -245,7 +245,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import ConsolidacaoAnalise from '../ConsolidacaoAnalise';
-import AnalisarItem from '../AnalisarItem';
+import AnalisarItem from './AnalisarItem';
 
 export default {
     name: 'Planilha',

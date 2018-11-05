@@ -5,12 +5,12 @@ import Painel from './components/ParecerTecnico/Painel';
 import TipoAvaliacao from './components/TipoAvaliacao';
 import Planilha from './components/ParecerTecnico/Planilha';
 import VisualizarPlanilha from './components/VisualizarPlanilha';
-import AnaliseComprovantes from './components/AnaliseComprovantes';
+import AnaliseComprovantes from './components/ParecerTecnico/AnaliseComprovantes';
 import Diligenciar from './components/Diligenciar';
 import Historico from './components/Historico';
 import EmitirLaudoFinal from './components/EmitirLaudoFinal';
 import Laudo from './components/LaudoFinal/PainelLaudo';
-import AnalisarItem from './components/AnalisarItem';
+import AnalisarItem from './components/ParecerTecnico/AnalisarItem';
 import VisualizarParecer from './components/VisualizarParecer';
 import VisualizarLaudo from './components/VisualizarLaudo';
 
