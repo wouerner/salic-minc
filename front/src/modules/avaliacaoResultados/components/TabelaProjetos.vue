@@ -19,6 +19,7 @@
                 <td class="text-xs-center">{{ props.item.Situacao }}</td>
                 <td class="text-xs-center">{{ props.item.UfProjeto }}</td>
                 <td class="text-xs-center" v-if="mostrarTecnico">{{ props.item.usu_nome }}</td>
+                <td> <btn-diligencias></btn-diligencias></td>
                 <!-- <td class="text-xs-right">
                     <v-btn flat icon color="green" :to="{ name: 'AnalisePlanilha', params:{ id:props.item.idPronac }}">
                         <v-icon class="material-icons">assignment_indcompare_arrows</v-icon>
@@ -40,7 +41,8 @@
                             :atual="componentes.atual"
                             :proximo="componentes.proximo"
                             :idTipoDoAtoAdministrativo="componentes.idTipoDoAtoAdministrativo"
-                        ></component>
+                        >
+                        </component>
                     </template>
                 </td>
             </template>
@@ -64,10 +66,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
+    import BtnDiligencias from './ParecerTecnico/HistoricoDiligencias';
 
-export default {
+    export default {
     name: 'TabelaProjetos',
+    components: { 'btn-diligencias': BtnDiligencias },
     props: ['dados', 'componentes', 'mostrarTecnico'],
     data() {
         return {
@@ -127,8 +131,12 @@ export default {
                     sortable: false,
                     value: 'numero',
                 },
-                { text: 'PRONAC', value: 'Pronac' },
-                { text: 'Nome Do Projeto',
+                {
+                    text: 'PRONAC',
+                    value: 'Pronac',
+                },
+                {
+                    text: 'Nome Do Projeto',
                     align: 'center',
                     value: 'NomeProjeto' },
                 {
@@ -150,8 +158,14 @@ export default {
                     value: '',
                 };
             }
-
-            dados[6] = {
+            if (!this.mostrarTecnico) {
+                dados[6] = {
+                    text: 'Diligências',
+                    align: 'center',
+                    value: '',
+                };
+            }
+            dados[7] = {
                 text: 'Ações',
                 sortable: false,
                 align: 'center',

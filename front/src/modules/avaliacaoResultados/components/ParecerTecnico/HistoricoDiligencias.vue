@@ -40,12 +40,8 @@
 </template>
 
 <script>
-
-    import BtnEncaminhar from '../BtnEncaminhar';
-
-    export default {
+export default {
     name: 'HistoricoDiligencias',
-    components: { BtnEncaminhar },
     data() {
         return {
             dialog: false,
