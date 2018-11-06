@@ -25,15 +25,21 @@ class AvaliacaoResultados_DiligenciaController extends MinC_Controller_Rest_Abst
 
     public function indexAction()
     {
-
-        if (!isset($this->_request->idPronac) || !isset($this->_request->situacao) || !isset($this->_request->tpDiligencia)){
-            $this->renderJsonResponse([message=>'Erro de requisição'], 400);
-        }else{
-            $this->_request->idPronac;
-            $this->_request->situacao;
-            $this->_request->tpDiligencia;
-
-            $this->renderJsonResponse([message=>'Requisição'], 200);
+        $diligencia = new DiligenciaService();
+        if (!isset($this->_request->idPronac) ||
+            !isset($this->_request->situacao) ||
+            !isset($this->_request->tpDiligencia)) {
+            $this->renderJsonResponse([message => 'Erro de requisição'], 400);
+        } else {
+            $coisa = $diligencia->listaDiligenciaPainel(['idPronac' => $this->_request->idPronac,
+                'situacao' => $this->_request->idPronac,
+                'tipoDiligencia' => $this->_request->tpDiligencia
+            ]);
+            if (!isset($coisa)){
+                $this->renderJsonResponse($coisa->toArray(), 400);
+            }elseif (isset($coisa)){
+                $this->renderJsonResponse(\TratarArray::utf8EncodeArray($coisa->toArray()), 200);
+            }
         }
     }
 

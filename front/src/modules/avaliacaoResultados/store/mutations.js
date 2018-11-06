@@ -247,7 +247,6 @@ export const mutations = {
                 .UF[params.cdUf]
                 .cidade[params.idmunicipio]
                 .itens[tipoAvaliacao]).length === 0) {
-
                 Vue.delete(state
                     .planilha[params.cdProduto]
                     .etapa[params.etapa]

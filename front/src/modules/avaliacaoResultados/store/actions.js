@@ -57,13 +57,13 @@ export const obterDadosTabelaTecnico = ({ commit }, params) => {
         .then((response) => {
             const data = response.data.data;
             commit(types.PROJETOS_AVALIACAO_TECNICA, data);
-            data.then( data.items.forEach(a => {
-                avaliacaoResultadosHelperAPI.listarDiligenciasAvaliacao(a.idPronac).then(
+            data.then(data.items.forEach((a) => {
+                avaliacaoResultadosHelperAPI.listarDiligencias(a.idPronac).then(
                     (response) => {
-                        const  data = response.data.data;
+                        const data = response.data.data;
                         console.info(data);
-                    }
-                )
+                    },
+                );
             }));
         });
 };
