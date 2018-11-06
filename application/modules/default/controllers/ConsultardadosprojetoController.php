@@ -168,21 +168,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
                 $idPronac = Seguranca::dencrypt($idPronac);
             }
 
-            $tbProjetos = new Projetos();
-            $where = [];
-            $where['IdPRONAC'] = $idPronac;
-            $projeto = $tbProjetos->findBy($where);
-
             if (empty($debug)) {
-                if (empty($projeto)) {
-                    throw new Exception("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.");
-                }
-
-                if ($projeto['Mecanismo'] == 1) {
-                    $this->redirect('/projeto/#/incentivo/' . $idPronacHash);
-                } else {
-                    $this->redirect('/projeto/convenio/visualizar/idPronac/' . $idPronacHash);
-                }
+                $this->redirect('/projeto/#/' . $idPronacHash);
             }
 
             $dbTableProjetos = new Projeto_Model_DbTable_Projetos();
@@ -190,10 +177,6 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             $this->view->projeto = $projeto;
             if (count($projeto) <= 0) {
                 throw new Exception("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.");
-            }
-
-            if($projeto->idMecanismo != 1) { #incentivo fiscal
-                $this->redirect('/projeto/convenio/visualizar/idPronac/' . $idPronac);
             }
 
             $dbTableInabilitado = new Inabilitado();
@@ -367,6 +350,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $this->view->CgcCpf = $tbdados[0]->CgcCpf;
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service > application/modules/projeto/service/certidoes-negativas/CertidoesNegativas.php
+     *
+     */
     public function certidoesNegativasAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -384,6 +371,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $this->view->dados = $resultado;
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service > application/modules/projeto/service/dados-complementares/DadosComplementares.php
+     *
+     */
     public function dadosComplementaresAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -406,7 +397,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
                 $rsProposta = $tblProposta->buscar(array('idPreProjeto=?'=>$rsProjeto->idProjeto))->current();
                 $this->view->proposta = $rsProposta;
                 $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
-                $this->view->itensCustosVinculados = $tbCustosVinculadosMapper->obterCustosVinculados($rsProjeto->idProjeto);
+                $this->view->itensCustosVinculados = $tbCustosVinculadosMapper->obterCustosVinculadosPlanilhaProposta($rsProjeto->idProjeto);
             }
         }
     }
@@ -506,6 +497,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/plano-distribuicao-in2013/PlanoDistribuicaoIn2013.php
+     *
+     */
     public function planoDeDistribuicaoAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -523,6 +519,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/local-realizacao-deslocamento/LocalRealizacaoDeslocamento.php
+     *
+     */
     public function localRealizacaoDeslocamentoAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -611,6 +612,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/documentos-anexados/DocumentosAnexados.php
+     *
+     */
     public function documentosAnexadosAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -873,6 +879,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $this->view->projeto = $rst[0];
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/tramitacao/TramitacaoDocumento.php
+     */
     public function tramitacaoAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -1021,6 +1031,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/providencia-tomada/ProvidenciaTomada.php
+     */
     public function providenciaTomadaAction()
     {
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
@@ -1548,6 +1562,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/historico-encaminhamento/HistoricoEncaminhamento.php
+     */
     public function historicoEncaminhamentoAction()
     {
         $idPronac = $this->_request->getParam("idPronac");
@@ -3105,6 +3123,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/diligencia/DiligenciaProjeto.php
+     */
     public function diligenciasAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
