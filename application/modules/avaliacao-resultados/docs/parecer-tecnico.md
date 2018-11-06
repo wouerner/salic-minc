@@ -129,6 +129,7 @@ Para visualizar a lista dos projetos aguardando a análise do técnico logado é
 Visualizar o histórico de encaminhamentos do projeto.
 
 #### 2. Analisar Projeto
+ O [analisar projeto](#3.-Visualizar-Projeto)  do Tecnico Prestaçao de contas e semelhante ao do Coordenador de Prestação de Contas ,porem tem as opções de  comprovar item, diligenciar, emitir parecer  
 
 ## Assinar
 
@@ -140,9 +141,14 @@ Visualizar o histórico de encaminhamentos do projeto.
 
 #### 2. Assinar
 
+O [assinar](#2.-assinar) do Tecnico Prestaçao de contas e semelhante ao do Coordenador de Prestação de Contas 
+
 #### 3. Devolver Projeto
 
-#### 4. [Visualizar Projeto](#3.-visualizar-projeto)
+O [devolver](#3.-Devolver-Projeto) do Tecnico Prestaçao de contas e semelhante ao do Coordenador de Prestação de Contas 
+
+
+#### 4. [Projeto](#3.-visualizar-projeto)  
 
 ## Historico
 
