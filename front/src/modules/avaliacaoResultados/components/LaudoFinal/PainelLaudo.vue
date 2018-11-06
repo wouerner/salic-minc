@@ -12,6 +12,7 @@
             >
                 <v-tabs-slider color="deep-orange accent-3"></v-tabs-slider>
                 <v-tab href="#tab-0"
+                       id="emAnalise"
                        v-if="getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL"
                 >
                     <template v-if="Object.keys(getProjetosLaudoFinal).length == 0">
@@ -83,7 +84,7 @@
 <script>
 
 import { mapActions, mapGetters } from 'vuex';
-import Const from '../const';
+import Const from '../../const';
 import Laudo from './Laudo';
 
 export default {

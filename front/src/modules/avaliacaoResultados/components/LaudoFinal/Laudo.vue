@@ -23,7 +23,7 @@
                 <td class="text-xs-center">
                     <v-flex>
                         <div>
-                            <v-btn :href="'/projeto/#/'+ props.item.IdPronac">{{ props.item.PRONAC }}</v-btn>
+                            <v-btn :href="'/projeto/#/'+ props.item.idPronac">{{ props.item.PRONAC }}</v-btn>
                         </div>
                     </v-flex>
                 </td>
@@ -128,8 +128,8 @@
 <script>
     import ModalTemplate from '@/components/modal';
     import { mapActions, mapGetters } from 'vuex';
-    import Const from '../const';
-    import Devolver from './Devolver';
+    import Const from '../../const';
+    import Devolver from '../components/Devolver';
 
     export default {
         name: 'Painel',
