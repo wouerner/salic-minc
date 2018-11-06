@@ -66,10 +66,10 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
-    import BtnDiligencias from './ParecerTecnico/HistoricoDiligencias';
+import { mapActions, mapGetters } from 'vuex';
+import BtnDiligencias from './ParecerTecnico/HistoricoDiligencias';
 
-    export default {
+export default {
     name: 'TabelaProjetos',
     components: { 'btn-diligencias': BtnDiligencias },
     props: ['dados', 'componentes', 'mostrarTecnico'],
