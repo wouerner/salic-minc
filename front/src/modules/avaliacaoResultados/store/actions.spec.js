@@ -371,6 +371,9 @@ describe('Testes Actions - Avaliação de Resultados', () => {
                             atual: '6',
                             proximo: '5',
                             idTipoDoAtoAdministrativo: '622',
+                            usuario: {
+                                grupo_ativo: '125'
+                            }
                         },
                 },
             };
