@@ -109,7 +109,7 @@
                 this.loading = false;
             },
             loadingButton() {
-                setTimeout(() => (this.loadingButton = -1), 2000);
+                setTimeout(() => (this.loadingButton == -1), 2000);
             },
         },
         methods: {

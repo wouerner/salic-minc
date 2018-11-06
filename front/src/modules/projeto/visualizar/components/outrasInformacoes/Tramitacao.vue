@@ -1,9 +1,6 @@
 <template>
     <div>
         <div v-if="dadosProjeto">
-            <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
-                                  :nomeProjeto="dadosProjeto.NomeProjeto">
-            </IdentificacaoProjeto>
             <UltimaTramitacao :idPronac="dadosProjeto.idPronac"></UltimaTramitacao>
             <TramitacaoProjeto
                     :idPronac="dadosProjeto.idPronac">

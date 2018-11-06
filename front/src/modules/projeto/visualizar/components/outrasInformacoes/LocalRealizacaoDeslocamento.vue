@@ -4,9 +4,6 @@
             <Carregando :text="'Carregando Local de Realiza&ccedil;&atilde;o e Deslocamento'"></Carregando>
         </div>
         <div v-else-if="Object.keys(dados).length > 0">
-            <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
-                                  :nomeProjeto="dadosProjeto.NomeProjeto">
-            </IdentificacaoProjeto>
             <v-card>
                 <v-card-title>
                      <h6 style="color:green;">Local de Realiza&ccedil;&atilde;o</h6>

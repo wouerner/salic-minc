@@ -4,9 +4,6 @@
             <Carregando :text="'Carregando Providência Tomada'"></Carregando>
         </div>
         <div v-else-if="dados.providenciaTomada">
-            <IdentificacaoProjeto :pronac="dadosProjeto.Pronac"
-                                  :nomeProjeto="dadosProjeto.NomeProjeto">
-            </IdentificacaoProjeto>
            <v-data-table
                     :headers="headers"
                     :items="dados.providenciaTomada"
