@@ -2,12 +2,12 @@
     <div>
         <v-card>
             <v-card-title>
-                <h6 style="color:green;">&Uacute;ltima Tramita&ccedil;&atilde;o</h6>
+                <h6>&Uacute;ltima Tramita&ccedil;&atilde;o</h6>
             </v-card-title>
             <v-data-table
                     :headers="headers"
                     :items="dados"
-                    class="elevation-1 container-fluid"
+                    class="elevation-1 container-fluid mb-2"
                     rows-per-page-text="Items por Página"
             >
                 <template slot="items" slot-scope="props">

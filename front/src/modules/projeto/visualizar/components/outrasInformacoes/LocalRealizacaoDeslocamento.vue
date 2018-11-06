@@ -6,7 +6,7 @@
         <div v-else-if="Object.keys(dados).length > 0">
             <v-card>
                 <v-card-title>
-                     <h6 style="color:green;">Local de Realiza&ccedil;&atilde;o</h6>
+                     <h6>Local de Realiza&ccedil;&atilde;o</h6>
                 </v-card-title>
                 <v-data-table
                         :headers="headersLocalRealizacao"
@@ -31,7 +31,7 @@
             </v-card>
             <v-card>
                 <v-card-title>
-                     <h6 style="color:green;">Deslocamento</h6>
+                     <h6>Deslocamento</h6>
                 </v-card-title>
                 <v-data-table
                         :headers="headersDeslocamento"
