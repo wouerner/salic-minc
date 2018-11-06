@@ -6,8 +6,13 @@ class ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto extends MinC_Db_Table_
 
     const SI_COM_PROPONENTE = 1;
     const SI_AGUARDANDO_ANALISE = 2;
-    const SI_EM_AVALIACAO_TECNICO = 3;
-    const SI_EM_AVALIACAO_COORDENADOR = 5;
+    const SI_PARA_AVALIACAO_TECNICO = 3;
+    const SI_EM_AVALIACAO_TECNICO = 4;
+    const SI_PARA_AVALIACAO_COORDENADOR = 5;
+
+    const OBJETO_PARCIALMENTE_APROVADO = 'P';
+    const OBJETO_APROVADO = 'A';
+    const OBJETO_REPROVADO = 'R';
 
     protected $_banco = "SAC";
     protected $_schema = "SAC";

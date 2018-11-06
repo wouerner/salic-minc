@@ -11,13 +11,12 @@
     </ul>
 </div>
 
-
 <div id="titulo">
-    <div>Parecer T&eacute;cnico <span class="voltar"><a
+    <div>Parecer T&eacute;cnico
+        <span class="voltar"><a
                 href="<?php echo $this->baseUrl(); ?>/comprovacao-objeto/avaliaracompanhamentoprojeto/index-tecnico"
                 title="Voltar">Voltar</a></span></div>
 </div>
-
 
 <div id="conteudo">
     <table class="tabela">
@@ -42,7 +41,11 @@
     <br clear="all"/>
 
     <form id="formParecer"
-          action="<?php echo $this->url(array('module' => 'comprovacao-objeto', 'controller' => 'avaliaracompanhamentoprojeto', 'action' => 'avaliar-relatorio'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>"
+          action="<?php echo $this->url(array(
+              'module' => 'comprovacao-objeto',
+              'controller' => 'avaliaracompanhamentoprojeto',
+              'action' => 'salvar-avaliacao'),
+              '', true); ?>?idPronac=<?php echo $this->idPronac; ?>"
           method="post">
         <table class="tabela">
             <tr align="center">
@@ -52,7 +55,6 @@
                 <td>
                     <textarea name="informacaoAdicional" id="informacaoAdicional" cols="" rows="7" style="width: 99%;"
                               class="informacaoAdicional" <?php echo $this->contadorTextarea('form.informacaoAdicional', 'form.exibirContadorTextarea1', 7500); ?>><?php echo $this->DadosParecer->dsInformacaoAdicional; ?></textarea>
-                    <!--  <span style="clear:both;"><?php echo $this->exibirContadorTextarea('exibirContadorTextarea1', 4, 7500, strlen($this->DadosParecer->dsInformacaoAdicional), '30px'); ?></span> -->
                     <div id="contadorinformacaoAdicional"></div>
                 </td>
             </tr>
@@ -63,7 +65,6 @@
                 <td>
                     <textarea name="orientacao" id="orientacao" cols="" rows="7" style="width: 99%;"
                               class="orientacao" <?php echo $this->contadorTextarea('form.orientacao', 'form.exibirContadorTextarea2', 950); ?>><?php echo $this->DadosParecer->dsOrientacao; ?></textarea>
-                    <!--    <span style="clear:both;"><?php echo $this->exibirContadorTextarea('exibirContadorTextarea2', 4, 950, strlen($this->DadosParecer->dsOrientacao), '30px'); ?></span> -->
                     <div id="contadororientacao"></div>
                 </td>
             </tr>
@@ -74,7 +75,6 @@
                 <td>
                     <textarea name="conclusao" id="conclusao" cols="" rows="7" style="width: 99%;"
                               class="textarea_simples obrigatorio" <?php echo $this->contadorTextarea('form.conclusao', 'form.exibirContadorTextarea3', 950); ?>><?php echo $this->DadosParecer->dsConclusao; ?></textarea>
-                    <!--    <span style="clear:both;"><?php echo $this->exibirContadorTextarea('exibirContadorTextarea3', 4, 950, strlen($this->DadosParecer->dsConclusao), '30px'); ?></span> -->
                     <div id="contadorconclusao"></div>
                 </td>
             </tr>
@@ -138,11 +138,23 @@
     </form>
 
     <p align="center">
-        <input type="button" class="btn_salvar" id="btn_salvar">
-        <input type="button" value="" class="btn_finalizar" id="btn_finalizar" onclick="return EnviarFormulario();">
-    </p>
+        <a id="btn-salvar"
+           href="javascript:void(0)"
+           style="margin-bottom:5px;"
+           class="btn waves-effect waves-light tooltipped small white-text btn-primary"
+           data-tooltip="Salvar parecer">
+            <i class="material-icons left">save</i> Salvar parecer
+        </a>
 
-    <br clear="all"/>
+        <a id="btn-finalizar"
+           href="javascript:void(0)"
+           style="margin-bottom:5px;"
+           class="btn waves-effect waves-light tooltipped small white-text btn-info"
+           onclick="return EnviarFormulario();"
+           data-tooltip="Finalizar parecer e assinar documento">
+            <i class="material-icons left">border_color</i> Finalizar e assinar
+        </a>
+    </p>
 </div>
 
 <script type="text/javascript">
@@ -167,8 +179,6 @@
     }
 
     $(document).ready(function () {
-
-        //inicializaao e configuração do editor tinyMCE
 
         tinymce.init({
             plugins: "paste,textcolor",
@@ -221,20 +231,16 @@
             }
         });
 
-
-        // associa botões a funcoes
-
-        $('#btn_salvar').click(function () {
+        $('#btn-salvar').click(function () {
             SalvarFormulario();
         });
 
-        $('#btn_finalizar').click(function () {
+        $('#btn-finalizar').click(function () {
             EnviarFormulario();
         });
 
     });
 
-    //Onde é feita a contagem do elemento do contador
     function CountCharacters(contador) {
         var body = tinymce.get(contador).getBody();
         var content = tinymce.trim(body.innerText || body.textContent);
@@ -288,15 +294,9 @@
         return valido;
     }
 
-
-    // Salvar Formulário
-
-
     function SalvarFormulario() {
         $('#formParecer').submit();
     }
-
-    //Enviar Fomulário
 
     function EnviarFormulario() {
         var valido = Validacao();
@@ -341,7 +341,7 @@
                     height: 160,
                     modal: true,
                     buttons: {
-                        'Não': function () {
+                        'N\u00E3o': function () {
                             $(this).dialog('close');
                         },
                         'Sim': function () {
@@ -355,6 +355,5 @@
             }
         }
     }
-
 
 </script>

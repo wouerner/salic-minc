@@ -27,7 +27,8 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
             $PermissoesGrupo[] = 132; // Chefe de Divisao
             $PermissoesGrupo[] = 151;
             $PermissoesGrupo[] = 148;
-
+            $PermissoesGrupo[] = Autenticacao_Model_Grupos::TECNICO_PRESTACAO_DE_CONTAS;
+            $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_PRESTACAO_DE_CONTAS;
             if (!in_array($GrupoAtivo->codGrupo, $PermissoesGrupo)) { // verifica se o grupo ativo esta no array de permissoes
                 parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal/index", "ALERT");
             }
@@ -62,11 +63,11 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
 
     public function indexAction()
     {
-        $auth = Zend_Auth::getInstance(); // pega a autenticacao
+        $auth = Zend_Auth::getInstance();
         $idusuario = isset($auth->getIdentity()->usu_codigo) ? $auth->getIdentity()->usu_codigo : $auth->getIdentity()->IdUsuario;
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
-        $codOrgao = $GrupoAtivo->codOrgao; //  orgao ativo na sessao
-        $codPerfil = $GrupoAtivo->codGrupo; //  orgao ativo na sessao
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $codOrgao = $GrupoAtivo->codOrgao;
+        $codPerfil = $GrupoAtivo->codGrupo;
         $this->view->codOrgao = $codOrgao;
         $this->view->idUsuarioLogado = $idusuario;
 
@@ -140,6 +141,7 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
             $filtro = 'Aguardando An&aacute;lise';
             $where['a.siCumprimentoObjeto = ?'] = 2;
         }
+
 
         $tbCumprimentoObjeto = new ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
         $total = $tbCumprimentoObjeto->listaRelatorios($where, $order, null, null, true);
@@ -501,7 +503,10 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
         $this->view->codOrgao = $codOrgao;
         $this->view->idUsuarioLogado = $idusuario;
         /******************************************************************/
-        if ($codPerfil != 139 && $codPerfil != 148 && $codPerfil != 151) {
+        if ($codPerfil != Autenticacao_Model_Grupos::TECNICO_AVALIACAO
+            && $codPerfil != Autenticacao_Model_Grupos::TECNICO_PRESTACAO_DE_CONTAS
+            && $codPerfil != Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO
+            && $codPerfil != Autenticacao_Model_Grupos::PRESIDENTE_VINCULADA_SUBSTITUTO) {
             parent::message("Voc&ecirc; n&atilde;o tem permissao para acessar essa funcionalidade!", "principal", "ALERT");
         }
 
@@ -619,7 +624,8 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
         $codOrgao = $GrupoAtivo->codOrgao; //  orgao ativo na sessao
         $codPerfil = $GrupoAtivo->codGrupo; //  orgao ativo na sessao
 
-        if ($codPerfil != Autenticacao_Model_Grupos::TECNICO_AVALIACAO) {
+        if ($codPerfil != Autenticacao_Model_Grupos::TECNICO_AVALIACAO
+            && $codPerfil != Autenticacao_Model_Grupos::TECNICO_PRESTACAO_DE_CONTAS) {
             parent::message("Voc&ecirc; n&atilde;o tem permissao para acessar essa funcionalidade!", "principal", "ALERT");
         }
 
@@ -871,56 +877,136 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
         $this->view->idPronac = $idPronac;
     }
 
-    public function avaliarRelatorioAction()
+    public function salvarAvaliacaoAction()
     {
+        try {
+
+            $auth = Zend_Auth::getInstance();
+            $idusuario = $auth->getIdentity()->usu_codigo;
+            $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+            $codOrgao = $GrupoAtivo->codOrgao;
+
+            $idPronac = $this->_request->getParam("idPronac");
+            if (strlen($idPronac) > 7) {
+                $idPronac = Seguranca::dencrypt($idPronac);
+            }
+
+            $where = array();
+            $where['idPronac = ?'] = $idPronac;
+            $where['idTecnicoAvaliador = ?'] = $idusuario;
+            $where['siCumprimentoObjeto in (?)'] = array(3, 4);
+
+            $tbCumprimentoObjeto = new ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
+            $dadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto($where);
+
+            if (empty($dadosRelatorio)) {
+                parent::message('Relat&aacute;rio n&atilde;o encontrado!', "comprovacao-objeto/avaliaracompanhamentoprojeto/index-tecnico", "ALERT");
+            }
+
+            if ($this->getRequest()->isPost()) {
+                $siComprovante = ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto::SI_EM_AVALIACAO_TECNICO;
+                $msg = 'Relat&oacute;rio salvo com sucesso!';
+                $callback = "comprovacao-objeto/avaliaracompanhamentoprojeto/parecer-tecnico?idPronac=" . $idPronac;
+                $post = Zend_Registry::get('post');
+
+                if (!empty($post->finalizar)) {
+
+//                    $siComprovante = ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto::SI_PARA_AVALIACAO_COORDENADOR;
+                    $msg = 'Relat&oacute;rio finalizado com sucesso, agora voc&ecirc; deve assinar o documento para continuar!';
+                    $callback = 'comprovacao-objeto/avaliaracompanhamentoprojeto/index-tecnico';
+
+                    if (empty($post->informacaoAdicional) || strlen($post->informacaoAdicional) < 50) {
+                        throw new Exception("Parecer de avalia&ccedil;&atilde;o t&eacute;cnica &eacute; obrigat&oacute;rio");
+                    }
+
+                    if (empty($post->conclusao) || strlen($post->conclusao) < 50) {
+                        throw new Exception("Conclus&atilde;o &eacute; obrigat&oacute;rio");
+                    }
+
+                    if (empty($post->resultadoAvaliacao)) {
+                        throw new Exception("Avalia&ccedil;&atilde;o é obrigat&oacute;rio");
+                    }
+                }
+
+                $dados = array(
+                    'dsInformacaoAdicional' => $post->informacaoAdicional,
+                    'dsOrientacao' => $post->orientacao,
+                    'dsConclusao' => $post->conclusao,
+                    'stResultadoAvaliacao' => $post->resultadoAvaliacao,
+                    'idChefiaImediata' => $post->chefiaImediata,
+                    'siCumprimentoObjeto' => $siComprovante
+                );
+
+                $servicoDocumentoAssinatura = new \Application\Modules\ComprovacaoObjeto\Service\Assinatura\DocumentoAssinatura(
+                    $idPronac,
+                    Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_AVALIACAO_OBJETO,
+                    $dadosRelatorio->idCumprimentoObjeto
+                );
+
+                $whereFinal = 'idCumprimentoObjeto = ' . $dadosRelatorio->idCumprimentoObjeto;
+                $resultado = $tbCumprimentoObjeto->alterar($dados, $whereFinal);
+
+                if ($post->finalizar) {
+                    $idDocumentoAssinatura = $this->iniciarFluxoAssinatura($idPronac);
+                    if ($idDocumentoAssinatura) {
+                        parent::message(
+                            $msg, "/assinatura/index/visualizar-projeto?idDocumentoAssinatura={$idDocumentoAssinatura}&origin={$callback}",
+                            "CONFIRM"
+                        );
+                    }
+                }
+
+                if ($resultado) {
+                    parent::message($msg, $callback, "CONFIRM");
+                }
+            }
+
+        } catch (Exception $e) {
+            parent::message($e->getMessage(), "/comprovacao-objeto/avaliaracompanhamentoprojeto/parecer-tecnico?idPronac=" . $idPronac, "ERROR");
+        }
+    }
+
+    final private function iniciarFluxoAssinatura($idPronac)
+    {
+        if (empty($idPronac)) {
+            throw new Exception(
+                "Identificador do projeto &eacute; necess&aacute;rio para acessar essa funcionalidade."
+            );
+        }
+
         $auth = Zend_Auth::getInstance();
         $idusuario = $auth->getIdentity()->usu_codigo;
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
-        $codOrgao = $GrupoAtivo->codOrgao;
-
-        $idPronac = $this->_request->getParam("idPronac");
-        if (strlen($idPronac) > 7) {
-            $idPronac = Seguranca::dencrypt($idPronac);
-        }
 
         $where = array();
         $where['idPronac = ?'] = $idPronac;
         $where['idTecnicoAvaliador = ?'] = $idusuario;
-        $where['siCumprimentoObjeto in (?)'] = array(3, 4);
-
         $tbCumprimentoObjeto = new ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
-        $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto($where);
+        $dadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto($where);
 
-        if (empty($DadosRelatorio)) {
-            parent::message('Relat&aacute;rio n&atilde;o encontrado!', "comprovacao-objeto/avaliaracompanhamentoprojeto/index-tecnico", "ALERT");
+        if (empty($dadosRelatorio->idCumprimentoObjeto)) {
+            throw new Exception(
+                "&Eacute; necess&amp;aacute;rio ao menos um parecer para iniciar o fluxo de assinatura."
+            );
         }
 
-        $siComprovante = 4;
-        $msg = 'Relat&aacute;rio salvo com sucesso!';
-        $controller = "comprovacao-objeto/avaliaracompanhamentoprojeto/parecer-tecnico?idPronac=" . $idPronac;
-        if (isset($_POST['finalizar']) && !empty($_POST['finalizar'])) {
-            $siComprovante = 5;
-            $msg = 'Relat&aacute;rio finalizado com sucesso!';
-            $controller = 'comprovacao-objeto/avaliaracompanhamentoprojeto/index-tecnico';
-        }
-
-        $dados = array(
-            'dsInformacaoAdicional' => $_POST['informacaoAdicional'],
-            'dsOrientacao' => $_POST['orientacao'],
-            'dsConclusao' => $_POST['conclusao'],
-            'stResultadoAvaliacao' => $_POST['resultadoAvaliacao'],
-            'idChefiaImediata' => $_POST['chefiaImediata'],
-            'siCumprimentoObjeto' => $siComprovante
+        $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $documentoAssinatura = $objDbTableDocumentoAssinatura->obterProjetoDisponivelParaAssinatura(
+            $idPronac,
+            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_AVALIACAO_OBJETO
         );
 
-        $whereFinal = 'idCumprimentoObjeto = ' . $DadosRelatorio->idCumprimentoObjeto;
-        $resultado = $tbCumprimentoObjeto->alterar($dados, $whereFinal);
-
-        if ($resultado) {
-            parent::message($msg, $controller, "CONFIRM");
+        if (count($documentoAssinatura) < 1) {
+            $servicoDocumentoAssinatura = new \Application\Modules\ComprovacaoObjeto\Service\Assinatura\DocumentoAssinatura(
+                $idPronac,
+                Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_AVALIACAO_OBJETO,
+                $dadosRelatorio->idCumprimentoObjeto
+            );
+            $idDocumentoAssinatura = $servicoDocumentoAssinatura->iniciarFluxo();
         } else {
-            parent::message('N&atilde;o foi poss&iacute;vel salvar o relat&oacute;rio!', "analisarexecucaofisicatecnico", "ERROR");
+            $idDocumentoAssinatura = $documentoAssinatura['idDocumentoAssinatura'];
         }
+
+        return $idDocumentoAssinatura;
     }
 
     public function finalizarRelatorioAction()
@@ -972,5 +1058,14 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
             ->buscarRecursosDaFonte($this->getRequest()->getParam('idPronac'));
         //Passando o pronac para ser usada no menu lateral esquerdo
         $this->view->idPronac = $this->getRequest()->getParam('idPronac');
+    }
+
+    public function gerenciarAssinaturasAction()
+    {
+        $origin = $this->_request->getParam('origin');
+        if ($origin != '') {
+            $this->redirect($origin);
+        }
+        $this->redirect("/comprovacao-objeto/avaliaracompanhamentoprojeto/index-tecnico");
     }
 }

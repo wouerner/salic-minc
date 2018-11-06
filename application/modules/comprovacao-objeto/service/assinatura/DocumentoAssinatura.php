@@ -26,6 +26,13 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
             throw new \Exception("Identificador do Tipo do Ato Administrativo n&atilde;o informado");
         }
 
+        $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
+        $this->dadosProjeto = $objTbProjetos->findBy(array('IdPRONAC' => $idPronac));
+
+        if (!$this->dadosProjeto) {
+            throw new \Exception("Projeto n&atilde;o encontrado.");
+        }
+
         $this->idPronac = $idPronac;
         $this->idTipoDoAtoAdministrativo = $idTipoDoAtoAdministrativo;
         $this->idAtoDeGestao = $idAtoDeGestao;
@@ -33,42 +40,19 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
 
     public function iniciarFluxo() :int
     {
-        if (!$this->idPronac) {
-            throw new \Exception("Identificador do Projeto não informado.");
-        }
-
-        $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
-        $this->dadosProjeto = $objTbProjetos->findBy(array('IdPRONAC' => $this->idPronac));
-
-        if (!$this->dadosProjeto) {
-            throw new \Exception("Projeto n&atilde;o encontrado.");
-        }
-
-        /** @todo pegar as situacoes com o Rômulo */
-        if ($this->dadosProjeto['Situacao'] != 'B02' && $this->dadosProjeto['Situacao'] != 'B03') {
-            throw new \Exception("Situa&ccedil;&atilde;o do projeto inv&aacute;lida!");
-        }
-
         $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
         $isProjetoDisponivelParaAssinatura = $objDbTableDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
             $this->idPronac,
             $this->idTipoDoAtoAdministrativo
         );
-
         if (!$isProjetoDisponivelParaAssinatura) {
             $auth = \Zend_Auth::getInstance();
-
-            $enquadramento = new \Admissibilidade_Model_Enquadramento();
-            $dadosEnquadramento = $enquadramento->obterEnquadramentoPorProjeto(
-                $this->idPronac,
-                $this->dadosProjeto['AnoProjeto'],
-                $this->dadosProjeto['Sequencial']
-            );
+            $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
 
             $objModelDocumentoAssinatura = new \Assinatura_Model_TbDocumentoAssinatura();
             $objModelDocumentoAssinatura->setIdPRONAC($this->idPronac);
             $objModelDocumentoAssinatura->setIdTipoDoAtoAdministrativo($this->idTipoDoAtoAdministrativo);
-            $objModelDocumentoAssinatura->setIdAtoDeGestao($dadosEnquadramento['IdEnquadramento']);
+            $objModelDocumentoAssinatura->setIdAtoDeGestao($this->idAtoDeGestao);
             $objModelDocumentoAssinatura->setConteudo($this->criarDocumento());
             $objModelDocumentoAssinatura->setIdCriadorDocumento($auth->getIdentity()->usu_codigo);
             $objModelDocumentoAssinatura->setCdSituacao(
@@ -83,21 +67,13 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
             $objDocumentoAssinatura->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
         }
 
-        $objProjeto = new \Projetos();
-        $objProjeto->alterarSituacao(
-            $this->idPronac,
-            null,
-            'B04',
-            'Projeto em an&aacute;lise documental.'
-        );
+        $dados = [
+            'siCumprimentoObjeto' => \ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto::SI_PARA_AVALIACAO_COORDENADOR
+        ];
 
-        $orgaoDestino = \Orgaos::ORGAO_SAV_DAP;
-        $objOrgaos = new \Orgaos();
-        $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($this->dadosProjeto['Orgao']);
-        if ($dadosOrgaoSuperior['Codigo'] == \Orgaos::ORGAO_SUPERIOR_SEFIC) {
-            $orgaoDestino = \Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI;
-        }
-        $objTbProjetos->alterarOrgao($orgaoDestino, $this->idPronac);
+        $whereObjeto = 'idCumprimentoObjeto = ' . $this->idAtoDeGestao;
+        $tbCumprimentoObjeto = new \ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
+        $tbCumprimentoObjeto->alterar($dados, $whereObjeto);
 
         return (int)$objDbTableDocumentoAssinatura->getIdDocumentoAssinatura(
             $this->idPronac,
@@ -117,17 +93,18 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
             . 'template'
         );
 
-        $view->titulo = 'Parecer T&eacute;cnico de Aprova&ccedil;&atilde;o Preliminar';
-
-        $objPlanoDistribuicaoProduto = new \Projeto_Model_vwPlanoDeDistribuicaoProduto();
-        $view->dadosProducaoProjeto = $objPlanoDistribuicaoProduto->obterProducaoProjeto(array(
-            'IdPRONAC = ?' => $this->idPronac
-        ));
-
+        $view->titulo = 'Parecer de Avalia&ccedil;&atilde;o do Objeto';
         $view->IdPRONAC = $this->idPronac;
 
         $objProjeto = new \Projeto_Model_DbTable_Projetos();
         $view->projeto = $objProjeto->findBy(array('IdPRONAC' => $this->idPronac));
+
+        $tbCumprimentoObjeto = new \ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
+        $dadosParecer = $tbCumprimentoObjeto->buscarCumprimentoObjeto([
+            'idPronac = ?' => $this->idPronac,
+            'idCumprimentoObjeto = ?' => $this->idAtoDeGestao
+        ]);
+        $view->dadosParecer = $dadosParecer;
 
         $objAgentes = new \Agente_Model_DbTable_Agentes();
         $dadosAgente = $objAgentes->buscarFornecedor(array('a.CNPJCPF = ?' => $view->projeto['CgcCpf']));
@@ -145,16 +122,6 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
                 'Codigo' => $view->projeto['Segmento']
             )
         );
-        $view->valoresProjeto = $objProjeto->obterValoresProjeto($this->idPronac);
-
-        $objEnquadramento = new \Admissibilidade_Model_Enquadramento();
-        $arrayPesquisa = array(
-            'AnoProjeto' => $this->dadosProjeto['AnoProjeto'],
-            'Sequencial' => $this->dadosProjeto['Sequencial'],
-            'IdPRONAC' => $this->idPronac
-        );
-
-        $view->dadosEnquadramento = $objEnquadramento->findBy($arrayPesquisa);
 
         $objOrgaos = new \Orgaos();
         $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($this->dadosProjeto['Orgao']);

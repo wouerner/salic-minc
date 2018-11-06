@@ -640,13 +640,21 @@ class Navegacao_MenuPrincipalController extends Zend_Rest_Controller
         $arrMenu['acompanhamento']['menu'][] = [
             'title' => 'Ir para Analisar Projeto Parecer',
             'label' => 'Analisar Comprova&ccedil;&atilde;o do Objeto',
-            'grupo' => [138],
+            'grupo' => [
+                Autenticacao_Model_Grupos::COORDENADOR_AVALIACAO,
+                Autenticacao_Model_Grupos::COORDENADOR_PRESTACAO_DE_CONTAS
+            ],
             'url' => ['module' => 'comprovacao-objeto', 'controller' => 'avaliaracompanhamentoprojeto', 'action' => 'index'],
         ];
         $arrMenu['acompanhamento']['menu'][] = [
             'title' => 'Ir para Analisar Projeto Parecer',
             'label' => 'Analisar Comprova&ccedil;&atilde;o do Objeto',
-            'grupo' => [139, 148, 151],
+            'grupo' => [
+                Autenticacao_Model_Grupos::TECNICO_PRESTACAO_DE_CONTAS,
+                Autenticacao_Model_Grupos::TECNICO_AVALIACAO,
+                Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO,
+                Autenticacao_Model_Grupos::PRESIDENTE_VINCULADA_SUBSTITUTO
+            ],
             'url' => ['module' => 'comprovacao-objeto', 'controller' => 'avaliaracompanhamentoprojeto', 'action' => 'index-tecnico'],
         ];
         $arrMenu['acompanhamento']['menu'][] = [
