@@ -7,7 +7,7 @@
                         <v-btn icon dark :to="{ name: 'Laudo' }">
                             <v-icon>close</v-icon>
                         </v-btn>
-                        <v-toolbar-title>Emissão de Laudo Final de Avaliação de Resultados</v-toolbar-title>
+                        <v-toolbar-title>Avaliação de Resultados - Emitir Laudo Final</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
                             <v-btn dark flat
@@ -26,13 +26,13 @@
                             <v-flex xs12 sm12 md12>
                                 <p><b>Projeto:</b> {{projeto.AnoProjeto}}{{projeto.Sequencial}} - {{projeto.NomeProjeto}}</p>
                             </v-flex>
-                            <v-flex xs12 sm12 md12>
-                                <p><b>Proponente:</b> {{proponente.CgcCpf}} - {{proponente.Nome}}</p>
+                            <v-flex xs12 sm12 md12 v-if="proponente.CgcCpf || proponente.Nome">
+                                <p><b>Proponente:</b> {{proponente.CgcCpf | cnpjFilter}} - {{proponente.Nome}}</p>
                             </v-flex>
                         </v-layout>
                         <v-divider></v-divider>
                     </v-container>
-                    <v-container grid-list>
+                    <v-container grid-list v-if="parecerLaudoFinal.items">
                         <v-layout wrap align-center>
                             <v-flex>
                                 <label for="manifestacao">Manifestação *</label>
@@ -48,11 +48,12 @@
                             </v-flex>
                         </v-layout>
                         <v-flex>
+                            <label for="parecer">Parecer *</label>
                             <v-textarea :value="parecerLaudoFinal.items.dsLaudoFinal"
                                         @input="updateParecer"
                                         :rules="parecerRules"
                                         color="deep-purple"
-                                        label="Parecer *"
+                                        id="parecer"
                                         height="200px"
                                         required="required">
                             </v-textarea>
@@ -66,6 +67,7 @@
 
 <script>
     import { mapActions, mapGetters } from 'vuex';
+    import cnpjFilter from '@/filters/cnpj';
 
     export default {
         data() {
@@ -88,14 +90,9 @@
             ...mapActions({
                 modalOpen: 'modal/modalOpen',
                 modalClose: 'modal/modalClose',
-                requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
                 salvar: 'avaliacaoResultados/salvarLaudoFinal',
                 finalizar: 'avaliacaoResultados/finalizarLaudoFinal',
-                getLaudoFinal: 'avaliacaoResultados/getLaudoFinal',
             }),
-            getConsolidacao(id) {
-                this.requestEmissaoParecer(id);
-            },
             salvarLaudoFinal() {
                 const data = {
                     idPronac: this.idPronac,
@@ -124,7 +121,7 @@
                     siManifestacao: this.parecerLaudoFinal.items.siManifestacao,
                     dsLaudoFinal: this.parecerLaudoFinal.items.dsLaudoFinal,
                     atual: 10,
-                    proximo: 11,
+                    proximo: 14,
                 };
 
                 if (this.parecerLaudoFinal.items.idLaudoFinal) {
@@ -156,9 +153,8 @@
                 parecerLaudoFinal: 'avaliacaoResultados/getParecerLaudoFinal',
             }),
         },
-        created() {
-            this.getConsolidacao(this.idPronac);
-            this.getLaudoFinal(this.idPronac);
+        filters: {
+            cnpjFilter,
         },
     };
 </script>

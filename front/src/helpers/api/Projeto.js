@@ -36,9 +36,9 @@ export const buscaPlanilhaHomologada = (idPronac) => {
     return api.getRequest(path, queryParams);
 };
 
-export const buscaPlanilhaOriginal = (idPreProjeto) => {
-    const path = '/proposta/visualizar/obter-planilha-proposta-original-ajax/';
-    const queryParams = `?idPreProjeto=${idPreProjeto}`;
+export const buscaPlanilhaOriginal = (idPronac) => {
+    const path = '/projeto/orcamento/obter-planilha-proposta-original-ajax/';
+    const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };
 
@@ -48,15 +48,15 @@ export const buscaPlanilhaReadequada = (idPronac) => {
     return api.getRequest(path, queryParams);
 };
 
-export const buscaPlanilhaAutorizada = (idPreProjeto) => {
-    const path = '/proposta/visualizar/obter-planilha-proposta-original-ajax/';
-    const queryParams = `?idPreProjeto=${idPreProjeto}`;
+export const buscaPlanilhaAutorizada = (idPronac) => {
+    const path = '/projeto/orcamento/obter-planilha-proposta-original-ajax/';
+    const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };
 
-export const buscaPlanilhaAdequada = (idPreProjeto) => {
-    const path = '/proposta/visualizar/obter-planilha-proposta-adequada-ajax/';
-    const queryParams = `?idPreProjeto=${idPreProjeto}`;
+export const buscaPlanilhaAdequada = (idPronac) => {
+    const path = '/projeto/orcamento/obter-planilha-proposta-adequada-ajax/';
+    const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };
 
@@ -168,12 +168,12 @@ export const buscarPlanoDistribuicaoIn2017 = (idPreProjeto) => {
     return api.getRequest(path, queryParams);
 };
 
-export const buscarDiligenciaProposta = (dados) => {
+export const buscarDiligenciaProposta = (idPreprojeto, idAvaliacaoProposta) => {
     const modulo = '/projeto';
     const controller = '/diligencia-proposta-rest';
     const metodo = '/get';
     const path = `${modulo}${controller}${metodo}`;
-    const queryParams = `?idPreProjeto=${dados.idPreprojeto}&idAvaliacaoProposta=${dados.idAvaliacaoProposta}`;
+    const queryParams = `?idPreProjeto=${idPreprojeto}&idAvaliacaoProposta=${idAvaliacaoProposta}`;
     return api.getRequest(path, queryParams);
 };
 

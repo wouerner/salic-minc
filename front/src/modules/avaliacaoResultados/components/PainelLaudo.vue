@@ -1,14 +1,9 @@
 <template>
     <v-container fluid>
+        <v-subheader>
+            <h2>{{route.meta.title}}</h2>
+        </v-subheader>
         <v-card>
-            <v-toolbar
-                color="green darken-1"
-                dark
-                tabs
-                style="height: 40px;"
-            >
-                <v-toolbar-title>Avaliação de Resultados - Laudo final</v-toolbar-title>
-            </v-toolbar>
             <v-tabs
                 centered
                 color="green darken-1"
@@ -16,7 +11,9 @@
                 icons-and-text
             >
                 <v-tabs-slider color="deep-orange accent-3"></v-tabs-slider>
-                <v-tab href="#tab-0">
+                <v-tab href="#tab-0"
+                       v-if="getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL"
+                >
                     <template v-if="Object.keys(getProjetosLaudoFinal).length == 0">
                         <v-progress-circular
                             indeterminate
@@ -29,7 +26,9 @@
                         <v-icon>how_to_reg</v-icon>
                     </template>
                 </v-tab>
-                <v-tab href="#tab-1">
+                <v-tab href="#tab-1"
+                       v-if="getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL"
+                >
                      Assinar
                     <v-icon>done</v-icon>
                 </v-tab>
@@ -37,41 +36,44 @@
                      Em assinatura
                     <v-icon>done_all</v-icon>
                 </v-tab>
+                <v-tab href="#tab-3"
+                       v-if="getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL"
+                >
+                     Finalizados
+                    <v-icon>collections_bookmark</v-icon>
+                </v-tab>
 
                 <v-tab-item
-                    :id="'tab-0'"
+                    :value="'tab-0'"
                     :key="0"
                 >
-                    <v-card flat
-                    >
-                        <Laudo :dados="getProjetosLaudoFinal"></Laudo>
-                    </v-card>
+                    <Laudo :dados="getProjetosLaudoFinal"
+                           :estado="Const.ESTADO_ANALISE_LAUDO"
+                    ></Laudo>
                 </v-tab-item>
                 <v-tab-item
-                    :id="'tab-1'"
+                    :value="'tab-1'"
                     :key="1"
                 >
-                    <v-card flat>
-                        <v-card-text>
-                            <!-- <TabelaProjetos
-                                :dados="getProjetosFinalizados"
-                                :componentes="listaAcoesAssinar"
-                            ></TabelaProjetos> -->
-                        </v-card-text>
-                    </v-card>
+                    <Laudo :dados="getProjetosLaudoAssinar"
+                           :estado="Const.ESTADO_LAUDO_FINALIZADO"
+                    ></Laudo>
                 </v-tab-item>
                 <v-tab-item
-                    :id="'tab-2'"
+                    :value="'tab-2'"
                     :key="2"
                 >
-                    <v-card flat>
-                        <v-card-text>
-                            <!-- <TabelaProjetos
-                                :dados="getLaudosEmAssinatura"
-                                :componentes="listaAcoesTecnico"
-                            ></TabelaProjetos> -->
-                        </v-card-text>
-                    </v-card>
+                    <Laudo :dados="getProjetosLaudoEmAssinatura"
+                           :estado="Const.ESTADO_AGUARDANDO_ASSINATURA_LAUDO"
+                    ></Laudo>
+                </v-tab-item>
+                <v-tab-item
+                    :value="'tab-3'"
+                    :key="3"
+                >
+                    <Laudo :dados="getProjetosLaudoFinalizados"
+                           :estado="Const.ESTADO_AVALIACAO_RESULTADOS_FINALIZADA"
+                    ></Laudo>
                 </v-tab-item>
             </v-tabs>
         </v-card>
@@ -81,18 +83,21 @@
 <script>
 
 import { mapActions, mapGetters } from 'vuex';
+import Const from '../const';
 import Laudo from './Laudo';
 
 export default {
     name: 'PainelLaudo',
-    created() {
-        this.obterProjetosLaudoFinal();
-        this.projetosAssinatura({ estado: 'assinar' });
-        this.projetosAssinatura({ estado: 'em_assinatura' });
-        this.projetosAssinatura({ estado: 'historico' });
-    },
     data() {
-        return { };
+        return {
+            Const,
+        };
+    },
+    created() {
+        this.obterProjetosLaudoFinal({ estadoId: 10 });
+        this.obterProjetosLaudoAssinar({ estadoId: 14 });
+        this.obterProjetosLaudoEmAssinatura({ estadoId: 11 });
+        this.obterProjetosLaudoFinalizados({ estadoId: 12 });
     },
     components: {
         Laudo,
@@ -100,16 +105,19 @@ export default {
     methods: {
         ...mapActions({
             obterProjetosLaudoFinal: 'avaliacaoResultados/obterProjetosLaudoFinal',
-            projetosAssinatura: 'avaliacaoResultados/projetosAssinatura',
-            usuarioLogado: 'autenticacao/usuarioLogado',
+            obterProjetosLaudoAssinar: 'avaliacaoResultados/obterProjetosLaudoAssinar',
+            obterProjetosLaudoEmAssinatura: 'avaliacaoResultados/obterProjetosLaudoEmAssinatura',
+            obterProjetosLaudoFinalizados: 'avaliacaoResultados/obterProjetosLaudoFinalizados',
         }),
     },
     computed: {
         ...mapGetters({
             getProjetosLaudoFinal: 'avaliacaoResultados/getProjetosLaudoFinal',
-            getLaudosAssinar: 'avaliacaoResultados/getLaudosAssinar',
-            getLaudosEmAssinatura: 'avaliacaoResultados/getLaudosEmAssinatura',
+            getProjetosLaudoAssinar: 'avaliacaoResultados/getProjetosLaudoAssinar',
+            getProjetosLaudoEmAssinatura: 'avaliacaoResultados/getProjetosLaudoEmAssinatura',
+            getProjetosLaudoFinalizados: 'avaliacaoResultados/getProjetosLaudoFinalizados',
             getUsuario: 'autenticacao/getUsuario',
+            route: 'route',
         }),
     },
 };

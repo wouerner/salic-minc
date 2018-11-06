@@ -1,45 +1,67 @@
 <template>
     <div>
-        <table class="tabela" v-if="Object.keys(diligencias).length > 0">
-            <thead>
-            <tr class="destacar">
-                <th>VISUALIZAR</th>
-                <th>DATA DA AVALIA&Ccedil;&Atilde;O</th>
-                <th>TIPO DE DILIG&Ecirc;NCIA</th>
-            </tr>
-            </thead>
-            <tbody v-for="(diligencia, index) in diligencias" :key="index">
-            <tr>
-                <td class="center">
-                    <button
-                            class="waves-effect waves-darken btn white black-text"
-                            @click="setAbaAtiva(diligencia, index)"
-                    >
-                        <i class="material-icons">visibility</i>
-                    </button>
+        <v-data-table
+                :headers="headers"
+                :items="diligencias"
+                class="elevation-1"
+                rows-per-page-text="Items por Página"
+        >
+            <template slot="items" slot-scope="props">
+                <td class="text-xs-center">
+                    <v-btn flat icon>
+                        <v-tooltip bottom>
+                            <v-icon
+                                    slot="activator"
+                                    @click="editItem(props.item)"
+                                    class="material-icons">visibility
+                            </v-icon>
+                            <span>Visualizar Projeto</span>
+                        </v-tooltip>
+                    </v-btn>
                 </td>
-                <td>{{ diligencia.dtAvaliacao }}</td>
-                <td>{{ diligencia.tipoDiligencia }}</td>
-            </tr>
-            <tr v-if="abaAtiva === index && ativo && Object.keys(dadosDiligencia).length > 2">
-                <td colspan="3">
-                    <table v-if="dadosDiligencia.dsAvaliacao" class="tabela">
-                        <tbody>
-                        <tr>
-                            <th>SOLICITA&Ccedil;&Atilde;O</th>
-                        </tr>
-                        <tr>
-                            <td style="padding-left: 20px" v-html="dadosDiligencia.dsAvaliacao"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <div v-else class="center">
-            <em>Dados n&atilde;o informado.</em>
-        </div>
+                <td class="text-xs-center">{{ props.item.dtAvaliacao }}</td>
+                <td class="text-xs-center">{{ props.item.tipoDiligencia }}</td>
+            </template>
+            <template slot="no-data">
+                <v-alert :value="true" color="info" icon="warning">
+                    Nenhum dado encontrado
+                </v-alert>
+            </template>
+            <template slot="pageText" slot-scope="props">
+                Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+            </template>
+        </v-data-table>
+
+        <v-dialog v-model="dialog" width="1000px">
+
+            <v-card>
+                <v-card-text>
+                    <tr>
+                        <td colspan="3">
+                            <table v-if="dadosDiligencia.dsAvaliacao" class="tabela">
+                                <tbody>
+                                <tr>
+                                    <th>SOLICITA&Ccedil;&Atilde;O</th>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 20px" v-html="dadosDiligencia.dsAvaliacao"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                            color="red"
+                            flat
+                            @click="dialog = false">
+                        Fechar
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -51,8 +73,25 @@
         props: ['idPronac', 'diligencias'],
         data() {
             return {
-                abaAtiva: -1,
-                ativo: false,
+                dialog: false,
+                headers: [
+                    {
+                        text: 'VISUALIZAR',
+                        align: 'center',
+                        sortable: false,
+                        value: '',
+                    },
+                    {
+                        text: 'DATA DA AVALIAÇÃO',
+                        align: 'center',
+                        value: 'dtAvaliacao',
+                    },
+                    {
+                        text: 'TIPO DE DILIGÊNCIA',
+                        align: 'center',
+                        value: 'tipoDiligencia',
+                    },
+                ],
             };
         },
         computed: {
@@ -62,18 +101,12 @@
             }),
         },
         methods: {
-            setAbaAtiva(value, index) {
-                if (this.abaAtiva === index) {
-                    this.ativo = !this.ativo;
-                } else {
-                    this.abaAtiva = index;
-                    this.ativo = true;
+            editItem(item) {
+                const idPronac = this.dadosProjeto.idPronac;
+                const valor = item.idAvaliarAdequacaoProjeto;
 
-                    const valor = value.idAvaliarAdequacaoProjeto;
-                    const idPronac = this.dadosProjeto.idPronac;
-
-                    this.buscarDiligenciaAdequacao({ idPronac, valor });
-                }
+                this.buscarDiligenciaAdequacao({ idPronac, valor });
+                this.dialog = true;
             },
             ...mapActions({
                 buscarDiligenciaAdequacao: 'projeto/buscarDiligenciaAdequacao',

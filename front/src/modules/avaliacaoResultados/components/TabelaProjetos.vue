@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-data-table
-            :headers="cabecalho"
+            :headers="cab()"
             :items="dados.items"
             :pagination.sync="pagination"
             hide-actions
@@ -11,13 +11,14 @@
                 <td class="text-xs-right">
                     <v-flex xs12 sm4 text-xs-center>
                         <div>
-                            <v-btn :href="'/projeto/#/incentivo/'+ props.item.idPronac">{{ props.item.PRONAC }}</v-btn>
+                            <v-btn flat :href="'/projeto/#/'+ props.item.idPronac">{{ props.item.PRONAC }}</v-btn>
                         </div>
                     </v-flex>
-                </td>
+                </td>cd
                 <td class="text-xs-left">{{ props.item.NomeProjeto }}</td>
                 <td class="text-xs-center">{{ props.item.Situacao }}</td>
                 <td class="text-xs-center">{{ props.item.UfProjeto }}</td>
+                <td class="text-xs-center" v-if="mostrarTecnico">{{ props.item.usu_nome }}</td>
                 <!-- <td class="text-xs-right">
                     <v-btn flat icon color="green" :to="{ name: 'AnalisePlanilha', params:{ id:props.item.idPronac }}">
                         <v-icon class="material-icons">assignment_indcompare_arrows</v-icon>
@@ -29,12 +30,16 @@
                     </v-btn>
                 </td> -->
                 <td class="text-xs-center">
-                    <template v-for="c in componentes">
+                    <template v-for="(c, index) in componentes.acoes" d-inline-block>
                         <component
+                            v-bind:key="index"
                             :is="c"
                             :id-pronac="props.item.IdPRONAC"
                             :pronac="props.item.PRONAC"
                             :nome-projeto="props.item.NomeProjeto"
+                            :atual="componentes.atual"
+                            :proximo="componentes.proximo"
+                            :idTipoDoAtoAdministrativo="componentes.idTipoDoAtoAdministrativo"
                         ></component>
                     </template>
                 </td>
@@ -51,7 +56,7 @@
                     v-model="pagination.page"
                     :length="pages"
                     :total-visible="4"
-                    color="green lighten-2"
+                    color="primary "
                 ></v-pagination>
             </div>
         </div>
@@ -63,7 +68,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
     name: 'TabelaProjetos',
-    props: ['dados', 'componentes'],
+    props: ['dados', 'componentes', 'mostrarTecnico'],
     data() {
         return {
             pagination: {
@@ -77,18 +82,29 @@ export default {
                     sortable: false,
                     value: 'numero',
                 },
-                { text: 'PRONAC', value: 'Pronac' },
+                {
+                    text: 'PRONAC',
+                    value: 'Pronac',
+                    align: 'center',
+                },
                 { text: 'Nome Do Projeto',
                     align: 'center',
                     value: 'NomeProjeto' },
                 {
                     text: 'Situacao',
                     align: 'center',
-                    value: 'Situacao' },
+                    value: 'Situacao',
+                },
                 {
                     text: 'Estado',
                     align: 'center',
-                    value: 'UfProjeto' },
+                    value: 'UfProjeto',
+                },
+                {
+                    text: 'Tecnico',
+                    align: 'center',
+                    value: '',
+                },
                 {
                     text: 'Ações',
                     sortable: false,
@@ -101,6 +117,48 @@ export default {
         ...mapActions({
             obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
         }),
+        cab() {
+            let dados = [];
+
+            dados = [
+                {
+                    text: '#',
+                    align: 'left',
+                    sortable: false,
+                    value: 'numero',
+                },
+                { text: 'PRONAC', value: 'Pronac' },
+                { text: 'Nome Do Projeto',
+                    align: 'center',
+                    value: 'NomeProjeto' },
+                {
+                    text: 'Situacao',
+                    align: 'center',
+                    value: 'Situacao',
+                },
+                {
+                    text: 'Estado',
+                    align: 'center',
+                    value: 'UfProjeto',
+                },
+            ];
+
+            if (this.mostrarTecnico) {
+                dados[5] = {
+                    text: 'Tecnico',
+                    align: 'center',
+                    value: '',
+                };
+            }
+
+            dados[6] = {
+                text: 'Ações',
+                sortable: false,
+                align: 'center',
+            };
+
+            return dados;
+        },
     },
     computed: {
         ...mapGetters({

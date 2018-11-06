@@ -38,8 +38,8 @@ export const buscaPlanilhaHomologada = ({ commit }, idPronac) => {
         });
 };
 
-export const buscaPlanilhaOriginal = ({ commit }, idPreProjeto) => {
-    projetoHelperAPI.buscaPlanilhaOriginal(idPreProjeto)
+export const buscaPlanilhaOriginal = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscaPlanilhaOriginal(idPronac)
         .then((response) => {
             const data = response.data;
             const planilhaOriginal = data.data;
@@ -56,8 +56,8 @@ export const buscaPlanilhaReadequada = ({ commit }, idPronac) => {
         });
 };
 
-export const buscaPlanilhaAutorizada = ({ commit }, idPreProjeto) => {
-    projetoHelperAPI.buscaPlanilhaAutorizada(idPreProjeto)
+export const buscaPlanilhaAutorizada = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscaPlanilhaAutorizada(idPronac)
         .then((response) => {
             const data = response.data;
             const planilhaAutorizada = data.data;
@@ -65,8 +65,8 @@ export const buscaPlanilhaAutorizada = ({ commit }, idPreProjeto) => {
         });
 };
 
-export const buscaPlanilhaAdequada = ({ commit }, idPreProjeto) => {
-    projetoHelperAPI.buscaPlanilhaAdequada(idPreProjeto)
+export const buscaPlanilhaAdequada = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscaPlanilhaAdequada(idPronac)
         .then((response) => {
             const data = response.data;
             const planilhaAdequada = data.data;
@@ -181,8 +181,9 @@ export const buscarPlanoDistribuicaoIn2017 = ({ commit }, idPreProjeto) => {
         });
 };
 
-export const buscarDiligenciaProposta = ({ commit }, dados) => {
-    projetoHelperAPI.buscarDiligenciaProposta(dados)
+export const buscarDiligenciaProposta = ({ commit }, value) => {
+    const { idPreprojeto, valor } = value;
+    projetoHelperAPI.buscarDiligenciaProposta(idPreprojeto, valor)
         .then((response) => {
             const data = response.data.data.items;
             commit(types.SET_DILIGENCIA_PROPOSTA, data);
