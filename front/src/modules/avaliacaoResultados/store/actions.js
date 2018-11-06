@@ -1,4 +1,3 @@
-import * as desencapsularResponse from '@/helpers/actions';
 import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
 import * as types from './types';
 
@@ -8,6 +7,17 @@ export const dadosMenu = ({ commit }) => {
             const data = response.data;
             const dadosTabela = data.data;
             commit(types.SET_REGISTROS_TABELA, dadosTabela);
+        });
+};
+
+export const setRegistroAtivo = ({ commit }, registro) => {
+    commit(types.SET_REGISTRO_ATIVO, registro);
+};
+
+export const removerRegistro = ({ commit }, registro) => {
+    avaliacaoResultadosHelperAPI.removerRegistro(registro)
+        .then(() => {
+            commit(types.REMOVER_REGISTRO, registro);
         });
 };
 
@@ -100,7 +110,6 @@ export const redirectLinkAvaliacaoResultadoTipo = ({ commit }, params) => {
 };
 
 export const planilha = ({ commit }, params) => {
-    commit(types.GET_PLANILHA, {});
     avaliacaoResultadosHelperAPI.planilha(params)
         .then((response) => {
             const planilha = response.data;
@@ -171,7 +180,7 @@ export const salvarLaudoFinal = ({ commit }, data) => {
 export const finalizarLaudoFinal = ({ commit }, data) => {
     avaliacaoResultadosHelperAPI.alterarEstado(data)
         .then(() => {
-            commit('noticias/SET_DADOS', { ativo: true, color: 'success', text: 'Finalizado com sucesso!'}, { root: true });
+            commit('noticias/SET_DADOS', { ativo: true, color: 'success', text: 'Finalizado com sucesso!' }, { root: true });
         });
 };
 
