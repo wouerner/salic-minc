@@ -438,7 +438,7 @@ class ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto extends MinC_Db_Table_
                     ",
                 array(
                     'd.idDocumentoAssinatura',
-                    new Zend_Db_Expr( "(select count(*)
+                    new Zend_Db_Expr("(select count(*)
                                         from sac.dbo.TbAssinatura as  tbAssinatura
                                        where tbAssinatura.idPronac = d.idPronac
                                          and tbAssinatura.idDocumentoAssinatura = d.idDocumentoAssinatura) as quantidadeAssinaturas")

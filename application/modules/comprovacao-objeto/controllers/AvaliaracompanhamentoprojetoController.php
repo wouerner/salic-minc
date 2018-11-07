@@ -151,7 +151,7 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
         $totalPag = (int)(($total % $this->intTamPag == 0) ? ($total / $this->intTamPag) : (($total / $this->intTamPag) + 1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
         $busca = $tbCumprimentoObjeto->listaRelatorios($where, $order, $tamanho, $inicio, false, $analisados);
-//            xd($busca);
+
         $paginacao = array(
             "pag" => $pag,
             "qtde" => $this->intTamPag,
@@ -664,9 +664,9 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
         $dadosParecer = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac=?' => $idPronac, 'idTecnicoAvaliador=?' => $idusuario));
         $this->view->DadosParecer = $dadosParecer;
 
-        $pa = new paCoordenadorDoPerfil();
-        $usuarios = $pa->buscarUsuarios($codPerfil, $codOrgao);
-        $this->view->Usuarios = $usuarios;
+//        $pa = new paCoordenadorDoPerfil();
+//        $usuarios = $pa->buscarUsuarios($codPerfil, $codOrgao);
+//        $this->view->Usuarios = $usuarios;
     }
 
     public function etapasDeTrabalhoFinalAction()
@@ -907,49 +907,42 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
             }
 
             if ($this->getRequest()->isPost()) {
-                $siComprovante = ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto::SI_EM_AVALIACAO_TECNICO;
                 $msg = 'Relat&oacute;rio salvo com sucesso!';
                 $callback = "comprovacao-objeto/avaliaracompanhamentoprojeto/parecer-tecnico?idPronac=" . $idPronac;
-                $post = Zend_Registry::get('post');
 
-                if (!empty($post->finalizar)) {
+                $post = $this->getRequest()->getPost();
 
-//                    $siComprovante = ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto::SI_PARA_AVALIACAO_COORDENADOR;
+                if (!empty($post['finalizar'])) {
+
                     $msg = 'Relat&oacute;rio finalizado com sucesso, agora voc&ecirc; deve assinar o documento para continuar!';
                     $callback = 'comprovacao-objeto/avaliaracompanhamentoprojeto/index-tecnico';
 
-                    if (empty($post->informacaoAdicional) || strlen($post->informacaoAdicional) < 50) {
+                    if (empty($post['informacaoAdicional']) || strlen($post['informacaoAdicional']) < 50) {
                         throw new Exception("Parecer de avalia&ccedil;&atilde;o t&eacute;cnica &eacute; obrigat&oacute;rio");
                     }
 
-                    if (empty($post->conclusao) || strlen($post->conclusao) < 50) {
+                    if (empty($post['conclusao']) || strlen($post['conclusao']) < 50) {
                         throw new Exception("Conclus&atilde;o &eacute; obrigat&oacute;rio");
                     }
 
-                    if (empty($post->resultadoAvaliacao)) {
+                    if (empty($post['resultadoAvaliacao'])) {
                         throw new Exception("Avalia&ccedil;&atilde;o é obrigat&oacute;rio");
                     }
                 }
 
                 $dados = array(
-                    'dsInformacaoAdicional' => $post->informacaoAdicional,
-                    'dsOrientacao' => $post->orientacao,
-                    'dsConclusao' => $post->conclusao,
-                    'stResultadoAvaliacao' => $post->resultadoAvaliacao,
-                    'idChefiaImediata' => $post->chefiaImediata,
-                    'siCumprimentoObjeto' => $siComprovante
-                );
-
-                $servicoDocumentoAssinatura = new \Application\Modules\ComprovacaoObjeto\Service\Assinatura\DocumentoAssinatura(
-                    $idPronac,
-                    Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_AVALIACAO_OBJETO,
-                    $dadosRelatorio->idCumprimentoObjeto
+                    'dsInformacaoAdicional' => $post['informacaoAdicional'],
+                    'dsOrientacao' => $post['orientacao'],
+                    'dsConclusao' => $post['conclusao'],
+                    'stResultadoAvaliacao' => $post['resultadoAvaliacao'],
+                    'idChefiaImediata' => $post['chefiaImediata'],
+                    'siCumprimentoObjeto' => ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto::SI_EM_AVALIACAO_TECNICO
                 );
 
                 $whereFinal = 'idCumprimentoObjeto = ' . $dadosRelatorio->idCumprimentoObjeto;
                 $resultado = $tbCumprimentoObjeto->alterar($dados, $whereFinal);
 
-                if ($post->finalizar) {
+                if ($post['finalizar']) {
                     $idDocumentoAssinatura = $this->iniciarFluxoAssinatura($idPronac);
                     if ($idDocumentoAssinatura) {
                         parent::message(
