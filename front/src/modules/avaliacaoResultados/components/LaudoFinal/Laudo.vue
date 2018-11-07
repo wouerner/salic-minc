@@ -121,7 +121,7 @@
                         v-model="pagination.page"
                         :length="pages"
                         :total-visible="3"
-                        color="green darken-1"
+                        color="green darken-3"
                 ></v-pagination>
             </div>
         </div>
