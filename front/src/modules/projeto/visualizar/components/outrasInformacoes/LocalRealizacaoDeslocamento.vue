@@ -39,6 +39,7 @@
                         :items="dados.Deslocamento"
                         class="elevation-1 container-fluid"
                         rows-per-page-text="Items por Página"
+                        no-data-text="Nenhum dado encontrado"
                 >
                     <template slot="items" slot-scope="props">
                         <td>{{ props.item.PaisOrigem }}</td>
