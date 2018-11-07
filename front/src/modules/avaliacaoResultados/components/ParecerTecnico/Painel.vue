@@ -196,9 +196,10 @@ export default {
         this.projetosFinalizados(projetosFinalizados);
         this.projetosAssinarCoordenador();
         this.projetosAssinarCoordenadorGeral();
+
         Vue.set(this.listaAcoesAssinar, 'usuario', this.getUsuario);
-    },
-    watch: {
+        Vue.set(this.listaAcoesCoordenador, 'usuario', this.getUsuario);
+        Vue.set(this.listaAcoesAssinarCoordenadorGeral, 'usuario', this.getUsuario);
     },
     data() {
         return {
