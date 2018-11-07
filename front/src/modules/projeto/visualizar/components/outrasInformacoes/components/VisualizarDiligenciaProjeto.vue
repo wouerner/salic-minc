@@ -37,7 +37,7 @@
 
         <v-dialog v-model="dialog" width="90%">
             <v-card>
-                <v-card-text>
+                <v-card-text v-if="Object.keys(dadosDiligencia).length > 0">
                     <v-container fluid>
                         <v-layout justify-space-around row wrap>
                             <v-flex s12 m6 lg2 offset-lg1 dark>
@@ -106,6 +106,22 @@
                         </div>
                     </v-container>
                 </v-card-text>
+                <v-card-text v-else>
+                    <div style="align: center" class="text-xs-center">
+                        <div style="padding-top: 25px">
+                            <v-progress-circular
+                                    :size="50"
+                                    color="primary"
+                                    indeterminate
+                            ></v-progress-circular>
+                        </div>
+                        <br>
+                        <div style="padding-top: 20px">
+                            Carregando...
+                        </div>
+                    </div>
+                </v-card-text>
+                <v-divider></v-divider>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
