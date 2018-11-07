@@ -13,7 +13,7 @@
                         <v-tooltip bottom>
                             <v-icon
                                     slot="activator"
-                                    @click="editItem(props.item)"
+                                    @click="showItem(props.item)"
                                     class="material-icons">visibility
                             </v-icon>
                             <span>Visualizar Projeto</span>
@@ -116,7 +116,7 @@
             }),
         },
         methods: {
-            editItem(item) {
+            showItem(item) {
                 const idPreprojeto = item.idPreprojeto;
                 const valor = item.idAvaliacaoProposta;
 
