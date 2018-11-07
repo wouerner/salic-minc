@@ -13,6 +13,7 @@
                         :items="dados.localRealizacoes"
                         class="elevation-1 container-fluid"
                         rows-per-page-text="Items por Página"
+                        no-data-text="Nenhum dado encontrado"
                 >
                     <template slot="items" slot-scope="props">
                         <td>{{ props.item.Descricao }}</td>
@@ -47,11 +48,6 @@
                         <td>{{ props.item.UFDestino }}</td>
                         <td>{{ props.item.MunicipioDestino }}</td>
                         <td>{{ props.item.Qtde }}</td>
-                    </template>
-                    <template slot="no-data">
-                        <v-alert :value="true" color="info" icon="warning">
-                            Nenhum dado encontrado
-                        </v-alert>
                     </template>
                     <template slot="pageText" slot-scope="props">
                         Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}

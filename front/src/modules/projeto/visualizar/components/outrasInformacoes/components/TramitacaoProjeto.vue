@@ -9,6 +9,7 @@
                     :items="dados"
                     class="elevation-1 container-fluid mb-2"
                     rows-per-page-text="Items por Página"
+                    no-data-text="Nenhum dado encontrado"
             >
                 <template slot="items" slot-scope="props">
                     <td>{{ props.item.Origem }}</td>
@@ -17,11 +18,6 @@
                     <td>{{ props.item.dtTramitacaoRecebida }}</td>
                     <td>{{ props.item.Situacao }}</td>
                     <td style="width: 700px">{{ props.item.meDespacho }}</td>
-                </template>
-                <template slot="no-data">
-                    <v-alert :value="true" color="error" icon="warning">
-                        Nenhum dado encontrado ¯\_(ツ)_/¯
-                    </v-alert>
                 </template>
                 <template slot="pageText" slot-scope="props">
                     Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}

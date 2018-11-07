@@ -10,6 +10,7 @@
                 :pagination.sync="pagination"
                 class="elevation-1"
                 rows-per-page-text="Items por Página"
+                no-data-text="Nenhum dado encontrado"
         >
             <template slot="items" slot-scope="props">
                 <td class="text-xs-center">
@@ -41,11 +42,6 @@
                         <span>Visualizar</span>
                     </v-tooltip>
                 </td>
-            </template>
-            <template slot="no-data">
-                <v-alert :value="true" color="info" icon="warning">
-                    Nenhum dado encontrado
-                </v-alert>
             </template>
             <template slot="pageText" slot-scope="props">
                 Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}

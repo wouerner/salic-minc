@@ -9,6 +9,7 @@
                     :items="dados.providenciaTomada"
                     class="elevation-1 container-fluid"
                     rows-per-page-text="Items por Página"
+                    no-data-text="Nenhum dado encontrado"
            >
                 <template slot="items" slot-scope="props">
                     <td style="width: 190px" class="text-xs-center">{{ props.item.DtSituacao }}</td>
@@ -18,11 +19,6 @@
                     <td style="width: 190px" class="text-xs-center" v-else>Nao se aplica.</td>
                     <td class="text-xs-center">{{ props.item.usuario }}</td>
                 </template>
-               <template slot="no-data">
-                   <v-alert :value="true" color="info" icon="warning">
-                       Nenhum dado encontrado
-                   </v-alert>
-               </template>
                 <template slot="pageText" slot-scope="props">
                     Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
                 </template>

@@ -5,6 +5,7 @@
                 :items="diligencias"
                 class="elevation-1"
                 rows-per-page-text="Items por Página"
+                no-data-text="Nenhum dado encontrado"
         >
             <template slot="items" slot-scope="props">
                 <td class="text-xs-center">
@@ -28,11 +29,6 @@
                 <td class="text-xs-center">{{ props.item.dataResposta }}</td>
                 <td class="text-xs-center">{{ props.item.prazoResposta }}</td>
                 <td class="text-xs-center">Prorrogado</td>
-            </template>
-            <template slot="no-data">
-                <v-alert :value="true" color="info" icon="warning">
-                    Nenhum dado encontrado
-                </v-alert>
             </template>
             <template slot="pageText" slot-scope="props">
                 Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
