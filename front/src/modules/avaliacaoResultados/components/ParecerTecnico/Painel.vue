@@ -147,23 +147,21 @@
 </template>
 <script>
 
-import Vue from 'vue';
-import { mapActions, mapGetters } from 'vuex';
-import CONST from '../../const';
-import TabelaProjetos from '../TabelaProjetos';
-import Historico from '../components/Historico';
-import Encaminhar from '../ComponenteEncaminhar';
-import AnaliseButton from '../analise/analisarButton';
-import AssinarButton from '../analise/AssinarButton';
-import Devolver from '../components/Devolver';
-import VisualizarPlanilhaButtton from '../analise/VisualizarPlanilhaButtton';
-import Diligencias from '../components/HistoricoDiligencias';
+    import Vue from 'vue';
+    import { mapActions, mapGetters } from 'vuex';
+    import CONST from '../../const';
+    import TabelaProjetos from '../TabelaProjetos';
+    import Historico from '../components/Historico';
+    import Encaminhar from '../ComponenteEncaminhar';
+    import AnaliseButton from '../analise/analisarButton';
+    import AssinarButton from '../analise/AssinarButton';
+    import Devolver from '../components/Devolver';
+    import VisualizarPlanilhaButtton from '../analise/VisualizarPlanilhaButtton';
+    import Diligencias from '../components/HistoricoDiligencias';
 
-export default {
+    export default {
     name: 'Painel',
     created() {
-        this.projetosAssinatura({ estado: 'historico' });
-
         this.CONST = CONST;
 
         let projetosTecnico = {};
@@ -197,6 +195,8 @@ export default {
         this.projetosFinalizados(projetosFinalizados);
         this.projetosAssinarCoordenador();
         this.projetosAssinarCoordenadorGeral();
+        this.projetosAssinatura({ estado: 'historico' });
+
 
         Vue.set(this.listaAcoesAssinar, 'usuario', this.getUsuario);
         Vue.set(this.listaAcoesCoordenador, 'usuario', this.getUsuario);
@@ -204,6 +204,7 @@ export default {
     },
     data() {
         return {
+            projetoAnaliseDados: { code: 300, items: [] },
             listaAcoesTecnico: {
                 atual: '',
                 proximo: '',

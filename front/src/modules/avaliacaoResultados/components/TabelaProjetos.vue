@@ -42,7 +42,7 @@
                             :proximo="componentes.proximo"
                             :idTipoDoAtoAdministrativo="componentes.idTipoDoAtoAdministrativo"
                             :usuario="componentes.usuario"
-                            :data="props.item.diligencias"
+                            :data="props.item.IdPRONAC"
                         >
                         </component>
                     </template>
@@ -68,9 +68,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
 
-export default {
+    export default {
     name: 'TabelaProjetos',
     props: ['dados', 'componentes', 'mostrarTecnico'],
     data() {
@@ -188,9 +188,6 @@ export default {
                 this.pagination.totalItems = this.dados.items.length;
             }
         },
-    },
-    updated() {
-        console.info(this.dados.items);
     },
 };
 </script>

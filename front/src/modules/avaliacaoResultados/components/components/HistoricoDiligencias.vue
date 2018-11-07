@@ -72,11 +72,11 @@ export default {
     },
     methods: {
         show() {
-            console.info(this.data);
+            console.info('oi' + this.data);
         },
     },
     mounted() {
-        // this.show();
+        this.show();
     },
 };
 </script>
