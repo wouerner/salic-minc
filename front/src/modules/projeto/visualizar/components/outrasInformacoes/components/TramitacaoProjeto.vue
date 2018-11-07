@@ -12,12 +12,12 @@
                     no-data-text="Nenhum dado encontrado"
             >
                 <template slot="items" slot-scope="props">
-                    <td>{{ props.item.Origem }}</td>
-                    <td>{{ props.item.dtTramitacaoEnvio }}</td>
-                    <td>{{ props.item.Destino }}</td>
-                    <td>{{ props.item.dtTramitacaoRecebida }}</td>
-                    <td>{{ props.item.Situacao }}</td>
-                    <td style="width: 700px">{{ props.item.meDespacho }}</td>
+                    <td class="text-xs-left">{{ props.item.Origem }}</td>
+                    <td class="text-xs-right">{{ props.item.dtTramitacaoEnvio }}</td>
+                    <td class="text-xs-right">{{ props.item.Destino }}</td>
+                    <td class="text-xs-right">{{ props.item.dtTramitacaoRecebida }}</td>
+                    <td class="text-xs-right">{{ props.item.Situacao }}</td>
+                    <td class="text-xs-left">{{ props.item.meDespacho }}</td>
                 </template>
                 <template slot="pageText" slot-scope="props">
                     Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
@@ -48,22 +48,27 @@
                     },
                     {
                         text: 'DT.ENVIO',
+                        align: 'center',
                         value: 'dtTramitacaoEnvio',
                     },
                     {
                         text: 'DESTINO',
+                        align: 'center',
                         value: 'Destino',
                     },
                     {
                         text: 'DT.RECEBIMENTO',
+                        align: 'center',
                         value: 'dtTramitacaoRecebida',
                     },
                     {
                         text: 'ESTADO',
+                        align: 'center',
                         value: 'Situacao',
                     },
                     {
                         text: 'DESPACHO',
+                        align: 'left',
                         value: 'meDespacho',
                     },
                 ],

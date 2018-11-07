@@ -12,17 +12,17 @@
                     no-data-text="Nenhum dado encontrado"
             >
                 <template slot="items" slot-scope="props">
-                    <td>{{ props.item.dsTipoDocumento }}</td>
-                    <td>{{ props.item.dtDocumento }}</td>
-                    <td>{{ props.item.dtAnexacao }}</td>
-                    <td>
+                    <td class="text-xs-left">{{ props.item.dsTipoDocumento }}</td>
+                    <td class="text-xs-right">{{ props.item.dtDocumento }}</td>
+                    <td class="text-xs-right">{{ props.item.dtAnexacao }}</td>
+                    <td class="text-xs-right">
                         <a :href="`/consultardadosprojeto/abrir-documento-tramitacao?id=${ props.item.idDocumento}&idPronac=${idPronac}`">
                             {{ props.item.noArquivo }}
                         </a>
                     </td>
-                    <td>{{ props.item.Usuario }}</td>
-                    <td>{{ props.item.idLote }}</td>
-                    <td>{{ props.item.Situacao }}</td>
+                    <td class="text-xs-left">{{ props.item.Usuario }}</td>
+                    <td class="text-xs-right">{{ props.item.idLote }}</td>
+                    <td class="text-xs-right">{{ props.item.Situacao }}</td>
                 </template>
                 <template slot="pageText" slot-scope="props">
                     Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
@@ -53,26 +53,32 @@
                     },
                     {
                         text: 'DATA',
+                        align: 'center',
                         value: 'dtDocumento',
                     },
                     {
                         text: 'DT. ANEXAÇÃO',
+                        align: 'center',
                         value: 'dtAnexacao',
                     },
                     {
                         text: 'DOCUMENTO',
+                        align: 'center',
                         value: 'noArquivo',
                     },
                     {
                         text: 'ANEXADO POR',
+                        align: 'left',
                         value: 'Usuario',
                     },
                     {
                         text: 'LOTE',
+                        align: 'center',
                         value: 'idLote',
                     },
                     {
                         text: 'ESTADO',
+                        align: 'center',
                         value: 'Situacao',
                     },
                 ],

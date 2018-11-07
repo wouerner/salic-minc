@@ -12,13 +12,13 @@
                     no-data-text="Nenhum dado encontrado"
             >
                 <template slot="items" slot-scope="props">
-                    <td>{{ props.item.Emissor }}</td>
-                    <td>{{ props.item.dtTramitacaoEnvio }}</td>
-                    <td>{{ props.item.Receptor }}</td>
-                    <td>{{ props.item.dtTramitacaoRecebida }}</td>
-                    <td>{{ props.item.Estado }}</td>
-                    <td>{{ props.item.Destino }}</td>
-                    <td style="width: 700px">{{ props.item.meDespacho }}</td>
+                    <td class="text-xs-left">{{ props.item.Emissor }}</td>
+                    <td class="text-xs-right">{{ props.item.dtTramitacaoEnvio }}</td>
+                    <td class="text-xs-left">{{ props.item.Receptor }}</td>
+                    <td class="text-xs-right">{{ props.item.dtTramitacaoRecebida }}</td>
+                    <td class="text-xs-right">{{ props.item.Estado }}</td>
+                    <td class="text-xs-right">{{ props.item.Destino }}</td>
+                    <td class="text-xs-left">{{ props.item.meDespacho }}</td>
                 </template>
                 <template slot="pageText" slot-scope="props">
                     Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
@@ -43,32 +43,38 @@
                 selected: [],
                 headers: [
                     {
-                        text: 'Emissor',
+                        text: 'EMISSOR',
                         align: 'left',
                         value: 'Emissor',
                     },
                     {
-                        text: 'Dt.Envio',
+                        text: 'DT.ENVIO',
+                        align: 'center',
                         value: 'dtTramitacaoEnvio',
                     },
                     {
-                        text: 'Receptor',
+                        text: 'RECEPTOR',
+                        align: 'left',
                         value: 'Receptor',
                     },
                     {
-                        text: 'Dt.Recebimento',
+                        text: 'DT.RECEBIMENTO',
+                        align: 'center',
                         value: 'dtTramitacaoRecebida',
                     },
                     {
-                        text: 'Estado',
+                        text: 'ESTADO',
+                        align: 'center',
                         value: 'Estado',
                     },
                     {
-                        text: 'Destino',
+                        text: 'DESTINO',
+                        align: 'center',
                         value: 'Destino',
                     },
                     {
-                        text: 'Despacho',
+                        text: 'DESPACHO',
+                        align: 'left',
                         value: 'meDespacho',
                     },
                 ],
