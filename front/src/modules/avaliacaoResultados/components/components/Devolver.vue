@@ -1,5 +1,6 @@
 <template>
     <v-dialog
+        v-if=" typeof usuario !== 'undefined' && Object.keys(usuario).length > 0"
         v-model="dialog"
         width="650"
     >
@@ -17,9 +18,17 @@
             <span>Devolver Projeto</span>
         </v-tooltip>
         <v-card>
-            <v-card-text>
-                Você deseja devolver o projeto '{{ pronac }} - {{ nomeProjeto }}' para análise?
-            </v-card-text>
+            <v-container grid-list-md>
+                <v-card-text>
+                    Você deseja devolver o projeto '{{ pronac }} - {{ nomeProjeto }}' para análise?
+                    <v-textarea
+                        v-model="justificativa"
+                        outline
+                        name="input-7-4"
+                        label="Justificativa"
+                        ></v-textarea>
+                </v-card-text>
+            </v-container>
             <v-card-actions>
                 <v-btn
                     color="success"
@@ -49,16 +58,24 @@ export default {
     data() {
         return {
             dialog: false,
+            justificativa: '',
         };
     },
-    props: [
-        'idPronac',
-        'atual',
-        'proximo',
-        'nomeProjeto',
-        'pronac',
-        'idTipoDoAtoAdministrativo',
-    ],
+    props: {
+        idPronac: String,
+        usuario: Object,
+        atual: String,
+        proximo: String,
+        nomeProjeto: String,
+        pronac: String,
+        idTipoDoAtoAdministrativo: {
+            type: String,
+            default: '',
+            validator(value) {
+                return ['622', '623'].includes(value);
+            },
+        },
+    },
     methods: {
         ...mapActions({
             setDevolverProjeto: 'avaliacaoResultados/devolverProjeto',
@@ -71,6 +88,8 @@ export default {
                 atual: this.atual,
                 proximo: this.proximo,
                 idTipoDoAtoAdministrativo: this.idTipoDoAtoAdministrativo,
+                justificativa: this.justificativa,
+                usuario: this.usuario,
             };
 
             this.setDevolverProjeto(dados);
