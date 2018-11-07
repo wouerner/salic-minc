@@ -27,51 +27,44 @@
                 Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
             </template>
         </v-data-table>
-        <v-dialog
-                v-model="dialog"
-                width="1200px"
-                transition="scale-transition"
-        >
+        <v-dialog v-model="dialog" width="90%">
             <v-card>
                 <v-card-text>
-                    <tr>
-                        <td colspan="3">
-                            <template>
-                                <table class="tabela">
-                                    <tbody>
-                                    <tr>
-                                        <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
-                                        <th>DATA DA RESPOSTA</th>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ dadosDiligencia.dataSolicitacao }}</td>
-                                        <td>{{ dadosDiligencia.dataResposta }}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <table v-if="dadosDiligencia.Solicitacao" class="tabela">
-                                    <tbody>
-                                    <tr>
-                                        <th>SOLICITA&Ccedil;&Atilde;O</th>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-left: 20px" v-html="dadosDiligencia.Solicitacao"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <table v-if="dadosDiligencia.Resposta" class="tabela">
-                                    <tbody>
-                                    <tr>
-                                        <th>RESPOSTA:</th>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-left: 20px" v-html="dadosDiligencia.Resposta"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </template>
-                        </td>
-                    </tr>
+                    <v-container fluid>
+                        <v-layout justify-space-around row wrap>
+                            <v-flex s12 m6 lg2 offset-lg1 dark>
+                                <b>DATA DA SOLICITA&Ccedil;&Atilde;O</b>
+                                <p>{{ dadosDiligencia.dataSolicitacao }}</p>
+                            </v-flex>
+                            <v-flex s12 m6 lg3>
+                                <b>DATA DA RESPOSTA</b>
+                                <p>{{ dadosDiligencia.dataResposta }}</p>
+                            </v-flex>
+                        </v-layout>
+
+                        <div v-if="dadosDiligencia.Solicitacao">
+                            <v-layout justify-space-around row wrap>
+                                <v-flex lg12 dark>
+                                    <b>SOLICITAÇÃO</b>
+                                </v-flex>
+                                <v-flex>
+                                    <p v-html="dadosDiligencia.Solicitacao"></p>
+                                </v-flex>
+                            </v-layout>
+                        </div>
+
+                        <div v-if="dadosDiligencia.Resposta">
+                            <v-layout justify-space-around row wrap>
+                                <v-flex lg12 dark>
+                                    <b>RESPOSTA</b>
+                                </v-flex>
+                                <v-flex>
+                                    <p v-html="dadosDiligencia.Resposta"></p>
+                                </v-flex>
+                            </v-layout>
+                        </div>
+
+                    </v-container>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>

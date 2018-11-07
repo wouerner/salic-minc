@@ -28,24 +28,22 @@
             </template>
         </v-data-table>
 
-        <v-dialog v-model="dialog" width="1000px">
-
+        <v-dialog v-model="dialog" width="80%">
             <v-card>
                 <v-card-text>
-                    <tr>
-                        <td colspan="3">
-                            <table v-if="dadosDiligencia.dsAvaliacao" class="tabela">
-                                <tbody>
-                                <tr>
-                                    <th>SOLICITA&Ccedil;&Atilde;O</th>
-                                </tr>
-                                <tr>
-                                    <td style="padding-left: 20px" v-html="dadosDiligencia.dsAvaliacao"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
+                    <v-container fluid>
+                        <div v-if="dadosDiligencia.dsAvaliacao">
+                            <v-layout justify-space-around row wrap>
+                                <v-flex lg12 dark>
+                                    <b>SOLICITAÇÃO</b>
+                                </v-flex>
+                                <v-flex>
+                                    <p v-html="dadosDiligencia.dsAvaliacao"></p>
+                                </v-flex>
+                            </v-layout>
+                        </div>
+
+                    </v-container>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
