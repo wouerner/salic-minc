@@ -67,9 +67,9 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
-    export default {
+export default {
     name: 'TabelaProjetos',
     props: ['dados', 'componentes', 'mostrarTecnico'],
     data() {
@@ -185,7 +185,7 @@
             }
         },
     },
-    updated(){
+    updated() {
         console.info(this.dados.items);
     },
 };
