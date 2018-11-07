@@ -1,6 +1,7 @@
 <?php
 
 use Application\Modules\AvaliacaoResultados\Service\Encaminhar\AvaliacaoFinanceira as EncaminharAvaliacaoService;
+use Application\Modules\AvaliacaoResultados\Service\Fluxo\Estado as EstadoService;
 
 class AvaliacaoResultados_Events_Devolver
 {
@@ -20,6 +21,7 @@ class AvaliacaoResultados_Events_Devolver
     public function attach() {
         $this->events->attach('run', $this->alterarEstado());
         $this->events->attach('run', $this->invalidarDocumento());
+        $this->events->attach('run', $this->salvarEncaminhamento());
     }
 
     public function run($params) {
@@ -34,31 +36,12 @@ class AvaliacaoResultados_Events_Devolver
         };
     }
 
-    public function alterarSituacaoProjeto() {
-        return function($t) {
-            $params = $t->getParams();
-            $projeto = new Projetos();
-            $projeto->alterarSituacao($params['idPronac'], '', 'E27', 'Comprova&ccedil;&atilde;o Financeira do Projeto em Análise');
-        };
-    }
-
     public function alterarEstado() {
         return function($t) {
             $params = $t->getParams();
 
-            $model = new AvaliacaoResultados_Model_FluxosProjeto();
-            $mapper = new AvaliacaoResultados_Model_FluxosProjetoMapper();
-
-            $row = $mapper->find(['idPronac = ?' => $params['idPronac']]);
-
-            if (!empty($row)) {
-                $model->setId($row['id']);
-            }
-
-            $model->setIdPronac($params['idPronac']);
-            $model->setEstadoId($params['proximo']);
-
-            $mapper->save($model);
+            $estadoService = new EstadoService();
+            $estadoService->alterarEstado($params);
         };
     }
 

@@ -118,9 +118,6 @@ export const mutations = {
     [types.GET_PARECER_LAUDO_FINAL](state, data) {
         state.getParecerLaudoFinal = data;
     },
-    [types.GET_PROJETO_ANALISE](state, projetoAnalise) {
-        state.projetoAnalise = projetoAnalise;
-    },
     [types.SET_PARECER](state, parecer) {
         state.parecer = parecer;
     },
@@ -216,7 +213,7 @@ export const mutations = {
             }
         });
 
-        state.dadosItemComprovacao.comprovantes.forEach((valor, chave) => {
+        state.dadosItemComprovacao.comprovantes.forEach((valor) => {
             copiaItem.stItemAvaliado = valor.stItemAvaliado;
             if (typeof state
                 .planilha[params.cdProduto]
@@ -256,6 +253,4 @@ export const mutations = {
             }
         });
     },
-
-
 };
