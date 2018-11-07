@@ -3,14 +3,14 @@
 ## Como acessar os Pareceres Técnicos no perfil de Coordenador de Prestação de Contas
 
 * Primeiro passo, é necessário estar logado em um perfil de Coordenador de Prestação de Contas.
-* Segundo passo selecione a aba Avaliação de Resultados e clique na opção Analisar Parecer.
+* Segundo passo selecione a opção Avaliação de Resultados localizada no menu superior e clique na opção Analisar Parecer.
 
 ## Abas
 
-1. [ENCAMINHAR](#encaminhar)
-2. [EM ANALISE](#em-análise)
-3. [ASSINAR](#assinar)
-4. [HISTORICO](#historico)
+1. ENCAMINHAR
+2. EM ANALISE
+3. ASSINAR
+4. HISTORICO
 
 ## Encaminhar
 
@@ -106,16 +106,18 @@ Visualizar o histórico de encaminhamentos do projeto.
 
 Ao clicar na ação, é aberta a planilha orçamentaria do projeto.
 
+---
+
 ## Como acessar os Pareceres Técnicos no perfil de Técnico de Prestação de Contas
 
 * Primeiro passo, é necessário estar logado em um perfil de Técnico de Prestação de Contas.
-* Segundo passo selecione a aba Avaliação de Resultados e clique na opção Analisar Parecer.
+* Segundo passo selecione a opção Avaliação de Resultados localizada no menu superior e clique na opção Analisar Parecer.
 
 ## Abas
 
-1. [EM ANALISE](#)
-2. [ASSINAR](#)
-3. [HISTORICO](#)
+1. EM ANALISE
+2. ASSINAR
+3. HISTORICO
 
 ## Em Análise
 
@@ -129,7 +131,7 @@ Para visualizar a lista dos projetos aguardando a análise do técnico logado é
 Visualizar o histórico de encaminhamentos do projeto.
 
 #### 2. Analisar Projeto
- O [analisar projeto](#3.-Visualizar-Projeto)  do Tecnico Prestaçao de contas e semelhante ao do Coordenador de Prestação de Contas ,porem tem as opções de  comprovar item, diligenciar, emitir parecer  
+ O [analisar projeto](#3.-Visualizar-Projeto)  do Técnico Prestação de contas e semelhante ao do Coordenador de Prestação de Contas ,porém tem as opções de  comprovar item, diligenciar, emitir parecer.
 
 ## Assinar
 
@@ -141,11 +143,11 @@ Visualizar o histórico de encaminhamentos do projeto.
 
 #### 2. Assinar
 
-O [assinar](#2.-assinar) do Tecnico Prestaçao de contas e semelhante ao do Coordenador de Prestação de Contas 
+O [assinar](#2.-assinar) do Técnico Prestação de contas e semelhante ao do Coordenador de Prestação de Contas 
 
 #### 3. Devolver Projeto
 
-O [devolver](#3.-Devolver-Projeto) do Tecnico Prestaçao de contas e semelhante ao do Coordenador de Prestação de Contas 
+O [devolver](#3.-Devolver-Projeto) do Técnico Prestação de contas e semelhante ao do Coordenador de Prestação de Contas 
 
 
 #### 4. [Projeto](#3.-visualizar-projeto)  
@@ -161,6 +163,68 @@ Visualizar o histórico de encaminhamentos do projeto.
 #### 2. [Visualizar Projeto](#3.-visualizar-projeto)
 
 Ao clicar na ação, é aberta a planilha orçamentaria do projeto.
+
+---
+## Como acessar os Pareceres Técnicos no perfil de Coordenador Geral de Prestação de Contas
+
+* Primeiro passo, é necessário estar logado em um perfil de Coordenador Geral de Prestação de Contas.
+* Segundo passo selecione a opção Avaliação de Resultados localizada no menu superior e clique na opção Analisar Parecer.
+
+## Abas
+
+1. EM ANALISE
+2. ASSINAR
+3. HISTORICO
+
+## Em Análise
+
+Para visualizar a lista dos projetos em análise é necessário selecionar a aba EM ANALISE.
+
+![Parecer técnico aba Em Análise](./imagens/parecer_tecnico_emanalise_coord_geral.png)
+
+### Ações disponíveis:
+
+#### 1. [Encaminhar Projeto](#1.-encaminhar-projeto)
+
+
+#### 2. Histórico de Encaminhamentos
+Visualizar o histórico de encaminhamentos do projeto.
+
+#### 3. [Visualizar Projeto](#3.-visualizar-projeto)
+
+## Assinar
+
+### Ações disponíveis:
+
+#### 1. Histórico de Encaminhamentos
+
+Visualizar o histórico de encaminhamentos do projeto.
+
+#### 2. Assinar
+
+A ação Assinar do Coordenador Geral de Prestação de contas é semelhante a ação Assinar do Coordenador de Prestação de Contas e já foi descrita [aqui](#2.-assinar).
+
+#### 3. Devolver Projeto
+
+A ação [Devolver] do Coordenador Geral de Prestação de contas é semelhante a ação Devolver do Coordenador de Prestação de Contas e já foi descrita [aqui](#3.-Devolver-Projeto). 
+
+#### 4. [Visualizar Projeto](#3.-visualizar-projeto)  
+
+## Historico
+
+![Parecer técnico aba Historico](./imagens/parecer_tecnico_historico_coord_geral.png)
+
+### Ações disponíveis:
+
+#### 1. Histórico de Encaminhamentos
+
+Visualizar o histórico de encaminhamentos do projeto.
+
+#### 2. [Visualizar Projeto](#3.-visualizar-projeto)
+
+Ao clicar na ação, é aberta a planilha orçamentaria do projeto.
+
+
 
 
 
