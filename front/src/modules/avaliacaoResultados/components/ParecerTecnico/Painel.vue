@@ -254,7 +254,6 @@ export default {
             getProjetosHistorico: 'avaliacaoResultados/getProjetosHistorico',
             getProjetosParaDistribuir: 'avaliacaoResultados/getProjetosParaDistribuir',
             getUsuario: 'autenticacao/getUsuario',
-            getProjetosRevisao: 'avaliacaoResultados/getProjetosRevisao',
             getProjetosAssinarCoordenador: 'avaliacaoResultados/getProjetosAssinarCoordenador',
             getProjetosAssinarCoordenadorGeral: 'avaliacaoResultados/getProjetosAssinarCoordenadorGeral',
             route: 'route',
