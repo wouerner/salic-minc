@@ -147,17 +147,18 @@
 </template>
 <script>
 
-import { mapActions, mapGetters } from 'vuex';
-import CONST from '../../const';
-import TabelaProjetos from '../TabelaProjetos';
-import Historico from '../components/Historico';
-import Encaminhar from '../ComponenteEncaminhar';
-import AnaliseButton from '../analise/analisarButton';
-import AssinarButton from '../analise/AssinarButton';
-import Devolver from '../components/Devolver';
-import VisualizarPlanilhaButtton from '../analise/VisualizarPlanilhaButtton';
+    import { mapActions, mapGetters } from 'vuex';
+    import CONST from '../../const';
+    import TabelaProjetos from '../TabelaProjetos';
+    import Historico from '../components/Historico';
+    import Encaminhar from '../ComponenteEncaminhar';
+    import AnaliseButton from '../analise/analisarButton';
+    import AssinarButton from '../analise/AssinarButton';
+    import Devolver from '../components/Devolver';
+    import VisualizarPlanilhaButtton from '../analise/VisualizarPlanilhaButtton';
+    import Diligencias from '../components/HistoricoDiligencias';
 
-export default {
+    export default {
     name: 'Painel',
     created() {
         this.distribuir();
@@ -216,17 +217,17 @@ export default {
             listaAcoesAssinar: {
                 atual: CONST.ESTADO_PARECER_FINALIZADO,
                 proximo: CONST.ESTADO_ANALISE_PARECER,
-                acoes: [Historico, AssinarButton, Devolver, VisualizarPlanilhaButtton],
+                acoes: [Diligencias, Historico, AssinarButton, Devolver, VisualizarPlanilhaButtton],
             },
-            listaAcoesCoordenador: { atual: '', proximo: '', acoes: [Encaminhar, Historico, VisualizarPlanilhaButtton] },
+            listaAcoesCoordenador: { atual: '', proximo: '', acoes: [Diligencias, Encaminhar, Historico, VisualizarPlanilhaButtton] },
             listaAcoesAssinarCoordenadorGeral: {
                 atual: CONST.ESTADO_AGUARDANDO_ASSINATURA_COORDENADOR_PARECER,
                 proximo: CONST.ESTADO_ANALISE_PARECER,
                 idTipoDoAtoAdministrativo: CONST.ATO_ADMINISTRATIVO_PARECER_TECNICO,
-                acoes: [Historico, AssinarButton, Devolver, VisualizarPlanilhaButtton],
+                acoes: [Diligencias, Historico, AssinarButton, Devolver, VisualizarPlanilhaButtton],
             },
             distribuirAcoes: { atual: '', proximo: '', acoes: [Encaminhar] },
-            historicoAcoes: { atual: '', proximo: '', acoes: [Historico, VisualizarPlanilhaButtton] },
+            historicoAcoes: { atual: '', proximo: '', acoes: [Diligencias, Historico, VisualizarPlanilhaButtton] },
             CONST: '',
         };
     },

@@ -19,7 +19,7 @@
                 <td class="text-xs-center">{{ props.item.Situacao }}</td>
                 <td class="text-xs-center">{{ props.item.UfProjeto }}</td>
                 <td class="text-xs-center" v-if="mostrarTecnico">{{ props.item.usu_nome }}</td>
-                <td> <btn-diligencias></btn-diligencias></td>
+                <td>{{props}}</td>
                 <!-- <td class="text-xs-right">
                     <v-btn flat icon color="green" :to="{ name: 'AnalisePlanilha', params:{ id:props.item.idPronac }}">
                         <v-icon class="material-icons">assignment_indcompare_arrows</v-icon>
@@ -41,6 +41,7 @@
                             :atual="componentes.atual"
                             :proximo="componentes.proximo"
                             :idTipoDoAtoAdministrativo="componentes.idTipoDoAtoAdministrativo"
+                            :data="props.item.diligencias"
                         >
                         </component>
                     </template>
@@ -66,12 +67,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import BtnDiligencias from './ParecerTecnico/HistoricoDiligencias';
+    import { mapActions, mapGetters } from 'vuex';
 
-export default {
+    export default {
     name: 'TabelaProjetos',
-    components: { 'btn-diligencias': BtnDiligencias },
     props: ['dados', 'componentes', 'mostrarTecnico'],
     data() {
         return {
@@ -91,9 +90,11 @@ export default {
                     value: 'Pronac',
                     align: 'center',
                 },
-                { text: 'Nome Do Projeto',
+                {
+                    text: 'Nome Do Projeto',
                     align: 'center',
-                    value: 'NomeProjeto' },
+                    value: 'NomeProjeto',
+                },
                 {
                     text: 'Situacao',
                     align: 'center',
@@ -123,7 +124,6 @@ export default {
         }),
         cab() {
             let dados = [];
-
             dados = [
                 {
                     text: '#',
@@ -158,13 +158,6 @@ export default {
                     value: '',
                 };
             }
-            if (!this.mostrarTecnico) {
-                dados[6] = {
-                    text: 'Diligências',
-                    align: 'center',
-                    value: '',
-                };
-            }
             dados[7] = {
                 text: 'Ações',
                 sortable: false,
@@ -191,6 +184,9 @@ export default {
                 this.pagination.totalItems = this.dados.items.length;
             }
         },
+    },
+    updated(){
+        console.info(this.dados.items);
     },
 };
 </script>
