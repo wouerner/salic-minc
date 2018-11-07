@@ -16,7 +16,7 @@
                     <td class="text-xs-right">{{ props.item.dtTramitacaoEnvio }}</td>
                     <td class="text-xs-right">{{ props.item.Destino }}</td>
                     <td class="text-xs-right">{{ props.item.dtTramitacaoRecebida }}</td>
-                    <td class="text-xs-right">{{ props.item.Situacao }}</td>
+                    <td class="text-xs-left">{{ props.item.Situacao }}</td>
                     <td class="text-xs-left">{{ props.item.meDespacho }}</td>
                 </template>
                 <template slot="pageText" slot-scope="props">
@@ -63,7 +63,7 @@
                     },
                     {
                         text: 'ESTADO',
-                        align: 'center',
+                        align: 'left',
                         value: 'Situacao',
                     },
                     {

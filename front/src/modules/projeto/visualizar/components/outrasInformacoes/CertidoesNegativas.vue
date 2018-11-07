@@ -12,14 +12,14 @@
                     no-data-text="Nenhum dado encontrado"
             >
                 <template slot="items" slot-scope="props">
-                    <td>{{ props.item.dsCertidao }}</td>
-                    <td>{{ props.item.DtEmissao }}</td>
-                    <td>{{ props.item.DtValidade }}</td>
-                    <td>{{ props.item.Pronac }}</td>
-                    <td v-if="props.item.Situacao">
+                    <td class="text-xs-left">{{ props.item.dsCertidao }}</td>
+                    <td class="text-xs-right">{{ props.item.DtEmissao }}</td>
+                    <td class="text-xs-right">{{ props.item.DtValidade }}</td>
+                    <td class="text-xs-right">{{ props.item.Pronac }}</td>
+                    <td class="text-xs-left" v-if="props.item.Situacao">
                         {{ props.item.Situacao }}
                     </td>
-                    <td v-else>
+                    <td v-else class="text-xs-left">
                         Vencida
                     </td>
                 </template>
@@ -53,18 +53,22 @@
                     },
                     {
                         text: 'DATA DE EMISSÃO',
+                        align: 'center',
                         value: 'DtEmissao',
                     },
                     {
                         text: 'DATA DE VALIDADE',
+                        align: 'center',
                         value: 'DtValidade',
                     },
                     {
                         text: 'PRONAC',
+                        align: 'center',
                         value: 'Pronac',
                     },
                     {
                         text: 'SITUAÇÃO',
+                        align: 'left',
                         value: 'Situacao',
                     },
                 ],

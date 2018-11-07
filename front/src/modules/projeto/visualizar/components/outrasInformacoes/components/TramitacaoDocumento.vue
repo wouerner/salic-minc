@@ -22,7 +22,7 @@
                     </td>
                     <td class="text-xs-left">{{ props.item.Usuario }}</td>
                     <td class="text-xs-right">{{ props.item.idLote }}</td>
-                    <td class="text-xs-right">{{ props.item.Situacao }}</td>
+                    <td class="text-xs-left">{{ props.item.Situacao }}</td>
                 </template>
                 <template slot="pageText" slot-scope="props">
                     Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
@@ -78,7 +78,7 @@
                     },
                     {
                         text: 'ESTADO',
-                        align: 'center',
+                        align: 'left',
                         value: 'Situacao',
                     },
                 ],
