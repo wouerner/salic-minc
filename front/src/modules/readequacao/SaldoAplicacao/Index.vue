@@ -1,192 +1,205 @@
 <template>
-    <div class="readequacao-saldo-aplicacao container-fluid">
-        <div class="card" v-if="!disabled">
-	    <div class="card-content">
-                <div class="col s2">
-                    <b>Pronac: </b>{{ dadosProjeto.Pronac }}<br>
-                </div>
-                <div class="col s8">
-                    <b>Projeto: </b><span v-html="dadosProjeto.NomeProjeto"></span>
-                </div>
-                <br/>
-            </div>
-        </div>
-	
-	<div v-show="exibirBotaoIniciar">
-	    <button class="waves-effect waves-light btn btn-primary small btn-novaproposta"
-		    id="novo"
-		    v-on:click="solicitarUsoSaldo()"
-		    >
-	      <i class="material-icons left">border_color</i>Solicitar uso do saldo de aplica&ccedil;&atilde;o
-	    </button>
-	</div>
-	<ul
-	  class="collapsible"
-	  v-if="!disabled"
-	  v-show="exibirPaineis"
+<div class="readequacao-saldo-aplicacao container-fluid">
+  <div class="page-title">
+    <div class="row">
+      <div class="col s12 m9 l10">
+	<h1>Readequação Saldo de aplicação</h1>
+      </div>
+      <div class="col s12 m3 l2 right-align">
+        <a href="javascript:voltar();" title="Página Anterior"
+           class="btn small grey lighten-3 grey-text z-depth-0 chat-toggle"><i class="material-icons">arrow_back</i>
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="card" v-if="!disabled">
+    <div class="card-content">
+      <div class="col s2">
+        <b>Pronac: </b>{{ dadosProjeto.Pronac }}<br>
+      </div>
+      <div class="col s8">
+        <b>Projeto: </b><span v-html="dadosProjeto.NomeProjeto"></span>
+      </div>
+      <br/>
+    </div>
+  </div>
+  
+  <div v-show="exibirBotaoIniciar">
+    <button class="waves-effect waves-light btn btn-primary small btn-novaproposta"
+	    id="novo"
+	    v-on:click="solicitarUsoSaldo()"
+	    >
+      <i class="material-icons left">border_color</i>Solicitar uso do saldo de aplica&ccedil;&atilde;o
+    </button>
+  </div>
+  <ul
+    class="collapsible"
+    v-if="!disabled"
+    v-show="exibirPaineis"
+    >
+    <li id="collapsible">
+      <div class="collapsible-header active"><i class="material-icons">assignment</i>Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</div>
+      <div class="collapsible-body">
+	<readequacao-formulario
+	  ref="formulario"
+	  :id-pronac="idPronac"
+	  :disabled="disabled"
+	  :id-tipo-readequacao="idTipoReadequacao"
+	  :componente-ds-solicitacao='componenteFormulario'
+	  :objReadequacao="dadosReadequacao"
+	  v-on:eventoAtualizarReadequacao="atualizarReadequacao"
 	  >
-	  <li id="collapsible">
-	    <div class="collapsible-header active"><i class="material-icons">assignment</i>Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</div>
-	    <div class="collapsible-body">
-	      <readequacao-formulario
-		ref="formulario"
-		:id-pronac="idPronac"
-		:disabled="disabled"
-		:id-tipo-readequacao="idTipoReadequacao"
-		:componente-ds-solicitacao='componenteFormulario'
-		:objReadequacao="dadosReadequacao"
-		v-on:eventoAtualizarReadequacao="atualizarReadequacao"
-		>
-	      </readequacao-formulario>
-	    </div>
-	  </li>
-	  <li>
-	    <div class="collapsible-header">
-	      <i class="material-icons">list</i>
-	      Editar planilha or&ccedil;ament&aacute;ria
-	    </div>
-	    <div class="collapsible-body" v-if="solicitacaoIniciada">
-	      <div class="card">
-		<div class="card-content">
-		  <readequacao-saldo-aplicacao-resumo
-		    :valorSaldoAplicacao="valorSaldoAplicacao"
-		    :valorEntrePlanilhasLimpo="valorEntrePlanilhasLimpo"
-		    :valorSaldoDisponivelParaUso="valorSaldoDisponivelParaUso"
-		    :valorSaldoUtilizado="valorSaldoUtilizado"
-		    :valorSaldoDisponivelParaUsoNegativo="valorSaldoDisponivelParaUsoNegativo"
-		    :valorSaldoDisponivelParaUsoNeutro="valorSaldoDisponivelParaUsoNeutro"
-		    :valorSaldoDisponivelParaUsoPositivo="valorSaldoDisponivelParaUsoPositivo"
-		    :valorSaldoUtilizadoPositivo="valorSaldoUtilizadoPositivo"
-		    :valorSaldoUtilizadoNeutro="valorSaldoUtilizadoNeutro"
-		    :readequacaoAlterada="readequacaoAlterada"					
-		    :valorSaldoUtilizadoNegativo="valorSaldoUtilizadoNegativo"
-		    >
-		  </readequacao-saldo-aplicacao-resumo>
-		</div>
-	      </div>
-	      
-	      <div class="card">
-		<div class="card-content">
-		  <planilha-orcamentaria
-		    :id-pronac="idPronac"
-		    :tipo-planilha="tipoPlanilha"
-		    :link="1"
-		    :id-readequacao="dadosReadequacao.idReadequacao"
-		    :componente-planilha="componentePlanilha"
-		    :perfil="perfil"
-		    :disabled="disabled"
-		    :disponivelParaAdicaoItensReadequacaoPlanilha="disponivelParaAdicaoItensReadequacaoPlanilha"
-		    :disponivelParaEdicaoReadequacaoPlanilha="dadosReadequacao.disponivelEdicaoReadequacaoPlanilha"
-		    v-on:atualizarSaldoEntrePlanilhas="carregarValorEntrePlanilhas"
-		    >
-		  </planilha-orcamentaria>
-		</div>
-	      </div>
-	      
-	      <div class="card">
-		<div class="card-content">
-		  <readequacao-saldo-aplicacao-resumo
-		    :valorSaldoAplicacao="valorSaldoAplicacao"
-		    :valorEntrePlanilhasLimpo="valorEntrePlanilhasLimpo"
-		    :valorSaldoDisponivelParaUso="valorSaldoDisponivelParaUso"
-		    :valorSaldoUtilizado="valorSaldoUtilizado"
-		    :valorSaldoDisponivelParaUsoNegativo="valorSaldoDisponivelParaUsoNegativo"
-		    :valorSaldoDisponivelParaUsoPositivo="valorSaldoDisponivelParaUsoPositivo"
-		    :valorSaldoUtilizadoPositivo="valorSaldoUtilizadoPositivo"
-		    :valorSaldoUtilizadoNeutro="valorSaldoUtilizadoNeutro"
-		    :readequacaoAlterada="readequacaoAlterada"
-		    :valorSaldoUtilizadoNegativo="valorSaldoUtilizadoNegativo"
-		    >
-		  </readequacao-saldo-aplicacao-resumo>
-		</div>
-	      </div>
-	      
-	    </div>
-	    <div class="collapsible-body card" v-else>
-	      <span>Preencha o valor do saldo dispon&iacute;vel para poder iniciar as altera&ccedil;&atilde;oes na planilha or&ccedil;ament&aacute;ria.</span>
-	    </div>
-	  </li>
-	</ul>
-	<div v-if="disabled">
-	  <div class="card">
-	    <div class="card-content">
-	      <h4>Saldo de aplica&ccedil;&atildeo declarado</h4>
-	      <h6 class="blue-text lighten-1">R$ {{valorSaldoAplicacao}}</h6>
-	    </div>
-	  </div>
-	  <div class="card">
-	    <div class="card-content">
-	      <planilha-orcamentaria
-		:id-pronac="idPronac"
-		:tipo-planilha="tipoPlanilha"
-		:link="1"
-		:id-readequacao="dadosReadequacao.idReadequacao"
-		:componente-planilha="componentePlanilha"
-		:perfil="perfil"
-		:disabled="disabled"
-		:disponivelParaAdicaoItensReadequacaoPlanilha="disponivelParaAdicaoItensReadequacaoPlanilha"
-		:disponivelParaEdicaoReadequacaoPlanilha="disponivelParaEdicaoReadequacaoPlanilha"
-		v-on:atualizarSaldoEntrePlanilhas="carregarValorEntrePlanilhas"
-		>
-	      </planilha-orcamentaria>
-	    </div>
-	  </div>
-	</div>
-        
-	<div class="card" v-if="mostrarBotoes">
+	</readequacao-formulario>
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header">
+	<i class="material-icons">list</i>
+	Editar planilha or&ccedil;ament&aacute;ria
+      </div>
+      <div class="collapsible-body" v-if="solicitacaoIniciada">
+	<div class="card">
 	  <div class="card-content">
-	    <div class="row">
-	      <div class="right-align padding20 col s12">
-		<button
-		  class="waves-light waves-effect btn red modal-trigger"
-		  v-on:click="prepararExcluirReadequacao()"
-		  >Excluir</button>
-		<a
-		  class="waves-light waves-effect btn modal-trigger"
-		  href="#modalFinalizar"
-		  :disabled="!podeFinalizarReadequacao"
-		  >Finalizar</a>
-	      </div>
-	    </div>
+	    <readequacao-saldo-aplicacao-resumo
+	      :valorSaldoAplicacao="valorSaldoAplicacao"
+	      :valorEntrePlanilhasLimpo="valorEntrePlanilhasLimpo"
+	      :valorSaldoDisponivelParaUso="valorSaldoDisponivelParaUso"
+	      :valorSaldoUtilizado="valorSaldoUtilizado"
+	      :valorSaldoDisponivelParaUsoNegativo="valorSaldoDisponivelParaUsoNegativo"
+	      :valorSaldoDisponivelParaUsoNeutro="valorSaldoDisponivelParaUsoNeutro"
+	      :valorSaldoDisponivelParaUsoPositivo="valorSaldoDisponivelParaUsoPositivo"
+	      :valorSaldoUtilizadoPositivo="valorSaldoUtilizadoPositivo"
+	      :valorSaldoUtilizadoNeutro="valorSaldoUtilizadoNeutro"
+	      :readequacaoAlterada="readequacaoAlterada"					
+	      :valorSaldoUtilizadoNegativo="valorSaldoUtilizadoNegativo"
+	      >
+	    </readequacao-saldo-aplicacao-resumo>
 	  </div>
 	</div>
 	
- 	<div id="modalExcluir" class="modal">
-	  <div class="modal-content center-align">
-	    <h4>Tem certeza que deseja excluir a redequa&ccedil;&atilde;o?</h4>
-	  </div>
-	  <div class="modal-footer">
-	    <a class="waves-effect waves-green btn-flat red white-text"
-	       v-on:click="excluirReadequacao">Excluir
-	    </a>
-	    <a class="modal-close waves-effect waves-green btn-flat"
-	       href="#!">Cancelar
-	    </a>												
-	  </div>
-	</div>						
- 	<div id="modalFinalizar" class="modal">
-	  <div class="modal-content center-align">
-	    <h4>Tem certeza que deseja finalizar a redequa&ccedil;&atilde;o?</h4>
-	  </div>
-	  <div class="modal-footer">
-	    <a 
-	      class="waves-effect waves-green btn-flat green white-text"
-	      v-on:click="finalizarReadequacao">Finalizar
-	    </a>
-	    <a class="modal-close waves-effect waves-green btn-flat"
-	       href="#!">Cancelar
-	    </a>												
-	  </div>
-	</div>						
-	
-	<div v-if="mostrarMensagemFinal" class="card">
+	<div class="card">
 	  <div class="card-content">
-	    <div class="row">
-              <div class="col s1 right-align"><i class="medium green-text material-icons">check_circle</i></div>
-              <div class="col s11">
-		<p><b>Solicita&ccedil;&atilde;o enviada com sucesso!</b></p>
-		<p>Sua solicita&ccedil;&atilde;o agora est&aacute; para an&aacute;lise t&eacute;cnica do MinC.</p>
-		<p>Para acompanhar, acesse o menu lateral 'Execu&ccedil;&atilde;o -> Dados das readequa&ccedil;&otilde;es'
+	    <planilha-orcamentaria
+	      :id-pronac="idPronac"
+	      :tipo-planilha="tipoPlanilha"
+	      :link="1"
+	      :id-readequacao="dadosReadequacao.idReadequacao"
+	      :componente-planilha="componentePlanilha"
+	      :perfil="perfil"
+	      :disabled="disabled"
+	      :disponivelParaAdicaoItensReadequacaoPlanilha="disponivelParaAdicaoItensReadequacaoPlanilha"
+	      :disponivelParaEdicaoReadequacaoPlanilha="dadosReadequacao.disponivelEdicaoReadequacaoPlanilha"
+	      v-on:atualizarSaldoEntrePlanilhas="carregarValorEntrePlanilhas"
+	      >
+	    </planilha-orcamentaria>
+	  </div>
+	</div>
+	
+	<div class="card">
+	  <div class="card-content">
+	    <readequacao-saldo-aplicacao-resumo
+	      :valorSaldoAplicacao="valorSaldoAplicacao"
+	      :valorEntrePlanilhasLimpo="valorEntrePlanilhasLimpo"
+	      :valorSaldoDisponivelParaUso="valorSaldoDisponivelParaUso"
+	      :valorSaldoUtilizado="valorSaldoUtilizado"
+	      :valorSaldoDisponivelParaUsoNegativo="valorSaldoDisponivelParaUsoNegativo"
+	      :valorSaldoDisponivelParaUsoPositivo="valorSaldoDisponivelParaUsoPositivo"
+	      :valorSaldoUtilizadoPositivo="valorSaldoUtilizadoPositivo"
+	      :valorSaldoUtilizadoNeutro="valorSaldoUtilizadoNeutro"
+	      :readequacaoAlterada="readequacaoAlterada"
+	      :valorSaldoUtilizadoNegativo="valorSaldoUtilizadoNegativo"
+	      >
+	    </readequacao-saldo-aplicacao-resumo>
+	  </div>
+	</div>
+	
+      </div>
+      <div class="collapsible-body card" v-else>
+	<span>Preencha o valor do saldo dispon&iacute;vel para poder iniciar as altera&ccedil;&atilde;oes na planilha or&ccedil;ament&aacute;ria.</span>
+      </div>
+    </li>
+  </ul>
+  <div v-if="disabled">
+    <div class="card">
+      <div class="card-content">
+	<h4>Saldo de aplica&ccedil;&atildeo declarado</h4>
+	<h6 class="blue-text lighten-1">R$ {{valorSaldoAplicacao}}</h6>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-content">
+	<planilha-orcamentaria
+	  :id-pronac="idPronac"
+	  :tipo-planilha="tipoPlanilha"
+	  :link="1"
+	  :id-readequacao="dadosReadequacao.idReadequacao"
+	  :componente-planilha="componentePlanilha"
+	  :perfil="perfil"
+	  :disabled="disabled"
+	  :disponivelParaAdicaoItensReadequacaoPlanilha="disponivelParaAdicaoItensReadequacaoPlanilha"
+	  :disponivelParaEdicaoReadequacaoPlanilha="disponivelParaEdicaoReadequacaoPlanilha"
+	  v-on:atualizarSaldoEntrePlanilhas="carregarValorEntrePlanilhas"
+	  >
+	</planilha-orcamentaria>
+      </div>
+    </div>
+  </div>
+  
+  <div class="card" v-if="mostrarBotoes">
+    <div class="card-content">
+      <div class="row">
+	<div class="right-align padding20 col s12">
+	  <button
+	    class="waves-light waves-effect btn red modal-trigger"
+	    v-on:click="prepararExcluirReadequacao()"
+	    >Excluir</button>
+	  <a
+	    class="waves-light waves-effect btn modal-trigger"
+	    href="#modalFinalizar"
+	    :disabled="!podeFinalizarReadequacao"
+	    >Finalizar</a>
+	</div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="modalExcluir" class="modal">
+    <div class="modal-content center-align">
+      <h4>Tem certeza que deseja excluir a redequa&ccedil;&atilde;o?</h4>
+    </div>
+    <div class="modal-footer">
+      <a class="waves-effect waves-green btn-flat red white-text"
+	 v-on:click="excluirReadequacao">Excluir
+      </a>
+      <a class="modal-close waves-effect waves-green btn-flat"
+	 href="#!">Cancelar
+      </a>												
+    </div>
+  </div>						
+  <div id="modalFinalizar" class="modal">
+    <div class="modal-content center-align">
+      <h4>Tem certeza que deseja finalizar a redequa&ccedil;&atilde;o?</h4>
+    </div>
+    <div class="modal-footer">
+      <a 
+	class="waves-effect waves-green btn-flat green white-text"
+	v-on:click="finalizarReadequacao">Finalizar
+      </a>
+      <a class="modal-close waves-effect waves-green btn-flat"
+	 href="#!">Cancelar
+      </a>												
+    </div>
+  </div>						
+  
+  <div v-if="mostrarMensagemFinal" class="card">
+    <div class="card-content">
+      <div class="row">
+        <div class="col s1 right-align"><i class="medium green-text material-icons">check_circle</i></div>
+        <div class="col s11">
+	  <p><b>Solicita&ccedil;&atilde;o enviada com sucesso!</b></p>
+	  <p>Sua solicita&ccedil;&atilde;o agora est&aacute; para an&aacute;lise t&eacute;cnica do MinC.</p>
+	  <p>Para acompanhar, acesse o menu lateral 'Execu&ccedil;&atilde;o -> Dados das readequa&ccedil;&otilde;es'
 		  em <a :href="'/projeto/#incentivo/' + idPronac">consultar dados do projeto</a>.</p>
               </div>
 	    </div>
