@@ -75,15 +75,14 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
         $resultArray = [];
 
         foreach ($diligencias as $diligencia) {
-            $tipoDiligencia = html_entity_decode(utf8_encode($diligencia['tipoDiligencia']));
             $objDateTimedataSolicitacao = new \DateTime($diligencia['dataSolicitacao']);
             $objDateTimedataResposta = new \DateTime($diligencia['dataResposta']);
 
             $qtdia = 40;
             $resultArray[] = [
-                'produto' => $diligencia['produto'],
+                'produto' => html_entity_decode(utf8_encode($diligencia['produto'])),
+                'tipoDiligencia' => html_entity_decode(utf8_encode($diligencia['tipoDiligencia'])),
                 'idDiligencia' => $diligencia['idDiligencia'],
-                'tipoDiligencia' => $tipoDiligencia,
                 'dataSolicitacao' => $objDateTimedataSolicitacao->format('d/m/Y'),
                 'dataResposta' => $objDateTimedataResposta->format('d/m/Y'),
                 'prazoResposta' => date('d/m/Y',strtotime($diligencia['dataSolicitacao'].' +'.$qtdia.' day')),

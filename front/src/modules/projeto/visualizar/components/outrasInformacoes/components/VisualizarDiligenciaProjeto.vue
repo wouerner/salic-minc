@@ -42,64 +42,73 @@
         <v-dialog v-model="dialog" width="90%">
             <v-card>
                 <v-card-text>
-                    <tr>
-                        <td colspan="7">
-                            <table class="tabela">
-                                <tbody>
-                                <tr>
-                                    <th>DATA DA SOLICITA&Ccedil;&Atilde;O</th>
-                                    <th>DATA DA RESPOSTA</th>
-                                </tr>
-                                <tr>
-                                    <td>{{ dadosDiligencia.dataSolicitacao }}</td>
-                                    <td>{{ dadosDiligencia.dataResposta }}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <table v-if="dadosDiligencia.Solicitacao" class="tabela">
-                                <tbody>
-                                <tr>
-                                    <th>SOLICITA&Ccedil;&Atilde;O</th>
-                                </tr>
-                                <tr>
-                                    <td style="padding-left: 20px" v-html="dadosDiligencia.Solicitacao"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <table v-if="dadosDiligencia.Resposta" class="tabela">
-                                <tbody>
-                                <tr>
-                                    <th>RESPOSTA:</th>
-                                </tr>
-                                <tr>
-                                    <td style="padding-left: 20px" v-html="dadosDiligencia.Resposta"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <table class="tabela"
-                                   v-if="dadosDiligencia.arquivos && Object.keys(dadosDiligencia.arquivos).length > 0">
-                                <tbody>
-                                <tr>
-                                    <th colspan="3">Arquivos Anexados</th>
-                                </tr>
-                                <tr>
-                                    <td class="destacar bold" align="center">Arquivo</td>
-                                    <td class="destacar bold" align="center">Dt.Envio</td>
-                                </tr>
-                                <tr v-for="arquivo of dadosDiligencia.arquivos" :key="arquivo.idArquivo">
-                                    <td>
-                                        <a :href="`/upload/abrir?id=${arquivo.idArquivo}`" target="_blank">
-                                            {{ arquivo.nmArquivo }}
-                                        </a>
-                                    </td>
-                                    <td align="center">
-                                        {{ arquivo.dtEnvio }}
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
+                    <v-container fluid>
+                        <v-layout justify-space-around row wrap>
+                            <v-flex s12 m6 lg2 offset-lg1 dark>
+                                <b>DATA DA SOLICITA&Ccedil;&Atilde;O</b>
+                                <p>{{ dadosDiligencia.dataSolicitacao }}</p>
+                            </v-flex>
+                            <v-flex s12 m6 lg3>
+                                <b>DATA DA RESPOSTA</b>
+                                <p>{{ dadosDiligencia.dataResposta }}</p>
+                            </v-flex>
+                        </v-layout>
+                        <div v-if="dadosDiligencia.Solicitacao">
+                            <v-layout justify-space-around row wrap>
+                                <v-flex lg12 dark>
+                                    <b>SOLICITAÇÃO</b>
+                                </v-flex>
+                                <v-flex>
+                                    <p v-html="dadosDiligencia.Solicitacao"></p>
+                                </v-flex>
+                            </v-layout>
+                        </div>
+
+                        <div v-if="dadosDiligencia.Resposta">
+                            <v-layout justify-space-around row wrap>
+                                <v-flex lg12 dark>
+                                    <b>RESPOSTA</b>
+                                </v-flex>
+                                <v-flex>
+                                    <p v-html="dadosDiligencia.Resposta"></p>
+                                </v-flex>
+                            </v-layout>
+                        </div>
+
+                        <div v-if="dadosDiligencia.arquivos && Object.keys(dadosDiligencia.arquivos).length > 0">
+                            <v-flex lg12 dark class="text-xs-center">
+                                <b>ARQUIVOS ANEXADOS</b>
+                            </v-flex>
+                            <v-container grid-list-md>
+                                <v-layout justify-space-around row wrap>
+                                    <v-flex xs6>
+                                        <b>Arquivo</b>
+                                    </v-flex>
+                                    <v-flex xs2>
+                                        <b>Dt.Envio</b>
+                                    </v-flex>
+                                </v-layout>
+                                <v-layout justify-space-around align-center row
+                                          v-for="arquivo of dadosDiligencia.arquivos"
+                                          :key="arquivo.idArquivo"
+                                >
+                                    <v-flex xs6>
+                                        <p>
+                                            <a :href="`/upload/abrir?id=${arquivo.idArquivo}`"
+                                               target="_blank">
+                                                {{ arquivo.nmArquivo }}
+                                            </a>
+                                        </p>
+                                    </v-flex>
+                                    <v-flex xs2>
+                                        <p>
+                                            {{ arquivo.dtEnvio }}
+                                        </p>
+                                    </v-flex>
+                                </v-layout>
+                            </v-container>
+                        </div>
+                    </v-container>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
