@@ -116,7 +116,7 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
             $where['AnoProjeto+Sequencial = ?'] = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
             $this->view->pronacProjeto = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
         }
-
+        $analisados = false;
         if (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])) {
             $tipoFiltro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
             switch ($tipoFiltro) {
@@ -128,6 +128,7 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
                 case 'analisados':
                     $tipoFiltro = 'analisados';
                     $filtro = 'Analisados';
+                    $analisados = true;
                     $where['a.siCumprimentoObjeto = ?'] = 5;
                     break;
                 default:
@@ -144,13 +145,13 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
 
 
         $tbCumprimentoObjeto = new ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
-        $total = $tbCumprimentoObjeto->listaRelatorios($where, $order, null, null, true);
+        $total = $tbCumprimentoObjeto->listaRelatorios($where, $order, null, null, true, $analisados);
         $fim = $inicio + $this->intTamPag;
 
         $totalPag = (int)(($total % $this->intTamPag == 0) ? ($total / $this->intTamPag) : (($total / $this->intTamPag) + 1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
-        $busca = $tbCumprimentoObjeto->listaRelatorios($where, $order, $tamanho, $inicio);
-
+        $busca = $tbCumprimentoObjeto->listaRelatorios($where, $order, $tamanho, $inicio, false, $analisados);
+//            xd($busca);
         $paginacao = array(
             "pag" => $pag,
             "qtde" => $this->intTamPag,
@@ -166,6 +167,8 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
             "tamanho" => $tamanho
         );
 
+        $this->view->urlAssinatura = '/assinatura/index/visualizar-projeto';
+        $this->view->originAssinatura = 'comprovacao-objeto/avaliaracompanhamentoprojeto/index?tipoFiltro=analisados';
         $this->view->paginacao = $paginacao;
         $this->view->qtdRegistros = $total;
         $this->view->dados = $busca;
@@ -366,7 +369,7 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
         $this->view->DadosRelatorio = $DadosRelatorio;
         $this->view->cumprimentoDoObjeto = $tbCumprimentoObjeto;
         if (count($DadosRelatorio) == 0) {
-            parent::message("Relat&aacute;rio n&atilde;o encontrado!", "comprovacao-objeto/avaliaracompanhamentoprojeto/index", "ALERT");
+            parent::message("Relat&oacute;rio n&atilde;o encontrado!", "comprovacao-objeto/avaliaracompanhamentoprojeto/index", "ALERT");
         }
 
         $LocaisDeRealizacao = $projetos->buscarLocaisDeRealizacao($idPronac);
