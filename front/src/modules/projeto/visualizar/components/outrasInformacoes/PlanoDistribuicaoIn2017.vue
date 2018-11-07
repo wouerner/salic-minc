@@ -10,31 +10,35 @@
             </PropostaPlanoDistribuicao>
         </div>
     </div> -->
-<v-expansion-panel popout focusable>
-            <v-expansion-panel-content class="elevation-1">
+<v-expansion-panel popout>
+            <v-expansion-panel-content 
+                class="elevation-1"
+                v-for="(produto, index) of dadosIn2017.planodistribuicaoproduto" 
+                :key="index"
+                >
                 <v-layout slot="header" class="green--text">
                     <v-icon class="mr-3 green--text">subject</v-icon>
-                    <span>Plano Teste</span>
+                    <span>{{produto.Produto}}</span>
                 </v-layout>
                 <v-container fluid>
-                    <v-card class="elevation-2 pl-5 pt-3">
+                    <v-card class="elevation-2 pl-5 pt-3" color="grey lighten-4">
                         <v-card-text>
                             <v-layout justify-space-around row wrap>
                                 <v-flex s12 m6 lg2 offset-lg1 dark>
-                                    <b>AREA</b>
-                                    <p>Artes Cenicas</p>
+                                    <b>&Aacute;REA</b>
+                                    <p>{{produto.DescricaoArea}}</p>
                                     </v-flex>
                                     <v-flex s12 m6 lg3>
                                         <b>SEGMENTO</b>
-                                    <p>Teatro</p>
+                                        <p>{{produto.DescricaoSegmento}}</p>
+                                    </v-flex>
+                                    <v-flex s12 m6 lg3>
+                                        <b>PRINCIPAL</b>
+                                        <P>{{label_sim_ou_nao(produto.stPrincipal)}}</P>
                                     </v-flex>
                                     <v-flex s12 m6 lg3>
                                         <b>CANAL ABERTO?</b>
-                                        <P>Sim</P>
-                                    </v-flex>
-                                    <v-flex s12 m6 lg3>
-                                        <b>CANAL ABERTO?</b>
-                                        <P>NAO</P>
+                                        <P>{{label_sim_ou_nao(produto.canalAberto)}}</P>
                                     </v-flex>
                                 </v-layout>
 
@@ -44,67 +48,44 @@
                                     </v-flex>
                                     <v-flex s6 m6 lg3 offset-lg1>
                                         <p>
-                                           <b>Divulgacao</b><br>
-                                            #1
+                                           <b>Divulga&ccedil;&atilde;o</b><br>
+                                            {{produto.QtdeProponente}}
                                         </p>
                                     </v-flex>
                                     <v-flex s12 m6 lg4>
                                         <p>
                                             <b>Patrocinador</b><br>
-                                            #2
+                                            {{produto.QtdePatrocinador}}
                                         </p>
                                     </v-flex>
                                     <v-flex s12 m6 offset-xlg10>
                                         <p>
-                                            <b>Populacao</b><br>
-                                            #3
+                                            <b>Popula&ccedil;&atilde;o</b><br>
+                                            {{produto.QtdeOutros}}
                                         </p>
                                     </v-flex>
                                 </v-layout>
 
                                 <v-layout justify-space-around row wrap>
                                     <v-flex lg12 dark class="text-xs-center">
-                                    <b>PRECO POPULAR</b>
+                                    <b>PRE&Ccedil;O POPULAR</b>
                                     </v-flex>
                                     <v-flex s6 m6 lg3 offset-lg1>
                                         <p>
                                             <b>Quantidade Inteira</b><br>
-                                            #1
+                                            {{produto.QtdeVendaPopularNormal}}
                                         </p>
                                     </v-flex>
                                     <v-flex s12 m6 lg4>
                                         <p>
                                             <b>Quantidade Meia</b><br>
-                                            #2
+                                            {{produto.QtdeVendaPopularPromocional}}
                                         </p>
                                     </v-flex>
                                     <v-flex s12 m6 lg4>
                                         <p>
-                                            <b>Valor medio</b><br>
-                                            #3
-                                        </p>
-                                    </v-flex>
-                                </v-layout>
-                                <v-layout justify-space-around row wrap>
-                                    <v-flex lg12 dark class="text-xs-center">
-                                    <b>PRECO POPULAR</b>
-                                    </v-flex>
-                                    <v-flex s6 m6 lg3 offset-lg1>
-                                        <p>
-                                            <b>Quantidade Inteira</b><br>
-                                            #1
-                                        </p>
-                                    </v-flex>
-                                    <v-flex s12 m6 lg4>
-                                        <p>
-                                            <b>Quantidade Meia</b><br>
-                                            #2
-                                        </p>
-                                    </v-flex>
-                                    <v-flex s12 m6 lg4>
-                                        <p>
-                                            <b>Valor medio</b><br>
-                                            #3
+                                            <b>Valor m&eacute;dio</b><br>
+                                            {{produto.ReceitaPopularNormal}}
                                         </p>
                                     </v-flex>
                                 </v-layout>
@@ -116,19 +97,19 @@
                                     <v-flex s6 m6 lg3 offset-lg1>
                                         <p>
                                             <b>Quantidade Inteira</b><br>
-                                            #1
+                                            {{produto.QtdeVendaNormal}}
                                         </p>
                                     </v-flex>
                                     <v-flex s12 m6 lg4>
                                         <p>
                                             <b>Quantidade Meia</b><br>
-                                            #2
+                                            {{produto.QtdeVendaPromocional}}
                                         </p>
                                     </v-flex>
                                     <v-flex s12 m6 lg4>
                                         <p>
-                                            <b>Valor medio</b><br>
-                                            #3
+                                            <b>Valor m&eacute;dio</b><br>
+                                            {{produto.PrecoUnitarioNormal}}
                                         </p>
                                     </v-flex>
                                 </v-layout>
@@ -143,13 +124,13 @@
                                     <v-flex s3 m6 lg5 offset-lg1>
                                         <p>
                                             <b>Quantidade Inteira</b><br>
-                                            #1
+                                            {{produto.QtdeProduzida}}
                                         </p>
                                     </v-flex>
                                     <v-flex s3 m6 lg6>
                                         <p>
                                             <b>Quantidade Meia</b><br>
-                                            #2
+                                            {{produto.Receita}}
                                         </p>
                                     </v-flex>
                                 </v-layout>
@@ -195,7 +176,13 @@ export default {
   methods: {
     ...mapActions({
       buscarPlanoDistribuicaoIn2017: "projeto/buscarPlanoDistribuicaoIn2017"
-    })
+    }),
+    label_sim_ou_nao(valor) {
+        if (valor === 1) {
+            return 'Sim';
+        }
+        return 'N\xE3o';
+    },
   }
 };
 </script>
