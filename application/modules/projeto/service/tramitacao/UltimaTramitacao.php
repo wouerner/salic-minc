@@ -35,6 +35,8 @@ class UltimaTramitacao implements \MinC\Servico\IServicoRestZend
 
         $tramitacoes = $this->obterUltimaTramitacao($rst);
 
+        $tramitacoes = \TratarArray::utf8EncodeArray($tramitacoes);
+
         return $tramitacoes;
     }
 
@@ -42,9 +44,9 @@ class UltimaTramitacao implements \MinC\Servico\IServicoRestZend
     {
         $resultArray = [];
         foreach ($tramitacoes as $tramitacao) {
-            $Emissor = html_entity_decode(utf8_encode($tramitacao['Emissor']));
-            $Receptor = html_entity_decode(utf8_encode($tramitacao['Receptor']));
-            $meDespacho = html_entity_decode(utf8_encode($tramitacao['meDespacho']));
+            $Emissor = $tramitacao['Emissor'];
+            $Receptor = $tramitacao['Receptor'];
+            $meDespacho = $tramitacao['meDespacho'];
             $objDateTimeDtTramitacaoEnvio = new \DateTime($tramitacao['DtTramitacaoEnvio']);
             $objDateTimedtTramitacaoRecebida = new \DateTime($tramitacao['dtTramitacaoRecebida']);
 

@@ -35,6 +35,8 @@ class TramitacaoDocumento implements \MinC\Servico\IServicoRestZend
 
         $tramitacoes = $this->obterTramitacaoDocumento($total);
 
+        $tramitacoes = \TratarArray::utf8EncodeArray($tramitacoes);
+
         return $tramitacoes;
     }
 
@@ -42,8 +44,8 @@ class TramitacaoDocumento implements \MinC\Servico\IServicoRestZend
     {
         $resultArray = [];
         foreach ($tramitacoes as $tramitacao) {
-            $dsTipoDocumento = html_entity_decode(utf8_encode($tramitacao['dsTipoDocumento']));
-            $noArquivo = html_entity_decode(utf8_encode($tramitacao['noArquivo']));
+            $dsTipoDocumento = $tramitacao['dsTipoDocumento'];
+            $noArquivo = $tramitacao['noArquivo'];
             $objDateTimedtDocumento = new \DateTime($tramitacao['dtDocumento']);
             $objDateTimedtJuntada = new \DateTime($tramitacao['dtJuntada']);
 

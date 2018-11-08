@@ -35,6 +35,8 @@ class TramitacaoProjeto implements \MinC\Servico\IServicoRestZend
 
         $tramitacoes = $this->obterTramitacaoProjeto($total);
 
+        $tramitacoes = \TratarArray::utf8EncodeArray($tramitacoes);
+
         return $tramitacoes;
     }
 
@@ -42,7 +44,7 @@ class TramitacaoProjeto implements \MinC\Servico\IServicoRestZend
     {
         $resultArray = [];
         foreach ($tramitacoes as $tramitacao) {
-            $meDespacho = html_entity_decode(utf8_encode($tramitacao['meDespacho']));
+            $meDespacho = $tramitacao['meDespacho'];
             $objDateTimeDtTramitacaoEnvio = new \DateTime($tramitacao['dtTramitacaoEnvio']);
             $objDateTimedtTramitacaoRecebida = new \DateTime($tramitacao['dtTramitacaoRecebida']);
 
