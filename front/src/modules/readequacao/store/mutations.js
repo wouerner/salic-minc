@@ -17,7 +17,7 @@ export const mutations = {
     [types.EXCLUIR_READEQUACAO](state) {
         state.readequacao = {};
     },
-    [types.DISPONIVEL_EDICAO_READEQUACAO_PLANILHA](state, disponivel) {
+    [types.OBTER_DISPONIVEL_EDICAO_READEQUACAO_PLANILHA](state, disponivel) {
         state.readequacao.disponivelEdicaoReadequacaoPlanilha = disponivel;
     },
     [types.ADICIONAR_DOCUMENTO](state, data) {

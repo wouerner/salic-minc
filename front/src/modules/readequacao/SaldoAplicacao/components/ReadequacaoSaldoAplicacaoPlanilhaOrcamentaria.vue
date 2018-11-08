@@ -46,7 +46,7 @@
                                                                     :valor="locais.total"
                                                                     :prefixo="prefixoValor"
                                                                     />
-                                                            </span>
+                                                             </span>
                                                     </div>
                                                     <div class="collapsible-body no-padding margin20 scroll-x">
                                                         <div class="center-align margin20" v-if="podeIncluirItem()">
@@ -131,7 +131,7 @@
                 />
             </span>
         </div>
-        <div id="modalEditar" class="modal" v-if="disponivelParaEdicaoReadequacaoPlanilha">
+        <div id="modalEditar" class="modal" v-if="disponivelEdicaoReadequacaoPlanilha">
             <div class="modal-header margin20">
                 <h4 class="center-align">Alterar item</h4>
             </div>
@@ -156,6 +156,7 @@
 </template>
 
 <script>
+    import { mapActions, mapGetters } from 'vuex';
     import SalicFormatarValor from '@/components/SalicFormatarValor';
     import _ from 'lodash';
     import numeral from 'numeral';
@@ -180,7 +181,6 @@
             link: '',
             disabled: '',
             disponivelParaAdicaoItensReadequacaoPlanilha: '',
-            disponivelParaEdicaoReadequacaoPlanilha: '',
         },
         mixins: [utils],
         data() {
@@ -223,8 +223,8 @@
             },
             iniciarCollapsible() {
                 $3('.planilha-orcamentaria .collapsible').each(
-                    () => {
-                        $3(this).collapsible();
+                    (key, element) => {
+                        $3(element).collapsible();
                     },
                 );
             },
@@ -277,7 +277,7 @@
                 if (this.perfil === this.perfilProponente &&
                     this.link &&
                     item.vlComprovado < item.vlAprovado &&
-                    this.disponivelParaEdicaoReadequacaoPlanilha &&
+                    this.disponivelEdicaoReadequacaoPlanilha &&
                     (item.tpAcao !== 'E' &&
                      item.idFonte === this.fonteRecursosFederais)) {
                     return true;
@@ -393,6 +393,12 @@
             valorFormatado(valor) {
                 return valor;
             },
+            ...mapGetters({
+                disponivelEdicaoReadequacaoPlanilha: 'readequacao/disponivelEdicaoReadequacaoPlanilha',
+            }),
+            ...mapActions({
+                obterDisponivelEdicaoReadequacaoPlanilha: 'readequacao/obterDisponivelEdicaoReadequacaoPlanilha',
+            }),
         },
         watch: {
             objPlanilha(value) {
@@ -430,7 +436,7 @@
                             totalEtapa = 0;
                             Object.entries(locais).forEach(([local, itens]) => {
                                 totalLocal = 0;
-                                Object.entries(itens).forEach(([column, cell]) => {
+                                Object.keys(itens).forEach(([cell]) => {
                                     totalLocal += cell.vlAprovado;
                                 });
 

@@ -89,7 +89,6 @@
               :perfil="perfil"
               :disabled="disabled"
               :disponivelParaAdicaoItensReadequacaoPlanilha="disponivelParaAdicaoItensReadequacaoPlanilha"
-              :disponivelParaEdicaoReadequacaoPlanilha="dadosReadequacao.disponivelEdicaoReadequacaoPlanilha"
               v-on:atualizarSaldoEntrePlanilhas="carregarValorEntrePlanilhas"
               >
             </planilha-orcamentaria>
@@ -138,7 +137,6 @@
           :perfil="perfil"
           :disabled="disabled"
           :disponivelParaAdicaoItensReadequacaoPlanilha="disponivelParaAdicaoItensReadequacaoPlanilha"
-          :disponivelParaEdicaoReadequacaoPlanilha="disponivelParaEdicaoReadequacaoPlanilha"
           v-on:atualizarSaldoEntrePlanilhas="carregarValorEntrePlanilhas"
           >
         </planilha-orcamentaria>
@@ -287,7 +285,7 @@ export default {
                     self.buscaReadequacao({ idPronac, idTipoReadequacao });
                     self.exibirPaineis = true;
                     self.exibirBotaoIniciar = false;
-                    self.disponivelParaEdicaoReadequacaoPlanilha();
+                    self.disponivelEdicaoReadequacaoPlanilha(self.idPronac);
                     self.carregarValorEntrePlanilhas();
                 },
             );
@@ -387,7 +385,7 @@ export default {
             buscaProjeto: 'projeto/buscaProjeto',
             buscaReadequacao: 'readequacao/buscaReadequacao',
             excluirReadequacao: 'readequacao/excluirReadequacao',
-            disponivelEdicaoReadequacaoPlanilha: 'readequacao/disponivelEdicaoReadequacaoPlanilha',
+            obterDisponivelEdicaoReadequacaoPlanilha: 'readequacao/obterDisponivelEdicaoReadequacaoPlanilha',
         }),
     },
     watch: {
@@ -407,7 +405,7 @@ export default {
             if (typeof this.dadosReadequacao.dsSolicitacao !== 'undefined') {
                 this.exibirBotaoIniciar = false;
                 $3('.collapsible').collapsible();
-                this.disponivelEdicaoReadequacaoPlanilha(this.dadosReadequacao.idPronac);
+                this.obterDisponivelEdicaoReadequacaoPlanilha(this.dadosReadequacao.idPronac);
                 this.carregarValorEntrePlanilhas();
                 this.solicitacaoIniciada = true;
                 this.exibirPaineis = true;

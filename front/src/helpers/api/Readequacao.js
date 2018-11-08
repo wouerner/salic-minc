@@ -26,7 +26,7 @@ export const excluirReadequacao = (params) => {
     return api.postRequest(path, buildData(params));
 };
 
-export const disponivelEdicaoReadequacaoPlanilha = (idPronac) => {
+export const obterDisponivelEdicaoReadequacaoPlanilha = (idPronac) => {
     const path = '/readequacao/saldo-aplicacao/verificar-disponivel-para-edicao-readequacao-planilha/?idPronac=';
     return api.getRequest(path, idPronac);
 };

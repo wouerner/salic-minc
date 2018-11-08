@@ -30,11 +30,11 @@ export const excluirReadequacao = ({ commit }, params) => {
         });
 };
 
-export const disponivelEdicaoReadequacaoPlanilha = ({ commit }, idPronac) => {
-    readequacaoHelperAPI.disponivelEdicaoReadequacaoPlanilha(idPronac)
+export const obterDisponivelEdicaoReadequacaoPlanilha = ({ commit }, idPronac) => {
+    readequacaoHelperAPI.obterDisponivelEdicaoReadequacaoPlanilha(idPronac)
         .then((response) => {
             const data = response.data.disponivelParaEdicaoReadequacaoPlanilha;
-            commit(types.DISPONIVEL_EDICAO_READEQUACAO_PLANILHA, data);
+            commit(types.OBTER_DISPONIVEL_EDICAO_READEQUACAO_PLANILHA, data);
         });
 };
 
