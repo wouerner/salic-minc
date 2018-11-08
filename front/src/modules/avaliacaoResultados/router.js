@@ -3,7 +3,6 @@ import Router from 'vue-router';
 import EmitirParecer from './components/ParecerTecnico/EmitirParecer';
 import HistoricoDiligencias from './components/components/HistoricoDiligencias';
 import Painel from './components/ParecerTecnico/Painel';
-import TipoAvaliacao from './components/TipoAvaliacao';
 import Planilha from './components/ParecerTecnico/Planilha';
 import VisualizarPlanilha from './components/components/VisualizarPlanilha';
 import AnaliseComprovantes from './components/ParecerTecnico/AnaliseComprovantes';
@@ -23,14 +22,6 @@ const routes = [
         component: EmitirParecer,
         meta: {
             title: 'Principal',
-        },
-    },
-    {
-        path: '/tipo-avaliacao/:id',
-        name: 'tipoAvaliacao',
-        component: TipoAvaliacao,
-        meta: {
-            title: 'Tipo Avaliacao',
         },
     },
     {
