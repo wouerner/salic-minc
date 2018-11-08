@@ -41,6 +41,8 @@ class DocumentosAnexados implements \MinC\Servico\IServicoRestZend
 
         $resultArray['documentos'] = $docs;
 
+        $resultArray = \TratarArray::utf8EncodeArray($resultArray);
+
         return $resultArray;
     }
 
@@ -67,8 +69,8 @@ class DocumentosAnexados implements \MinC\Servico\IServicoRestZend
             $itemArray = [
                 'Anexado' => $item->Anexado,
                 'Data' => $item->Data,
-                'Descricao' => utf8_encode($item->Descricao),
-                'NoArquivo' => utf8_encode($item->NoArquivo),
+                'Descricao' => $item->Descricao,
+                'NoArquivo' => $item->NoArquivo,
                 'idArquivo' => $item->idDocumentosAgentes,
                 'AgenteDoc' => $item->AgenteDoc,
             ];
