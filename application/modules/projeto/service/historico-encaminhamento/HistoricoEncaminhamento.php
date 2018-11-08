@@ -44,6 +44,8 @@ class HistoricoEncaminhamento implements \MinC\Servico\IServicoRestZend
 
         $resultArray['Encaminhamentos'] = $Encaminhamentos;
 
+        $resultArray = \TratarArray::utf8EncodeArray($resultArray);
+
         return $resultArray;
     }
 
@@ -51,9 +53,9 @@ class HistoricoEncaminhamento implements \MinC\Servico\IServicoRestZend
         $result = [];
 
         foreach ($historicoEncaminhamento as $item) {
-            $produto = html_entity_decode(utf8_encode($item['Produto']));
-            $unidade = html_entity_decode(utf8_encode($item['Unidade']));
-            $observacao = html_entity_decode(utf8_encode($item['Observacao']));
+            $produto = $item['Produto'];
+            $unidade = $item['Unidade'];
+            $observacao = $item['Observacao'];
             $objDateTimeDtEnvio = new \DateTime($item['DtEnvio']);
             $objDateTimeDtRetorno = new \DateTime($item['DtRetorno']);
 
