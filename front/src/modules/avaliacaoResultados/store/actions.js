@@ -80,11 +80,12 @@ export const obterDadosTabelaTecnico = ({ commit }, params) => {
 };
 
 export const obetDadosDiligencias = ({ commit }, params) => {
+    console.info(params);
     avaliacaoResultadosHelperAPI.listarDiligencias(params).then(
         (response) => {
             const obj = response.data.data;
             console.log(obj);
-            commit(types.PROJETOS_AVALIACAO_TECNICA, obj);
+            commit(types.HISTORICO_DILIGENCIAS, obj);
         },
     );
 };

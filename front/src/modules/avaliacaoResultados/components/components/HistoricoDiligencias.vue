@@ -2,28 +2,27 @@
 
     <v-layout row justify-center>
         <v-dialog v-model="dialog" scrollable max-width="800px">
-            <v-btn slot="activator" color="cyan" dark><v-icon>assignment_late</v-icon></v-btn>
+            <v-btn slot="activator" color="cyan" dark @click.native="obterDiligencias(idPronac);"><v-icon>assignment_late</v-icon></v-btn>
             <v-card>
                 <v-card-title>Histórico Diligências</v-card-title>
                 <v-divider></v-divider>
                 <v-card-text style="height: 300px;">
-                    <v-timeline>
+                    <v-timeline >
                         <v-timeline-item
-                            v-for="(year, i) in years"
-                            :color="year.color"
-                            :key="i"
-                            small
+                            v-for="item in diligencias.items"
+                            :key="item"
+                            large
                         >
-                              <span
-                                  slot="opposite"
-                                  :class="`headline font-weight-bold ${year.color}--text`"
-                                  v-text="year.year">
-                              </span>
+                              <!--<span-->
+                                  <!--slot="opposite"-->
+                                  <!--:class="`headline font-weight-bold ${year.color}&#45;&#45;text`"-->
+                                  <!--v-text="year.year">-->
+                              <!--</span>-->
                             <div class="py-3">
-                                <h2 :class="`headline font-weight-light mb-3 ${year.color}--text`">Lorem ipsum </h2>
-                                <div>
-                                    Lorem ipsum dolor sit amet, no nam oblique veritus. Commune scaevola imperdiet nec ut, sed euismod convenire principes at. Est et nobis iisque percipit, an vim zril disputando voluptatibus, vix an salutandi sententiae.
-                                </div>
+                                <h2 :class="`headline font-weight-light mb-3 ${year.color}&#45;&#45;text`">Lorem ipsum </h2>-->
+                                <template >
+                                    <div v-html="item.Resposta"></div>
+                                </template>
                             </div>
                         </v-timeline-item>
                     </v-timeline>
@@ -40,9 +39,11 @@
 </template>
 
 <script>
-export default {
+    import { mapActions, mapGetters } from 'vuex';
+
+    export default {
     name: 'HistoricoDiligencias',
-    props: { data: Object },
+    props: { idPronac: Object },
     data() {
         return {
             dialog: false,
@@ -71,12 +72,14 @@ export default {
         };
     },
     methods: {
-        show() {
-            console.info('oi' + this.data);
-        },
+        ...mapActions({
+            obterDiligencias: 'avaliacaoResultados/obetDadosDiligencias',
+        }),
     },
-    mounted() {
-        this.show();
+    computed: {
+        ...mapGetters({
+            diligencias: 'avaliacaoResultados/diligenciasHistorico'
+        })
     },
 };
 </script>

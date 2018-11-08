@@ -146,7 +146,6 @@
     </v-container>
 </template>
 <script>
-
     import Vue from 'vue';
     import { mapActions, mapGetters } from 'vuex';
     import CONST from '../../const';

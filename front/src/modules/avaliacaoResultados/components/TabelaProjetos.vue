@@ -42,7 +42,6 @@
                             :proximo="componentes.proximo"
                             :idTipoDoAtoAdministrativo="componentes.idTipoDoAtoAdministrativo"
                             :usuario="componentes.usuario"
-                            :data="props.item.IdPRONAC"
                         >
                         </component>
                     </template>
