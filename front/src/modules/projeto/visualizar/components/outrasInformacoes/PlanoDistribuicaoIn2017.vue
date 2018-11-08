@@ -152,21 +152,21 @@
                                 >
                                     <template slot="items" slot-scope="props">
                                         <td class="text-xs-left">{{props.item.dsProduto}}</td>
-                                        <td class="text-xs-left">{{ props.item.qtExemplares }}</td>
+                                        <td class="text-xs-right">{{ props.item.qtExemplares }}</td>
 
-                                        <td class="text-xs-left">{{ parseInt(props.item.qtGratuitaDivulgacao) +
+                                        <td class="text-xs-right">{{ parseInt(props.item.qtGratuitaDivulgacao) +
                                             parseInt(props.item.qtGratuitaPatrocinador) + parseInt(props.item.qtGratuitaPopulacao) }}
                                         </td>
 
-                                        <td class="text-xs-left">{{ props.item.qtPopularIntegral }}</td>
-                                        <td class="text-xs-left">{{ props.item.qtPopularParcial }}</td>
-                                        <td class="text-xs-left">{{ props.item.vlUnitarioPopularIntegral }}</td>
+                                        <td class="text-xs-right">{{ props.item.qtPopularIntegral }}</td>
+                                        <td class="text-xs-right">{{ props.item.qtPopularParcial }}</td>
+                                        <td class="text-xs-right">{{ props.item.vlUnitarioPopularIntegral }}</td>
 
-                                        <td class="text-xs-left">{{ props.item.qtProponenteIntegral }}</td>
-                                        <td class="text-xs-left">{{ props.item.qtProponenteParcial }}</td>
-                                        <td class="text-xs-left">{{ props.item.vlUnitarioProponenteIntegral }}</td>
+                                        <td class="text-xs-right">{{ props.item.qtProponenteIntegral }}</td>
+                                        <td class="text-xs-right">{{ props.item.qtProponenteParcial }}</td>
+                                        <td class="text-xs-right">{{ props.item.vlUnitarioProponenteIntegral }}</td>
 
-                                        <td class="text-xs-left">{{ props.item.vlReceitaPrevista }}</td>
+                                        <td class="text-xs-right">{{ props.item.vlReceitaPrevista }}</td>
                                     </template>
                                     <template slot="pageText" slot-scope="props">
                                         Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
@@ -224,7 +224,7 @@ export default {
                 },
                 {
                     text: 'PREÇO UNITÁRIO',
-                    align: 'left',
+                    align: 'center',
                     value: 'vlUnitarioPopularIntegral',
                 },
                 {
@@ -239,12 +239,12 @@ export default {
                 },
                 {
                     text: 'PREÇO UNITÁRIO',
-                    align: 'left',
+                    align: 'center',
                     value: 'vlUnitarioProponenteIntegral',
                 },
                 {
                     text: 'RECEITA PREVISTA',
-                    align: 'left',
+                    align: 'center',
                     value: 'vlReceitaPrevista',
                 },
             ],
