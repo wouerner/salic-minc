@@ -34,14 +34,12 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
                 parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal/index", "ALERT");
             }
 
-            // pega as unidades autorizadas, orgaos e grupos do usuario (pega todos os grupos)
             $grupos = $Usuario->buscarUnidades(isset($auth->getIdentity()->usu_codigo) ? $auth->getIdentity()->usu_codigo : $auth->getIdentity()->IdUsuario, 21);
 
-            // manda os dados para a visao
-            $this->view->usuario = $auth->getIdentity(); // manda os dados do usuario para a visao
-            $this->view->arrayGrupos = $grupos; // manda todos os grupos do usuario para a visao
-            $this->view->grupoAtivo = $GrupoAtivo->codGrupo; // manda o grupo ativo do usuario para a visao
-            $this->view->orgaoAtivo = $GrupoAtivo->codOrgao; // manda o orgao ativo do usuario para a visao
+            $this->view->usuario = $auth->getIdentity();
+            $this->view->arrayGrupos = $grupos;
+            $this->view->grupoAtivo = $GrupoAtivo->codGrupo;
+            $this->view->orgaoAtivo = $GrupoAtivo->codOrgao;
             $this->orgSup = $GrupoAtivo->codOrgao;
             $this->usu_orgao = $GrupoAtivo->codOrgao;
 
@@ -57,9 +55,7 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
         }
         $this->view->idPronac = $idPronac;
 
-
-        //recupera ID do pre projeto (proposta)
-        parent::init(); // chama o init() do pai GenericControllerNew
+        parent::init();
     }
 
     public function indexAction()
@@ -184,9 +180,8 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
 
     public function imprimirPainelAction()
     {
-        $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();
 
-        //** Usuario Logado ************************************************/
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $idusuario = isset($auth->getIdentity()->usu_codigo) ? $auth->getIdentity()->usu_codigo : $auth->getIdentity()->IdUsuario;
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
@@ -194,7 +189,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
         $codPerfil = $GrupoAtivo->codGrupo; //  orgao ativo na sessao
         $this->view->codOrgao = $codOrgao;
         $this->view->idUsuarioLogado = $idusuario;
-        /******************************************************************/
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
         if ($this->_request->getParam("qtde")) {
@@ -425,7 +419,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
             $idPronac = Seguranca::dencrypt($idPronac);
         }
 
-        //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
@@ -502,7 +495,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
 
     public function indexTecnicoAction()
     {
-        //** Usuario Logado ************************************************/
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $idusuario = $auth->getIdentity()->usu_codigo;
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
@@ -510,7 +502,7 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
         $codPerfil = $GrupoAtivo->codGrupo; //  orgao ativo na sessao
         $this->view->codOrgao = $codOrgao;
         $this->view->idUsuarioLogado = $idusuario;
-        /******************************************************************/
+
         if ($codPerfil != Autenticacao_Model_Grupos::TECNICO_AVALIACAO
             && $codPerfil != Autenticacao_Model_Grupos::TECNICO_PRESTACAO_DE_CONTAS
             && $codPerfil != Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO
@@ -598,12 +590,9 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
 
     public function devolverRelatorioAction()
     {
-        $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
+        $this->_helper->layout->disableLayout();
 
-        //** Usuario Logado ************************************************/
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
-        /******************************************************************/
-
         $post = Zend_Registry::get('post');
         $idPronac = (int)$post->pronac;
 
@@ -706,7 +695,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
             $idPronac = Seguranca::dencrypt($idPronac);
         }
 
-        //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
@@ -721,7 +709,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
     public function localDeRealizacaoFinalAction()
     {
 
-        //** Verifica se o usuario logado tem permissao de acesso **//
         $this->verificarPermissaoAcesso(false, true, false);
 
         $idPronac = $this->_request->getParam("idPronac");
@@ -729,7 +716,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
             $idPronac = Seguranca::dencrypt($idPronac);
         }
 
-        //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
@@ -742,7 +728,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
     public function planoDeDivulgacaoFinalAction()
     {
 
-        //** Verifica se o usuario logado tem permissao de acesso **//
         $this->verificarPermissaoAcesso(false, true, false);
 
         $idPronac = $this->_request->getParam("idPronac");
@@ -750,7 +735,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
             $idPronac = Seguranca::dencrypt($idPronac);
         }
 
-        //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
         $dadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $dadosProjeto;
@@ -773,7 +757,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
     public function planoDeDistribuicaoFinalAction()
     {
 
-        //** Verifica se o usuario logado tem permissao de acesso **//
         $this->verificarPermissaoAcesso(false, true, false);
 
         $idPronac = $this->_request->getParam("idPronac");
@@ -781,7 +764,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
             $idPronac = Seguranca::dencrypt($idPronac);
         }
 
-        //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
@@ -799,7 +781,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
     public function metasComprovadasFinalAction()
     {
 
-        //** Verifica se o usuario logado tem permissao de acesso **//
         $this->verificarPermissaoAcesso(false, true, false);
 
         $idPronac = $this->_request->getParam("idPronac");
@@ -807,12 +788,10 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
             $idPronac = Seguranca::dencrypt($idPronac);
         }
 
-        //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        //****** Dados da Comprova��o de Metas *****//
         $DadosCompMetas = $projetos->buscarMetasComprovadas($idPronac);
         $this->view->DadosCompMetas = $DadosCompMetas;
         $this->view->idPronac = $idPronac;
@@ -820,8 +799,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
 
     public function itensComprovadosFinalAction()
     {
-
-        //** Verifica se o usuario logado tem permissao de acesso **//
         $this->verificarPermissaoAcesso(false, true, false);
 
         $idPronac = $this->_request->getParam("idPronac");
@@ -829,7 +806,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
             $idPronac = Seguranca::dencrypt($idPronac);
         }
 
-        //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
@@ -841,8 +817,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
 
     public function comprovantesDeExecucaoFinalAction()
     {
-
-        //** Verifica se o usuario logado tem permissao de acesso **//
         $this->verificarPermissaoAcesso(false, true, false);
 
         $idPronac = $this->_request->getParam("idPronac");
@@ -850,7 +824,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
             $idPronac = Seguranca::dencrypt($idPronac);
         }
 
-        //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
@@ -863,7 +836,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
 
     public function aceiteDeObraFinalAction()
     {
-        //** Verifica se o usuario logado tem permissao de acesso **//
         $this->verificarPermissaoAcesso(false, true, false);
 
         $idPronac = $this->_request->getParam("idPronac");
@@ -871,7 +843,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
             $idPronac = Seguranca::dencrypt($idPronac);
         }
 
-        //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
@@ -884,7 +855,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
 
     public function bensFinalAction()
     {
-        //** Verifica se o usuario logado tem permissao de acesso **//
         $this->verificarPermissaoAcesso(false, true, false);
 
         $idPronac = $this->_request->getParam("idPronac");
@@ -892,7 +862,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
             $idPronac = Seguranca::dencrypt($idPronac);
         }
 
-        //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
@@ -1032,10 +1001,13 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
         return $idDocumentoAssinatura;
     }
 
+    /**
+     * @deprecated não utilizado com o modelo de assinatura
+     */
     public function finalizarRelatorioAction()
     {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-
+        die;
         $post = Zend_Registry::get('post');
         $idPronac = (int)$post->pronac;
         $dados = array();
@@ -1049,11 +1021,6 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
         $dadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto($where);
 
         $where = "idPronac = $idPronac";
-//        $tbProjetos->mudarSituacao(
-//            $idPronac,
-//            Projeto_Model_Situacao::AGUARDA_ANALISE_FINANCEIRA,
-//            Projeto_Model_Situacao::APRESENTOU_PRESTACAO_DE_CONTAS
-//        );
 
 
         $retorno = false;
@@ -1077,9 +1044,7 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
     public function recursosPorFonteAction()
     {
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
-        $this->view->recursosPorFonte = $planilhaAprovacaoModel
-            ->buscarRecursosDaFonte($this->getRequest()->getParam('idPronac'));
-        //Passando o pronac para ser usada no menu lateral esquerdo
+        $this->view->recursosPorFonte = $planilhaAprovacaoModel->buscarRecursosDaFonte($this->getRequest()->getParam('idPronac'));
         $this->view->idPronac = $this->getRequest()->getParam('idPronac');
     }
 
