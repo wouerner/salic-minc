@@ -61,7 +61,6 @@
 </template>
 
 <script>
-    import numeral from 'numeral';
     import SalicFormatarValor from '@/components/SalicFormatarValor';
 
     export default {
@@ -79,7 +78,7 @@
             valorSaldoUtilizadoNegativo: false,
             readequacaoAlterada: false,
         },
-        data: function() {
+        data() {
             return {
                 prefixoValor: "R$ ",
             }
@@ -88,10 +87,10 @@
             SalicFormatarValor,
         },
         computed: {
-            valorSaldoDisponivelParaUsoMensagem: function() {
+            valorSaldoDisponivelParaUsoMensagem() {
                 return this.valorSaldoDisponivelParaUso * -1;
             },
-            exibeMensagemFinalizar: function() {
+            exibeMensagemFinalizar() {
                 if (!this.valorSaldoUtilizadoNeutro &&
                     !this.valorSaldoDisponivelParaUsoNegativo &&
                     !this.readequacaoAlterada

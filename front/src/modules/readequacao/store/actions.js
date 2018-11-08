@@ -26,30 +26,30 @@ export const updateReadequacaoDsSolicitacao = ({ commit }, dsSolicitacao) => {
 
 export const excluirReadequacao = ({ commit }, params) => {
     readequacaoHelperAPI.excluirReadequacao(params)
-	.then((response) => {
-	    commit(types.EXCLUIR_READEQUACAO);
-	});
+        .then(() => {
+            commit(types.EXCLUIR_READEQUACAO);
+        });
 };
 
-export const verificarDisponivelEdicaoReadequacaoPlanilha = ({ commit }, idPronac) => {
-    readequacaoHelperAPI.verificarDisponivelEdicaoReadequacaoPlanilha(idPronac)
-	.then((response) => {
-	    const data = response.data;
-	    commit(types.VERIFICAR_DISPONIVEL_EDICAO_READEQUACAO_PLANILHA, data.disponivelParaEdicaoReadequacaoPlanilha);
-	});
+export const disponivelEdicaoReadequacaoPlanilha = ({ commit }, idPronac) => {
+    readequacaoHelperAPI.disponivelEdicaoReadequacaoPlanilha(idPronac)
+        .then((response) => {
+            const data = response.data.disponivelParaEdicaoReadequacaoPlanilha;
+            commit(types.DISPONIVEL_EDICAO_READEQUACAO_PLANILHA, data);
+        });
 };
 
 export const adicionarDocumento = ({ commit }, params) => {
     readequacaoHelperAPI.adicionarDocumento(params)
-	.then((response) => {
-	    const documento = response.data.documento;
-	    commit(types.ADICIONAR_DOCUMENTO, documento);
-	});
+        .then((response) => {
+            const documento = response.data.documento;
+            commit(types.ADICIONAR_DOCUMENTO, documento);
+        });
 };
 
 export const excluirDocumento = ({ commit }, params) => {
     readequacaoHelperAPI.excluirDocumento(params)
-	.then((response) => {
-	    commit(types.EXCLUIR_DOCUMENTO);
-	});
+        .then((response) => {
+            commit(types.EXCLUIR_DOCUMENTO);
+        });
 };
