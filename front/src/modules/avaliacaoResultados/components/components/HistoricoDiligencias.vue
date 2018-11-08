@@ -1,37 +1,80 @@
 <template>
 
     <v-layout row justify-center>
-        <v-dialog v-model="dialog" scrollable max-width="800px">
-            <v-btn slot="activator" color="cyan" dark @click.native="obterDiligencias(idPronac);"><v-icon>assignment_late</v-icon></v-btn>
+        <v-dialog v-model="dialog"
+                  full-width
+                  scrollable
+                  fullscreen
+        >
+            <v-tooltip slot="activator" bottom>
+                <v-btn slot="activator" flat icon @click.native="obterDiligencias(idPronac);">
+                    <v-icon class="material-icons">assignment_late</v-icon>
+                </v-btn>
+                <span>Histórico de Diligências </span>
+            </v-tooltip>
+
             <v-card>
-                <v-card-title>Histórico Diligências</v-card-title>
+
+                <v-toolbar dark color="green">
+                    <v-btn icon dark @click.native="dialog = false">
+                        <v-icon>close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>Diligências do Projeto</v-toolbar-title>
+                </v-toolbar>
+
                 <v-divider></v-divider>
-                <v-card-text style="height: 300px;">
+                <v-card-text>
                     <v-timeline >
                         <v-timeline-item
-                            v-for="item in diligencias.items"
-                            :key="item"
-                            large
+                            v-for="(item, i) in sortByDate(diligencias.items)"
+                            :key="i"
+                            small
                         >
-                              <!--<span-->
-                                  <!--slot="opposite"-->
-                                  <!--:class="`headline font-weight-bold ${year.color}&#45;&#45;text`"-->
-                                  <!--v-text="year.year">-->
-                              <!--</span>-->
-                            <div class="py-3">
-                                <!--<h2 :class="`headline font-weight-light mb-3 ${year.color}&#45;&#45;text`">Lorem ipsum </h2>-->
-                                <template >
-                                    <div v-html="item.Resposta"></div>
-                                </template>
-                            </div>
+     <span
+                            slot="opposite"
+                            :class="`headline font-weight-bold green--text`"
+                            v-text="year.year"
+                        ></span>></span>
+                            <v-card
+                                color="#468847"
+                            >
+                                <v-card-title class="title">{{item.tipoDiligencia}}</v-card-title>
+                                <v-card-text class="white text--primary">
+                                    <div>
+                                        Projeto: {{item.nomeProjeto}}
+                                        produto: {{item.produto}}
+                                        Pronac: {{item.pronac}}
+                                    </div>
+                                    <v-btn
+                                        class="mx-0"
+                                        outline
+                                        color="red"
+                                        v-on:click="mostrarSolicitacao(i)"
+                                        v-if="item.Solicitacao"
+                                    >
+                                        Solicitação
+                                    </v-btn>
+                                    <v-btn
+                                        class="mx-0"
+                                        outline
+                                        color="red"
+                                        v-on:click="mostrarResposta(i)"
+                                        v-if="item.Resposta"
+                                    >
+                                        Resposta
+                                    </v-btn>
+
+
+                                        <div v-if="show.solicitacao && show.index === i" v-html="item.Solicitacao"></div>
+                                        <div v-if="show.resposta && show.index === i" v-html="item.Resposta"></div>
+
+                                </v-card-text>
+                            </v-card>
+
+
                         </v-timeline-item>
                     </v-timeline>
                 </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions>
-                    <v-btn color="blue darken-1" flat @click.native="dialog = false">Close</v-btn>
-                    <v-btn color="blue darken-1" flat @click.native="dialog = false">Save</v-btn>
-                </v-card-actions>
             </v-card>
         </v-dialog>
     </v-layout>
@@ -40,41 +83,37 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import CarregarTemplateAjax from '../../../../components/CarregarTemplateAjax';
 
 export default {
     name: 'HistoricoDiligencias',
+    components: { CarregarTemplateAjax },
     props: { idPronac: Object },
     data() {
         return {
             dialog: false,
-            years: [
-                {
-                    color: 'cyan',
-                    year: '1960',
-                },
-                {
-                    color: 'green',
-                    year: '1970',
-                },
-                {
-                    color: 'pink',
-                    year: '1980',
-                },
-                {
-                    color: 'amber',
-                    year: '1990',
-                },
-                {
-                    color: 'orange',
-                    year: '2000',
-                },
-            ],
+            show: {
+              solicitacao: false,
+              resposta: false,
+              index: '',
+            },
         };
     },
     methods: {
         ...mapActions({
             obterDiligencias: 'avaliacaoResultados/obetDadosDiligencias',
         }),
+        mostrarSolicitacao(index){
+            this.show.solicitacao = !this.show.solicitacao;
+            this.show.index = index;
+        },
+        mostrarResposta(index){
+            this.show.resposta = !this.show.resposta;
+            this.show.index = index;
+        },
+        sortByDate: function (list) {
+            return _.orderBy(list, 'dataSolicitacao', 'desc');
+        }
     },
     computed: {
         ...mapGetters({
@@ -83,3 +122,4 @@ export default {
     },
 };
 </script>
+
