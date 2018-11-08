@@ -51,6 +51,8 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
         $result['diligenciaProjeto'] = $projeto;
         $result['diligenciaAdequacao'] = $adequacao;
 
+        $result = \TratarArray::utf8EncodeArray($result);
+
         return $result;
     }
 
@@ -75,7 +77,7 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
         $resultArray = [];
 
         foreach ($diligencias as $diligencia) {
-            $tipoDiligencia = html_entity_decode(utf8_encode($diligencia['tipoDiligencia']));
+            $tipoDiligencia = $diligencia['tipoDiligencia'];
             $objDateTimedataSolicitacao = new \DateTime($diligencia['dataSolicitacao']);
             $objDateTimedataResposta = new \DateTime($diligencia['dataResposta']);
 
@@ -102,7 +104,7 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
 
             $resultArray[] = [
                 'idAvaliarAdequacaoProjeto' => $diligencia['idAvaliarAdequacaoProjeto'],
-                'tipoDiligencia' => html_entity_decode('Dilig&ecirc;ncia na An&aacute;lise da adequa&ccedil;&atilde;o &agrave; realidade do projeto.'),
+                'tipoDiligencia' => 'Diligência na Análise da adequação à realidade do projeto.',
                 'dtAvaliacao' => $objDateTimedtAvaliacao->format('d/m/Y'),
             ];
         }
@@ -132,6 +134,8 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
 
         $diligenciaProjeto = $this->obterDiligenciaProjeto($diligencia);
 
+        $diligenciaProjeto = \TratarArray::utf8EncodeArray($diligenciaProjeto);
+
         return $diligenciaProjeto;
     }
 
@@ -139,9 +143,9 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
     {
         $objDateTimedataSolicitacao = new \DateTime($diligencia['dataSolicitacao']);
         $objDateTimedataResposta = new \DateTime($diligencia['dataResposta']);
-        $Solicitacao = html_entity_decode(utf8_encode($diligencia['Solicitacao']));
-        $Resposta = html_entity_decode(utf8_encode($diligencia['Resposta']));
-        $nomeProjeto = html_entity_decode(utf8_encode($diligencia['nomeProjeto']));
+        $Solicitacao = $diligencia['Solicitacao'];
+        $Resposta = $diligencia['Resposta'];
+        $nomeProjeto = $diligencia['nomeProjeto'];
 
         $arquivos= $this->obterAnexosDiligencias($diligencia);
 
@@ -166,7 +170,7 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
             $objdtEnvio = new \DateTime($arquivo->dtEnvio);
             $arquivoArray[] = [
                 'idArquivo' => $arquivo->idArquivo,
-                'nmArquivo' => utf8_encode($arquivo->nmArquivo),
+                'nmArquivo' => $arquivo->nmArquivo,
                 'dtEnvio' => $objdtEnvio->format('d/m/Y H:i:s'),
                 'idDiligencia' => $arquivo->idDiligencia,
             ];
