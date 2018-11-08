@@ -19,7 +19,7 @@
                                   <!--v-text="year.year">-->
                               <!--</span>-->
                             <div class="py-3">
-                                <h2 :class="`headline font-weight-light mb-3 ${year.color}&#45;&#45;text`">Lorem ipsum </h2>-->
+                                <!--<h2 :class="`headline font-weight-light mb-3 ${year.color}&#45;&#45;text`">Lorem ipsum </h2>-->
                                 <template >
                                     <div v-html="item.Resposta"></div>
                                 </template>
@@ -39,9 +39,9 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
-    export default {
+export default {
     name: 'HistoricoDiligencias',
     props: { idPronac: Object },
     data() {
@@ -78,8 +78,8 @@
     },
     computed: {
         ...mapGetters({
-            diligencias: 'avaliacaoResultados/diligenciasHistorico'
-        })
+            diligencias: 'avaliacaoResultados/diligenciasHistorico',
+        }),
     },
 };
 </script>

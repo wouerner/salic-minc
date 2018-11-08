@@ -146,19 +146,19 @@
     </v-container>
 </template>
 <script>
-    import Vue from 'vue';
-    import { mapActions, mapGetters } from 'vuex';
-    import CONST from '../../const';
-    import TabelaProjetos from '../TabelaProjetos';
-    import Historico from '../components/Historico';
-    import Encaminhar from '../ComponenteEncaminhar';
-    import AnaliseButton from '../analise/analisarButton';
-    import AssinarButton from '../analise/AssinarButton';
-    import Devolver from '../components/Devolver';
-    import VisualizarPlanilhaButtton from '../analise/VisualizarPlanilhaButtton';
-    import Diligencias from '../components/HistoricoDiligencias';
+import Vue from 'vue';
+import { mapActions, mapGetters } from 'vuex';
+import CONST from '../../const';
+import TabelaProjetos from '../TabelaProjetos';
+import Historico from '../components/Historico';
+import Encaminhar from '../ComponenteEncaminhar';
+import AnaliseButton from '../analise/analisarButton';
+import AssinarButton from '../analise/AssinarButton';
+import Devolver from '../components/Devolver';
+import VisualizarPlanilhaButtton from '../analise/VisualizarPlanilhaButtton';
+import Diligencias from '../components/HistoricoDiligencias';
 
-    export default {
+export default {
     name: 'Painel',
     created() {
         this.CONST = CONST;
