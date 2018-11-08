@@ -11,9 +11,9 @@
         </div>
     </div> -->
     <v-expansion-panel popout>
-        <v-expansion-panel-content 
+        <v-expansion-panel-content
             class="elevation-1"
-            v-for="(produto, index) of dadosIn2017.planodistribuicaoproduto" 
+            v-for="(produto, index) of dadosIn2017.planodistribuicaoproduto"
             :key="index"
             >
                 <v-layout slot="header" class="green--text">
@@ -136,7 +136,7 @@
                             </v-layout>
                         </v-card-text>
                         <v-expansion-panel popout>
-                            <v-expansion-panel-content 
+                            <v-expansion-panel-content
                                 class="elevation-1"
                                 >
                                 <v-layout slot="header" class="black--text">
@@ -217,48 +217,48 @@
     </v-expansion-panel>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex";
-import Carregando from "@/components/Carregando";
-import PropostaPlanoDistribuicao from "@/modules/proposta/visualizar/components/PropostaPlanoDistribuicao";
+import { mapGetters, mapActions } from 'vuex';
+import Carregando from '@/components/Carregando';
+import PropostaPlanoDistribuicao from '@/modules/proposta/visualizar/components/PropostaPlanoDistribuicao';
 
 export default {
-  name: "PlanoDistribuicaoIn2017",
-  props: ["idPronac"],
-  data() {
-    return {
-      loading: true
-    };
-  },
-  components: {
-    Carregando,
-    PropostaPlanoDistribuicao
-  },
-  mounted() {
-    if (typeof this.dadosProjeto.idPreProjeto !== "undefined") {
-      this.buscarPlanoDistribuicaoIn2017(this.dadosProjeto.idPreProjeto);
-    }
-  },
-  watch: {
-    dadosIn2017() {
-      this.loading = false;
-    }
-  },
-  computed: {
-    ...mapGetters({
-      dadosProjeto: "projeto/projeto",
-      dadosIn2017: "projeto/planoDistribuicaoIn2017"
-    })
-  },
-  methods: {
-    ...mapActions({
-      buscarPlanoDistribuicaoIn2017: "projeto/buscarPlanoDistribuicaoIn2017"
-    }),
-    label_sim_ou_nao(valor) {
-        if (valor === 1) {
-            return 'Sim';
-        }
-        return 'N\xE3o';
+    name: 'PlanoDistribuicaoIn2017',
+    props: ['idPronac'],
+    data() {
+        return {
+            loading: true,
+        };
     },
-  }
+    components: {
+        Carregando,
+        PropostaPlanoDistribuicao,
+    },
+    mounted() {
+        if (typeof this.dadosProjeto.idPreProjeto !== 'undefined') {
+            this.buscarPlanoDistribuicaoIn2017(this.dadosProjeto.idPreProjeto);
+        }
+    },
+    watch: {
+        dadosIn2017() {
+            this.loading = false;
+        },
+    },
+    computed: {
+        ...mapGetters({
+            dadosProjeto: 'projeto/projeto',
+            dadosIn2017: 'projeto/planoDistribuicaoIn2017',
+        }),
+    },
+    methods: {
+        ...mapActions({
+            buscarPlanoDistribuicaoIn2017: 'projeto/buscarPlanoDistribuicaoIn2017',
+        }),
+        label_sim_ou_nao(valor) {
+            if (valor === 1) {
+                return 'Sim';
+            }
+            return 'N\xE3o';
+        },
+    },
 };
 </script>
