@@ -80,8 +80,8 @@
         },
         data() {
             return {
-                prefixoValor: "R$ ",
-            }
+                prefixoValor: 'R$ ',
+            };
         },
         components: {
             SalicFormatarValor,
@@ -97,7 +97,8 @@
                 ) {
                     return true;
                 }
-            }
-        }
-    }
+                return false;
+            },
+        },
+    };
 </script>

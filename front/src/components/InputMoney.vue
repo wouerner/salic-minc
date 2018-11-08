@@ -16,51 +16,51 @@ export default {
     name: 'InputMoney',
     props: {
         value: {
-            default: 0
+            default: 0,
         },
         disabled: {
             type: Boolean,
-            default: false
-        }
+            default: false,
+        },
     },
     mixins: [utils],
-    data: function () {
+    data() {
         return {
-            val: 0
-        }
+            val: 0,
+        };
     },
-    mounted: function () {
+    mounted() {
         this.$refs.input.disabled = this.disabled;
         this.val = this.value;
         this.formatValue();
     },
     methods: {
-        formatValue: function () {
-	    let num = this.formatFloat(this.$refs.input.value);
+        formatValue() {
+            const num = this.formatFloat(this.$refs.input.value);
             this.$refs.input.value = this.converterParaMoedaPontuado(num);
             this.updateMoney(
-                this.formatFloat(this.$refs.input.value)
+                this.formatFloat(this.$refs.input.value),
             );
         },
-	formatFloat: function (value) {
-	    if (value.search(',') > 0) {
-		value = value.replace('.', '');
-		value = value.replace(',', '.');
-	    }
-	    return value;
-	},
-        updateMoney: function (value) {
+        formatFloat(value) {
+            if (value.search(',') > 0) {
+                value = value.replace('.', '');
+                value = value.replace(',', '.');
+            }
+            return value;
+        },
+        updateMoney(value) {
             this.val = value;
-            this.$emit('ev', this.val)
-        }
+            this.$emit('ev', this.val);
+        },
     },
     watch: {
-        disabled: function () {
+        disabled() {
             this.$refs.input.disabled = this.disabled;
             if (this.disabled) {
                 this.val = 0;
             }
-        }
-    }
-}
+        },
+    },
+};
 </script>

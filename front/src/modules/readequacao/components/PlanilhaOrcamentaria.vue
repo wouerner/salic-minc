@@ -27,34 +27,36 @@
             perfil: '',
             disabled: false,
             disponivelParaAdicaoItensReadequacaoPlanilha: '',
-            disponivelParaEdicaoReadequacaoPlanilha: ''
+            disponivelParaEdicaoReadequacaoPlanilha: '',
         },
-        data: function() {
+        data() {
             return {
-                planilhaOrcamentaria: {}
-            }
+                planilhaOrcamentaria: {},
+            };
         },
-        created: function() {
+        created() {
             this.montarPlanilhaOrcamentaria();
         },
         methods: {
-            montarPlanilhaOrcamentaria: function() {
-                let self = this;
+            montarPlanilhaOrcamentaria() {
+                const self = this;
                 $3.ajax({
                     type: 'GET',
                     url: '/readequacao/readequacoes/obter-planilha-orcamentaria',
                     data: {
                         idPronac: self.idPronac,
                         tipoPlanilha: self.tipoPlanilha,
-                        link: self.link
-                    }
-                }).done(function(response) {
-                    self.planilhaOrcamentaria = response.planilhaOrcamentaria;
-                });
+                        link: self.link,
+                    },
+                }).done(
+                    (response) => {
+                        self.planilhaOrcamentaria = response.planilhaOrcamentaria;
+                    },
+                );
             },
-            atualizarSaldoEntrePlanilhas: function() {
+            atualizarSaldoEntrePlanilhas() {
                 this.$emit('atualizarSaldoEntrePlanilhas');
-            }
-        }
-    }
+            },
+        },
+    };
 </script>

@@ -16,9 +16,6 @@
 </template>
 
 <script>
-import {
-    utils
-} from '@/mixins/utils';
 import InputMoney from '@/components/InputMoney';
 import { mapActions } from 'vuex';
 
@@ -29,26 +26,25 @@ export default {
     },
     props: [
         'dsSolicitacao',
-        'disabled'
+        'disabled',
     ],
-    data: function() {
+    data() {
         return {
-            saldoDisponivel: 0
-        }
+            saldoDisponivel: 0,
+        };
     },
     methods: {
-        alterarSaldo: function(event) {
-	    this.updateReadequacaoDsSolicitacao(event.target.value);
+        alterarSaldo(event) {
+            this.updateReadequacaoDsSolicitacao(event.target.value);
         },
-	...mapActions({
-            updateReadequacaoDsSolicitacao: 'readequacao/updateReadequacaoDsSolicitacao',	
-	}),
-	
+        ...mapActions({
+            updateReadequacaoDsSolicitacao: 'readequacao/updateReadequacaoDsSolicitacao',
+        }),
     },
     watch: {
-        dsSolicitacao: function(valor) {
+        dsSolicitacao(valor) {
             this.saldoDisponivel = valor;
         },
     },
-}
+};
 </script>

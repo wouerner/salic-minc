@@ -116,9 +116,8 @@
 </template>
 
 <script>
-    import numeral from 'numeral';
     import {
-        utils
+        utils,
     } from '@/mixins/utils';
     import InputMoney from '@/components/InputMoney';
     import SalicFormatarValor from '@/components/SalicFormatarValor';
@@ -133,9 +132,9 @@
             idPronac: '',
             idPlanilhaAprovacao: '',
             item: {},
-            unidades: {}
+            unidades: {},
         },
-        data: function() {
+        data() {
             return {
                 itemForm: Object.assign({}, this.item),
                 dadosPlanilhaAtiva: {
@@ -176,60 +175,61 @@
                 dadosProjeto: {
                     IdPRONAC: '',
                     NomePRojeto: '',
-                    PRONAC: ''
+                    PRONAC: '',
                 },
                 valoresDoItem: {
                     vlComprovadoDoItem: '',
-                    vlComprovadoDoItemValidacao: ''
-                }
-            }
+                    vlComprovadoDoItemValidacao: '',
+                },
+            };
         },
         mixins: [utils],
         methods: {
-            obterDadosItem: function() {
-                let self = this;
+            obterDadosItem() {
+                const self = this;
                 $3.ajax({
                     type: 'POST',
                     url: '/readequacao/saldo-aplicacao/obter-item-solicitacao',
                     data: {
                         idPronac: self.idPronac,
-                        idPlanilha: self.idPlanilhaAprovacao
-                    }
-                }).done(function(response) {
-                    self.dadosPlanilhaAtiva = response.dadosPlanilhaAtiva;
-                    self.dadosPlanilhaEditavel = response.dadosPlanilhaEditavel;
-                    self.dadosProjeto = response.dadosProjeto;
-                    self.valoresDoItem = response.valoresDoItem;
-                });
+                        idPlanilha: self.idPlanilhaAprovacao,
+                    },
+                }).done(
+                    (response) => {
+                        self.dadosPlanilhaAtiva = response.dadosPlanilhaAtiva;
+                        self.dadosPlanilhaEditavel = response.dadosPlanilhaEditavel;
+                        self.dadosProjeto = response.dadosProjeto;
+                        self.valoresDoItem = response.valoresDoItem;
+                    },
+                );
             },
-            alterarItem: function() {
-                if (this.dadosPlanilhaEditavel.Quantidade == '') {
-                    this.mensagemAlerta("\xC9 obrigat\xF3rio informar a quantidade!");
+            alterarItem() {
+                if (this.dadosPlanilhaEditavel.Quantidade === '') {
+                    this.mensagemAlerta('\xC9 obrigat\xF3rio informar a quantidade!');
                     this.$refs.itemQtd.focus();
                     return;
                 }
-                if (this.dadosPlanilhaEditavel.Ocorrencia == '') {
-                    this.mensagemAlerta("\xC9 obrigat\xF3rio informar a ocorr&ecirc;ncia!");
+                if (this.dadosPlanilhaEditavel.Ocorrencia === '') {
+                    this.mensagemAlerta('\xC9 obrigat\xF3rio informar a ocorr&ecirc;ncia!');
                     this.$refs.itemOcorrencia.focus();
                     return;
                 }
-                if (this.dadosPlanilhaEditavel.ValorUnitario == '') {
-                    this.mensagemAlerta("\xC9 obrigat\xF3rio informar o valor unit&aacute;rio!");
+                if (this.dadosPlanilhaEditavel.ValorUnitario === '') {
+                    this.mensagemAlerta('\xC9 obrigat\xF3rio informar o valor unit&aacute;rio!');
                     this.$refs.itemValorUnitario.focus();
                     return;
                 }
-                if (this.dadosPlanilhaEditavel.Justificativa == '') {
-                    this.mensagemAlerta("\xC9 obrigat\xF3rio informar a justificativa!");
+                if (this.dadosPlanilhaEditavel.Justificativa === '') {
+                    this.mensagemAlerta('\xC9 obrigat\xF3rio informar a justificativa!');
                     this.$refs.itemJustificativa.focus();
                     return;
                 }
 
-                if (this.totalItem < parseInt(this.valoresDoItem.vlComprovadoDoItem)) {
-                    this.mensagemAlerta("O valor total do item n\xE3o pode ser menor do que o valor comprovado de " + this.valoresDoItem.vlComprovadoDoItem);
+                if (this.totalItem < parseInt(this.valoresDoItem.vlComprovadoDoItem, 10)) {
+                    this.mensagemAlerta(`O valor total do item n\xE3o pode ser menor do que o valor comprovado de ${this.valoresDoItem.vlComprovadoDoItem}`);
                     return;
                 }
-
-                let self = this;
+                const self = this;
                 $3.ajax({
                     type: 'POST',
                     url: '/readequacao/readequacoes/salvar-avaliacao-do-item',
@@ -242,22 +242,24 @@
                         ValorUnitario: self.dadosPlanilhaEditavel.ValorUnitario,
                         QtdeDias: self.dadosPlanilhaEditavel.QtdeDias,
                         Justificativa: self.dadosPlanilhaEditavel.Justificativa,
-                        valorSolicitado: self.dadosPlanilhaAtiva.TotalSolicitado
-                    }
-                }).done(function() {
-                    self.$emit('atualizarItem');
-                    self.$emit('atualizarSaldoEntrePlanilhas');
-                    self.$emit('fecharAlterar');
-                });
+                        valorSolicitado: self.dadosPlanilhaAtiva.TotalSolicitado,
+                    },
+                }).done(
+                    () => {
+                        self.$emit('atualizarItem');
+                        self.$emit('atualizarSaldoEntrePlanilhas');
+                        self.$emit('fecharAlterar');
+                    },
+                );
             },
-            cancelar: function() {
+            cancelar() {
                 this.resetData();
                 this.$emit('fecharAlterar');
             },
-            atualizarUnidade: function(e) {
+            atualizarUnidade(e) {
                 this.dadosPlanilhaEditavel.descUnidade = this.unidades[e.target.options.selectedIndex].Descricao;
             },
-            resetData: function() {
+            resetData() {
                 this.dadosPlanilhaAtiva = {
                     Justificativa: '',
                     Ocorrencia: '',
@@ -275,7 +277,6 @@
                     idProduto: '',
                     idUnidade: '',
                 };
-
                 this.dadosPlanilhaEditavel = {
                     Justificativa: '',
                     Ocorrencia: 0,
@@ -294,38 +295,35 @@
                     idProduto: '',
                     idUnidade: '',
                 };
-
                 this.dadosProjeto = {
                     IdPRONAC: '',
                     NomePRojeto: '',
-                    PRONAC: ''
+                    PRONAC: '',
                 };
-
                 this.valoresDoItem = {
                     vlComprovadoDoItem: '',
-                    vlComprovadoDoItemValidacao: ''
-                }
-            }
+                    vlComprovadoDoItemValidacao: '',
+                };
+            },
         },
         watch: {
-            idPlanilhaAprovacao: function() {
+            idPlanilhaAprovacao() {
                 this.resetData();
-                if (this.idPlanilhaAprovacao != '') {
+                if (this.idPlanilhaAprovacao !== '') {
                     this.obterDadosItem();
                 }
-            }
+            },
         },
         computed: {
-            totalItem: function() {
+            totalItem() {
                 if (this.dadosPlanilhaEditavel.Ocorrencia > 0 &&
                     this.dadosPlanilhaEditavel.Quantidade > 0 &&
-                    this.dadosPlanilhaEditavel.ValorUnitario != ''
+                    this.dadosPlanilhaEditavel.ValorUnitario !== ''
                 ) {
                     return this.dadosPlanilhaEditavel.Ocorrencia * this.dadosPlanilhaEditavel.Quantidade * this.dadosPlanilhaEditavel.ValorUnitario;
-                } else {
-                    return 0;
                 }
+                return 0;
             },
-        }
-    }
+        },
+    };
 </script>

@@ -94,149 +94,139 @@
   </div>
 </template>
 <script>
-import _ from "lodash";
-import numeral from "numeral";
-import { utils } from "@/mixins/utils";
+import _ from 'lodash';
+import { utils } from '@/mixins/utils';
 import { mapActions, mapGetters } from 'vuex';
 
 // TODO: implementar usando slot para não ter que importar os módulos
-import ReadequacaoSaldoAplicacaoSaldo from "../SaldoAplicacao/components/ReadequacaoSaldoAplicacaoSaldo";
+import ReadequacaoSaldoAplicacaoSaldo from '../SaldoAplicacao/components/ReadequacaoSaldoAplicacaoSaldo';
 
 export default {
-    name: "ReadequacaoFormulario",
+    name: 'ReadequacaoFormulario',
     components: {
-	ReadequacaoSaldoAplicacaoSaldo
+        ReadequacaoSaldoAplicacaoSaldo,
     },
-    data: function() {
-	return {
-	    readequacao: {
-		idPronac: "",
-		idReadequacao: "",
-		justificativa: "",
-		arquivo: "",
-		idTipoReadequacao: "",
-		dsSolicitacao: "",
-		idDocumento: "",
-		nomeArquivo: ""
-	    },
-	    exibirInfo: false,
-	    minCaracteresJustificativa: 10,
-	    arquivo: {
-		tamanhoMaximo: 500000,
-		tiposAceitos: ["pdf"]
-	    },
-	    excluindoDocumento: false,
-	};
+    data() {
+        return {
+            readequacao: {
+                idPronac: '',
+                idReadequacao: '',
+                justificativa: '',
+                arquivo: '',
+                idTipoReadequacao: '',
+                dsSolicitacao: '',
+                idDocumento: '',
+                nomeArquivo: '',
+            },
+            exibirInfo: false,
+            minCaracteresJustificativa: 10,
+            arquivo: {
+                tamanhoMaximo: 500000,
+                tiposAceitos: ['pdf'],
+            },
+            excluindoDocumento: false,
+        };
     },
     props: {
-	idPronac: "",
-	idTipoReadequacao: "",
-	objReadequacao: {},
-	disabled: false,
-	componenteDsSolicitacao: ""
+        idPronac: '',
+        idTipoReadequacao: '',
+        objReadequacao: {},
+        disabled: false,
+        componenteDsSolicitacao: '',
     },
     mixins: [utils],
     methods: {
-	salvarReadequacao: function() {
-	    if (this.dadosReadequacao.dsSolicitacao == 0 || this.dadosReadequacao.dsSolicitacao == '0,00') {
-		this.mensagemAlerta("\xC9 obrigat\xF3rio informar o saldo dispon\xEDvel; o valor deve ser diferente de R$ 0,00!");
-		this.$children[0].$children[0].$refs.input.focus();
-		
-		return;		
-	    }
-	    
-	    if (this.readequacao.justificativa.length < this.minCaracteresJustificativa) {
-		this.mensagemAlerta(
-		    "\xC9 obrigat\xF3rio preencher a justificativa da readequa\xE7\xE3o! M\xEDnimo de " + this.minCaracteresJustificativa + " caracteres."
-		);
-		this.$refs.readequacaoJustificativa.focus();
-		return;
-	    }
-	    
-	    this.readequacao.dsSolicitacao = this.$parent.$refs.formulario.$children[0].dsSolicitacao;
-	    this.updateReadequacao(this.readequacao);
-	},
-	prepararAdicionarDocumento: function() {
-	    let arquivos = document.getElementById('arquivo'),
-		arquivo = arquivos.files[0];
-	    
-	    if (!this.validarDocumento(arquivo)) {
-		return;
-	    }
-
-	    this.adicionarDocumento({
-		arquivo: arquivo,
-		idPronac: this.dadosReadequacao.idPronac,
-		idReadequacao: this.dadosReadequacao.idReadequacao,
-		idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
-		idDocumentoAtual: this.dadosReadequacao.idDocumento,
-	    });
-	},
-	preparaExcluirDocumento: function() {
-	    this.excluindoDocumento = true;
-	    
-	    this.excluirDocumento({
-		idDocumento: this.dadosReadequacao.idDocumento,
-		idPronac: this.dadosReadequacao.idPronac,
-		idReadequacao: this.dadosReadequacao.idReadequacao,
-	    });
-	},
-	validarDocumento: function(arquivo) {
-	    if (
-		!this.arquivo.tiposAceitos.includes(
-		    arquivo.name
-			.split(".")
-			.pop()
-			.toLowerCase()
-		)
-	    ) {
-		this.mensagemAlerta(
-		    "Extens\xE3o de arquivo inv\xE1lida. Envie arquivos nos tipos: " +
-			this.arquivo.tiposAceitos.join(",")
-		);
-		return;
-	    }
-	    
-	    if (arquivo.size > this.arquivo.tamanhoMaximo) {
-		this.mensagemAlerta(
-		    "Arquivo ultrapassou o limite de " + this.arquivo.tamanhoMaximo
-		);
-		return;
-	    }
-	    return true;
-	},
-	updateJustificativa: function(event) {
-	    this.readequacao.justificativa = event.target.value;
-	},
-	...mapActions({
+        salvarReadequacao() {
+            if (this.dadosReadequacao.dsSolicitacao === 0 || this.dadosReadequacao.dsSolicitacao === '0,00') {
+                this.mensagemAlerta('\xC9 obrigat\xF3rio informar o saldo dispon\xEDvel; o valor deve ser diferente de R$ 0,00!');
+                this.$children[0].$children[0].$refs.input.focus();
+                return;
+            }
+            if (this.readequacao.justificativa.length < this.minCaracteresJustificativa) {
+                this.mensagemAlerta(
+                    `\xC9 obrigat\xF3rio preencher a justificativa da readequa\xE7\xE3o! M\xEDnimo de ${this.minCaracteresJustificativa} caracteres.`,
+                );
+                this.$refs.readequacaoJustificativa.focus();
+                return;
+            }
+            this.readequacao.dsSolicitacao = this.$parent.$refs.formulario.$children[0].dsSolicitacao;
+            this.updateReadequacao(this.readequacao);
+        },
+        prepararAdicionarDocumento() {
+            const arquivos = document.getElementById('arquivo');
+            const arquivo = arquivos.files[0];
+            if (!this.validarDocumento(arquivo)) {
+                return;
+            }
+            this.adicionarDocumento({
+                arquivo,
+                idPronac: this.dadosReadequacao.idPronac,
+                idReadequacao: this.dadosReadequacao.idReadequacao,
+                idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
+                idDocumentoAtual: this.dadosReadequacao.idDocumento,
+            });
+        },
+        preparaExcluirDocumento() {
+            this.excluindoDocumento = true;
+            this.excluirDocumento({
+                idDocumento: this.dadosReadequacao.idDocumento,
+                idPronac: this.dadosReadequacao.idPronac,
+                idReadequacao: this.dadosReadequacao.idReadequacao,
+            });
+        },
+        validarDocumento(arquivo) {
+            if (
+                !this.arquivo.tiposAceitos.includes(
+                    arquivo.name
+                        .split('.')
+                        .pop()
+                        .toLowerCase(),
+                )
+            ) {
+                this.mensagemAlerta(
+                    `Extens\xE3o de arquivo inv\xE1lida. Envie arquivos nos tipos: ${this.arquivo.tiposAceitos.join(',')}`,
+                );
+                return false;
+            }
+            if (arquivo.size > this.arquivo.tamanhoMaximo) {
+                this.mensagemAlerta(
+                    `Arquivo ultrapassou o limite de ${this.arquivo.tamanhoMaximo}`,
+                );
+                return false;
+            }
+            return true;
+        },
+        updateJustificativa(event) {
+            this.readequacao.justificativa = event.target.value;
+        },
+        ...mapActions({
             updateReadequacao: 'readequacao/updateReadequacao',
-	    adicionarDocumento: 'readequacao/adicionarDocumento',
-	    excluirDocumento: 'readequacao/excluirDocumento',
-	}),	
+            adicionarDocumento: 'readequacao/adicionarDocumento',
+            excluirDocumento: 'readequacao/excluirDocumento',
+        }),
     },
     computed: {
         ...mapGetters({
-	    dadosReadequacao: 'readequacao/readequacao',
-	}),
-	arquivoAnexado: function() {
-	    if (this.dadosReadequacao.idDocumento != "") {
-		return true;
-	    }
-	    return false;
-	},
+            dadosReadequacao: 'readequacao/readequacao',
+        }),
+        arquivoAnexado() {
+            if (this.dadosReadequacao.idDocumento !== '') {
+                return true;
+            }
+            return false;
+        },
     },
-    
     watch: {
-     	objReadequacao: function() {
-	    if (!_.isEmpty(this.objReadequacao)) {
-		this.readequacao.idReadequacao = this.objReadequacao.idReadequacao;
-		this.readequacao.idTipoReadequacao = this.objReadequacao.idTipoReadequacao;
-		this.readequacao.nomeArquivo = this.objReadequacao.nomeArquivo;
-		this.readequacao.idDocumento = this.objReadequacao.idDocumento;
-		this.readequacao.idPronac = this.objReadequacao.idPronac;
-		this.readequacao.justificativa = this.objReadequacao.justificativa;
-	    }
-	},
-    }
+        objReadequacao() {
+            if (!_.isEmpty(this.objReadequacao)) {
+                this.readequacao.idReadequacao = this.objReadequacao.idReadequacao;
+                this.readequacao.idTipoReadequacao = this.objReadequacao.idTipoReadequacao;
+                this.readequacao.nomeArquivo = this.objReadequacao.nomeArquivo;
+                this.readequacao.idDocumento = this.objReadequacao.idDocumento;
+                this.readequacao.idPronac = this.objReadequacao.idPronac;
+                this.readequacao.justificativa = this.objReadequacao.justificativa;
+            }
+        },
+    },
 };
 </script>

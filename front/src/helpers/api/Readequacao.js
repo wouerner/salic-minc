@@ -17,26 +17,26 @@ export const buscaReadequacao = (params) => {
 };
 
 export const updateReadequacao = (params) => {
-    const path = `/readequacao/saldo-aplicacao/salvar-readequacao`;
+    const path = '/readequacao/saldo-aplicacao/salvar-readequacao';
     return api.putRequest(path, buildData(params), params.idReadequacao);
 };
 
 export const excluirReadequacao = (params) => {
-    const path = `/readequacao/saldo-aplicacao/excluir-readequacao`;
+    const path = '/readequacao/saldo-aplicacao/excluir-readequacao';
     return api.postRequest(path, buildData(params));
 };
 
-export const verificarDisponivelEdicaoReadequacaoPlanilha = (idPronac) => {
-    const path = `/readequacao/saldo-aplicacao/verificar-disponivel-para-edicao-readequacao-planilha/?idPronac=`;
+export const disponivelEdicaoReadequacaoPlanilha = (idPronac) => {
+    const path = '/readequacao/saldo-aplicacao/verificar-disponivel-para-edicao-readequacao-planilha/?idPronac=';
     return api.getRequest(path, idPronac);
 };
 
 export const adicionarDocumento = (params) => {
-    const path = `/readequacao/readequacoes/salvar-documento/`;
+    const path = '/readequacao/readequacoes/salvar-documento/';
     return api.postRequest(path, buildData(params));
 };
 
 export const excluirDocumento = (params) => {
-    const path = `/readequacao/readequacoes/excluir-documento/`;
+    const path = '/readequacao/readequacoes/excluir-documento/';
     return api.postRequest(path, buildData(params));
 };

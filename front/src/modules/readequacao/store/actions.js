@@ -1,5 +1,4 @@
 import * as readequacaoHelperAPI from '@/helpers/api/Readequacao';
-
 import * as types from './types';
 
 export const buscaReadequacao = ({ commit }, params) => {
@@ -49,7 +48,7 @@ export const adicionarDocumento = ({ commit }, params) => {
 
 export const excluirDocumento = ({ commit }, params) => {
     readequacaoHelperAPI.excluirDocumento(params)
-        .then((response) => {
+        .then(() => {
             commit(types.EXCLUIR_DOCUMENTO);
         });
 };

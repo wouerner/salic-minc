@@ -102,9 +102,8 @@
 </template>
 
 <script>
-    import numeral from 'numeral';
     import {
-        utils
+        utils,
     } from '@/mixins/utils';
     import InputMoney from '@/components/InputMoney';
 
@@ -134,12 +133,12 @@
                 Dias: '',
                 listaItens: [{
                     idPlanilhaItens: '',
-                    Item: ''
-                }]
+                    Item: '',
+                }],
             },
-            unidades: {}
+            unidades: {},
         },
-        data: function() {
+        data() {
             return {
                 item: {
                     idUnidade: '',
@@ -148,46 +147,44 @@
                     ValorUnitario: '',
                     QtdeDias: '',
                     idItem: '',
-                    Justificativa: ''
-                }
-            }
+                    Justificativa: '',
+                },
+            };
         },
         mixins: [utils],
         methods: {
-            incluirItem: function() {
-
-                if (this.item.idItem == '') {
-                    this.mensagemAlerta("\xC9 obrigat\xF3rio selecionar um item!");
+            incluirItem() {
+                if (this.item.idItem === '') {
+                    this.mensagemAlerta('\xC9 obrigat\xF3rio selecionar um item!');
                     this.$refs.itemIdItem.focus();
                     return;
                 }
-                if (this.item.Quantidade == '') {
-                    this.mensagemAlerta("\xC9 obrigat\xF3rio informar a quantidade!");
+                if (this.item.Quantidade === '') {
+                    this.mensagemAlerta('\xC9 obrigat\xF3rio informar a quantidade!');
                     this.$refs.itemQtd.focus();
                     return;
                 }
-                if (this.item.Ocorrencia == '') {
-                    this.mensagemAlerta("\xC9 obrigat\xF3rio informar a ocorr&ecirc;ncia!");
+                if (this.item.Ocorrencia === '') {
+                    this.mensagemAlerta('\xC9 obrigat\xF3rio informar a ocorr&ecirc;ncia!');
                     this.$refs.itemOcorrencia.focus();
                     return;
                 }
-                if (this.item.ValorUnitario == '') {
-                    this.mensagemAlerta("\xC9 obrigat\xF3rio informar o valor unit&aacute;rio!");
+                if (this.item.ValorUnitario === '') {
+                    this.mensagemAlerta('\xC9 obrigat\xF3rio informar o valor unit&aacute;rio!');
                     this.$refs.itemValorUnitario.focus();
                     return;
                 }
-                if (this.item.QtdeDias == '') {
-                    this.mensagemAlerta("\xC9 obrigat\xF3rio informar o n&uacute;mero de dias!");
+                if (this.item.QtdeDias === '') {
+                    this.mensagemAlerta('\xC9 obrigat\xF3rio informar o n&uacute;mero de dias!');
                     this.$refs.itemDias.focus();
                     return;
                 }
-                if (this.item.Justificativa == '') {
-                    this.mensagemAlerta("\xC9 obrigat\xF3rio informar a justificativa!");
+                if (this.item.Justificativa === '') {
+                    this.mensagemAlerta('\xC9 obrigat\xF3rio informar a justificativa!');
                     this.$refs.itemJustificativa.focus();
                     return;
                 }
-
-                let self = this;
+                const self = this;
                 $3.ajax({
                     type: 'POST',
                     url: '/readequacao/readequacoes/incluir-item-planilha-readequacao',
@@ -205,23 +202,25 @@
                         newValorUnitario: self.item.ValorUnitario,
                         newDias: self.item.QtdeDias,
                         newJustificativa: self.item.Justificativa,
-                        idReadequacao: self.idReadequacao
-                    }
-                }).done(function() {
-                    self.$emit('atualizarIncluir');
-                    self.$emit('atualizarSaldoEntrePlanilhas');
-                    self.$emit('fecharIncluir');
-                    self.resetData();
-                });
+                        idReadequacao: self.idReadequacao,
+                    },
+                }).done(
+                    () => {
+                        self.$emit('atualizarIncluir');
+                        self.$emit('atualizarSaldoEntrePlanilhas');
+                        self.$emit('fecharIncluir');
+                        self.resetData();
+                    },
+                );
             },
-            cancelar: function() {
+            cancelar() {
                 this.resetData();
                 this.$emit('fecharIncluir');
             },
-            atualizarUnidade: function(e) {
+            atualizarUnidade(e) {
                 this.item.descUnidade = this.unidades[e.target.options.selectedIndex].Descricao;
             },
-            resetData: function() {
+            resetData() {
                 this.item = {
                     idUnidade: '',
                     Quantidade: null,
@@ -229,24 +228,23 @@
                     ValorUnitario: '',
                     QtdeDias: '',
                     idItem: '',
-                    Justificativa: ''
-                }
-            }
+                    Justificativa: '',
+                };
+            },
         },
         computed: {
-            totalItem: function() {
+            totalItem() {
                 if (this.item.Ocorrencia > 0 &&
                     this.item.Quantidade > 0 &&
-                    this.item.ValorUnitario != ''
+                    this.item.ValorUnitario !== ''
                 ) {
                     return this.item.Ocorrencia * this.item.Quantidade * this.item.ValorUnitario;
-                } else {
-                    return 0;
                 }
+                return 0;
             },
-            totalItemFormatado: function() {
+            totalItemFormatado() {
                 return this.converterParaMoedaPontuado(this.totalItem);
-            }
-        }
-    }
+            },
+        },
+    };
 </script>

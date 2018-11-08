@@ -126,9 +126,9 @@
         <div class="card-action">
             <span><b>Valor total do projeto:</b>
                   <SalicFormatarValor
-            	:valor="planilhaCompleta.total"
-            	:prefixo="prefixoValor"
-            	/>
+                :valor="planilhaCompleta.total"
+                :prefixo="prefixoValor"
+                />
             </span>
         </div>
         <div id="modalEditar" class="modal" v-if="disponivelParaEdicaoReadequacaoPlanilha">
@@ -156,14 +156,14 @@
 </template>
 
 <script>
+    import SalicFormatarValor from '@/components/SalicFormatarValor';
     import _ from 'lodash';
     import numeral from 'numeral';
     import {
-        utils
+        utils,
     } from '@/mixins/utils';
     import PlanilhaOrcamentariaAlterarItem from '../../components/PlanilhaOrcamentariaAlterarItem';
     import PlanilhaOrcamentariaIncluirItem from '../../components/PlanilhaOrcamentariaIncluirItem';
-    import SalicFormatarValor from '@/components/SalicFormatarValor';
 
     export default {
         name: 'ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria',
@@ -180,10 +180,10 @@
             link: '',
             disabled: '',
             disponivelParaAdicaoItensReadequacaoPlanilha: '',
-            disponivelParaEdicaoReadequacaoPlanilha: ''
+            disponivelParaEdicaoReadequacaoPlanilha: '',
         },
         mixins: [utils],
-        data: function() {
+        data() {
             return {
                 planilha: {},
                 unidades: [],
@@ -195,112 +195,115 @@
                     municipio: '',
                     etapa: '',
                     produto: '',
-                    listaItens: []
+                    listaItens: [],
                 },
                 perfilProponente: 1111,
                 fonteRecursosFederais: 109,
-                prefixoValor: "R$ ",
+                prefixoValor: 'R$ ',
             };
         },
-        created: function() {
+        created() {
             this.obterUnidades();
         },
-        mounted: function() {},
+        mounted() {},
         methods: {
-            obterUnidades: function() {
-                let self = this;
+            obterUnidades() {
+                const self = this;
                 $3.ajax({
                     type: 'GET',
                     url: '/readequacao/saldo-aplicacao/carregar-unidades',
                     data: {
-                        idPronac: self.idPronac
-                    }
-                }).done(function(response) {
-                    self.unidades = response.unidades;
-                });
+                        idPronac: self.idPronac,
+                    },
+                }).done(
+                    (response) => {
+                        self.unidades = response.unidades;
+                    },
+                );
             },
-            iniciarCollapsible: function() {
-                $3('.planilha-orcamentaria .collapsible').each(function() {
-                    $3(this).collapsible();
-                });
+            iniciarCollapsible() {
+                $3('.planilha-orcamentaria .collapsible').each(
+                    () => {
+                        $3(this).collapsible();
+                    },
+                );
             },
-            converterStringParaClasseCss: function(text) {
+            converterStringParaClasseCss(text) {
                 return text.toString().toLowerCase().trim()
                     .replace(/&/g, '-and-')
                     .replace(/[\s\W-]+/g, '-');
             },
-            exibirExcluirItem: function(item) {
-                if (this.perfil != this.perfilProponente) {
+            exibirExcluirItem(item) {
+                if (this.perfil !== this.perfilProponente) {
                     return false;
                 }
-
                 if (!_.isNull(item.vlComprovado) &&
                     item.vlComprovado > 0) {
                     return false;
-                } else {
-                    if (!this.itemExcluido(item)) {
-                        return true;
-                    }
                 }
+                if (!this.itemExcluido(item)) {
+                    return true;
+                }
+                return false;
             },
-            defineCorLinha: function(item) {
+            defineCorLinha(item) {
                 let cor = '';
                 switch (item.tpAcao) {
-                    case 'E':
-                        if (this.perfil == this.perfilProponente) {
-                            cor = 'grey-text lighten-3';
-                        } else {
-                            cor = 'red-text lighten-3';
-                        }
-                        break;
-                    case 'I':
-                        cor = 'green-text lighten-3';
-                        break;
-                    case 'A':
-                        cor = 'blue-text lighten-3';
-                        break;
-                    default:
-                        cor = 'black-text';
-                        break;
+                case 'E':
+                    if (this.perfil === this.perfilProponente) {
+                        cor = 'grey-text lighten-3';
+                    } else {
+                        cor = 'red-text lighten-3';
+                    }
+                    break;
+                case 'I':
+                    cor = 'green-text lighten-3';
+                    break;
+                case 'A':
+                    cor = 'blue-text lighten-3';
+                    break;
+                default:
+                    cor = 'black-text';
+                    break;
                 }
                 return cor;
             },
-            editarItem: function(item) {
+            editarItem(item) {
                 this.idPlanilhaAprovacaoEdicao = item.idPlanilhaAprovacao;
                 this.itemEdicao = item;
                 $3('#modalEditar').modal('open');
             },
-            podeEditarItem: function(item) {
-                if (this.perfil == this.perfilProponente &&
+            podeEditarItem(item) {
+                if (this.perfil === this.perfilProponente &&
                     this.link &&
                     item.vlComprovado < item.vlAprovado &&
                     this.disponivelParaEdicaoReadequacaoPlanilha &&
-                    (item.tpAcao != 'E' &&
-                        item.idFonte == this.fonteRecursosFederais)) {
+                    (item.tpAcao !== 'E' &&
+                     item.idFonte === this.fonteRecursosFederais)) {
                     return true;
                 }
+                return false;
             },
-            podeIncluirItem: function() {
-                if (this.perfil == this.perfilProponente &&
+            podeIncluirItem() {
+                if (this.perfil === this.perfilProponente &&
                     this.disponivelParaAdicaoItensReadequacaoPlanilha &&
                     this.link) {
                     return true;
                 }
+                return false;
             },
-            incluirItem: function(info, local, etapa, produto) {
-                let firstKey = Object.keys(info)[0],
-                    instance = info[firstKey],
-                    uf = local.split(' - ')[0],
-                    municipio = local.split(' - ')[1];
-
+            incluirItem(info, local, etapa, produto) {
+                const firstKey = Object.keys(info)[0];
+                const instance = info[firstKey];
+                const uf = local.split(' - ')[0];
+                const municipio = local.split(' - ')[1];
                 etapa = etapa.split(' - ')[1];
-
                 this.dadosIncluir = {
                     recurso: instance.FonteRecurso,
-                    etapa: etapa,
-                    uf: uf,
-                    municipio: municipio,
-                    produto: produto,
+                    etapa,
+                    uf,
+                    municipio,
+                    produto,
                     idRecurso: instance.idFonte,
                     idUnidade: instance.idUnidade,
                     idMunicipio: instance.idMunicipio,
@@ -311,113 +314,113 @@
                     Ocorrencia: '',
                     ValorUnitario: '',
                     Dias: '',
-                    listaItens: []
+                    listaItens: [],
                 };
                 this.obterItens(instance.idMunicipio, instance.idProduto, instance.idEtapa);
                 $3('#modalIncluir').modal('open');
             },
-            obterItens: function(idMunicipio, idProduto, idEtapa) {
-                let self = this;
+            obterItens(idMunicipio, idProduto, idEtapa) {
+                const self = this;
                 $3.ajax({
                     type: 'POST',
                     url: '/readequacao/readequacoes',
                     data: {
-
                         idPronac: self.idPronac,
-                        idMunicipio: idMunicipio,
-                        idProduto: idProduto,
-                        idEtapa: idEtapa
-                    }
-                }).done(function(data) {
-                    self.dadosIncluir.listaItens = data;
-                });
+                        idMunicipio,
+                        idProduto,
+                        idEtapa,
+                    },
+                }).done(
+                    (data) => {
+                        self.dadosIncluir.listaItens = data;
+                    },
+                );
             },
-            fecharModalAlterar: function() {
+            fecharModalAlterar() {
                 $3('#modalEditar').modal('close');
             },
-            fecharModalIncluir: function() {
+            fecharModalIncluir() {
                 $3('#modalIncluir').modal('close');
             },
-            atualizarItens: function() {
+            atualizarItens() {
                 this.$emit('atualizarPlanilha');
             },
-            itemExcluido: function(item) {
-                if (item.tpAcao == 'E') {
-                    return true;
+            itemExcluido(item) {
+                if (item.tpAcao !== 'E') {
+                    return false;
                 }
+                return true;
             },
-            excluirItem: function(item) {
-                if (confirm("Tem certeza que deseja exclir o item?")) {
-                    let self = this;
-
+            excluirItem(item) {
+                if (confirm('Tem certeza que deseja exclir o item?')) {
+                    const self = this;
                     $3.ajax({
                         type: 'POST',
                         url: '/readequacao/readequacoes/excluir-item-solicitacao',
                         data: {
                             idPronac: self.idPronac,
-                            idPlanilha: item.idPlanilhaAprovacao
-                        }
-                    }).done(function() {
-                        item.tpAcao = 'E';
-                        self.atualizarSaldoEntrePlanilhas();
-                        self.mensagemSucesso("Item exclu&iacute;do com sucesso");
-                    });
+                            idPlanilha: item.idPlanilhaAprovacao,
+                        },
+                    }).done(
+                        () => {
+                            item.tpAcao = 'E';
+                            self.atualizarSaldoEntrePlanilhas();
+                            self.mensagemSucesso('Item exclu&iacute;do com sucesso');
+                        },
+                    );
                 }
             },
-            restaurarItem: function(item) {
-                let self = this;
+            restaurarItem(item) {
+                const self = this;
                 $3.ajax({
                     type: 'POST',
                     url: '/readequacao/readequacoes/alteracoes-tecnicas-no-item',
                     data: {
                         idPlanilha: item.idPlanilhaAprovacao,
-                        tpAcao: item.tpAcao
+                        tpAcao: item.tpAcao,
                     },
-                }).done(function() {
-                    item.tpAcao = 'N';
-                    self.atualizarSaldoEntrePlanilhas();
-                    self.mensagemSucesso("Item restaurado com sucesso");
-                });
+                }).done(
+                    () => {
+                        item.tpAcao = 'N';
+                        self.atualizarSaldoEntrePlanilhas();
+                        self.mensagemSucesso('Item restaurado com sucesso');
+                    },
+                );
             },
-            atualizarSaldoEntrePlanilhas: function() {
+            atualizarSaldoEntrePlanilhas() {
                 this.$emit('atualizarSaldoEntrePlanilhas');
             },
-            valorFormatado: function(valor) {
-                //console.log(converterParaReal);
-                return valor; //return converterParaReal(valor);
+            valorFormatado(valor) {
+                return valor;
             },
         },
         watch: {
-            objPlanilha: function(value) {
+            objPlanilha(value) {
                 this.planilha = value;
                 this.iniciarCollapsible();
-                let self = this;
                 $3('#modalEditar').modal();
                 $3('#modalEditar').css('height', '85%');
                 $3('#modalEditar').css('max-height', '85%');
-
                 if (this.podeIncluirItem()) {
                     $3('#modalIncluir').modal();
                     $3('#modalIncluir').css('height', '85%');
                     $3('#modalIncluir').css('max-height', '85%');
                 }
-            }
+            },
         },
         computed: {
-            planilhaCompleta: function() {
+            planilhaCompleta() {
                 if (!_.isEmpty(this.objPlanilha)) {
                     this.planilha = this.objPlanilha;
                 } else {
                     return 0;
                 }
-
-                let novaPlanilha = {},
-                    totalProjeto = 0,
-                    totalFonte = 0,
-                    totalProduto = 0,
-                    totalEtapa = 0,
-                    totalLocal = 0;
-
+                let novaPlanilha = {};
+                let totalProjeto = 0;
+                let totalFonte = 0;
+                let totalProduto = 0;
+                let totalEtapa = 0;
+                let totalLocal = 0;
                 novaPlanilha = this.planilha;
                 Object.entries(this.planilha).forEach(([fonte, produtos]) => {
                     totalFonte = 0;
@@ -444,9 +447,8 @@
                     totalProjeto += totalFonte;
                 });
                 this.$set(novaPlanilha, 'total', numeral(totalProjeto).format('0.00'));
-
                 return novaPlanilha;
-            }
-        }
-    }
+            },
+        },
+    };
 </script>
