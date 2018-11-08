@@ -37,6 +37,8 @@ class ProvidenciaTomada implements \MinC\Servico\IServicoRestZend
         $providenciaTomada = $this->montaArrayProvidenciaTomada($result);
         $resultArray['providenciaTomada'] = $providenciaTomada;
 
+        $resultArray = \TratarArray::utf8EncodeArray($resultArray);
+
         return $resultArray;
     }
 
@@ -45,8 +47,8 @@ class ProvidenciaTomada implements \MinC\Servico\IServicoRestZend
         $resultArray = [];
 
         foreach ($providenciaTomada as $providencia) {
-            $ProvidenciaTomada = html_entity_decode(utf8_encode($providencia['ProvidenciaTomada']));
-            $usuario = html_entity_decode(utf8_encode($providencia['usuario']));
+            $ProvidenciaTomada = $providencia['ProvidenciaTomada'];
+            $usuario = $providencia['usuario'];
             $objDateTimeDtSituacao = new \DateTime($providencia['DtSituacao']);
             $resultArray[] = [
                 'DtSituacao' => $objDateTimeDtSituacao->format('d/m/Y H:i:s'),
