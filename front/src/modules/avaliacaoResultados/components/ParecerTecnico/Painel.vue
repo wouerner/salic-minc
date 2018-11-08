@@ -146,13 +146,12 @@
     </v-container>
 </template>
 <script>
-
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import CONST from '../../const';
-import TabelaProjetos from '../TabelaProjetos';
+import TabelaProjetos from './components/TabelaProjetos';
 import Historico from '../components/Historico';
-import Encaminhar from '../ComponenteEncaminhar';
+import Encaminhar from './components/ComponenteEncaminhar';
 import AnaliseButton from '../analise/analisarButton';
 import AssinarButton from '../analise/AssinarButton';
 import Devolver from '../components/Devolver';
