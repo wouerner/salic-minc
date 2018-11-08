@@ -40,8 +40,8 @@ class CertidoesNegativas implements \MinC\Servico\IServicoRestZend
         $resultArray = [];
 
         foreach ($resultado as $item) {
-            $dsCertidao = html_entity_decode($item['dsCertidao']);
-            $situacao = html_entity_decode($item['Situacao']);
+            $dsCertidao = $item['dsCertidao'];
+            $situacao = $item['Situacao'];
             $objDateTimeDtEmissao = new \DateTime($item['DtEmissao']);
             $objDateTimeDtValidade = new \DateTime($item['DtValidade']);
 
@@ -59,6 +59,8 @@ class CertidoesNegativas implements \MinC\Servico\IServicoRestZend
 
 
         $resultArray['certidoes'] = $certidoes;
+
+        $resultArray = \TratarArray::utf8EncodeArray($resultArray);
 
         return $resultArray;
     }
