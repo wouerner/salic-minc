@@ -23,11 +23,6 @@ class Finalizar implements IAcaoFinalizar
             $providenciaTomada = 'Projeto encaminhado para revisão da avaliação de  resultados';
         }
 
-        $dados = [];
-        $dados['siCumprimentoObjeto'] = \ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto::SI_FINALIZADO_PELO_COORDENADOR_GERAL;
-        $where = sprintf("idCumprimentoObjeto = %d", $objeto['idCumprimentoObjeto']);
-        $tbCumprimentoObjeto->update($dados, $where);
-
         $tbProjetos = new \Projetos();
         $tbProjetos->alterarSituacao($modeloTbAssinatura->getIdPronac(), '', $situacao, $providenciaTomada);
     }

@@ -10,7 +10,6 @@ class ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto extends MinC_Db_Table_
     const SI_EM_AVALIACAO_TECNICO = 4;
     const SI_PARA_AVALIACAO_COORDENADOR = 5;
     const SI_FINALIZADO_PELO_COORDENADOR = 6;
-    const SI_FINALIZADO_PELO_COORDENADOR_GERAL = 7;
 
     const OBJETO_PARCIALMENTE_APROVADO = 'P';
     const OBJETO_APROVADO = 'A';
