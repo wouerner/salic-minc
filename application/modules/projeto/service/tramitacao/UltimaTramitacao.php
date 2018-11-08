@@ -47,14 +47,23 @@ class UltimaTramitacao implements \MinC\Servico\IServicoRestZend
             $Emissor = $tramitacao['Emissor'];
             $Receptor = $tramitacao['Receptor'];
             $meDespacho = $tramitacao['meDespacho'];
-            $objDateTimeDtTramitacaoEnvio = new \DateTime($tramitacao['DtTramitacaoEnvio']);
-            $objDateTimedtTramitacaoRecebida = new \DateTime($tramitacao['dtTramitacaoRecebida']);
+            $objDateTimeDtTramitacaoEnvio = ' ';
+            $objDateTimedtTramitacaoRecebida = ' ';
+
+            if (!empty($tramitacao['DtTramitacaoEnvio'])) {
+                $objDateTimeDtTramitacaoEnvio = new \DateTime($tramitacao['DtTramitacaoEnvio']);
+                $objDateTimeDtTramitacaoEnvio = $objDateTimeDtTramitacaoEnvio->format('d/m/Y H:i:s');
+            }
+            if (!empty($tramitacao['dtTramitacaoRecebida'])) {
+                $objDateTimedtTramitacaoRecebida = new \DateTime($tramitacao['dtTramitacaoRecebida']);
+                $objDateTimedtTramitacaoRecebida = $objDateTimedtTramitacaoRecebida->format('d/m/Y H:i:s');
+            }
 
             $resultArray[] = [
                 'Emissor' => $Emissor,
-                'dtTramitacaoEnvio' => $objDateTimeDtTramitacaoEnvio->format('d/m/Y H:i:s'),
+                'dtTramitacaoEnvio' => $objDateTimeDtTramitacaoEnvio,
                 'Receptor' => $Receptor,
-                'dtTramitacaoRecebida' => $objDateTimedtTramitacaoRecebida->format('d/m/Y H:i:s'),
+                'dtTramitacaoRecebida' => $objDateTimedtTramitacaoRecebida,
                 'Estado' => $tramitacao['Estado'],
                 'Destino' => $tramitacao['Destino'],
                 'meDespacho' => $meDespacho,

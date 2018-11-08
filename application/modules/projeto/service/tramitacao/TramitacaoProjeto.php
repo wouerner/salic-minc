@@ -45,12 +45,22 @@ class TramitacaoProjeto implements \MinC\Servico\IServicoRestZend
         $resultArray = [];
         foreach ($tramitacoes as $tramitacao) {
             $meDespacho = $tramitacao['meDespacho'];
-            $objDateTimeDtTramitacaoEnvio = new \DateTime($tramitacao['dtTramitacaoEnvio']);
-            $objDateTimedtTramitacaoRecebida = new \DateTime($tramitacao['dtTramitacaoRecebida']);
+            $objDateTimeDtTramitacaoEnvio = ' ';
+            $objDateTimedtTramitacaoRecebida = ' ';
+
+            if (!empty($tramitacao['dtTramitacaoEnvio'])) {
+                $objDateTimeDtTramitacaoEnvio = new \DateTime($tramitacao['dtTramitacaoEnvio']);
+                $objDateTimeDtTramitacaoEnvio = $objDateTimeDtTramitacaoEnvio->format('d/m/Y H:i:s');
+            }
+
+            if (!empty($tramitacao['dtTramitacaoRecebida'])) {
+                $objDateTimedtTramitacaoRecebida = new \DateTime($tramitacao['dtTramitacaoRecebida']);
+                $objDateTimedtTramitacaoRecebida = $objDateTimedtTramitacaoRecebida->format('d/m/Y H:i:s');
+            }
 
             $resultArray[] = [
-                'dtTramitacaoEnvio' => $objDateTimeDtTramitacaoEnvio->format('d/m/Y H:i:s'),
-                'dtTramitacaoRecebida' => $objDateTimedtTramitacaoRecebida->format('d/m/Y H:i:s'),
+                'dtTramitacaoEnvio' => $objDateTimeDtTramitacaoEnvio,
+                'dtTramitacaoRecebida' => $objDateTimedtTramitacaoRecebida,
                 'Situacao' => $tramitacao['Situacao'],
                 'Origem' => $tramitacao['Origem'],
                 'Destino' => $tramitacao['Destino'],

@@ -46,15 +46,25 @@ class TramitacaoDocumento implements \MinC\Servico\IServicoRestZend
         foreach ($tramitacoes as $tramitacao) {
             $dsTipoDocumento = $tramitacao['dsTipoDocumento'];
             $noArquivo = $tramitacao['noArquivo'];
-            $objDateTimedtDocumento = new \DateTime($tramitacao['dtDocumento']);
-            $objDateTimedtJuntada = new \DateTime($tramitacao['dtJuntada']);
+            $objDateTimedtDocumento = ' ';
+            $objDateTimedtJuntada = ' ';
+
+            if (!empty($tramitacao['dtDocumento'])) {
+                $objDateTimedtDocumento = new \DateTime($tramitacao['dtDocumento']);
+                $objDateTimedtDocumento = $objDateTimedtDocumento->format('d/m/Y H:i:s');
+            }
+
+            if (!empty($tramitacao['dtJuntada'])) {
+                $objDateTimedtJuntada = new \DateTime($tramitacao['dtJuntada']);
+                $objDateTimedtJuntada = $objDateTimedtJuntada->format('d/m/Y H:i:s');
+            }
 
             $resultArray[] = [
                 'idDocumento' => $tramitacao['idDocumento'],
                 'dsTipoDocumento' => $dsTipoDocumento,
-                'dtDocumento' => $objDateTimedtDocumento->format('d/m/Y H:i:s'),
+                'dtDocumento' => $objDateTimedtDocumento,
                 'noArquivo' => $noArquivo,
-                'dtAnexacao' => $objDateTimedtJuntada->format('d/m/Y H:i:s'),
+                'dtAnexacao' => $objDateTimedtJuntada,
                 'Usuario' => $tramitacao['Usuario'],
                 'idLote' => $tramitacao['idLote'],
                 'Situacao' => $tramitacao['Situacao'],
