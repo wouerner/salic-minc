@@ -78,16 +78,25 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
 
         foreach ($diligencias as $diligencia) {
             $tipoDiligencia = $diligencia['tipoDiligencia'];
-            $objDateTimedataSolicitacao = new \DateTime($diligencia['dataSolicitacao']);
-            $objDateTimedataResposta = new \DateTime($diligencia['dataResposta']);
+            $objDateTimedataResposta = ' ';
+            $objDateTimedataSolicitacao = ' ';
+
+            if (!empty($diligencia['dataSolicitacao'])) {
+                $objDateTimedataSolicitacao = new \DateTime($diligencia['dataSolicitacao']);
+                $objDateTimedataSolicitacao = $objDateTimedataSolicitacao->format('d/m/Y');
+            }
+            if (!empty($diligencia['dataResposta'])) {
+                $objDateTimedataResposta = new \DateTime($diligencia['dataResposta']);
+                $objDateTimedataResposta = $objDateTimedataResposta->format('d/m/Y');
+            }
 
             $qtdia = 40;
             $resultArray[] = [
                 'produto' => $diligencia['produto'],
                 'idDiligencia' => $diligencia['idDiligencia'],
                 'tipoDiligencia' => $tipoDiligencia,
-                'dataSolicitacao' => $objDateTimedataSolicitacao->format('d/m/Y'),
-                'dataResposta' => $objDateTimedataResposta->format('d/m/Y'),
+                'dataSolicitacao' => $objDateTimedataSolicitacao,
+                'dataResposta' => $objDateTimedataResposta,
                 'prazoResposta' => date('d/m/Y',strtotime($diligencia['dataSolicitacao'].' +'.$qtdia.' day')),
             ];
         }
