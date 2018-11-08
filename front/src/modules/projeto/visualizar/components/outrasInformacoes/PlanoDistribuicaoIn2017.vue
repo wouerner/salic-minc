@@ -24,7 +24,7 @@
                     <v-card class="elevation-2" color="grey lighten-4">
                         <v-card-text class="pl-5">
                             <v-layout justify-space-around row wrap>
-                                <v-flex s12 m6 lg2 offset-lg1 dark>
+                                <v-flex s12 m6 lg2 offset-lg1>
                                     <b>&Aacute;REA</b>
                                     <p>{{produto.DescricaoArea}}</p>
                                 </v-flex>
@@ -43,7 +43,7 @@
                             </v-layout>
 
                             <v-layout justify-space-around row wrap>
-                                <v-flex lg12 dark class="text-xs-center">
+                                <v-flex lg12 class="text-xs-center">
                                 <b>QUANTIDADE DISTRIBUICAO GRATUITA</b>
                                 </v-flex>
                                 <v-flex s6 m6 lg3 offset-lg1>
@@ -67,7 +67,7 @@
                             </v-layout>
 
                             <v-layout justify-space-around row wrap>
-                                <v-flex lg12 dark class="text-xs-center">
+                                <v-flex lg12 class="text-xs-center">
                                 <b>PRE&Ccedil;O POPULAR</b>
                                 </v-flex>
                                 <v-flex s6 m6 lg3 offset-lg1>
@@ -91,7 +91,7 @@
                             </v-layout>
 
                             <v-layout justify-space-around row wrap>
-                                <v-flex lg12 dark class="text-xs-center">
+                                <v-flex lg12 class="text-xs-center">
                                 <b>PROPONENTE</b>
                                 </v-flex>
                                 <v-flex s6 m6 lg3 offset-lg1>
@@ -115,10 +115,10 @@
                             </v-layout>
 
                             <v-layout justify-space-around row wrap>
-                                <v-flex lg5 dark class="text-xs-center">
+                                <v-flex lg5 class="text-xs-center">
                                 <b>QUANTIDADE TOTAL</b>
                                 </v-flex>
-                                <v-flex lg5 dark class="text-xs-center">
+                                <v-flex lg5 class="text-xs-center">
                                 <b>RECEITA PREVISTA TOTAL</b>
                                 </v-flex>
                                 <v-flex s3 m6 lg5 offset-lg1>
@@ -141,74 +141,37 @@
                                 >
                                 <v-layout slot="header" class="black--text">
                                     <v-icon class="mr-3 black--text">place</v-icon>
-                                    <span>Detalhamento Teste</span>
+                                    <span>Detalhamento - {{dadosIn2017.tbdetalhaplanodistribuicao[index].DescricaoUf}} - {{dadosIn2017.tbdetalhaplanodistribuicao[index].DescricaoMunicipio}}</span>
                                 </v-layout>
-                                <v-container fluid>
-                                    <v-card class="elevation-2 pl-5 pt-3" color="grey lighten-4">
-                                        <v-card-text>
-                                            <v-layout justify-start row wrap>
-                                                <v-flex lg5 offset-lg3 class="text-xs-center pl-5">
-                                                    <b>PRE&Ccedil;O POPULAR</b>
-                                                </v-flex>
-                                                <v-flex lg1 class="text-lg-right pl-2">
-                                                    <b>PROPONENTE</b>
-                                                </v-flex>
-                                            </v-layout>
-                                            <v-layout justify-space-around row wrap>
-                                                <v-flex s12 m3 lg1>
-                                                    <b>CATEGORIA</b>
-                                                    <p>Centro de Eventos</p><br>
-                                                    <b>Totais</b>
-                                                </v-flex>
-                                                <v-flex s12 m3 lg1 offset-lg1>
-                                                    <p><b>QTD.</b><br></p>
-                                                    <p>400</p><br>
-                                                    <p>400</p>
-                                                </v-flex>
-                                                <v-flex s12 m3 lg2>
-                                                    <p><b>DIST.GRATUITA</b><br></p>
-                                                    <p>1200</p><br>
-                                                    <p>1200</p>
-                                                </v-flex>
-                                                <v-flex s12 m3 lg1>
-                                                    <p><b>QTD. INTEIRA</b><br></p>
-                                                    <p>1200</p>
-                                                    <p>1200</p>
-                                                </v-flex>
-                                                <v-flex s12 m3 lg1>
-                                                    <p><b>QTD. MEIA</b><br></p>
-                                                    <p>1200</p><br>
-                                                    <p>1200</p>
-                                                </v-flex>
-                                                <v-flex s12 m3 lg1>
-                                                    <p><b>PRECO UNITARIO</b><br></p>
-                                                    <p>1200</p>
-                                                    <p>1200</p>
-                                                </v-flex>
-                                                <v-flex s12 m3 lg1>
-                                                    <p><b>QTD. INTEIRA</b><br></p>
-                                                    <p>1200</p>
-                                                    <p>1200</p>
-                                                </v-flex>
-                                                <v-flex s12 m3 lg1>
-                                                    <p><b>QTD. MEIA</b><br></p>
-                                                    <p>1200</p><br>
-                                                    <p>1200</p>
-                                                </v-flex>
-                                                <v-flex s12 m3 lg1>
-                                                    <p><b>PRECO UNITARIO</b><br></p>
-                                                    <p>1200</p>
-                                                    <p>1200</p>
-                                                </v-flex>
-                                                <v-flex s12 m3 lg1>
-                                                    <p><b>RECEITA PREVISTA</b></p>
-                                                    <p>1200</p>
-                                                    <p>1200</p>
-                                                </v-flex>
-                                            </v-layout>
-                                        </v-card-text>
-                                    </v-card>
-                                </v-container>
+                                <v-data-table
+                                        :headers="headers"
+                                        :items="dadosIn2017.tbdetalhaplanodistribuicao"
+                                        class="elevation-1 container-fluid"
+                                        rows-per-page-text="Items por Página"
+                                        no-data-text="Nenhum dado encontrado"
+                                >
+                                    <template slot="items" slot-scope="props">
+                                        <td class="text-xs-left">{{props.item.dsProduto}}</td>
+                                        <td class="text-xs-left">{{ props.item.qtExemplares }}</td>
+
+                                        <td class="text-xs-left">{{ parseInt(props.item.qtGratuitaDivulgacao) +
+                                            parseInt(props.item.qtGratuitaPatrocinador) + parseInt(props.item.qtGratuitaPopulacao) }}
+                                        </td>
+
+                                        <td class="text-xs-left">{{ props.item.qtPopularIntegral }}</td>
+                                        <td class="text-xs-left">{{ props.item.qtPopularParcial }}</td>
+                                        <td class="text-xs-left">{{ props.item.vlUnitarioPopularIntegral }}</td>
+
+                                        <td class="text-xs-left">{{ props.item.qtProponenteIntegral }}</td>
+                                        <td class="text-xs-left">{{ props.item.qtProponenteParcial }}</td>
+                                        <td class="text-xs-left">{{ props.item.vlUnitarioProponenteIntegral }}</td>
+
+                                        <td class="text-xs-left">{{ props.item.vlReceitaPrevista }}</td>
+                                    </template>
+                                    <template slot="pageText" slot-scope="props">
+                                        Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                                    </template>
+                                </v-data-table>
                             </v-expansion-panel-content>
                         </v-expansion-panel>
                     </v-card>
@@ -226,7 +189,65 @@ export default {
     props: ['idPronac'],
     data() {
         return {
+            search: '',
+            pagination: {
+                sortBy: 'fat',
+            },
+            selected: [],
             loading: true,
+            headers: [
+                {
+                    text: 'CATEGORIA',
+                    align: 'left',
+                    value: 'dsProduto',
+                },
+                {
+                    text: 'QTD.',
+                    align: 'center',
+                    value: 'qtExemplares',
+                },
+                {
+                    text: 'DIST. GRATUITA',
+                    align: 'center',
+                    // value: `${qtGratuitaDivulgacao}+${qtGratuitaPatrocinador}+${qtGratuitaPopulacao}`,
+                    value: 'qtGratuitaDivulgacao + qtGratuitaPatrocinador + qtGratuitaPopulacao',
+                },
+                {
+                    text: 'QTD. INTEIRA',
+                    align: 'center',
+                    value: 'qtPopularIntegral',
+                },
+                {
+                    text: 'QTD. MEIA',
+                    align: 'center',
+                    value: 'qtPopularParcial',
+                },
+                {
+                    text: 'PREÇO UNITÁRIO',
+                    align: 'left',
+                    value: 'vlUnitarioPopularIntegral',
+                },
+                {
+                    text: 'QTD. INTEIRA',
+                    align: 'center',
+                    value: 'qtProponenteIntegral',
+                },
+                {
+                    text: 'QTD. MEIA',
+                    align: 'center',
+                    value: 'qtProponenteParcial',
+                },
+                {
+                    text: 'PREÇO UNITÁRIO',
+                    align: 'left',
+                    value: 'vlUnitarioProponenteIntegral',
+                },
+                {
+                    text: 'RECEITA PREVISTA',
+                    align: 'left',
+                    value: 'vlReceitaPrevista',
+                },
+            ],
         };
     },
     components: {
