@@ -135,45 +135,8 @@
                                 </v-flex>
                             </v-layout>
                         </v-card-text>
-                        <v-expansion-panel popout>
-                            <v-expansion-panel-content
-                                class="elevation-1"
-                                >
-                                <v-layout slot="header" class="black--text">
-                                    <v-icon class="mr-3 black--text">place</v-icon>
-                                    <span>Detalhamento - {{dadosIn2017.tbdetalhaplanodistribuicao[index].DescricaoUf}} - {{dadosIn2017.tbdetalhaplanodistribuicao[index].DescricaoMunicipio}}</span>
-                                </v-layout>
-                                <v-data-table
-                                        :headers="headers"
-                                        :items="dadosIn2017.tbdetalhaplanodistribuicao"
-                                        class="elevation-1 container-fluid"
-                                        rows-per-page-text="Items por Página"
-                                        no-data-text="Nenhum dado encontrado"
-                                >
-                                    <template slot="items" slot-scope="props">
-                                        <td class="text-xs-left">{{props.item.dsProduto}}</td>
-                                        <td class="text-xs-right">{{ props.item.qtExemplares }}</td>
-
-                                        <td class="text-xs-right">{{ parseInt(props.item.qtGratuitaDivulgacao) +
-                                            parseInt(props.item.qtGratuitaPatrocinador) + parseInt(props.item.qtGratuitaPopulacao) }}
-                                        </td>
-
-                                        <td class="text-xs-right">{{ props.item.qtPopularIntegral }}</td>
-                                        <td class="text-xs-right">{{ props.item.qtPopularParcial }}</td>
-                                        <td class="text-xs-right">{{ props.item.vlUnitarioPopularIntegral }}</td>
-
-                                        <td class="text-xs-right">{{ props.item.qtProponenteIntegral }}</td>
-                                        <td class="text-xs-right">{{ props.item.qtProponenteParcial }}</td>
-                                        <td class="text-xs-right">{{ props.item.vlUnitarioProponenteIntegral }}</td>
-
-                                        <td class="text-xs-right">{{ props.item.vlReceitaPrevista }}</td>
-                                    </template>
-                                    <template slot="pageText" slot-scope="props">
-                                        Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
-                                    </template>
-                                </v-data-table>
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
+                        <DetalhamentoPlanoDistribuicao
+                            :arrayDetalhamentos="detalhamentosByID(dadosIn2017.tbdetalhaplanodistribuicao, produto.idPlanoDistribuicao)"></DetalhamentoPlanoDistribuicao>
                     </v-card>
             </v-container>
         </v-expansion-panel-content>
@@ -183,80 +146,29 @@
 import { mapGetters, mapActions } from 'vuex';
 import Carregando from '@/components/Carregando';
 import PropostaPlanoDistribuicao from '@/modules/proposta/visualizar/components/PropostaPlanoDistribuicao';
+import DetalhamentoPlanoDistribuicao from './components/DetalhamentoPlanoDistribuicao';
 
 export default {
     name: 'PlanoDistribuicaoIn2017',
     props: ['idPronac'],
     data() {
         return {
-            search: '',
-            pagination: {
-                sortBy: 'fat',
-            },
-            selected: [],
+            detalhamentos: [],
             loading: true,
-            headers: [
-                {
-                    text: 'CATEGORIA',
-                    align: 'left',
-                    value: 'dsProduto',
-                },
-                {
-                    text: 'QTD.',
-                    align: 'center',
-                    value: 'qtExemplares',
-                },
-                {
-                    text: 'DIST. GRATUITA',
-                    align: 'center',
-                    // value: `${qtGratuitaDivulgacao}+${qtGratuitaPatrocinador}+${qtGratuitaPopulacao}`,
-                    value: 'qtGratuitaDivulgacao + qtGratuitaPatrocinador + qtGratuitaPopulacao',
-                },
-                {
-                    text: 'QTD. INTEIRA',
-                    align: 'center',
-                    value: 'qtPopularIntegral',
-                },
-                {
-                    text: 'QTD. MEIA',
-                    align: 'center',
-                    value: 'qtPopularParcial',
-                },
-                {
-                    text: 'PREÇO UNITÁRIO',
-                    align: 'center',
-                    value: 'vlUnitarioPopularIntegral',
-                },
-                {
-                    text: 'QTD. INTEIRA',
-                    align: 'center',
-                    value: 'qtProponenteIntegral',
-                },
-                {
-                    text: 'QTD. MEIA',
-                    align: 'center',
-                    value: 'qtProponenteParcial',
-                },
-                {
-                    text: 'PREÇO UNITÁRIO',
-                    align: 'center',
-                    value: 'vlUnitarioProponenteIntegral',
-                },
-                {
-                    text: 'RECEITA PREVISTA',
-                    align: 'center',
-                    value: 'vlReceitaPrevista',
-                },
-            ],
         };
     },
     components: {
         Carregando,
         PropostaPlanoDistribuicao,
+        DetalhamentoPlanoDistribuicao,
     },
     mounted() {
         if (typeof this.dadosProjeto.idPreProjeto !== 'undefined') {
             this.buscarPlanoDistribuicaoIn2017(this.dadosProjeto.idPreProjeto);
+        }
+
+        if (typeof this.dadosIn2017.tbdetalhaplanodistribuicao !== 'undefined') {
+            this.detalhamentos = this.dadosIn2017.tbdetalhaplanodistribuicao;
         }
     },
     watch: {
@@ -279,6 +191,21 @@ export default {
                 return 'Sim';
             }
             return 'N\xE3o';
+        },
+        detalhamentosByID(lista, id) {
+            if (typeof lista !== 'undefined') {
+                /* eslint-disable */
+                let novaLista = [];
+
+                Object.keys(lista).map((key) => {
+                    if (lista[key].idPlanoDistribuicao === id) {
+                        novaLista.push(lista[key]);
+                    }
+                    return novaLista;
+                });
+                return novaLista;
+            }
+            return lista;
         },
     },
 };
