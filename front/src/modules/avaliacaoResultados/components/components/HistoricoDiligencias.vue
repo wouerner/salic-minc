@@ -33,7 +33,7 @@
      <span
                             slot="opposite"
                             :class="`headline font-weight-bold green--text`"
-                            v-text="year.year"
+                            v-text="'Solicitado: '+item.dataSolicitacao"
                         ></span>></span>
                             <v-card
                                 color="#468847"
