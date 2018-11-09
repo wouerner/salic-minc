@@ -12,8 +12,8 @@
                     no-data-text="Nenhum dado encontrado"
             >
                 <template slot="items" slot-scope="props">
-                    <td class="text-xs-right">{{ props.item.Produto }}</td>
-                    <td class="text-xs-right">{{ props.item.Unidade }}</td>
+                    <td class="text-xs-left">{{ props.item.Produto }}</td>
+                    <td class="text-xs-left">{{ props.item.Unidade }}</td>
                     <td class="text-xs-left" v-html="props.item.Observacao"></td>
                     <td class="text-xs-right">{{ props.item.DtEnvio }}</td>
                     <td class="text-xs-right">{{ props.item.DtRetorno }}</td>
@@ -43,12 +43,12 @@
                 headers: [
                     {
                         text: 'PRODUTO',
-                        align: 'center',
+                        align: 'left',
                         value: 'Produto',
                     },
                     {
                         text: 'UNIDADE',
-                        align: 'center',
+                        align: 'left',
                         value: 'Unidade',
                     },
                     {
