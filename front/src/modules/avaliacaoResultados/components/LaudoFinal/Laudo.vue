@@ -23,7 +23,7 @@
                 <td class="text-xs-center">
                     <v-flex>
                         <div>
-                            <v-btn :href="'/projeto/#/'+ props.item.IdPronac">{{ props.item.PRONAC }}</v-btn>
+                            <v-btn :href="'/projeto/#/'+ props.item.idPronac">{{ props.item.PRONAC }}</v-btn>
                         </div>
                     </v-flex>
                 </td>
@@ -60,19 +60,21 @@
                 <td class="text-xs-center">
                     <Devolver
                         v-if="usuario"
-                        :idPronac="props.item.IdPronac"
+                        :idPronac="String(props.item.IdPronac)"
                         :atual="estado"
                         :proximo="proximoEstado()"
                         :nomeProjeto="props.item.NomeProjeto"
                         :pronac="props.item.PRONAC"
                         :idTipoDoAtoAdministrativo="atoAdministrativo"
+                        :usuario="getUsuario"
                     >
                     </Devolver>
                 </td>
                 <td v-if="estado == Const.ESTADO_ANALISE_LAUDO" class="text-xs-center">
                     <v-btn flat icon color="blue"
-                            @click.native="sincState(props.item.IdPronac)"
-                            :to="{ name: 'EmitirLaudoFinal', params:{ id:props.item.IdPronac }}">
+                           id="emitirLaudo"
+                           @click.native="sincState(props.item.IdPronac)"
+                           :to="{ name: 'EmitirLaudoFinal', params:{ id:props.item.IdPronac }}">
                         <v-tooltip bottom>
                             <v-icon slot="activator" class="material-icons">create</v-icon>
                             <span>Emitir Laudo</span>
@@ -81,7 +83,8 @@
                 </td>
                 <td v-if="estado == Const.ESTADO_LAUDO_FINALIZADO" class="text-xs-center">
                     <v-btn flat icon color="blue"
-                            :href="'/assinatura/index/assinar-projeto?IdPRONAC='+props.item.IdPronac+'&idTipoDoAtoAdministrativo=623'">
+                           id="assinarLaudo"
+                           :href="'/assinatura/index/assinar-projeto?IdPRONAC='+props.item.IdPronac+'&idTipoDoAtoAdministrativo=623'">
                         <v-tooltip bottom>
                             <v-icon slot="activator" class="material-icons">assignment_turned_in</v-icon>
                             <span>Assinar Laudo</span>
@@ -93,8 +96,9 @@
                     class="text-xs-center"
                 >
                     <v-btn flat icon color="blue"
-                            @click.native="sincState(props.item.IdPronac)"
-                            :to="{ name: 'VisualizarLaudo', params:{ id:props.item.IdPronac }}">
+                           id="visualizarLaudo"
+                           @click.native="sincState(props.item.IdPronac)"
+                           :to="{ name: 'VisualizarLaudo', params:{ id:props.item.IdPronac }}">
                         <v-tooltip bottom>
                             <v-icon slot="activator" class="material-icons">visibility</v-icon>
                             <span>Visualizar Laudo</span>
@@ -118,7 +122,7 @@
                         v-model="pagination.page"
                         :length="pages"
                         :total-visible="3"
-                        color="green darken-1"
+                        color="green darken-3"
                 ></v-pagination>
             </div>
         </div>
@@ -128,8 +132,8 @@
 <script>
     import ModalTemplate from '@/components/modal';
     import { mapActions, mapGetters } from 'vuex';
-    import Const from '../const';
-    import Devolver from './Devolver';
+    import Const from '../../const';
+    import Devolver from '../components/Devolver';
 
     export default {
         name: 'Painel',

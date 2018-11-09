@@ -12,13 +12,11 @@
                     no-data-text="Nenhum dado encontrado"
             >
                 <template slot="items" slot-scope="props">
-                    <td class="text-xs-left">{{ props.item.dsCertidao }}</td>
+                    <td class="text-xs-left" v-html="props.item.dsCertidao"></td>
                     <td class="text-xs-right">{{ props.item.DtEmissao }}</td>
                     <td class="text-xs-right">{{ props.item.DtValidade }}</td>
                     <td class="text-xs-right">{{ props.item.Pronac }}</td>
-                    <td class="text-xs-left" v-if="props.item.Situacao">
-                        {{ props.item.Situacao }}
-                    </td>
+                    <td class="text-xs-left" v-if="props.item.Situacao" v-html="props.item.Situacao"></td>
                     <td v-else class="text-xs-left">
                         Vencida
                     </td>

@@ -3,9 +3,11 @@
         <v-app :dark="isModoNoturno">
             <SlNav></SlNav>
             <v-content>
-                <v-container fluid>
+                <v-container fluid v-if="Object.keys(usuario).length > 0">
                   <v-layout>
-                    <router-view></router-view>
+                    <v-fade-transition mode="out-in">
+                        <router-view></router-view>
+                    </v-fade-transition>
                   </v-layout>
                 </v-container>
             </v-content>
@@ -47,6 +49,7 @@ export default {
         ...mapGetters({
             getSnackbar: 'noticias/getDados',
             isModoNoturno: 'layout/modoNoturno',
+            usuario: 'autenticacao/getUsuario',
         }),
     },
     mounted() {

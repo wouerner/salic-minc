@@ -51,6 +51,8 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
         $result['diligenciaProjeto'] = $projeto;
         $result['diligenciaAdequacao'] = $adequacao;
 
+        $result = \TratarArray::utf8EncodeArray($result);
+
         return $result;
     }
 
@@ -75,16 +77,27 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
         $resultArray = [];
 
         foreach ($diligencias as $diligencia) {
-            $objDateTimedataSolicitacao = new \DateTime($diligencia['dataSolicitacao']);
-            $objDateTimedataResposta = new \DateTime($diligencia['dataResposta']);
+            $tipoDiligencia = $diligencia['tipoDiligencia'];
+            $objDateTimedataResposta = ' ';
+            $objDateTimedataSolicitacao = ' ';
+
+            if (!empty($diligencia['dataSolicitacao'])) {
+                $objDateTimedataSolicitacao = new \DateTime($diligencia['dataSolicitacao']);
+                $objDateTimedataSolicitacao = $objDateTimedataSolicitacao->format('d/m/Y');
+            }
+            if (!empty($diligencia['dataResposta'])) {
+                $objDateTimedataResposta = new \DateTime($diligencia['dataResposta']);
+                $objDateTimedataResposta = $objDateTimedataResposta->format('d/m/Y');
+            }
 
             $qtdia = 40;
             $resultArray[] = [
                 'produto' => html_entity_decode(utf8_encode($diligencia['produto'])),
                 'tipoDiligencia' => html_entity_decode(utf8_encode($diligencia['tipoDiligencia'])),
                 'idDiligencia' => $diligencia['idDiligencia'],
-                'dataSolicitacao' => $objDateTimedataSolicitacao->format('d/m/Y'),
-                'dataResposta' => $objDateTimedataResposta->format('d/m/Y'),
+                'tipoDiligencia' => $tipoDiligencia,
+                'dataSolicitacao' => $objDateTimedataSolicitacao,
+                'dataResposta' => $objDateTimedataResposta,
                 'prazoResposta' => date('d/m/Y',strtotime($diligencia['dataSolicitacao'].' +'.$qtdia.' day')),
             ];
         }
@@ -101,7 +114,7 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
 
             $resultArray[] = [
                 'idAvaliarAdequacaoProjeto' => $diligencia['idAvaliarAdequacaoProjeto'],
-                'tipoDiligencia' => html_entity_decode('Dilig&ecirc;ncia na An&aacute;lise da adequa&ccedil;&atilde;o &agrave; realidade do projeto.'),
+                'tipoDiligencia' => 'Diligência na Análise da adequação à realidade do projeto.',
                 'dtAvaliacao' => $objDateTimedtAvaliacao->format('d/m/Y'),
             ];
         }
@@ -131,6 +144,8 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
 
         $diligenciaProjeto = $this->obterDiligenciaProjeto($diligencia);
 
+        $diligenciaProjeto = \TratarArray::utf8EncodeArray($diligenciaProjeto);
+
         return $diligenciaProjeto;
     }
 
@@ -138,9 +153,9 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
     {
         $objDateTimedataSolicitacao = new \DateTime($diligencia['dataSolicitacao']);
         $objDateTimedataResposta = new \DateTime($diligencia['dataResposta']);
-        $Solicitacao = html_entity_decode(utf8_encode($diligencia['Solicitacao']));
-        $Resposta = html_entity_decode(utf8_encode($diligencia['Resposta']));
-        $nomeProjeto = html_entity_decode(utf8_encode($diligencia['nomeProjeto']));
+        $Solicitacao = $diligencia['Solicitacao'];
+        $Resposta = $diligencia['Resposta'];
+        $nomeProjeto = $diligencia['nomeProjeto'];
 
         $arquivos= $this->obterAnexosDiligencias($diligencia);
 
@@ -165,7 +180,7 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
             $objdtEnvio = new \DateTime($arquivo->dtEnvio);
             $arquivoArray[] = [
                 'idArquivo' => $arquivo->idArquivo,
-                'nmArquivo' => utf8_encode($arquivo->nmArquivo),
+                'nmArquivo' => $arquivo->nmArquivo,
                 'dtEnvio' => $objdtEnvio->format('d/m/Y H:i:s'),
                 'idDiligencia' => $arquivo->idDiligencia,
             ];
