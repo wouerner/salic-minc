@@ -34,53 +34,55 @@ class Recurso implements \MinC\Servico\IServicoRestZend
         if (!empty($idPronac)) {
             $Projetos = new \Projetos();
             $rsProjeto = $Projetos->buscar(array("IdPronac=?"=>$idPronac))->current();
-//            $this->view->projeto = $rsProjeto;
 
             // verifica se ha pedidos de reconsideracao e de recurso
             $tbRecurso = new \tbRecurso();
             $recursos = $tbRecurso->buscar(array('IdPRONAC = ?'=> $idPronac));
             $pedidoReconsideracao = 0;
             $pedidoRecurso = 0;
+
             $data= [];
             if (count($recursos)>0) {
                 foreach ($recursos as $r) {
                     if ($r->tpRecurso == 1) {
                         $pedidoReconsideracao = $r->idRecurso;
-                        $dados = $tbRecurso->buscarDadosRecursos(array('idRecurso = ?'=>$r->idRecurso))->current();
+                        $dados = $tbRecurso->buscarDadosRecursos(array('idRecurso = ?'=> $r->idRecurso))->current()->toArray();
                         $data['dadosReconsideracao'] = $dados;
 
+                        $data['desistenciaReconsideracao'] = false;
                         if ($r->siRecurso == 0) {
                             $data['desistenciaReconsideracao'] = true;
                         }
 
-                        $data['desistenciaReconsideracao'] = false;
-//                        $this->view->produtosReconsideracao = array();
 
-                        if ($dados->siFaseProjeto == 2) {
-                            if ($dados->tpSolicitacao == 'PI' || $dados->tpSolicitacao == 'EO' || $dados->tpSolicitacao == 'OR') {
+                        if ($dados['siFaseProjeto'] == 2) {
+                            if ($dados['tpSolicitacao'] == 'PI' || $dados['tpSolicitacao'] == 'EO' || $dados['tpSolicitacao'] == 'OR') {
+
                                 $PlanoDistribuicaoProduto = new \Proposta_Model_DbTable_PlanoDistribuicaoProduto();
-                                $dadosProdutos = $PlanoDistribuicaoProduto->buscarProdutosProjeto($dados->IdPRONAC);
+                                $dadosProdutos = $PlanoDistribuicaoProduto->buscarProdutosProjeto($dados['IdPRONAC'])->toArray();
                                 $data['produtosReconsideracao'] = $dadosProdutos;
+
                                 $tipoDaPlanilha = 3; // 3=Planilha Orcamentaria Aprovada Ativa
 
-                                $spPlanilhaOrcamentaria = new \spPlanilhaOrcamentaria();
-                                $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($dados->IdPRONAC, $tipoDaPlanilha);
+//                                $spPlanilhaOrcamentaria = new \spPlanilhaOrcamentaria();
+//                                $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($dados['IdPRONAC'], $tipoDaPlanilha);
 //                                $data['planilhaReconsideracao'] = $this->montarPlanilhaOrcamentaria($planilhaOrcamentaria, $tipoDaPlanilha);
                             }
                         }
-                        if ($dados->tpSolicitacao == 'DR' || $dados->tpSolicitacao == 'EO' || $dados->tpSolicitacao == 'OR' || $dados->tpSolicitacao == 'PI') {
-                            $data['projetosENReconsideracao'] = $Projetos->buscaAreaSegmentoProjeto($dados->IdPRONAC);
 
+                        if ($dados['tpSolicitacao'] == 'DR' || $dados['tpSolicitacao'] == 'EO' || $dados['tpSolicitacao'] == 'OR' || $dados['tpSolicitacao'] == 'PI') {
+                            $data['projetosENReconsideracao'] = $Projetos->buscaAreaSegmentoProjeto($dados['IdPRONAC'])->toArray();
+//
                             $data['comboareasculturaisReconsideracao']= $mapperArea->fetchPairs('codigo', 'descricao');
-                            $objSegmentocultural = new \Segmentocultural();
-                            $data['combosegmentosculturaisReconsideracao'] = $objSegmentocultural->buscarSegmento($data['projetosENReconsideracao']['cdArea']);
+
+//                            $objSegmentocultural = new \Segmentocultural();
+//                            $data['combosegmentosculturaisReconsideracao'] = $objSegmentocultural->buscarSegmento($data['projetosENReconsideracao']['cdArea']);
 
                             $parecer = new \Parecer();
-                            $data['ParecerReconsideracao'] = $parecer->buscar(array('IdPRONAC = ?' => $dados->IdPRONAC, 'TipoParecer in (?)' => array(1,7), 'stAtivo = ?' => 1))->current();
-xd($data);
+                            $data['ParecerReconsideracao'] = $parecer->buscar(array('IdPRONAC = ?' => $dados['IdPRONAC'], 'TipoParecer in (?)' => array(1,7), 'stAtivo = ?' => 1))->current()->toArray();
                         }
-
                     }
+
 
 //                    if ($r->tpRecurso == 2) {
 //                        $pedidoRecurso = $r->idRecurso;
@@ -119,11 +121,11 @@ xd($data);
 //                        }
 //                    }
                 }
+        return $data;
             }
 
 //            $this->view->pedidoReconsideracao = $pedidoReconsideracao;
 //            $this->view->pedidoRecurso = $pedidoRecurso;
         }
-
     }
 }

@@ -18,7 +18,7 @@ class Analise_RecursosRestController extends MinC_Controller_Rest_Abstract
             $RecursosService = new RecursosService($this->getRequest(), $this->getResponse());
             $resposta = $RecursosService->buscarRecursos();
             $resposta = \TratarArray::utf8EncodeArray($resposta);
-xd($resposta);
+
             $this->RenderJsonResponse($resposta, 200);
 
         } catch (Exception $objException) {
