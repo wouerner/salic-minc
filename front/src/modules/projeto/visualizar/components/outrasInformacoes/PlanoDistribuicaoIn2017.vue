@@ -44,7 +44,7 @@
 
                             <v-layout justify-space-around row wrap>
                                 <v-flex lg12 class="text-xs-center">
-                                <b>QUANTIDADE DISTRIBUICAO GRATUITA</b>
+                                <b>QUANTIDADE DISTRIBUI&Ccedil;&Atilde;O GRATUITA</b>
                                 </v-flex>
                                 <v-flex s6 m6 lg3 offset-lg1>
                                     <p>
