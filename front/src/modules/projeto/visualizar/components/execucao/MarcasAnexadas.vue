@@ -16,7 +16,7 @@
             >
                 <template slot="items" slot-scope="props">
                     <td class="text-xs-left">{{ props.item.dsDocumento }}</td>
-                    <td class="text-xs-right">{{ props.item.dtEnvio }}</td>
+                    <td class="text-xs-right">{{ props.item.dtEnvio | formatarData }}</td>
                     <td class="text-xs-left">{{ props.item.stAtivoDocumentoProjeto }}</td>
                     <td class="text-xs-center">
                         <v-tooltip left>
@@ -48,7 +48,7 @@
 
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/Carregando';
-
+    import moment from 'moment';
 
     export default {
         name: 'MarcasAnexadas',
@@ -85,6 +85,14 @@
                     },
                 ],
             };
+        },
+        filters: {
+            formatarData(date) {
+                if (date.length === 0) {
+                    return '-';
+                }
+                return moment(date).format('DD/MM/YYYY');
+            },
         },
         components: {
             Carregando,
