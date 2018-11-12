@@ -120,7 +120,8 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
                 case 'emanalise':
                     $tipoFiltro = 'emanalise';
                     $filtro = 'Em an&aacute;lise';
-                    $where['a.siCumprimentoObjeto = ?'] = 3;
+                    $where['a.siCumprimentoObjeto in (?)'] = [3, 4];
+                    $order = ['3 DESC'];
                     break;
                 case 'analisados':
                     $tipoFiltro = 'analisados';
@@ -399,17 +400,18 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
         $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?' => $idPronac), array('b.Descricao'));
         $this->view->BensCadastrados = $BensCadastrados;
 
-        if ($DadosRelatorio->siCumprimentoObjeto >= 5) {
+//        if ($DadosRelatorio->siCumprimentoObjeto >= 5) {
             $Usuario = new UsuarioDAO();
             $nmUsuarioCadastrador = $Usuario->buscarUsuario($DadosRelatorio->idTecnicoAvaliador);
 
             $this->view->TecnicoAvaliador = $nmUsuarioCadastrador;
-        }
 
-        if (!empty($DadosRelatorio->idChefiaImediata)) {
-            $nmChefiaImediata = $Usuario->buscarUsuario($DadosRelatorio->idChefiaImediata);
-            $this->view->ChefiaImediata = $nmChefiaImediata;
-        }
+            if (!empty($DadosRelatorio->idChefiaImediata)) {
+                $nmChefiaImediata = $Usuario->buscarUsuario($DadosRelatorio->idChefiaImediata);
+                $this->view->ChefiaImediata = $nmChefiaImediata;
+            }
+//        }
+
     }
 
     public function imprimirAction()
