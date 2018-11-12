@@ -37,6 +37,9 @@ class MarcasAnexadas
         $marcas = $tbArquivoImagem->marcasAnexadas($pronac)->toArray();
 
         foreach ($marcas as &$item) {
+            $objDateMarcasAnexadas = new \DateTime($item['dtEnvio']);
+            $item['dtEnvio'] = $objDateMarcasAnexadas->format('d/m/Y');
+
             $estadoDocumentacao = $this->obterEstadoDocumento($item['stAtivoDocumentoProjeto']);
             $item['stAtivoDocumentoProjeto'] = $estadoDocumentacao;
         }
