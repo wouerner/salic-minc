@@ -215,3 +215,11 @@ export const buscarDiligencia = ({ commit }, idPronac) => {
             commit(types.SET_DILIGENCIA, data);
         });
 };
+
+export const buscarMarcasAnexadas = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarMarcasAnexadas(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_MARCAS_ANEXADAS, data);
+        });
+};

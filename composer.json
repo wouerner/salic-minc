@@ -80,7 +80,8 @@
             "Application\\Modules\\AvaliacaoResultados\\Service\\LaudoFinal\\": "./application/modules/avaliacao-resultados/service/laudo-final",
             "MinC\\Assinatura\\": "./library/MinC/Assinatura/",
             "MinC\\Db\\Model\\": "./library/MinC/Db/Model/",
-            "MinC\\Servico\\": "./library/MinC/Servico/"
+            "MinC\\Servico\\": "./library/MinC/Servico/",
+            "Application\\Modules\\Execucao\\Service\\MarcasAnexadas\\": "./application/modules/execucao/service/"
         }
     },
     "archive": {
