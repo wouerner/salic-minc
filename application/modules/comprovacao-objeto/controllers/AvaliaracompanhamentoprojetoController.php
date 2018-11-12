@@ -360,11 +360,11 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
         $this->view->DadosProjeto = $DadosProjeto;
 
         $tbCumprimentoObjeto = new ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
-        $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idPronac, 'siCumprimentoObjeto in (?)' => array(2, 5)));
+        $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idPronac, 'siCumprimentoObjeto in (?)' => array(2, 3, 4, 5)));
         $this->view->DadosRelatorio = $DadosRelatorio;
         $this->view->cumprimentoDoObjeto = $tbCumprimentoObjeto;
         if (count($DadosRelatorio) == 0) {
-            parent::message("Relat&oacute;rio n&atilde;o encontrado!", "comprovacao-objeto/avaliaracompanhamentoprojeto/index", "ALERT");
+            parent::message("Projeto ainda não possui relat&oacute;rio!", "comprovacao-objeto/avaliaracompanhamentoprojeto/index", "ALERT");
         }
 
         $LocaisDeRealizacao = $projetos->buscarLocaisDeRealizacao($idPronac);
