@@ -109,23 +109,13 @@
                                     </v-layout>
 
                                     <v-layout justify-space-around row wrap>
-                                        <v-flex lg5 class="text-xs-center">
-                                        <b>QUANTIDADE TOTAL</b>
+                                        <v-flex lg5 offset-lg1 class="text-xs-center pl-4">
+                                            <p><b>QUANTIDADE TOTAL</b></p>
+                                            <p>{{ produto.QtdeProduzida }}</p>
                                         </v-flex>
-                                        <v-flex lg5 class="text-xs-center">
-                                        <b>RECEITA PREVISTA TOTAL</b>
-                                        </v-flex>
-                                        <v-flex s3 m6 lg5 offset-lg1>
-                                            <p>
-                                                <b>Quantidade Inteira</b><br>
-                                                {{produto.QtdeProduzida}}
-                                            </p>
-                                        </v-flex>
-                                        <v-flex s3 m6 lg6>
-                                            <p>
-                                                <b>Quantidade Meia</b><br>
-                                                {{produto.Receita}}
-                                            </p>
+                                        <v-flex lg6 class="text-xs-center">
+                                            <p><b>RECEITA PREVISTA TOTAL</b></p>
+                                            <p>{{ produto.Receita }}</p>
                                         </v-flex>
                                     </v-layout>
                                 </v-card-text>
