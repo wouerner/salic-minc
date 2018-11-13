@@ -16,7 +16,7 @@ class Execucao_FiscalizacaoRestController extends MinC_Controller_Rest_Abstract
     {
         try {
             $FiscalizacaoService = new FiscalizacaoService($this->getRequest(), $this->getResponse());
-            $resposta = $FiscalizacaoService->buscarFiscalizacao();
+            $resposta = $FiscalizacaoService->listaFiscalizacao();
             $resposta = \TratarArray::utf8EncodeArray($resposta);
 
             $this->renderJsonResponse($resposta, 200);
@@ -35,7 +35,22 @@ class Execucao_FiscalizacaoRestController extends MinC_Controller_Rest_Abstract
 
     public function getAction()
     {
-        $this->renderJsonResponse(200);
+        try {
+            $visualizarFiscalizacaoService = new FiscalizacaoService($this->getRequest(), $this->getResponse());
+            $resposta = $visualizarFiscalizacaoService->visualizarFiscalizacao();
+            $resposta = \TratarArray::utf8EncodeArray($resposta);
+
+            $this->renderJsonResponse($resposta, 200);
+
+        } catch (Exception $objException) {
+            $this->customRenderJsonResponse([
+                'error' => [
+                    'code' => 404,
+                    'message' => $objException->getMessage()
+                ]
+            ], 404);
+
+        }
     }
 
     public function postAction()
