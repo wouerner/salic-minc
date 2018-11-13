@@ -1058,4 +1058,21 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
         }
         $this->redirect("/comprovacao-objeto/avaliaracompanhamentoprojeto/index-tecnico");
     }
+
+    public function visualizarDespachosAjaxAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $idPronac = $this->_request->getParam('idPronac');
+
+        $tbDespacho = new Proposta_Model_DbTable_TbDespacho();
+
+        $projetos = new Projetos();
+        $projeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
+        $this->view->projeto = $projeto;
+
+        $this->view->despachos = $tbDespacho->obterDespachos([
+            "Projetos.idPronac = ?" => $idPronac],
+            ['idDespacho DESC']
+        );
+    }
 }
