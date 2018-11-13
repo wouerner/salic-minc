@@ -54,7 +54,7 @@
                 <div class="center-align" id="divAssinaturaEmMassa"
                      style="display: none;">
                     <input type="hidden" id="idTipoDoAtoAdministrativo" value="" />
-                    <button class="btn waves-effect waves-light" type="submit" name="action">
+                    <button class="btn waves-effect waves-light" type="submit" name="action" id="enviarAssinaturaEmMassa">
                         Assinar em massa <i class="material-icons right">send</i>
                     </button>
                 </div>
@@ -86,13 +86,23 @@
                     tratarExibicaoCheckboxChecados('.checkbox_legal', '#divAssinaturaEmMassa');
                 });
 
-                function tratarExibicaoCheckboxChecados(seletorCheckboxes, seletorExibicao) {
-                    var quantidadeCheckboxChecados = $(seletorCheckboxes).filter(':checked').length;
-                    $(seletorExibicao).hide('fast');
-                    if (quantidadeCheckboxChecados > 0) {
-                        $(seletorExibicao).show('fast');
-                    }
-                }
+             $('#enviarAssinaturaEmMassa').on('click', function(e) {
+                 const idTipoDoAtoAdministrativo = $('#idTipoDoAtoAdministrativo').val();
+                 let arrIdPronac = [];
+                 $('.checkbox_legal').filter(':checked').each(function(index, item) {
+                     arrIdPronac[index] = item.value;
+                 });
+                 
+                 window.location.replace('/assinatura/index/assinar-projeto?IdPRONAC=' + arrIdPronac.join(',') + '&idTipoDoAtoAdministrativo=' + idTipoDoAtoAdministrativo);
+             });
+             
+             function tratarExibicaoCheckboxChecados(seletorCheckboxes, seletorExibicao) {
+                 var quantidadeCheckboxChecados = $(seletorCheckboxes).filter(':checked').length;
+                 $(seletorExibicao).hide('fast');
+                 if (quantidadeCheckboxChecados > 0) {
+                     $(seletorExibicao).show('fast');
+                 }
+             }
 
                 $(document).on('click', '.checkbox_legal', function () {
                     var quantidadeCheckBoxesSelecionados = $('.checkbox_legal').filter(':checked').length;
