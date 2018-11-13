@@ -1,47 +1,47 @@
 <template>
-    <div v-if="loading">
-        <carregando :text="'Carregando Marcas Anexadas'"/>
-    </div>
-    <div v-else="dados">
-        <v-card>
-            <v-card-title>
-                <h6>Marcas Anexadas</h6>
-            </v-card-title>
-            <v-data-table
-                    :headers="headers"
-                    :items="dados"
-                    class="elevation-1 container-fluid mb-2"
-                    rows-per-page-text="Items por Página"
-                    no-data-text="Nenhum dado encontrado"
-            >
-                <template slot="items" slot-scope="props">
-                    <td class="text-xs-left">{{ props.item.dsDocumento }}</td>
-                    <td class="text-xs-right">{{ props.item.dtEnvio | formatarData }}</td>
-                    <td class="text-xs-left">{{ props.item.stAtivoDocumentoProjeto }}</td>
-                    <td class="text-xs-center">
-                        <v-tooltip left>
-                            <v-btn
-                                    :loading="parseInt(props.item.idDocumento) === loadingButton"
-                                    style="text-decoration: none"
-                                    slot="activator"
-                                    color="blue"
-                                    @click.native="loadingButton = parseInt(props.item.idDocumento)"
-                                    :href="`/upload/abrir?id=${props.item.idArquivo}`"
-                                    dark
-                            >
-                                <v-icon dark>cloud_download</v-icon>
-                            </v-btn>
-                            <span>{{ props.item.nmArquivo }}</span>
-                        </v-tooltip>
-                    </td>
-
-
-                </template>
-                <template slot="pageText" slot-scope="props">
-                    Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
-                </template>
-            </v-data-table>
-        </v-card>
+    <div>
+        <div v-if="loading">
+            <carregando :text="'Carregando Marcas Anexadas'"/>
+        </div>
+        <div v-else-if="dados">
+            <v-card>
+                <v-card-title>
+                    <h6>Marcas Anexadas</h6>
+                </v-card-title>
+                <v-data-table
+                        :headers="headers"
+                        :items="dados"
+                        class="elevation-1 container-fluid mb-2"
+                        rows-per-page-text="Items por Página"
+                        no-data-text="Nenhum dado encontrado"
+                >
+                    <template slot="items" slot-scope="props">
+                        <td class="text-xs-left">{{ props.item.dsDocumento }}</td>
+                        <td class="text-xs-right">{{ props.item.dtEnvio | formatarData }}</td>
+                        <td class="text-xs-left">{{ props.item.stAtivoDocumentoProjeto }}</td>
+                        <td class="text-xs-center">
+                            <v-tooltip left>
+                                <v-btn
+                                        :loading="parseInt(props.item.idDocumento) === loadingButton"
+                                        style="text-decoration: none"
+                                        slot="activator"
+                                        color="blue"
+                                        @click.native="loadingButton = parseInt(props.item.idDocumento)"
+                                        :href="`/upload/abrir?id=${props.item.idArquivo}`"
+                                        dark
+                                >
+                                    <v-icon dark>cloud_download</v-icon>
+                                </v-btn>
+                                <span>{{ props.item.nmArquivo }}</span>
+                            </v-tooltip>
+                        </td>
+                    </template>
+                    <template slot="pageText" slot-scope="props">
+                        Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                    </template>
+                </v-data-table>
+            </v-card>
+        </div>
     </div>
 </template>
 <script>
