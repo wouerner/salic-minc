@@ -8,9 +8,9 @@
         >
             <v-tooltip slot="activator" bottom>
                 <v-btn slot="activator" flat icon @click.native="obterDiligencias(idPronac);">
-                    <v-icon class="material-icons">assignment_late</v-icon>
+                    <v-icon :color="status.color" class="material-icons">assignment_late</v-icon>
                 </v-btn>
-                <span>Histórico de Diligências </span>
+                <span>{{status.desc}} </span>
             </v-tooltip>
 
             <v-card>
@@ -41,31 +41,7 @@
                             <v-card color="green">
                                 <v-card-title dark class="title white--text">{{item.tipoDiligencia}} <span v-if="item.stProrrogacao"> - {{item.stProrrogacao}}</span></v-card-title>
                                 <v-card-text class="white text--primary">
-                                    <!--<v-btn-->
-                                        <!--class="mx-0"-->
-                                        <!--outline-->
-                                        <!--color="red"-->
-                                        <!--v-on:click="mostrarSolicitacao(i)"-->
-                                        <!--v-if="item.Solicitacao"-->
-                                    <!--&gt;-->
-                                        <!--Solicitação-->
-                                    <!--</v-btn>-->
-                                    <!--<v-btn-->
-                                        <!--class="mx-0"-->
-                                        <!--outline-->
-                                        <!--color="red"-->
-                                        <!--v-on:click="mostrarResposta(i)"-->
-                                        <!--v-if="item.Resposta"-->
-                                    <!--&gt;-->
-                                        <!--Resposta-->
-                                    <!--</v-btn>-->
-
-
-                                        <!--<div v-if="show.solicitacao && show.index === i" v-html="item.Solicitacao"></div>-->
-                                        <!--<div v-if="show.resposta && show.index === i" v-html="item.Resposta"></div>-->
-
-
-                                    <v-expansion-panel>
+                                     <v-expansion-panel>
                                         <v-expansion-panel-content v-if="item.Solicitacao">
                                             <div slot="header">Solicitação</div>
                                             <v-card>
@@ -100,7 +76,7 @@
 
 export default {
     name: 'HistoricoDiligencias',
-    props: { idPronac: String },
+    props: { idPronac: String , status: Object},
     data() {
         return {
             dialog: false,

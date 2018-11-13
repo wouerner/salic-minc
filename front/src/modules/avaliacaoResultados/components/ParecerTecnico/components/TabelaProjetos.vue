@@ -34,6 +34,7 @@
                     <template v-for="(c, index) in componentes.acoes" d-inline-block>
                         <component
                             v-bind:key="index"
+                            :status="statusDiligencia(props.item)"
                             :is="c"
                             :id-pronac="props.item.IdPRONAC"
                             :pronac="props.item.PRONAC"
@@ -67,13 +68,17 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
 
-export default {
+    export default {
     name: 'TabelaProjetos',
     props: ['dados', 'componentes', 'mostrarTecnico'],
     data() {
         return {
+            status: {
+                color:'orange',
+                desc: 'teste'
+            },
             pagination: {
                 rowsPerPage: 10,
             },
@@ -169,6 +174,10 @@ export default {
 
             return dados;
         },
+        statusDiligencia(obj){
+            console.info('oi')
+            return this.status;
+        }
     },
     computed: {
         ...mapGetters({
