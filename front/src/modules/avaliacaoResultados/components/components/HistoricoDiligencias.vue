@@ -19,7 +19,7 @@
                     <v-btn icon dark @click.native="dialog = false">
                         <v-icon>close</v-icon>
                     </v-btn>
-                    <v-toolbar-title>Diligências do Projeto</v-toolbar-title>
+                    <v-toolbar-title>Diligências do Projeto - {{info.nomeProjeto}}</v-toolbar-title>
                 </v-toolbar>
 
                 <v-divider></v-divider>
@@ -34,39 +34,57 @@
                             slot="opposite"
                             :class="`headline font-weight-bold green--text`"
                             v-text="'Solicitado: '+item.dataSolicitacao"
-                        ></span>></span>
+                        ></span>
                             <v-card
                                 color="#468847"
                             >
                                 <v-card-title class="title">{{item.tipoDiligencia}}</v-card-title>
                                 <v-card-text class="white text--primary">
                                     <div>
-                                        Projeto: {{item.nomeProjeto}}
-                                        produto: {{item.produto}}
-                                        Pronac: {{item.pronac}}
+                                        Solicitado: {{item.dataSolicitacao}}
+                                        Respondido: {{item.dataResposta}}
+                                        Prorrogado: {{item.stProrrogacao}}
                                     </div>
-                                    <v-btn
-                                        class="mx-0"
-                                        outline
-                                        color="red"
-                                        v-on:click="mostrarSolicitacao(i)"
-                                        v-if="item.Solicitacao"
-                                    >
-                                        Solicitação
-                                    </v-btn>
-                                    <v-btn
-                                        class="mx-0"
-                                        outline
-                                        color="red"
-                                        v-on:click="mostrarResposta(i)"
-                                        v-if="item.Resposta"
-                                    >
-                                        Resposta
-                                    </v-btn>
+                                    <!--<v-btn-->
+                                        <!--class="mx-0"-->
+                                        <!--outline-->
+                                        <!--color="red"-->
+                                        <!--v-on:click="mostrarSolicitacao(i)"-->
+                                        <!--v-if="item.Solicitacao"-->
+                                    <!--&gt;-->
+                                        <!--Solicitação-->
+                                    <!--</v-btn>-->
+                                    <!--<v-btn-->
+                                        <!--class="mx-0"-->
+                                        <!--outline-->
+                                        <!--color="red"-->
+                                        <!--v-on:click="mostrarResposta(i)"-->
+                                        <!--v-if="item.Resposta"-->
+                                    <!--&gt;-->
+                                        <!--Resposta-->
+                                    <!--</v-btn>-->
 
 
-                                        <div v-if="show.solicitacao && show.index === i" v-html="item.Solicitacao"></div>
-                                        <div v-if="show.resposta && show.index === i" v-html="item.Resposta"></div>
+                                        <!--<div v-if="show.solicitacao && show.index === i" v-html="item.Solicitacao"></div>-->
+                                        <!--<div v-if="show.resposta && show.index === i" v-html="item.Resposta"></div>-->
+
+
+                                    <v-expansion-panel>
+                                        <v-expansion-panel-content v-if="item.Solicitacao">
+                                            <div slot="header">Solicitacao</div>
+                                            <v-card>
+                                                <v-card-text v-html="item.Solicitacao"></v-card-text>
+                                            </v-card>
+                                        </v-expansion-panel-content>
+                                        <v-expansion-panel-content v-if="item.Resposta">
+                                            <div slot="header">Resposta</div>
+                                            <v-card>
+                                                <v-card-text v-html="item.Resposta"></v-card-text>
+                                            </v-card>
+                                        </v-expansion-panel-content>
+                                    </v-expansion-panel>
+
+
 
                                 </v-card-text>
                             </v-card>
@@ -82,10 +100,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import CarregarTemplateAjax from '../../../../components/CarregarTemplateAjax';
+    import {mapActions, mapGetters} from 'vuex';
+    import CarregarTemplateAjax from '../../../../components/CarregarTemplateAjax';
 
-export default {
+    export default {
     name: 'HistoricoDiligencias',
     components: { CarregarTemplateAjax },
     props: { idPronac: Object },
@@ -93,9 +111,13 @@ export default {
         return {
             dialog: false,
             show: {
-              solicitacao: false,
-              resposta: false,
-              index: '',
+                solicitacao: false,
+                resposta: false,
+                index: '',
+            },
+            info: {
+                nomeProjeto: '',
+                pronac: '',
             },
         };
     },
@@ -103,22 +125,26 @@ export default {
         ...mapActions({
             obterDiligencias: 'avaliacaoResultados/obetDadosDiligencias',
         }),
-        mostrarSolicitacao(index){
+        mostrarSolicitacao(index) {
             this.show.solicitacao = !this.show.solicitacao;
             this.show.index = index;
         },
-        mostrarResposta(index){
+        mostrarResposta(index) {
             this.show.resposta = !this.show.resposta;
             this.show.index = index;
         },
-        sortByDate: function (list) {
+        sortByDate(list) {
             return _.orderBy(list, 'dataSolicitacao', 'desc');
-        }
+        },
     },
     computed: {
         ...mapGetters({
             diligencias: 'avaliacaoResultados/diligenciasHistorico',
         }),
+    },
+    created() {
+        this.info.nomeProjeto = this.diligencias.items[0].nomeProjeto;
+        this.info.nomeProjeto = this.diligencias.items[0].pronac;
     },
 };
 </script>
