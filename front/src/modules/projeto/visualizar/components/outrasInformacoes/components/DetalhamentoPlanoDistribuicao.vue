@@ -26,6 +26,7 @@
                         class="elevation-1 container-fluid"
                         rows-per-page-text="Items por Página"
                         no-data-text="Nenhum dado encontrado"
+                        hide-actions
                 >
                     <template slot="items" slot-scope="props">
                         <td class="text-xs-left">{{props.item.dsProduto}}</td>
@@ -45,9 +46,6 @@
 
                         <td class="text-xs-right">{{ props.item.vlReceitaPrevista }}</td>
                     </template>
-                    <template slot="pageText" slot-scope="props">
-                        Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
-                    </template>
                 </v-data-table>
             </v-expansion-panel-content>
         </v-expansion-panel>
@@ -60,11 +58,6 @@ export default {
     data() {
         return {
             detalhamentos: [],
-            search: '',
-            pagination: {
-                sortBy: 'fat',
-            },
-            selected: [],
             headers: [
                 {
                     text: 'CATEGORIA',
