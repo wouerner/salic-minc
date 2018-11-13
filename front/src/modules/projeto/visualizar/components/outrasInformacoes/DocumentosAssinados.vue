@@ -1,8 +1,8 @@
 <template>
-    <div>
-        <div v-if="loading">
-            <Carregando :text="'Carregando Documentos Assinados'"></Carregando>
-        </div>
+    <div v-if="loading">
+        <Carregando :text="'Carregando Documentos Assinados'"></Carregando>
+    </div>
+    <div v-else>
         <v-data-table
                 :headers="headers"
                 :items="dados"
