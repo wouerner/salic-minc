@@ -912,6 +912,13 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
 
                 if (!empty($post['finalizar'])) {
 
+                    $tbProjetos = new Projeto_Model_DbTable_Projetos();
+                    $projeto = $tbProjetos->findBy(['idPronac = ?' => $idPronac]);
+
+                    if ($projeto['Situacao'] == Projeto_Model_Situacao::DILIGENCIADO_NA_AVALIACAO_CUMPRIMENTO_DE_OBJETO) {
+                        throw new Exception("N&atilde;o &eacute; poss&iacute;vel finalizar a avalia&ccedil;&atilde;o. O projeto est&aacute; em dilig&ecirc;ncia!");
+                    }
+
                     $msg = 'Relat&oacute;rio finalizado com sucesso, agora voc&ecirc; deve assinar o documento para continuar!';
                     $callback = 'comprovacao-objeto/avaliaracompanhamentoprojeto/index-tecnico';
 
