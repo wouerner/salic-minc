@@ -25,6 +25,7 @@ class AvaliacaoResultados_Bootstrap extends Zend_Application_Module_Bootstrap
                     'projeto',
                     'projeto-assinatura',
                     'projeto-inicio',
+                    'planilha-aprovada',
                     'projetos-avaliacao-tecnica',
                     'fluxo-projeto',
                 ]
