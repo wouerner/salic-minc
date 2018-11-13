@@ -19,7 +19,7 @@
                     <v-btn icon dark @click.native="dialog = false">
                         <v-icon>close</v-icon>
                     </v-btn>
-                    <v-toolbar-title>Diligências do Projeto - {{info.nomeProjeto}}</v-toolbar-title>
+                    <v-toolbar-title>Diligências Projeto: {{diligencias.items}} </v-toolbar-title>
                 </v-toolbar>
 
                 <v-divider></v-divider>
@@ -30,21 +30,17 @@
                             :key="i"
                             small
                         >
-     <span
-                            slot="opposite"
-                            :class="`headline font-weight-bold green--text`"
-                            v-text="'Solicitado: '+item.dataSolicitacao"
-                        ></span>
-                            <v-card
-                                color="#468847"
-                            >
-                                <v-card-title class="title">{{item.tipoDiligencia}}</v-card-title>
+                             <span
+                                 slot="opposite"
+                                 :class="`headline font-weight-bold green--text`"
+                             >
+                                 Solicitado: {{item.dataSolicitacao | date}} </br>
+                                 <span v-if="item.dataResposta">  Respondido: {{item.dataResposta | date}}</span>
+                             </span>
+
+                            <v-card color="green">
+                                <v-card-title dark class="title white--text">{{item.tipoDiligencia}} <span v-if="item.stProrrogacao"> - {{item.stProrrogacao}}</span></v-card-title>
                                 <v-card-text class="white text--primary">
-                                    <div>
-                                        Solicitado: {{item.dataSolicitacao}}
-                                        Respondido: {{item.dataResposta}}
-                                        Prorrogado: {{item.stProrrogacao}}
-                                    </div>
                                     <!--<v-btn-->
                                         <!--class="mx-0"-->
                                         <!--outline-->
@@ -71,24 +67,20 @@
 
                                     <v-expansion-panel>
                                         <v-expansion-panel-content v-if="item.Solicitacao">
-                                            <div slot="header">Solicitacao</div>
+                                            <div slot="header">Solicitação</div>
                                             <v-card>
                                                 <v-card-text v-html="item.Solicitacao"></v-card-text>
                                             </v-card>
                                         </v-expansion-panel-content>
                                         <v-expansion-panel-content v-if="item.Resposta">
-                                            <div slot="header">Resposta</div>
+                                            <div slot="header" class="font-weight-regular">Resposta</div>
                                             <v-card>
                                                 <v-card-text v-html="item.Resposta"></v-card-text>
                                             </v-card>
                                         </v-expansion-panel-content>
                                     </v-expansion-panel>
-
-
-
                                 </v-card-text>
                             </v-card>
-
 
                         </v-timeline-item>
                     </v-timeline>
@@ -100,10 +92,14 @@
 </template>
 
 <script>
+    import Vue from 'vue';
     import {mapActions, mapGetters} from 'vuex';
     import CarregarTemplateAjax from '../../../../components/CarregarTemplateAjax';
+    import Data from '../../../../filters/date';
 
-    export default {
+    Vue.filter( 'date' , Data);
+
+export default {
     name: 'HistoricoDiligencias',
     components: { CarregarTemplateAjax },
     props: { idPronac: Object },
@@ -141,11 +137,15 @@
         ...mapGetters({
             diligencias: 'avaliacaoResultados/diligenciasHistorico',
         }),
+        setInfo(){
+
+            console.info('aqui' + this.diligencias);
+        }
     },
-    created() {
-        this.info.nomeProjeto = this.diligencias.items[0].nomeProjeto;
-        this.info.nomeProjeto = this.diligencias.items[0].pronac;
-    },
+    created(){
+        this.obterDiligencias();
+        this.setInfo();
+    }
 };
 </script>
 
