@@ -19,7 +19,7 @@
                     <v-btn icon dark @click.native="dialog = false">
                         <v-icon>close</v-icon>
                     </v-btn>
-                    <v-toolbar-title>Diligências Projeto: {{diligencias.items}} </v-toolbar-title>
+                    <v-toolbar-title>Diligências Projeto: {{info.pronac}} - {{info.nomeProjeto}} </v-toolbar-title>
                 </v-toolbar>
 
                 <v-divider></v-divider>
@@ -93,16 +93,14 @@
 
 <script>
     import Vue from 'vue';
-    import {mapActions, mapGetters} from 'vuex';
-    import CarregarTemplateAjax from '../../../../components/CarregarTemplateAjax';
+    import { mapActions, mapGetters } from 'vuex';
     import Data from '../../../../filters/date';
 
     Vue.filter( 'date' , Data);
 
 export default {
     name: 'HistoricoDiligencias',
-    components: { CarregarTemplateAjax },
-    props: { idPronac: Object },
+    props: { idPronac: String },
     data() {
         return {
             dialog: false,
@@ -138,13 +136,16 @@ export default {
             diligencias: 'avaliacaoResultados/diligenciasHistorico',
         }),
         setInfo(){
-
-            console.info('aqui' + this.diligencias);
-        }
+            if(Object.keys(this.diligencias).length > 0 ){
+                this.info.nomeProjeto = this.diligencias.items[0].nomeProjeto;
+                this.info.pronac = this.diligencias.items[0].pronac;
+                return this.diligencias;
+            }
+            return 0;
+        },
     },
-    created(){
-        this.obterDiligencias();
-        this.setInfo();
+    updated(){
+      this.setInfo;
     }
 };
 </script>
