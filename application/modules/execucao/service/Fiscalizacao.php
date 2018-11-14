@@ -105,4 +105,52 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
         }
         return $listaFiscalizacao;
     }
+
+    private function montaLocaisFiscalizacao($dados)
+    {
+        foreach ($dados as $item) {
+            $locaisFiscalizacao[] = [
+                'regiao' => $item['Regiao'],
+                'uf' => $item['uf'],
+                'cidade' => $item['cidade'],
+            ];
+
+        }
+        return $locaisFiscalizacao;
+    }
+
+    private function montaOficializarFiscalizacao($dados)
+    {
+        foreach ($dados as $item) {
+            $objDateTimeDtInicio = ' ';
+            $objDateTimeDtFim = ' ';
+            $objDateTimeDtResposta = ' ';
+
+            if (!empty($item['dtInicioFiscalizacaoProjeto'])) {
+                $objDateTimeDtInicio = new \DateTime($item['dtInicioFiscalizacaoProjeto']);
+                $objDateTimeDtInicio = $objDateTimeDtInicio->format('d/m/Y');
+            }
+
+            if (!empty($item['dtFimFiscalizacaoProjeto'])) {
+                $objDateTimeDtFim = new \DateTime($item['dtFimFiscalizacaoProjeto']);
+                $objDateTimeDtFim = $objDateTimeDtFim->format('d/m/Y');
+            }
+            if (!empty($item['dtRespostaSolicitada'])) {
+                $objDateTimeDtResposta = new \DateTime($item['dtRespostaSolicitada']);
+                $objDateTimeDtResposta = $objDateTimeDtResposta->format('d/m/Y');
+            }
+
+            $listaFiscalizacao[] = [
+                'dtInicio' => $objDateTimeDtInicio,
+                'dtFim' => $objDateTimeDtFim,
+                'dtResposta' => $objDateTimeDtResposta,
+                'cpfTecnico' => $item['cpfTecnico'],
+                'nmTecnico' => $item['nmTecnico'],
+                'tpDemandante' => $item['tpDemandante'],
+                'dsFiscalizacaoProjeto' => $item['dsFiscalizacaoProjeto'],
+            ];
+
+        }
+        return $listaFiscalizacao;
+    }
 }
