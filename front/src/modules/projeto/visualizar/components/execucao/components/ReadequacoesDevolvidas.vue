@@ -1,19 +1,19 @@
 <template>
-    <div>
+    <v-container fluid>
         <v-card>
             <v-card-title>
-                    <h6>Readequações Devolvidas</h6>
+                <h6>Readequações Devolvidas</h6>
             </v-card-title>
             <v-data-table
                     :headers="headers"
-                    :items="dadosReadequacao"
+                    :items="dadosReadequacao.dadosReadequacoesDevolvidas"
                     class="elevation-1 container-fluid mb-2"
                     rows-per-page-text="Items por Página"
                     no-data-text="Nenhum dado encontrado"
             >
                 <template slot="items" slot-scope="props">
                     <td class="text-xs-left">{{ props.item.dsReadequacao }}</td>
-                    <td class="text-xs-right">{{ props.item.dtAvaliador }}</td>
+                    <td class="text-xs-right">{{ props.item.dtAvaliador | formatarData }}</td>
                     <td class="text-xs-left" v-html="props.item.dsAvaliacao"></td>
                 </template>
                 <template slot="pageText" slot-scope="props">
@@ -21,11 +21,12 @@
                 </template>
             </v-data-table>
         </v-card>
-    </div>
+    </v-container>
 </template>
 
 <script>
     import { mapActions, mapGetters } from 'vuex';
+    import moment from 'moment';
 
     export default {
         name: 'ReadequacoesDevolvidas',
@@ -61,6 +62,14 @@
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
                 this.buscarDadosReadequacoes(this.dadosProjeto.idPronac);
             }
+        },
+        filters: {
+            formatarData(date) {
+                if (date.leggth === 0) {
+                    return '-';
+                }
+                return moment(date).format('DD/MM/YYYY');
+            },
         },
         computed: {
             ...mapGetters({
