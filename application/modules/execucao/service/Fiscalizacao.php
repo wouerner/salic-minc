@@ -75,7 +75,7 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
             $relatorioFiscalizacao = $RelatorioFiscalizacaoDAO->buscaRelatorioFiscalizacao($idFiscalizacao);
 
         }
-        xd($infoProjeto);
+        xd($relatorioFiscalizacao);
         return;
     }
 
@@ -152,5 +152,62 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
 
         }
         return $listaFiscalizacao;
+    }
+
+    private function montaArquivosFiscalizacao($dados)
+    {
+        foreach ($dados as $item) {
+            $arquivosFiscalizacao[] = [
+                'nmArquivo' => $item['nmArquivo'],
+                'idArquivo' => $item['idArquivo'],
+            ];
+
+        }
+        return $arquivosFiscalizacao;
+    }
+
+    private function montaFiscalizacaoConcluidaParecer($dados)
+    {
+        foreach ($dados as $item) {
+            $resumoExecucao[] = [
+                'dsAcoesProgramadas' => $item['dsAcoesProgramadas'],
+                'dsAcoesExecutadas' => $item['dsAcoesExecutadas'],
+                'dsBeneficioAlcancado' => $item['dsBeneficioAlcancado'],
+                'dsDificuldadeEncontrada' => $item['dsDificuldadeEncontrada'],
+            ];
+            $utilizacaoRecursos[] = [
+                'stApuracaoUFiscalizacao' => $this->statusFiscalizacao($item['stApuracaoUFiscalizacao']),
+                'stComprovacaoUtilizacaoRecurso' => $this->statusFiscalizacao($item['stComprovacaoUtilizacaoRecurso']),
+                'stCompatibilidadeDesembolsoEvo' => $this->statusFiscalizacao($item['stCompatibilidadeDesembolsoEvo']),
+                'stOcorreuDespesas' => $this->statusFiscalizacao($item['stOcorreuDespesas']),
+                'stPagamentoServidorPublico' => $this->statusFiscalizacao($item['stPagamentoServidorPublico']),
+                'stDespesaAdministracao' => $this->statusFiscalizacao($item['stDespesaAdministracao']),
+                'stTransferenciaRecurso' => $this->statusFiscalizacao($item['stTransferenciaRecurso']),
+                'stDespesasPublicidade' => $this->statusFiscalizacao($item['stDespesasPublicidade']),
+                'stOcorreuAditamento' => $this->statusFiscalizacao($item['stOcorreuAditamento']),
+                'stAplicadosRecursos' => $this->statusFiscalizacao($item['stAplicadosRecursos']),
+                'stRecursosCaptados' => $this->statusFiscalizacao($item['stRecursosCaptados']),
+                'stSaldoAposEncerramento' => $this->statusFiscalizacao($item['stSaldoAposEncerramento']),
+                'stSaldoVerificacaoFNC' => $this->statusFiscalizacao($item['stSaldoVerificacaoFNC']),
+            ];
+        }
+        return $arquivosFiscalizacao;
+    }
+
+    private function statusFiscalizacao($dado)
+    {
+        switch ($dado) {
+            case 1:
+                $result = 'Sim';
+                break;
+            case 2:
+                $result = 'N&atilde;o';
+                break;
+            case 3:
+                $result = 'N&atilde;o se aplica.';
+                break;
+        }
+
+        return $result;
     }
 }
