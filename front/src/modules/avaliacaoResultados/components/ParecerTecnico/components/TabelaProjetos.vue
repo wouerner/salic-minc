@@ -76,8 +76,8 @@
     data() {
         return {
             status: {
-                color:'orange',
-                desc: 'teste'
+                color:'grey',
+                desc: 'Histórico Diligências'
             },
             pagination: {
                 rowsPerPage: 10,
@@ -203,9 +203,9 @@
 
              */
            // //diligenciado
-            if (obj.dtSolicitacao && obj.dtResposta == null && prazoResposta <= prazoPadrao && stEnviado == 'S') {
-                return this.status = { color: 'green', desc: "Diligenciado" };
-            }
+           //  if (obj.dtSolicitacao && obj.dtResposta == null && prazoResposta <= prazoPadrao && stEnviado == 'S') {
+           //      return this.status = { color: 'green', desc: "Diligenciado" };
+           //  }
            // //diligencia não respondida
            //    }else if( dtSolicitacao && dtResposta == null && prazoResposta > PrazoPadrao ){
            //                  return this.status.desc="Diligência não respondida";
@@ -221,10 +221,10 @@
            //       }else{
            //              return this.status.desc="A Diligenciar";
            //       }
-            if(obj.idPronac === '1410398') {
-                console.info(obj);
-            }
-            this.status.desc= 'OLAAA';
+           //  if(obj.idPronac === '1410398') {
+           //      console.info(obj);
+           //  }
+           //  this.status.desc= 'OLAAA';
             return this.status;
         }
     },
