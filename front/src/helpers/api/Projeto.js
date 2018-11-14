@@ -212,3 +212,12 @@ export const buscarMarcasAnexadas = (idPronac) => {
     const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscarDadosReadequacoes = (idPronac) => {
+    const modulo = '/execucao';
+    const controller = '/dados-readequacoes-rest';
+    const metodo = '/index';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};

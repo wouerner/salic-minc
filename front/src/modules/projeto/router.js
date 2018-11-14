@@ -22,6 +22,7 @@ import ProvidenciaTomada from './visualizar/components/outrasInformacoes/Provide
 import DiligenciaProjeto from './visualizar/components/outrasInformacoes/DiligenciaProjeto';
 import Tramitacao from './visualizar/components/outrasInformacoes/Tramitacao';
 import MarcasAnexadas from './visualizar/components/execucao/MarcasAnexadas';
+import DadosReadequacoes from './visualizar/components/execucao/DadosReadequacoes';
 
 Vue.use(Router);
 
@@ -226,6 +227,14 @@ const routes = [
                 component: MarcasAnexadas,
                 meta: {
                     title: 'Marcas Anexadas',
+                },
+            },
+            {
+                path: 'dados-readequacao',
+                name: 'DadosReadequacoes',
+                component: DadosReadequacoes,
+                meta: {
+                    title: 'Dados das Readequações',
                 },
             },
         ],
