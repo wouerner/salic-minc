@@ -82,7 +82,8 @@
             "MinC\\Db\\Model\\": "./library/MinC/Db/Model/",
             "MinC\\Servico\\": "./library/MinC/Servico/",
             "Application\\Modules\\Execucao\\Service\\MarcasAnexadas\\": "./application/modules/execucao/service/",
-            "Application\\Modules\\Execucao\\Service\\Fiscalizacao\\": "./application/modules/execucao/service/"
+            "Application\\Modules\\Execucao\\Service\\Fiscalizacao\\": "./application/modules/execucao/service/",
+            "Application\\Modules\\Execucao\\Service\\DadosReadequacoes\\": "./application/modules/execucao/service/"
         }
     },
     "archive": {

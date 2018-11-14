@@ -26,6 +26,7 @@ export const state = {
     diligenciaProjeto: [],
     diligencia: [],
     marcasAnexadas: [],
+    dadosReadequacoes: [],
 };
 
 export const mutations = {
@@ -103,5 +104,8 @@ export const mutations = {
     },
     [types.SET_MARCAS_ANEXADAS](state, dados) {
         state.marcasAnexadas = dados;
+    },
+    [types.SET_DADOS_READEQUACOES](state, dados) {
+        state.dadosReadequacoes = dados;
     },
 };

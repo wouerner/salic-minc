@@ -786,6 +786,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     *
+     */
     public function readequacoesAction()
     {
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout

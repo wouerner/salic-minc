@@ -223,3 +223,11 @@ export const buscarMarcasAnexadas = ({ commit }, idPronac) => {
             commit(types.SET_MARCAS_ANEXADAS, data);
         });
 };
+
+export const buscarDadosReadequacoes = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarDadosReadequacoes(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_DADOS_READEQUACOES, data);
+        });
+};
