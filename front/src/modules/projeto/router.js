@@ -23,6 +23,7 @@ import DiligenciaProjeto from './visualizar/components/outrasInformacoes/Diligen
 import Tramitacao from './visualizar/components/outrasInformacoes/Tramitacao';
 import MarcasAnexadas from './visualizar/components/execucao/MarcasAnexadas';
 import DadosReadequacoes from './visualizar/components/execucao/DadosReadequacoes';
+import PedidoProrrogacao from './visualizar/components/execucao/PedidoProrrogacao';
 
 Vue.use(Router);
 
@@ -235,6 +236,14 @@ const routes = [
                 component: DadosReadequacoes,
                 meta: {
                     title: 'Dados das Readequações',
+                },
+            },
+            {
+                path: 'pedido-prorrogacao',
+                name: 'PedidoProrrogacao',
+                component: PedidoProrrogacao,
+                meta: {
+                    title: 'Pedido de Prorrogacao',
                 },
             },
         ],

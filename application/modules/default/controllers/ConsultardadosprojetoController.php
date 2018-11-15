@@ -4896,6 +4896,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $this->view->pronac = $pronac;
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/execucao/controllers/MarcasAnexadasRestController.php
+     * application/modules/execucao/service/MarcasAnexadas.php
+     */
     public function pedidoProrrogacaoAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
