@@ -5,8 +5,9 @@
         </v-subheader>
         <v-card>
             <v-tabs
+                value="tab-0"
                 centered
-                color="green darken-1"
+                color="green darken-3"
                 dark
                 icons-and-text
             >
@@ -28,16 +29,19 @@
                     </template>
                 </v-tab>
                 <v-tab href="#tab-1"
+                       id="assinar"
                        v-if="getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL"
                 >
                      Assinar
                     <v-icon>done</v-icon>
                 </v-tab>
-                <v-tab href="#tab-2">
+                <v-tab href="#tab-2"
+                       id="emAssinatura">
                      Em assinatura
                     <v-icon>done_all</v-icon>
                 </v-tab>
                 <v-tab href="#tab-3"
+                       id="finalizados"
                        v-if="getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL"
                 >
                      Finalizados
@@ -83,11 +87,11 @@
 
 <script>
 
-import { mapActions, mapGetters } from 'vuex';
-import Const from '../../const';
-import Laudo from './Laudo';
+    import { mapActions, mapGetters } from 'vuex';
+    import Const from '../../const';
+    import Laudo from './Laudo';
 
-export default {
+    export default {
     name: 'PainelLaudo',
     data() {
         return {

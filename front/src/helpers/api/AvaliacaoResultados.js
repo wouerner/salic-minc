@@ -39,7 +39,7 @@ export const obterDadosTabelaTecnico = (params) => {
 
 export const obterHistoricoEncaminhamento = params => api.getRequest(`/avaliacao-resultados/historico/idPronac/${params}`);
 
-export const planilha = params => api.getRequest(`/prestacao-contas/realizar-prestacao-contas/planilha-analise-filtros/idPronac/${params}`);
+export const planilha = params => api.getRequest(`/avaliacao-resultados/planilha-aprovada/idPronac/${params}`);
 
 export const projetoAnalise = params => api.getRequest(`/avaliacao-resultados/projeto/idPronac/${params}`);
 
@@ -56,7 +56,13 @@ export const criarParecerLaudoFinal = params => api.postRequest('/avaliacao-resu
 
 export const obterProjetosParaDistribuir = () => api.getRequest('/avaliacao-resultados/projeto-inicio');
 
+/** DILIGENCIA */
+
 export const criarDiligencia = params => api.postRequest('/diligencia/diligencia', buildData(params));
+
+export const listarDiligencias = params => api.getRequest(`/avaliacao-resultados/diligencia?idPronac=${params}&situacao=E17&tpDiligencia=147`);
+
+/** FIM DILIGENCIA */
 
 /**  PARECER TECNICO */
 

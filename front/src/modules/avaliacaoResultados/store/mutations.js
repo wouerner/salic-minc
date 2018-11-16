@@ -10,6 +10,7 @@ export const state = {
     dadosTabelaTecnico: [],
     dadosHistoricoEncaminhamento: [],
     dadosDestinatarios: [],
+    diligenciasHistorico: [],
     mocks:
     {
         parecer: Parecer,
@@ -94,6 +95,9 @@ export const mutations = {
     [types.PROJETOS_AVALIACAO_TECNICA](state, dados) {
         state.dadosTabelaTecnico = dados;
     },
+    [types.HISTORICO_DILIGENCIAS](state, diligencias) {
+        state.diligenciasHistorico = diligencias;
+    },
     [types.HISTORICO_ENCAMINHAMENTO](state, dados) {
         state.dadosHistoricoEncaminhamento = [];
         Object.values(dados).forEach((historico) => {
@@ -117,9 +121,6 @@ export const mutations = {
     },
     [types.GET_PARECER_LAUDO_FINAL](state, data) {
         state.getParecerLaudoFinal = data;
-    },
-    [types.GET_PROJETO_ANALISE](state, projetoAnalise) {
-        state.projetoAnalise = projetoAnalise;
     },
     [types.SET_PARECER](state, parecer) {
         state.parecer = parecer;

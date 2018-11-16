@@ -1,4 +1,3 @@
-import * as desencapsularResponse from '@/helpers/actions';
 import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
 import * as types from './types';
 
@@ -8,6 +7,17 @@ export const dadosMenu = ({ commit }) => {
             const data = response.data;
             const dadosTabela = data.data;
             commit(types.SET_REGISTROS_TABELA, dadosTabela);
+        });
+};
+
+export const setRegistroAtivo = ({ commit }, registro) => {
+    commit(types.SET_REGISTRO_ATIVO, registro);
+};
+
+export const removerRegistro = ({ commit }, registro) => {
+    avaliacaoResultadosHelperAPI.removerRegistro(registro)
+        .then(() => {
+            commit(types.REMOVER_REGISTRO, registro);
         });
 };
 
@@ -53,12 +63,29 @@ export const obterDestinatarios = ({ commit }) => {
 };
 
 export const obterDadosTabelaTecnico = ({ commit }, params) => {
+    commit(types.PROJETOS_AVALIACAO_TECNICA, {});
     avaliacaoResultadosHelperAPI.obterDadosTabelaTecnico(params)
         .then((response) => {
-            const data = response.data;
-            const dadosTabela = data.data;
-            commit(types.PROJETOS_AVALIACAO_TECNICA, dadosTabela);
+            const data = response.data.data;
+            data.items.forEach((a, index) => {
+                avaliacaoResultadosHelperAPI.listarDiligencias(a.idPronac).then(
+                    (response) => {
+                        const obj = response.data.data;
+                        data.items[index].diligencias = obj.items;
+                    },
+                );
+            });
+            commit(types.PROJETOS_AVALIACAO_TECNICA, data);
         });
+};
+
+export const obetDadosDiligencias = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.listarDiligencias(params).then(
+        (response) => {
+            const obj = response.data.data;
+            commit(types.HISTORICO_DILIGENCIAS, obj);
+        },
+    );
 };
 
 export const projetosFinalizados = ({ commit }, params) => {
@@ -100,11 +127,13 @@ export const redirectLinkAvaliacaoResultadoTipo = ({ commit }, params) => {
 };
 
 export const planilha = ({ commit }, params) => {
-    commit(types.GET_PLANILHA, {});
     avaliacaoResultadosHelperAPI.planilha(params)
         .then((response) => {
             const planilha = response.data;
             commit(types.GET_PLANILHA, planilha);
+        }).catch((error) => {
+            const data = error.response;
+            commit(types.GET_PLANILHA, { error: data.data.data.erro });
         });
 };
 
@@ -252,15 +281,6 @@ export const projetosRevisao = ({ commit }, params) => {
         });
 };
 
-export const buscarDetalhamentoItens = ({ commit }, idPronac) => {
-    avaliacaoResultadosHelperAPI.buscarDetalhamentoItens(idPronac)
-        .then((response) => {
-            const itens = desencapsularResponse.default(response);
-            commit(types.SET_ITENS_BUSCA_COMPROVANTES, itens);
-        });
-};
-
-
 export const buscarComprovantes = ({ commit }, params) => {
     avaliacaoResultadosHelperAPI.buscarComprovantes(params)
         .then((response) => {
@@ -271,12 +291,44 @@ export const buscarComprovantes = ({ commit }, params) => {
 };
 
 export const devolverProjeto = ({ commit, dispatch }, params) => {
+    commit(types.SET_DADOS_PROJETOS_FINALIZADOS, {});
+    commit(types.SYNC_PROJETOS_ASSINAR_COORDENADOR, {});
+    commit(types.PROJETOS_AVALIACAO_TECNICA, {});
+
+    let projetosTecnico = {};
+    let projetosFinalizados = {};
+
+    if (
+        parseInt(params.usuario.grupo_ativo, 10) === 125
+        || parseInt(params.usuario.grupo_ativo, 10) === 126
+    ) {
+        projetosTecnico = {
+            estadoid: 5,
+        };
+
+        projetosFinalizados = {
+            estadoid: 6,
+        };
+    } else {
+        projetosTecnico = {
+            estadoid: 5,
+            idAgente: params.usuario.usu_codigo,
+        };
+
+        projetosFinalizados = {
+            estadoid: 6,
+            idAgente: params.usuario.usu_codigo,
+        };
+    }
+
     avaliacaoResultadosHelperAPI.alterarEstado(params)
         .then((response) => {
             const devolverProjeto = response.data;
-            commit(types.SET_DADOS_PROJETOS_FINALIZADOS, {});
             commit(types.SET_DEVOLVER_PROJETO, devolverProjeto);
-            dispatch('projetosFinalizados', { estadoid: 6 });
+
+            dispatch('projetosFinalizados', projetosFinalizados);
+            dispatch('projetosAssinarCoordenador', { estadoid: 9 });
+            dispatch('obterDadosTabelaTecnico', projetosTecnico);
         });
 };
 
