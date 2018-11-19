@@ -224,10 +224,7 @@
              }
 
              */
-           // //diligenciado
-           //  if (obj.dtSolicitacao && obj.dtResposta == null && prazoResposta <= prazoPadrao && stEnviado == 'S') {
-           //      return this.status = { color: 'green', desc: "Diligenciado" };
-           //  }
+
            // //diligencia não respondida
            //    }else if( dtSolicitacao && dtResposta == null && prazoResposta > PrazoPadrao ){
            //                  return this.status.desc="Diligência não respondida";
@@ -248,7 +245,7 @@
            //  }
            //
 
-        }
+        },
     },
     computed: {
         ...mapGetters({
