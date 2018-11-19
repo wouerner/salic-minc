@@ -1,2 +1,3 @@
 export const readequacao = state => state.readequacao;
-export const disponivelEdicaoReadequacaoPlanilha = state => state.readequacao.disponivelEdicaoReadequacaoPlanilha;
+export const saldoAplicacao = state => state.saldoAplicacao;
+export const saldoAplicacaoDisponivelEdicaoItem = state => state.readequacao.saldoAplicacaoDisponivelEdicaoItem;

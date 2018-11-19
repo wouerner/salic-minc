@@ -16,18 +16,18 @@ export const buscaReadequacao = (params) => {
     return api.getRequest(path);
 };
 
-export const updateReadequacao = (params) => {
+export const updateReadequacaoSaldoAplicacao = (params) => {
     const path = '/readequacao/saldo-aplicacao/salvar-readequacao';
     return api.putRequest(path, buildData(params), params.idReadequacao);
 };
 
-export const excluirReadequacao = (params) => {
+export const excluirReadequacaoSaldoAplicacao = (params) => {
     const path = '/readequacao/saldo-aplicacao/excluir-readequacao';
     return api.postRequest(path, buildData(params));
 };
 
-export const obterDisponivelEdicaoReadequacaoPlanilha = (idPronac) => {
-    const path = '/readequacao/saldo-aplicacao/verificar-disponivel-para-edicao-readequacao-planilha/?idPronac=';
+export const obterDisponivelEdicaoItemSaldoAplicacao = (idPronac) => {
+    const path = '/readequacao/saldo-aplicacao/disponivel-edicao-item/?idPronac=';
     return api.getRequest(path, idPronac);
 };
 

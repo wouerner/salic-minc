@@ -1451,9 +1451,8 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
             $periodoExecucaoVigente) {
 
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**

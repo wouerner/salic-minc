@@ -394,10 +394,10 @@
                 return valor;
             },
             ...mapGetters({
-                disponivelEdicaoReadequacaoPlanilha: 'readequacao/disponivelEdicaoReadequacaoPlanilha',
+                disponivelEdicaoReadequacaoPlanilha: 'readequacao/saldoAplicacaoDisponivelEdicaoItem',
             }),
             ...mapActions({
-                obterDisponivelEdicaoReadequacaoPlanilha: 'readequacao/obterDisponivelEdicaoReadequacaoPlanilha',
+                obterDisponivelEdicaoReadequacaoPlanilha: 'readequacao/obterDisponivelEdicaoItemSaldoAplicacao',
             }),
         },
         watch: {

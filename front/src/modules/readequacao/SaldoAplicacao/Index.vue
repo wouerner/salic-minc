@@ -385,7 +385,7 @@ export default {
             buscaProjeto: 'projeto/buscaProjeto',
             buscaReadequacao: 'readequacao/buscaReadequacao',
             excluirReadequacao: 'readequacao/excluirReadequacao',
-            obterDisponivelEdicaoReadequacaoPlanilha: 'readequacao/obterDisponivelEdicaoReadequacaoPlanilha',
+            obterDisponivelEdicaoReadequacaoPlanilha: 'readequacao/obterDisponivelEdicaoItemSaldoAplicacao',
         }),
     },
     watch: {

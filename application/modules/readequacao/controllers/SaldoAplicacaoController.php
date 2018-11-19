@@ -259,7 +259,7 @@ class Readequacao_SaldoAplicacaoController extends Readequacao_GenericController
         }
     }
 
-    public function verificarDisponivelParaEdicaoReadequacaoPlanilhaAction()
+    public function disponivelEdicaoItemAction()
     {
         $this->_helper->layout->disableLayout();
         $idPronac = $this->_request->getParam("idPronac");
@@ -270,18 +270,18 @@ class Readequacao_SaldoAplicacaoController extends Readequacao_GenericController
         if ($this->idPerfil != Autenticacao_Model_Grupos::PROPONENTE) {
             $this->_helper->json([
                 'success' => 'true',
-                'disponivelParaEdicaoReadequacaoPlanilha' => false,
-                'msg' => 'Dispon&iacute;vel para edi&ccedil;&atilde;o de itens.'
+                'disponivelEdicaoItem' => false,
+                'msg' => 'N&atilde;o dispon&iacute;vel para edi&ccedil;&atilde;o de itens.'
             ]);
         }
         
         try {
             $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-            $disponivelParaEdicaoReadequacaoPlanilha = $Readequacao_Model_DbTable_TbReadequacao->disponivelParaEdicaoReadequacaoPlanilha($idPronac, $idAgente);
+            $disponivelParaEdicaoReadequacaoPlanilha = $Readequacao_Model_DbTable_TbReadequacao->disponivelParaEdicaoReadequacaoPlanilha($idPronac);
             
             $this->_helper->json([
                 'success' => true,
-                'disponivelParaEdicaoReadequacaoPlanilha' => $disponivelParaEdicaoReadequacaoPlanilha,
+                'disponivelEdicaoItem' => $disponivelParaEdicaoReadequacaoPlanilha,
                 'msg' => 'Dispon&iacute;vel para edi&ccedil;&atilde;o de itens.'
             ]);
         } catch (Exception $e) {
