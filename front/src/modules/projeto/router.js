@@ -243,7 +243,7 @@ const routes = [
                 name: 'PedidoProrrogacao',
                 component: PedidoProrrogacao,
                 meta: {
-                    title: 'Pedido de Prorrogacao',
+                    title: 'Pedido de Prorrogação',
                 },
             },
         ],

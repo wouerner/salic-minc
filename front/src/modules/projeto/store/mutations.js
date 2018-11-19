@@ -27,6 +27,7 @@ export const state = {
     diligencia: [],
     marcasAnexadas: [],
     dadosReadequacoes: [],
+    pedidoProrrogacao: [],
 };
 
 export const mutations = {
@@ -107,5 +108,8 @@ export const mutations = {
     },
     [types.SET_DADOS_READEQUACOES](state, dados) {
         state.dadosReadequacoes = dados;
+    },
+    [types.SET_PEDIDO_PRORROGACAO](state, dados) {
+        state.pedidoProrrogacao = dados;
     },
 };
