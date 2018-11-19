@@ -75,8 +75,12 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
             $relatorioFiscalizacao = $RelatorioFiscalizacaoDAO->buscaRelatorioFiscalizacao($idFiscalizacao);
 
         }
-        xd($relatorioFiscalizacao);
-        return;
+        $resultArray['locaisFiscalizacao'] = $this->montaLocaisFiscalizacao($infoProjeto);
+        $resultArray['oficializarFiscalizacao'] = $this->montaOficializarFiscalizacao($infoProjeto);
+        $resultArray['arquivosFiscalizacao'] = $this->montaArquivosFiscalizacao($arquivos);
+        $resultArray['fiscalizacaoConcluidaParecer'] = $this->montamontaFiscalizacaoConcluidaParecer($relatorioFiscalizacao);
+
+        return $resultArray;
     }
 
     private function montaListaFiscalizacao($dados)
@@ -227,7 +231,14 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
                 'dsParecer' => $item['dsParecer'],
             ];
         }
-        return $arquivosFiscalizacao;
+        $result['resumoExecucao'] = $resumoExecucao;
+        $result['utilizacaoRecursos'] = $utilizacaoRecursos;
+        $result['comprovantesDespesa'] = $comprovantesDespesa;
+        $result['divulgacao'] = $divulgacao;
+        $result['execucao'] = $execucao;
+        $result['empregosGeradosProjeto'] = $empregosGeradosProjeto;
+
+        return $result;
     }
 
     private function statusFiscalizacao($dado)
