@@ -202,6 +202,12 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
                 'stDespesaRelacionada' => $this->statusFiscalizacao($item['stDespesaRelacionada']),
                 'stComprovanteFiscal' => $this->statusFiscalizacao($item['stComprovanteFiscal']),
             ];
+
+            $divulgacao[] = [
+                'stCienciaLegislativo' => $this->statusFiscalizacao($item['stCienciaLegislativo']),
+                'stExigenciaLegal' => $this->statusFiscalizacao($item['stExigenciaLegal']),
+                'stMaterialInformativo' => $this->statusFiscalizacao($item['stMaterialInformativo']),
+            ];
         }
         return $arquivosFiscalizacao;
     }
