@@ -75,10 +75,6 @@
     props: ['dados', 'componentes', 'mostrarTecnico'],
     data() {
         return {
-            status: {
-                color:'grey',
-                desc: 'Histórico Diligências'
-            },
             pagination: {
                 rowsPerPage: 10,
             },
@@ -177,6 +173,32 @@
         statusDiligencia(obj){
             //prazoPadrão = 40 (dias)
 
+            let status = {
+                    color:'grey',
+                    desc: 'Histórico Diligências'
+              };
+            if(obj.idDiligencia == 58455){
+              console.info(obj.idDiligencia+" - " + obj.DtSolicitacao + " / " + obj.stEnviado + " - "+ obj.DtResposta);
+              status.color='blue'
+              status.desc= 'Diliganciado';
+                return status;
+            }
+
+            if(obj.idDiligencia == 53257){
+                console.info(obj.idDiligencia+" - " + obj.DtSolicitacao + " / " + obj.stEnviado + " - "+ obj.DtResposta);
+                status.color='red'
+                status.desc= 'Não respondido';
+                return status;
+            }
+
+            if(obj.idDiligencia == 51863){
+                console.info(obj.idDiligencia+" - " + obj.DtSolicitacao + " / " + obj.stEnviado + " - "+ obj.DtResposta);
+                status.color='green'
+                status.desc= 'Diligencia respondida';
+                return status;
+            }
+
+            return status;
             /**
               If (notempty dtSolicitação){
              Calculo do Prazo
@@ -224,8 +246,8 @@
            //  if(obj.idPronac === '1410398') {
            //      console.info(obj);
            //  }
-           //  this.status.desc= 'OLAAA';
-            return this.status;
+           //
+
         }
     },
     computed: {

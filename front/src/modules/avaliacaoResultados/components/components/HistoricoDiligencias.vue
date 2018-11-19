@@ -8,7 +8,7 @@
         >
             <v-tooltip slot="activator" bottom>
                 <v-btn slot="activator" flat icon @click.native="obterDiligencias(idPronac);">
-                    <v-icon :color="status.color" class="material-icons">assignment_late</v-icon>
+                    <v-icon :color="status.color" :change="status.color" class="material-icons">assignment_late</v-icon>
                 </v-btn>
                 <span>{{status.desc}} </span>
             </v-tooltip>
@@ -68,11 +68,11 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import { mapActions, mapGetters } from 'vuex';
-import Data from '../../../../filters/date';
+    import Vue from 'vue';
+    import { mapActions, mapGetters } from 'vuex';
+    import Data from '../../../../filters/date';
 
-Vue.filter('date', Data);
+    Vue.filter('date', Data);
 
 export default {
     name: 'HistoricoDiligencias',
@@ -121,7 +121,7 @@ export default {
         },
     },
     updated() {
-        this.setInfo();
+        this.setInfo;
     },
 };
 </script>
