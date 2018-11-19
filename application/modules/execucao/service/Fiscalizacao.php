@@ -190,6 +190,18 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
                 'stSaldoAposEncerramento' => $this->statusFiscalizacao($item['stSaldoAposEncerramento']),
                 'stSaldoVerificacaoFNC' => $this->statusFiscalizacao($item['stSaldoVerificacaoFNC']),
             ];
+
+            $comprovantesDespesa[] = [
+                'stProcessoDocumentado' => $this->statusFiscalizacao($item['stProcessoDocumentado']),
+                'stDocumentacaoCompleta' => $this->statusFiscalizacao($item['stDocumentacaoCompleta']),
+                'stConformidadeExecucao' => $this->statusFiscalizacao($item['stConformidadeExecucao']),
+                'stIdentificaProjeto' => $this->statusFiscalizacao($item['stIdentificaProjeto']),
+                'stDespesaAnterior' => $this->statusFiscalizacao($item['stDespesaAnterior']),
+                'stDespesaPosterior' => $this->statusFiscalizacao($item['stDespesaPosterior']),
+                'stDespesaCoincidem' => $this->statusFiscalizacao($item['stDespesaCoincidem']),
+                'stDespesaRelacionada' => $this->statusFiscalizacao($item['stDespesaRelacionada']),
+                'stComprovanteFiscal' => $this->statusFiscalizacao($item['stComprovanteFiscal']),
+            ];
         }
         return $arquivosFiscalizacao;
     }
