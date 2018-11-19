@@ -14,6 +14,69 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const env = require('../config/prod.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
+    mode: 'production',
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                commons: {
+                    chunks: "initial",
+                    name: "manifest",
+                    minChunks: 2,
+                    maxInitialRequests: 5, // The default limit is too small to showcase the effect
+                    minSize: 0 // This is example is too small to create commons chunks
+                },
+                vendor: {
+                    test: /node_modules/,
+                    chunks: "all",
+                    name: "vendor",
+                    priority: 10,
+                    // enforce: true
+                }
+            }
+        }
+    },
+    // optimization: {
+    //     splitChunks: {
+    //         chunks: 'async',
+    //         minSize: 30000,
+    //         maxSize: 0,
+    //         minChunks: 1,
+    //         maxAsyncRequests: 5,
+    //         maxInitialRequests: 3,
+    //         automaticNameDelimiter: '~',
+    //         name: true,
+    //         cacheGroups: {
+    //             commons: {
+    //                 test: /[\\/]node_modules[\\/]/,
+    //                 name: 'vendors',
+    //                 chunks: 'all'
+    //             },
+    //         }
+    //     }
+    // },
+    // optimization: {
+    //     splitChunks: {
+    //         chunks: 'async',
+    //         minSize: 30000,
+    //         maxSize: 0,
+    //         minChunks: 1,
+    //         maxAsyncRequests: 5,
+    //         maxInitialRequests: 3,
+    //         automaticNameDelimiter: '~',
+    //         name: true,
+    //         cacheGroups: {
+    //             vendors: {
+    //                 test: /[\\/]node_modules[\\/]/,
+    //                 priority: -10
+    //             },
+    //             default: {
+    //                 minChunks: 2,
+    //                 priority: -20,
+    //                 reuseExistingChunk: true
+    //             }
+    //         }
+    //     }
+    // },
     module: {
         rules: utils.styleLoaders({
             sourceMap: config.build.productionSourceMap,
@@ -67,7 +130,7 @@ const webpackConfig = merge(baseWebpackConfig, {
                 // https://github.com/kangax/html-minifier#options-quick-reference
             },
             hash: true,
-            chunks: ['main', 'vendor','manifest'],
+            chunks: ['main'],
             // necessary to consistently work with multiple chunks via CommonsChunkPlugin
             chunksSortMode: 'dependency'
         }),
@@ -76,35 +139,34 @@ const webpackConfig = merge(baseWebpackConfig, {
         // enable scope hoisting
         new webpack.optimize.ModuleConcatenationPlugin(),
         // split vendor js into its own file
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks(module) {
-                // any required modules inside node_modules are extracted to vendor
-                return (
-                    module.resource &&
-                    /\.js$/.test(module.resource) &&
-                    module.resource.indexOf(
-                        path.join(__dirname, '../../node_modules')
-                    ) === 0
-                )
-            }
-        }),
-        // extract webpack runtime and module manifest to its own file in order to
-        // prevent vendor hash from being updated whenever app bundle is updated
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'manifest',
-            minChunks: Infinity
-        }),
-        // This instance extracts shared chunks from code splitted chunks and bundles them
-        // in a separate chunk, similar to the vendor chunk
-        // see: https://webpack.js.org/plugins/commons-chunk-plugin/#extra-async-commons-chunk
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'app',
-            async: 'vendor-async',
-            children: true,
-            minChunks: 3
-        }),
-
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     name: 'vendor',
+        //     minChunks(module) {
+        //         // any required modules inside node_modules are extracted to vendor
+        //         return (
+        //             module.resource &&
+        //             /\.js$/.test(module.resource) &&
+        //             module.resource.indexOf(
+        //                 path.join(__dirname, '../../node_modules')
+        //             ) === 0
+        //         )
+        //     }
+        // }),
+        // // extract webpack runtime and module manifest to its own file in order to
+        // // prevent vendor hash from being updated whenever app bundle is updated
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     name: 'manifest',
+        //     minChunks: Infinity
+        // }),
+        // // This instance extracts shared chunks from code splitted chunks and bundles them
+        // // in a separate chunk, similar to the vendor chunk
+        // // see: https://webpack.js.org/plugins/commons-chunk-plugin/#extra-async-commons-chunk
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     name: 'app',
+        //     async: 'vendor-async',
+        //     children: true,
+        //     minChunks: 3
+        // }),
         // copy custom static assets
         new CopyWebpackPlugin([
             {
@@ -135,8 +197,12 @@ if (config.build.productionGzip) {
 }
 
 if (config.build.bundleAnalyzerReport) {
-    const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-    webpackConfig.plugins.push(new BundleAnalyzerPlugin())
+    const options = {
+        analyzerPort: config.build.analyzerPort
+    };
+
+    const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+    webpackConfig.plugins.push(new BundleAnalyzerPlugin(options))
 }
 
 module.exports = webpackConfig

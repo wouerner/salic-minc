@@ -24,10 +24,10 @@ module.exports = {
     context: path.resolve(__dirname, '../'),
     entry: {
         main: './src/main.js',
-        // foo: './src/modules/foo/main.js',
-        // avaliacao_resultados: './src/modules/avaliacaoResultados/main.js',
-        // proposta: './src/modules/proposta/main.js',
-        // projeto: './src/modules/projeto/main.js',
+        foo: './src/modules/foo/main.js',
+        avaliacao_resultados: './src/modules/avaliacaoResultados/main.js',
+        proposta: './src/modules/proposta/main.js',
+        projeto: './src/modules/projeto/main.js',
     },
     output: {
         path: config.build.assetsRoot,
@@ -35,7 +35,7 @@ module.exports = {
         publicPath: process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'watch'
             ? config.build.assetsPublicPath
             : config.dev.assetsPublicPath,
-        chunkFilename: utils.assetsPath('js/[id].[name].js'),
+        chunkFilename: utils.assetsPath('js/[name].js'),
     },
     resolve: {
         extensions: ['.js', '.vue', '.json'],
@@ -46,11 +46,11 @@ module.exports = {
     },
     module: {
         rules: [
-            // ...(process.env.NODE_ENV !== 'production' && config.dev.useEslint ? [createLintingRule()] : []),
+             ...(process.env.NODE_ENV !== 'production' && config.dev.useEslint ? [createLintingRule()] : []),
             {
                 test: /\.vue$/,
                 loader: 'vue-loader',
-                // options: vueLoaderConfig
+                options: vueLoaderConfig
             },
             {
                 test: /\.js$/,
