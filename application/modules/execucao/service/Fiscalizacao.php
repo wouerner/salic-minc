@@ -208,6 +208,24 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
                 'stExigenciaLegal' => $this->statusFiscalizacao($item['stExigenciaLegal']),
                 'stMaterialInformativo' => $this->statusFiscalizacao($item['stMaterialInformativo']),
             ];
+
+            $execucao[] = [
+                'stFinalidadeEsperada' => $this->statusFiscalizacao($item['stFinalidadeEsperada']),
+                'stPlanoTrabalho' => $this->statusFiscalizacao($item['stPlanoTrabalho']),
+                'stExecucaoAprovado' => $this->statusFiscalizacao($item['stExecucaoAprovado']),
+                'dsObservacao' => $this->statusFiscalizacao($item['dsObservacao']),
+            ];
+
+            $empregosGeradosProjeto[] = [
+                'qtEmpregoDireto' => $item['qtEmpregoDireto'],
+                'qtEmpregoIndireto' => $item['qtEmpregoIndireto'],
+                'qtEmpregoTotal' => $item['qtEmpregoDireto'] + $item['qtEmpregoIndireto'],
+                'dsEvidencia' => $item['dsEvidencia'],
+                'dsRecomendacaoEquipe' => $item['dsRecomendacaoEquipe'],
+                'dsConclusaoEquipe' => $item['dsConclusaoEquipe'],
+                'dsParecerTecnico' => $item['dsParecerTecnico'],
+                'dsParecer' => $item['dsParecer'],
+            ];
         }
         return $arquivosFiscalizacao;
     }
