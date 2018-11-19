@@ -18,7 +18,7 @@ class Execucao_DadosReadequacoesRestController extends MinC_Controller_Rest_Abst
             $DadosReadequacoesService = new DadosReadequacoesService($this->getRequest(), $this->getResponse());
             $resposta = $DadosReadequacoesService->buscarReadequacoes();
             $resposta = \TratarArray::utf8EncodeArray($resposta);
-//xd($resposta);
+
             $this->renderJsonResponse($resposta, 200);
 
         } catch (Exception $objException) {

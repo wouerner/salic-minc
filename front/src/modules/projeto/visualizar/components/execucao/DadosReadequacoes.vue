@@ -3,7 +3,7 @@
         <div v-if="loading">
             <Carregando :text="'Carregando Dados das Readequações'"></Carregando>
         </div>
-        <div>
+        <div v-else>
             <v-expansion-panel popout focusable>
                 <v-expansion-panel-content
                         class="elevation-1"
@@ -16,9 +16,6 @@
                     </v-layout>
                     <v-container fluid>
                         <v-card class="elevation-2">
-                            <!--TEMPLATE PARA CASOS DO siEncaminhamento != 12   idPronacs para teste = 201753, 201978,
-                                    199437,182737, 189712, 168247, 117034,150712
-                            -->
                             <v-card-text class="pl-5">
                                 <v-container fluid>
                                     <div>
@@ -37,7 +34,6 @@
                                                 </span>
                                                 </v-card-text>
                                             </v-card>
-
                                             <v-card>
                                                 <v-card-text>
                                                     <b>DATA ENVIO</b>
@@ -76,8 +72,7 @@
                                             </v-card>
                                         </v-layout>
                                     </div>
-                                    <!-- so mostrar os campos: "Situacao, data avaliação e DESCRIÇÃO DA AVALIAÇÃO" se siEncaminhamento, array(2,3,4,5,6,7,9,10,15)-->
-                                    <div v-if="dado.siEncaminhamento">
+                                    <div v-if="validarAcessoSituacao(dado.siEncaminhamento)">
                                         <v-layout row justify-space-between>
                                             <v-card>
                                                 <v-card-text>
@@ -111,39 +106,38 @@
                                             </v-card>
                                         </v-layout>
                                     </div>
-                                    <!-- fim da verificação siEncaminhamento, array(2,3,4,5,6,7,9,10,15)-->
-
-                                    <!--( so mostrar os campos: "PARECER FAVORÁVEL,Dt. Parecer , Descrição do Parecer" quando o siEncaminhamento, array(15)-->
                                     <div v-if="dado.siEncaminhamento === 15">
-                                        <v-layout row justify-space-between>
-                                            <v-card>
-                                                <v-card-text>
-                                                    <b>PARECER FAVORÁVEL?</b>
-                                                    <p v-if="dado.pareceres[0].ParecerFavoravel === 2 ">
-                                                        {{ dados.pareceres }}
-                                                    </p>
-                                                    <p v-else>
-                                                        dados.pareceres
-                                                    </p>
-                                                </v-card-text>
-                                            </v-card>
+                                        <v-list v-for="parecer in dado.pareceres">
+                                            <v-layout row justify-space-between>
+                                                <v-card>
+                                                    <v-card-text>
+                                                        <b>PARECER FAVORÁVEL?</b>
+                                                        <p v-if="parecer.ParecerFavoravel === '2'">
+                                                            SIM
+                                                        </p>
+                                                        <p v-else>
+                                                            NÂO
+                                                        </p>
+                                                    </v-card-text>
+                                                </v-card>
 
-                                            <v-card>
-                                                <v-card-text>
-                                                    <b>DATA PARECER</b>
-                                                    <p>{{ dadosPina </p>
-                                                </v-card-text>
-                                            </v-card>
-                                        </v-layout>
+                                                <v-card>
+                                                    <v-card-text>
+                                                        <b>DATA PARECER</b>
+                                                        <p> {{ parecer.DtParecer | formatarData }}</p>
+                                                    </v-card-text>
+                                                </v-card>
+                                            </v-layout>
 
-                                        <v-layout row justify-space-between>
-                                            <v-card>
-                                                <v-card-text>
-                                                    <b>DESCRIÇÃO DO PARECER - TÉCNICO / PARECERISTA</b>
-                                                    <p v-html="dado.siEncaminhamento.ResumoParecer"></p>
-                                                </v-card-text>
-                                            </v-card>
-                                        </v-layout>
+                                            <v-layout row justify-space-between>
+                                                <v-card>
+                                                    <v-card-text>
+                                                        <b>DESCRIÇÃO DO PARECER - TÉCNICO / PARECERISTA</b>
+                                                        <p v-html="parecer.ResumoParecer"></p>
+                                                    </v-card-text>
+                                                </v-card>
+                                            </v-layout>
+                                        </v-list>
                                     </div>
                                 </v-container>
                             </v-card-text>
@@ -164,7 +158,7 @@
     import ReadequacoesDevolvidas from './components/ReadequacoesDevolvidas';
 
     export default {
-        name: 'MarcasAnexadas',
+        name: 'DadosReadequacoes',
         props: ['idPronac'],
         data() {
             return {
@@ -203,6 +197,10 @@
             ...mapActions({
                 buscarDadosReadequacoes: 'projeto/buscarDadosReadequacoes',
             }),
+            validarAcessoSituacao(siEncaminhamento) {
+                const permitidos = [2, 3, 4, 5, 6, 7, 9, 10, 15];
+                return permitidos.indexOf(siEncaminhamento) !== -1;
+            },
         },
     };
 </script>
