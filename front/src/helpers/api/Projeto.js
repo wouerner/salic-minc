@@ -221,3 +221,12 @@ export const buscarDadosReadequacoes = (idPronac) => {
     const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscarPedidoProrrogacao = (idPronac) => {
+    const modulo = '/execucao';
+    const controller = '/pedido-prorrogacao-rest';
+    const metodo = '/index';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};
