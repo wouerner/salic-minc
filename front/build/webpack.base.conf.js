@@ -3,6 +3,7 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 function resolve(dir) {
     return path.join(__dirname, '..', dir)
@@ -23,10 +24,10 @@ module.exports = {
     context: path.resolve(__dirname, '../'),
     entry: {
         main: './src/main.js',
-        foo: './src/modules/foo/main.js',
-        avaliacao_resultados: './src/modules/avaliacaoResultados/main.js',
-        proposta: './src/modules/proposta/main.js',
-        projeto: './src/modules/projeto/main.js',
+        // foo: './src/modules/foo/main.js',
+        // avaliacao_resultados: './src/modules/avaliacaoResultados/main.js',
+        // proposta: './src/modules/proposta/main.js',
+        // projeto: './src/modules/projeto/main.js',
     },
     output: {
         path: config.build.assetsRoot,
@@ -45,11 +46,11 @@ module.exports = {
     },
     module: {
         rules: [
-            ...(process.env.NODE_ENV !== 'production' && config.dev.useEslint ? [createLintingRule()] : []),
+            // ...(process.env.NODE_ENV !== 'production' && config.dev.useEslint ? [createLintingRule()] : []),
             {
                 test: /\.vue$/,
                 loader: 'vue-loader',
-                options: vueLoaderConfig
+                // options: vueLoaderConfig
             },
             {
                 test: /\.js$/,
@@ -93,5 +94,8 @@ module.exports = {
         net: 'empty',
         tls: 'empty',
         child_process: 'empty'
-    }
+    },
+    plugins: [
+        new VueLoaderPlugin()
+    ]
 }
