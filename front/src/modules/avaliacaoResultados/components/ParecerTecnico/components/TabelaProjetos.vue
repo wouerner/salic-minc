@@ -68,7 +68,7 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
+    import {mapActions, mapGetters} from 'vuex';
 
     export default {
     name: 'TabelaProjetos',
@@ -171,36 +171,70 @@
             return dados;
         },
         statusDiligencia(obj){
-            //prazoPadrão = 40 (dias)
 
+            let prazo = this.prazoResposta(obj);
             let status = {
                     color:'grey',
                     desc: 'Histórico Diligências'
               };
-            if(obj.idDiligencia == 58455){
-              console.info(obj.idDiligencia+" - " + obj.DtSolicitacao + " / " + obj.stEnviado + " - "+ obj.DtResposta);
-              status.color='blue'
-              status.desc= 'Diliganciado';
-                return status;
+            let prazoPadrao = 40;
+            //
+            //
+            // if(obj.idDiligencia == 58455){
+            //   console.info(obj.idDiligencia+" - " + obj.DtSolicitacao + " / " + obj.stEnviado + " - "+ obj.DtResposta);
+            //   status.color='blue'
+            //   status.desc= 'Diliganciado';
+            //     return status;
+            // }
+            //
+            // if(obj.idDiligencia == 53257){
+            //     console.info(obj.idDiligencia+" - " + obj.DtSolicitacao + " / " + obj.stEnviado + " - "+ obj.DtResposta);
+            //     status.color='red'
+            //     status.desc= 'Não respondido';
+            //     return status;
+            // }
+            //
+            // if(obj.idDiligencia == 51863){
+            //     console.info(obj.idDiligencia+" - " + obj.DtSolicitacao + " / " + obj.stEnviado + " - "+ obj.DtResposta);
+            //     status.color='green'
+            //     status.desc= 'Diligencia respondida';
+            //     return status;
+            // }
+
+            //diligenciado
+             if (obj.DtSolicitacao && obj.dtResposta == null && prazo <= prazoPadrao && stEnviado == 'S') {
+                 return status = { color: 'green', desc: "Diligenciado" };
+
+
+            //diligencia não respondida
+              }else if( obj.DtSolicitacao && obj.dtResposta == null && prazo > prazoPadrao ){
+                 status.desc="Diligência não respondida";
+                 return status;
+            //diligencia respondida com ressalvas
+                 }else if( obj.DtSolicitacao && obj.dtResposta != null ) {
+                    if( obj.stEnviado == 'N' && prazo > prazoPadrao ){
+                        status.desc="Diligência não respondida";
+                        return status;
+                    }else if(obj.stEnviado =='N' && prazo < prazoPadrao){
+                        status.desc="Diligenciado";
+                        return status;
+                    }else{
+                        status.desc="Diligencia respondida";
+                        return status;
+                    }
+                 }else{
+                        status.desc="A Diligenciar";
+                        return status;
+                 }
+            if(obj.idPronac === '1410398') {
+                console.info(obj);
             }
 
-            if(obj.idDiligencia == 53257){
-                console.info(obj.idDiligencia+" - " + obj.DtSolicitacao + " / " + obj.stEnviado + " - "+ obj.DtResposta);
-                status.color='red'
-                status.desc= 'Não respondido';
-                return status;
-            }
 
-            if(obj.idDiligencia == 51863){
-                console.info(obj.idDiligencia+" - " + obj.DtSolicitacao + " / " + obj.stEnviado + " - "+ obj.DtResposta);
-                status.color='green'
-                status.desc= 'Diligencia respondida';
-                return status;
-            }
-
-            return status;
+        },
+        prazoResposta(obj){
             /**
-              If (notempty dtSolicitação){
+             If (notempty dtSolicitação){
              Calculo do Prazo
 
              prazo = date.now() - datainicial(dtSolicitacao);
@@ -222,29 +256,33 @@
              }else {
              return 0
              }
-
              */
 
-           // //diligencia não respondida
-           //    }else if( dtSolicitacao && dtResposta == null && prazoResposta > PrazoPadrao ){
-           //                  return this.status.desc="Diligência não respondida";
-           // //diligencia respondida com ressalvas
-           //       }else if( dtSolicitacao && dtResposta != null ) {
-           //          if( stEnviado == 'N' && prazoResposta > prazoPadrao ){
-           //              return this.status.desc="Diligência não respondida";
-           //          }else if(stEnviado =='N' && prazoResposta < prazoPadrao){
-           //              return this.status.desc="Diligenciado";
-           //          }else{
-           //              return this.status.desc="Diligencia respondida";
-           //          }
-           //       }else{
-           //              return this.status.desc="A Diligenciar";
-           //       }
-           //  if(obj.idPronac === '1410398') {
-           //      console.info(obj);
-           //  }
-           //
+            if(typeof obj.DtSolicitacao !== undefined){
 
+                var coisa = Date.now();
+                var timeDiff = Math.abs(coisa - new Date(obj.DtSolicitacao));
+                var prazo = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                console.info(new Date().toLocaleDateString(undefined, {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                }) + " - "+ new Date(obj.DtSolicitacao).toLocaleDateString(undefined, {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                }) + " = "+ prazo);
+
+                if(prazo > 0) { //prazo positivo
+                    return prazo
+                } else if( prazo <= 0) { //prazo negativo
+                    return 0
+                } else {        //para prazo de resposta igual ao padrão
+                    return -1
+                }
+            }else {
+                return 0
+            }
         },
     },
     computed: {
