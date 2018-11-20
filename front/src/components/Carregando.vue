@@ -28,8 +28,8 @@
         data() {
             return {
                 interval: {},
-                value: 0
-            }
+                value: 0,
+            };
         },
         mounted() {
             this.interval = setInterval(() => {
