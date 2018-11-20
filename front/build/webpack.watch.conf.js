@@ -12,6 +12,30 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 const watchWebpackConfig = merge(baseWebpackConfig, {
+    mode: 'none',
+    watch: true,
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                commons: {
+                    chunks: "initial",
+                    name: "manifest",
+                    minChunks: 2,
+                    maxInitialRequests: 5, // The default limit is too small to showcase the effect
+                    minSize: 0 // This is example is too small to create commons chunks
+                },
+                vendor: {
+                    test: /node_modules/,
+                    chunks: "all",
+                    name: "vendor",
+                    priority: 10,
+                    enforce: true
+                }
+            }
+        },
+        namedModules: true,
+        namedChunks: true,
+    },
     module: {
         rules: utils.styleLoaders({
             sourceMap: config.dev.cssSourceMap,
@@ -19,7 +43,6 @@ const watchWebpackConfig = merge(baseWebpackConfig, {
             usePostCSS: true
         })
     },
-    watch: true,
     // cheap-module-eval-source-map is faster for development
     devtool: config.dev.devtool,
     plugins: [
@@ -87,10 +110,5 @@ const watchWebpackConfig = merge(baseWebpackConfig, {
         })
     ]
 })
-
-if (config.build.bundleAnalyzerReport) {
-    const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-    watchWebpackConfig.plugins.push(new BundleAnalyzerPlugin())
-}
 
 module.exports = watchWebpackConfig
