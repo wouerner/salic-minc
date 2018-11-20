@@ -173,62 +173,38 @@
         statusDiligencia(obj){
 
             let prazo = this.prazoResposta(obj);
-            let status = {
+            var status = {
                     color:'grey',
                     desc: 'Histórico Diligências'
               };
             let prazoPadrao = 40;
-            //
-            //
-            // if(obj.idDiligencia == 58455){
-            //   console.info(obj.idDiligencia+" - " + obj.DtSolicitacao + " / " + obj.stEnviado + " - "+ obj.DtResposta);
-            //   status.color='blue'
-            //   status.desc= 'Diliganciado';
-            //     return status;
-            // }
-            //
-            // if(obj.idDiligencia == 53257){
-            //     console.info(obj.idDiligencia+" - " + obj.DtSolicitacao + " / " + obj.stEnviado + " - "+ obj.DtResposta);
-            //     status.color='red'
-            //     status.desc= 'Não respondido';
-            //     return status;
-            // }
-            //
-            // if(obj.idDiligencia == 51863){
-            //     console.info(obj.idDiligencia+" - " + obj.DtSolicitacao + " / " + obj.stEnviado + " - "+ obj.DtResposta);
-            //     status.color='green'
-            //     status.desc= 'Diligencia respondida';
-            //     return status;
-            // }
 
             //diligenciado
-             if (obj.DtSolicitacao && obj.dtResposta == null && prazo <= prazoPadrao && stEnviado == 'S') {
-                 return status = { color: 'green', desc: "Diligenciado" };
-
+             if (obj.DtSolicitacao && obj.DtResposta == null && prazo <= prazoPadrao && stEnviado == 'S') {
+                 status = { color: 'yellow', desc: "Diligenciado" };
+                 return status;
 
             //diligencia não respondida
-              }else if( obj.DtSolicitacao && obj.dtResposta == null && prazo > prazoPadrao ){
-                 status.desc="Diligência não respondida";
+              }else if( obj.DtSolicitacao && obj.DtResposta == null && prazo > prazoPadrao ){
+                 status = { color: 'red', desc: "Diligencia não respondida" };
                  return status;
             //diligencia respondida com ressalvas
-                 }else if( obj.DtSolicitacao && obj.dtResposta != null ) {
+                 }else if( obj.DtSolicitacao && obj.DtResposta != null ) {
                     if( obj.stEnviado == 'N' && prazo > prazoPadrao ){
-                        status.desc="Diligência não respondida";
+                        status = { color: 'red', desc: "Diligencia não respondida" };
                         return status;
                     }else if(obj.stEnviado =='N' && prazo < prazoPadrao){
+                        console.info('entrei3');
                         status.desc="Diligenciado";
                         return status;
                     }else{
-                        status.desc="Diligencia respondida";
+                        status = { color: 'blue', desc: "Diligencia respondida" };
                         return status;
                     }
                  }else{
-                        status.desc="A Diligenciar";
+                        status = { color: 'green', desc: "A Diligenciar" };
                         return status;
                  }
-            if(obj.idPronac === '1410398') {
-                console.info(obj);
-            }
 
 
         },
@@ -263,15 +239,15 @@
                 var coisa = Date.now();
                 var timeDiff = Math.abs(coisa - new Date(obj.DtSolicitacao));
                 var prazo = Math.ceil(timeDiff / (1000 * 3600 * 24));
-                console.info(new Date().toLocaleDateString(undefined, {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric'
-                }) + " - "+ new Date(obj.DtSolicitacao).toLocaleDateString(undefined, {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric'
-                }) + " = "+ prazo);
+                // console.info(new Date().toLocaleDateString(undefined, {
+                //     day: '2-digit',
+                //     month: '2-digit',
+                //     year: 'numeric'
+                // }) + " - "+ new Date(obj.DtSolicitacao).toLocaleDateString(undefined, {
+                //     day: '2-digit',
+                //     month: '2-digit',
+                //     year: 'numeric'
+                // }) + " = "+ prazo);
 
                 if(prazo > 0) { //prazo positivo
                     return prazo
