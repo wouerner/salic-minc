@@ -18,17 +18,15 @@
                         <v-card class="elevation-2" color="grey lighten-4">
                             <v-card-text class="pl-5">
                                 <v-layout justify-space-around row wrap>
-                                    <v-flex lg12 class="text-xs-center">
+                                    <v-flex s12 m6 lg3 offset-lg2>
                                         <p><b>Produto</b></p>
                                         <p>{{ dado.Produto }}</p>
                                     </v-flex>
-                                </v-layout>
-                                <v-layout justify-space-around row wrap>
-                                    <v-flex lg5 class="text-xs-center">
+                                    <v-flex s6 m6 lg3>
                                         <p><b>&Aacute;REA</b></p>
                                         <p>{{ dado.Area }}</p>
                                     </v-flex>
-                                    <v-flex lg5 class="text-xs-center">
+                                    <v-flex s12 m6 offset-xlg10>
                                         <p><b>SEGMENTO</b></p>
                                         <p>{{ dado.Segmento }}</p>
                                     </v-flex>
@@ -57,25 +55,25 @@
                                         </v-flex>
                                     </v-layout>
                                     <v-layout justify-space-around row wrap>
-                                        <v-flex lg12 class="text-xs-center">
+                                        <v-flex lg5 offset-lg1 class="text-xs-center pl-4">
                                             <p><b>TOTAL PARA VENDA (QTDE)</b></p>
                                         </v-flex>
-                                        <v-flex s3 m6 lg5 offset-lg2 class="text-xs-center">
+                                        <v-flex lg6 class="text-xs-center">
+                                            <p><b>TOTAL PRODUZIDO</b></p>
+                                        </v-flex>
+                                        <v-flex s12 m6 lg3 offset-lg2>
                                             <p>
                                                 <b>Normal</b><br>
                                                 {{ dado.QtdeVendaNormal }}
                                             </p>
                                         </v-flex>
-                                        <v-flex s3 m6 lg5>
+                                        <v-flex s6 m6 lg3>
                                             <p>
                                                 <b>Proporcional</b><br>
                                                 {{ dado.QtdeVendaPromocional }}
                                             </p>
                                         </v-flex>
-                                    </v-layout>
-                                    <v-layout justify-space-around row wrap>
-                                        <v-flex lg12 class="text-xs-center">
-                                            <p><b>TOTAL PRODUZIDO</b></p>
+                                        <v-flex s12 m6 offset-xlg10 class="pl-5">
                                             <p>
                                                 <b>N&ordm; Exemplares / Ingressos</b><br>
                                                 {{ dado.QtdeProduzida }}
@@ -83,16 +81,16 @@
                                         </v-flex>
                                     </v-layout>
                                     <v-layout justify-space-around row wrap>
-                                        <v-flex lg12 class="text-xs-center">
+                                        <v-flex lg12 offset-lg4 class="text-xs-left">
                                             <p><b>PRE&Ccedil;O UNIT&Aacute;RIO (R$)</b></p>
                                         </v-flex>
-                                        <v-flex s3 m6 lg5 offset-lg2 class="text-xs-center">
+                                        <v-flex s12 m6 lg3 offset-lg1 class="pl-3">
                                             <p>
                                                 <b>Normal</b><br>
                                                 {{ dado.PrecoUnitarioNormal }}
                                             </p>
                                         </v-flex>
-                                        <v-flex s3 m6 lg5>
+                                        <v-flex s6 m6 lg3>
                                             <p>
                                                 <b>Proporcional</b><br>
                                                 {{ dado.PrecoUnitarioPromocional }}
@@ -118,7 +116,7 @@
                                                 {{ dado.ReceitaPro }}
                                             </p>
                                         </v-flex>
-                                        <v-flex s12 m6 offset-xlg10>
+                                        <v-flex s12 m6 offset-xlg10 class="pl-5">
                                             <p>
                                                 <b>Total Receita Prevista (R$)</b><br>
                                                 {{ dado.ReceitaPrevista }}

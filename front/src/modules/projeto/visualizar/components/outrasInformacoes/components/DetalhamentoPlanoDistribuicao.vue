@@ -1,45 +1,55 @@
 <template>
-    <v-expansion-panel popout>
-        <v-expansion-panel-content
-            class="elevation-1"
-            v-for="(detalhamento, index) of detalhamentos"
-            :key="index"
-            >
-            <v-layout slot="header" class="black--text">
-                <v-icon class="mr-3 black--text">place</v-icon>
-                <span>Detalhamento - {{detalhamento[0].DescricaoUf}} - {{detalhamento[0].DescricaoMunicipio}}</span>
-            </v-layout>
-            <v-data-table
-                    :headers="headers"
-                    :items="detalhamento"
-                    class="elevation-1 container-fluid"
-                    rows-per-page-text="Items por Página"
-                    no-data-text="Nenhum dado encontrado"
-            >
-                <template slot="items" slot-scope="props">
-                    <td class="text-xs-left">{{props.item.dsProduto}}</td>
-                    <td class="text-xs-right">{{ props.item.qtExemplares }}</td>
+    <v-card>
+        <v-expansion-panel popout>
+            <v-expansion-panel-content
+                class="elevation-1"
+                v-for="(detalhamento, index) of detalhamentos"
+                :key="index"
+                >
+                <v-layout slot="header" class="black--text">
+                    <v-icon class="mr-3 black--text">place</v-icon>
+                    <span>Detalhamento - {{detalhamento[0].DescricaoUf}} - {{detalhamento[0].DescricaoMunicipio}}</span>
+                </v-layout>
+                <v-card-title>
+                    <v-layout justify-space-around row wrap>
+                        <v-flex lg4 offset-lg3 class="text-xs-center">
+                            <h6>Preco Popular</h6>
+                        </v-flex>
+                        <v-flex lg2 class="text-xs-left">
+                            <h6>Proponente</h6>
+                        </v-flex>
+                    </v-layout>
+                </v-card-title>
+                <v-data-table
+                        :headers="headers"
+                        :items="detalhamento"
+                        class="elevation-1 container-fluid"
+                        rows-per-page-text="Items por Página"
+                        no-data-text="Nenhum dado encontrado"
+                        hide-actions
+                >
+                    <template slot="items" slot-scope="props">
+                        <td class="text-xs-left">{{props.item.dsProduto}}</td>
+                        <td class="text-xs-right">{{ props.item.qtExemplares }}</td>
 
-                    <td class="text-xs-right">{{ parseInt(props.item.qtGratuitaDivulgacao) +
-                        parseInt(props.item.qtGratuitaPatrocinador) + parseInt(props.item.qtGratuitaPopulacao) }}
-                    </td>
+                        <td class="text-xs-right">{{ parseInt(props.item.qtGratuitaDivulgacao) +
+                            parseInt(props.item.qtGratuitaPatrocinador) + parseInt(props.item.qtGratuitaPopulacao) }}
+                        </td>
 
-                    <td class="text-xs-right">{{ props.item.qtPopularIntegral }}</td>
-                    <td class="text-xs-right">{{ props.item.qtPopularParcial }}</td>
-                    <td class="text-xs-right">{{ props.item.vlUnitarioPopularIntegral }}</td>
+                        <td class="text-xs-right">{{ props.item.qtPopularIntegral }}</td>
+                        <td class="text-xs-right">{{ props.item.qtPopularParcial }}</td>
+                        <td class="text-xs-right">{{ props.item.vlUnitarioPopularIntegral }}</td>
 
-                    <td class="text-xs-right">{{ props.item.qtProponenteIntegral }}</td>
-                    <td class="text-xs-right">{{ props.item.qtProponenteParcial }}</td>
-                    <td class="text-xs-right">{{ props.item.vlUnitarioProponenteIntegral }}</td>
+                        <td class="text-xs-right">{{ props.item.qtProponenteIntegral }}</td>
+                        <td class="text-xs-right">{{ props.item.qtProponenteParcial }}</td>
+                        <td class="text-xs-right">{{ props.item.vlUnitarioProponenteIntegral }}</td>
 
-                    <td class="text-xs-right">{{ props.item.vlReceitaPrevista }}</td>
-                </template>
-                <template slot="pageText" slot-scope="props">
-                    Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
-                </template>
-            </v-data-table>
-        </v-expansion-panel-content>
-    </v-expansion-panel>
+                        <td class="text-xs-right">{{ props.item.vlReceitaPrevista }}</td>
+                    </template>
+                </v-data-table>
+            </v-expansion-panel-content>
+        </v-expansion-panel>
+    </v-card>
 </template>
 <script>
 export default {
@@ -48,11 +58,6 @@ export default {
     data() {
         return {
             detalhamentos: [],
-            search: '',
-            pagination: {
-                sortBy: 'fat',
-            },
-            selected: [],
             headers: [
                 {
                     text: 'CATEGORIA',
