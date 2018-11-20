@@ -24,8 +24,8 @@ import Tramitacao from './visualizar/components/outrasInformacoes/Tramitacao';
 
 Vue.use(Router);
 
-// const DadosProjeto = () => import(/* webpackChunkName: "dados-projeto" */ './visualizar/components/DadosProjeto');
-// const Proponente = () => import(/* webpackChunkName: "proponente" */ './visualizar/components/incentivo/Proponente');
+const DadosProjeto = () => import(/* webpackChunkName: "dados-projeto" */ './visualizar/components/DadosProjeto');
+const Proponente = () => import(/* webpackChunkName: "proponente" */ './visualizar/components/incentivo/Proponente');
 
 const templateAjax = {
     template: '<div id="conteudo"></div>',
@@ -39,7 +39,7 @@ const routes = [
             {
                 path: '',
                 name: 'dadosprojeto',
-                component: () => import(/* webpackChunkName: "dados-projeto" */ './visualizar/components/DadosProjeto'),
+                component: DadosProjeto,
                 meta: {
                     title: 'Dados do Projeto',
                 },
@@ -47,7 +47,7 @@ const routes = [
             {
                 path: 'proponente',
                 name: 'proponente',
-                component: () => import(/* webpackChunkName: "proponente" */ './visualizar/components/incentivo/Proponente'),
+                component: Proponente,
                 meta: {
                     title: 'Proponente',
                 },
