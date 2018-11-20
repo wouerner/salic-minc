@@ -78,7 +78,7 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
         $resultArray['locaisFiscalizacao'] = $this->montaLocaisFiscalizacao($infoProjeto);
         $resultArray['oficializarFiscalizacao'] = $this->montaOficializarFiscalizacao($infoProjeto);
         $resultArray['arquivosFiscalizacao'] = $this->montaArquivosFiscalizacao($arquivos);
-        $resultArray['fiscalizacaoConcluidaParecer'] = $this->montamontaFiscalizacaoConcluidaParecer($relatorioFiscalizacao);
+        $resultArray['fiscalizacaoConcluidaParecer'] = $this->montaFiscalizacaoConcluidaParecer($relatorioFiscalizacao, $infoProjeto[0]['dtInicioFiscalizacaoProjeto']);
 
         return $resultArray;
     }
@@ -170,73 +170,77 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
         return $arquivosFiscalizacao;
     }
 
-    private function montaFiscalizacaoConcluidaParecer($dados)
+    private function montaFiscalizacaoConcluidaParecer($dados, $dtInicioFiscalizacao)
     {
-        foreach ($dados as $item) {
-            $resumoExecucao[] = [
-                'dsAcoesProgramadas' => $item['dsAcoesProgramadas'],
-                'dsAcoesExecutadas' => $item['dsAcoesExecutadas'],
-                'dsBeneficioAlcancado' => $item['dsBeneficioAlcancado'],
-                'dsDificuldadeEncontrada' => $item['dsDificuldadeEncontrada'],
-            ];
-            $utilizacaoRecursos[] = [
-                'stApuracaoUFiscalizacao' => $this->statusFiscalizacao($item['stApuracaoUFiscalizacao']),
-                'stComprovacaoUtilizacaoRecurso' => $this->statusFiscalizacao($item['stComprovacaoUtilizacaoRecurso']),
-                'stCompatibilidadeDesembolsoEvo' => $this->statusFiscalizacao($item['stCompatibilidadeDesembolsoEvo']),
-                'stOcorreuDespesas' => $this->statusFiscalizacao($item['stOcorreuDespesas']),
-                'stPagamentoServidorPublico' => $this->statusFiscalizacao($item['stPagamentoServidorPublico']),
-                'stDespesaAdministracao' => $this->statusFiscalizacao($item['stDespesaAdministracao']),
-                'stTransferenciaRecurso' => $this->statusFiscalizacao($item['stTransferenciaRecurso']),
-                'stDespesasPublicidade' => $this->statusFiscalizacao($item['stDespesasPublicidade']),
-                'stOcorreuAditamento' => $this->statusFiscalizacao($item['stOcorreuAditamento']),
-                'stAplicadosRecursos' => $this->statusFiscalizacao($item['stAplicadosRecursos']),
-                'stRecursosCaptados' => $this->statusFiscalizacao($item['stRecursosCaptados']),
-                'stSaldoAposEncerramento' => $this->statusFiscalizacao($item['stSaldoAposEncerramento']),
-                'stSaldoVerificacaoFNC' => $this->statusFiscalizacao($item['stSaldoVerificacaoFNC']),
+        $dtDeCorte = strtotime(date('2013-09-15 00:00:00'));
+        $result['resumoExecucao'] = [
+            'dsAcoesProgramadas' => $dados['dsAcoesProgramadas'],
+            'dsAcoesExecutadas' => $dados['dsAcoesExecutadas'],
+            'dsBeneficioAlcancado' => $dados['dsBeneficioAlcancado'],
+            'dsDificuldadeEncontrada' => $dados['dsDificuldadeEncontrada'],
             ];
 
-            $comprovantesDespesa[] = [
-                'stProcessoDocumentado' => $this->statusFiscalizacao($item['stProcessoDocumentado']),
-                'stDocumentacaoCompleta' => $this->statusFiscalizacao($item['stDocumentacaoCompleta']),
-                'stConformidadeExecucao' => $this->statusFiscalizacao($item['stConformidadeExecucao']),
-                'stIdentificaProjeto' => $this->statusFiscalizacao($item['stIdentificaProjeto']),
-                'stDespesaAnterior' => $this->statusFiscalizacao($item['stDespesaAnterior']),
-                'stDespesaPosterior' => $this->statusFiscalizacao($item['stDespesaPosterior']),
-                'stDespesaCoincidem' => $this->statusFiscalizacao($item['stDespesaCoincidem']),
-                'stDespesaRelacionada' => $this->statusFiscalizacao($item['stDespesaRelacionada']),
-                'stComprovanteFiscal' => $this->statusFiscalizacao($item['stComprovanteFiscal']),
-            ];
+        if ($dtInicioFiscalizacao < $dtDeCorte) {
 
-            $divulgacao[] = [
-                'stCienciaLegislativo' => $this->statusFiscalizacao($item['stCienciaLegislativo']),
-                'stExigenciaLegal' => $this->statusFiscalizacao($item['stExigenciaLegal']),
-                'stMaterialInformativo' => $this->statusFiscalizacao($item['stMaterialInformativo']),
-            ];
-
-            $execucao[] = [
-                'stFinalidadeEsperada' => $this->statusFiscalizacao($item['stFinalidadeEsperada']),
-                'stPlanoTrabalho' => $this->statusFiscalizacao($item['stPlanoTrabalho']),
-                'stExecucaoAprovado' => $this->statusFiscalizacao($item['stExecucaoAprovado']),
-                'dsObservacao' => $this->statusFiscalizacao($item['dsObservacao']),
-            ];
-
-            $empregosGeradosProjeto[] = [
-                'qtEmpregoDireto' => $item['qtEmpregoDireto'],
-                'qtEmpregoIndireto' => $item['qtEmpregoIndireto'],
-                'qtEmpregoTotal' => $item['qtEmpregoDireto'] + $item['qtEmpregoIndireto'],
-                'dsEvidencia' => $item['dsEvidencia'],
-                'dsRecomendacaoEquipe' => $item['dsRecomendacaoEquipe'],
-                'dsConclusaoEquipe' => $item['dsConclusaoEquipe'],
-                'dsParecerTecnico' => $item['dsParecerTecnico'],
-                'dsParecer' => $item['dsParecer'],
+            $result['stConvenioFiscalizacao'] = [
+                'stSiafi' => $this->statusConvenio($dados['stSiafi']),
+                'stPrestacaoContas' => $this->statusFiscalizacao($dados['stPrestacaoContas']),
+                'stCumpridasNormas' => $this->statusFiscalizacao($dados['stCumpridasNormas']),
+                'stCumpridoPrazo' => $this->statusFiscalizacao($dados['stCumpridoPrazo']),
             ];
         }
-        $result['resumoExecucao'] = $resumoExecucao;
-        $result['utilizacaoRecursos'] = $utilizacaoRecursos;
-        $result['comprovantesDespesa'] = $comprovantesDespesa;
-        $result['divulgacao'] = $divulgacao;
-        $result['execucao'] = $execucao;
-        $result['empregosGeradosProjeto'] = $empregosGeradosProjeto;
+
+        $result['utilizacaoRecursos'] = [
+            'stApuracaoUFiscalizacao' => $this->statusFiscalizacao($dados['stApuracaoUFiscalizacao']),
+            'stComprovacaoUtilizacaoRecurso' => $this->statusFiscalizacao($dados['stComprovacaoUtilizacaoRecurso']),
+            'stCompatibilidadeDesembolsoEvo' => $this->statusFiscalizacao($dados['stCompatibilidadeDesembolsoEvo']),
+            'stOcorreuDespesas' => $this->statusFiscalizacao($dados['stOcorreuDespesas']),
+            'stPagamentoServidorPublico' => $this->statusFiscalizacao($dados['stPagamentoServidorPublico']),
+            'stDespesaAdministracao' => $this->statusFiscalizacao($dados['stDespesaAdministracao']),
+            'stTransferenciaRecurso' => $this->statusFiscalizacao($dados['stTransferenciaRecurso']),
+            'stDespesasPublicidade' => $this->statusFiscalizacao($dados['stDespesasPublicidade']),
+            'stOcorreuAditamento' => $this->statusFiscalizacao($dados['stOcorreuAditamento']),
+            'stAplicadosRecursos' => $this->statusFiscalizacao($dados['stAplicadosRecursos']),
+            'stRecursosCaptados' => $this->statusFiscalizacao($dados['stRecursosCaptados']),
+            'stSaldoAposEncerramento' => $this->statusFiscalizacao($dados['stSaldoAposEncerramento']),
+            'stSaldoVerificacaoFNC' => $this->statusFiscalizacao($dados['stSaldoVerificacaoFNC']),
+        ];
+
+        $result['comprovantesDespesa'] = [
+            'stProcessoDocumentado' => $this->statusFiscalizacao($dados['stProcessoDocumentado']),
+            'stDocumentacaoCompleta' => $this->statusFiscalizacao($dados['stDocumentacaoCompleta']),
+            'stConformidadeExecucao' => $this->statusFiscalizacao($dados['stConformidadeExecucao']),
+            'stIdentificaProjeto' => $this->statusFiscalizacao($dados['stIdentificaProjeto']),
+            'stDespesaAnterior' => $this->statusFiscalizacao($dados['stDespesaAnterior']),
+            'stDespesaPosterior' => $this->statusFiscalizacao($dados['stDespesaPosterior']),
+            'stDespesaCoincidem' => $this->statusFiscalizacao($dados['stDespesaCoincidem']),
+            'stDespesaRelacionada' => $this->statusFiscalizacao($dados['stDespesaRelacionada']),
+            'stComprovanteFiscal' => $this->statusFiscalizacao($dados['stComprovanteFiscal']),
+            ];
+
+        $result['divulgacao'] = [
+            'stCienciaLegislativo' => $this->statusFiscalizacao($dados['stCienciaLegislativo']),
+            'stExigenciaLegal' => $this->statusFiscalizacao($dados['stExigenciaLegal']),
+            'stMaterialInformativo' => $this->statusFiscalizacao($dados['stMaterialInformativo']),
+            ];
+
+        $result['execucao'] = [
+            'stFinalidadeEsperada' => $this->statusFiscalizacao($dados['stFinalidadeEsperada']),
+            'stPlanoTrabalho' => $this->statusFiscalizacao($dados['stPlanoTrabalho']),
+            'stExecucaoAprovado' => $this->statusFiscalizacao($dados['stExecucaoAprovado']),
+            'dsObservacao' => $this->statusFiscalizacao($dados['dsObservacao']),
+            ];
+
+        $result['empregosGeradosProjeto'] = [
+            'qtEmpregoDireto' => $dados['qtEmpregoDireto'],
+            'qtEmpregoIndireto' => $dados['qtEmpregoIndireto'],
+            'qtEmpregoTotal' => $dados['qtEmpregoDireto'] + $dados['qtEmpregoIndireto'],
+            'dsEvidencia' => $dados['dsEvidencia'],
+            'dsRecomendacaoEquipe' => $dados['dsRecomendacaoEquipe'],
+            'dsConclusaoEquipe' => $dados['dsConclusaoEquipe'],
+            'dsParecerTecnico' => $dados['dsParecerTecnico'],
+            'dsParecer' => $dados['dsParecer'],
+            ];
 
         return $result;
     }
@@ -253,6 +257,27 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
             case 3:
                 $result = 'N&atilde;o se aplica.';
                 break;
+            default:
+                $result = ' - ';
+        }
+
+        return $result;
+    }
+
+    private function statusConvenio($dado)
+    {
+        switch ($dado) {
+            case 1:
+                $result = 'Aprovado';
+                break;
+            case 2:
+                $result = 'A aprovar';
+                break;
+            case 3:
+                $result = 'A comprovar';
+                break;
+            default:
+                $result = ' - ';
         }
 
         return $result;
