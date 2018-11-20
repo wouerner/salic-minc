@@ -68,9 +68,9 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 
-    export default {
+export default {
     name: 'TabelaProjetos',
     props: ['dados', 'componentes', 'mostrarTecnico'],
     data() {
@@ -171,44 +171,38 @@
             return dados;
         },
         statusDiligencia(obj){
-
-            let prazo = this.prazoResposta(obj);
-            var status = {
-                    color:'grey',
-                    desc: 'Histórico Diligências'
-              };
-            let prazoPadrao = 40;
-
-            //diligenciado
-             if (obj.DtSolicitacao && obj.DtResposta == null && prazo <= prazoPadrao && stEnviado == 'S') {
-                 status = { color: 'yellow', desc: "Diligenciado" };
-                 return status;
-
-            //diligencia não respondida
-              }else if( obj.DtSolicitacao && obj.DtResposta == null && prazo > prazoPadrao ){
-                 status = { color: 'red', desc: "Diligencia não respondida" };
-                 return status;
-            //diligencia respondida com ressalvas
-                 }else if( obj.DtSolicitacao && obj.DtResposta != null ) {
-                    if( obj.stEnviado == 'N' && prazo > prazoPadrao ){
-                        status = { color: 'red', desc: "Diligencia não respondida" };
-                        return status;
-                    }else if(obj.stEnviado =='N' && prazo < prazoPadrao){
-                        console.info('entrei3');
-                        status.desc="Diligenciado";
-                        return status;
-                    }else{
-                        status = { color: 'blue', desc: "Diligencia respondida" };
-                        return status;
-                    }
-                 }else{
-                        status = { color: 'green', desc: "A Diligenciar" };
-                        return status;
-                 }
-
-
+            const prazo = this.prazoResposta(obj);
+            let status = {
+                color: 'grey',
+                desc: 'Histórico Diligências',
+            };
+            const prazoPadrao = 40;
+            // diligenciado
+            if (obj.DtSolicitacao && obj.DtResposta === null && prazo <= prazoPadrao && obj.stEnviado === 'S') {
+                status = { color: 'yellow', desc: 'Diligenciado' };
+                return status;
+            // diligencia não respondida
+            } else if (obj.DtSolicitacao && obj.DtResposta == null && prazo > prazoPadrao) {
+                status = { color: 'red', desc: 'Diligencia não respondida' };
+                return status;
+            // diligencia respondida com ressalvas
+            } else if (obj.DtSolicitacao && obj.DtResposta != null) {
+                if (obj.stEnviado === 'N' && prazo > prazoPadrao) {
+                    status = { color: 'red', desc: 'Diligencia não respondida' };
+                    return status;
+                } else if (obj.stEnviado === 'N' && prazo < prazoPadrao) {
+                    status = { color: 'yellow', desc: 'Diligenciado' };
+                    return status;
+                } else {
+                    status = { color: 'blue', desc: 'Diligencia respondida' };
+                    return status;
+                }
+            } else {
+                status = { color: 'green', desc: 'A Diligenciar' };
+                return status;
+            }
         },
-        prazoResposta(obj){
+        prazoResposta(obj) {
             /**
              If (notempty dtSolicitação){
              Calculo do Prazo
@@ -234,11 +228,13 @@
              }
              */
 
-            if(typeof obj.DtSolicitacao !== undefined){
-
-                var coisa = Date.now();
-                var timeDiff = Math.abs(coisa - new Date(obj.DtSolicitacao));
-                var prazo = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            let coisa;
+            let timeDiff;
+            let prazo;
+            if (typeof obj.DtSolicitacao !== 'undefined') {
+                coisa = Date.now();
+                timeDiff = Math.abs(coisa - new Date(obj.DtSolicitacao));
+                prazo = Math.ceil(timeDiff / (1000 * 3600 * 24));
                 // console.info(new Date().toLocaleDateString(undefined, {
                 //     day: '2-digit',
                 //     month: '2-digit',
@@ -249,15 +245,18 @@
                 //     year: 'numeric'
                 // }) + " = "+ prazo);
 
-                if(prazo > 0) { //prazo positivo
-                    return prazo
-                } else if( prazo <= 0) { //prazo negativo
-                    return 0
-                } else {        //para prazo de resposta igual ao padrão
-                    return -1
+                if (prazo > 0) {
+                    // prazo positivo
+                    return prazo;
+                } else if (prazo <= 0) {
+                    // prazo negativo
+                    return 0;
+                } else {
+                    // para prazo de resposta igual ao padrão
+                    return -1;
                 }
-            }else {
-                return 0
+            } else {
+                return 0;
             }
         },
     },
@@ -279,8 +278,5 @@
             }
         },
     },
-    mounted(){
-        this.dadosTabelaTecnico;
-    }
 };
 </script>
