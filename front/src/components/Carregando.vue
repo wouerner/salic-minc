@@ -1,19 +1,17 @@
 <template>
-    <div class="center-align padding10">
-        <h6 v-html="text"></h6>
-        <div class="preloader-wrapper small active">
-            <div class="spinner-layer spinner-green-only">
-                <div class="circle-clipper left">
-                    <div class="circle"></div>
-                </div>
-                <div class="gap-patch">
-                    <div class="circle"></div>
-                </div>
-                <div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-            </div>
+    <div class="text-xs-center">
+        <div style="padding-top: 20px">
+            <h6 v-html="text"></h6>
         </div>
+        <v-progress-circular
+                :rotate="180"
+                :size="70"
+                :width="7"
+                :value="value"
+                color="teal"
+        >
+            {{ value }}
+        </v-progress-circular>
     </div>
 </template>
 
@@ -26,5 +24,20 @@
                 default: '',
             },
         },
+
+        data() {
+            return {
+                interval: {},
+                value: 0,
+            };
+        },
+        mounted() {
+            this.interval = setInterval(() => {
+                if (this.value === 100) {
+                    return (this.value = 0)
+                }
+                this.value += 10
+            }, 1000)
+        }
     };
 </script>
