@@ -39,6 +39,7 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
                 $diligenciasProposta = $tblPreProjeto->listarDiligenciasPreProjeto(array('pre.idPreProjeto = ?' => $projeto->idProjeto,'aval.ConformidadeOK = ? '=>0));
                 $proposta = $this->montarArrayListaDiligenciaProposta($diligenciasProposta);
             }
+            $proposta = [];
         }
         $diligencias = $tblProjeto->listarDiligencias(array('pro.IdPRONAC = ?' => $idPronac, 'dil.stEnviado = ?' => 'S'));
         $projeto = $this->montarArrayListaDiligenciaProjeto($diligencias);
@@ -114,7 +115,7 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
 
             $resultArray[] = [
                 'idAvaliarAdequacaoProjeto' => $diligencia['idAvaliarAdequacaoProjeto'],
-                'tipoDiligencia' => 'Diligência na Análise da adequação à realidade do projeto.',
+                'tipoDiligencia' => 'Diligï¿½ncia na Anï¿½lise da adequaï¿½ï¿½o ï¿½ realidade do projeto.',
                 'dtAvaliacao' => $objDateTimedtAvaliacao->format('d/m/Y'),
             ];
         }
