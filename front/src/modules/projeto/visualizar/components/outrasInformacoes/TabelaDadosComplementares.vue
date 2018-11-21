@@ -1,8 +1,8 @@
 <template>
     <v-expansion-panel popout focusable>
         <v-expansion-panel-content class="elevation-1">
-            <v-layout slot="header" class="green--text">
-                <v-icon class="mr-3 green--text">subject</v-icon>
+            <v-layout slot="header">
+                <v-icon class="mr-3">subject</v-icon>
                 <span v-html="dadoComplementar">{{ dadoComplementar }}</span>
             </v-layout>
             <v-card>
