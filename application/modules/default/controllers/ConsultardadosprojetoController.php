@@ -788,7 +788,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
 
     /**
      * @deprecated migrado para nova estrutura de Rest e Service >
-     *
+     * application/modules/execucao/controllers/DadosReadequacoesRestController.php
+     * application/modules/execucao/service/DadosReadequacoes.php
      */
     public function readequacoesAction()
     {
