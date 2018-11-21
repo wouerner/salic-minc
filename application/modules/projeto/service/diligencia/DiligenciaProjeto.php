@@ -93,7 +93,7 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
 
             $qtdia = 40;
             $resultArray[] = [
-                'produto' => html_entity_decode(utf8_encode($diligencia['produto'])),
+                'produto' => $diligencia['produto'],
                 'tipoDiligencia' => html_entity_decode(utf8_encode($diligencia['tipoDiligencia'])),
                 'idDiligencia' => $diligencia['idDiligencia'],
                 'tipoDiligencia' => $tipoDiligencia,
