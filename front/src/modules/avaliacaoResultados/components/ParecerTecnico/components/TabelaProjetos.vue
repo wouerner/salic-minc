@@ -43,6 +43,10 @@
                             :proximo="componentes.proximo"
                             :idTipoDoAtoAdministrativo="componentes.idTipoDoAtoAdministrativo"
                             :usuario="componentes.usuario"
+                            :tecnico="{
+                               idAgente: props.item.idAgente,
+                               nome: props.item.usu_nome
+                            }"
                         >
                         </component>
                     </template>
@@ -68,16 +72,16 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
-    export default {
+export default {
     name: 'TabelaProjetos',
     props: ['dados', 'componentes', 'mostrarTecnico'],
     data() {
         return {
             status: {
-                color:'orange',
-                desc: 'teste'
+                color: 'orange',
+                desc: 'teste',
             },
             pagination: {
                 rowsPerPage: 10,
@@ -174,10 +178,9 @@
 
             return dados;
         },
-        statusDiligencia(obj){
-            console.info('oi')
+        statusDiligencia() {
             return this.status;
-        }
+        },
     },
     computed: {
         ...mapGetters({
