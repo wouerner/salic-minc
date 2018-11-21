@@ -28,6 +28,7 @@ export const state = {
     marcasAnexadas: [],
     dadosReadequacoes: [],
     pedidoProrrogacao: [],
+    dadosFiscalizacaoLista: [],
 };
 
 export const mutations = {
@@ -111,5 +112,8 @@ export const mutations = {
     },
     [types.SET_PEDIDO_PRORROGACAO](state, dados) {
         state.pedidoProrrogacao = dados;
+    },
+    [types.SET_DADOS_FISCALIZACAO_LISTA](state, dados) {
+        state.dadosFiscalizacaoLista = dados;
     },
 };

@@ -239,3 +239,11 @@ export const buscarPedidoProrrogacao = ({ commit }, idPronac) => {
             commit(types.SET_PEDIDO_PRORROGACAO, data);
         });
 };
+
+export const buscarDadosFiscalizacaoLista = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarDadosFiscalizacaoLista(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_DADOS_FISCALIZACAO_LISTA, data);
+        });
+};
