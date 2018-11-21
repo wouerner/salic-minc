@@ -24,7 +24,6 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
     public function listaFiscalizacao()
     {
         $idPronac = $this->request->idPronac;
-        // $idFiscalizacao = $this->request->idFiscalizacao;
 
         if (strlen($idPronac) > 7) {
             $idPronac = \Seguranca::dencrypt($idPronac);
@@ -33,7 +32,7 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
         $Projetos = new \Projetos();
         $dadosProj = $Projetos->buscar(array('IdPRONAC = ?' => $idPronac))->current();
 
-        $infoProjeto = $Projetos->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
+        $infoProjeto = $Projetos->consultarFiscalizacao(array('Projetos.IdPRONAC = ?' => $idPronac), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
 
         $listaFiscalizacao = $this->montaListaFiscalizacao($infoProjeto);
 
@@ -53,10 +52,9 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
         $dadosProj = $Projetos->buscar(array('IdPRONAC = ?' => $idPronac))->current();
 
         $infoProjeto = $Projetos->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac, 'tbFiscalizacao.idFiscalizacao = ?' => $idFiscalizacao), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
-xd($infoProjeto);
+
         $Localizacoes = new \Proposta_Model_DbTable_Abrangencia();
         $dadosLocalizacoes = $Localizacoes->buscarRegiaoUFMunicipio($infoProjeto[0]['idProjeto']);
-        // xd($dadosLocalizacoes);
 
         $OrgaoFiscalizadorDao = new \OrgaoFiscalizador();
         $ArquivoFiscalizacaoDao = new \ArquivoFiscalizacao();
@@ -70,7 +68,6 @@ xd($infoProjeto);
         $relatorioFiscalizacao = $RelatorioFiscalizacaoDAO->buscaRelatorioFiscalizacao($idFiscalizacao);
 
         $resultArray['locaisFiscalizacao'] = $this->montaLocaisFiscalizacao($dadosLocalizacoes);
-        xd($resultArray['locaisFiscalizacao']);
         $resultArray['oficializarFiscalizacao'] = $this->montaOficializarFiscalizacao($infoProjeto);
         $resultArray['arquivosFiscalizacao'] = $this->montaArquivosFiscalizacao($arquivos);
         $resultArray['fiscalizacaoConcluidaParecer'] = $this->montaFiscalizacaoConcluidaParecer($relatorioFiscalizacao, $infoProjeto[0]['dtInicioFiscalizacaoProjeto']);
