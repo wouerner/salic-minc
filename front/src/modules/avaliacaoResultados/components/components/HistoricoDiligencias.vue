@@ -69,7 +69,6 @@
     import {mapActions, mapGetters} from 'vuex';
     import Data from '../../../../filters/date';
 
-
     Vue.filter('date', Data);
 
 export default {
