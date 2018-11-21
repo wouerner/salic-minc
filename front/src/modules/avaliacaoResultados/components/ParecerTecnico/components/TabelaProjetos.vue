@@ -34,7 +34,7 @@
                     <template v-for="(c, index) in componentes.acoes" d-inline-block>
                         <component
                             v-bind:key="index"
-                            :status="statusDiligencia(props.item)"
+                            :obj="props.item"
                             :is="c"
                             :id-pronac="props.item.IdPRONAC"
                             :pronac="props.item.PRONAC"
@@ -79,10 +79,6 @@ export default {
     props: ['dados', 'componentes', 'mostrarTecnico'],
     data() {
         return {
-            status: {
-                color: 'orange',
-                desc: 'teste',
-            },
             pagination: {
                 rowsPerPage: 10,
             },
@@ -177,9 +173,6 @@ export default {
             };
 
             return dados;
-        },
-        statusDiligencia() {
-            return this.status;
         },
     },
     computed: {
