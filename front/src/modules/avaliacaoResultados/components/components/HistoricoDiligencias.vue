@@ -23,7 +23,7 @@
                 <v-card-text>
                     <v-timeline >
                         <v-timeline-item
-                            v-for="(item, i) in sortByDate(diligencias.items)"
+                            v-for="(item, i) in sortByDate"
                             :key="i"
                             small
                         >
@@ -204,12 +204,12 @@ export default {
             }
             return 0;
         },
-        sortByDate(list) {
-            return _.orderBy(list, 'dataSolicitacao', 'desc');
+        sortByDate() {
+            return _.orderBy(this.diligencias.items, 'dataSolicitacao', 'desc');
         },
     },
     updated() {
-        this.setInfo();
+        this.setInfo;
     },
 };
 </script>
