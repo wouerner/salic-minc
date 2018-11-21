@@ -20,15 +20,15 @@
                         </v-tooltip>
                     </v-btn>
                 </td>
-                <td class="text-xs-center" v-if="props.item.produto">
+                <td class="text-xs-left" v-if="props.item.produto">
                     {{ props.item.produto }}
                 </td>
-                <td v-else class="text-xs-center"> -</td>
-                <td class="text-xs-center">{{ props.item.tipoDiligencia }}</td>
-                <td class="text-xs-center">{{ props.item.dataSolicitacao }}</td>
-                <td class="text-xs-center">{{ props.item.dataResposta }}</td>
-                <td class="text-xs-center">{{ props.item.prazoResposta }}</td>
-                <td class="text-xs-center">Prorrogado</td>
+                <td v-else class="text-xs-left"> - </td>
+                <td class="text-xs-left">{{ props.item.tipoDiligencia }}</td>
+                <td class="text-xs-right">{{ props.item.dataSolicitacao }}</td>
+                <td class="text-xs-right">{{ props.item.dataResposta }}</td>
+                <td class="text-xs-right">{{ props.item.prazoResposta }}</td>
+                <td class="text-xs-left">Prorrogado</td>
             </template>
             <template slot="pageText" slot-scope="props">
                 Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
@@ -156,12 +156,12 @@
                     },
                     {
                         text: 'PRODUTO',
-                        align: 'center',
+                        align: 'left',
                         value: 'produto',
                     },
                     {
                         text: 'TIPO DE DILIGÊNCIA',
-                        align: 'center',
+                        align: 'left',
                         value: 'tipoDiligencia',
                     },
                     {
@@ -183,7 +183,7 @@
                         text: 'PRORROGADO',
                         value: 'prorrogado',
                         sortable: false,
-                        align: 'center',
+                        align: 'left',
                     },
                 ],
             };
