@@ -230,8 +230,15 @@ export const buscarPedidoProrrogacao = (idPronac) => {
 export const buscarDadosFiscalizacaoLista = (idPronac) => {
     const modulo = '/execucao';
     const controller = '/fiscalizacao-rest';
-    // const metodo = '/index';
     const path = `${modulo}${controller}`;
     const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};
+
+export const buscarDadosFiscalizacaoVisualiza = (idPronac, idFiscalizacao) => {
+    const modulo = '/execucao';
+    const controller = '/fiscalizacao-rest';
+    const path = `${modulo}${controller}`;
+    const queryParams = `?id=${idFiscalizacao}&idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };

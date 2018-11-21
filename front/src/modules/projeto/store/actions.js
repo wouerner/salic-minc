@@ -247,3 +247,13 @@ export const buscarDadosFiscalizacaoLista = ({ commit }, idPronac) => {
             commit(types.SET_DADOS_FISCALIZACAO_LISTA, data);
         });
 };
+
+export const buscarDadosFiscalizacaoVisualiza = ({ commit }, value) => {
+    const { idPronac, idFiscalizacao } = value;
+    projetoHelperAPI.buscarDadosFiscalizacaoVisualiza(idPronac, idFiscalizacao)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_DADOS_FISCALIZACAO_VISUALIZA, data);
+        });
+};
+
