@@ -24,7 +24,7 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
     public function listaFiscalizacao()
     {
         $idPronac = $this->request->idPronac;
-        $idFiscalizacao = $this->request->idFiscalizacao;
+        // $idFiscalizacao = $this->request->idFiscalizacao;
 
         if (strlen($idPronac) > 7) {
             $idPronac = \Seguranca::dencrypt($idPronac);
@@ -33,12 +33,7 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
         $Projetos = new \Projetos();
         $dadosProj = $Projetos->buscar(array('IdPRONAC = ?' => $idPronac))->current();
 
-
-        if (empty($idFiscalizacao)) {
-            $infoProjeto = $Projetos->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
-        } else {
-            $infoProjeto = $Projetos->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac, 'tbFiscalizacao.idFiscalizacao = ?' => $idFiscalizacao), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
-        }
+        $infoProjeto = $Projetos->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
 
         $listaFiscalizacao = $this->montaListaFiscalizacao($infoProjeto);
 
@@ -48,7 +43,7 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
     public function visualizarFiscalizacao()
     {
         $idPronac = $this->request->idPronac;
-        $idFiscalizacao = $this->request->idFiscalizacao;
+        $idFiscalizacao = $this->request->id;
 
         if (strlen($idPronac) > 7) {
             $idPronac = \Seguranca::dencrypt($idPronac);
@@ -57,25 +52,25 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
         $Projetos = new \Projetos();
         $dadosProj = $Projetos->buscar(array('IdPRONAC = ?' => $idPronac))->current();
 
+        $infoProjeto = $Projetos->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac, 'tbFiscalizacao.idFiscalizacao = ?' => $idFiscalizacao), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
+xd($infoProjeto);
+        $Localizacoes = new \Proposta_Model_DbTable_Abrangencia();
+        $dadosLocalizacoes = $Localizacoes->buscarRegiaoUFMunicipio($infoProjeto[0]['idProjeto']);
+        // xd($dadosLocalizacoes);
 
-        if (empty($idFiscalizacao)) {
-            $infoProjeto = $Projetos->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
-        } else {
-            $infoProjeto = $Projetos->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac, 'tbFiscalizacao.idFiscalizacao = ?' => $idFiscalizacao), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
+        $OrgaoFiscalizadorDao = new \OrgaoFiscalizador();
+        $ArquivoFiscalizacaoDao = new \ArquivoFiscalizacao();
 
-            $OrgaoFiscalizadorDao = new \OrgaoFiscalizador();
-            if ($idFiscalizacao) {
-                $dadosOrgaos = $OrgaoFiscalizadorDao->dadosOrgaos(array('tbOF.idFiscalizacao = ?' => $idFiscalizacao));
-            }
-            $ArquivoFiscalizacaoDao = new \ArquivoFiscalizacao();
-            if ($idFiscalizacao) {
-                $arquivos = $ArquivoFiscalizacaoDao->buscarArquivo(array('arqfis.idFiscalizacao = ?' => $idFiscalizacao));
-            }
-            $RelatorioFiscalizacaoDAO = new \RelatorioFiscalizacao();
-            $relatorioFiscalizacao = $RelatorioFiscalizacaoDAO->buscaRelatorioFiscalizacao($idFiscalizacao);
-
+        if ($idFiscalizacao) {
+            $arquivos = $ArquivoFiscalizacaoDao->buscarArquivo(array('arqfis.idFiscalizacao = ?' => $idFiscalizacao));
+            $dadosOrgaos = $OrgaoFiscalizadorDao->dadosOrgaos(array('tbOF.idFiscalizacao = ?' => $idFiscalizacao));
         }
-        $resultArray['locaisFiscalizacao'] = $this->montaLocaisFiscalizacao($infoProjeto);
+
+        $RelatorioFiscalizacaoDAO = new \RelatorioFiscalizacao();
+        $relatorioFiscalizacao = $RelatorioFiscalizacaoDAO->buscaRelatorioFiscalizacao($idFiscalizacao);
+
+        $resultArray['locaisFiscalizacao'] = $this->montaLocaisFiscalizacao($dadosLocalizacoes);
+        xd($resultArray['locaisFiscalizacao']);
         $resultArray['oficializarFiscalizacao'] = $this->montaOficializarFiscalizacao($infoProjeto);
         $resultArray['arquivosFiscalizacao'] = $this->montaArquivosFiscalizacao($arquivos);
         $resultArray['fiscalizacaoConcluidaParecer'] = $this->montaFiscalizacaoConcluidaParecer($relatorioFiscalizacao, $infoProjeto[0]['dtInicioFiscalizacaoProjeto']);
@@ -114,9 +109,9 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
     {
         foreach ($dados as $item) {
             $locaisFiscalizacao[] = [
-                'regiao' => $item['Regiao'],
-                'uf' => $item['uf'],
-                'cidade' => $item['cidade'],
+                'regiao' => $item->Regiao,
+                'uf' => $item->Descricao,
+                'cidade' => $item->Municipio,
             ];
 
         }
