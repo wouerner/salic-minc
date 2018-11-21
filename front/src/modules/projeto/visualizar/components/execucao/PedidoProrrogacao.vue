@@ -18,7 +18,7 @@
                     <td class="text-xs-right">{{ props.item.DtPedido | formatarData }}</td>
                     <td class="text-xs-right">{{ props.item.DtInicio | formatarData }}</td>
                     <td class="text-xs-right">{{ props.item.DtFinal | formatarData }}</td>
-                    <td class="text-xs-left">{{ props.item.Observacao }}</td>
+                    <td class="text-xs-left" v-html="props.item.Observacao"></td>
                     <td class="text-xs-left">{{ props.item.Estado }}</td>
                     <td class="text-xs-left">{{ props.item.Usuario }}</td>
                 </template>

@@ -232,7 +232,7 @@ const routes = [
                 },
             },
             {
-                path: 'dados-readequacao',
+                path: 'readequacoes',
                 name: 'DadosReadequacoes',
                 component: DadosReadequacoes,
                 meta: {

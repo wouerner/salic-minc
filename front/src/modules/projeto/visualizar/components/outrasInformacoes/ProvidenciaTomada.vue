@@ -9,15 +9,21 @@
                     :items="dados.providenciaTomada"
                     class="elevation-1 container-fluid"
                     rows-per-page-text="Items por Página"
+                    :pagination.sync="pagination"
+                    :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
                     no-data-text="Nenhum dado encontrado"
            >
                 <template slot="items" slot-scope="props">
-                    <td style="width: 190px" class="text-xs-center">{{ props.item.DtSituacao }}</td>
-                    <td style="width: 50px"  class="text-xs-center">{{ props.item.Situacao }}</td>
-                    <td style="width: 700px" class="text-xs-center">{{ props.item.ProvidenciaTomada }}</td>
-                    <td style="width: 190px" class="text-xs-center" v-if="props.item.cnpjcpf">{{ props.item.cnpjcpf | cnpjFilter }}</td>
-                    <td style="width: 190px" class="text-xs-center" v-else>Nao se aplica.</td>
-                    <td class="text-xs-center">{{ props.item.usuario }}</td>
+                    <td class="text-xs-right">{{ props.item.DtSituacao }}</td>
+                    <td class="text-xs-right">{{ props.item.Situacao }}</td>
+                    <td class="text-xs-left">{{ props.item.ProvidenciaTomada }}</td>
+                    <td class="text-xs-right" v-if="props.item.cnpjcpf">
+                        {{ props.item.cnpjcpf | cnpjFilter }}
+                    </td>
+                    <td class="text-xs-left" v-else>
+                        Nao se aplica.
+                    </td>
+                    <td class="text-xs-left">{{ props.item.usuario }}</td>
                 </template>
                 <template slot="pageText" slot-scope="props">
                     Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
@@ -43,6 +49,7 @@
             return {
                 search: '',
                 pagination: {
+                    rowsPerPage: 10,
                     sortBy: 'fat',
                 },
                 selected: [],
@@ -50,17 +57,17 @@
                 headers: [
                     {
                         text: 'DT. SITUAÇÃO',
-                        align: 'center',
+                        align: 'right',
                         value: 'DtSituacao',
                     },
                     {
                         text: 'SITUAÇÃO',
-                        align: 'center',
+                        align: 'right',
                         value: 'Situacao',
                     },
                     {
                         text: 'PROVIDÊNCIA TOMADA',
-                        align: 'center',
+                        align: 'left',
                         value: 'ProvidenciaTomada',
                     },
                     {
@@ -70,7 +77,7 @@
                     },
                     {
                         text: 'NOME',
-                        align: 'center',
+                        align: 'left',
                         value: 'usuario',
                     },
                 ],
