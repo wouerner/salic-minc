@@ -126,7 +126,7 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
     public function visualizarDiligenciaProjeto()
     {
         $idPronac = $this->request->idPronac;
-        $idDiligencia = (int) $this->request->idDiligencia;
+        $idDiligencia = (int) $this->request->id;
 
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
