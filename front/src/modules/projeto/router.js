@@ -24,6 +24,7 @@ import Tramitacao from './visualizar/components/outrasInformacoes/Tramitacao';
 import MarcasAnexadas from './visualizar/components/execucao/MarcasAnexadas';
 import DadosReadequacoes from './visualizar/components/execucao/DadosReadequacoes';
 import PedidoProrrogacao from './visualizar/components/execucao/PedidoProrrogacao';
+import DadosFiscalizacao from './visualizar/components/execucao/DadosFiscalizacao';
 
 Vue.use(Router);
 
@@ -244,6 +245,14 @@ const routes = [
                 component: PedidoProrrogacao,
                 meta: {
                     title: 'Pedido de Prorrogação',
+                },
+            },
+            {
+                path: 'dados-fiscalizacao',
+                name: 'DadosFiscalizacao',
+                component: DadosFiscalizacao,
+                meta: {
+                    title: 'Dados Fiscalizacao',
                 },
             },
         ],
