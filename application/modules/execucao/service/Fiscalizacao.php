@@ -96,6 +96,7 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
                 'dtFim' => $objDateTimeDtFim,
                 'cpfTecnico' => $item['cpfTecnico'],
                 'nmTecnico' => $item['nmTecnico'],
+                'idFiscalizacao' => $item['idFiscalizacao']
             ];
 
         }
