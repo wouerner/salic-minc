@@ -8,7 +8,7 @@
                 :size="70"
                 :width="7"
                 :value="value"
-                color="teal"
+                color="primary"
         >
             {{ value }}
         </v-progress-circular>
@@ -34,10 +34,10 @@
         mounted() {
             this.interval = setInterval(() => {
                 if (this.value === 100) {
-                    return (this.value = 0)
+                    return (this.value = 0);
                 }
-                this.value += 10
-            }, 1000)
-        }
+                this.value += 10;
+            }, 1000);
+        },
     };
 </script>
