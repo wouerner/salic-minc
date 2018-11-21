@@ -4899,8 +4899,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
 
     /**
      * @deprecated migrado para nova estrutura de Rest e Service >
-     * application/modules/execucao/controllers/MarcasAnexadasRestController.php
-     * application/modules/execucao/service/MarcasAnexadas.php
+     * application/modules/execucao/controllers/PedidoProrrogacaoRestController.php
+     * application/modules/execucao/service/PedidoProrrogacao.php
      */
     public function pedidoProrrogacaoAction()
     {

@@ -1,5 +1,5 @@
 <?php
-//caminho do Diretorio da service com o nome da classe!
+
 use Application\Modules\Execucao\Service\PedidoProrrogacao\PedidoProrrogacao as PedidoProrrogacaoService;
 
 class Execucao_PedidoProrrogacaoRestController extends MinC_Controller_Rest_Abstract

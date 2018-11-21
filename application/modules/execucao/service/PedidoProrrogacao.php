@@ -27,16 +27,9 @@ class PedidoProrrogacao
             $idPronac = \Seguranca::dencrypt($idPronac);
         }
 
-        //****** Dados do Projeto - Cabecalho *****//
-//        $projetos = new Projetos();
-//        $DadosProjeto = $projetos->dadosProjeto(array('idPronac = ?' => $idpronac))->current();
-//        $this->view->DadosProjeto = $DadosProjeto;
-
-        //****** Lista de Prorroga��es *****//
         $prorrogacao = new \Prorrogacao();
-        $DadosProrrogacoes = $prorrogacao->buscarProrrogacoes($idPronac)->toArray();
-        return ($DadosProrrogacoes);
-//        $this->view->DadosProrrogacoes = $DadosProrrogacoes;
+        $dadosProrrogacoes = $prorrogacao->buscarProrrogacoes($idPronac)->toArray();
+        return $dadosProrrogacoes;
     }
 }
 
