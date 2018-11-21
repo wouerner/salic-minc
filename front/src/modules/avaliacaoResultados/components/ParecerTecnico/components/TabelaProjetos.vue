@@ -43,6 +43,10 @@
                             :proximo="componentes.proximo"
                             :idTipoDoAtoAdministrativo="componentes.idTipoDoAtoAdministrativo"
                             :usuario="componentes.usuario"
+                            :tecnico="{
+                               idAgente: props.item.idAgente,
+                               nome: props.item.usu_nome
+                            }"
                         >
                         </component>
                     </template>
@@ -68,7 +72,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
     name: 'TabelaProjetos',
