@@ -20,8 +20,8 @@
                         </v-tooltip>
                     </v-btn>
                 </td>
-                <td class="text-xs-center">{{ props.item.dtAvaliacao }}</td>
-                <td class="text-xs-center">{{ props.item.tipoDiligencia }}</td>
+                <td class="text-xs-right">{{ props.item.dtAvaliacao }}</td>
+                <td class="text-xs-left" v-html="props.item.tipoDiligencia"></td>
             </template>
             <template slot="pageText" slot-scope="props">
                 Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
@@ -31,7 +31,7 @@
         <v-dialog v-model="dialog" width="80%">
             <v-card>
                 <v-card-text v-if="Object.keys(dadosDiligencia).length > 0">
-                    <v-container fluid>
+                    <v-container fluid>'
                         <div v-if="dadosDiligencia.dsAvaliacao">
                             <v-layout justify-space-around row wrap>
                                 <v-flex lg12 dark>
@@ -98,7 +98,7 @@
                     },
                     {
                         text: 'TIPO DE DILIGÊNCIA',
-                        align: 'center',
+                        align: 'left',
                         value: 'tipoDiligencia',
                     },
                 ],
