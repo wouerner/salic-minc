@@ -6,8 +6,8 @@
         <v-flex v-else>
             <v-expansion-panel popout focusable>
                 <v-expansion-panel-content class="elevation-1">
-                    <v-layout slot="header">
-                        <v-icon class="mr-3 ">perm_media</v-icon>
+                    <v-layout slot="header" class="primary--text">
+                        <v-icon class="mr-3 primary--text">perm_media</v-icon>
                         Diligência Proposta
                     </v-layout>
                     <v-card>
@@ -22,8 +22,8 @@
                 </v-expansion-panel-content>
 
                 <v-expansion-panel-content class="elevation-1">
-                    <v-layout slot="header">
-                        <v-icon class="mr-3 ">perm_media</v-icon>
+                    <v-layout slot="header" class="primary--text">
+                        <v-icon class="mr-3 primary--text">perm_media</v-icon>
                         Diligências da Adequação do Projeto
                     </v-layout>
                     <v-card>
@@ -38,8 +38,8 @@
                 </v-expansion-panel-content>
 
                 <v-expansion-panel-content class="elevation-1">
-                    <v-layout slot="header">
-                        <v-icon class="mr-3 ">perm_media</v-icon>
+                    <v-layout slot="header" class="primary--text">
+                        <v-icon class="mr-3 primary--text">perm_media</v-icon>
                         Diligência Projeto
                     </v-layout>
                     <v-card>

@@ -10,8 +10,8 @@
                     v-for="(dado, index) in dadosIn2013"
                     :key="index"
                 >
-                    <v-layout slot="header">
-                        <v-icon class="mr-3">subject</v-icon>
+                    <v-layout slot="header" class="primary--text">
+                        <v-icon class="mr-3 primary--text">subject</v-icon>
                         <span>{{dado.Produto}}</span>
                     </v-layout>
                     <v-container fluid>
