@@ -64,12 +64,12 @@
 </template>
 
 <script>
-    import Vue from 'vue';
-    import _ from 'lodash';
-    import { mapActions, mapGetters } from 'vuex';
-    import Data from '../../../../filters/date';
+import Vue from 'vue';
+import _ from 'lodash';
+import { mapActions, mapGetters } from 'vuex';
+import Data from '../../../../filters/date';
 
-    Vue.filter('date', Data);
+Vue.filter('date', Data);
 
 export default {
     name: 'HistoricoDiligencias',
