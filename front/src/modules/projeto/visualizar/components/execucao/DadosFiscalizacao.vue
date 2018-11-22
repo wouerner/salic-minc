@@ -54,7 +54,7 @@
                                         <v-flex xs4 offset-xs1>
                                             <p><b>REGIAO</b></p>
                                         </v-flex>
-                                        <v-flex xs4 offset-xs1>
+                                        <v-flex xs4 offset-xs1 class="pl-4">
                                             <p><b>UF</b></p>
                                         </v-flex>
                                         <v-flex xs4 offset-xs1>
@@ -75,7 +75,7 @@
                                 </v-container>
                             </v-card>
                         </v-timeline-item>
-                        <v-timeline-item
+                        <v-timeline-item  class="justify-center"
                         fill-dot
                         right
                         >
@@ -123,7 +123,7 @@
                         </v-timeline-item>
                         <v-timeline-item
                         fill-dot
-                        right
+                        left
                         small
                         >
                         <v-card>
