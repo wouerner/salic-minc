@@ -107,7 +107,7 @@
                                         </v-layout>
                                     </div>
                                     <div v-if="dado.siEncaminhamento === 15">
-                                        <v-list v-for="parecer in dado.pareceres">
+                                        <v-list v-for="(parecer, index) in dado.pareceres" :key="index">
                                             <v-layout row justify-space-between>
                                                 <v-card>
                                                     <v-card-text>
