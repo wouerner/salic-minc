@@ -151,7 +151,21 @@
 
                                                 <v-flex md12 xs12 mb-4>
                                                     <v-card>
-                                                        <v-textarea
+                                                        <!-- <EditorTexto
+                                                            @text-change="inputParecer($event)"
+                                                            :value="getParecer.dsParecer"
+                                                        >                                      
+                                                        </EditorTexto> -->
+
+                                                        <vue-editor
+                                                            :editorToolbar="customToolbar"
+                                                            :placeholder="'Texto do Parecer *'"
+                                                            :value="getParecer.dsParecer"
+                                                            @text-change="inputParecer($event)"
+                                                        >
+                                                        </vue-editor>
+
+                                                        <!-- <v-textarea
                                                             :value="getParecer.dsParecer"
                                                             @input="inputParecer($event)"
                                                             :rules="parecerRules"
@@ -160,7 +174,7 @@
                                                             height="200px"
                                                             required="required"
                                                             outline
-                                                        ></v-textarea>
+                                                        ></v-textarea> -->
                                                     </v-card>
                                                 </v-flex>
 
@@ -182,6 +196,9 @@ import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import cnpjFilter from '@/filters/cnpj';
 import VueCurrencyFilter from 'vue-currency-filter';
+import { VueEditor } from "vue2-editor";
+// import EditorTexto from './components/EditorTexto'
+
 
 Vue.use(VueCurrencyFilter, {
     symbol: 'R$',
@@ -191,6 +208,9 @@ Vue.use(VueCurrencyFilter, {
 
 export default {
     name: 'EmitirParecer',
+    components: {
+        VueEditor
+    },
     data() {
         return {
             tipo: true,
@@ -218,7 +238,18 @@ export default {
                     text: 'Aprovação com Ressalva',
                 },
             ],
+            customToolbar:  [
+                    [{ 'font': [] }],
+                    [{ 'header': [false, 1, 2, 3, 4, 5, 6, ] }],
+                    [{ 'size': ['small', false, 'large', 'huge'] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{'align': ''}, {'align': 'center'}, {'align': 'right'}, {'align': 'justify'}],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'indent': '-1'}, { 'indent': '+1' }],
+                    [{ 'color': [] }],
+            ],
             parecerData: {},
+
         };
     },
     methods: {
@@ -253,6 +284,8 @@ export default {
             if (this.parecerData.dsParecer) {
                 data.dsParecer = this.parecerData.dsParecer;
             }
+            console.log('this: ' + this.getParecer.dsParecer);
+            console.log('data: ' + data.dsParecer);
 
             this.salvar(data);
             /** Descomentar linha após migração da lista para o VUEJS */
