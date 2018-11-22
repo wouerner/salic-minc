@@ -51,24 +51,24 @@
                                 </v-card-title>
                                 <v-container>
                                     <v-layout>
-                                        <v-flex xs4>
+                                        <v-flex xs4 offset-xs1>
                                             <p><b>REGIAO</b></p>
                                         </v-flex>
-                                        <v-flex xs4>
+                                        <v-flex xs4 offset-xs1>
                                             <p><b>UF</b></p>
                                         </v-flex>
-                                        <v-flex xs4>
+                                        <v-flex xs4 offset-xs1>
                                             <p><b>CIDADE</b></p>
                                         </v-flex>
                                     </v-layout>
                                     <v-layout v-for="(dado, index) in dadosVisualizacao.locaisFiscalizacao" :key="index">
-                                        <v-flex xs4>
+                                        <v-flex xs4 offset-xs1>
                                             <p>{{ dado.regiao }}</p>
                                         </v-flex>
-                                        <v-flex xs4>
+                                        <v-flex xs4 offset-xs1>
                                             <p>{{ dado.uf }}</p>
                                         </v-flex>
-                                        <v-flex xs4>
+                                        <v-flex xs4 offset-xs1>
                                             <p>{{ dado.cidade }}</p>
                                         </v-flex>
                                     </v-layout>
@@ -81,8 +81,44 @@
                         >
                             <v-card>
                                 <v-card-title class="primary justify-center">
-                                    <h2 class="display-1 white--text font-weight-light">Titulo</h2>
+                                    <h2 class="display-1 white--text font-weight-light">Oficializar Fiscalização</h2>
                                 </v-card-title>
+                            </v-card>
+                        </v-timeline-item>
+                        <v-timeline-item
+                        color="amber lighten-1"
+                        fill-dot
+                        right
+                        small
+                        >
+                            <v-card>
+                                <v-card-title class="amber lighten-1">
+                                <h2 class="display-1 mr-3 white--text font-weight-light">Datas / Demandante</h2>
+                                </v-card-title>
+                                <v-container v-for="(dado, index) in dadosVisualizacao.oficializarFiscalizacao" :key="index">
+                                    <v-layout >
+                                        <v-flex xs6 offset-xs2>
+                                            <p><b>Dt. Inicio</b></p>
+                                            {{ dado.dtInicio }} <br>
+                                        </v-flex>
+                                        <v-flex xs6 offset-xs2>
+                                            <p><b>Dt. Fim</b></p>
+                                            {{ dado.dtFim }} <br>
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout >
+                                        <v-flex xs6 offset-xs2>
+                                            <br><p><b>Demandante da Fiscalização</b></p>
+                                            <p v-if="dado.tpDemandante == 0" class="pl-5 justify-center">SEFIC</p>
+                                            <p v-else-if="dado.tpDemandante == 1">SAV</p>
+                                        </v-flex>
+                                        <v-flex xs6 offset-xs2>
+                                            <br><p><b>Data de Resposta</b></p>
+                                            <p v-if="dado.dtResposta.length > 1"> {{ dado.dtResposta }} </p>
+                                            <p v-else-if="dado.dtResposta.length == 1" class="pl-5 justify-center"> - </p>
+                                        </v-flex>
+                                    </v-layout>
+                                </v-container>
                             </v-card>
                         </v-timeline-item>
                         <v-timeline-item
@@ -92,14 +128,25 @@
                         >
                         <v-card>
                             <v-card-title style="background-color: #44CC38;">
-                                <h2 class="display-1 white--text font-weight-light">Title 1</h2>
+                                <h2 class="display-1 white--text font-weight-light">Identificação do Técnico</h2>
                             </v-card-title>
-                            <v-container>
-                            <v-layout>
-                                <v-flex xs10>
-                                Lorem ipsum dolor sit amet, no nam oblique veritus. Commune scaevola imperdiet nec ut, sed euismod convenire principes at. Est et nobis iisque percipit.
-                                </v-flex>
-                            </v-layout>
+                            <v-container v-for="(dado, index) in dadosVisualizacao.oficializarFiscalizacao" :key="index">
+                                <v-layout>
+                                    <v-flex xs6 offset-xs2>
+                                        <p><b>CPF</b></p>
+                                        {{ dado.cpfTecnico }} <br>
+                                    </v-flex>
+                                    <v-flex xs6 offset-xs2>
+                                        <p><b>Técnico</b></p>
+                                        {{ dado.nmTecnico }} <br>
+                                    </v-flex>
+                                </v-layout>
+                                <v-layout>
+                                    <v-flex xs10 offset-xs4>
+                                        <br><p><b>Dados para Fiscalização</b></p>
+                                        {{ dado.dsFiscalizacaoProjeto }}    
+                                    </v-flex>
+                                </v-layout>
                             </v-container>
                         </v-card>
                         </v-timeline-item>
