@@ -92,10 +92,11 @@
                         right
                         small
                         >
+                            <span
+                                slot="opposite"
+                                :class="`headline font-weight-bold green--text`"
+                            >Datas / Demandante</span>
                             <v-card>
-                                <v-card-title class="amber lighten-1">
-                                <h2 class="display-1 mr-3 white--text font-weight-light">Datas / Demandante</h2>
-                                </v-card-title>
                                 <v-container v-for="(dado, index) in dadosVisualizacao.oficializarFiscalizacao" :key="index">
                                     <v-layout >
                                         <v-flex xs6 offset-xs2>
@@ -127,10 +128,11 @@
                         left
                         small
                         >
+                        <span
+                                slot="opposite"
+                                :class="`headline font-weight-bold green--text`"
+                            >Identificação do Técnico</span>
                         <v-card>
-                            <v-card-title style="background-color: #44CC38;" class="justify-end">
-                                <h2 class="display-1 white--text font-weight-light">Identificação do Técnico</h2>
-                            </v-card-title>
                             <v-container v-for="(dado, index) in dadosVisualizacao.oficializarFiscalizacao" :key="index">
                                 <v-layout>
                                     <v-flex xs6 offset-xs2>
@@ -169,10 +171,11 @@
                         fill-dot
                         right
                         >
+                            <span
+                                slot="opposite"
+                                :class="`headline font-weight-bold green--text`"
+                            >Resumo da Execução</span>
                             <v-card>
-                                <v-card-title class="cyan lighten-1">
-                                    <h2 class="display-1 white--text font-weight-light">Resumo da Execução</h2>
-                                </v-card-title>
                                 <v-container v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
                                     <v-layout>
                                         <v-flex xs10 offset-xs1>
@@ -206,10 +209,11 @@
                         fill-dot
                         left
                         >
+                            <span
+                                slot="opposite"
+                                :class="`headline font-weight-bold green--text`"
+                            >Utilização de Recursos</span>
                             <v-card>
-                                <v-card-title class="cyan lighten-1">
-                                    <h2 class="display-1 white--text font-weight-light">Utilização de Recursos</h2>
-                                </v-card-title>
                                 <v-container v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
                                     <v-layout>
                                         <v-flex xs10 offset-xs1>
@@ -293,6 +297,74 @@
                                         <v-flex xs10 offset-xs1>
                                             <br><p><b>O saldo verificado foi recolhido ao FNC?</b></p>
                                                 {{ dado.utilizacaoRecursos[index].stSaldoVerificacaoFNC }}
+                                        </v-flex>
+                                    </v-layout>
+                                </v-container>
+                            </v-card>
+                        </v-timeline-item>
+                        <v-timeline-item
+                        color="cyan lighten-1"
+                        fill-dot
+                        right
+                        >
+                            <span
+                                slot="opposite"
+                                :class="`headline font-weight-bold green--text`"
+                            >Comprovantes Fiscais de Despesa</span>
+                            <v-card>
+                                <v-container v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>O proponente/convenente tem mantido a documentação relativa ao projeto em arquivo próprio?</b></p>
+                                                {{ dado.comprovantesDespesa[index].stProcessoDocumentado }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>A documentação está completa e arquivada?</b></p>
+                                                {{ dado.comprovantesDespesa[index].stDocumentacaoCompleta }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Guardam conformidade entre o executado e o aprovado?</b></p>
+                                                {{ dado.comprovantesDespesa[index].stConformidadeExecucao }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Identificam o projeto com o número do Pronac/Convênio?</b></p>
+                                                {{ dado.comprovantesDespesa[index].stIdentificaProjeto }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Existem despesas anteriores ao prazo de vigência?</b></p>
+                                                {{ dado.comprovantesDespesa[index].stDespesaAnterior }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Existem despesas posteriores ao prazo de vigência?</b></p>
+                                                {{ dado.comprovantesDespesa[index].stDespesaPosterior }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>As despesas coincidem com as informadas na relação de pagamentos?</b></p>
+                                                {{ dado.comprovantesDespesa[index].stDespesaCoincidem }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>As despesas estão devidamente relacionadas no extrato bancário?</b></p>
+                                                {{ dado.comprovantesDespesa[index].stDespesaRelacionada }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Os comprovantes fiscais estão com o atesto do recebimento?</b></p>
+                                                {{ dado.comprovantesDespesa[index].stComprovanteFiscal }}
                                         </v-flex>
                                     </v-layout>
                                 </v-container>
