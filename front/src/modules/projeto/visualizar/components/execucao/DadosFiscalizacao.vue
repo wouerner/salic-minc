@@ -441,53 +441,158 @@
                                     <v-layout>
                                         <v-flex xs10 offset-xs1>
                                             <br><p><b>Observações</b></p>
-                                            <p v-html="dado.execucao[index].dsObservacao"></p>
+                                            <div v-html="dado.execucao[index].dsObservacao"></div>
                                         </v-flex>
                                     </v-layout>
                                 </v-container>
                             </v-card>
                         </v-timeline-item>
 
-                        <v-timeline-item
-                        color="red lighten-1"
-                        fill-dot
-                        left
-                        small
-                        >
-                        <v-card>
-                            <v-card-title class="red lighten-1 justify-end">
-                            <h2 class="display-1 mr-3 white--text font-weight-light">Title 4</h2>
-                            </v-card-title>
-                            <v-container>
-                            <v-layout>
-                                <v-flex>
-                                    <fieldset>
-                                        <legend>Resumo</legend>
-                                        Lorem ipsum dolor sit amet, no nam oblique veritus. Commune scaevola imperdiet nec ut, sed euismod convenire principes at. Est et nobis iisque percipit, an vim zril disputando voluptatibus.
-                                    </fieldset>
-                                </v-flex>
-                            </v-layout>
-                            </v-container>
-                        </v-card>
-                        </v-timeline-item>
+                        <div v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
+                            <v-timeline-item
+                            color="cyan lighten-1"
+                            fill-dot
+                            left
+                            >
+                                <span
+                                    slot="opposite"
+                                    :class="`headline font-weight-bold green--text`"
+                                >Empregos gerados em decorrência do projeto</span>
+                                <v-card>
+                                    <v-container >
+                                        <v-layout>
+                                            <v-flex xs4 offset-xs1>
+                                                <br><p><b>Diretos: </b>{{ dado.empregosGeradosProjeto[index].qtEmpregoDireto }}</p>
+                                            </v-flex>
+                                            <v-flex xs4 offset-xs1>
+                                                <br><p><b>Indiretos: </b>{{ dado.empregosGeradosProjeto[index].qtEmpregoIndireto }}</p>
+                                            </v-flex>
+                                            <v-flex xs4 offset-xs1>
+                                                <br><p><b>Total: </b>{{ dado.empregosGeradosProjeto[index].qtEmpregoTotal }}</p>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </v-card>
+                            </v-timeline-item>
 
+                            <v-timeline-item
+                            color="cyan lighten-1"
+                            fill-dot
+                            right
+                            >
+                                <span
+                                    slot="opposite"
+                                    :class="`headline font-weight-bold green--text`"
+                                >Evidências</span>
+                                <v-card>
+                                    <v-container >
+                                        <v-layout>
+                                            <v-flex xs10 offset-xs1>
+                                                <div v-html="dado.empregosGeradosProjeto[index].dsEvidencia"></div>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </v-card>
+                            </v-timeline-item>
+
+                            <v-timeline-item
+                            color="cyan lighten-1"
+                            fill-dot
+                            left
+                            >
+                                <span
+                                    slot="opposite"
+                                    :class="`headline font-weight-bold green--text`"
+                                >Recomendações da Equipe</span>
+                                <v-card>
+                                    <v-container >
+                                        <v-layout>
+                                            <v-flex xs10 offset-xs1>
+                                                <div v-html="dado.empregosGeradosProjeto[index].dsRecomendacaoEquipe"></div>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </v-card>
+                            </v-timeline-item>
+
+                            <v-timeline-item
+                            color="cyan lighten-1"
+                            fill-dot
+                            right
+                            >
+                                <span
+                                    slot="opposite"
+                                    :class="`headline font-weight-bold green--text`"
+                                >Conclusão da Equipe</span>
+                                <v-card>
+                                    <v-container >
+                                        <v-layout>
+                                            <v-flex xs10 offset-xs1>
+                                                <div v-html="dado.empregosGeradosProjeto[index].dsConclusaoEquipe"></div>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </v-card>
+                            </v-timeline-item>
+
+                            <v-timeline-item
+                            color="cyan lighten-1"
+                            fill-dot
+                            left
+                            >
+                                <span
+                                    slot="opposite"
+                                    :class="`headline font-weight-bold green--text`"
+                                >Parecer da Fiscalização</span>
+                                <v-card>
+                                    <v-container >
+                                        <v-layout>
+                                            <v-flex xs10 offset-xs1>
+                                                <div v-html="dado.empregosGeradosProjeto[index].dsParecerTecnico"></div>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </v-card>
+                            </v-timeline-item>
+
+                            <v-timeline-item
+                            color="cyan lighten-1"
+                            fill-dot
+                            right
+                            >
+                                <span
+                                    slot="opposite"
+                                    :class="`headline font-weight-bold green--text`"
+                                >Parecer do Coordenador</span>
+                                <v-card>
+                                    <v-container >
+                                        <v-layout>
+                                            <v-flex xs10 offset-xs1>
+                                                <div v-html="dado.empregosGeradosProjeto[index].dsParecer"></div>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </v-card>
+                            </v-timeline-item>
+                        </div>
                         <v-timeline-item
-                        color="green lighten-1"
-                        fill-dot
-                        right
-                        >
-                        <v-card>
-                            <v-card-title class="green lighten-1">
-                            <h2 class="display-1 white--text font-weight-light">Title 5</h2>
-                            </v-card-title>
-                            <v-container>
-                            <v-layout>
-                                <v-flex>
-                                Lorem ipsum dolor sit amet, no nam oblique veritus. Commune scaevola imperdiet nec ut, sed euismod convenire principes at. Est et nobis iisque percipit, an vim zril disputando voluptatibus, vix an salutandi sententiae.
-                                </v-flex>
-                            </v-layout>
-                            </v-container>
-                        </v-card>
+                            color="cyan lighten-1"
+                            fill-dot
+                            left
+                            >
+                                <span
+                                    slot="opposite"
+                                    :class="`headline font-weight-bold green--text`"
+                                >Anexos</span>
+                                <v-card>
+                                    <v-container v-for="(dado, index) in dadosVisualizacao.arquivosFiscalizacao" :key="index">
+                                        <v-layout>
+                                            <v-flex xs10 offset-xs1>
+                                                <a :href="`/upload/abrir?id=${dado.idArquivo}`">{{ dado.nmArquivo }}</a>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </v-card>
                         </v-timeline-item>
                     </v-timeline>
                 </v-container>
