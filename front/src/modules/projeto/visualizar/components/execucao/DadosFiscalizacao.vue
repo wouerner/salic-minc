@@ -45,10 +45,11 @@
                         fill-dot
                         left
                         >
+                            <span
+                                slot="opposite"
+                                :class="`headline font-weight-bold green--text`"
+                            >Locais</span>
                             <v-card>
-                                <v-card-title class="primary justify-center">
-                                <h2 class="display-1 white--text font-weight-light">Locais</h2>
-                                </v-card-title>
                                 <v-container>
                                     <v-layout>
                                         <v-flex xs4 offset-xs1>
@@ -127,7 +128,7 @@
                         small
                         >
                         <v-card>
-                            <v-card-title style="background-color: #44CC38;">
+                            <v-card-title style="background-color: #44CC38;" class="justify-end">
                                 <h2 class="display-1 white--text font-weight-light">Identificação do Técnico</h2>
                             </v-card-title>
                             <v-container v-for="(dado, index) in dadosVisualizacao.oficializarFiscalizacao" :key="index">
@@ -144,34 +145,23 @@
                                 <v-layout>
                                     <v-flex xs10 offset-xs4>
                                         <br><p><b>Dados para Fiscalização</b></p>
-                                        {{ dado.dsFiscalizacaoProjeto }}    
+                                        {{ dado.dsFiscalizacaoProjeto }}
                                     </v-flex>
                                 </v-layout>
                             </v-container>
                         </v-card>
                         </v-timeline-item>
 
-                        <v-timeline-item
+                        <v-timeline-item class="justify-center"
                         color="amber lighten-1"
                         fill-dot
-                        left
                         small
                         >
-                        <v-card>
-                            <v-card-title class="amber lighten-1 justify-end">
-                            <h2 class="display-1 mr-3 white--text font-weight-light">Title 2</h2>
-                            </v-card-title>
-                            <v-container>
-                            <v-layout>
-                                <v-flex xs8>
-                                Lorem ipsum dolor sit amet, no nam oblique veritus. Commune scaevola imperdiet nec ut, sed euismod convenire principes at. Est et nobis iisque percipit.
-                                </v-flex>
-                                <v-flex xs4>
-                                Lorem ipsum dolor sit amet, no nam oblique veritus.
-                                </v-flex>
-                            </v-layout>
-                            </v-container>
-                        </v-card>
+                            <v-card>
+                                <v-card-title class="primary justify-center">
+                                    <h2 class="display-1 mr-3 white--text font-weight-light">Fiscalização Concluída para Parecer</h2>
+                                </v-card-title>
+                            </v-card>
                         </v-timeline-item>
 
                         <v-timeline-item
@@ -179,22 +169,134 @@
                         fill-dot
                         right
                         >
-                        <v-card>
-                            <v-card-title class="cyan lighten-1">
-                            <h2 class="display-1 white--text font-weight-light">Title 3</h2>
-                            </v-card-title>
-                            <v-container>
-                            <v-layout>
-                                <v-flex
-                                v-for="n in 3"
-                                :key="n"
-                                xs4
-                                >
-                                Lorem ipsum dolor sit amet, no nam oblique veritus no nam oblique.
-                                </v-flex>
-                            </v-layout>
-                            </v-container>
-                        </v-card>
+                            <v-card>
+                                <v-card-title class="cyan lighten-1">
+                                    <h2 class="display-1 white--text font-weight-light">Resumo da Execução</h2>
+                                </v-card-title>
+                                <v-container v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Ações Programadas</b></p>
+                                                {{ dado.resumoExecucao[index].dsAcoesProgramadas }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Ações Executadas</b></p>
+                                                {{ dado.resumoExecucao[index].dsAcoesExecutadas }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Benefícios Alcançados</b></p>
+                                                {{ dado.resumoExecucao[index].dsBeneficioAlcancado }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Dificuldades Encontradas</b></p>
+                                                {{ dado.resumoExecucao[index].dsDificuldadeEncontrada }}
+                                        </v-flex>
+                                    </v-layout>
+                                </v-container>
+                            </v-card>
+                        </v-timeline-item>
+                        <v-timeline-item
+                        color="cyan lighten-1"
+                        fill-dot
+                        left
+                        >
+                            <v-card>
+                                <v-card-title class="cyan lighten-1">
+                                    <h2 class="display-1 white--text font-weight-light">Utilização de Recursos</h2>
+                                </v-card-title>
+                                <v-container v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Foi apurado por unidade fiscalizadora ou auditora a aplicação irregular de recursos?</b></p>
+                                                {{ dado.utilizacaoRecursos[index].stApuracaoUFiscalizacao }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Comprovou a correta utilização dos recursos da contrapartida?</b></p>
+                                                {{ dado.utilizacaoRecursos[index].stComprovacaoUtilizacaoRecurso }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Há compatibilidade entre os recursos transferidos e a evolução do projeto?</b></p>
+                                                {{ dado.utilizacaoRecursos[index].stCompatibilidadeDesembolsoEvo }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Ocorreu despesas com multas, juros, taxas bancárias ou correção monetária?</b></p>
+                                                {{ dado.utilizacaoRecursos[index].stOcorreuDespesas }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Ocorreu pagamento de servidor público?</b></p>
+                                                {{ dado.utilizacaoRecursos[index].stPagamentoServidorPublico }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Ocorreu despesa com taxa de administração?</b></p>
+                                                {{ dado.utilizacaoRecursos[index].stDespesaAdministracao }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Há transferência de recurso para clubes/associações ou outras entidades congêneres?</b></p>
+                                                {{ dado.utilizacaoRecursos[index].stTransferenciaRecurso }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Há despesas com publicidade, salvo as de caráter educativo, informativo ou de orientação social?</b></p>
+                                                {{ dado.utilizacaoRecursos[index].stDespesasPublicidade }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Ocorreu aditamento prevendo alteração de objeto?</b></p>
+                                                {{ dado.utilizacaoRecursos[index].stOcorreuAditamento }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Os recursos de contrapartida foram depositados na conta do projeto?</b></p>
+                                                {{ dado.utilizacaoRecursos[index].stAplicadosRecursos }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Ocorreu aplicação de recursos em outra finalidade que não a do objeto pactuado?</b></p>
+                                                {{ dado.utilizacaoRecursos[index].stAplicacaoRecursosFinalidade }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Os recursos captados estão sendo aplicados em conformidade com a legislação vigente?</b></p>
+                                                {{ dado.utilizacaoRecursos[index].stRecursosCaptados }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Ocorreu saldo após o encerramento do projeto?</b></p>
+                                                {{ dado.utilizacaoRecursos[index].stSaldoAposEncerramento }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>O saldo verificado foi recolhido ao FNC?</b></p>
+                                                {{ dado.utilizacaoRecursos[index].stSaldoVerificacaoFNC }}
+                                        </v-flex>
+                                    </v-layout>
+                                </v-container>
+                            </v-card>
                         </v-timeline-item>
 
                         <v-timeline-item
@@ -210,7 +312,10 @@
                             <v-container>
                             <v-layout>
                                 <v-flex>
-                                Lorem ipsum dolor sit amet, no nam oblique veritus. Commune scaevola imperdiet nec ut, sed euismod convenire principes at. Est et nobis iisque percipit, an vim zril disputando voluptatibus.
+                                    <fieldset>
+                                        <legend>Resumo</legend>
+                                        Lorem ipsum dolor sit amet, no nam oblique veritus. Commune scaevola imperdiet nec ut, sed euismod convenire principes at. Est et nobis iisque percipit, an vim zril disputando voluptatibus.
+                                    </fieldset>
                                 </v-flex>
                             </v-layout>
                             </v-container>
