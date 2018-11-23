@@ -1519,8 +1519,8 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             } elseif ($this->_request->getParam('stAtendimento') == 'DP') {
                 // devolvida ao proponente
                 $r->siEncaminhamento = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE;
-                $r->stEstado = 0;
-                $r->stAtendimento = 'E';
+                $r->stEstado = 1;
+                $r->stAtendimento = 'N';
             } else {
                 // deferida
                 if ($this->_request->getParam('vinculada') == Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI || $this->_request->getParam('vinculada') == Orgaos::ORGAO_SAV_CAP) {
