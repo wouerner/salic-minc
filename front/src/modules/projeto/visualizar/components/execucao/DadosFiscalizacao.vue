@@ -113,13 +113,13 @@
                                     <v-layout >
                                         <v-flex xs6 offset-xs2>
                                             <br><p><b>Demandante da Fiscalização</b></p>
-                                            <p v-if="dado.tpDemandante == 0" class="pl-5 justify-center">SEFIC</p>
+                                            <p v-if="dado.tpDemandante == 0" class="justify-center">SEFIC</p>
                                             <p v-else-if="dado.tpDemandante == 1">SAV</p>
                                         </v-flex>
                                         <v-flex xs6 offset-xs2>
                                             <br><p><b>Data de Resposta</b></p>
                                             <p v-if="dado.dtResposta.length > 1"> {{ dado.dtResposta }} </p>
-                                            <p v-else-if="dado.dtResposta.length == 1" class="pl-5 justify-center"> - </p>
+                                            <p v-else-if="dado.dtResposta.length == 1" class="justify-center"> - </p>
                                         </v-flex>
                                     </v-layout>
                                 </v-container>
