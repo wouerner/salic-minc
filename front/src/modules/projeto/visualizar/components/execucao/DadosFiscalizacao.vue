@@ -76,6 +76,7 @@
                                 </v-container>
                             </v-card>
                         </v-timeline-item>
+
                         <v-timeline-item  class="justify-center"
                         fill-dot
                         right
@@ -86,6 +87,7 @@
                                 </v-card-title>
                             </v-card>
                         </v-timeline-item>
+
                         <v-timeline-item
                         color="amber lighten-1"
                         fill-dot
@@ -123,6 +125,7 @@
                                 </v-container>
                             </v-card>
                         </v-timeline-item>
+
                         <v-timeline-item
                         fill-dot
                         left
@@ -204,6 +207,7 @@
                                 </v-container>
                             </v-card>
                         </v-timeline-item>
+
                         <v-timeline-item
                         color="cyan lighten-1"
                         fill-dot
@@ -302,6 +306,7 @@
                                 </v-container>
                             </v-card>
                         </v-timeline-item>
+
                         <v-timeline-item
                         color="cyan lighten-1"
                         fill-dot
@@ -365,6 +370,78 @@
                                         <v-flex xs10 offset-xs1>
                                             <br><p><b>Os comprovantes fiscais estão com o atesto do recebimento?</b></p>
                                                 {{ dado.comprovantesDespesa[index].stComprovanteFiscal }}
+                                        </v-flex>
+                                    </v-layout>
+                                </v-container>
+                            </v-card>
+                        </v-timeline-item>
+
+                        <v-timeline-item
+                        color="cyan lighten-1"
+                        fill-dot
+                        left
+                        >
+                            <span
+                                slot="opposite"
+                                :class="`headline font-weight-bold green--text`"
+                            >Divulgação</span>
+                            <v-card>
+                                <v-container v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Ciência ao Poder legislativo?</b></p>
+                                                {{ dado.divulgacao[index].stCienciaLegislativo }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Contemplou as exigências legais?</b></p>
+                                                {{ dado.divulgacao[index].stExigenciaLegal }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Há material informativo do Projeto?</b></p>
+                                                {{ dado.divulgacao[index].stMaterialInformativo }}
+                                        </v-flex>
+                                    </v-layout>
+                                </v-container>
+                            </v-card>
+                        </v-timeline-item>
+
+                        <v-timeline-item
+                        color="cyan lighten-1"
+                        fill-dot
+                        right
+                        >
+                            <span
+                                slot="opposite"
+                                :class="`headline font-weight-bold green--text`"
+                            >Execução</span>
+                            <v-card>
+                                <v-container v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Alcançou a finalidade esperada?</b></p>
+                                                {{ dado.execucao[index].stFinalidadeEsperada }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>As metas/etapas do Plano de Trabalho foram executadas integralmente?</b></p>
+                                                {{ dado.execucao[index].stPlanoTrabalho }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>O projeto está sendo executado de acordo com o aprovado?</b></p>
+                                                {{ dado.execucao[index].stExecucaoAprovado }}
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout>
+                                        <v-flex xs10 offset-xs1>
+                                            <br><p><b>Observações</b></p>
+                                            <p v-html="dado.execucao[index].dsObservacao"></p>
                                         </v-flex>
                                     </v-layout>
                                 </v-container>
