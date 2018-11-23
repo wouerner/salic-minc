@@ -222,7 +222,7 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
             'stFinalidadeEsperada' => $this->statusFiscalizacao($dados['stFinalidadeEsperada']),
             'stPlanoTrabalho' => $this->statusFiscalizacao($dados['stPlanoTrabalho']),
             'stExecucaoAprovado' => $this->statusFiscalizacao($dados['stExecucaoAprovado']),
-            'dsObservacao' => $this->statusFiscalizacao($dados['dsObservacao']),
+            'dsObservacao' => $dados['dsObservacao'],
             ];
 
         $empregosGeradosProjeto[] = [
