@@ -3065,6 +3065,34 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $destinatario = (null !== $this->_request->getParam('destinatario')) ? $this->_request->getParam('destinatario') : null;
         $idUnidade = $this->_request->getParam('vinculada');
 
+        $tbDocumentoAssinaturaDbTable = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+        $servicoReadequacaoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\ReadequacaoAssinatura(
+            $this->grupoAtivo,
+            $this->auth
+        );        
+
+        $readequacao = $tbReadequacao->buscarDadosReadequacoes(['idReadequacao = ?' => $idReadequacao])->current();
+        $idTipoDoAto = $servicoReadequacaoAssinatura->obterAtoAdministrativoPorTipoReadequacao($readequacao['idTipoReadequacao']);
+        
+        $documentoAssinatura = $tbDocumentoAssinaturaDbTable->obterDocumentoAssinatura(
+            $readequacao['idPronac'],
+            $idTipoDoAto
+        );
+        
+        $data = [
+            'cdSituacao' => \Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA,
+            'stEstado' => \Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_INATIVO
+        ];
+        $where = [
+            'idDocumentoAssinatura = ?' => $documentoAssinatura['idDocumentoAssinatura'],
+        ];
+        
+        $update = $tbDocumentoAssinaturaDbTable->update(
+            $data,
+            $where
+        );
+        
         try {
             if (in_array($idUnidade, array(Orgaos::ORGAO_SAV_CAP, Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI))) {
                 // MUDANÇA DE TECNICO
