@@ -148,7 +148,7 @@
                                     </v-flex>
                                 </v-layout>
                                 <v-layout>
-                                    <v-flex xs10 offset-xs4>
+                                    <v-flex xs10 offset-xs2>
                                         <br><p><b>Dados para Fiscalização</b></p>
                                         {{ dado.dsFiscalizacaoProjeto }}
                                     </v-flex>
@@ -528,7 +528,8 @@
                                     <v-container >
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
-                                                <div v-html="dado.empregosGeradosProjeto[index].dsConclusaoEquipe"></div>
+                                                <div v-if="dado.empregosGeradosProjeto[index].dsConclusaoEquipe.length > 1" v-html="dado.empregosGeradosProjeto[index].dsConclusaoEquipe"></div>
+                                                <div v-else>Não se Aplica.</div>
                                             </v-flex>
                                         </v-layout>
                                     </v-container>
@@ -588,7 +589,7 @@
                                     <v-container v-for="(dado, index) in dadosVisualizacao.arquivosFiscalizacao" :key="index">
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
-                                                <a :href="`/upload/abrir?id=${dado.idArquivo}`">{{ dado.nmArquivo }}</a>
+                                                <a :href="`/upload/abrir?id=${dado.idArquivo}`"><v-icon color="black"> file_copy</v-icon>{{ dado.nmArquivo }}</a>
                                             </v-flex>
                                         </v-layout>
                                     </v-container>
