@@ -208,6 +208,48 @@
                             </v-card>
                         </v-timeline-item>
 
+                        <div v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
+                            <v-timeline-item
+                            v-if="dado.stDtDeCorte == 1"
+                            color="cyan lighten-1"
+                            fill-dot
+                            left
+                            >
+                                <span
+                                    slot="opposite"
+                                    :class="`headline font-weight-bold green--text`"
+                                >Situação do Convênio na Realização da Fiscalização</span>
+                                <v-card>
+                                    <v-container v-for="(dado, index) in dadosVisualizacao.stConvenioFiscalizacao" :key="index">
+                                        <v-layout>
+                                            <v-flex xs10 offset-xs1>
+                                                <br><p><b>Situação SIAFI</b></p>
+                                                    {{ dado.divulgacao[index].stSiafi }}
+                                            </v-flex>
+                                        </v-layout>
+                                        <v-layout>
+                                            <v-flex xs10 offset-xs1>
+                                                <br><p><b>Prestação de Contas Apresentada?</b></p>
+                                                    {{ dado.divulgacao[index].stPrestacaoContas }}
+                                            </v-flex>
+                                        </v-layout>
+                                        <v-layout>
+                                            <v-flex xs10 offset-xs1>
+                                                <br><p><b>Foram cumpridas as normas estabelecidas?</b></p>
+                                                    {{ dado.divulgacao[index].stCumpridasNormas }}
+                                            </v-flex>
+                                        </v-layout>
+                                        <v-layout>
+                                            <v-flex xs10 offset-xs1>
+                                                <br><p><b>Foi cumprido o prazo para entrega da prestação de contas?</b></p>
+                                                    {{ dado.divulgacao[index].stCumpridoPrazo }}
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </v-card>
+                            </v-timeline-item>
+                        </div>
+
                         <v-timeline-item
                         color="cyan lighten-1"
                         fill-dot
