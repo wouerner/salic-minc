@@ -42,12 +42,13 @@
 
                     <v-timeline>
                         <v-timeline-item
+                        color="green darken-3"
                         fill-dot
                         left
                         >
                             <span
                                 slot="opposite"
-                                :class="`headline font-weight-bold green--text`"
+                                :class="`headline font-weight-bold green--text text--darken-3`"
                             >Locais</span>
                             <v-card>
                                 <v-container>
@@ -89,14 +90,14 @@
                         </v-timeline-item>
 
                         <v-timeline-item
-                        color="amber lighten-1"
+                        color="deep-orange lighten-1"
                         fill-dot
                         right
                         small
                         >
                             <span
                                 slot="opposite"
-                                :class="`headline font-weight-bold green--text`"
+                                :class="`headline font-weight-bold deep-orange--text text--lighten-1`"
                             >Datas / Demandante</span>
                             <v-card>
                                 <v-container v-for="(dado, index) in dadosVisualizacao.oficializarFiscalizacao" :key="index">
@@ -127,13 +128,14 @@
                         </v-timeline-item>
 
                         <v-timeline-item
+                        color="deep-purple accent-3"
                         fill-dot
                         left
                         small
                         >
                         <span
                                 slot="opposite"
-                                :class="`headline font-weight-bold green--text`"
+                                :class="`headline font-weight-bold deep-purple--text text--accent-3`"
                             >Identificação do Técnico</span>
                         <v-card>
                             <v-container v-for="(dado, index) in dadosVisualizacao.oficializarFiscalizacao" :key="index">
@@ -176,7 +178,7 @@
                         >
                             <span
                                 slot="opposite"
-                                :class="`headline font-weight-bold green--text`"
+                                :class="`headline font-weight-bold cyan--text text--lighten-1`"
                             >Resumo da Execução</span>
                             <v-card>
                                 <v-container v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
@@ -217,7 +219,7 @@
                             >
                                 <span
                                     slot="opposite"
-                                    :class="`headline font-weight-bold green--text`"
+                                    :class="`headline font-weight-bold cyan--text text--lighten-1`"
                                 >Situação do Convênio na Realização da Fiscalização</span>
                                 <v-card>
                                     <v-container v-for="(dado, index) in dadosVisualizacao.stConvenioFiscalizacao" :key="index">
@@ -251,13 +253,13 @@
                         </div>
 
                         <v-timeline-item
-                        color="cyan lighten-1"
+                        color="light-green "
                         fill-dot
                         left
                         >
                             <span
                                 slot="opposite"
-                                :class="`headline font-weight-bold green--text`"
+                                :class="`headline font-weight-bold light-green--text`"
                             >Utilização de Recursos</span>
                             <v-card>
                                 <v-container v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
@@ -352,13 +354,13 @@
                         </v-timeline-item>
 
                         <v-timeline-item
-                        color="cyan lighten-1"
+                        color="orange lighten-2"
                         fill-dot
                         right
                         >
                             <span
                                 slot="opposite"
-                                :class="`headline font-weight-bold green--text`"
+                                :class="`headline font-weight-bold orange--text text--lighten-2`"
                             >Comprovantes Fiscais de Despesa</span>
                             <v-card>
                                 <v-container v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
@@ -423,13 +425,13 @@
                         </v-timeline-item>
 
                         <v-timeline-item
-                        color="cyan lighten-1"
+                        color="indigo lighten-2"
                         fill-dot
                         left
                         >
                             <span
                                 slot="opposite"
-                                :class="`headline font-weight-bold green--text`"
+                                :class="`headline font-weight-bold indigo--text text--lighten-2`"
                             >Divulgação</span>
                             <v-card>
                                 <v-container v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
@@ -456,13 +458,13 @@
                         </v-timeline-item>
 
                         <v-timeline-item
-                        color="cyan lighten-1"
+                        color="teal accent-3"
                         fill-dot
                         right
                         >
                             <span
                                 slot="opposite"
-                                :class="`headline font-weight-bold green--text`"
+                                :class="`headline font-weight-bold teal--text text--accent-3`"
                             >Execução</span>
                             <v-card>
                                 <v-container v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
@@ -497,13 +499,13 @@
 
                         <div v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
                             <v-timeline-item
-                            color="cyan lighten-1"
+                            color="pink lighten-3"
                             fill-dot
                             left
                             >
                                 <span
                                     slot="opposite"
-                                    :class="`headline font-weight-bold green--text`"
+                                    :class="`headline font-weight-bold pink--text text--lighten-3`"
                                 >Empregos gerados em decorrência do projeto</span>
                                 <v-card>
                                     <v-container >
@@ -523,13 +525,13 @@
                             </v-timeline-item>
 
                             <v-timeline-item
-                            color="cyan lighten-1"
+                            color="lime lighten-1"
                             fill-dot
                             right
                             >
                                 <span
                                     slot="opposite"
-                                    :class="`headline font-weight-bold green--text`"
+                                    :class="`headline font-weight-bold lime--text text--lighten-1`"
                                 >Evidências</span>
                                 <v-card>
                                     <v-container >
@@ -543,13 +545,13 @@
                             </v-timeline-item>
 
                             <v-timeline-item
-                            color="cyan lighten-1"
+                            color="amber darken-2"
                             fill-dot
                             left
                             >
                                 <span
                                     slot="opposite"
-                                    :class="`headline font-weight-bold green--text`"
+                                    :class="`headline font-weight-bold amber--text text--darken-2`"
                                 >Recomendações da Equipe</span>
                                 <v-card>
                                     <v-container >
@@ -563,13 +565,13 @@
                             </v-timeline-item>
 
                             <v-timeline-item
-                            color="cyan lighten-1"
+                            color="blue-grey lighten-2"
                             fill-dot
                             right
                             >
                                 <span
                                     slot="opposite"
-                                    :class="`headline font-weight-bold green--text`"
+                                    :class="`headline font-weight-bold blue-grey--text text--lighten-2`"
                                 >Conclusão da Equipe</span>
                                 <v-card>
                                     <v-container >
@@ -584,13 +586,13 @@
                             </v-timeline-item>
 
                             <v-timeline-item
-                            color="cyan lighten-1"
+                            color="light-blue lighten-3"
                             fill-dot
                             left
                             >
                                 <span
                                     slot="opposite"
-                                    :class="`headline font-weight-bold green--text`"
+                                    :class="`headline font-weight-bold light-blue--text text--lighten-3`"
                                 >Parecer da Fiscalização</span>
                                 <v-card>
                                     <v-container >
@@ -604,13 +606,13 @@
                             </v-timeline-item>
 
                             <v-timeline-item
-                            color="cyan lighten-1"
+                            color="green darken-2"
                             fill-dot
                             right
                             >
                                 <span
                                     slot="opposite"
-                                    :class="`headline font-weight-bold green--text`"
+                                    :class="`headline font-weight-bold green--text text--darken-2`"
                                 >Parecer do Coordenador</span>
                                 <v-card>
                                     <v-container >
@@ -624,13 +626,13 @@
                             </v-timeline-item>
                         </div>
                         <v-timeline-item
-                            color="cyan lighten-1"
+                            color="orange darken-1"
                             fill-dot
                             left
                             >
                                 <span
                                     slot="opposite"
-                                    :class="`headline font-weight-bold green--text`"
+                                    :class="`headline font-weight-bold orange--text text--darken-1`"
                                 >Anexos</span>
                                 <v-card>
                                     <v-container v-for="(dado, index) in dadosVisualizacao.arquivosFiscalizacao" :key="index">

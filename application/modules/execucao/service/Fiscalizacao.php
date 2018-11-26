@@ -167,6 +167,7 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
     {
         $dtDeCorte = strtotime(date('2013-09-15 00:00:00'));
         $stDtDeCorte = 0;
+
         $resumoExecucao[] = [
             'dsAcoesProgramadas' => $dados['dsAcoesProgramadas'],
             'dsAcoesExecutadas' => $dados['dsAcoesExecutadas'],
