@@ -391,7 +391,7 @@
                             >Divulgação</span>
                             <v-card>
                                 <v-container v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
-                                    <v-layout>
+                                    <v-layout v-if="dado.stDtDeCorte == 1">
                                         <v-flex xs10 offset-xs1>
                                             <br><p><b>Ciência ao Poder legislativo?</b></p>
                                                 {{ dado.divulgacao[index].stCienciaLegislativo }}
@@ -424,13 +424,13 @@
                             >Execução</span>
                             <v-card>
                                 <v-container v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
-                                    <v-layout>
+                                    <v-layout v-if="dado.stDtDeCorte == 1">
                                         <v-flex xs10 offset-xs1>
                                             <br><p><b>Alcançou a finalidade esperada?</b></p>
                                                 {{ dado.execucao[index].stFinalidadeEsperada }}
                                         </v-flex>
                                     </v-layout>
-                                    <v-layout>
+                                    <v-layout v-if="dado.stDtDeCorte == 1">
                                         <v-flex xs10 offset-xs1>
                                             <br><p><b>As metas/etapas do Plano de Trabalho foram executadas integralmente?</b></p>
                                                 {{ dado.execucao[index].stPlanoTrabalho }}
@@ -438,11 +438,12 @@
                                     </v-layout>
                                     <v-layout>
                                         <v-flex xs10 offset-xs1>
-                                            <br><p><b>O projeto está sendo executado de acordo com o aprovado?</b></p>
+                                            <div v-if="dado.stDtDeCorte == 0"><br><p><b>O projeto está sendo executado de acordo com o aprovado?</b></p></div>
+                                            <div v-if="dado.stDtDeCorte == 1"><br><p><b>A execução respeitou o aprovado?</b></p></div>
                                                 {{ dado.execucao[index].stExecucaoAprovado }}
                                         </v-flex>
                                     </v-layout>
-                                    <v-layout>
+                                    <v-layout v-if="dado.stDtDeCorte == 0">
                                         <v-flex xs10 offset-xs1>
                                             <br><p><b>Observações</b></p>
                                             <div v-html="dado.execucao[index].dsObservacao"></div>
