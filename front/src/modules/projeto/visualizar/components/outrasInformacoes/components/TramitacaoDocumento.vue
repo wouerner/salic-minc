@@ -15,7 +15,7 @@
                     <td class="text-xs-left">{{ props.item.dsTipoDocumento }}</td>
                     <td class="text-xs-right">{{ props.item.dtDocumento }}</td>
                     <td class="text-xs-right">{{ props.item.dtAnexacao }}</td>
-                    <td class="text-xs-right">
+                    <td class="text-xs-left">
                         <a :href="`/consultardadosprojeto/abrir-documento-tramitacao?id=${ props.item.idDocumento}&idPronac=${idPronac}`">
                             {{ props.item.noArquivo }}
                         </a>
@@ -53,7 +53,7 @@
                     },
                     {
                         text: 'DATA',
-                        align: 'center',
+                        align: 'right',
                         value: 'dtDocumento',
                     },
                     {
@@ -63,7 +63,7 @@
                     },
                     {
                         text: 'DOCUMENTO',
-                        align: 'center',
+                        align: 'left',
                         value: 'noArquivo',
                     },
                     {
