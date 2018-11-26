@@ -322,11 +322,12 @@
                                 <v-container v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
                                     <v-layout>
                                         <v-flex xs10 offset-xs1>
-                                            <br><p><b>O proponente/convenente tem mantido a documentação relativa ao projeto em arquivo próprio?</b></p>
+                                            <div v-if="dado.stDtDeCorte == 0"><br><p><b>O proponente/convenente tem mantido a documentação relativa ao projeto em arquivo próprio?</b></p></div>
+                                            <div v-else-if="dado.stDtDeCorte == 1"><br><p><b>O processo está bem documentado?</b></p></div>
                                                 {{ dado.comprovantesDespesa[index].stProcessoDocumentado }}
                                         </v-flex>
                                     </v-layout>
-                                    <v-layout>
+                                    <v-layout v-if="dado.stDtDeCorte == 1">
                                         <v-flex xs10 offset-xs1>
                                             <br><p><b>A documentação está completa e arquivada?</b></p>
                                                 {{ dado.comprovantesDespesa[index].stDocumentacaoCompleta }}
@@ -340,7 +341,8 @@
                                     </v-layout>
                                     <v-layout>
                                         <v-flex xs10 offset-xs1>
-                                            <br><p><b>Identificam o projeto com o número do Pronac/Convênio?</b></p>
+                                            <div v-if="dado.stDtDeCorte == 0"><br><p><b>Identificam o projeto com o número do Pronac/Convênio?</b></p></div>
+                                            <div v-if="dado.stDtDeCorte == 1"><br><p><b>Identificam o nome do projeto e o número do convênio?</b></p></div>
                                                 {{ dado.comprovantesDespesa[index].stIdentificaProjeto }}
                                         </v-flex>
                                     </v-layout>
@@ -350,7 +352,7 @@
                                                 {{ dado.comprovantesDespesa[index].stDespesaAnterior }}
                                         </v-flex>
                                     </v-layout>
-                                    <v-layout>
+                                    <v-layout v-if="dado.stDtDeCorte == 1">
                                         <v-flex xs10 offset-xs1>
                                             <br><p><b>Existem despesas posteriores ao prazo de vigência?</b></p>
                                                 {{ dado.comprovantesDespesa[index].stDespesaPosterior }}
