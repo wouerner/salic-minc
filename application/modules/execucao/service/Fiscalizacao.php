@@ -70,7 +70,7 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
         $resultArray['locaisFiscalizacao'] = $this->montaLocaisFiscalizacao($dadosLocalizacoes);
         $resultArray['oficializarFiscalizacao'] = $this->montaOficializarFiscalizacao($infoProjeto);
         $resultArray['arquivosFiscalizacao'] = $this->montaArquivosFiscalizacao($arquivos);
-        $resultArray['fiscalizacaoConcluidaParecer'] = $this->montaFiscalizacaoConcluidaParecer($relatorioFiscalizacao, $infoProjeto[0]['dtInicioFiscalizacaoProjeto']);
+        $resultArray['fiscalizacaoConcluidaParecer'] = $this->montaFiscalizacaoConcluidaParecer($relatorioFiscalizacao, strtotime($infoProjeto[0]['dtInicioFiscalizacaoProjeto']));
 
         return $resultArray;
     }
@@ -166,6 +166,7 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
     private function montaFiscalizacaoConcluidaParecer($dados, $dtInicioFiscalizacao)
     {
         $dtDeCorte = strtotime(date('2013-09-15 00:00:00'));
+        $stDtDeCorte = 0;
         $resumoExecucao[] = [
             'dsAcoesProgramadas' => $dados['dsAcoesProgramadas'],
             'dsAcoesExecutadas' => $dados['dsAcoesExecutadas'],
@@ -174,7 +175,7 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
             ];
 
         if ($dtInicioFiscalizacao < $dtDeCorte) {
-
+            $stDtDeCorte = 1;
             $stConvenioFiscalizacao[] = [
                 'stSiafi' => $this->statusConvenio($dados['stSiafi']),
                 'stPrestacaoContas' => $this->statusFiscalizacao($dados['stPrestacaoContas']),
@@ -243,7 +244,8 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
                 'comprovantesDespesa' => $comprovantesDespesa,
                 'divulgacao' => $divulgacao,
                 'execucao' => $execucao,
-                'empregosGeradosProjeto' => $empregosGeradosProjeto
+                'empregosGeradosProjeto' => $empregosGeradosProjeto,
+                'stDtDeCorte' => $stDtDeCorte
             ];
         return $result;
     }
@@ -255,10 +257,10 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
                 $result = 'Sim';
                 break;
             case 2:
-                $result = 'Não';
+                $result = 'Nï¿½o';
                 break;
             case 3:
-                $result = 'Não se aplica.';
+                $result = 'Nï¿½o se aplica.';
                 break;
             default:
                 $result = ' - ';
