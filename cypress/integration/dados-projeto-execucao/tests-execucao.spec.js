@@ -18,6 +18,5 @@ describe('Testes dos Sub-menu Execucao', function () {
         //Dados das Readequações
         cy.get(':nth-child(6) > .collapsible > .bold > .collapsible-body > ul > :nth-child(3) > .waves-effect').click(); //
         cy.get('.m9 > h1').should('not.be.empty').contains('Dados das Readequações');
-
     });
 });
