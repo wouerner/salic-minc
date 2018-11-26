@@ -233,8 +233,9 @@
                                     </v-layout>
                                     <v-layout>
                                         <v-flex xs10 offset-xs1>
-                                            <br><p><b>Há compatibilidade entre os recursos transferidos e a evolução do projeto?</b></p>
-                                                {{ dado.utilizacaoRecursos[index].stCompatibilidadeDesembolsoEvo }}
+                                            <div v-if="dado.stDtDeCorte == 0"><br><p><b>Há compatibilidade entre os recursos transferidos e a evolução do projeto?</b></p></div>
+                                            <div v-else-if="dado.stDtDeCorte == 1"><br><p><b>Há compatibilidade entre o desembolso e a evolução?</b></p></div>
+                                            {{ dado.utilizacaoRecursos[index].stCompatibilidadeDesembolsoEvo }}
                                         </v-flex>
                                     </v-layout>
                                     <v-layout>
@@ -243,31 +244,31 @@
                                                 {{ dado.utilizacaoRecursos[index].stOcorreuDespesas }}
                                         </v-flex>
                                     </v-layout>
-                                    <v-layout>
+                                    <v-layout v-if="dado.stDtDeCorte == 1">
                                         <v-flex xs10 offset-xs1>
                                             <br><p><b>Ocorreu pagamento de servidor público?</b></p>
                                                 {{ dado.utilizacaoRecursos[index].stPagamentoServidorPublico }}
                                         </v-flex>
                                     </v-layout>
-                                    <v-layout>
+                                    <v-layout v-if="dado.stDtDeCorte == 1">
                                         <v-flex xs10 offset-xs1>
                                             <br><p><b>Ocorreu despesa com taxa de administração?</b></p>
                                                 {{ dado.utilizacaoRecursos[index].stDespesaAdministracao }}
                                         </v-flex>
                                     </v-layout>
-                                    <v-layout>
+                                    <v-layout v-if="dado.stDtDeCorte == 1">
                                         <v-flex xs10 offset-xs1>
                                             <br><p><b>Há transferência de recurso para clubes/associações ou outras entidades congêneres?</b></p>
                                                 {{ dado.utilizacaoRecursos[index].stTransferenciaRecurso }}
                                         </v-flex>
                                     </v-layout>
-                                    <v-layout>
+                                    <v-layout v-if="dado.stDtDeCorte == 1">
                                         <v-flex xs10 offset-xs1>
                                             <br><p><b>Há despesas com publicidade, salvo as de caráter educativo, informativo ou de orientação social?</b></p>
                                                 {{ dado.utilizacaoRecursos[index].stDespesasPublicidade }}
                                         </v-flex>
                                     </v-layout>
-                                    <v-layout>
+                                    <v-layout v-if="dado.stDtDeCorte == 1">
                                         <v-flex xs10 offset-xs1>
                                             <br><p><b>Ocorreu aditamento prevendo alteração de objeto?</b></p>
                                                 {{ dado.utilizacaoRecursos[index].stOcorreuAditamento }}
@@ -275,8 +276,9 @@
                                     </v-layout>
                                     <v-layout>
                                         <v-flex xs10 offset-xs1>
-                                            <br><p><b>Os recursos de contrapartida foram depositados na conta do projeto?</b></p>
-                                                {{ dado.utilizacaoRecursos[index].stAplicadosRecursos }}
+                                            <div v-if="dado.stDtDeCorte == 0"><br><p><b>Os recursos de contrapartida foram depositados na conta do projeto?</b></p></div>
+                                            <div v-else-if="dado.stDtDeCorte == 1"><br><p><b>Não foram aplicados os recursos de contrapartida?</b></p></div>
+                                            {{ dado.utilizacaoRecursos[index].stAplicadosRecursos }}
                                         </v-flex>
                                     </v-layout>
                                     <v-layout>
@@ -285,19 +287,19 @@
                                                 {{ dado.utilizacaoRecursos[index].stAplicacaoRecursosFinalidade }}
                                         </v-flex>
                                     </v-layout>
-                                    <v-layout>
+                                    <v-layout v-if="dado.stDtDeCorte == 0">
                                         <v-flex xs10 offset-xs1>
                                             <br><p><b>Os recursos captados estão sendo aplicados em conformidade com a legislação vigente?</b></p>
                                                 {{ dado.utilizacaoRecursos[index].stRecursosCaptados }}
                                         </v-flex>
                                     </v-layout>
-                                    <v-layout>
+                                    <v-layout v-if="dado.stDtDeCorte == 1">
                                         <v-flex xs10 offset-xs1>
                                             <br><p><b>Ocorreu saldo após o encerramento do projeto?</b></p>
                                                 {{ dado.utilizacaoRecursos[index].stSaldoAposEncerramento }}
                                         </v-flex>
                                     </v-layout>
-                                    <v-layout>
+                                    <v-layout v-if="dado.stDtDeCorte == 1">
                                         <v-flex xs10 offset-xs1>
                                             <br><p><b>O saldo verificado foi recolhido ao FNC?</b></p>
                                                 {{ dado.utilizacaoRecursos[index].stSaldoVerificacaoFNC }}
