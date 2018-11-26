@@ -13,6 +13,7 @@
                         :items="dados"
                         class="elevation-1 container-fluid mb-2"
                         rows-per-page-text="Items por Página"
+                        :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
                         no-data-text="Nenhum dado encontrado"
                 >
                     <template slot="items" slot-scope="props">
@@ -57,6 +58,7 @@
             return {
                 search: '',
                 pagination: {
+                    rowsPerPage: 10,
                     sortBy: 'fat',
                 },
                 loading: true,

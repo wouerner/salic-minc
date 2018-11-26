@@ -1,5 +1,5 @@
 <?php
-class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
+class AvaliacaoResultados_Model_DbTable_tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
 {
     protected $_schema = "sac";
     protected $_name = "tbPlanilhaAprovacao";
@@ -71,11 +71,11 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             array('a' => $this->_name),
             '*'
         );
-        
+
         $select->where('a.IdPRONAC = ?', $idPronac);
         $select->where('a.StAtivo = ?', 'S');
-        
-        return $this->fetchAll($select);        
+
+        return $this->fetchAll($select);
     }
 
     /**
@@ -92,13 +92,13 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             array('a' => $this->_name),
             '*'
         );
-        
+
         $select->where('a.IdPRONAC = ?', $idPronac);
         $select->where('a.StAtivo = ?', 'S');
         $select->where(new Zend_Db_Expr('a.tpAcao <> ? OR a.tpAcao IS NULL'), 'E');
         $select->where(new Zend_Db_Expr('(a.qtItem * a.nrOcorrencia * a.vlUnitario) > ?'), '0');
-        
-        return $this->fetchAll($select);        
+
+        return $this->fetchAll($select);
     }
 
     /**
@@ -123,14 +123,14 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             array(''),
             'SAC.dbo'
         );
-        
+
         $select->where('a.IdPRONAC = ?', $idPronac);
         $select->where('a.StAtivo = ?', 'S');
         $select->where('r.stEstado = ?', 0);
 
         return $this->fetchAll($select);
-    }   
-    
+    }
+
 
     public function copiandoPlanilhaRecurso($idPronac)
     {
@@ -228,7 +228,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
         foreach ($where as $key => $valor) {
             $select->where($key, $valor);
         }
-        
+
         return $this->fetchAll($select);
     }
 
@@ -302,16 +302,16 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             array(),
             $this->_schema
         );
-        
+
         $select->where('a.IdPRONAC = ?', $idPronac);
         $select->where('a.nrFonteRecurso = ?', $nrFonteRecurso);
         $select->where('a.idProduto = ?', $idProduto);
         $select->where('a.idEtapa = ?', $idEtapa);
         $select->where('a.idMunicipioDespesa = ?', $idMunicipioDespesa);
         $select->where('a.idPlanilhaItem = ?', $idPlanilhaItem);
-        
+
         $result = $this->fetchAll($select);
-        
+
         if (count($result) > 0) {
             return true;
         } else {
@@ -327,7 +327,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
      * @return boolean
      */
     public function valorTotalPlanilhaAtiva($idPronac, $nrFonteRecurso = []) {
-        
+
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from(
@@ -337,13 +337,12 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             )
         );
         $select->where('a.idPronac = ?', $idPronac);
-        $select->where(new Zend_Db_Expr('a.tpAcao <> ? OR a.tpAcao IS NULL'), 'E');
         $select->where('a.stAtivo = ?', 'S');
 
         if (!empty($nrFonteRecurso)) {
             $select->where('a.nrFonteRecurso IN(?)', $nrFonteRecurso);
         }
-                
+
         return $this->fetchAll($select);
     }
 
@@ -355,7 +354,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
      * @return boolean
      */
     public function valorTotalPlanilhaAtivaNaoExcluidosPorEtapa($idPronac, $idEtapa) {
-        
+
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from(
@@ -369,7 +368,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
         $select->where(new Zend_Db_Expr('a.tpAcao <> ? OR a.tpAcao IS NULL'), 'E');
         $select->where(new Zend_Db_Expr('(a.qtItem * a.nrOcorrencia * a.vlUnitario) > ?'), '0');
         $select->where('a.idEtapa IN (?)', $idEtapa);
-                
+
         return $this->fetchAll($select);
     }
 
@@ -382,7 +381,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
      * @return boolean
      */
     public function valorTotalPlanilhaReadequada($idPronac, $idReadequacao, $nrFonteRecurso = []) {
-        
+
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from(
@@ -391,19 +390,19 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
                 new Zend_Db_Expr('ROUND(SUM(a.qtItem*a.nrOcorrencia*a.vlUnitario), 2) AS Total')
             )
         );
-        
+
         $select->where('a.tpPlanilha = ?', 'SR');
         $select->where('a.stAtivo = ?', 'N');
         $select->where('a.tpAcao != ?', 'E');
         $select->where('a.idReadequacao = ?', $idReadequacao);
-        
+
         if (!empty($nrFonteRecurso)) {
-            $select->where('a.nrFonteRecurso IN(?)', $nrFonteRecurso);   
-        }        
-        
+            $select->where('a.nrFonteRecurso IN(?)', $nrFonteRecurso);
+        }
+
         return $this->fetchAll($select);
     }
-    
+
     /**
      * Função para buscar item de planilha original
      * @param integer $idPlanilhaAprovacao
@@ -424,10 +423,10 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             array(''),
             $this->_schema
         );
-        
+
         $select->where('b.idPlanilhaAprovacao = ?', $idPlanilhaAprovacao);
-        
-        return $this->fetchAll($select);        
+
+        return $this->fetchAll($select);
     }
 
     /**
@@ -440,7 +439,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
     {
         $where = [];
         $where['idPlanilhaAprovacao = ?'] = $idPlanilhaAprovacao;
-        
+
         $planilhaAtiva = $this->buscarDadosAvaliacaoDeItemRemanejamento($where);
 
         if (count($planilhaAtiva) > 0) {
@@ -467,17 +466,17 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
         $whereItemValorComprovado['b.idUFDespesa = ?'] = $planilhaAtiva['idUFDespesa'];
         $whereItemValorComprovado['b.idMunicipioDespesa = ?'] = $planilhaAtiva['idMunicipioDespesa'];
         $whereItemValorComprovado['b.nrFonteRecurso = ?'] = $planilhaAtiva['nrFonteRecurso'];
-        
+
         $tbCompPagxPlanAprov = new tbComprovantePagamentoxPlanilhaAprovacao();
         $resComprovado = $tbCompPagxPlanAprov->buscarValorComprovadoPorFonteProdutoEtapaLocalItem($whereItemValorComprovado);
-        
+
         if (count($resComprovado) > 0) {
             return $resComprovado;
         } else {
             return false;
         }
     }
-    
+
 
     /**
      * retorna item original da planilha
@@ -496,7 +495,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
         $whereItemPlanilhaOriginal['idUFDespesa = ?'] = $planilhaAtiva['idUFDespesa'];
         $whereItemPlanilhaOriginal['idMunicipioDespesa = ?'] = $planilhaAtiva['idMunicipioDespesa'];
         $whereItemPlanilhaOriginal['nrFonteRecurso = ?'] = $planilhaAtiva['nrFonteRecurso'];
-        
+
         $planilhaOriginal = $this->buscar($whereItemPlanilhaOriginal);
 
         if (count($planilhaOriginal) > 0) {
@@ -513,7 +512,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
     public function buscarValoresItem($item, $valorComprovado)
     {
         $vlTotalItem = $item['qtItem']*$item['nrOcorrencia']*$item['vlUnitario'];
-        
+
         //CALCULAR VALORES MINIMO E MAXIMO PARA VALIDACAO
         $vlAtual = @number_format(
             (
@@ -524,10 +523,10 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             ''
         );
         $vlAtualPerc = $vlAtual* Readequacao_Model_DbTable_TbReadequacao::PERCENTUAL_REMANEJAMENTO/100;
-        
+
         //VALOR MINIMO E MAXIMO DO ITEM ORIGINAL
         //SE TIVER VALOR COMPROVADO, DEVE SUBTRAIR O VALOR DO ITEM COMPROVADO DO VALOR UNITARIO
-        
+
         $vlAtualMin = (
             number_format(
                 $valorComprovado,
@@ -545,15 +544,15 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
                     : round($vlAtual-$vlAtualPerc);
 
         $vlAtualMax = round($vlAtual+$vlAtualPerc);
-        
+
         $valoresItem = [];
-        
+
         $valoresItem['vlTotalItem'] = $vlTotalItem;
         $valoresItem['vlAtual'] = $vlAtual;
         $valoresItem['vlAtualPerc'] = $vlAtualPerc;
         $valoresItem['vlAtualMin'] = $vlAtualMin;
         $valoresItem['vlAtualMax'] = $vlAtualMax;
-        
+
         return $valoresItem;
     }
 
@@ -583,7 +582,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
                 $select->where(
                     "CASE
                         WHEN J.idSituacaoEncPrestContas IS NULL THEN 1
-                        ELSE J.idSituacaoEncPrestContas 
+                        ELSE J.idSituacaoEncPrestContas
                     END = ?",
                     tbPlanilhaAprovacao::FILTRO_ANALISE_FINANCEIRA_VIRTUAL_AGUARDANDO_ANALISE
                 );
@@ -603,7 +602,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
                 $select->where(
                     "CASE
                         WHEN J.idSituacaoEncPrestContas IS NULL THEN 1
-                        ELSE J.idSituacaoEncPrestContas 
+                        ELSE J.idSituacaoEncPrestContas
                     END = ?",
                     tbPlanilhaAprovacao::FILTRO_ANALISE_FINANCEIRA_VIRTUAL_EM_ANALISE
                 );
@@ -621,7 +620,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
                 $select->where(
                     "CASE
                         WHEN J.idSituacaoEncPrestContas IS NULL THEN 1
-                        ELSE J.idSituacaoEncPrestContas 
+                        ELSE J.idSituacaoEncPrestContas
                     END = ?",
                     tbPlanilhaAprovacao::FILTRO_ANALISE_FINANCEIRA_VIRTUAL_ANALISADOS
                 );
@@ -738,9 +737,9 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
     public function copiarPlanilhas($idPronac, $idReadequacao)
     {
         $planilhaSR = array();
-        
+
         $planilhaAtiva = $this->buscarPlanilhaAtivaNaoExcluidos($idPronac);
-        
+
         foreach ($planilhaAtiva as $value) {
             $planilhaSR['tpPlanilha'] = 'SR';
             $planilhaSR['dtPlanilha'] = new Zend_Db_Expr('GETDATE()');
@@ -769,11 +768,11 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             $planilhaSR['tpAcao'] = 'N';
             $planilhaSR['idRecursoDecisao'] = $value['idRecursoDecisao'];
             $planilhaSR['stAtivo'] = 'N';
-            
+
             $idPlanilhaAprovacao = $this->inserir($planilhaSR);
-            
+
             if (!$idPlanilhaAprovacao) {
-                throw new Exception("Houve um erro na c&oacute;pia das planilhas");                
+                throw new Exception("Houve um erro na c&oacute;pia das planilhas");
             }
         }
         return true;
@@ -803,14 +802,14 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
                     'd.UfProjeto',
                     'a.IdPRONAC',
                 ];
-                $select->where("d.Situacao = ?", 'E68');
-                $select->where(
-                    "CASE
-                        WHEN J.idSituacaoEncPrestContas IS NULL THEN 1
-                        ELSE J.idSituacaoEncPrestContas 
-                    END = ?",
-                    tbPlanilhaAprovacao::FILTRO_ANALISE_FINANCEIRA_VIRTUAL_AGUARDANDO_ANALISE
-                );
+                $select->where("d.Situacao in (?)", ['E68', 'E30']);
+                /* $select->where( */
+                /*     "CASE */
+                /*         WHEN J.idSituacaoEncPrestContas IS NULL THEN 1 */
+                /*         ELSE J.idSituacaoEncPrestContas */
+                /*     END = ?", */
+                /*     tbPlanilhaAprovacao::FILTRO_ANALISE_FINANCEIRA_VIRTUAL_AGUARDANDO_ANALISE */
+                /* ); */
                 break;
         }
         $colunasOrdenadas[] = '
@@ -901,25 +900,16 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             $select->where('d.AnoProjeto+d.Sequencial like ? OR d.NomeProjeto like ?', '%' . $search['value'] . '%');
         }
 
-        /* if (!empty($order)) { */
-        /*     $select->order($order); */
-        /* } */
-
-        /* if (!is_null($start) && $limit) { */
-        /*     $start = (int) $start; */
-        /*     $limit = (int) $limit; */
-        /*     $select->limit($limit, $start); */
-        /* } */
         /* echo $select;die; */
 
         return $this->fetchAll($select);
     }
-    
+
     public function projetoContemEtapasCustosDivulgacao($idPronac)
     {
         $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
-        
+
         $objQuery->from(
             array(
                 'tbPlanilhaAprovacao' => $this->_name
@@ -934,9 +924,9 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             PlanilhaEtapa::ETAPA_DIVULGACAO_COMERCIALIZACAO
         ]);
         $objQuery->where('tbPlanilhaAprovacao.IdPRONAC = ?', $idPronac);
-        
+
         $result = $this->fetchAll($objQuery);
-        
+
         if (count($result > 0)) {
             return true;
         }
