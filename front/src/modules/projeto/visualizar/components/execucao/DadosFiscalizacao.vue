@@ -44,7 +44,8 @@
                         <v-timeline-item
                         color="green darken-3"
                         fill-dot
-                        left
+                        :class="definirClasseTimeline()"
+                        small
                         >
                             <span
                                 slot="opposite"
@@ -92,7 +93,7 @@
                         <v-timeline-item
                         color="deep-orange lighten-1"
                         fill-dot
-                        right
+                        :class="definirClasseTimeline()"
                         small
                         >
                             <span
@@ -130,7 +131,7 @@
                         <v-timeline-item
                         color="deep-purple accent-3"
                         fill-dot
-                        left
+                        :class="definirClasseTimeline()"
                         small
                         >
                         <span
@@ -170,11 +171,12 @@
                                 </v-card-title>
                             </v-card>
                         </v-timeline-item>
-                        <div v-for="(dado, index) in dadosVisualizacao.fiscalizacaoConcluidaParecer" :key="index">
+                        <div v-if="parecer">
                             <v-timeline-item
                             color="cyan lighten-1"
                             fill-dot
-                            right
+                            :class="definirClasseTimeline()"
+                            small
                             >
                                 <span
                                     slot="opposite"
@@ -185,25 +187,25 @@
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Ações Programadas</b></p>
-                                                    {{ dado.resumoExecucao[index].dsAcoesProgramadas }}
+                                                    {{ parecer.resumoExecucao.dsAcoesProgramadas }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Ações Executadas</b></p>
-                                                    {{ dado.resumoExecucao[index].dsAcoesExecutadas }}
+                                                    {{ parecer.resumoExecucao.dsAcoesExecutadas }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Benefícios Alcançados</b></p>
-                                                    {{ dado.resumoExecucao[index].dsBeneficioAlcancado }}
+                                                    {{ parecer.resumoExecucao.dsBeneficioAlcancado }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Dificuldades Encontradas</b></p>
-                                                    {{ dado.resumoExecucao[index].dsDificuldadeEncontrada }}
+                                                    {{ parecer.resumoExecucao.dsDificuldadeEncontrada }}
                                             </v-flex>
                                         </v-layout>
                                     </v-container>
@@ -211,39 +213,40 @@
                             </v-timeline-item>
 
                             <v-timeline-item
-                            v-if="dado.stDtDeCorte == 1"
-                            color="cyan lighten-1"
+                            v-if="parecer.stDtDeCorte == 1"
+                            color="orange darken-3"
                             fill-dot
-                            left
+                            :class="definirClasseTimeline()"
+                            small
                             >
                                 <span
                                     slot="opposite"
-                                    :class="`headline font-weight-bold cyan--text text--lighten-1`"
+                                    :class="`headline font-weight-bold orange--text text--darken-3`"
                                 >Situação do Convênio na Realização da Fiscalização</span>
                                 <v-card>
                                     <v-container>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Situação SIAFI</b></p>
-                                                    {{ dado.stConvenioFiscalizacao[index].stSiafi }}
+                                                    {{ parecer.stConvenioFiscalizacao.stSiafi }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Prestação de Contas Apresentada?</b></p>
-                                                    {{ dado.stConvenioFiscalizacao[index].stPrestacaoContas }}
+                                                    {{ parecer.stConvenioFiscalizacao.stPrestacaoContas }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Foram cumpridas as normas estabelecidas?</b></p>
-                                                    {{ dado.stConvenioFiscalizacao[index].stCumpridasNormas }}
+                                                    {{ parecer.stConvenioFiscalizacao.stCumpridasNormas }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Foi cumprido o prazo para entrega da prestação de contas?</b></p>
-                                                    {{ dado.stConvenioFiscalizacao[index].stCumpridoPrazo }}
+                                                    {{ parecer.stConvenioFiscalizacao.stCumpridoPrazo }}
                                             </v-flex>
                                         </v-layout>
                                     </v-container>
@@ -253,7 +256,8 @@
                             <v-timeline-item
                             color="light-green "
                             fill-dot
-                            left
+                            :class="definirClasseTimeline()"
+                            small
                             >
                                 <span
                                     slot="opposite"
@@ -264,87 +268,87 @@
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Foi apurado por unidade fiscalizadora ou auditora a aplicação irregular de recursos?</b></p>
-                                                    {{ dado.utilizacaoRecursos[index].stApuracaoUFiscalizacao }}
+                                                    {{ parecer.utilizacaoRecursos.stApuracaoUFiscalizacao }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Comprovou a correta utilização dos recursos da contrapartida?</b></p>
-                                                    {{ dado.utilizacaoRecursos[index].stComprovacaoUtilizacaoRecurso }}
+                                                    {{ parecer.utilizacaoRecursos.stComprovacaoUtilizacaoRecurso }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
-                                                <div v-if="dado.stDtDeCorte == 0"><br><p><b>Há compatibilidade entre os recursos transferidos e a evolução do projeto?</b></p></div>
-                                                <div v-else-if="dado.stDtDeCorte == 1"><br><p><b>Há compatibilidade entre o desembolso e a evolução?</b></p></div>
-                                                {{ dado.utilizacaoRecursos[index].stCompatibilidadeDesembolsoEvo }}
+                                                <div v-if="parecer.stDtDeCorte == 0"><br><p><b>Há compatibilidade entre os recursos transferidos e a evolução do projeto?</b></p></div>
+                                                <div v-else-if="parecer.stDtDeCorte == 1"><br><p><b>Há compatibilidade entre o desembolso e a evolução?</b></p></div>
+                                                {{ parecer.utilizacaoRecursos.stCompatibilidadeDesembolsoEvo }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Ocorreu despesas com multas, juros, taxas bancárias ou correção monetária?</b></p>
-                                                    {{ dado.utilizacaoRecursos[index].stOcorreuDespesas }}
+                                                    {{ parecer.utilizacaoRecursos.stOcorreuDespesas }}
                                             </v-flex>
                                         </v-layout>
-                                        <v-layout v-if="dado.stDtDeCorte == 1">
+                                        <v-layout v-if="parecer.stDtDeCorte == 1">
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Ocorreu pagamento de servidor público?</b></p>
-                                                    {{ dado.utilizacaoRecursos[index].stPagamentoServidorPublico }}
+                                                    {{ parecer.utilizacaoRecursos.stPagamentoServidorPublico }}
                                             </v-flex>
                                         </v-layout>
-                                        <v-layout v-if="dado.stDtDeCorte == 1">
+                                        <v-layout v-if="parecer.stDtDeCorte == 1">
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Ocorreu despesa com taxa de administração?</b></p>
-                                                    {{ dado.utilizacaoRecursos[index].stDespesaAdministracao }}
+                                                    {{ parecer.utilizacaoRecursos.stDespesaAdministracao }}
                                             </v-flex>
                                         </v-layout>
-                                        <v-layout v-if="dado.stDtDeCorte == 1">
+                                        <v-layout v-if="parecer.stDtDeCorte == 1">
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Há transferência de recurso para clubes/associações ou outras entidades congêneres?</b></p>
-                                                    {{ dado.utilizacaoRecursos[index].stTransferenciaRecurso }}
+                                                    {{ parecer.utilizacaoRecursos.stTransferenciaRecurso }}
                                             </v-flex>
                                         </v-layout>
-                                        <v-layout v-if="dado.stDtDeCorte == 1">
+                                        <v-layout v-if="parecer.stDtDeCorte == 1">
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Há despesas com publicidade, salvo as de caráter educativo, informativo ou de orientação social?</b></p>
-                                                    {{ dado.utilizacaoRecursos[index].stDespesasPublicidade }}
+                                                    {{ parecer.utilizacaoRecursos.stDespesasPublicidade }}
                                             </v-flex>
                                         </v-layout>
-                                        <v-layout v-if="dado.stDtDeCorte == 1">
+                                        <v-layout v-if="parecer.stDtDeCorte == 1">
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Ocorreu aditamento prevendo alteração de objeto?</b></p>
-                                                    {{ dado.utilizacaoRecursos[index].stOcorreuAditamento }}
+                                                    {{ parecer.utilizacaoRecursos.stOcorreuAditamento }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
-                                                <div v-if="dado.stDtDeCorte == 0"><br><p><b>Os recursos de contrapartida foram depositados na conta do projeto?</b></p></div>
-                                                <div v-else-if="dado.stDtDeCorte == 1"><br><p><b>Não foram aplicados os recursos de contrapartida?</b></p></div>
-                                                {{ dado.utilizacaoRecursos[index].stAplicadosRecursos }}
+                                                <div v-if="parecer.stDtDeCorte == 0"><br><p><b>Os recursos de contrapartida foram depositados na conta do projeto?</b></p></div>
+                                                <div v-else-if="parecer.stDtDeCorte == 1"><br><p><b>Não foram aplicados os recursos de contrapartida?</b></p></div>
+                                                {{ parecer.utilizacaoRecursos.stAplicadosRecursos }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Ocorreu aplicação de recursos em outra finalidade que não a do objeto pactuado?</b></p>
-                                                    {{ dado.utilizacaoRecursos[index].stAplicacaoRecursosFinalidade }}
+                                                    {{ parecer.utilizacaoRecursos.stAplicacaoRecursosFinalidade }}
                                             </v-flex>
                                         </v-layout>
-                                        <v-layout v-if="dado.stDtDeCorte == 0">
+                                        <v-layout v-if="parecer.stDtDeCorte == 0">
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Os recursos captados estão sendo aplicados em conformidade com a legislação vigente?</b></p>
-                                                    {{ dado.utilizacaoRecursos[index].stRecursosCaptados }}
+                                                    {{ parecer.utilizacaoRecursos.stRecursosCaptados }}
                                             </v-flex>
                                         </v-layout>
-                                        <v-layout v-if="dado.stDtDeCorte == 1">
+                                        <v-layout v-if="parecer.stDtDeCorte == 1">
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Ocorreu saldo após o encerramento do projeto?</b></p>
-                                                    {{ dado.utilizacaoRecursos[index].stSaldoAposEncerramento }}
+                                                    {{ parecer.utilizacaoRecursos.stSaldoAposEncerramento }}
                                             </v-flex>
                                         </v-layout>
-                                        <v-layout v-if="dado.stDtDeCorte == 1">
+                                        <v-layout v-if="parecer.stDtDeCorte == 1">
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>O saldo verificado foi recolhido ao FNC?</b></p>
-                                                    {{ dado.utilizacaoRecursos[index].stSaldoVerificacaoFNC }}
+                                                    {{ parecer.utilizacaoRecursos.stSaldoVerificacaoFNC }}
                                             </v-flex>
                                         </v-layout>
                                     </v-container>
@@ -354,7 +358,8 @@
                             <v-timeline-item
                             color="orange lighten-2"
                             fill-dot
-                            right
+                            :class="definirClasseTimeline()"
+                            small
                             >
                                 <span
                                     slot="opposite"
@@ -364,58 +369,58 @@
                                     <v-container>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
-                                                <div v-if="dado.stDtDeCorte == 0"><br><p><b>O proponente/convenente tem mantido a documentação relativa ao projeto em arquivo próprio?</b></p></div>
-                                                <div v-else-if="dado.stDtDeCorte == 1"><br><p><b>O processo está bem documentado?</b></p></div>
-                                                    {{ dado.comprovantesDespesa[index].stProcessoDocumentado }}
+                                                <div v-if="parecer.stDtDeCorte == 0"><br><p><b>O proponente/convenente tem mantido a documentação relativa ao projeto em arquivo próprio?</b></p></div>
+                                                <div v-else-if="parecer.stDtDeCorte == 1"><br><p><b>O processo está bem documentado?</b></p></div>
+                                                    {{ parecer.comprovantesDespesa.stProcessoDocumentado }}
                                             </v-flex>
                                         </v-layout>
-                                        <v-layout v-if="dado.stDtDeCorte == 1">
+                                        <v-layout v-if="parecer.stDtDeCorte == 1">
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>A documentação está completa e arquivada?</b></p>
-                                                    {{ dado.comprovantesDespesa[index].stDocumentacaoCompleta }}
+                                                    {{ parecer.comprovantesDespesa.stDocumentacaoCompleta }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Guardam conformidade entre o executado e o aprovado?</b></p>
-                                                    {{ dado.comprovantesDespesa[index].stConformidadeExecucao }}
+                                                    {{ parecer.comprovantesDespesa.stConformidadeExecucao }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
-                                                <div v-if="dado.stDtDeCorte == 0"><br><p><b>Identificam o projeto com o número do Pronac/Convênio?</b></p></div>
-                                                <div v-if="dado.stDtDeCorte == 1"><br><p><b>Identificam o nome do projeto e o número do convênio?</b></p></div>
-                                                    {{ dado.comprovantesDespesa[index].stIdentificaProjeto }}
+                                                <div v-if="parecer.stDtDeCorte == 0"><br><p><b>Identificam o projeto com o número do Pronac/Convênio?</b></p></div>
+                                                <div v-if="parecer.stDtDeCorte == 1"><br><p><b>Identificam o nome do projeto e o número do convênio?</b></p></div>
+                                                    {{ parecer.comprovantesDespesa.stIdentificaProjeto }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Existem despesas anteriores ao prazo de vigência?</b></p>
-                                                    {{ dado.comprovantesDespesa[index].stDespesaAnterior }}
+                                                    {{ parecer.comprovantesDespesa.stDespesaAnterior }}
                                             </v-flex>
                                         </v-layout>
-                                        <v-layout v-if="dado.stDtDeCorte == 1">
+                                        <v-layout v-if="parecer.stDtDeCorte == 1">
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Existem despesas posteriores ao prazo de vigência?</b></p>
-                                                    {{ dado.comprovantesDespesa[index].stDespesaPosterior }}
+                                                    {{ parecer.comprovantesDespesa.stDespesaPosterior }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>As despesas coincidem com as informadas na relação de pagamentos?</b></p>
-                                                    {{ dado.comprovantesDespesa[index].stDespesaCoincidem }}
+                                                    {{ parecer.comprovantesDespesa.stDespesaCoincidem }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>As despesas estão devidamente relacionadas no extrato bancário?</b></p>
-                                                    {{ dado.comprovantesDespesa[index].stDespesaRelacionada }}
+                                                    {{ parecer.comprovantesDespesa.stDespesaRelacionada }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Os comprovantes fiscais estão com o atesto do recebimento?</b></p>
-                                                    {{ dado.comprovantesDespesa[index].stComprovanteFiscal }}
+                                                    {{ parecer.comprovantesDespesa.stComprovanteFiscal }}
                                             </v-flex>
                                         </v-layout>
                                     </v-container>
@@ -425,7 +430,8 @@
                             <v-timeline-item
                             color="indigo lighten-2"
                             fill-dot
-                            left
+                            :class="definirClasseTimeline()"
+                            small
                             >
                                 <span
                                     slot="opposite"
@@ -433,22 +439,22 @@
                                 >Divulgação</span>
                                 <v-card>
                                     <v-container>
-                                        <v-layout v-if="dado.stDtDeCorte == 1">
+                                        <v-layout v-if="parecer.stDtDeCorte == 1">
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Ciência ao Poder legislativo?</b></p>
-                                                    {{ dado.divulgacao[index].stCienciaLegislativo }}
+                                                    {{ parecer.divulgacao.stCienciaLegislativo }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Contemplou as exigências legais?</b></p>
-                                                    {{ dado.divulgacao[index].stExigenciaLegal }}
+                                                    {{ parecer.divulgacao.stExigenciaLegal }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Há material informativo do Projeto?</b></p>
-                                                    {{ dado.divulgacao[index].stMaterialInformativo }}
+                                                    {{ parecer.divulgacao.stMaterialInformativo }}
                                             </v-flex>
                                         </v-layout>
                                     </v-container>
@@ -458,7 +464,8 @@
                             <v-timeline-item
                             color="teal accent-3"
                             fill-dot
-                            right
+                            :class="definirClasseTimeline()"
+                            small
                             >
                                     <span
                                         slot="opposite"
@@ -466,29 +473,29 @@
                                     >Execução</span>
                                     <v-card>
                                         <v-container>
-                                            <v-layout v-if="dado.stDtDeCorte == 1">
+                                            <v-layout v-if="parecer.stDtDeCorte == 1">
                                                 <v-flex xs10 offset-xs1>
                                                     <br><p><b>Alcançou a finalidade esperada?</b></p>
-                                                        {{ dado.execucao[index].stFinalidadeEsperada }}
+                                                        {{ parecer.execucao.stFinalidadeEsperada }}
                                                 </v-flex>
                                             </v-layout>
-                                            <v-layout v-if="dado.stDtDeCorte == 1">
+                                            <v-layout v-if="parecer.stDtDeCorte == 1">
                                                 <v-flex xs10 offset-xs1>
                                                     <br><p><b>As metas/etapas do Plano de Trabalho foram executadas integralmente?</b></p>
-                                                        {{ dado.execucao[index].stPlanoTrabalho }}
+                                                        {{ parecer.execucao.stPlanoTrabalho }}
                                                 </v-flex>
                                             </v-layout>
                                             <v-layout>
                                                 <v-flex xs10 offset-xs1>
-                                                    <div v-if="dado.stDtDeCorte == 0"><br><p><b>O projeto está sendo executado de acordo com o aprovado?</b></p></div>
-                                                    <div v-if="dado.stDtDeCorte == 1"><br><p><b>A execução respeitou o aprovado?</b></p></div>
-                                                        {{ dado.execucao[index].stExecucaoAprovado }}
+                                                    <div v-if="parecer.stDtDeCorte == 0"><br><p><b>O projeto está sendo executado de acordo com o aprovado?</b></p></div>
+                                                    <div v-if="parecer.stDtDeCorte == 1"><br><p><b>A execução respeitou o aprovado?</b></p></div>
+                                                        {{ parecer.execucao.stExecucaoAprovado }}
                                                 </v-flex>
                                             </v-layout>
-                                            <v-layout v-if="dado.stDtDeCorte == 0">
+                                            <v-layout v-if="parecer.stDtDeCorte == 0">
                                                 <v-flex xs10 offset-xs1>
                                                     <br><p><b>Observações</b></p>
-                                                    <div v-html="dado.execucao[index].dsObservacao"></div>
+                                                    <div v-html="parecer.execucao.dsObservacao"></div>
                                                 </v-flex>
                                             </v-layout>
                                         </v-container>
@@ -497,7 +504,8 @@
                                 <v-timeline-item
                                 color="pink lighten-3"
                                 fill-dot
-                                left
+                                :class="definirClasseTimeline()"
+                                small
                                 >
                                     <span
                                         slot="opposite"
@@ -507,13 +515,13 @@
                                         <v-container >
                                             <v-layout>
                                                 <v-flex xs4 offset-xs1>
-                                                    <br><p><b>Diretos: </b>{{ dado.empregosGeradosProjeto[index].qtEmpregoDireto }}</p>
+                                                    <br><p><b>Diretos: </b>{{ parecer.empregosGeradosProjeto.qtEmpregoDireto }}</p>
                                                 </v-flex>
                                                 <v-flex xs4 offset-xs1>
-                                                    <br><p><b>Indiretos: </b>{{ dado.empregosGeradosProjeto[index].qtEmpregoIndireto }}</p>
+                                                    <br><p><b>Indiretos: </b>{{ parecer.empregosGeradosProjeto.qtEmpregoIndireto }}</p>
                                                 </v-flex>
                                                 <v-flex xs4 offset-xs1>
-                                                    <br><p><b>Total: </b>{{ dado.empregosGeradosProjeto[index].qtEmpregoTotal }}</p>
+                                                    <br><p><b>Total: </b>{{ parecer.empregosGeradosProjeto.qtEmpregoTotal }}</p>
                                                 </v-flex>
                                             </v-layout>
                                         </v-container>
@@ -523,7 +531,8 @@
                                 <v-timeline-item
                                 color="lime lighten-1"
                                 fill-dot
-                                right
+                                :class="definirClasseTimeline()"
+                                small
                                 >
                                     <span
                                         slot="opposite"
@@ -533,7 +542,7 @@
                                         <v-container >
                                             <v-layout>
                                                 <v-flex xs10 offset-xs1>
-                                                    <div v-html="dado.empregosGeradosProjeto[index].dsEvidencia"></div>
+                                                    <div v-html="parecer.empregosGeradosProjeto.dsEvidencia"></div>
                                                 </v-flex>
                                             </v-layout>
                                         </v-container>
@@ -543,7 +552,8 @@
                                 <v-timeline-item
                                 color="amber darken-2"
                                 fill-dot
-                                left
+                                :class="definirClasseTimeline()"
+                                small
                                 >
                                     <span
                                         slot="opposite"
@@ -553,7 +563,7 @@
                                         <v-container >
                                             <v-layout>
                                                 <v-flex xs10 offset-xs1>
-                                                    <div v-html="dado.empregosGeradosProjeto[index].dsRecomendacaoEquipe"></div>
+                                                    <div v-html="parecer.empregosGeradosProjeto.dsRecomendacaoEquipe"></div>
                                                 </v-flex>
                                             </v-layout>
                                         </v-container>
@@ -563,7 +573,8 @@
                                 <v-timeline-item
                                 color="blue-grey lighten-2"
                                 fill-dot
-                                right
+                                :class="definirClasseTimeline()"
+                                small
                                 >
                                     <span
                                         slot="opposite"
@@ -573,7 +584,7 @@
                                         <v-container >
                                             <v-layout>
                                                 <v-flex xs10 offset-xs1>
-                                                    <div v-if="dado.empregosGeradosProjeto[index].dsConclusaoEquipe.length > 1" v-html="dado.empregosGeradosProjeto[index].dsConclusaoEquipe"></div>
+                                                    <div v-if="parecer.empregosGeradosProjeto.dsConclusaoEquipe.length > 1" v-html="parecer.empregosGeradosProjeto.dsConclusaoEquipe"></div>
                                                     <div v-else>Não se Aplica.</div>
                                                 </v-flex>
                                             </v-layout>
@@ -584,7 +595,8 @@
                                 <v-timeline-item
                                 color="light-blue lighten-3"
                                 fill-dot
-                                left
+                                :class="definirClasseTimeline()"
+                                small
                                 >
                                     <span
                                         slot="opposite"
@@ -594,7 +606,7 @@
                                         <v-container >
                                             <v-layout>
                                                 <v-flex xs10 offset-xs1>
-                                                    <div v-html="dado.empregosGeradosProjeto[index].dsParecerTecnico"></div>
+                                                    <div v-html="parecer.empregosGeradosProjeto.dsParecerTecnico"></div>
                                                 </v-flex>
                                             </v-layout>
                                         </v-container>
@@ -604,7 +616,8 @@
                                 <v-timeline-item
                                 color="green darken-2"
                                 fill-dot
-                                right
+                                :class="definirClasseTimeline()"
+                                small
                                 >
                                     <span
                                         slot="opposite"
@@ -614,7 +627,7 @@
                                         <v-container >
                                             <v-layout>
                                                 <v-flex xs10 offset-xs1>
-                                                    <div v-html="dado.empregosGeradosProjeto[index].dsParecer"></div>
+                                                    <div v-html="parecer.empregosGeradosProjeto.dsParecer"></div>
                                                 </v-flex>
                                             </v-layout>
                                         </v-container>
@@ -624,7 +637,8 @@
                         <v-timeline-item
                             color="orange darken-1"
                             fill-dot
-                            left
+                            :class="definirClasseTimeline()"
+                            small
                             >
                                 <span
                                     slot="opposite"
@@ -650,7 +664,7 @@
 <script>
 
     import { mapActions, mapGetters } from 'vuex';
-
+    let contador = 0;
     export default {
         name: 'DadosFiscalizacao',
         data() {
@@ -703,6 +717,9 @@
                 dadosListagem: 'projeto/dadosFiscalizacaoLista',
                 dadosVisualizacao: 'projeto/dadosFiscalizacaoVisualiza',
             }),
+            parecer() {
+                return this.dadosVisualizacao.fiscalizacaoConcluidaParecer;
+            },
         },
         methods: {
             showItem(idFiscalizacao) {
@@ -710,7 +727,14 @@
 
                 this.buscarDadosFiscalizacaoVisualiza({ idPronac, idFiscalizacao });
                 this.dialog = true;
+            },
+            definirClasseTimeline() {
+                 contador++;
 
+                return {
+                    'v-timeline-item--left': parseInt(contador % 2, 10) === 0,
+                    'v-timeline-item--right': parseInt(contador % 2, 10) !== 0,
+                };
             },
             ...mapActions({
                 buscarDadosFiscalizacaoLista: 'projeto/buscarDadosFiscalizacaoLista',
