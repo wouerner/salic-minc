@@ -239,18 +239,6 @@ $arrMenu['acompanhamento']['menu'][] = array(
 );
 
 $arrMenu['acompanhamento']['menu'][] = array(
-    'grupo' => array(138),
-    'url' => $this->url(array('controller' => 'avaliaracompanhamentoprojeto', 'action' => 'index'), '', true),
-    'title' => 'Ir para Analisar Projeto Parecer',
-    'label' => 'Analisar Comprova&ccedil;&atilde;o do Objeto'
-);
-$arrMenu['acompanhamento']['menu'][] = array(
-    'grupo' => array(139, 148, 151),
-    'url' => $this->url(array('controller' => 'avaliaracompanhamentoprojeto', 'action' => 'index-tecnico'), '', true),
-    'title' => 'Ir para Analisar Projeto Parecer',
-    'label' => 'Analisar Comprova&ccedil;&atilde;o do Objeto'
-);
-$arrMenu['acompanhamento']['menu'][] = array(
     'grupo' => array(137),
     'url' => $this->url(array('controller' => 'parecerista', 'action' => 'configurar-pagamento-parecerista'), '', true),
     'title' => 'Ir para Pagamento de parecerista',
@@ -899,7 +887,7 @@ if (isset ($auth['cpf'])) {
 </style>
 <div id="navbar-header">
     <nav class="">
-        <div class="nav-wrapper" style="margin: 0 auto; max-width: 960px">
+        <div class="nav-wrapper" style="margin: 0 auto; max-width: 1200px">
             <a id="menu-right" href="#" data-activates="nav-mobile" class="button-collapse right"><i
                         class="material-icons">menu</i></a>
             <ul class="left hide-on-med-and-down">
