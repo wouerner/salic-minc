@@ -331,7 +331,7 @@ class ReadequacaoAssinatura implements IServico
                 'Sequencial' => $dadosPrj->Sequencial,
                 'TipoAprovacao' => $TipoAprovacao,
                 'DtAprovacao' => new \Zend_Db_Expr('GETDATE()'),
-                'ResumoAprovacao' => 'Parecer favorável para readequação',
+                'ResumoAprovacao' => 'Parecer favor&aacute;vel para readequa&ccedil;&atilde;o',
                 'AprovadoReal' => $TipoDeReadequacao[0]['vlReadequado'], //Alterado pelo valor retornado pela Store
                 'Logon' => $this->auth->getIdentity()->usu_codigo,
                 'idReadequacao' => $read->idReadequacao
@@ -353,7 +353,7 @@ class ReadequacaoAssinatura implements IServico
             'Sequencial' => $dadosPrj->Sequencial,
             'TipoAprovacao' => 8,
             'DtAprovacao' => new \Zend_Db_Expr('GETDATE()'),
-            'ResumoAprovacao' => 'Parecer favorável para readequação',
+            'ResumoAprovacao' => 'Parecer favor&aacute;vel para readequa&ccedil;&atilde;o',
             'Logon' => $this->auth->getIdentity()->usu_codigo,
             'idReadequacao' => $read->idReadequacao
         ];
@@ -507,7 +507,7 @@ class ReadequacaoAssinatura implements IServico
             'Sequencial' => $dadosPrj->Sequencial,
             'TipoAprovacao' => 8,
             'DtAprovacao' => new \Zend_Db_Expr('GETDATE()'),
-            'ResumoAprovacao' => 'Parecer favorável para readequação',
+            'ResumoAprovacao' => 'Parecer favor&aacute;vel para readequa&ccedil;&atilde;o',
             'Logon' => $this->auth->getIdentity()->usu_codigo,
             'idReadequacao' => $read->idReadequacao
         ];
@@ -529,7 +529,7 @@ class ReadequacaoAssinatura implements IServico
             'Sequencial' => $dadosPrj->Sequencial,
             'TipoAprovacao' => 8,
             'DtAprovacao' => new \Zend_Db_Expr('GETDATE()'),
-            'ResumoAprovacao' => 'Parecer favorável para readequação',
+            'ResumoAprovacao' => 'Parecer favor&aacute;vel para readequa&ccedil;&atilde;o',
             'Logon' => $this->auth->getIdentity()->usu_codigo,
             'idReadequacao' => $read->idReadequacao
         ];
@@ -618,7 +618,7 @@ class ReadequacaoAssinatura implements IServico
             'Sequencial' => $dadosPrj->Sequencial,
             'TipoAprovacao' => 8,
             'DtAprovacao' => new \Zend_Db_Expr('GETDATE()'),
-            'ResumoAprovacao' => 'Parecer favorável para readequação',
+            'ResumoAprovacao' => 'Parecer favor&aacute;vel para readequa&ccedil;&atilde;o',
             'Logon' => $this->auth->getIdentity()->usu_codigo,
             'idReadequacao' => $read->idReadequacao
         ];
