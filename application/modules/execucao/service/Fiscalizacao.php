@@ -258,10 +258,10 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
                 $result = 'Sim';
                 break;
             case 2:
-                $result = 'Nï¿½o';
+                $result = 'Não';
                 break;
             case 3:
-                $result = 'Nï¿½o se aplica.';
+                $result = 'Não se aplica.';
                 break;
             default:
                 $result = ' - ';

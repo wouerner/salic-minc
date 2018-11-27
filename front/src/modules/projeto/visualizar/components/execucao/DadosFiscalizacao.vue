@@ -222,29 +222,29 @@
                                     :class="`headline font-weight-bold cyan--text text--lighten-1`"
                                 >Situação do Convênio na Realização da Fiscalização</span>
                                 <v-card>
-                                    <v-container v-for="(dado, index) in dadosVisualizacao.stConvenioFiscalizacao" :key="index">
+                                    <v-container>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Situação SIAFI</b></p>
-                                                    {{ dado.divulgacao[index].stSiafi }}
+                                                    {{ dado.stConvenioFiscalizacao[index].stSiafi }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Prestação de Contas Apresentada?</b></p>
-                                                    {{ dado.divulgacao[index].stPrestacaoContas }}
+                                                    {{ dado.stConvenioFiscalizacao[index].stPrestacaoContas }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Foram cumpridas as normas estabelecidas?</b></p>
-                                                    {{ dado.divulgacao[index].stCumpridasNormas }}
+                                                    {{ dado.stConvenioFiscalizacao[index].stCumpridasNormas }}
                                             </v-flex>
                                         </v-layout>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
                                                 <br><p><b>Foi cumprido o prazo para entrega da prestação de contas?</b></p>
-                                                    {{ dado.divulgacao[index].stCumpridoPrazo }}
+                                                    {{ dado.stConvenioFiscalizacao[index].stCumpridoPrazo }}
                                             </v-flex>
                                         </v-layout>
                                     </v-container>
