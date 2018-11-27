@@ -135,7 +135,7 @@
                                                 <v-flex xs4 d-flex>
                                                         <v-select
                                                             height="20px"
-                                                            :value="getParecer.siManifestacao"
+                                                            v-model="getParecer.siManifestacao"
                                                             @input="inputManifestacao($event)"
                                                             :rules="itemRules"
                                                             :items="items"
@@ -151,19 +151,13 @@
 
                                                 <v-flex md12 xs12 mb-4>
                                                     <v-card>
-                                                        <!-- <EditorTexto
-                                                            @text-change="inputParecer($event)"
-                                                            :value="getParecer.dsParecer"
-                                                        >                                      
-                                                        </EditorTexto> -->
-
-                                                        <vue-editor
-                                                            :editorToolbar="customToolbar"
-                                                            :placeholder="'Texto do Parecer *'"
-                                                            :value="getParecer.dsParecer"
-                                                            @text-change="inputParecer($event)"
-                                                        >
-                                                        </vue-editor>
+                                                        <v-responsive>
+                                                            <EditorTexto
+                                                                v-model="getParecer.dsParecer"
+                                                                @text-change="inputParecer($event)"
+                                                            >
+                                                            </EditorTexto>
+                                                        </v-responsive>
 
                                                         <!-- <v-textarea
                                                             :value="getParecer.dsParecer"
@@ -196,8 +190,7 @@ import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import cnpjFilter from '@/filters/cnpj';
 import VueCurrencyFilter from 'vue-currency-filter';
-import { VueEditor } from "vue2-editor";
-// import EditorTexto from './components/EditorTexto'
+import EditorTexto from './components/EditorTexto'
 
 
 Vue.use(VueCurrencyFilter, {
@@ -209,7 +202,7 @@ Vue.use(VueCurrencyFilter, {
 export default {
     name: 'EmitirParecer',
     components: {
-        VueEditor
+        EditorTexto
     },
     data() {
         return {
@@ -272,7 +265,6 @@ export default {
                 siManifestacao: this.getParecer.siManifestacao,
                 dsParecer: this.getParecer.dsParecer,
             };
-
             if (this.parecer.idAvaliacaoFinanceira) {
                 data.idAvaliacaoFinanceira = this.parecer.idAvaliacaoFinanceira;
             }
@@ -284,9 +276,6 @@ export default {
             if (this.parecerData.dsParecer) {
                 data.dsParecer = this.parecerData.dsParecer;
             }
-            console.log('this: ' + this.getParecer.dsParecer);
-            console.log('data: ' + data.dsParecer);
-
             this.salvar(data);
             /** Descomentar linha após migração da lista para o VUEJS */
             // this.dialog = false;
