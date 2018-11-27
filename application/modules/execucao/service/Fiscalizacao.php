@@ -168,7 +168,7 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
         $dtDeCorte = strtotime(date('2013-09-15 00:00:00'));
         $stDtDeCorte = 0;
 
-        $resumoExecucao[] = [
+        $resumoExecucao = [
             'dsAcoesProgramadas' => $dados['dsAcoesProgramadas'],
             'dsAcoesExecutadas' => $dados['dsAcoesExecutadas'],
             'dsBeneficioAlcancado' => $dados['dsBeneficioAlcancado'],
@@ -177,7 +177,7 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
 
         if ($dtInicioFiscalizacao < $dtDeCorte) {
             $stDtDeCorte = 1;
-            $stConvenioFiscalizacao[] = [
+            $stConvenioFiscalizacao = [
                 'stSiafi' => $this->statusConvenio($dados['stSiafi']),
                 'stPrestacaoContas' => $this->statusFiscalizacao($dados['stPrestacaoContas']),
                 'stCumpridasNormas' => $this->statusFiscalizacao($dados['stCumpridasNormas']),
@@ -185,7 +185,7 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
             ];
         }
 
-        $utilizacaoRecursos[] = [
+        $utilizacaoRecursos = [
             'stApuracaoUFiscalizacao' => $this->statusFiscalizacao($dados['stApuracaoUFiscalizacao']),
             'stComprovacaoUtilizacaoRecurso' => $this->statusFiscalizacao($dados['stComprovacaoUtilizacaoRecurso']),
             'stCompatibilidadeDesembolsoEvo' => $this->statusFiscalizacao($dados['stCompatibilidadeDesembolsoEvo']),
@@ -202,7 +202,7 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
             'stSaldoVerificacaoFNC' => $this->statusFiscalizacao($dados['stSaldoVerificacaoFNC']),
         ];
 
-        $comprovantesDespesa[] = [
+        $comprovantesDespesa = [
             'stProcessoDocumentado' => $this->statusFiscalizacao($dados['stProcessoDocumentado']),
             'stDocumentacaoCompleta' => $this->statusFiscalizacao($dados['stDocumentacaoCompleta']),
             'stConformidadeExecucao' => $this->statusFiscalizacao($dados['stConformidadeExecucao']),
@@ -214,20 +214,20 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
             'stComprovanteFiscal' => $this->statusFiscalizacao($dados['stComprovanteFiscal']),
             ];
 
-        $divulgacao[] = [
+        $divulgacao = [
             'stCienciaLegislativo' => $this->statusFiscalizacao($dados['stCienciaLegislativo']),
             'stExigenciaLegal' => $this->statusFiscalizacao($dados['stExigenciaLegal']),
             'stMaterialInformativo' => $this->statusFiscalizacao($dados['stMaterialInformativo']),
             ];
 
-        $execucao[] = [
+        $execucao = [
             'stFinalidadeEsperada' => $this->statusFiscalizacao($dados['stFinalidadeEsperada']),
             'stPlanoTrabalho' => $this->statusFiscalizacao($dados['stPlanoTrabalho']),
             'stExecucaoAprovado' => $this->statusFiscalizacao($dados['stExecucaoAprovado']),
             'dsObservacao' => $dados['dsObservacao'],
             ];
 
-        $empregosGeradosProjeto[] = [
+        $empregosGeradosProjeto = [
             'qtEmpregoDireto' => $dados['qtEmpregoDireto'],
             'qtEmpregoIndireto' => $dados['qtEmpregoIndireto'],
             'qtEmpregoTotal' => $dados['qtEmpregoDireto'] + $dados['qtEmpregoIndireto'],
@@ -238,7 +238,7 @@ class Fiscalizacao implements \MinC\Servico\IServicoRestZend
             'dsParecer' => $dados['dsParecer'],
             ];
 
-            $result[] = [
+            $result = [
                 'resumoExecucao' => $resumoExecucao,
                 'stConvenioFiscalizacao' => $stConvenioFiscalizacao,
                 'utilizacaoRecursos' => $utilizacaoRecursos,
