@@ -208,6 +208,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             //CALCULAR VALORES MINIMO E MAXIMO PARA VALIDACAO
             $dadosPlanilhaAtiva['idPlanilhaAprovacao'] = $registro['idPlanilhaAprovacao'];
             $dadosPlanilhaAtiva['idProduto'] = $registro['idProduto'];
+            $dadosPlanilhaAtiva['nrFonteRecurso'] = $registro['nrFonteRecurso'];
             $dadosPlanilhaAtiva['descProduto'] = utf8_encode($registro['descProduto']);
             $dadosPlanilhaAtiva['idEtapa'] = $registro['idEtapa'];
             $dadosPlanilhaAtiva['descEtapa'] = utf8_encode($registro['descEtapa']);
@@ -228,6 +229,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             foreach ($planilhaEditaval as $registroEditavel) {
                 $dadosPlanilhaEditavel['idPlanilhaAprovacao'] = $registroEditavel['idPlanilhaAprovacao'];
                 $dadosPlanilhaEditavel['idProduto'] = $registroEditavel['idProduto'];
+                $dadosPlanilhaEditavel['nrFonteRecurso'] = $registroEditavel['nrFonteRecurso'];
                 $dadosPlanilhaEditavel['descProduto'] = utf8_encode($registroEditavel['descProduto']);
                 $dadosPlanilhaEditavel['idEtapa'] = $registroEditavel['idEtapa'];
                 $dadosPlanilhaEditavel['descEtapa'] = utf8_encode($registroEditavel['descEtapa']);
@@ -450,6 +452,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $editarItem->qtDias = $this->_request->getParam('QtdeDias');
         $editarItem->dsJustificativa = utf8_decode($this->_request->getParam('Justificativa'));
         $editarItem->idAgente = $idAgente;
+        $editarItem->nrFonteRecurso = $this->_request->getParam('nrFonteRecurso');
         if ($editarItem->tpAcao == 'N') {
             $editarItem->tpAcao = 'A';
         }
@@ -921,15 +924,23 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-
+        
+        $idReadequacao = filter_var($this->_request->getParam("idReadequacao"), FILTER_SANITIZE_NUMBER_INT);
+        $idTipoReadequacao = filter_var($this->_request->getParam("tipoReadequacao"), FILTER_SANITIZE_NUMBER_INT);
+        
         $urlCallback = $this->_request->getParam('urlCallback');
 
         if (empty($urlCallback)) {
-            $urlCallback = "readequacao/readequacoes/index?idPronac=" . Seguranca::encrypt($idPronac);
+            switch ($idTipoReadequacao) {
+                case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA:
+                    $urlCallback = "readequacao/readequacoes/planilha-orcamentaria/?idPronac=" . Seguranca::encrypt($idPronac);
+                    break;
+                default:
+                    $urlCallback = "readequacao/readequacoes/index?idPronac=" . Seguranca::encrypt($idPronac);
+                    break;
+            }
         }
 
-        $idReadequacao = filter_var($this->_request->getParam("idReadequacao"), FILTER_SANITIZE_NUMBER_INT);
-        $idTipoReadequacao = filter_var($this->_request->getParam("tipoReadequacao"), FILTER_SANITIZE_NUMBER_INT);
 
         $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
         $busca = array();
@@ -1738,51 +1749,47 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
      */
     public function encaminharReadequacaoAction()
     {
-        $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
+        $this->_helper->layout->disableLayout();
         $vinculada = $this->idOrgao;
 
         $idDistRead = $this->_request->getParam('idDistRead');
         $idReadequacao = $this->_request->getParam('idReadequacao');
 
-        //Atualiza a tabela tbDistribuirReadequacao
-        if ($vinculada != Orgaos::ORGAO_IPHAN_PRONAC) { // todos os casos exceto IPHAN
+        if ($vinculada != Orgaos::ORGAO_IPHAN_PRONAC) {
             $idAvaliador = $this->_request->getParam('parecerista');
 
-            $dados = array();
+            $dados = [];
             $dados['idAvaliador'] = $idAvaliador;
             $dados['DtEnvioAvaliador'] = new Zend_Db_Expr('GETDATE()');
             $where["idDistribuirReadequacao = ? "] = $idDistRead;
             $tbDistribuirReadequacao = new Readequacao_Model_tbDistribuirReadequacao();
             $return = $tbDistribuirReadequacao->update($dados, $where);
-
-            //Atualiza a tabelaReadequacao_Model_DbTable_TbReadequacao
-            $dados = array();
+            
+            $dados = [];
             $dados['siEncaminhamento'] = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_ENVIADO_ANALISE_TECNICA;
-            $where = array();
+            $where = [];
             $where['idReadequacao = ?'] = $idReadequacao;
             $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
             $return2 = $tbReadequacao->update($dados, $where);
 
             if ($return && $return2) {
-                $this->_helper->json(array('resposta' => true));
+                $this->_helper->json(['resposta' => true]);
             } else {
-                $this->_helper->json(array('resposta' => false));
+                $this->_helper->json(['resposta' => false]);
             }
         } else {
-            // IPHAN
-
             $idVinculada = $this->_request->getParam('parecerista');
 
-            $dados = array();
+            $dados = [];
             $dados['idUnidade'] = $idVinculada;
             $where["idDistribuirReadequacao = ? "] = $idDistRead;
             $tbDistribuirReadequacao = new Readequacao_Model_tbDistribuirReadequacao();
             $return = $tbDistribuirReadequacao->update($dados, $where);
 
             if ($return) {
-                $this->_helper->json(array('resposta' => true));
+                $this->_helper->json(['resposta' => true]);
             } else {
-                $this->_helper->json(array('resposta' => false));
+                $this->_helper->json(['resposta' => false]);
             }
         }
         $this->_helper->viewRenderer->setNoRender(true);

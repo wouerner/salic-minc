@@ -63,12 +63,29 @@ export const obterDestinatarios = ({ commit }) => {
 };
 
 export const obterDadosTabelaTecnico = ({ commit }, params) => {
+    commit(types.PROJETOS_AVALIACAO_TECNICA, {});
     avaliacaoResultadosHelperAPI.obterDadosTabelaTecnico(params)
         .then((response) => {
-            const data = response.data;
-            const dadosTabela = data.data;
-            commit(types.PROJETOS_AVALIACAO_TECNICA, dadosTabela);
+            const data = response.data.data;
+            data.items.forEach((a, index) => {
+                avaliacaoResultadosHelperAPI.listarDiligencias(a.idPronac).then(
+                    (response) => {
+                        const obj = response.data.data;
+                        data.items[index].diligencias = obj.items;
+                    },
+                );
+            });
+            commit(types.PROJETOS_AVALIACAO_TECNICA, data);
         });
+};
+
+export const obetDadosDiligencias = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.listarDiligencias(params).then(
+        (response) => {
+            const obj = response.data.data;
+            commit(types.HISTORICO_DILIGENCIAS, obj);
+        },
+    );
 };
 
 export const projetosFinalizados = ({ commit }, params) => {
@@ -101,14 +118,7 @@ export const getTipoAvaliacao = ({ commit }, params) => {
     return p;
 };
 
-export const redirectLinkAvaliacaoResultadoTipo = ({ commit }, params) => {
-    if (params.percentual === 0) {
-        commit(types.LINK_REDIRECIONAMENTO_TIPO_AVALIACAO_RESULTADO, `/prestacao-contas/realizar-prestacao-contas/index/idPronac/${params.idPronac}`);
-    } else {
-        commit(types.LINK_REDIRECIONAMENTO_TIPO_AVALIACAO_RESULTADO, `/prestacao-contas/prestacao-contas/amostragem/idPronac/${params.idPronac}/tipoAvaliacao/${params.percentual}`);
-    }
-};
-
+// deprecated
 export const planilha = ({ commit }, params) => {
     avaliacaoResultadosHelperAPI.planilha(params)
         .then((response) => {
@@ -120,7 +130,28 @@ export const planilha = ({ commit }, params) => {
         });
 };
 
+export const syncPlanilhaAction = ({ commit }, params) => {
+    commit(types.GET_PLANILHA, {});
+    avaliacaoResultadosHelperAPI.planilha(params)
+        .then((response) => {
+            const planilha = response.data;
+            commit(types.GET_PLANILHA, planilha);
+        }).catch((error) => {
+            const data = error.response;
+            commit(types.GET_PLANILHA, { error: data.data.data.erro });
+        });
+};
+// deprecated use syncProjetoAction
 export const projetoAnalise = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.projetoAnalise(params)
+        .then((response) => {
+            const projetoAnalise = response.data;
+            commit(types.GET_PROJETO_ANALISE, projetoAnalise);
+        });
+};
+
+export const syncProjetoAction = ({ commit }, params) => {
+    commit(types.GET_PROJETO_ANALISE, {});
     avaliacaoResultadosHelperAPI.projetoAnalise(params)
         .then((response) => {
             const projetoAnalise = response.data;

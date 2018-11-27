@@ -54,6 +54,10 @@ class Assinatura_IndexController extends Assinatura_GenericController
 //
 //        $order = ($order[0]['dir'] != 1) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : ["Pronac desc"];
 
+        if ($search['value'] != '') {
+            $search['value'] = urldecode($search['value']);
+            $search['value'] = str_replace('\\', '', $search['value']);
+        }
         $get = Zend_Registry::get('get');
         $idTipoDoAtoAdministrativo = $get->idTipoDoAtoAdministrativo;
         $idTipoDoAtoAdministrativos = [];
@@ -304,7 +308,10 @@ class Assinatura_IndexController extends Assinatura_GenericController
             if (count($arrayIdPronacs) < 1) {
                 throw new Exception("Identificador do projeto &eacute; necess&aacute;rio para acessar essa funcionalidade.");
             }
-
+            if ($arrayIdPronacs > 1) {
+                $idPronac = current($arrayIdPronacs);
+            }
+            
             $post = $this->getRequest()->getPost();
 
 
@@ -321,8 +328,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
             $idDocumentoAssinatura = $this->view->documentoAssinatura['idDocumentoAssinatura'];
             
             $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-            
-            $grupoAtoAdministrativo = '';
+            $grupoAtoAdministrativo = null;
             if ($idDocumentoAssinatura != '') {
                 $grupoAtoAdministrativo = $objTbAtoAdministrativo->obterGrupoPorIdDocumentoAssinatura($idDocumentoAssinatura);
             }
