@@ -500,6 +500,21 @@
                                     </v-layout>
                                 </v-container>
                             </v-card>
+                            <v-footer
+                                height="auto"
+                            >
+                                <v-card
+                                    class="flex"
+                                    flat
+                                    tile
+                                >
+                                    <v-card-actions class="justify-center">
+                                        <v-btn @click="dialog = false" class="primary">
+                                            FECHAR
+                                        </v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-footer>
                     </v-container>
                 </v-card>
             </v-dialog>
