@@ -40,11 +40,11 @@
                     </v-toolbar>
                     <v-container style="max-width: 100%;">
                             <v-card>
-                                <v-card-title primary-title class="primary justify-center">
+                                <v-subheader class="primary justify-center">
                                     <div>
-                                        <h2 class="display-1 white--text font-weight-light">Locais</h2>
+                                        <h3 class="display-1 white--text font-weight-light">Locais</h3>
                                     </div>
-                                </v-card-title>
+                                </v-subheader>
                                 <v-container>
                                     <v-layout>
                                         <v-flex xs4 offset-xs2>
@@ -71,14 +71,18 @@
                                 </v-container>
                             </v-card>
                             <v-card>
-                                <v-card-title class="primary justify-center">
-                                    <h2 class="display-1 white--text font-weight-light">Oficializar Fiscalização</h2>
-                                </v-card-title>
+                                <v-subheader class="primary justify-center">
+                                    <div>
+                                        <h3 class="display-1 white--text font-weight-light">Oficializar Fiscalização</h3>
+                                    </div>
+                                </v-subheader>
                             </v-card>
                             <v-card>
-                                <v-card-title class="justify-center">
-                                    <h2 class="display-1 font-weight-light">Datas / Demandante</h2>
-                                </v-card-title>
+                                <v-subheader class="justify-center">
+                                    <div>
+                                        <h4 class="display-1 grey--text text--darken-4 font-weight-light">Datas / Demandante</h4>
+                                    </div>
+                                </v-subheader>
                                 <v-container v-for="(dado, index) in dadosVisualizacao.oficializarFiscalizacao" :key="index">
                                     <v-layout >
                                         <v-flex xs6 offset-xs2>
@@ -105,9 +109,11 @@
                                 </v-container>
                             </v-card>
                             <v-card>
-                                <v-card-title class="justify-center">
-                                    <h2 class="display-1 font-weight-light">Identificação do Técnico</h2>
-                                </v-card-title>
+                                <v-subheader class="justify-center">
+                                    <div>
+                                        <h4 class="display-1 grey--text text--darken-4 font-weight-light">Identificação do Técnico</h4>
+                                    </div>
+                                </v-subheader>
                                 <v-container v-for="(dado, index) in dadosVisualizacao.oficializarFiscalizacao" :key="index">
                                     <v-layout>
                                         <v-flex xs6 offset-xs2>
@@ -128,9 +134,11 @@
                                 </v-container>
                             </v-card>
                             <v-card>
-                                <v-card-title class="primary justify-center">
-                                    <h2 class="display-1 mr-3 white--text font-weight-light">Fiscalização Concluída para Parecer</h2>
-                                </v-card-title>
+                                <v-subheader class="primary justify-center">
+                                    <div>
+                                        <h3 class="display-1 white--text font-weight-light">Fiscalização Concluída para Parecer</h3>
+                                    </div>
+                                </v-subheader>
                             </v-card>
                             <div v-if="parecer">
                                 <v-card>
@@ -165,9 +173,11 @@
                                     </v-container>
                                 </v-card>
                                 <v-card v-if="parecer.stDtDeCorte == 1">
-                                    <v-card-title class="justify-center">
-                                        <h2 class="display-1 font-weight-light">Situação do Convênio na Realização da Fiscalização</h2>
-                                    </v-card-title>
+                                    <v-subheader class="justify-center">
+                                        <div>
+                                            <h4 class="display-1 grey--text text--darken-4 font-weight-light">Situação do Convênio na Realização da Fiscalização</h4>
+                                        </div>
+                                    </v-subheader>
                                     <v-container>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
@@ -196,9 +206,11 @@
                                     </v-container>
                                 </v-card>
                                 <v-card>
-                                    <v-card-title class="justify-center">
-                                        <h2 class="display-1 font-weight-light">Utilização de Recursos</h2>
-                                    </v-card-title>
+                                    <v-subheader class="justify-center">
+                                        <div>
+                                            <h4 class="display-1 grey--text text--darken-4 font-weight-light">Utilização de Recursos</h4>
+                                        </div>
+                                    </v-subheader>
                                     <v-container>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
@@ -289,9 +301,11 @@
                                     </v-container>
                                 </v-card>
                                 <v-card>
-                                    <v-card-title class="justify-center">
-                                        <h2 class="display-1 font-weight-light">Comprovantes Fiscais de Despesa</h2>
-                                    </v-card-title>
+                                    <v-subheader class="justify-center">
+                                        <div>
+                                            <h4 class="display-1 grey--text text--darken-4 font-weight-light">Comprovantes Fiscais de Despesa</h4>
+                                        </div>
+                                    </v-subheader>
                                     <v-container>
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
@@ -352,9 +366,11 @@
                                     </v-container>
                                 </v-card>
                                 <v-card>
-                                    <v-card-title class="justify-center">
-                                        <h2 class="display-1 font-weight-light">Divulgação</h2>
-                                    </v-card-title>
+                                    <v-subheader class="justify-center">
+                                        <div>
+                                            <h4 class="display-1 grey--text text--darken-4 font-weight-light">Divulgação</h4>
+                                        </div>
+                                    </v-subheader>
                                     <v-container>
                                         <v-layout v-if="parecer.stDtDeCorte == 1">
                                             <v-flex xs10 offset-xs1>
@@ -377,9 +393,11 @@
                                     </v-container>
                                 </v-card>
                                 <v-card>
-                                    <v-card-title class="justify-center">
-                                        <h2 class="display-1 font-weight-light">Execução</h2>
-                                    </v-card-title>
+                                    <v-subheader class="justify-center">
+                                        <div>
+                                            <h4 class="display-1 grey--text text--darken-4 font-weight-light">Execução</h4>
+                                        </div>
+                                    </v-subheader>
                                     <v-container>
                                         <v-layout v-if="parecer.stDtDeCorte == 1">
                                             <v-flex xs10 offset-xs1>
@@ -409,9 +427,11 @@
                                     </v-container>
                                 </v-card>
                                 <v-card>
-                                    <v-card-title class="justify-center">
-                                        <h2 class="display-1 font-weight-light">Empregos gerados em decorrência do projeto</h2>
-                                    </v-card-title>
+                                    <v-subheader class="justify-center">
+                                        <div>
+                                            <h4 class="display-1 grey--text text--darken-4 font-weight-light">Empregos gerados em decorrência do projeto</h4>
+                                        </div>
+                                    </v-subheader>
                                     <v-container >
                                         <v-layout>
                                             <v-flex xs4 offset-xs1>
@@ -427,9 +447,11 @@
                                     </v-container>
                                 </v-card>
                                 <v-card>
-                                    <v-card-title class="justify-center">
-                                        <h2 class="display-1 font-weight-light">Evidências</h2>
-                                    </v-card-title>
+                                    <v-subheader class="justify-center">
+                                        <div>
+                                            <h4 class="display-1 grey--text text--darken-4 font-weight-light">Evidências</h4>
+                                        </div>
+                                    </v-subheader>
                                     <v-container >
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
@@ -439,9 +461,11 @@
                                     </v-container>
                                 </v-card>
                                 <v-card>
-                                    <v-card-title class="justify-center">
-                                        <h2 class="display-1 font-weight-light">Recomendações da Equipe</h2>
-                                    </v-card-title>
+                                    <v-subheader class="justify-center">
+                                        <div>
+                                            <h4 class="display-1 grey--text text--darken-4 font-weight-light">Recomendações da Equipe</h4>
+                                        </div>
+                                    </v-subheader>
                                     <v-container >
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
@@ -451,9 +475,11 @@
                                     </v-container>
                                 </v-card>
                                 <v-card>
-                                    <v-card-title class="justify-center">
-                                        <h2 class="display-1 font-weight-light">Conclusão da Equipe</h2>
-                                    </v-card-title>
+                                    <v-subheader class="justify-center">
+                                        <div>
+                                            <h4 class="display-1 grey--text text--darken-4 font-weight-light">Conclusão da Equipe</h4>
+                                        </div>
+                                    </v-subheader>
                                     <v-container >
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
@@ -464,9 +490,11 @@
                                     </v-container>
                                 </v-card>
                                 <v-card>
-                                    <v-card-title class="justify-center">
-                                        <h2 class="display-1 font-weight-light">Parecer da Fiscalização</h2>
-                                    </v-card-title>
+                                    <v-subheader class="justify-center">
+                                        <div>
+                                            <h4 class="display-1 grey--text text--darken-4 font-weight-light">Parecer da Fiscalização</h4>
+                                        </div>
+                                    </v-subheader>
                                     <v-container >
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
@@ -476,9 +504,11 @@
                                     </v-container>
                                 </v-card>
                                 <v-card>
-                                    <v-card-title class="justify-center">
-                                        <h2 class="display-1 font-weight-light">Parecer do Coordenador</h2>
-                                    </v-card-title>
+                                    <v-subheader class="justify-center">
+                                        <div>
+                                            <h4 class="display-1 grey--text text--darken-4 font-weight-light">Parecer do Coordenador</h4>
+                                        </div>
+                                    </v-subheader>
                                     <v-container >
                                         <v-layout>
                                             <v-flex xs10 offset-xs1>
@@ -489,9 +519,11 @@
                                 </v-card>
                             </div>
                             <v-card>
-                                <v-card-title class="justify-center">
-                                    <h2 class="display-1 font-weight-light">Anexos</h2>
-                                </v-card-title>
+                                <v-subheader class="justify-center">
+                                    <div>
+                                        <h4 class="display-1 grey--text text--darken-4 font-weight-light">Anexos</h4>
+                                    </div>
+                                </v-subheader>
                                 <v-container v-for="(dado, index) in dadosVisualizacao.arquivosFiscalizacao" :key="index">
                                     <v-layout>
                                         <v-flex xs10 offset-xs1>
