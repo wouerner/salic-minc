@@ -153,8 +153,9 @@
                                                     <v-card>
                                                         <v-responsive>
                                                             <EditorTexto
-                                                                v-model="getParecer.dsParecer"
-                                                                @text-change="inputParecer($event)"
+                                                                :value="getParecer.dsParecer"
+                                                                @editor-texto-input="inputParecer($event)"
+                                                                @editor-texto-counter="validarParecer()"
                                                             >
                                                             </EditorTexto>
                                                         </v-responsive>
@@ -190,7 +191,7 @@ import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import cnpjFilter from '@/filters/cnpj';
 import VueCurrencyFilter from 'vue-currency-filter';
-import EditorTexto from './components/EditorTexto'
+import EditorTexto from './components/EditorTexto';
 
 
 Vue.use(VueCurrencyFilter, {
@@ -202,7 +203,7 @@ Vue.use(VueCurrencyFilter, {
 export default {
     name: 'EmitirParecer',
     components: {
-        EditorTexto
+        EditorTexto,
     },
     data() {
         return {
@@ -213,10 +214,11 @@ export default {
             valid: false,
             dialog: true,
             itemRules: [v => !!v || 'Tipo de manifestação e obrigatório!'],
-            parecerRules: [
-                v => !!v || 'Parecer e obrigatório!',
-                v => v.length >= 10 || 'Parecer deve conter mais que 10 characteres',
-            ],
+            parecerRules: {
+                show: false,
+                color: '',
+                msg: '',
+            },
             items: [
                 {
                     id: 'R',
@@ -230,16 +232,6 @@ export default {
                     id: 'P',
                     text: 'Aprovação com Ressalva',
                 },
-            ],
-            customToolbar:  [
-                    [{ 'font': [] }],
-                    [{ 'header': [false, 1, 2, 3, 4, 5, 6, ] }],
-                    [{ 'size': ['small', false, 'large', 'huge'] }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{'align': ''}, {'align': 'center'}, {'align': 'right'}, {'align': 'justify'}],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    [{ 'indent': '-1'}, { 'indent': '+1' }],
-                    [{ 'color': [] }],
             ],
             parecerData: {},
 
@@ -306,9 +298,19 @@ export default {
         },
         inputParecer(e) {
             this.parecerData.dsParecer = e;
+            this.validarParecer(e);
         },
         inputManifestacao(e) {
             this.parecerData.siManifestacao = e;
+        },
+        validarParecer(e){
+             console.info(e);
+            // if(e.length >= 10) {
+            //
+            // }
+            // v => !!v || 'Parecer e obrigatório!',
+            //  || 'Parecer deve conter mais que 10 characteres',
+
         },
     },
     computed: {
