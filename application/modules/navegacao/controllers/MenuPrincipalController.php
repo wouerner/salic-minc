@@ -655,7 +655,7 @@ class Navegacao_MenuPrincipalController extends Zend_Rest_Controller
             'title' => 'Ir para Fiscalizar Projeto',
             'label' => 'Fiscalizar Projeto',
             'grupo' => [134, 135],
-            'url' => ['module' => 'default', 'controller' => 'pesquisarprojetofiscalizacao', 'action' => 'grid'],
+            'url' => ['module' => 'fiscalizacao', 'controller' => 'pesquisarprojetofiscalizacao', 'action' => 'grid'],
         ];
         $arrMenu['acompanhamento']['menu'][] = [
             'title' => 'Ir para Pagamento de parecerista',

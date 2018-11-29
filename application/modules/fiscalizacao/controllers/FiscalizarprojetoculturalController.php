@@ -1,5 +1,5 @@
 <?php
-class FiscalizarprojetoculturalController extends MinC_Controller_Action_Abstract
+class Fiscalizacao_FiscalizarprojetoculturalController extends MinC_Controller_Action_Abstract
 {
     public function init()
     {

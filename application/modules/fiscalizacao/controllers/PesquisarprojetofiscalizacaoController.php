@@ -1,7 +1,7 @@
 <?php
 
 
-class PesquisarprojetofiscalizacaoController extends MinC_Controller_Action_Abstract
+class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controller_Action_Abstract
 {
     private $intTamPag = 10;
     private $codOrgao = null;
