@@ -89,7 +89,7 @@
                      tratarExibicaoCheckboxChecados('.checkbox_legal', '#divAssinaturaEmMassa');
                  }
              });
-             
+
              $('#enviarAssinaturaEmMassa').on('click', function(e) {
                  let arrIdPronac = [];
                  $('.checkbox_legal').filter(':checked').each(function(index, item) {
@@ -112,7 +112,7 @@
                      }
                  });
              }
-             
+
              function tratarExibicaoCheckboxChecados(seletorCheckboxes, seletorExibicao) {
                  const quantidadeCheckboxChecados = $(seletorCheckboxes).filter(':checked').length;
                  const idTipoDoAtoAdministrativo = $('#idTipoDoAtoAdministrativo').val();
@@ -126,7 +126,7 @@
                      $('#assinaturaProjetos tr').removeClass('lighten-4');
                  }
              }
-             
+
              $(document).on('click', '.checkbox_legal', function () {
                  var quantidadeCheckBoxesSelecionados = $('.checkbox_legal').filter(':checked').length;
                  var isCheckBoxAtualSelecionado = ($(this).filter(':checked').length > 0);
@@ -181,10 +181,10 @@
                                      .draw();
 
                                  val = val.replace(/\\/, '');
-                                 
+
                                  $('#assinaturaProjetos_filter input').val(val);
                                  $('#assinaturaProjetos_filter input').keyup();
-                                 
+
                                  if (val !== '') {
                                      $('#marcarDesmarcarCheckbox').removeProp('disabled');
                                  } else {
@@ -194,7 +194,7 @@
                              });
                          column.data().unique().sort().each( function( d, j ) {
                              select.append('<option value="'+ d + '">' + d + '</option>');
-                         });                         
+                         });
                      });
                  },
                  "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
@@ -303,6 +303,15 @@
                                                 ' <i class="material-icons">create</i> ' +
                                                 ' </a>';
 
+                             let botaoDevolver = '<a class="btn-floating waves-effect waves-light btn-primary tooltipped btn-danger" ' +
+                                 ' href="/assinatura/index/devolver-projeto?IdPRONAC=' + data.IdPRONAC +
+                                 '&idTipoDoAtoAdministrativo=' + data.idTipoDoAtoAdministrativo + '"' +
+                                 ' data-position="top" ' +
+                                 ' data-delay="50" ' +
+                                 ' data-tooltip="Assinar"> ' +
+                                 ' <i class="material-icons">undo</i> ' +
+                                 ' </a>';
+
                              return '<div style="position: relative; height: 60px;">'
                                   + '<div class="fixed-action-btn horizontal" style="position: absolute; top: 0px; right: 0; z-index: 996; padding: 15px 0 0 15px;">'
                                   + '<a class="btn btn-primary small">'
@@ -311,6 +320,7 @@
                                   + '<li>'
                                   + botaoVisualizar
                                   + botaoAssinar
+                                  + botaoDevolver
                                   + '</li>'
                                   + '</ul>'
                                   + '</div>';
