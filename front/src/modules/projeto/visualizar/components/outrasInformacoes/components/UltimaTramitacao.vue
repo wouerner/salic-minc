@@ -17,7 +17,7 @@
                     <td class="text-xs-left">{{ props.item.Receptor }}</td>
                     <td class="text-xs-right">{{ props.item.dtTramitacaoRecebida }}</td>
                     <td class="text-xs-left">{{ props.item.Situacao }}</td>
-                    <td class="text-xs-right">{{ props.item.Destino }}</td>
+                    <td class="text-xs-left">{{ props.item.Destino }}</td>
                     <td class="text-xs-left">{{ props.item.meDespacho }}</td>
                 </template>
                 <template slot="pageText" slot-scope="props">

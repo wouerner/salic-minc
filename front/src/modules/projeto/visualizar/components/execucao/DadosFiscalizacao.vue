@@ -15,8 +15,8 @@
                 <template slot="items" slot-scope="props">
                     <td class="text-xs-center" v-html="props.item.dtInicio"></td>
                     <td class="text-xs-center">{{ props.item.dtFim }}</td>
-                    <td class="text-xs-center">{{ props.item.cpfTecnico }}</td>
-                    <td class="text-xs-center">{{ props.item.nmTecnico }}</td>
+                    <td class="text-xs-left">{{ props.item.cpfTecnico | cnpjFilter }}</td>
+                    <td class="text-xs-left">{{ props.item.nmTecnico }}</td>
                     <td class="text-xs-center">
                         <v-btn flat icon>
                             <v-tooltip bottom>
@@ -46,6 +46,7 @@
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/Carregando_vuetify';
     import VisualizarFiscalizacao from './components/VisualizarFiscalizacao';
+    import cnpjFilter from '@/filters/cnpj';
 
     export default {
         name: 'DadosFiscalizacao',
@@ -55,7 +56,7 @@
                 loading: true,
                 headers: [
                     {
-                        text: 'DT. INICIO',
+                        text: 'DT. INÍCIO',
                         align: 'center',
                         value: 'dtInicio',
                     },
@@ -65,13 +66,13 @@
                         value: 'dtFim',
                     },
                     {
-                        text: 'CPF TECNICO',
-                        align: 'center',
+                        text: 'CPF TÉCNICO',
+                        align: 'left',
                         value: 'cpfTecnico',
                     },
                     {
-                        text: 'NOME TECNICO',
-                        align: 'center',
+                        text: 'NOME TÉCNICO',
+                        align: 'left',
                         value: 'nmTecnico',
                     },
                     {
@@ -82,6 +83,9 @@
                     },
                 ],
             };
+        },
+        filters: {
+            cnpjFilter,
         },
         components: {
             VisualizarFiscalizacao,
