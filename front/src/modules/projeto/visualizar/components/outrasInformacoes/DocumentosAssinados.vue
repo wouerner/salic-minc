@@ -13,16 +13,6 @@
                 no-data-text="Nenhum dado encontrado"
         >
             <template slot="items" slot-scope="props">
-                <td class="text-xs-center">
-                    <v-btn
-                            style="text-decoration: none"
-                            slot="activator"
-                            color="primary"
-                            class="center"
-                            :to="{ name: 'dadosprojeto', params: { idPronac: dadosProjeto.idPronac }}">
-                        {{ props.item.pronac }}
-                    </v-btn>
-                </td>
                 <td class="text-xs-left">{{ props.item.nomeProjeto }}</td>
                 <td class="text-xs-left">{{ props.item.dsAtoAdministrativo }}</td>
                 <td class="text-xs-right">{{ props.item.dt_criacao }}</td>
@@ -41,6 +31,16 @@
                         </v-btn>
                         <span>Visualizar</span>
                     </v-tooltip>
+                </td>
+                <td class="text-xs-center">
+                    <v-btn
+                            style="text-decoration: none"
+                            slot="activator"
+                            color="primary"
+                            class="center"
+                            :to="{ name: 'dadosprojeto', params: { idPronac: dadosProjeto.idPronac }}">
+                        {{ props.item.pronac }}
+                    </v-btn>
                 </td>
             </template>
             <template slot="pageText" slot-scope="props">
@@ -70,12 +70,6 @@
                 selected: [],
                 headers: [
                     {
-                        align: 'center',
-                        text: 'PRONAC',
-                        sortable: false,
-                        value: 'pronac',
-                    },
-                    {
                         align: 'left',
                         text: 'NOME DO PROJETO',
                         value: 'nomeProjeto',
@@ -94,6 +88,12 @@
                         align: 'center',
                         sortable: false,
                         text: 'VER',
+                    },
+                    {
+                        align: 'center',
+                        text: 'PRONAC',
+                        sortable: false,
+                        value: 'pronac',
                     },
                 ],
             };

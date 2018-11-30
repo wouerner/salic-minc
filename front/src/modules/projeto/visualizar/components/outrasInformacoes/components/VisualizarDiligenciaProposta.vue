@@ -8,6 +8,8 @@
                 no-data-text="Nenhum dado encontrado"
         >
             <template slot="items" slot-scope="props">
+                <td class="text-xs-center">{{ props.item.idPreprojeto }}</td>
+                <td class="text-xs-center">{{ props.item.dataSolicitacao }}</td>
                 <td class="text-xs-center">
                     <v-btn flat icon>
                         <v-tooltip bottom>
@@ -20,8 +22,6 @@
                         </v-tooltip>
                     </v-btn>
                 </td>
-                <td class="text-xs-center">{{ props.item.idPreprojeto }}</td>
-                <td class="text-xs-center">{{ props.item.dataSolicitacao }}</td>
             </template>
             <template slot="pageText" slot-scope="props">
                 Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
@@ -106,12 +106,6 @@
                 dialog: false,
                 headers: [
                     {
-                        text: 'VISUALIZAR',
-                        align: 'center',
-                        sortable: false,
-                        value: 'idPreprojeto',
-                    },
-                    {
                         text: 'NR PROPOSTA',
                         align: 'center',
                         value: 'idPreprojeto',
@@ -120,6 +114,12 @@
                         text: 'DATA DA SOLICITAÇÃO',
                         align: 'center',
                         value: 'dataSolicitacao',
+                    },
+                    {
+                        text: 'VISUALIZAR',
+                        align: 'center',
+                        sortable: false,
+                        value: 'idPreprojeto',
                     },
                 ],
             };
