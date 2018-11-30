@@ -65,11 +65,11 @@ class tbFiscalizacao extends MinC_Db_Table_Abstract
 
     public function gridFiscalizacaoProjetoFiltro($where = array(), $order = array(), $tamanho = -1, $inicio = -1, $qtdeTotal = false)
     {
-//        $queryFiscalizacao = $this->select();
-//        $queryFiscalizacao->setIntegrityCheck(false);
-//        $queryFiscalizacao->from(array("tbFiscalizacao" => $this->_name), array('*'), $this->_schema);
-//        $queryFiscalizacao->where('stFiscalizacaoProjeto = ?', '0');
-//        $queryFiscalizacao->orWhere('stFiscalizacaoProjeto = ?', '1');
+        $queryFiscalizacao = $this->select();
+        $queryFiscalizacao->setIntegrityCheck(false);
+        $queryFiscalizacao->from(array("tbFiscalizacao" => $this->_name), array('tbFiscalizacao.IdPRONAC, tbFiscalizacao.stFiscalizacaoProjeto'), $this->_schema);
+        $queryFiscalizacao->where('stFiscalizacaoProjeto = ?', '0');
+        $queryFiscalizacao->orWhere('stFiscalizacaoProjeto = ?', '1');
 
         $select = $this->select();
         $select->setIntegrityCheck(false);
@@ -147,7 +147,14 @@ class tbFiscalizacao extends MinC_Db_Table_Abstract
         $select->joinLeft(
             array('tf' => 'tbFiscalizacao'),
             'tf.IdPRONAC = p.IdPRONAC',
-            array('idFiscalizacao', 'dtInicioFiscalizacaoProjeto', 'dtFimFiscalizacaoProjeto', 'stFiscalizacaoProjeto', 'dsFiscalizacaoProjeto', 'dtRespostaSolicitada', 'idUsuarioInterno as idTecnico'),
+            array('idFiscalizacao',
+                'dtInicioFiscalizacaoProjeto',
+                'dtFimFiscalizacaoProjeto',
+                'stFiscalizacaoProjeto',
+                'dsFiscalizacaoProjeto',
+                'dtRespostaSolicitada',
+                'idUsuarioInterno as idTecnico'
+            ),
             $this->_schema
         );
         $select->joinLeft(
@@ -185,6 +192,8 @@ class tbFiscalizacao extends MinC_Db_Table_Abstract
             }
             $select->limit($tamanho, $tmpInicio);
         }
+
         return $this->fetchAll($select);
     }
+
 }
