@@ -1201,7 +1201,8 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
                  GETDATE()) as qtDiasEmAnalise,
                  tbdistribuirReadequacao.idAvaliador,
                  usuarios.usu_nome as nmParecerista,
-                 tbdistribuirReadequacao.idUnidade as idOrgao"
+                 tbdistribuirReadequacao.idUnidade as idOrgao,
+                 tbdistribuirReadequacao.idDistribuirReadequacao"
                 )
             );
 
@@ -1466,7 +1467,7 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
     {
         $liberacao = new Liberacao();
         $projeto = new Projetos();
-        $tbCumprimentoObjeto = new tbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
 
         $existeReadequacaoEmAndamento = $this->existeReadequacaoEmAndamento($idPronac);
         $contaLiberada = $liberacao->contaLiberada($idPronac);

@@ -337,6 +337,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             )
         );
         $select->where('a.idPronac = ?', $idPronac);
+        $select->where(new Zend_Db_Expr('a.tpAcao <> ? OR a.tpAcao IS NULL'), 'E');
         $select->where('a.stAtivo = ?', 'S');
 
         if (!empty($nrFonteRecurso)) {
@@ -662,7 +663,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             'SAC.dbo'
         );
         $select->joinInner(
-            ['e' => 'tbCumprimentoObjeto'],
+            ['e' => 'TbCumprimentoObjeto'],
             'd.IdPRONAC = e.idPronac',
             [''],
             'SAC.dbo'
@@ -848,7 +849,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             'SAC.dbo'
         );
         $select->joinInner(
-            ['e' => 'tbCumprimentoObjeto'],
+            ['e' => 'TbCumprimentoObjeto'],
             'd.IdPRONAC = e.idPronac',
             [''],
             'SAC.dbo'

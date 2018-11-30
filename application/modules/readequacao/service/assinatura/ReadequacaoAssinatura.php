@@ -81,8 +81,8 @@ class ReadequacaoAssinatura implements IServico
 
             if ($qtPessoasQueFaltamAssinar > 0) {
                 $ordemDaProximaAssinatura = $tbDocumentoAssinaturaDbTable->obterProximaAssinatura(
-                    $projeto->idDocumentoAssinatura,
-                    $projeto->idPronac
+                    $projeto['idDocumentoAssinatura'],
+                    $projeto['IdPRONAC']
                 );
             }
             $projeto['ordemDaProximaAssinatura'] = $ordemDaProximaAssinatura;
@@ -227,7 +227,7 @@ class ReadequacaoAssinatura implements IServico
                         $this->finalizarReadequacaoTransferenciaRecursos($read);
                         break;
                     case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO:
-                        $this->finalizarReadequacaoSaldoAplicacao($read);
+                        $this->finalizarReadequacaoSaldoAplicacao($read, $parecerTecnico);
                         break;
                 }
             }
@@ -331,10 +331,10 @@ class ReadequacaoAssinatura implements IServico
                 'Sequencial' => $dadosPrj->Sequencial,
                 'TipoAprovacao' => $TipoAprovacao,
                 'DtAprovacao' => new \Zend_Db_Expr('GETDATE()'),
-                'ResumoAprovacao' => 'Parecer favorável para readequação',
+                'ResumoAprovacao' => 'Parecer favor&aacute;vel para readequa&ccedil;&atilde;o',
                 'AprovadoReal' => $TipoDeReadequacao[0]['vlReadequado'], //Alterado pelo valor retornado pela Store
                 'Logon' => $this->auth->getIdentity()->usu_codigo,
-                'idReadequacao' => $idReadequacao
+                'idReadequacao' => $read->idReadequacao
             ];
 
             $idAprovacao = $tbAprovacao->inserir($dadosAprovacao);
@@ -353,7 +353,7 @@ class ReadequacaoAssinatura implements IServico
             'Sequencial' => $dadosPrj->Sequencial,
             'TipoAprovacao' => 8,
             'DtAprovacao' => new \Zend_Db_Expr('GETDATE()'),
-            'ResumoAprovacao' => 'Parecer favorável para readequação',
+            'ResumoAprovacao' => 'Parecer favor&aacute;vel para readequa&ccedil;&atilde;o',
             'Logon' => $this->auth->getIdentity()->usu_codigo,
             'idReadequacao' => $read->idReadequacao
         ];
@@ -479,7 +479,7 @@ class ReadequacaoAssinatura implements IServico
                     $novoLocalRead['idPais'] = $abg->idPais;
                     $novoLocalRead['idUF'] = $abg->idUF;
                     $novoLocalRead['idMunicipioIBGE'] = $abg->idMunicipioIBGE;
-                    $novoLocalRead['Usuario'] = $idUsuarioLogado;
+                    $novoLocalRead['Usuario'] = $this->auth->getIdentity()->usu_codigo;
                     $novoLocalRead['stAbrangencia'] = 1;
                     $Abrangencia->salvar($novoLocalRead);
                 }
@@ -507,7 +507,7 @@ class ReadequacaoAssinatura implements IServico
             'Sequencial' => $dadosPrj->Sequencial,
             'TipoAprovacao' => 8,
             'DtAprovacao' => new \Zend_Db_Expr('GETDATE()'),
-            'ResumoAprovacao' => 'Parecer favorável para readequação',
+            'ResumoAprovacao' => 'Parecer favor&aacute;vel para readequa&ccedil;&atilde;o',
             'Logon' => $this->auth->getIdentity()->usu_codigo,
             'idReadequacao' => $read->idReadequacao
         ];
@@ -529,7 +529,7 @@ class ReadequacaoAssinatura implements IServico
             'Sequencial' => $dadosPrj->Sequencial,
             'TipoAprovacao' => 8,
             'DtAprovacao' => new \Zend_Db_Expr('GETDATE()'),
-            'ResumoAprovacao' => 'Parecer favorável para readequação',
+            'ResumoAprovacao' => 'Parecer favor&aacute;vel para readequa&ccedil;&atilde;o',
             'Logon' => $this->auth->getIdentity()->usu_codigo,
             'idReadequacao' => $read->idReadequacao
         ];
@@ -552,7 +552,7 @@ class ReadequacaoAssinatura implements IServico
         $PlanoDeDivulgacao = new \PlanoDeDivulgacao();
         $tbPlanoDivulgacao = new \tbPlanoDivulgacao();
         $planosDivulgacao = $tbPlanoDivulgacao->buscar([
-            'idReadequacao=?' => $idReadequacao
+            'idReadequacao=?' => $read->idReadequacao
         ]);
 
         foreach ($planosDivulgacao as $plano) {
@@ -618,7 +618,7 @@ class ReadequacaoAssinatura implements IServico
             'Sequencial' => $dadosPrj->Sequencial,
             'TipoAprovacao' => 8,
             'DtAprovacao' => new \Zend_Db_Expr('GETDATE()'),
-            'ResumoAprovacao' => 'Parecer favorável para readequação',
+            'ResumoAprovacao' => 'Parecer favor&aacute;vel para readequa&ccedil;&atilde;o',
             'Logon' => $this->auth->getIdentity()->usu_codigo,
             'idReadequacao' => $read->idReadequacao
         ];
@@ -757,7 +757,7 @@ class ReadequacaoAssinatura implements IServico
         }
     }
 
-    protected function finalizarReadequacaoSaldoAplicacao($read)
+    protected function finalizarReadequacaoSaldoAplicacao($read, $parecerTecnico)
     {
                     
         $Projetos = new \Projetos();
@@ -791,7 +791,7 @@ class ReadequacaoAssinatura implements IServico
             'ResumoAprovacao' => $parecerTecnico->ResumoParecer,
             'idParecer' => $parecerTecnico->IdParecer,
             'Logon' => $this->auth->getIdentity()->usu_codigo,
-            'idReadequacao' => $idReadequacao
+            'idReadequacao' => $read->idReadequacao
         ];
         $idAprovacao = $tbAprovacao->inserir($dadosAprovacao);
 
@@ -807,7 +807,7 @@ class ReadequacaoAssinatura implements IServico
         $whereReadequacaoNova = [
             'IdPRONAC = ?' => $read->idPronac,
             'stAtivo = ?' => 'N',
-            'idReadequacao=?' => $idReadequacao
+            'idReadequacao=?' => $read->idReadequacao
         ];
         $tbPlanilhaAprovacao->update($dadosReadequacaoNova, $whereReadequacaoNova);
     }
