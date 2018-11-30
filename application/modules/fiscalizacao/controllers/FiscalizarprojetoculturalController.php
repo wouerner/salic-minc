@@ -35,6 +35,16 @@ class Fiscalizacao_FiscalizarprojetoculturalController extends MinC_Controller_A
         $this->view->grupoAtivo = $GrupoAtivo->codGrupo;
         $this->view->orgaoAtivo = $GrupoAtivo->codOrgao;
 
+        $this->view->isCoordenador = in_array($GrupoAtivo->codGrupo, [
+            Autenticacao_Model_Grupos::COORDENADOR_FISCALIZACAO,
+            Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO
+        ]);
+
+        $this->view->isTecnico = in_array($GrupoAtivo->codGrupo, [
+            Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO,
+            Autenticacao_Model_Grupos::TECNICO_FISCALIZACAO
+        ]);
+
         parent::init();
     }
 

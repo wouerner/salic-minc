@@ -42,6 +42,16 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
         $this->codUsuario = $auth->getIdentity()->usu_codigo;
         $this->grupoAtivo = $GrupoAtivo->codGrupo;
 
+        $this->view->isCoordenador = in_array($GrupoAtivo->codGrupo, [
+            Autenticacao_Model_Grupos::COORDENADOR_FISCALIZACAO,
+            Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO
+        ]);
+
+        $this->view->isTecnico = in_array($GrupoAtivo->codGrupo, [
+            Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO,
+            Autenticacao_Model_Grupos::TECNICO_FISCALIZACAO
+        ]);
+
         parent::init();
     }
 
@@ -96,10 +106,9 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
             $this->view->pronacProjeto = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
         }
 
-        if ($this->grupoAtivo == 134 && (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro']))) {
+        if ($this->view->isCoordenador && (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro']))) {
             //Coordenador
             $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
-            $this->view->filtro = $filtro;
             switch ($filtro) {
                 case '':
                     $where['b.stFiscalizacaoProjeto in (?)'] = array('0', '1');
@@ -149,6 +158,9 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
             "Itenspag" => $this->intTamPag,
             "tamanho" => $tamanho
         );
+
+        $this->view->filtro = $this->_request->getParam('tipoFiltro', null);
+        $this->view->filtroTecnico = $this->_request->getParam('tecFiltro', null);
 
         $this->view->paginacao = $paginacao;
         $this->view->qntdProjetos = $total;

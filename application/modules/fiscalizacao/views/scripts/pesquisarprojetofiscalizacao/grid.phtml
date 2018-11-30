@@ -45,21 +45,20 @@
         [$titulo => ''],
     )); ?>
 
-    <!-- ========== INÍCIO CONTEÚDO ========== -->
     <div id="conteudo">
         <table class="tabela">
             <tr>
-                <?php if ($this->grupoAtivo == 134) { //Se for coordenador habilita essa outra opção ?>
+                <?php if ($this->isCoordenador) { //Se for coordenador habilita essa outra opção ?>
                     <td class="left-align">
                         <select name="tipoFiltro" id="tipoFiltro" style="width: 285px; margin-right: 10px;"
                                 class="input_simples">
                             <option value="">Fiscaliza&ccedil;&atilde;o em andamento</option>
                             <option
-                                value="analisados" <?php echo ($this->filtro == 'analisados') ? 'selected="selected"' : ''; ?>>
+                                value="analisados" <?= ($this->filtro == 'analisados') ? 'selected="selected"' : ''; ?>>
                                 Fiscaliza&ccedil;&atilde;o conclu&iacute;da pelo t&eacute;cnico
                             </option>
                             <option
-                                value="concluidos" <?php echo ($this->filtro == 'concluidos') ? 'selected="selected"' : ''; ?>>
+                                value="concluidos" <?= ($this->filtro == 'concluidos') ? 'selected="selected"' : ''; ?>>
                                 Fiscaliza&ccedil;&atilde;o conclu&iacute;da pelo coordenador
                             </option>
                         </select>
@@ -67,7 +66,9 @@
                             <option value="">Todos os t&eacute;cnicos</option>
                             <?php foreach ($this->Usuarios as $usuario) { ?>
                                 <option
-                                    value="<?php echo $usuario->idUsuario; ?>"><?php echo $usuario->Nome; ?></option>
+                                    value="<?= $usuario->idUsuario; ?>"
+                                    <?= ($this->filtroTecnico == $usuario->idUsuario) ? 'selected="selected"' : ''; ?>
+                                ><?= $usuario->Nome; ?></option>
                             <?php } ?>
                         </select>
                         <a
@@ -77,7 +78,7 @@
                         ><i class="material-icons">filter_list</i></a>
                     </td>
                 <?php } ?>
-                <?php if ($this->grupoAtivo == 134) { //Se for coordenador habilita essa outra opção ?>
+                <?php if ($this->isCoordenador) { //Se for coordenador habilita essa outra opção ?>
                     <td class="right-align" width="210px">
                         <a
                             id="btn-pesquisar-projeto"
@@ -200,7 +201,7 @@
                         <td align="center" <?php echo $classRed; ?>><?php echo Data::tratarDataZend($d->dtInicioFiscalizacaoProjeto, 'Brasileira'); ?></td>
                         <td align="center" <?php echo $classRed; ?>><?php echo Data::tratarDataZend($d->dtFimFiscalizacaoProjeto, 'Brasileira'); ?></td>
                         <td align="center">
-                            <?php if ($this->grupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_FISCALIZACAO) { ?>
+                            <?php if ($this->isCoordenador) { ?>
 
                                 <?php if ($d->stFiscalizacaoProjeto == 0) { ?>
                                     <a
@@ -226,13 +227,13 @@
                                             'controller' => 'fiscalizarprojetocultural',
                                             'action' => 'parecerdotecnico']
                                     ); ?>?idProjeto=<?php echo $d->idProjeto; ?>&idFiscalizacao=<?php echo $d->idFiscalizacao; ?>">
-                                    <i class="material-icons">zoom_in</i>
+                                    <i class="material-icons">edit</i>
                                 </a>
                             <?php } ?>
 
 
                             <?php if ($this->filtro != 'concluidos'
-                                && $this->grupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_FISCALIZACAO) { ?>
+                                && $this->isCoordenador) { ?>
                                 <a
                                     class="btn-avaliar waves-effect waves-light btn small white-text tooltipped btn-secondary"
                                     data-tooltip="Comunicar proponente da fiscaliza&ccedil;&atilde;o"
