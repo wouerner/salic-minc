@@ -15,7 +15,11 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
 
         if (!$auth->hasIdentity()) {
-            return $this->_helper->redirector->goToRoute(array('controller' => 'index', 'action' => 'logout'), null, true);
+            return $this->_helper->redirector->goToRoute(array(
+                'module' => 'default',
+                'controller' => 'index',
+                'action' => 'logout'
+            ), null, true);
         }
 
         $PermissoesGrupo = array();
@@ -740,7 +744,6 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
                         <center>HENILTON PARENTE MENEZES</center>
                         <center>Secret&aacute;rio de Fomento e Incentivo &agrave; Cultura</center>
                 ";
-        //*/
 
         $this->view->html = $textoenvio;
         $this->view->idPronac = $post->idPronac;
@@ -764,7 +767,7 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
 
         //descomentar linha abaixo para produ�?o
         $emailEnvio = implode(';', $emails);
-        EmailDAO::enviarEmail($emailEnvio, 'Fiscalizacao in loco', $textoenvio);
+        EmailDAO::enviarEmail($emailEnvio, 'Fiscaliza&ccedil;&atilde;o in loco', $textoenvio);
 
         parent::message("Mensagem enviada com sucesso!", "fiscalizacao/pesquisarprojetofiscalizacao/grid", "CONFIRM");
     }
@@ -774,13 +777,13 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
         $this->_helper->layout->disableLayout();
         $this->_helper->ViewRenderer->setNoRender(true);
         $post = Zend_Registry::get('post');
-        $resposta = array('result' => false, 'mensagem' => utf8_encode('N?o foi possivel 1!'));
+        $resposta = array('result' => false, 'mensagem' => utf8_encode('N&atilde;o foi poss&iacute;vel 1!'));
         if ($post->idOrgaoFiscalizador) {
             $orgaofiscalizadorDao = new OrgaoFiscalizador();
             if ($orgaofiscalizadorDao->delete(array('idOrgaoFiscalizador = ?' => $post->idOrgaoFiscalizador))) {
                 $resposta = array('result' => true, 'mensagem' => 'Exclus&atilde;o realizada com sucesso!');
             } else {
-                $resposta = array('result' => false, 'mensagem' => utf8_encode('N?o foi possivel2!'));
+                $resposta = array('result' => false, 'mensagem' => utf8_encode('N&atilde;o foi poss&iacute;vel2!'));
             }
         }
         if ($post->idArquivoFiscalizacao) {
@@ -788,7 +791,7 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
             if ($arquivofiscalizacaoDao->delete(array('idArquivoFiscalizacao = ?' => $post->idArquivoFiscalizacao))) {
                 $resposta = array('result' => true, 'mensagem' => 'Exclus&atilde;o realizada com sucesso!');
             } else {
-                $resposta = array('result' => false, 'mensagem' => utf8_encode('N?o foi possivel3!'));
+                $resposta = array('result' => false, 'mensagem' => utf8_encode('N&atilde;o foi poss&iacute;vel3!'));
             }
         }
         if ($post->idArquivo) {
@@ -801,7 +804,7 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
             if ($rs && $rs2) {
                 $resposta = array('result' => true, 'mensagem' => 'Exclus&atilde;o realizada com sucesso!');
             } else {
-                $resposta = array('result' => false, 'mensagem' => utf8_encode('N?o foi possivel4!'));
+                $resposta = array('result' => false, 'mensagem' => utf8_encode('N&atilde;o foi poss&iacute;vel4!'));
             }
         }
         $this->_helper->json($resposta);

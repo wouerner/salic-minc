@@ -325,5 +325,11 @@
             } ?>
 
         <?php } ?>
+
+        <?php if ($this->qntdProjetos === 0) : ?>
+            <div class="padding20 center-align">
+                Nenhum projeto encontrado!
+            </div>
+        <?php endif; ?>
     </div>
 </div>
