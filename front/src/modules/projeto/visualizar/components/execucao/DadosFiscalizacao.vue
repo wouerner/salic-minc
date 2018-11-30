@@ -9,6 +9,10 @@
             no-data-text="Nenhum dado encontrado"
         >
             <template slot="items" slot-scope="props">
+                <td class="text-xs-center" v-html="props.item.dtInicio"></td>
+                <td class="text-xs-center">{{ props.item.dtFim }}</td>
+                <td class="text-xs-center">{{ props.item.cpfTecnico }}</td>
+                <td class="text-xs-center">{{ props.item.nmTecnico }}</td>
                 <td class="text-xs-center">
                     <v-btn flat icon>
                         <v-tooltip bottom>
@@ -21,12 +25,7 @@
                             <span>Visualizar Dados Fiscalizacao</span>
                         </v-tooltip>
                     </v-btn>
-                </td>
-                <td class="text-xs-center" v-html="props.item.dtInicio"></td>
-                <td class="text-xs-center">{{ props.item.dtFim }}</td>
-                <td class="text-xs-center">{{ props.item.cpfTecnico }}</td>
-                <td class="text-xs-center">{{ props.item.nmTecnico }}</td>
-            </template>
+                </td></template>
         </v-data-table>
         <v-layout row justify-center>
             <VisualizarFiscalizacao
@@ -48,12 +47,6 @@
                 loading: true,
                 headers: [
                     {
-                        text: 'VISUALIZAR',
-                        align: 'center',
-                        sortable: false,
-                        value: 'dados',
-                    },
-                    {
                         text: 'DT. INICIO',
                         align: 'center',
                         value: 'dtInicio',
@@ -72,6 +65,12 @@
                         text: 'NOME TECNICO',
                         align: 'center',
                         value: 'nmTecnico',
+                    },
+                    {
+                        text: 'VISUALIZAR',
+                        align: 'center',
+                        sortable: false,
+                        value: 'dados',
                     },
                 ],
             };
