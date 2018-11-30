@@ -1858,7 +1858,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             $qtdRelatorioEsperado = ceil($intervalo/90);
             $this->view->qtdRelatorioEsperado = $qtdRelatorioEsperado;
 
-            $tbComprovanteTrimestral = new tbComprovanteTrimestral();
+            $tbComprovanteTrimestral = new ComprovacaoObjeto_Model_DbTable_TbComprovanteTrimestral();
             $qtdRelatorioCadastrados = $tbComprovanteTrimestral->buscarComprovantes(array('idPronac=?'=>$idpronac), true, array('nrComprovanteTrimestral')); //busca todos os relatorios
             $qtdRelCadastrados = !empty($qtdRelatorioCadastrados) ? $qtdRelatorioCadastrados->count() : 0;
             $this->view->qtdRelatorioCadastrados = $qtdRelCadastrados;
@@ -1884,7 +1884,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        $tbComprovanteTrimestral = new tbComprovanteTrimestral();
+        $tbComprovanteTrimestral = new ComprovacaoObjeto_Model_DbTable_TbComprovanteTrimestral();
         $DadosRelatorio = $tbComprovanteTrimestral->buscarComprovantes(array('IdPRONAC = ?' => $idpronac, 'nrComprovanteTrimestral=?'=>$nrrelatorio));
         $this->view->DadosRelatorio = $DadosRelatorio;
 
@@ -1927,7 +1927,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        $tbComprovanteTrimestral = new tbComprovanteTrimestral();
+        $tbComprovanteTrimestral = new ComprovacaoObjeto_Model_DbTable_TbComprovanteTrimestral();
         $DadosRelatorio = $tbComprovanteTrimestral->buscarComprovantes(array('IdPRONAC = ?' => $idpronac, 'nrComprovanteTrimestral=?'=>$nrrelatorio));
         $this->view->DadosRelatorio = $DadosRelatorio;
 
@@ -1966,10 +1966,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
         //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
-        $DadosProjeto = $projetos->dadosProjeto(array('idPronac = ?' => $idpronac))->current();
-        $this->view->DadosProjeto = $DadosProjeto;
+        $dadosProjeto = $projetos->dadosProjeto(array('idPronac = ?' => $idpronac))->current();
+        $this->view->DadosProjeto = $dadosProjeto;
         $this->view->idPronac = $idpronac;
-        $tbCumprimentoObjeto = new tbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
         $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idpronac));
 
         if (!empty($DadosRelatorio)) {
@@ -1997,21 +1997,33 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             $dadosComprovantes = $Arquivo->buscarComprovantesExecucao($idpronac);
             $this->view->DadosComprovantes = $dadosComprovantes;
 
-            $tbTermoAceiteObra = new tbTermoAceiteObra();
+            $tbTermoAceiteObra = new ComprovacaoObjeto_Model_DbTable_TbTermoAceiteObra();
             $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idpronac));
             $this->view->AceiteObras = $AceiteObras;
 
-            $tbBensDoados = new tbBensDoados();
+            $tbBensDoados = new ComprovacaoObjeto_Model_DbTable_TbBensDoados();
             $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idpronac), array('b.Descricao'));
             $this->view->BensCadastrados = $BensCadastrados;
 
             if ($DadosRelatorio->siCumprimentoObjeto == 6) {
                 $Usuario = new UsuarioDAO();
                 $nmUsuarioCadastrador = $Usuario->buscarUsuario($DadosRelatorio->idTecnicoAvaliador);
-                $nmChefiaImediata = $Usuario->buscarUsuario($DadosRelatorio->idChefiaImediata);
                 $this->view->TecnicoAvaliador = $nmUsuarioCadastrador;
-                $this->view->ChefiaImediata = $nmChefiaImediata;
+
+                if ($DadosRelatorio->idChefiaImediata) {
+                    $nmChefiaImediata = $Usuario->buscarUsuario($DadosRelatorio->idChefiaImediata);
+                    $this->view->ChefiaImediata = $nmChefiaImediata;
+                }
             }
+
+            $isPermitidoVisualizarRelatorio = in_array(
+                $dadosProjeto->situacao,
+                Projeto_Model_Situacao::obterSituacoesPermitidoVisualizarPrestacaoContas()
+            );
+
+            $auth = Zend_Auth::getInstance();
+            $this->view->visualizarRelatorio =  isset($auth->getIdentity()->usu_codigo) ? true : $isPermitidoVisualizarRelatorio;
+
         }
 
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
@@ -2026,10 +2038,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
 
         //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
-        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
-        $this->view->DadosProjeto = $DadosProjeto;
+        $dadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
+        $this->view->DadosProjeto = $dadosProjeto;
 
-        $tbCumprimentoObjeto = new tbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
         $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idpronac));
         $this->view->DadosRelatorio = $DadosRelatorio;
 
@@ -2058,21 +2070,33 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $dadosComprovantes = $Arquivo->buscarComprovantesExecucao($idpronac);
         $this->view->DadosComprovantes = $dadosComprovantes;
 
-        $tbTermoAceiteObra = new tbTermoAceiteObra();
+        $tbTermoAceiteObra = new ComprovacaoObjeto_Model_DbTable_TbTermoAceiteObra();
         $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idpronac));
         $this->view->AceiteObras = $AceiteObras;
 
-        $tbBensDoados = new tbBensDoados();
+        $tbBensDoados = new ComprovacaoObjeto_Model_DbTable_TbBensDoados();
         $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idpronac), array('b.Descricao'));
         $this->view->BensCadastrados = $BensCadastrados;
 
         if ($DadosRelatorio->siCumprimentoObjeto == 6) {
             $Usuario = new UsuarioDAO();
             $nmUsuarioCadastrador = $Usuario->buscarUsuario($DadosRelatorio->idTecnicoAvaliador);
-            $nmChefiaImediata = $Usuario->buscarUsuario($DadosRelatorio->idChefiaImediata);
             $this->view->TecnicoAvaliador = $nmUsuarioCadastrador;
-            $this->view->ChefiaImediata = $nmChefiaImediata;
+
+            if ($DadosRelatorio->idChefiaImediata) {
+                $nmChefiaImediata = $Usuario->buscarUsuario($DadosRelatorio->idChefiaImediata);
+                $this->view->ChefiaImediata = $nmChefiaImediata;
+            }
         }
+
+        $isPermitidoVisualizarRelatorio = in_array(
+            $dadosProjeto->situacao,
+            Projeto_Model_Situacao::obterSituacoesPermitidoVisualizarPrestacaoContas()
+        );
+
+        $auth = Zend_Auth::getInstance();
+        $this->view->visualizarRelatorio =  isset($auth->getIdentity()->usu_codigo) ? true : $isPermitidoVisualizarRelatorio;
+
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
     }
 
