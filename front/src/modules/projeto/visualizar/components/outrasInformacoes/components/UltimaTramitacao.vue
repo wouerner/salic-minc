@@ -65,11 +65,7 @@
                     {
                         text: 'ESTADO',
                         align: 'left',
-<<<<<<< HEAD
-                        value: 'Estado',
-=======
                         value: 'Situacao',
->>>>>>> origin/feature/outras-informacoes
                     },
                     {
                         text: 'DESTINO',
