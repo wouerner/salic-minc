@@ -61,7 +61,6 @@
 <script>
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/Carregando_vuetify';
-    import IdentificacaoProjeto from './IdentificacaoProjeto';
 
     export default {
         name: 'LocalRealizacaoDeslocamento',
@@ -122,7 +121,6 @@
             };
         },
         components: {
-            IdentificacaoProjeto,
             Carregando,
         },
         mounted() {

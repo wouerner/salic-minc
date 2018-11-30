@@ -1,42 +1,50 @@
 <template>
     <div>
-        <v-data-table
-            :headers="headers"
-            :items="dadosListagem"
-            class="elevation-1 container-fluid"
-            rows-per-page-text="Items por Página"
-            hide-actions
-            no-data-text="Nenhum dado encontrado"
-        >
-            <template slot="items" slot-scope="props">
-                <td class="text-xs-center" v-html="props.item.dtInicio"></td>
-                <td class="text-xs-center">{{ props.item.dtFim }}</td>
-                <td class="text-xs-center">{{ props.item.cpfTecnico }}</td>
-                <td class="text-xs-center">{{ props.item.nmTecnico }}</td>
-                <td class="text-xs-center">
-                    <v-btn flat icon>
-                        <v-tooltip bottom>
-                            <v-icon
-                                    slot="activator"
-                                    @click="showItem(props.item.idFiscalizacao)"
-                                    class="material-icons"
-                                    dark>visibility
-                            </v-icon>
-                            <span>Visualizar Dados Fiscalizacao</span>
-                        </v-tooltip>
-                    </v-btn>
-                </td></template>
-        </v-data-table>
+        <div v-if="loading">
+            <Carregando :text="'Dados Fiscalização'"></Carregando>
+        </div>
+        <div v-else-if="dadosListagem">
+            <v-data-table
+                    :headers="headers"
+                    :items="dadosListagem"
+                    class="elevation-1 container-fluid"
+                    rows-per-page-text="Items por Página"
+                    hide-actions
+                    no-data-text="Nenhum dado encontrado"
+            >
+                <template slot="items" slot-scope="props">
+                    <td class="text-xs-center" v-html="props.item.dtInicio"></td>
+                    <td class="text-xs-center">{{ props.item.dtFim }}</td>
+                    <td class="text-xs-center">{{ props.item.cpfTecnico }}</td>
+                    <td class="text-xs-center">{{ props.item.nmTecnico }}</td>
+                    <td class="text-xs-center">
+                        <v-btn flat icon>
+                            <v-tooltip bottom>
+                                <v-icon
+                                        slot="activator"
+                                        @click="showItem(props.item.idFiscalizacao)"
+                                        class="material-icons"
+                                        dark>visibility
+                                </v-icon>
+                                <span>Visualizar Dados Fiscalizacao</span>
+                            </v-tooltip>
+                        </v-btn>
+                    </td>
+                </template>
+            </v-data-table>
+        </div>
         <v-layout row justify-center>
             <VisualizarFiscalizacao
-                :dadosVisualizacao="dadosVisualizacao"
-                :dialog="dialog"></VisualizarFiscalizacao>
+                    :dadosVisualizacao="dadosVisualizacao"
+                    :dialog="dialog">
+            </VisualizarFiscalizacao>
         </v-layout>
     </div>
 </template>
 <script>
 
     import { mapActions, mapGetters } from 'vuex';
+    import Carregando from '@/components/Carregando_vuetify';
     import VisualizarFiscalizacao from './components/VisualizarFiscalizacao';
 
     export default {
@@ -77,6 +85,7 @@
         },
         components: {
             VisualizarFiscalizacao,
+            Carregando,
         },
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
