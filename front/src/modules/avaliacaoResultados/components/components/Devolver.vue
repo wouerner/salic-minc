@@ -20,7 +20,7 @@
         <v-card>
             <v-container grid-list-md>
                 <v-card-text>
-                    Você deseja devolver o projeto '{{ pronac }} - {{ nomeProjeto }}' para análise do Tecnico: {{tecnico.nome}}?
+                    Você deseja devolver o projeto <b> {{ pronac }} - {{ nomeProjeto }}</b> para a etapa anterior?
                     <v-textarea
                         v-model="justificativa"
                         outline
