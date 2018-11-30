@@ -60,7 +60,7 @@
 </template>
 <script>
     import { mapActions, mapGetters } from 'vuex';
-    import Carregando from '@/components/Carregando';
+    import Carregando from '@/components/Carregando_vuetify';
     import IdentificacaoProjeto from './IdentificacaoProjeto';
 
     export default {
