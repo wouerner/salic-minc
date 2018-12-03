@@ -3740,7 +3740,7 @@ class Projetos extends MinC_Db_Table_Abstract
         return $this->fetchAll($select);
     }
 
-    public function buscarProjetosFiscalizacao($idFiscalizacao, $idUsuarioInterno = null)
+    public function buscarProjetosFiscalizacao($where)
     {
         $select = $this->select();
         $select->setIntegrityCheck(false);
@@ -3803,7 +3803,8 @@ class Projetos extends MinC_Db_Table_Abstract
                 'dtFimFiscalizacaoProjeto',
                 'dtRespostaSolicitada',
                 'idUsuarioInterno',
-                new Zend_Db_Expr('CAST(g.dsFiscalizacaoProjeto as TEXT) as dsFiscalizacaoProjeto'), 'stFiscalizacaoProjeto'
+                new Zend_Db_Expr('CAST(g.dsFiscalizacaoProjeto as TEXT) as dsFiscalizacaoProjeto'),
+                'stFiscalizacaoProjeto'
             ),
             'SAC.dbo'
         );
@@ -3819,10 +3820,9 @@ class Projetos extends MinC_Db_Table_Abstract
             array('idOrgaoFiscalizador', 'idOrgao', 'idParecerista', new Zend_Db_Expr('CAST(i.dsObservacao as TEXT) as dsObservacao')),
             'SAC.dbo'
         );
-        $select->where('g.idFiscalizacao = ?', $idFiscalizacao);
 
-        if ($idUsuarioInterno) {
-            $select->where('g.idUsuarioInterno = ?', $idUsuarioInterno);
+        foreach ($where as $coluna => $valor) {
+            $select->where($coluna, $valor);
         }
 
         $select->order('a.NomeProjeto');

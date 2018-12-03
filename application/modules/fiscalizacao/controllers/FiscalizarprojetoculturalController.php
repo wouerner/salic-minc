@@ -140,10 +140,25 @@ class Fiscalizacao_FiscalizarprojetoculturalController extends MinC_Controller_A
     public function parecerdotecnicoAction()
     {
         $idFiscalizacao = $this->_getParam('idFiscalizacao');
-        $projetosDAO = new Projetos();
+
+        if (empty($idFiscalizacao)) {
+            throw new Exception("Fiscaliza&ccedil;&atilde;o n&atilde;o informada");
+        }
+
+        $where = [];
+        $where['g.idFiscalizacao = ?'] = $idFiscalizacao;
 
         $idUsuarioInterno = $this->view->isTecnico ? $this->codUsuario : null;
-        $projeto = $projetosDAO->buscarProjetosFiscalizacao($idFiscalizacao, $idUsuarioInterno);
+        if ($idUsuarioInterno) {
+            $where['g.idUsuarioInterno = ?'] = $idUsuarioInterno;
+            $where['g.stFiscalizacaoProjeto in (?)'] = [
+                Fiscalizacao_Model_TbFiscalizacao::ST_FISCALIZACAO_INICIADA,
+                Fiscalizacao_Model_TbFiscalizacao::ST_FISCALIZACAO_OFICIALIZADA
+            ];
+        }
+
+        $projetosDAO = new Projetos();
+        $projeto = $projetosDAO->buscarProjetosFiscalizacao($where);
 
         if (count($projeto) < 1) {
             parent::message("Dados n&atilde;o localizados", "fiscalizacao/pesquisarprojetofiscalizacao/grid", "ERROR");
@@ -172,18 +187,14 @@ class Fiscalizacao_FiscalizarprojetoculturalController extends MinC_Controller_A
         $this->forward('parecerdotecnico', 'fiscalizarprojetocultural');
         $idFiscalizacao = $this->_getParam('idFiscalizacao');
 
+        if (empty($idFiscalizacao)) {
+            throw new Exception("Fiscaliza&ccedil;&atilde;o &eacute; obrigat&oacute;ria");
+        }
         $ProjetosDAO = new Projetos();
-//        $FiscalizacaoDAO = new Fiscalizacao_Model_DbTable_TbFiscalizacao();
-//        $RelatorioFiscalizacaoDAO = new RelatorioFiscalizacao();
+        $where = [];
+        $where['g.idFiscalizacao = ?'] = $idFiscalizacao;
 
-//        $aprovacaoDao = new Aprovacao();
-//        $selectAp = $aprovacaoDao->totalAprovadoProjeto(true);
-//        $abrangenciaDao = new Abrangencia();
-//        $selectAb = $abrangenciaDao->abrangenciaProjeto(true);
-//        $selectDOU = $aprovacaoDao->buscaDataPublicacaoDOU(true);
-
-//        $Projeto = $ProjetosDAO->buscaProjetosFiscalizacao($selectAb, $selectAp, false, $selectDOU, array('tbFiscalizacao.idFiscalizacao = ?' => $idFiscalizacao));
-        $Projeto = $ProjetosDAO->buscarProjetosFiscalizacao($idFiscalizacao);
+        $Projeto = $ProjetosDAO->buscarProjetosFiscalizacao($where);
 
         if (count($Projeto) < 1) {
             parent::message("Dados n&atilde;o localizados", "fiscalizacao/pesquisarprojetofiscalizacao/grid", "ERROR");
