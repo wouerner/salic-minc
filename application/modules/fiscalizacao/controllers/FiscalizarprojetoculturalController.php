@@ -3,6 +3,7 @@
 class Fiscalizacao_FiscalizarprojetoculturalController extends MinC_Controller_Action_Abstract
 {
     private $codUsuario = 0;
+    const URL_ASSINATURA = '/assinatura/index/visualizar-projeto';
 
     public function init()
     {
@@ -187,19 +188,44 @@ class Fiscalizacao_FiscalizarprojetoculturalController extends MinC_Controller_A
         $this->forward('parecerdotecnico', 'fiscalizarprojetocultural');
         $idFiscalizacao = $this->_getParam('idFiscalizacao');
 
-        if (empty($idFiscalizacao)) {
-            throw new Exception("Fiscaliza&ccedil;&atilde;o &eacute; obrigat&oacute;ria");
-        }
-        $ProjetosDAO = new Projetos();
-        $where = [];
-        $where['g.idFiscalizacao = ?'] = $idFiscalizacao;
+        try {
+            if (empty($idFiscalizacao)) {
+                throw new Exception("Fiscaliza&ccedil;&atilde;o &eacute; obrigat&oacute;ria");
+            }
 
-        $Projeto = $ProjetosDAO->buscarProjetosFiscalizacao($where);
+            $where = [];
+            $where['g.idFiscalizacao = ?'] = $idFiscalizacao;
 
-        if (count($Projeto) < 1) {
-            parent::message("Dados n&atilde;o localizados", "fiscalizacao/pesquisarprojetofiscalizacao/grid", "ERROR");
-        } else {
-            $this->view->projeto = $Projeto;
+            $projetosDAO = new Projetos();
+            $projeto = $projetosDAO->buscarProjetosFiscalizacao($where);
+
+            if (count($projeto) < 1) {
+                throw new Exception("Dados n&atilde;o localizados");
+            }
+
+            $servicoDocumentoAssinatura = new \Application\Modules\ComprovacaoObjeto\Service\Assinatura\DocumentoAssinatura(
+                $projeto[0]->IdPRONAC,
+                Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_FISCALIZACAO,
+                $idFiscalizacao
+            );
+
+            $assinatura = $servicoDocumentoAssinatura->obterProjetoDisponivelParaAssinatura();
+            if (!empty($assinatura)) {
+                $url = '%1$s/?idDocumentoAssinatura=%2$s&origin=%3$s';
+                $urlAssinatura = sprintf(
+                    $url,
+                    self::URL_ASSINATURA,
+                    $assinatura['idDocumentoAssinatura'],
+                    '/fiscalizacao/pesquisarprojetofiscalizacao/grid'
+                );
+
+                parent::message("Parecer j&aacute; finalizado! Aguardando assinatura!",
+                    $urlAssinatura,
+                    "ALERT"
+                );
+            }
+
+            $this->view->projeto = $projeto;
             $ArquivoFiscalizacaoDao = new Fiscalizacao_Model_DbTable_TbArquivoFiscalizacao();
             $this->view->arquivos = $ArquivoFiscalizacaoDao->buscarArquivo(array('arqfis.idFiscalizacao = ?' => $idFiscalizacao));
 
@@ -209,6 +235,8 @@ class Fiscalizacao_FiscalizarprojetoculturalController extends MinC_Controller_A
             } catch (Exception $e) {
                 $this->view->relatorioFiscalizacao = array();
             }
+        } catch (Exception $e) {
+            parent::message($e->getMessage(), "fiscalizacao/pesquisarprojetofiscalizacao/grid", "ERROR");
         }
     }
 
@@ -312,12 +340,18 @@ class Fiscalizacao_FiscalizarprojetoculturalController extends MinC_Controller_A
 
     public function salvarelatoriocoordenadorAction()
     {
-        $auth = Zend_Auth::getInstance(); // instancia da autentica��o
+        $auth = Zend_Auth::getInstance();
         $dados = $_POST;
+        $idFiscalizacao = $dados['idFiscalizacao'];
 
+        if (empty($idFiscalizacao)) {
+            throw new Exception("Fiscaliza&ccedil;&atilde;o n&atilde;o informada");
+        }
+
+        $idDocumentoAssinatura = $this->iniciarFluxoAssinatura($idFiscalizacao);
+        die;
         $anexardocumentos = false;
         $idUsuario = $auth->getIdentity()->usu_codigo;
-        $idFiscalizacao = $dados['idFiscalizacao'];
         $dsParecer = $dados['dsParecer'];
         $stAprovar = $dados['stAprovar'];
         $idPronac = $dados['idPronac'];
@@ -446,10 +480,59 @@ class Fiscalizacao_FiscalizarprojetoculturalController extends MinC_Controller_A
         }
 
         if ($stAprovar) {
-            parent::message("Fiscaliza&ccedil;&atilde;o aprovada com sucesso!", "fiscalizacao/pesquisarprojetofiscalizacao/grid?tipoFiltro=analisados", "CONFIRM");
+
+            $idDocumentoAssinatura = $this->iniciarFluxoAssinatura($idFiscalizacao);
+            if ($idDocumentoAssinatura) {
+                parent::message("Fiscaliza&ccedil;&atilde;o aprovada com sucesso! </br>
+                 Um documento foi gerado e est&aacute; dispon&iacute;vel para o t&eacute;cnico respons&aacute;vel. </br>
+                 Voc&ecirc; dever&aacute; assinar o documento ap&oacute;s o t&eacute;cnico. Acompanhe em 
+                 <u><a class='white-text' href='/assinatura/index/gerenciar-assinaturas'>Assinatura</a></u> no menu.",
+                    "fiscalizacao/pesquisarprojetofiscalizacao/grid?tipoFiltro=analisados",
+                    "CONFIRM"
+                );
+            }
+
+            parent::message("Fiscaliza&ccedil;&atilde;o aprovada com sucesso! Mas o documento n&atilde;o foi gerado", "fiscalizacao/pesquisarprojetofiscalizacao/grid?tipoFiltro=analisados", "CONFIRM");
         } else {
             parent::message("Dados salvos com sucesso!", "fiscalizacao/fiscalizarprojetocultural/parecerdocoordenador?idFiscalizacao=" . $idFiscalizacao, "CONFIRM");
         }
+    }
+
+    final private function iniciarFluxoAssinatura($idFiscalizacao)
+    {
+        if (empty($idFiscalizacao)) {
+            throw new Exception(
+                "Identificador da fiscaliza&ccedil;&atilde;o &eacute; necess&aacute;rio para acessar essa funcionalidade."
+            );
+        }
+
+        $tbRelatorioFiscalizacao = new Fiscalizacao_Model_DbTable_TbRelatorioFiscalizacao();
+        $relatorio = $tbRelatorioFiscalizacao->buscaRelatorioFiscalizacao($idFiscalizacao);
+
+        if (empty($relatorio['dsParecer'])) {
+            throw new Exception(
+                "&Eacute; necess&amp;aacute;rio ao menos um parecer para iniciar o fluxo de assinatura."
+            );
+        }
+
+        $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $documentoAssinatura = $objDbTableDocumentoAssinatura->obterProjetoDisponivelParaAssinatura(
+            $relatorio['IdPRONAC'],
+            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_FISCALIZACAO
+        );
+
+        if (count($documentoAssinatura) < 1) {
+            $servicoDocumentoAssinatura = new \Application\Modules\ComprovacaoObjeto\Service\Assinatura\DocumentoAssinatura(
+                $relatorio['IdPRONAC'],
+                Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_FISCALIZACAO,
+                $relatorio['idFiscalizacao']
+            );
+            $idDocumentoAssinatura = $servicoDocumentoAssinatura->iniciarFluxo();
+        } else {
+            $idDocumentoAssinatura = $documentoAssinatura['idDocumentoAssinatura'];
+        }
+
+        return $idDocumentoAssinatura;
     }
 
     public function gravaHistoricoDevolucao($dsJustificativa, $idRelatorioFiscalizacao)
@@ -498,5 +581,14 @@ class Fiscalizacao_FiscalizarprojetoculturalController extends MinC_Controller_A
     {
         $router = Zend_Controller_Front::getInstance()->getRouter();
         return $router->assemble($urlOptions, $name, $reset, $encode);
+    }
+
+    public function gerenciarAssinaturasAction()
+    {
+        $origin = $this->_request->getParam('origin');
+        if ($origin != '') {
+            $this->redirect($origin);
+        }
+        $this->redirect("/fiscalizacao/pesquisarprojetofiscalizacao/grid");
     }
 }
