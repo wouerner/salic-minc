@@ -2,6 +2,8 @@
 
 class Fiscalizacao_FiscalizarprojetoculturalController extends MinC_Controller_Action_Abstract
 {
+    private $codUsuario = 0;
+
     public function init()
     {
         $auth = Zend_Auth::getInstance();
@@ -34,6 +36,7 @@ class Fiscalizacao_FiscalizarprojetoculturalController extends MinC_Controller_A
         $this->view->arrayGrupos = $grupos;
         $this->view->grupoAtivo = $GrupoAtivo->codGrupo;
         $this->view->orgaoAtivo = $GrupoAtivo->codOrgao;
+        $this->codUsuario = $auth->getIdentity()->usu_codigo;
 
         $this->view->isCoordenador = in_array($GrupoAtivo->codGrupo, [
             Autenticacao_Model_Grupos::COORDENADOR_FISCALIZACAO,
@@ -137,14 +140,16 @@ class Fiscalizacao_FiscalizarprojetoculturalController extends MinC_Controller_A
     public function parecerdotecnicoAction()
     {
         $idFiscalizacao = $this->_getParam('idFiscalizacao');
-        $ProjetosDAO = new Projetos();
-        $Projeto = $ProjetosDAO->buscarProjetosFiscalizacao($idFiscalizacao);
+        $projetosDAO = new Projetos();
 
-        if (count($Projeto) < 1) {
+        $idUsuarioInterno = $this->view->isTecnico ? $this->codUsuario : null;
+        $projeto = $projetosDAO->buscarProjetosFiscalizacao($idFiscalizacao, $idUsuarioInterno);
+
+        if (count($projeto) < 1) {
             parent::message("Dados n&atilde;o localizados", "fiscalizacao/pesquisarprojetofiscalizacao/grid", "ERROR");
         } else {
             $this->view->historicoDevolucao = array();
-            $this->view->projeto = $Projeto;
+            $this->view->projeto = $projeto;
             $ArquivoFiscalizacaoDao = new Fiscalizacao_Model_DbTable_TbArquivoFiscalizacao();
             $this->view->arquivos = $ArquivoFiscalizacaoDao->buscarArquivo(array('arqfis.idFiscalizacao = ?' => $idFiscalizacao));
 

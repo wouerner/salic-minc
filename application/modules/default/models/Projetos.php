@@ -1929,7 +1929,7 @@ class Projetos extends MinC_Db_Table_Abstract
         );
         $select->joinLeft(
             array('tf' => 'tbFiscalizacao'),
-            'tf.IdPRONAC = p.IdPRONAC',
+            'tf.IdPRONAC = p.IdPRONAC AND stFiscalizacaoProjeto <> 3',
             array('idFiscalizacao',
                 'dtInicioFiscalizacaoProjeto',
                 'dtFimFiscalizacaoProjeto',
@@ -3740,7 +3740,7 @@ class Projetos extends MinC_Db_Table_Abstract
         return $this->fetchAll($select);
     }
 
-    public function buscarProjetosFiscalizacao($idFiscalizacao)
+    public function buscarProjetosFiscalizacao($idFiscalizacao, $idUsuarioInterno = null)
     {
         $select = $this->select();
         $select->setIntegrityCheck(false);
@@ -3797,7 +3797,12 @@ class Projetos extends MinC_Db_Table_Abstract
         $select->joinLeft(
             array('g' => 'tbFiscalizacao'),
             "a.IdPRONAC = g.IdPRONAC",
-            array('idFiscalizacao', 'dtInicioFiscalizacaoProjeto', 'dtFimFiscalizacaoProjeto', 'dtRespostaSolicitada',
+            array(
+                'idFiscalizacao',
+                'dtInicioFiscalizacaoProjeto',
+                'dtFimFiscalizacaoProjeto',
+                'dtRespostaSolicitada',
+                'idUsuarioInterno',
                 new Zend_Db_Expr('CAST(g.dsFiscalizacaoProjeto as TEXT) as dsFiscalizacaoProjeto'), 'stFiscalizacaoProjeto'
             ),
             'SAC.dbo'
@@ -3815,6 +3820,10 @@ class Projetos extends MinC_Db_Table_Abstract
             'SAC.dbo'
         );
         $select->where('g.idFiscalizacao = ?', $idFiscalizacao);
+
+        if ($idUsuarioInterno) {
+            $select->where('g.idUsuarioInterno = ?', $idUsuarioInterno);
+        }
 
         $select->order('a.NomeProjeto');
         $select->order('g.idFiscalizacao');

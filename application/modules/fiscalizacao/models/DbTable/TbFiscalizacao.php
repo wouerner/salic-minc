@@ -122,11 +122,11 @@ class Fiscalizacao_Model_DbTable_TbFiscalizacao extends MinC_Db_Table_Abstract
 
     public function gridFiscalizacaoProjetoFiltro($where = array(), $order = array(), $tamanho = -1, $inicio = -1, $qtdeTotal = false)
     {
-        $queryFiscalizacao = $this->select();
-        $queryFiscalizacao->setIntegrityCheck(false);
-        $queryFiscalizacao->from(array("tbFiscalizacao" => $this->_name), array('tbFiscalizacao.IdPRONAC, tbFiscalizacao.stFiscalizacaoProjeto'), $this->_schema);
-        $queryFiscalizacao->where('stFiscalizacaoProjeto = ?', '0');
-        $queryFiscalizacao->orWhere('stFiscalizacaoProjeto = ?', '1');
+//        $queryFiscalizacao = $this->select();
+//        $queryFiscalizacao->setIntegrityCheck(false);
+//        $queryFiscalizacao->from(array("tbFiscalizacao" => $this->_name), array('tbFiscalizacao.IdPRONAC, tbFiscalizacao.stFiscalizacaoProjeto'), $this->_schema);
+//        $queryFiscalizacao->where('stFiscalizacaoProjeto = ?', '0');
+//        $queryFiscalizacao->orWhere('stFiscalizacaoProjeto = ?', '1');
 
         $select = $this->select();
         $select->setIntegrityCheck(false);
@@ -210,7 +210,15 @@ class Fiscalizacao_Model_DbTable_TbFiscalizacao extends MinC_Db_Table_Abstract
                 'stFiscalizacaoProjeto',
                 'dsFiscalizacaoProjeto',
                 'dtRespostaSolicitada',
-                'idUsuarioInterno as idTecnico'
+                'idUsuarioInterno as idTecnico',
+                "statusFiscalizacao" => new Zend_Db_Expr(
+                    "CASE tf.stFiscalizacaoProjeto 
+                    WHEN 0 THEN 'Iniciada' 
+                    WHEN 1 THEN 'Em andamento' 
+                    WHEN 2 THEN 'Em an&aacute;lise pelo Coordenador' 
+                    WHEN 3 THEN 'Finalizada' 
+                    ELSE 'N&atilde;o realizada' 
+                    END ")
             ),
             $this->_schema
         );
