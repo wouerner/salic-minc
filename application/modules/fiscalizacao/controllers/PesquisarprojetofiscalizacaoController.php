@@ -504,7 +504,7 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
         $where["p.IdPRONAC NOT IN (SELECT IdPRONAC FROM SAC.dbo.tbFiscalizacao where stFiscalizacaoProjeto IN ('0','1') )"] = '';
         //$where["e.Status = ?"] = 1;
 
-        $tbFiscalizacao = new tbFiscalizacao();
+        $tbFiscalizacao = new Fiscalizacao_Model_DbTable_TbFiscalizacao();
         $total = $tbFiscalizacao->gridFiscalizacaoProjetoFiltro($where, $order, null, null, true);
 
         $fim = $inicio + $this->intTamPag;
