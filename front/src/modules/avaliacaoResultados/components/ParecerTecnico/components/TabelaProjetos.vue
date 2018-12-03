@@ -36,6 +36,7 @@
                             v-bind:key="index"
                             :obj="props.item"
                             :is="c"
+                            :link-direto-assinatura="true"
                             :id-pronac="props.item.IdPRONAC"
                             :pronac="props.item.PRONAC"
                             :nome-projeto="props.item.NomeProjeto"

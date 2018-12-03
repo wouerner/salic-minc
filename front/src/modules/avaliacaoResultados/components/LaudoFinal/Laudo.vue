@@ -249,6 +249,7 @@
         watch: {
             dados() {
                 if (this.dados.items !== undefined) {
+                    console.info(this.dados);
                     this.pagination.totalItems = this.dados.items.length;
                 }
             },
