@@ -7,7 +7,7 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
     private $codOrgao = null;
     private $grupoAtivo = null;
     private $codUsuario = 0;
-    private $orgaoUsuario = 0;
+    private $orgaoSuperiorUsuario = 0;
 
     public function init()
     {
@@ -41,7 +41,7 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
         $this->view->orgaoAtivo = $GrupoAtivo->codOrgao;
         $this->codOrgao = $GrupoAtivo->codOrgao;
         $this->codUsuario = $auth->getIdentity()->usu_codigo;
-        $this->orgaoUsuario = $auth->getIdentity()->usu_orgao;
+        $this->orgaoSuperiorUsuario = $auth->getIdentity()->usu_org_max_superior;
         $this->grupoAtivo = $GrupoAtivo->codGrupo;
 
         $this->view->isCoordenador = in_array($GrupoAtivo->codGrupo, [
@@ -120,7 +120,7 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
             $where['b.idUsuarioInterno = ?'] = $this->codUsuario;
         }
 
-        $where['b.tpDemandante = ?'] = $this->orgaoUsuario == Orgaos::ORGAO_SUPERIOR_SAV ? 1 : 0;
+        $where['b.tpDemandante = ?'] = $this->orgaoSuperiorUsuario == Orgaos::ORGAO_SUPERIOR_SAV ? 1 : 0;
 
         if (!empty($params['tecFiltro'])) {
             $this->view->tecnico = $params['tecFiltro'];
@@ -406,7 +406,7 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
         $situacaoDao = new Situacao();
         $this->view->situacaoprojeto = $situacaoDao->buscar(array("StatusProjeto = ?" => 1), array('Codigo'));
 
-        $operador = $this->orgaoUsuario == Orgaos::ORGAO_SUPERIOR_SAV ? '=' : '<>';
+        $operador = $this->orgaoSuperiorUsuario == Orgaos::ORGAO_SUPERIOR_SAV ? '=' : '<>';
         $whereArea = sprintf(
             'Codigo %1$s ?',
             $operador
@@ -494,7 +494,7 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
         if ($get->area != '') {
             $where['p.Area = ?'] = $get->area;
         } else {
-            $operador = $this->orgaoUsuario == Orgaos::ORGAO_SUPERIOR_SAV ? '=' : '<>';
+            $operador = $this->orgaoSuperiorUsuario == Orgaos::ORGAO_SUPERIOR_SAV ? '=' : '<>';
             $whereArea = sprintf(
                 'p.Area %1$s ?',
                 $operador
@@ -665,10 +665,7 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
         $fiscalizacaoDao = new Fiscalizacao_Model_DbTable_TbFiscalizacao();
 
         $auth = Zend_Auth::getInstance();
-        $tpDemandante = 0;
-        if ($auth->getIdentity()->usu_orgao == Orgaos::ORGAO_SUPERIOR_SAV) {
-            $tpDemandante = 1;
-        } //'SAV';
+
         if ($post->oficializar) {
             $dados['stFiscalizacaoProjeto'] = 1;
             $this->view->tela = 'grid';
@@ -688,7 +685,7 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
         }
 
         $dados['dsFiscalizacaoProjeto'] = $post->dsFiscalizacaoProjeto;
-        $dados['tpDemandante'] = $tpDemandante;
+        $dados['tpDemandante'] = $this->orgaoSuperiorUsuario == Orgaos::ORGAO_SUPERIOR_SAV ? 1 : 0;
         $dados['idSolicitante'] = $auth->getIdentity()->usu_codigo;
         $dados['idUsuarioInterno'] = $post->idUsuario;
 
