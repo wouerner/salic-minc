@@ -66,9 +66,9 @@ class Fiscalizacao_FiscalizarprojetoculturalController extends MinC_Controller_A
         $selectAp = $aprovacaoDao->totalAprovadoProjeto(true);
         $abrangenciaDao = new Proposta_Model_DbTable_Abrangencia();
         $selectAb = $abrangenciaDao->abrangenciaProjeto(true);
-        $projetosDao = new Projetos();
 
-        $resp = $projetosDao->buscaProjetosFiscalizacao(
+        $tbFiscalizacao = new Fiscalizacao_Model_DbTable_TbFiscalizacao();
+        $resp = $tbFiscalizacao->buscaProjetosFiscalizacao(
             $selectAb,
             $selectAp,
             false,
@@ -158,8 +158,8 @@ class Fiscalizacao_FiscalizarprojetoculturalController extends MinC_Controller_A
             ];
         }
 
-        $projetosDAO = new Projetos();
-        $projeto = $projetosDAO->buscarProjetosFiscalizacao($where);
+        $tbFiscalizacao = new Fiscalizacao_Model_DbTable_TbFiscalizacao();
+        $projeto = $tbFiscalizacao->buscarProjetosFiscalizacao($where);
 
         if (count($projeto) < 1) {
             parent::message("Dados n&atilde;o localizados", "fiscalizacao/pesquisarprojetofiscalizacao/grid", "ERROR");
@@ -196,8 +196,8 @@ class Fiscalizacao_FiscalizarprojetoculturalController extends MinC_Controller_A
             $where = [];
             $where['g.idFiscalizacao = ?'] = $idFiscalizacao;
 
-            $projetosDAO = new Projetos();
-            $projeto = $projetosDAO->buscarProjetosFiscalizacao($where);
+            $tbFiscalizacao = new Fiscalizacao_Model_DbTable_TbFiscalizacao();
+            $projeto = $tbFiscalizacao->buscarProjetosFiscalizacao($where);
 
             if (count($projeto) < 1) {
                 throw new Exception("Dados n&atilde;o localizados");
@@ -350,6 +350,7 @@ class Fiscalizacao_FiscalizarprojetoculturalController extends MinC_Controller_A
 
         $idDocumentoAssinatura = $this->iniciarFluxoAssinatura($idFiscalizacao);
         die;
+
         $anexardocumentos = false;
         $idUsuario = $auth->getIdentity()->usu_codigo;
         $dsParecer = $dados['dsParecer'];
