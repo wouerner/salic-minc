@@ -963,25 +963,27 @@ class Fiscalizacao_Model_DbTable_TbFiscalizacao extends MinC_Db_Table_Abstract
     {
         $select = $this->select();
         $select->setIntegrityCheck(false);
+
         $select->from(
-            array('a' => 'Projetos'),
-            array('IdPRONAC', 'idProjeto', 'NomeProjeto',
-                new Zend_Db_Expr("a.AnoProjeto + a.Sequencial AS Pronac")
-            )
+            array('b' => 'tbFiscalizacao'),
+            array('dtInicioFiscalizacaoProjeto', 'dtFimFiscalizacaoProjeto', 'idFiscalizacao', 'stFiscalizacaoProjeto'),
+            $this->_schema
         );
 
         $select->joinInner(
-            array('b' => 'tbFiscalizacao'),
+            array('a' => 'Projetos'),
             'b.IdPRONAC = a.IdPRONAC',
-            array('dtInicioFiscalizacaoProjeto', 'dtFimFiscalizacaoProjeto', 'idFiscalizacao', 'stFiscalizacaoProjeto'),
-            'SAC.dbo'
+            array('IdPRONAC', 'idProjeto', 'NomeProjeto',
+                new Zend_Db_Expr("a.AnoProjeto + a.Sequencial AS Pronac")
+            ),
+            $this->_schema
         );
 
         $select->joinLeft(
             array('c' => 'tbRelatorioFiscalizacao'),
             'b.idFiscalizacao = c.idFiscalizacao',
             array(''),
-            'SAC.dbo'
+            $this->_schema
         );
 
         //adiciona quantos filtros foram enviados
