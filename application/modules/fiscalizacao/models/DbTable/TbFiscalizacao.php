@@ -1049,7 +1049,7 @@ class Fiscalizacao_Model_DbTable_TbFiscalizacao extends MinC_Db_Table_Abstract
         );
         $select->joinInner(
             array('Area'),
-            "Projetos.Area = Area.Codigo",
+            "c = Area.Codigo",
             array()
         );
         $select->joinInner(

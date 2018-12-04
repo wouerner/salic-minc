@@ -7,6 +7,7 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
     private $codOrgao = null;
     private $grupoAtivo = null;
     private $codUsuario = 0;
+    private $orgaoUsuario = 0;
 
     public function init()
     {
@@ -40,6 +41,7 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
         $this->view->orgaoAtivo = $GrupoAtivo->codOrgao;
         $this->codOrgao = $GrupoAtivo->codOrgao;
         $this->codUsuario = $auth->getIdentity()->usu_codigo;
+        $this->orgaoUsuario = $auth->getIdentity()->usu_orgao;
         $this->grupoAtivo = $GrupoAtivo->codGrupo;
 
         $this->view->isCoordenador = in_array($GrupoAtivo->codGrupo, [
@@ -117,6 +119,8 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
             $where['b.stFiscalizacaoProjeto in (?)'] = array('0', '1');
             $where['b.idUsuarioInterno = ?'] = $this->codUsuario;
         }
+
+        $where['b.tpDemandante = ?'] = $this->orgaoUsuario == Orgaos::ORGAO_SUPERIOR_SAV ? 1 : 0;
 
         if (!empty($params['tecFiltro'])) {
             $this->view->tecnico = $params['tecFiltro'];
@@ -401,8 +405,15 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
         $this->view->mecanismo = $mecanismoDao->buscar(array('Status = ?' => 1));
         $situacaoDao = new Situacao();
         $this->view->situacaoprojeto = $situacaoDao->buscar(array("StatusProjeto = ?" => 1), array('Codigo'));
+
+        $operador = $this->orgaoUsuario == Orgaos::ORGAO_SUPERIOR_SAV ? '=' : '<>';
+        $whereArea = sprintf(
+            'Codigo %1$s ?',
+            $operador
+        );
         $areaDao = new Area();
-        $this->view->area = $areaDao->buscar();
+        $this->view->area = $areaDao->buscar([$whereArea => Area::AREA_AUDIOVISUAL]);
+
         $segmentoDao = new Segmento();
         $this->view->Segmento = $segmentoDao->buscar(array('stEstado = ?' => 1));
     }
@@ -482,6 +493,13 @@ class Fiscalizacao_PesquisarprojetofiscalizacaoController extends MinC_Controlle
 
         if ($get->area != '') {
             $where['p.Area = ?'] = $get->area;
+        } else {
+            $operador = $this->orgaoUsuario == Orgaos::ORGAO_SUPERIOR_SAV ? '=' : '<>';
+            $whereArea = sprintf(
+                'p.Area %1$s ?',
+                $operador
+            );
+            $where[$whereArea] = Area::AREA_AUDIOVISUAL;
         }
 
         if ($get->Segmento != '') {
