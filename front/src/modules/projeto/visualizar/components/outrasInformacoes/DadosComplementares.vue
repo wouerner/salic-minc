@@ -43,7 +43,7 @@
 </template>
 <script>
     import { mapActions, mapGetters } from 'vuex';
-    import Carregando from '@/components/Carregando';
+    import Carregando from '@/components/CarregandoVuetify';
     import TabelaDadosComplementares from './TabelaDadosComplementares';
 
     export default {
