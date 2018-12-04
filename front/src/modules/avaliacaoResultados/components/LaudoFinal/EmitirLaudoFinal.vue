@@ -147,7 +147,7 @@ export default {
             if (this.laudoFinalData.dsLaudoFinal) {
                 data.dsLaudoFinal = this.laudoFinalData.dsLaudoFinal;
             }
-            console.info(data);
+            // console.info(data);
             return null;
             this.salvar(data);
         },
@@ -172,7 +172,7 @@ export default {
             if (this.laudoFinalData.dsLaudoFinal) {
                 data.dsLaudoFinal = this.laudoFinalData.dsLaudoFinal;
             }
-            console.info(data);
+            // console.info(data);
             return null;
 
             this.finalizar(data);
