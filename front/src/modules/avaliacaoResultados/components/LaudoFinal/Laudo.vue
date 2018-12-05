@@ -67,6 +67,7 @@
                         :pronac="props.item.PRONAC"
                         :idTipoDoAtoAdministrativo="atoAdministrativo"
                         :usuario="getUsuario"
+                        :tecnico="devolucaoLaudo"
                     >
                     </Devolver>
                 </td>
@@ -140,6 +141,10 @@
         props: ['dados', 'estado'],
         data() {
             return {
+                devolucaoLaudo: {
+                    idAgente: 0,
+                    nome: 'sysLaudo',
+                },
                 pagination: {
                     rowsPerPage: 10,
                 },
@@ -249,7 +254,6 @@
         watch: {
             dados() {
                 if (this.dados.items !== undefined) {
-                    console.info(this.dados);
                     this.pagination.totalItems = this.dados.items.length;
                 }
             },
