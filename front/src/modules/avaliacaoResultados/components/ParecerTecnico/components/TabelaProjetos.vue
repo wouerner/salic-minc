@@ -37,6 +37,7 @@
                             :obj="props.item"
                             :is="c"
                             :link-direto-assinatura="true"
+                            :documento="props.item.idDocumentoAssinatura"
                             :id-pronac="props.item.IdPRONAC"
                             :pronac="props.item.PRONAC"
                             :nome-projeto="props.item.NomeProjeto"
@@ -179,6 +180,7 @@ export default {
     computed: {
         ...mapGetters({
             dadosTabelaTecnico: 'avaliacaoResultados/dadosTabelaTecnico',
+            getProjetosFinalizados: 'avaliacaoResultados/getProjetosFinalizados',
         }),
         pages() {
             if (this.pagination.rowsPerPage == null ||
