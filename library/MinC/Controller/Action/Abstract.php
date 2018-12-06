@@ -829,10 +829,7 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
                 if ($resuplanilha->idEtapa == PlanilhaEtapa::ETAPA_CUSTOS_VINCULADOS) {
                     if (!$custosVinculados) {
                         $propostaTbCustosVinculados = new Proposta_Model_TbCustosVinculadosMapper();
-                        $custosVinculados = $propostaTbCustosVinculados->obterCustosVinculados(
-                            $resuplanilha->idProjeto,
-                            $valorTotalProjeto
-                        );
+                        $custosVinculados = $propostaTbCustosVinculados->obterCustosVinculadosReadequacao($resuplanilha->idPronac);
                     }
                     
                     $valorItemCustoVinculado = 0;
