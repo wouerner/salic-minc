@@ -155,7 +155,7 @@
                                                             <EditorTexto
                                                                 :style="parecerRules.backgroundColor"
                                                                 :value="getParecer.dsParecer"
-                                                                @editor-texto-change="inputParecer($event)"
+                                                                @change="inputParecer($event)"
                                                                 @editor-texto-counter="validarParecer($event)"
                                                                 required="required"
                                                             >
@@ -226,7 +226,7 @@ export default {
                     text: 'Aprovação com Ressalva',
                 },
             ],
-            parecerData: {},
+            parecerData: { },
 
         };
     },
@@ -262,8 +262,6 @@ export default {
                 data.dsParecer = this.parecerData.dsParecer;
             }
             this.salvar(data);
-            /** Descomentar linha após migração da lista para o VUEJS */
-            // this.dialog = false;
         },
         finalizarParecer() {
             const data = {

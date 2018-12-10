@@ -55,7 +55,7 @@
                                     <EditorTexto
                                         :style="laudoRules.backgroundColor"
                                         :value="parecerLaudoFinal.items.dsLaudoFinal"
-                                        @editor-texto-input="inputLaudo($event)"
+                                        @change="inputLaudo($event)"
                                         @editor-texto-counter="validarLaudo($event)"
                                         required="required"
                                     >
@@ -147,7 +147,6 @@ export default {
             if (this.laudoFinalData.dsLaudoFinal) {
                 data.dsLaudoFinal = this.laudoFinalData.dsLaudoFinal;
             }
-            console.info(data);
             this.salvar(data);
         },
         finalizarLaudoFinal() {
