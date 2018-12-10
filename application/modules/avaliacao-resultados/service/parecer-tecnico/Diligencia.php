@@ -37,10 +37,10 @@ class Diligencia
                          );
 
                          $diligencias = $Projetosdao->listarDiligencias(array('pro.IdPRONAC = ?' => $idPronac));
-                         foreach ($diligencias as $diligencia => $valor){
-                             var_dump($valor);
-                                 die;
-                         }
+//                         foreach ($diligencias as $diligencia => $valor){
+//                             var_dump($valor);
+//                                 die;
+//                         }
                    return $diligencias;
                    }
                } else {
