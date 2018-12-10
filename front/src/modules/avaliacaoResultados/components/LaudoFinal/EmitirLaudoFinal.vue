@@ -55,7 +55,7 @@
                                     <EditorTexto
                                         :style="laudoRules.backgroundColor"
                                         :value="parecerLaudoFinal.items.dsLaudoFinal"
-                                        @change="inputLaudo($event)"
+                                        @editor-texto-input="inputLaudo($event)"
                                         @editor-texto-counter="validarLaudo($event)"
                                         required="required"
                                     >

@@ -155,7 +155,7 @@
                                                             <EditorTexto
                                                                 :style="parecerRules.backgroundColor"
                                                                 :value="getParecer.dsParecer"
-                                                                @change="inputParecer($event)"
+                                                                @editor-texto-input="inputParecer($event)"
                                                                 @editor-texto-counter="validarParecer($event)"
                                                                 required="required"
                                                             >
