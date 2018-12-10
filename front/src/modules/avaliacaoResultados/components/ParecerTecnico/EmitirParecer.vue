@@ -135,7 +135,7 @@
                                                         <v-select
                                                             height="20px"
                                                             v-model="getParecer.siManifestacao"
-                                                            @input="inputManifestacao($event)"
+                                                            @change="inputManifestacao($event)"
                                                             :rules="itemRules"
                                                             :items="items"
                                                             item-text="text"
@@ -155,7 +155,7 @@
                                                             <EditorTexto
                                                                 :style="parecerRules.backgroundColor"
                                                                 :value="getParecer.dsParecer"
-                                                                @editor-texto-input="inputParecer($event)"
+                                                                @editor-texto-change="inputParecer($event)"
                                                                 @editor-texto-counter="validarParecer($event)"
                                                                 required="required"
                                                             >
