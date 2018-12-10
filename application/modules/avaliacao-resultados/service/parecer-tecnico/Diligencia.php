@@ -2,6 +2,8 @@
 
 namespace Application\Modules\AvaliacaoResultados\Service\ParecerTecnico;
 
+use phpDocumentor\Reflection\Types\Object_;
+
 class Diligencia
 {
     /** modules/proposta/controllers/DiligenciarController -> listardiligenciaanalistaAction */
@@ -38,6 +40,17 @@ class Diligencia
 
                          $diligencias = $Projetosdao->listarDiligencias(array('pro.IdPRONAC = ?' => $idPronac));
 
+                         foreach ($diligencias->toArray() as $diligencia){
+//                             $diligencias[$key]->arquivo = $this->obterAnexosDiligencias($valor);
+
+                             $diligencia['arquivos'] = $this->obterAnexosDiligencias($diligencia);
+                             x($diligencia);
+//                             x($diligencias[$chave]);
+                             die();
+//                             x((object) $this->obterAnexosDiligencias($valor));
+//                             die;
+                       }
+                       die();
                    return $diligencias;
                    }
                } else {
@@ -171,6 +184,7 @@ class Diligencia
                 'idDiligencia' => $arquivo->idDiligencia,
             ];
         }
+
         return $arquivoArray;
     }
 }
