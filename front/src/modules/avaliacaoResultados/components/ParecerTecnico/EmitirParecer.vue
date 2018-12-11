@@ -299,7 +299,6 @@ export default {
         this.redirectLink = this.redirectLink + this.idPronac;
         this.getConsolidacao(this.idPronac);
         this.validarParecer(this.getParecer.dsParecer);
-        this.inputParecer(this.getParecer.dsParecer);
     },
     filters: {
         cnpjFilter,
