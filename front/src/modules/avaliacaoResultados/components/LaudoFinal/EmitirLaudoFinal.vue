@@ -43,7 +43,7 @@
                                                row>
                                     <v-radio color="success" label="Aprovado" value="A"></v-radio>
                                     <v-radio color="success" label="Aprovado com ressalvas" value="P"></v-radio>
-                                    <v-radio color="success" label="Reprovado" value="R"></v-radio>
+                                    <v-radio color="error" label="Reprovado" value="R"></v-radio>
                                 </v-radio-group>
                             </v-flex>
                         </v-layout>
