@@ -38,20 +38,17 @@ class Diligencia
                                 )
                          );
 
-                         $diligencias = $Projetosdao->listarDiligencias(array('pro.IdPRONAC = ?' => $idPronac));
+                         $diligencias = $Projetosdao->listarDiligencias(array('pro.IdPRONAC = ?' => $idPronac))->toArray();
 
-                         foreach ($diligencias->toArray() as $diligencia){
-//                             $diligencias[$key]->arquivo = $this->obterAnexosDiligencias($valor);
+                         $lista = $diligencias;
 
-                             $diligencia['arquivos'] = $this->obterAnexosDiligencias($diligencia);
-                             x($diligencia);
-//                             x($diligencias[$chave]);
-                             die();
-//                             x((object) $this->obterAnexosDiligencias($valor));
-//                             die;
-                       }
-                       die();
-                   return $diligencias;
+                         foreach ( $lista as $key => $value){
+
+                             $value['Arquivos'] = $this->obterAnexosDiligencias($value);
+
+                             $lista[$key] = $value;
+                         }
+                   return $lista;
                    }
                } else {
                     if ($idPreProjeto) {
