@@ -121,28 +121,27 @@
                                     </v-card-text>
                                     <v-card-actions>
                                         <v-container grid-list-xs text-xs-center ma-0 pa-0>
-                                                    <v-btn
-                                                        color="primary"
-                                                        @click.native="salvarParecer()"
-                                                        :disabled="!valid || !parecerRules.enable"
-                                                    >
-                                                        Salvar
-                                                    </v-btn>
-                                                    <v-btn
-                                                        color="primary"
-                                                        @click.native="finalizarParecer()"
-                                                        :href="redirectLink"
-                                                        :disabled="!valid || !parecerRules.enable"
-                                                    >
-                                                        Finalizar
-                                                    </v-btn>
+                                            <v-btn
+                                                color="primary"
+                                                @click.native="salvarParecer()"
+                                                :disabled="!valid || !parecerRules.enable"
+                                            >
+                                                Salvar
+                                            </v-btn>
+                                            <v-btn
+                                                color="primary"
+                                                @click.native="finalizarParecer()"
+                                                :href="redirectLink"
+                                                :disabled="!valid || !parecerRules.enable"
+                                            >
+                                                Finalizar
+                                            </v-btn>
                                         </v-container>
                                     </v-card-actions>
                                 </v-card>
                             </v-card-text>
                         </v-container>
                     </v-card-text>
-                    
                 </v-card>
             </v-dialog>
         </v-form>
