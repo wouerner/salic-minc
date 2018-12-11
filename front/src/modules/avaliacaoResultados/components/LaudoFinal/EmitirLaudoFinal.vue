@@ -3,7 +3,7 @@
         <v-form ref="form" v-model="valid">
             <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
                 <v-card>
-                    <v-toolbar dark color="green">
+                    <v-toolbar dark color="primary">
                         <v-btn icon dark :to="{ name: 'Laudo' }">
                             <v-icon>close</v-icon>
                         </v-btn>
