@@ -3,7 +3,7 @@
         <vue-editor
             :editorToolbar="customToolbar"
             v-model="editor"
-            :placeholder="'Texto do Parecer *'"
+            :placeholder="'Texto do Documento *'"
             @input="enviar($event)"
             @text-change="counter($event)"
         >
