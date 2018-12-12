@@ -36,8 +36,14 @@
                                                 <v-radio color="success" label="Somente itens recusados" value="645"></v-radio>
                                                 <v-radio color="success" label="Todos os itens orçamentários" value="174"></v-radio>
                                             </v-radio-group>
+                                            <div v-show="solicitacaoRules.show" class="text-xs-left"><h4 :class="solicitacaoRules.color">{{solicitacaoRules.msg}}*</h4></div>
                                             <EditorTexto
-                                            >
+                                                :style="solicitacaoRules.backgroundColor"
+                                                :value="solicitacao"
+                                                @editor-texto-input="inputSolicitacao($event)"
+                                                @editor-texto-counter="validarSolicitacao($event)"
+                                                required="required"
+                                            >                                                
                                             </EditorTexto>
                                         </v-form>
                                     </v-card-text>
@@ -45,7 +51,7 @@
                                         <v-btn
                                             color="primary"
                                             @click.native="enviarDiligencia()"
-                                            :disabled="!valid"
+                                            :disabled="!valid || !solicitacaoRules.enable"
                                             :to="{ name: 'AnalisePlanilha', params:{ id:this.idPronac }}"
                                         >
                                             Enviar
@@ -76,9 +82,13 @@
                 idPronac: this.$route.params.id,
                 valid: false,
                 dialog: true,
-                solicitacaoRules: [
-                    v => !!v || 'Solicitação é obrigatório!',
-                ],
+                solicitacaoRules: {
+                    show: false,
+                    color: '',
+                    backgroundColor: '',
+                    msg: '',
+                    enable: false,
+                },
                 diligenciaRules: [
                     v => !!v || 'Tipo de diligencia é obrigatório!',
                 ],
@@ -101,6 +111,30 @@
                 };
 
                 this.salvar(data);
+            },
+            inputSolicitacao(e) {
+                this.solicitacao = e;
+                this.validarSolicitacao(e);
+            },
+            validarSolicitacao(e) {
+                if (e < 1) {
+                    this.solicitacaoRules = {
+                        show: true,
+                        color: 'red--text',
+                        backgroundColor: { 'background-color': '#FFCDD2' },
+                        msg: 'A solicitação é obrigatória!',
+                        enable: false,
+                    };
+                }
+                if (e > 0) {
+                    this.solicitacaoRules = {
+                        show: false,
+                        color: '',
+                        backgroundColor: '',
+                        msg: '',
+                        enable: true,
+                    };
+                }
             },
         },
         computed:
