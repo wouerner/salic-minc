@@ -25,6 +25,7 @@ import MarcasAnexadas from './visualizar/components/execucao/MarcasAnexadas';
 import DadosReadequacoes from './visualizar/components/execucao/DadosReadequacoes';
 import PedidoProrrogacao from './visualizar/components/execucao/PedidoProrrogacao';
 import DadosFiscalizacao from './visualizar/components/execucao/DadosFiscalizacao';
+import ContasBancarias from './visualizar/components/dadosBancarios/ContasBancarias';
 
 Vue.use(Router);
 
@@ -253,6 +254,14 @@ const routes = [
                 component: DadosFiscalizacao,
                 meta: {
                     title: 'Dados Fiscalização',
+                },
+            },
+            {
+                path: 'contas-bancarias',
+                name: 'ContasBancarias',
+                component: ContasBancarias,
+                meta: {
+                    title: 'Contas Bancárias',
                 },
             },
         ],

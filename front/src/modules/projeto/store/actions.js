@@ -257,3 +257,10 @@ export const buscarDadosFiscalizacaoVisualiza = ({ commit }, value) => {
         });
 };
 
+export const buscarContasBancarias = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarContasBancarias(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_CONTAS_BANCARIAS, data);
+        });
+};

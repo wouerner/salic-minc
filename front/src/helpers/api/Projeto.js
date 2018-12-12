@@ -242,3 +242,11 @@ export const buscarDadosFiscalizacaoVisualiza = (idPronac, idFiscalizacao) => {
     const queryParams = `?id=${idFiscalizacao}&idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscarContasBancarias = (idPronac) => {
+    const modulo = '/dados-bancarios';
+    const controller = '/contas-bancarias-rest';
+    const path = `${modulo}${controller}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};

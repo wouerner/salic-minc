@@ -27,3 +27,4 @@ export const dadosReadequacoes = state => state.dadosReadequacoes;
 export const pedidoProrrogacao = state => state.pedidoProrrogacao;
 export const dadosFiscalizacaoLista = state => state.dadosFiscalizacaoLista;
 export const dadosFiscalizacaoVisualiza = state => state.dadosFiscalizacaoVisualiza;
+export const contasBancarias = state => state.contasBancarias;

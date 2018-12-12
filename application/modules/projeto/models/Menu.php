@@ -473,6 +473,101 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             ];
         }
 
+        #dados bancario
+        if (in_array($this->permissoesMenu['FaseDoProjeto'], array('2', '3', '4', '5')) || !$this->usuarioExterno || $this->debug) {
+
+            $menu['dadosbancarios'] = [
+                'id' => 'DadosBancarios',
+                'label' => 'Dados Banc&aacute;rios',
+                'title' => 'Menu Dados Banc&aacute;rios',
+                'link' => '',
+                'ajax' => false,
+                'icon' => 'attach_money',
+                'submenu' => '',
+                'grupo' => []
+            ];
+
+            $menu['dadosbancarios']['submenu'][] = [
+                'label' => 'Contas Banc&aacute;rias',
+                'title' => 'Ir para Contas Banc&aacute;rias',
+                'link' => '/default/consultardadosprojeto/dados-bancarios/?idPronac=' . $idPronacHash,
+                'ajax' => false,
+                'grupo' => []
+            ];
+
+            $menu['dadosbancarios']['submenu'][] = [
+                'label' => 'Libera&ccedil;&atilde;o',
+                'title' => 'Ir para Libera&ccedil;&atilde;o',
+                'link' => '/default/consultardadosprojeto/dados-bancarios-liberacao/?idPronac=' . $idPronacHash,
+                'ajax' => false,
+                'grupo' => []
+            ];
+
+            $menu['dadosbancarios']['submenu'][] = [
+                'label' => 'Capta&ccedil;&atilde;o',
+                'title' => 'Ir para Capta&ccedil;&atilde;o',
+                'link' => '/default/consultardadosprojeto/dados-bancarios-captacao/?idPronac=' . $idPronacHash,
+                'ajax' => false,
+                'grupo' => []
+            ];
+
+            $menu['dadosbancarios']['submenu'][] = [
+                'label' => 'Extrato Banc&aacute;rio',
+                'title' => 'Ir para Extrato Banc&aacute;rio',
+                'link' => '/default/consultardadosprojeto/extratos-bancarios/?idPronac=' . $idPronacHash,
+                'ajax' => false,
+                'grupo' => []
+            ];
+
+            $menu['dadosbancarios']['submenu'][] = [
+                'label' => 'Extrato Banc&aacute;rio Consolidado',
+                'title' => 'Ir para Extrato Banc&aacute;rio Consolidado',
+                'link' => '/default/consultardadosprojeto/extrato-conta-movimento-consolidado/?idPronac=' . $idPronacHash,
+                'ajax' => false,
+                'grupo' => []
+            ];
+
+            $menu['dadosbancarios']['submenu'][] = [
+                'label' => 'Concilia&ccedil;&atilde;o Banc&aacute;ria',
+                'title' => 'Ir para Concilia&ccedil;&atilde;o Banc&aacute;ria',
+                'link' => '/default/consultardadosprojeto/conciliacao-bancaria/?idPronac=' . $idPronacHash,
+                'ajax' => false,
+                'grupo' => []
+            ];
+
+            $menu['dadosbancarios']['submenu'][] = [
+                'label' => 'Inconsist&ecirc;ncias Banc&aacute;rias',
+                'title' => 'Ir para Inconsist&ecirc;ncias Banc&aacute;rias',
+                'link' => '/default/consultardadosprojeto/inconsistencia-bancaria/?idPronac=' . $idPronacHash,
+                'ajax' => false,
+                'grupo' => []
+            ];
+
+            $menu['dadosbancarios']['submenu'][] = [
+                'label' => 'Dep&oacute;sito Equivocado',
+                'title' => 'Ir para Dep&oacute;sito Equivocado',
+                'link' => '/default/aporte-captacao/deposito-equivocado/?idPronac=' . $idPronacHash,
+                'ajax' => false,
+                'grupo' => []
+            ];
+
+            $menu['dadosbancarios']['submenu'][] = [
+                'label' => 'Inconsist&ecirc;ncias Banc&aacute;rias',
+                'title' => 'Ir para Inconsist&ecirc;ncias Banc&aacute;rias',
+                'link' => '/default/consultardadosprojeto/inconsistencia-bancaria/?idPronac=' . $idPronacHash,
+                'ajax' => false,
+                'grupo' => []
+            ];
+
+            $menu['dadosbancarios']['submenu'][] = [
+                'label' => 'Devolu&ccedil;&otilde;es do Incentivador',
+                'title' => 'Ir para Devolu&ccedil;&otilde;es do Incentivador',
+                'link' => '/default/consultardadosprojeto/devolucoes-do-incentivador/?idPronac=' . $idPronacHash,
+                'ajax' => false,
+                'grupo' => []
+            ];
+        }
+
         # Prestação de contas
         if ($this->permissoesMenu['PrestacaoContas'] || !$this->usuarioExterno || $this->debug) {
             $menu['prestacaodecontas'] = [
