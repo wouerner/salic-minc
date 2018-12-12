@@ -1,46 +1,72 @@
 <template>
     <div id="app">
-        <v-app>
-            <SlNav>
-            </SlNav>
-            <v-container>
-              <v-layout>
-                <router-view></router-view>
-              </v-layout>
-            </v-container>
-            <v-footer
-                height="auto"
-                clase="pa-3"
-                color="green lighten-1"
+        <v-app :dark="isModoNoturno">
+            <SlNav></SlNav>
+            <v-content>
+                <v-container fluid v-if="Object.keys(usuario).length > 0">
+                  <v-layout>
+                    <v-fade-transition mode="out-in">
+                        <router-view></router-view>
+                    </v-fade-transition>
+                  </v-layout>
+                </v-container>
+            </v-content>
+
+            <v-snackbar
+                v-model="snackbar"
+                :color="getSnackbar.color"
+                :top="true"
+                :left="true"
+                :timeout="2000"
+                @input="fecharSnackbar"
             >
-                <v-layout
-                    justify-center
-                    row
-                    wrap
-                >
-                  <v-flex xs3 text-xs-center>
-                    <a class="orange-text text-lighten-3 tooltipped" data-position="top" data-delay="50" data-tooltip="Ir para o portal de notícias, tutoriais e legislações da Lei Rouanet" target="_blank" href="http://rouanet.cultura.gov.br/" data-tooltip-id="11c539d7-9913-16c0-3c16-ce4e6364817f">LEI ROUANET</a>
-                  </v-flex>
-                  <v-flex xs3 text-xs-center>
-                    Desenvolvimento | SQL Server
-                  </v-flex>
-                  <v-flex xs3 text-xs-center>
-                    Versão: <a class="tooltipped" data-position="top" data-delay="50" data-tooltip="Branch: f/prestacao-contas/dev" target="_blank" href="https://github.com/culturagovbr/salic-minc/releases" data-tooltip-id="ebb0a15a-2763-9484-464d-f10ca3d73a27">v5.0.7</a>
-                  </v-flex>
-                  <v-flex xs3 text-xs-center>
-                    <a class="orange-text text-lighten-3 tooltipped" data-position="top" data-delay="50" data-tooltip="Ir para o Site: Desenvolvimento Salic MinC" target="_blank" href="http://culturagovbr.github.io/salic-minc" data-tooltip-id="14f518c8-eb5f-3b9a-c172-cf75020f54f5">Desenvolvimento</a>
-                  </v-flex>
-             </v-layout>
-            </v-footer>
+                {{ this.getSnackbar.text }}
+            </v-snackbar>
+            <Rodape></Rodape>
       </v-app>
     </div>
 </template>
 
 <script>
-    import SlNav from './components/SlNav';
+import { mapActions, mapGetters } from 'vuex';
+import Rodape from '@/components/layout/footer';
+import SlNav from './components/SlNav';
 
-    export default {
-        name: 'Index',
-        components: { SlNav },
-    };
+export default {
+    name: 'Index',
+    components: { SlNav, Rodape },
+    methods: {
+        ...mapActions({
+            setSnackbar: 'noticias/setDados',
+            setUsuario: 'autenticacao/usuarioLogado',
+            obterModoNoturno: 'layout/obterModoNoturno',
+        }),
+        fecharSnackbar() {
+            this.setSnackbar({ ativo: false });
+        },
+    },
+    computed: {
+        ...mapGetters({
+            getSnackbar: 'noticias/getDados',
+            isModoNoturno: 'layout/modoNoturno',
+            usuario: 'autenticacao/getUsuario',
+        }),
+    },
+    mounted() {
+        this.setSnackbar({ ativo: false, color: 'success' });
+        this.setUsuario();
+        this.obterModoNoturno();
+    },
+    data() {
+        return {
+            dark: false,
+            snackbar: false,
+        };
+    },
+    watch: {
+        getSnackbar(val) {
+            this.snackbar = val.ativo;
+        },
+    },
+};
 </script>

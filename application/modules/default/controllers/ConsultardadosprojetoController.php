@@ -168,21 +168,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
                 $idPronac = Seguranca::dencrypt($idPronac);
             }
 
-            $tbProjetos = new Projetos();
-            $where = [];
-            $where['IdPRONAC'] = $idPronac;
-            $projeto = $tbProjetos->findBy($where);
-
             if (empty($debug)) {
-                if (empty($projeto)) {
-                    throw new Exception("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.");
-                }
-
-                if ($projeto['Mecanismo'] == 1) {
-                    $this->redirect('/projeto/#/incentivo/' . $idPronacHash);
-                } else {
-                    $this->redirect('/projeto/convenio/visualizar/idPronac/' . $idPronacHash);
-                }
+                $this->redirect('/projeto/#/' . $idPronacHash);
             }
 
             $dbTableProjetos = new Projeto_Model_DbTable_Projetos();
@@ -190,10 +177,6 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             $this->view->projeto = $projeto;
             if (count($projeto) <= 0) {
                 throw new Exception("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.");
-            }
-
-            if($projeto->idMecanismo != 1) { #incentivo fiscal
-                $this->redirect('/projeto/convenio/visualizar/idPronac/' . $idPronac);
             }
 
             $dbTableInabilitado = new Inabilitado();
@@ -367,6 +350,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $this->view->CgcCpf = $tbdados[0]->CgcCpf;
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/certidoes-negativas/CertidoesNegativas.php
+     *
+     */
     public function certidoesNegativasAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -384,6 +372,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $this->view->dados = $resultado;
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/dados-complementares/DadosComplementares.php
+     *
+     */
     public function dadosComplementaresAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -406,7 +399,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
                 $rsProposta = $tblProposta->buscar(array('idPreProjeto=?'=>$rsProjeto->idProjeto))->current();
                 $this->view->proposta = $rsProposta;
                 $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
-                $this->view->itensCustosVinculados = $tbCustosVinculadosMapper->obterCustosVinculados($rsProjeto->idProjeto);
+                $this->view->itensCustosVinculados = $tbCustosVinculadosMapper->obterCustosVinculadosPlanilhaProposta($rsProjeto->idProjeto);
             }
         }
     }
@@ -506,6 +499,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/plano-distribuicao-in2013/PlanoDistribuicaoIn2013.php
+     *
+     */
     public function planoDeDistribuicaoAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -523,6 +521,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/local-realizacao-deslocamento/LocalRealizacaoDeslocamento.php
+     *
+     */
     public function localRealizacaoDeslocamentoAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -611,6 +614,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/documentos-anexados/DocumentosAnexados.php
+     *
+     */
     public function documentosAnexadosAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -778,6 +786,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/execucao/controllers/DadosReadequacoesRestController.php
+     * application/modules/execucao/service/DadosReadequacoes.php
+     */
     public function readequacoesAction()
     {
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
@@ -873,6 +886,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $this->view->projeto = $rst[0];
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/tramitacao/TramitacaoDocumento.php
+     */
     public function tramitacaoAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -1021,6 +1038,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/providencia-tomada/ProvidenciaTomada.php
+     */
     public function providenciaTomadaAction()
     {
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
@@ -1548,6 +1569,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/historico-encaminhamento/HistoricoEncaminhamento.php
+     */
     public function historicoEncaminhamentoAction()
     {
         $idPronac = $this->_request->getParam("idPronac");
@@ -1833,7 +1858,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             $qtdRelatorioEsperado = ceil($intervalo/90);
             $this->view->qtdRelatorioEsperado = $qtdRelatorioEsperado;
 
-            $tbComprovanteTrimestral = new tbComprovanteTrimestral();
+            $tbComprovanteTrimestral = new ComprovacaoObjeto_Model_DbTable_TbComprovanteTrimestral();
             $qtdRelatorioCadastrados = $tbComprovanteTrimestral->buscarComprovantes(array('idPronac=?'=>$idpronac), true, array('nrComprovanteTrimestral')); //busca todos os relatorios
             $qtdRelCadastrados = !empty($qtdRelatorioCadastrados) ? $qtdRelatorioCadastrados->count() : 0;
             $this->view->qtdRelatorioCadastrados = $qtdRelCadastrados;
@@ -1859,7 +1884,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        $tbComprovanteTrimestral = new tbComprovanteTrimestral();
+        $tbComprovanteTrimestral = new ComprovacaoObjeto_Model_DbTable_TbComprovanteTrimestral();
         $DadosRelatorio = $tbComprovanteTrimestral->buscarComprovantes(array('IdPRONAC = ?' => $idpronac, 'nrComprovanteTrimestral=?'=>$nrrelatorio));
         $this->view->DadosRelatorio = $DadosRelatorio;
 
@@ -1902,7 +1927,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
 
-        $tbComprovanteTrimestral = new tbComprovanteTrimestral();
+        $tbComprovanteTrimestral = new ComprovacaoObjeto_Model_DbTable_TbComprovanteTrimestral();
         $DadosRelatorio = $tbComprovanteTrimestral->buscarComprovantes(array('IdPRONAC = ?' => $idpronac, 'nrComprovanteTrimestral=?'=>$nrrelatorio));
         $this->view->DadosRelatorio = $DadosRelatorio;
 
@@ -1941,10 +1966,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
         //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
-        $DadosProjeto = $projetos->dadosProjeto(array('idPronac = ?' => $idpronac))->current();
-        $this->view->DadosProjeto = $DadosProjeto;
+        $dadosProjeto = $projetos->dadosProjeto(array('idPronac = ?' => $idpronac))->current();
+        $this->view->DadosProjeto = $dadosProjeto;
         $this->view->idPronac = $idpronac;
-        $tbCumprimentoObjeto = new tbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
         $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idpronac));
 
         if (!empty($DadosRelatorio)) {
@@ -1972,21 +1997,33 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             $dadosComprovantes = $Arquivo->buscarComprovantesExecucao($idpronac);
             $this->view->DadosComprovantes = $dadosComprovantes;
 
-            $tbTermoAceiteObra = new tbTermoAceiteObra();
+            $tbTermoAceiteObra = new ComprovacaoObjeto_Model_DbTable_TbTermoAceiteObra();
             $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idpronac));
             $this->view->AceiteObras = $AceiteObras;
 
-            $tbBensDoados = new tbBensDoados();
+            $tbBensDoados = new ComprovacaoObjeto_Model_DbTable_TbBensDoados();
             $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idpronac), array('b.Descricao'));
             $this->view->BensCadastrados = $BensCadastrados;
 
             if ($DadosRelatorio->siCumprimentoObjeto == 6) {
                 $Usuario = new UsuarioDAO();
                 $nmUsuarioCadastrador = $Usuario->buscarUsuario($DadosRelatorio->idTecnicoAvaliador);
-                $nmChefiaImediata = $Usuario->buscarUsuario($DadosRelatorio->idChefiaImediata);
                 $this->view->TecnicoAvaliador = $nmUsuarioCadastrador;
-                $this->view->ChefiaImediata = $nmChefiaImediata;
+
+                if ($DadosRelatorio->idChefiaImediata) {
+                    $nmChefiaImediata = $Usuario->buscarUsuario($DadosRelatorio->idChefiaImediata);
+                    $this->view->ChefiaImediata = $nmChefiaImediata;
+                }
             }
+
+            $isPermitidoVisualizarRelatorio = in_array(
+                $dadosProjeto->situacao,
+                Projeto_Model_Situacao::obterSituacoesPermitidoVisualizarPrestacaoContas()
+            );
+
+            $auth = Zend_Auth::getInstance();
+            $this->view->visualizarRelatorio =  isset($auth->getIdentity()->usu_codigo) ? true : $isPermitidoVisualizarRelatorio;
+
         }
 
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
@@ -2001,10 +2038,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
 
         //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
-        $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
-        $this->view->DadosProjeto = $DadosProjeto;
+        $dadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idpronac))->current();
+        $this->view->DadosProjeto = $dadosProjeto;
 
-        $tbCumprimentoObjeto = new tbCumprimentoObjeto();
+        $tbCumprimentoObjeto = new ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
         $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idpronac));
         $this->view->DadosRelatorio = $DadosRelatorio;
 
@@ -2033,21 +2070,33 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $dadosComprovantes = $Arquivo->buscarComprovantesExecucao($idpronac);
         $this->view->DadosComprovantes = $dadosComprovantes;
 
-        $tbTermoAceiteObra = new tbTermoAceiteObra();
+        $tbTermoAceiteObra = new ComprovacaoObjeto_Model_DbTable_TbTermoAceiteObra();
         $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idpronac));
         $this->view->AceiteObras = $AceiteObras;
 
-        $tbBensDoados = new tbBensDoados();
+        $tbBensDoados = new ComprovacaoObjeto_Model_DbTable_TbBensDoados();
         $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idpronac), array('b.Descricao'));
         $this->view->BensCadastrados = $BensCadastrados;
 
         if ($DadosRelatorio->siCumprimentoObjeto == 6) {
             $Usuario = new UsuarioDAO();
             $nmUsuarioCadastrador = $Usuario->buscarUsuario($DadosRelatorio->idTecnicoAvaliador);
-            $nmChefiaImediata = $Usuario->buscarUsuario($DadosRelatorio->idChefiaImediata);
             $this->view->TecnicoAvaliador = $nmUsuarioCadastrador;
-            $this->view->ChefiaImediata = $nmChefiaImediata;
+
+            if ($DadosRelatorio->idChefiaImediata) {
+                $nmChefiaImediata = $Usuario->buscarUsuario($DadosRelatorio->idChefiaImediata);
+                $this->view->ChefiaImediata = $nmChefiaImediata;
+            }
         }
+
+        $isPermitidoVisualizarRelatorio = in_array(
+            $dadosProjeto->situacao,
+            Projeto_Model_Situacao::obterSituacoesPermitidoVisualizarPrestacaoContas()
+        );
+
+        $auth = Zend_Auth::getInstance();
+        $this->view->visualizarRelatorio =  isset($auth->getIdentity()->usu_codigo) ? true : $isPermitidoVisualizarRelatorio;
+
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
     }
 
@@ -3080,23 +3129,21 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         if (!empty($idPronac)) {
             $projetoDao = new Projetos();
             $this->view->projeto = $projetoDao->buscar(array('IdPRONAC = ?'=>$idPronac))->current();
-
+            $tbFiscalizacao = new Fiscalizacao_Model_DbTable_TbFiscalizacao();
             if (empty($idFiscalizacao)) {
-                $projetoDao = new Projetos();
-                $this->view->infoProjeto = $projetoDao->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
+                $this->view->infoProjeto = $tbFiscalizacao->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
             } else {
-                $projetoDao = new Projetos();
-                $this->view->infoProjeto = $projetoDao->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac, 'tbFiscalizacao.idFiscalizacao = ?' => $idFiscalizacao), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
+                $this->view->infoProjeto = $tbFiscalizacao->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac, 'tbFiscalizacao.idFiscalizacao = ?' => $idFiscalizacao), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
 
-                $OrgaoFiscalizadorDao = new OrgaoFiscalizador();
+                $OrgaoFiscalizadorDao = new Fiscalizacao_Model_DbTable_TbOrgaoFiscalizador();
                 if ($idFiscalizacao) {
                     $this->view->dadosOrgaos = $OrgaoFiscalizadorDao->dadosOrgaos(array('tbOF.idFiscalizacao = ?' => $idFiscalizacao));
                 }
-                $ArquivoFiscalizacaoDao = new ArquivoFiscalizacao();
+                $ArquivoFiscalizacaoDao = new Fiscalizacao_Model_DbTable_TbArquivoFiscalizacao();
                 if ($idFiscalizacao) {
                     $this->view->arquivos = $ArquivoFiscalizacaoDao->buscarArquivo(array('arqfis.idFiscalizacao = ?' => $idFiscalizacao));
                 }
-                $RelatorioFiscalizacaoDAO = new RelatorioFiscalizacao();
+                $RelatorioFiscalizacaoDAO = new Fiscalizacao_Model_DbTable_TbRelatorioFiscalizacao();
                 $this->view->relatorioFiscalizacao = $RelatorioFiscalizacaoDAO->buscaRelatorioFiscalizacao($idFiscalizacao);
 
                 $this->montaTela("/consultardadosprojeto/detalhes-dados-da-fiscalizacao.phtml", array());
@@ -3105,6 +3152,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/diligencia/DiligenciaProjeto.php
+     */
     public function diligenciasAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -3875,18 +3926,18 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
                         if (isset($arrConteudoImpressao) && in_array('dadosfiscalizacao', $arrConteudoImpressao)) {
                             $arrRegistros = array();
                             //$this->view->registrosFiscalizacao = $arrRegistros;
-                            $projetoDao = new Projetos();
-                            $arrProjetos = $projetoDao->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
+
+                            $tbFiscalizacao = new Fiscalizacao_Model_DbTable_TbFiscalizacao();
+                            $arrProjetos = $tbFiscalizacao->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
                             $arrIdFiscalizacao = array();
 
-                            $projetoDao = new Projetos();
-                            $OrgaoFiscalizadorDao = new OrgaoFiscalizador();
-                            $ArquivoFiscalizacaoDao = new ArquivoFiscalizacao();
-                            $RelatorioFiscalizacaoDAO = new RelatorioFiscalizacao();
+                            $OrgaoFiscalizadorDao = new Fiscalizacao_Model_DbTable_TbOrgaoFiscalizador();
+                            $ArquivoFiscalizacaoDao = new Fiscalizacao_Model_DbTable_TbArquivoFiscalizacao();
+                            $RelatorioFiscalizacaoDAO = new Fiscalizacao_Model_DbTable_TbRelatorioFiscalizacao();
 
                             foreach ($arrProjetos as $chave => $projeto) {
                                 if (isset($projeto->idFiscalizacao) && $projeto->idFiscalizacao!="") {
-                                    $this->view->infoProjeto = $projetoDao->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac, 'tbFiscalizacao.idFiscalizacao = ?' => $projeto->idFiscalizacao), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
+                                    $this->view->infoProjeto = $tbFiscalizacao->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac, 'tbFiscalizacao.idFiscalizacao = ?' => $projeto->idFiscalizacao), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
                                     $arrRegistros[$chave]['infoProjeto'] =$this->view->infoProjeto;
 
                                     if ($projeto->idFiscalizacao) {
@@ -4674,18 +4725,17 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
                             // === DADOS DA FISCALIZACAO
                             $arrRegistros = array();
                             //$this->view->registrosFiscalizacao = $arrRegistros;
-                            $projetoDao = new Projetos();
-                            $arrProjetos = $projetoDao->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
+                            $tbFiscalizacao = new Fiscalizacao_Model_DbTable_TbFiscalizacao();
+                            $arrProjetos = $tbFiscalizacao->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
                             $arrIdFiscalizacao = array();
 
-                            $projetoDao = new Projetos();
-                            $OrgaoFiscalizadorDao = new OrgaoFiscalizador();
-                            $ArquivoFiscalizacaoDao = new ArquivoFiscalizacao();
-                            $RelatorioFiscalizacaoDAO = new RelatorioFiscalizacao();
+                            $OrgaoFiscalizadorDao = new Fiscalizacao_Model_DbTable_TbOrgaoFiscalizador();
+                            $ArquivoFiscalizacaoDao = new Fiscalizacao_Model_DbTable_TbArquivoFiscalizacao();
+                            $RelatorioFiscalizacaoDAO = new Fiscalizacao_Model_DbTable_TbRelatorioFiscalizacao();
 
                             foreach ($arrProjetos as $chave => $projeto) {
                                 if (isset($projeto->idFiscalizacao) && $projeto->idFiscalizacao!="") {
-                                    $this->view->infoProjeto = $projetoDao->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac, 'tbFiscalizacao.idFiscalizacao = ?' => $projeto->idFiscalizacao), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
+                                    $this->view->infoProjeto = $tbFiscalizacao->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac, 'tbFiscalizacao.idFiscalizacao = ?' => $projeto->idFiscalizacao), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
                                     $arrRegistros[$chave]['infoProjeto'] =$this->view->infoProjeto;
 
                                     if ($projeto->idFiscalizacao) {
@@ -4844,6 +4894,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/execucao/controllers/MarcasAnexadasRestController.php
+     * application/modules/execucao/service/MarcasAnexadas.php
+     */
     public function marcasAnexadasAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -4863,6 +4918,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $this->view->pronac = $pronac;
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/execucao/controllers/PedidoProrrogacaoRestController.php
+     * application/modules/execucao/service/PedidoProrrogacao.php
+     */
     public function pedidoProrrogacaoAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout

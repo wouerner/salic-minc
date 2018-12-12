@@ -10,9 +10,24 @@ class AvaliacaoResultados_Bootstrap extends Zend_Application_Module_Bootstrap
             [],
             [
                 'avaliacao-resultados' => [
-                    'comprovante-pagamento',
-                    'planilha-aprovacao',
-                    'finalizar-avaliacao-financeira-rest'
+                    'index',
+                    'assinatura',
+                    'avaliacao-comprovante',
+                    'diligencia',
+                    'emissao-parecer-rest',
+                    'encaminhamento-prestacao-contas',
+                    'estado',
+                    'fluxo',
+                    'fluxo-projeto',
+                    'historico',
+                    'laudo',
+                    'tecnicos',
+                    'tipo-avaliacao-rest',
+                    'projeto',
+                    'projeto-assinatura',
+                    'projeto-inicio',
+                    'projetos-avaliacao-tecnica',
+                    'planilha-aprovada'
                 ]
             ]
         );

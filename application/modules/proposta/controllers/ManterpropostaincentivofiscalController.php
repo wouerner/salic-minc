@@ -25,6 +25,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
             $this->view->blnPossuiDiligencias = $rsDiligencias->count();
 
             $this->view->acao = $this->_urlPadrao . "/proposta/manterpropostaincentivofiscal/salvar";
+
         }
 
         // Busca na tabela apoio ExecucaoImediata
@@ -169,6 +170,8 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
      */
     public function salvarAction()
     {
+        $this->validarEdicaoProposta();
+
         $post = array_change_key_case($this->getRequest()->getPost());
 
         if (empty($post['idagente'])) {
@@ -373,6 +376,8 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
 
     public function identificacaodapropostaAction()
     {
+        $this->validarEdicaoProposta();
+
         if (empty($this->_proposta["idpreprojeto"])) {
             $post = Zend_Registry::get('post');
 
@@ -432,14 +437,19 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
 
     public function responsabilidadesocialAction()
     {
+        $this->validarEdicaoProposta();
+
     }
 
     public function detalhestecnicosAction()
     {
+        $this->validarEdicaoProposta();
+
     }
 
     public function outrasinformacoesAction()
     {
+        $this->validarEdicaoProposta();
     }
 
     /**
@@ -460,6 +470,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
     public function encaminharprojetoaomincAction()
     {
         $this->verificarPermissaoAcesso(true, false, false);
+        $this->validarEdicaoProposta();
 
         $params = $this->getRequest()->getParams();
 
@@ -525,9 +536,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
      */
     public function excluirAction()
     {
-        if ($this->isEditarProjeto) {
-            parent::message("N&atilde;o foi possível realizar a opera&ccedil;&atilde;o!", "/proposta/manterpropostaincentivofiscal/listarproposta", "ERROR");
-        }
+        $this->validarEdicaoProposta();
 
         $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
 
@@ -552,6 +561,8 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
      */
     public function enviarPropostaAction()
     {
+        $this->validarEdicaoProposta();
+
         $arrResultado = array();
 
         $params = $this->getRequest()->getParams();
@@ -580,7 +591,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
                 $tbMovimentacao = new Proposta_Model_DbTable_TbMovimentacao();
                 $insert = $tbMovimentacao->insert($dados);
 
-                parent::message("Proposta encaminhada com sucesso para an&aacute;lise no Minist&eacute;rio da Cultura.", "/proposta/manterpropostaincentivofiscal/identificacaodaproposta/idPreProjeto/" . $idPreProjeto, "CONFIRM");
+                parent::message("Proposta encaminhada com sucesso para an&aacute;lise no Minist&eacute;rio da Cultura.", "/proposta/visualizar/index/idPreProjeto/" . $idPreProjeto, "CONFIRM");
             } else {
                 $this->view->resultado = $arrResultado;
             }
@@ -598,7 +609,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
      * @access public
      * @return void
      */
-    public function validarEnvioPropostaComSp($idPreProjeto)
+    private function validarEnvioPropostaComSp($idPreProjeto)
     {
         try {
             $validacao = new stdClass();
@@ -691,7 +702,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
      * @access public
      * @return void
      */
-    public function validarEnvioPropostaSemSp($idPreProjeto)
+    private function validarEnvioPropostaSemSp($idPreProjeto)
     {
         try {
             $tbPreProjeto = new Proposta_Model_DbTable_PreProjeto();
@@ -838,7 +849,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
 
         $idAgente = ((int)$idAgente == 0) ? $this->idAgente : (int)$idAgente;
 
-        if (empty($idAgente)) {
+        if (empty($idAgente) || empty($this->idResponsavel)) {
             $this->_helper->json(array(
                 "data" => 0,
                 'recordsTotal' => 0,
@@ -848,7 +859,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
 
         $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
 
-        $rsPreProjeto = $tblPreProjeto->propostas($this->idAgente, $this->idResponsavel, $idAgente, array(), $order, $start, $length, $search);
+        $rsPreProjeto = $tblPreProjeto->propostas($this->idResponsavel, $idAgente, array(), $order, $start, $length, $search);
 
         $Movimentacao = new Proposta_Model_DbTable_TbMovimentacao();
 
@@ -860,13 +871,13 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
                 $proposta->nomeproponente = utf8_encode($proposta->nomeproponente);
                 $proposta->nomeprojeto = utf8_encode($proposta->nomeprojeto);
                 $proposta->situacao = utf8_encode($proposta->situacao);
-                $rsStatusAtual = $Movimentacao->buscarStatusPropostaNome($proposta->idpreprojeto);
+                $rsStatusAtual = $Movimentacao->buscarMovimentacaoProposta($proposta->idpreprojeto);
                 $proposta->situacao = isset($rsStatusAtual['MovimentacaoNome']) ? utf8_encode($rsStatusAtual['MovimentacaoNome']) : '';
 
                 $aux[$key] = $proposta;
             }
-            $recordsFiltered = $tblPreProjeto->propostasTotal($this->idAgente, $this->idResponsavel, $idAgente, array(), null, null, null, $search);
-            $recordsTotal = $tblPreProjeto->propostasTotal($this->idAgente, $this->idResponsavel, $idAgente);
+            $recordsFiltered = $tblPreProjeto->propostasTotal($this->idResponsavel, $idAgente, array(), null, null, null, $search);
+            $recordsTotal = $tblPreProjeto->propostasTotal($this->idResponsavel, $idAgente);
         }
 
         $this->_helper->json(array(
@@ -1028,7 +1039,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
      * @param $idPreProjeto
      * @return ArrayObject|bool|mixed
      */
-    public function atualizarDadosPessoaJuridicaVerificandoCNAECultural($idPreProjeto)
+    private function atualizarDadosPessoaJuridicaVerificandoCNAECultural($idPreProjeto)
     {
         $TbPreProjeto = new Proposta_Model_DbTable_PreProjeto();
         $proponente = $TbPreProjeto->buscarProponenteProposta($idPreProjeto);

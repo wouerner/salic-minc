@@ -4,20 +4,18 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
     protected $_schema = 'sac';
     protected $_name  = 'spPlanilhaOrcamentaria';
 
-    /**
-     *  tipoPlanilha = 0 : Planilha Orcamentaria da Proposta
-     *  tipoPlanilha = 1 : Planilha Orcamentaria do Proponente
-     *  tipoPlanilha = 2 : Planilha Orcamentaria do Parecerista
-     *  tipoPlanilha = 3 : Planilha Orcamentaria Aprovada Ativa
-     *  tipoPlanilha = 4 : Cortes Orcamentarios Aprovados
-     *  tipoPlanilha = 5 : Remanejamento menor que 20% (migradas para Zend)
-     *  tipoPlanilha = 6 : Readequacao (migradas para Zend)
-     *  tipoPlanilha = 7 : Saldo de Aplicação (migradas para Zend)
-     */
+    const TIPO_PLANILHA_PROPOSTA = 0;
+    const TIPO_PLANILHA_PROPONENTE = 1;
+    const TIPO_PLANILHA_PARECERISTA = 2;
+    const TIPO_PLANILHA_APROVADA_ATIVA = 3;
+    const TIPO_PLANILHA_CORTES_APROVADOS = 4;
+    const TIPO_PLANILHA_REMANEJAMENTO = 5;
+    const TIPO_PLANILHA_READEQUACAO = 6;
+    const TIPO_PLANILHA_SALDO_APLICACAO = 7;
 
     /**
      * Retorna planilha orçamentária
-     * 
+     *
      * @param integer $idPronac
      * @param integer $tipoPlanilha
      * @param array $params
@@ -26,29 +24,29 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
     public function exec($idPronac, $tipoPlanilha, $params = [])
     {
         switch ($tipoPlanilha) {
-            case 0:
+            case self::TIPO_PLANILHA_PROPOSTA:
                 return $this->planilhaOrcamentariaProposta($idPronac);
                 break;
-            case 1:
+            case self::TIPO_PLANILHA_PROPONENTE:
                 return $this->orcamentariaProponente($idPronac);
                 break;
-            case 2:
+            case self::TIPO_PLANILHA_PARECERISTA:
                 return $this->execSpPlanilhaOrcamentaria($idPronac, $tipoPlanilha);
-            case 3:
+            case self::TIPO_PLANILHA_APROVADA_ATIVA:
                 return $this->execSpPlanilhaOrcamentaria($idPronac, $tipoPlanilha);
-            case 4:
+            case self::TIPO_PLANILHA_CORTES_APROVADOS:
                 return $this->execSpPlanilhaOrcamentaria($idPronac, $tipoPlanilha);
-            case 5:
+            case self::TIPO_PLANILHA_REMANEJAMENTO:
                 if ($params['link'] || $params['view_edicao']) {
                     $planilhaOrcamentaria = $this->execSpPlanilhaOrcamentaria($idPronac, $tipoPlanilha);
                 } else {
                     $spVisualizarPlanilhaOrcamentariaPlanilhaOrcamentaria = new spVisualizarPlanilhaOrcamentaria();
                     $planilhaOrcamentaria = $spVisualizarPlanilhaOrcamentariaPlanilhaOrcamentaria->exec($idPronac);
                 }
-                
+
                 return $planilhaOrcamentaria;
                 break;
-            case 6:
+            case self::TIPO_PLANILHA_READEQUACAO:
                 if ($params['link'] || $params['view_edicao']) {
                     $planilhaOrcamentaria = $this->readequacao($idPronac, Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA);
                 } else {
@@ -57,7 +55,7 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
                 }
                 return $planilhaOrcamentaria;
                 break;
-            case 7:
+            case self::TIPO_PLANILHA_SALDO_APLICACAO:
                 if ($params['link'] || $params['view_edicao']) {
                     $planilhaOrcamentaria = $this->readequacao($idPronac, Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO);
                 } else {
@@ -164,7 +162,7 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
     {
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
-        
+
         $a =array(
             'a.idPronac',
             'a.AnoProjeto',
@@ -625,12 +623,12 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
             ->where("a.stAtivo = 'N'")
             ->where("a.tpPlanilha = 'SR'")
             ->where("b.idTipoReadequacao = ?", $idTipoReadequacao)
-            ->where("b.siEncaminhamento <> 15")
-            ->where("b.stEstado = 0")
+            ->where("b.siEncaminhamento <> ?", Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_FINALIZADA_SEM_PORTARIA)
+            ->where("b.stEstado = ?", Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_EM_ANDAMENTO)
             ->limit(1)
         ;
         $readequacao = $db->fetchAll($sql);
-        
+
         if (!empty($readequacao)) {
             $subSQLSumVlPagamento = array(
                 new Zend_Db_Expr("sum(b1.vlComprovacao) AS vlPagamento"),
@@ -660,7 +658,7 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
                                 ->where("c1.idUFDespesa = k.idUFDespesa")
                                 ->where("c1.idMunicipioDespesa = k.idMunicipioDespesa")
                                 ->group(new Zend_Db_Expr("c1.nrFonteRecurso, c1.idProduto, c1.idEtapa, c1.idUFDespesa, c1.idMunicipioDespesa, c1.idPlanilhaItem "));
-            
+
             $a = array(
                 "($subSQLVlComprovado) as vlComprovado",
                 new Zend_Db_Expr("CASE WHEN k.idProduto = 0 THEN 'Administra&ccedil;&atilde;o do Projeto' ELSE c.Descricao END as Produto"),
@@ -668,6 +666,7 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
                 new Zend_Db_Expr("( a.AnoProjeto+a.Sequencial ) as PRONAC"),
                 "a.NomeProjeto",
                 "a.idPronac",
+                "a.idProjeto",
                 "d.Descricao as Etapa",
                 "d.tpGrupo",
                 "e.Descricao as Unidade",
@@ -688,6 +687,7 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
                 "k.nrOcorrencia as Ocorrencia",
                 "k.tpAcao",
                 "k.vlUnitario",
+                "k.idPlanilhaItem",
                 "x.Descricao as FonteRecurso",
             );
             $sql = $db->select()->from(array('a' => 'Projetos'), $a, $this->_schema)
@@ -699,7 +699,7 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
                 ->join(array('x' => 'Verificacao'), '(k.nrFonteRecurso = x.idVerificacao)', null, $this->_schema)
                 ->join(array('f' => 'vUfMunicipio'), '(k.idUfDespesa = f.idUF AND k.idMunicipioDespesa = f.idMunicipio)', null, $this->getSchema('agentes'))
                 ->join(array('r' => 'tbReadequacao'), '(k.idReadequacao = r.idReadequacao)', null, $this->_schema)
-                 
+
                 ->where("k.stAtivo = 'N'")
                 ->where("k.tpPlanilha = 'SR'")
                 ->where(new Zend_Db_Expr("((ROUND((k.qtItem * k.nrOcorrencia * k.vlUnitario),2) <> 0) OR (k.dsJustificativa IS NOT NULL))"))
@@ -715,7 +715,7 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
                 ->order("i.Descricao");
 
         } else {
-            
+
             $subA = array(
                 new Zend_Db_Expr("sum(b1.vlComprovacao) AS vlPagamento"),
             );
@@ -735,6 +735,7 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
                 new Zend_Db_Expr("(a.AnoProjeto+a.Sequencial) as PRONAC"),
                 "a.NomeProjeto",
                 "a.idPronac",
+                "a.idProjeto",
                 "d.Descricao as Etapa",
                 "d.tpGrupo",
                 "e.Descricao as Unidade",
@@ -750,11 +751,12 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
                 "k.idPlanilhaAprovacaoPai",
                 "k.idProduto",
                 "k.idMunicipioDespesa AS idMunicipio",
-                "k.idUFDespesa AS idUF",                
+                "k.idUFDespesa AS idUF",
                 "k.nrFonteRecurso as idFonte",
                 "k.nrOcorrencia as Ocorrencia",
                 "k.tpAcao",
                 "k.vlUnitario",
+                "k.idPlanilhaItem",
                 "x.Descricao as FonteRecurso",
             );
 
@@ -773,13 +775,13 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
                 ->where("a.idPronac = ? ", $idPronac)
                 ->order("x.Descricao")
                 ->order("c.Descricao DESC")
-                ->order(new Zend_Db_Expr("CONVERT(VARCHAR(8),d.idPlanilhaEtapa) + ' - ' + d.Descricao"))                 
+                ->order(new Zend_Db_Expr("CONVERT(VARCHAR(8),d.idPlanilhaEtapa) + ' - ' + d.Descricao"))
                 ->order("f.UF")
                 ->order("f.Municipio")
                 ->order("i.Descricao")
             ;
         }
-        
+
         return $db->fetchAll($sql);
     }
 

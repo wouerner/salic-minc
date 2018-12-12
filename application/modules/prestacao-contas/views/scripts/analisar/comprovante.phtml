@@ -82,7 +82,7 @@
                                 <td><formatValue :value="projeto.vlAprovado"></formatValue></td>
                                 <th>Valor Comprovado:</th>
                                 <td><formatValue :value="projeto.vlComprovado"></formatValue></td>
-                                <th>Comprovação Validada:</th>
+                                <th>Comprova&ccedil;&atilde;o Validada:</th>
                                 <td><formatValue :value="projeto.ComprovacaoValidada"></formatValue></td>
                             </tr>
                         </tbody>
@@ -163,7 +163,7 @@
                                      <div class="input-field col s12">
                                         <label class="label label-primary">
                                             <h4>
-                                                Ocorrência do Técnico
+                                                Ocorr&ecirc;ncia do T&eacute;cnico
                                             </h4>
                                         </label>
                                         <textarea v-model="avaliacao.observacao"
@@ -202,17 +202,26 @@
             salvar: function () {
                 var vue = this;
                 url = '/prestacao-contas/comprovante-pagamento';
-                $3.ajax({
-                    type: "POST",
-                    url: url,
-                    data: this.avaliacao,
-                })
+
+                /* console.log('t', !this.avaliacao.observacao && this.avaliacao.situacao); */
+                if(!this.avaliacao.observacao && this.avaliacao.situacao == 3) {
+                    alert('faltou preencher "Ocorr&ecirc;ncia"!');
+                } else {
+
+                    $3.ajax({
+                        type: "POST",
+                        url: url,
+                        data: this.avaliacao,
+                    })
                     .done(function (data) {
                         vue.$parent.$emit('salvar-form', vue.$data.avaliacao);
                     })
                     .fail(function (jqXHR) {
                         alert('error');
                     });
+                }
+
+
             }
         }
     }
@@ -234,7 +243,7 @@
                         <tr>
                             <th>Comprovante</th>
                             <td>{{dados.tpDocumento}}</td>
-                            <th>Número</th>
+                            <th>N&uacute;mero</th>
                             <td>{{dados.numero}}</td>
                             <th>S&eacute;rie</th>
                             <td colspan="3">{{dados.serie}}</td>
@@ -243,7 +252,7 @@
                             <th>Dt. Emiss&atilde;o do comprovante de despesa</th>
                             <td>{{dataEmissaoComprovante}}</td>
                             <th>Forma de Pagamento</th>
-                            <td>{{dados.tpFormaDePagamento}}</td>
+                            <td>{{formaPagamento}}</td>
                             <th>Data do Pagamento</th>
                             <td>{{dataPagamento}}</td>
                             <th>N&ordm; Documento Pagamento</th>
@@ -259,7 +268,7 @@
                         </tr>
                         <tr>
                             <th>Justificativa do Proponente</th>
-                            <td colspan="7">{{dados.dsJustificativa}}</td>
+                            <td colspan="7">{{dados.justificativa}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -281,14 +290,25 @@
                 return CNPJCPF;
             },
             dataEmissaoComprovante() {
-                return moment(this.dados.dtEmissao).format('DD/MM/Y');
+                return moment(this.dados.dataEmissao).format('DD/MM/Y');
             },
             dataPagamento() {
-                return moment(this.dados.dtPagamento).format('DD/MM/Y');
+                return moment(this.dados.dataPagamento).format('DD/MM/Y');
             },
             valor() {
                 return parseFloat(this.dados.vlComprovacao).toFixed(2);
-            }
+            },
+            formaPagamento() {
+                forma = '';
+                console.log(this.dados.forma);
+                switch(parseInt(this.dados.forma)) {
+                    case 1: forma = 'Cheque'; break;
+                    case 2: forma = 'Transfer\xeancia Banc\xe1ria'; break;
+                    case 3: forma = 'Saque/Dinheiro'; break;
+                }
+
+                return forma;
+            },
         },
     };
 
