@@ -1,8 +1,8 @@
 <?php
 
-use Application\Modules\Execucao\Service\ConciliacaoBancaria\ConciliacaoBancaria as ConciliacaoBancariaService;
+use Application\Modules\DadosBancarios\Service\ConciliacaoBancaria\ConciliacaoBancaria as ConciliacaoBancariaService;
 
-class ConciliacaoBancariaRestController extends MinC_Controller_Rest_Abstract
+class DadosBancarios_ConciliacaoBancariaRestController extends MinC_Controller_Rest_Abstract
 {
      public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
     {

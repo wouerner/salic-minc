@@ -250,3 +250,11 @@ export const buscarContasBancarias = (idPronac) => {
     const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscarConciliacaoBancaria = (idPronac) => {
+    const modulo = '/dados-bancarios';
+    const controller = '/conciliacao-bancaria-rest';
+    const path = `${modulo}${controller}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};

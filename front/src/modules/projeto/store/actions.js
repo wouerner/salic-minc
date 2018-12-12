@@ -264,3 +264,11 @@ export const buscarContasBancarias = ({ commit }, idPronac) => {
             commit(types.SET_CONTAS_BANCARIAS, data);
         });
 };
+
+export const buscarConciliacaoBancaria = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarConciliacaoBancaria(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_CONCILIACAO_BANCARIA, data);
+        });
+};

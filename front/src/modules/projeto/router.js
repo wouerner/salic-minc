@@ -26,6 +26,7 @@ import DadosReadequacoes from './visualizar/components/execucao/DadosReadequacoe
 import PedidoProrrogacao from './visualizar/components/execucao/PedidoProrrogacao';
 import DadosFiscalizacao from './visualizar/components/execucao/DadosFiscalizacao';
 import ContasBancarias from './visualizar/components/dadosBancarios/ContasBancarias';
+import ConciliacaoBancaria from './visualizar/components/dadosBancarios/ConciliacaoBancaria';
 
 Vue.use(Router);
 
@@ -262,6 +263,14 @@ const routes = [
                 component: ContasBancarias,
                 meta: {
                     title: 'Contas Bancárias',
+                },
+            },
+            {
+                path: 'conciliacao-bancaria',
+                name: 'ConciliacaoBancaria',
+                component: ConciliacaoBancaria,
+                meta: {
+                    title: 'Conciliação Bancária',
                 },
             },
         ],

@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Modules\Execucao\Service\ConciliacaoBancaria;
+namespace Application\Modules\DadosBancarios\Service\ConciliacaoBancaria;
 
 class ConciliacaoBancaria
 {
@@ -22,7 +22,20 @@ class ConciliacaoBancaria
 
     public function buscarConciliacaoBancaria()
     {
+        $idPronac = $this->request->idPronac;
+        if (strlen($idPronac) > 7) {
+            $idPronac = \Seguranca::dencrypt($idPronac);
+        }
 
+        if (!empty($idPronac)) {
+            $where = array();
+            $where['idPronac = ?'] = $idPronac;
+            $DadosConciliacao = new \Projetos();
+
+            $buscaDadosConciliacao = $DadosConciliacao->painelDadosConciliacaoBancaria($where, ['dtPagamento DESC'], null, null)->toArray();
+
+            return $buscaDadosConciliacao;
+        }
     }
 }
 
