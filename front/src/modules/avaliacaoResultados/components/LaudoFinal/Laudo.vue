@@ -192,14 +192,6 @@
             Devolver,
         },
         methods: {
-            ...mapActions({
-                requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
-                getLaudoFinal: 'avaliacaoResultados/getLaudoFinal',
-            }),
-            sincState(id) {
-                this.requestEmissaoParecer(id);
-                this.getLaudoFinal(id);
-            },
             proximoEstado() {
                 let proximo = '';
 
