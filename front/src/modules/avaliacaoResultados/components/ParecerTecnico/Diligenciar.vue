@@ -36,14 +36,6 @@
                                                 <v-radio color="success" label="Somente itens recusados" value="645"></v-radio>
                                                 <v-radio color="success" label="Todos os itens orçamentários" value="174"></v-radio>
                                             </v-radio-group>
-                                            <label for="solicitacao">Solicitação *</label>
-                                            <!-- <v-textarea v-model="solicitacao"
-                                                        id="solicitacao"
-                                                        color="green"
-                                                        height="100px"
-                                                        :rules="solicitacaoRules"
-                                                        required="required">
-                                            </v-textarea> -->
                                             <EditorTexto
                                             >
                                             </EditorTexto>
