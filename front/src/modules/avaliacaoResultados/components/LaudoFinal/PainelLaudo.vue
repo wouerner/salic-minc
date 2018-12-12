@@ -5,7 +5,6 @@
         </v-subheader>
         <v-card>
             <v-tabs
-                value="tab-0"
                 centered
                 color="green darken-3"
                 dark
@@ -51,6 +50,7 @@
                 <v-tab-item
                     :value="'tab-0'"
                     :key="0"
+                    v-if="getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL"
                 >
                     <Laudo :dados="getProjetosLaudoFinal"
                            :estado="Const.ESTADO_ANALISE_LAUDO"
@@ -59,6 +59,7 @@
                 <v-tab-item
                     :value="'tab-1'"
                     :key="1"
+                    v-if="getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL"
                 >
                     <Laudo :dados="getProjetosLaudoAssinar"
                            :estado="Const.ESTADO_LAUDO_FINALIZADO"
@@ -75,6 +76,7 @@
                 <v-tab-item
                     :value="'tab-3'"
                     :key="3"
+                    v-if="getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL"
                 >
                     <Laudo :dados="getProjetosLaudoFinalizados"
                            :estado="Const.ESTADO_AVALIACAO_RESULTADOS_FINALIZADA"
@@ -87,11 +89,11 @@
 
 <script>
 
-    import { mapActions, mapGetters } from 'vuex';
-    import Const from '../../const';
-    import Laudo from './Laudo';
+import { mapActions, mapGetters } from 'vuex';
+import Const from '../../const';
+import Laudo from './Laudo';
 
-    export default {
+export default {
     name: 'PainelLaudo',
     data() {
         return {
@@ -103,12 +105,14 @@
         this.obterProjetosLaudoAssinar({ estadoId: 14 });
         this.obterProjetosLaudoEmAssinatura({ estadoId: 11 });
         this.obterProjetosLaudoFinalizados({ estadoId: 12 });
+        this.obterDadosTabelaTecnico({ estadoId: 11, idAgente: this.getUsuario.usu_codigo });
     },
     components: {
         Laudo,
     },
     methods: {
         ...mapActions({
+            obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
             obterProjetosLaudoFinal: 'avaliacaoResultados/obterProjetosLaudoFinal',
             obterProjetosLaudoAssinar: 'avaliacaoResultados/obterProjetosLaudoAssinar',
             obterProjetosLaudoEmAssinatura: 'avaliacaoResultados/obterProjetosLaudoEmAssinatura',
@@ -121,6 +125,7 @@
             getProjetosLaudoAssinar: 'avaliacaoResultados/getProjetosLaudoAssinar',
             getProjetosLaudoEmAssinatura: 'avaliacaoResultados/getProjetosLaudoEmAssinatura',
             getProjetosLaudoFinalizados: 'avaliacaoResultados/getProjetosLaudoFinalizados',
+            dadosTabelaTecnico: 'avaliacaoResultados/dadosTabelaTecnico',
             getUsuario: 'autenticacao/getUsuario',
             route: 'route',
         }),

@@ -33,7 +33,7 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
         $tblProjeto = new \Projetos();
         if (!empty($idPronac)) {
             $projeto = $tblProjeto->buscar(array('IdPRONAC = ?' => $idPronac))->current();
-
+            $proposta = [];
             if (isset($projeto->idProjeto) && !empty($projeto->idProjeto)) {
                 $tblPreProjeto = new \Proposta_Model_DbTable_PreProjeto();
                 $diligenciasProposta = $tblPreProjeto->listarDiligenciasPreProjeto(array('pre.idPreProjeto = ?' => $projeto->idProjeto,'aval.ConformidadeOK = ? '=>0));
@@ -93,6 +93,7 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
             $qtdia = 40;
             $resultArray[] = [
                 'produto' => $diligencia['produto'],
+                'tipoDiligencia' => html_entity_decode(utf8_encode($diligencia['tipoDiligencia'])),
                 'idDiligencia' => $diligencia['idDiligencia'],
                 'tipoDiligencia' => $tipoDiligencia,
                 'dataSolicitacao' => $objDateTimedataSolicitacao,
@@ -113,7 +114,7 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
 
             $resultArray[] = [
                 'idAvaliarAdequacaoProjeto' => $diligencia['idAvaliarAdequacaoProjeto'],
-                'tipoDiligencia' => 'Diligência na Análise da adequação à realidade do projeto.',
+                'tipoDiligencia' => 'Dilig&ecirc;ncia na An&aacute;lise da adequa&ccedil;&atilde;o &agrave; realidade do projeto.',
                 'dtAvaliacao' => $objDateTimedtAvaliacao->format('d/m/Y'),
             ];
         }
@@ -124,7 +125,7 @@ class DiligenciaProjeto implements \MinC\Servico\IServicoRestZend
     public function visualizarDiligenciaProjeto()
     {
         $idPronac = $this->request->idPronac;
-        $idDiligencia = (int) $this->request->idDiligencia;
+        $idDiligencia = (int) $this->request->id;
 
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
