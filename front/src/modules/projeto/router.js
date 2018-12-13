@@ -27,6 +27,7 @@ import PedidoProrrogacao from './visualizar/components/execucao/PedidoProrrogaca
 import DadosFiscalizacao from './visualizar/components/execucao/DadosFiscalizacao';
 import ContasBancarias from './visualizar/components/dadosBancarios/ContasBancarias';
 import ConciliacaoBancaria from './visualizar/components/dadosBancarios/ConciliacaoBancaria';
+import InconsistenciaBancaria from './visualizar/components/dadosBancarios/InconsistenciaBancaria';
 
 Vue.use(Router);
 
@@ -271,6 +272,14 @@ const routes = [
                 component: ConciliacaoBancaria,
                 meta: {
                     title: 'Conciliação Bancária',
+                },
+            },
+            {
+                path: 'inconsistencia-bancaria',
+                name: 'InconsistenciaBancaria',
+                component: InconsistenciaBancaria,
+                meta: {
+                    title: 'Inconsistencia Bancária',
                 },
             },
         ],

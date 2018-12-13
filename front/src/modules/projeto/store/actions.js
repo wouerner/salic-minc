@@ -272,3 +272,11 @@ export const buscarConciliacaoBancaria = ({ commit }, idPronac) => {
             commit(types.SET_CONCILIACAO_BANCARIA, data);
         });
 };
+
+export const buscarInconsistenciaBancaria = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarInconsistenciaBancaria(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_INCONSISTENCIA_BANCARIA, data);
+        });
+};

@@ -94,7 +94,8 @@
             "Application\\Modules\\Execucao\\Service\\DadosReadequacoes\\": "./application/modules/execucao/service/",
             "Application\\Modules\\Execucao\\Service\\PedidoProrrogacao\\": "./application/modules/execucao/service/",
             "Application\\Modules\\DadosBancarios\\Service\\ContasBancarias\\": "./application/modules/dados-bancarios/service/",
-            "Application\\Modules\\DadosBancarios\\Service\\ConciliacaoBancaria\\": "./application/modules/dados-bancarios/service/"
+            "Application\\Modules\\DadosBancarios\\Service\\ConciliacaoBancaria\\": "./application/modules/dados-bancarios/service/",
+            "Application\\Modules\\DadosBancarios\\Service\\InconsistenciaBancaria\\": "./application/modules/dados-bancarios/service/"
         }
     },
     "archive": {

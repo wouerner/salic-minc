@@ -32,6 +32,7 @@ export const state = {
     dadosFiscalizacaoVisualiza: [],
     contasBancarias: [],
     conciliacaoBancaria: [],
+    inconsistenciaBancaria: [],
 };
 
 export const mutations = {
@@ -127,5 +128,8 @@ export const mutations = {
     },
     [types.SET_CONCILIACAO_BANCARIA](state, dados) {
         state.conciliacaoBancaria = dados;
+    },
+    [types.SET_INCONSISTENCIA_BANCARIA](state, dados) {
+        state.inconsistenciaBancaria = dados;
     },
 };

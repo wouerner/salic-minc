@@ -258,3 +258,11 @@ export const buscarConciliacaoBancaria = (idPronac) => {
     const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscarInconsistenciaBancaria = (idPronac) => {
+    const modulo = '/dados-bancarios';
+    const controller = '/inconsistencia-bancaria-rest';
+    const path = `${modulo}${controller}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};

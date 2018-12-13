@@ -5394,6 +5394,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/projeto/service/certidoes-negativas/CertidoesNegativas.php
+     *
+     */
     public function inconsistenciaBancariaAction()
     {
         $idPronac = $this->_request->getParam("idPronac");
