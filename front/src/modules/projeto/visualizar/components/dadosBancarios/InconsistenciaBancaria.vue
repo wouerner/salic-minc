@@ -3,7 +3,7 @@
         <div v-if="loading">
             <Carregando :text="'Inconsistência Bancária'"></Carregando>
         </div>
-        <div v-else>
+        <div v-else-if="dadosInconsistencia">
             <v-data-table
                     :headers="headers"
                     :items="dadosInconsistencia"
@@ -106,8 +106,12 @@
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
                 this.buscarInconsistenciaBancaria(this.dadosProjeto.idPronac);
-                this.loading = false;
             }
+        },
+        watch: {
+            dadosInconsistencia() {
+                this.loading = false;
+            },
         },
         filters: {
             FormatarData(date) {
