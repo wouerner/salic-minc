@@ -280,3 +280,11 @@ export const buscarInconsistenciaBancaria = ({ commit }, idPronac) => {
             commit(types.SET_INCONSISTENCIA_BANCARIA, data);
         });
 };
+
+export const buscarLiberacao = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarLiberacao(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_LIBERACAO, data);
+        });
+};
