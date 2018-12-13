@@ -26,13 +26,10 @@ class InconsistenciaBancaria
             $where = array();
             $where['idPronac = ?'] = $idPronac;
 
-            $Dados = new \Projetos();
-//            $total = $Dados->inconsistenciasComprovacao($where, $order, null, null, true);
+            $dadosProjeto = new \Projetos();
+            $buscaDadosProjeto = $dadosProjeto->inconsistenciasComprovacao($where, null, null, null)->toArray();
 
-            $busca = $Dados->inconsistenciasComprovacao($where, null, null, null)->toArray();
-//xd($busca);
-
-            return $busca;
+            return $buscaDadosProjeto;
     }
 }
 

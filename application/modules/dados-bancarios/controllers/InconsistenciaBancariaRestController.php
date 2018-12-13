@@ -14,8 +14,8 @@ class DadosBancarios_InconsistenciaBancariaRestController extends MinC_Controlle
     public function indexAction()
     {
         try {
-            $pedidoProrrogacao = new InconsistenciaBancariaService($this->getRequest(), $this->getResponse());
-            $resposta = $pedidoProrrogacao->buscarInconsistenciaBancaria();
+            $inconsistenciaBancaria = new InconsistenciaBancariaService($this->getRequest(), $this->getResponse());
+            $resposta = $inconsistenciaBancaria->buscarInconsistenciaBancaria();
             $resposta = \TratarArray::utf8EncodeArray($resposta);
 
             $this->renderJsonResponse($resposta, 200);
