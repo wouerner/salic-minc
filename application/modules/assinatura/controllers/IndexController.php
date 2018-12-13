@@ -621,4 +621,67 @@ class Assinatura_IndexController extends Assinatura_GenericController
             );
         }
     }
+
+
+    public function documentosDevolvidosAction()
+    {
+        $this->view->idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
+        $this->view->dados = [];
+        $this->view->codGrupo = $this->grupoAtivo->codGrupo;
+    }
+
+    public function documentosDevolvidosAjaxAction()
+    {
+        $start = $this->getRequest()->getParam('start', -1);
+        $length = $this->getRequest()->getParam('length', 100);
+        $draw = (int)$this->getRequest()->getParam('draw');
+        $search = $this->getRequest()->getParam('search', '');
+        $order = $this->getRequest()->getParam('order');
+        $columns = $this->getRequest()->getParam('columns');
+
+        $order = (!empty($order[0]['dir'])) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : ["idDocumentoAssinatura desc"];
+
+//        if ($search['value'] != '') {
+//            $search['value'] = urldecode($search['value']);
+//            $search['value'] = str_replace('\\', '', $search['value']);
+//        }
+        $get = Zend_Registry::get('get');
+        $idTipoDoAtoAdministrativo = $get->idTipoDoAtoAdministrativo;
+        $idTipoDoAtoAdministrativos = [];
+
+        $stringIdTipoDoAtoAdministrativos = $get->idTipoDoAtoAdministrativos;
+        if (!is_null($stringIdTipoDoAtoAdministrativos) || !empty($stringIdTipoDoAtoAdministrativos)) {
+            array_push($idTipoDoAtoAdministrativos, explode(',', $stringIdTipoDoAtoAdministrativos));
+        }
+
+        if (!is_null($idTipoDoAtoAdministrativo) || !empty($idTipoDoAtoAdministrativo)) {
+            $idTipoDoAtoAdministrativos[] = $idTipoDoAtoAdministrativo;
+        }
+
+        $tbDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $where = [];
+
+        $projetosDisponiveis = $tbDocumentoAssinatura->obterDocumentosDevolvidos($where, $order, $start, $length, $search['value'])->toArray();
+
+        $recordsTotal = $tbDocumentoAssinatura->obterTotalDocumentosDevolvidos($where);
+
+        $recordsFiltered = $recordsTotal;
+        if (!empty($search['value'])) {
+            $recordsFiltered = count($projetosDisponiveis);
+        }
+
+        if (count($projetosDisponiveis) > 0) {
+            $projetos = $projetosDisponiveis;
+            array_walk($projetos, function (&$value) {
+                $value = array_map('utf8_encode', $value);
+            });
+        }
+
+        $this->_helper->json([
+            "data" => $projetos,
+            'recordsTotal' => $recordsTotal,
+            'draw' => $draw,
+            'recordsFiltered' => $recordsFiltered,
+        ]);
+    }
 }
