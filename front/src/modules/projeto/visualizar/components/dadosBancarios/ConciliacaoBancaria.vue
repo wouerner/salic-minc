@@ -52,6 +52,7 @@
                     <v-icon right dark>local_printshop</v-icon>
                 </v-btn>
             </div>
+            <PrintableDataTable v-bind="$data"></PrintableDataTable>
         </div>
     </div>
 </template>
@@ -62,11 +63,16 @@
     import moment from 'moment';
     import cnpjFilter from '@/filters/cnpj';
     import planilhas from '@/mixins/planilhas';
+    import PrintableDataTable from './components/PrintableDataTable';
 
     export default {
         name: 'ConciliacaoBancaria',
         data() {
             return {
+
+                tblClass: 'table-bordered',
+                pageSizeOptions: [5, 10, 15, 20, 25],
+
                 search: '',
                 pagination: {
                     sortBy: 'fat',
@@ -125,6 +131,7 @@
         mixins: [planilhas],
         components: {
             Carregando,
+            PrintableDataTable,
         },
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
