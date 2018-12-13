@@ -8,23 +8,23 @@
                 <v-subheader class="justify-center">
                     <div>
                         <h4 class="display-1 grey--text text--darken-4 font-weight-light">
-                            Dados da Liberação
+                            Liberação
                         </h4>
                     </div>
                 </v-subheader>
                 <v-container>
                     <v-layout>
-                        <v-flex xs4>
+                        <v-flex xs4 offset-xs1>
                             <br>
                             <p><b>Dt. Liberação</b></p>
                             <p>{{ dadosLiberacao.DtLiberacao | FormatarData }}</p>
                         </v-flex>
-                        <v-flex xs4>
+                        <v-flex xs4 offset-xs1>
                             <br>
                             <p><b>Vl. Liberado</b></p>
                             <p>{{ dadosLiberacao.vlLiberado }}</p>
                         </v-flex>
-                        <v-flex xs4>
+                        <v-flex xs4 offset-xs1>
                             <br>
                             <p><b>Conta liberada por:</b></p>
                             <p>{{ dadosLiberacao.usu_Nome }}</p>
