@@ -14,8 +14,8 @@ class DadosBancarios_SaldoContasRestController extends MinC_Controller_Rest_Abst
     public function indexAction()
     {
         try {
-            $pedidoProrrogacao = new SaldoContasService($this->getRequest(), $this->getResponse());
-            $resposta = $pedidoProrrogacao->buscarSaldoConta();
+            $saldoContas = new SaldoContasService($this->getRequest(), $this->getResponse());
+            $resposta = $saldoContas->buscarSaldoContas();
             $resposta = \TratarArray::utf8EncodeArray($resposta);
 
             $this->renderJsonResponse($resposta, 200);

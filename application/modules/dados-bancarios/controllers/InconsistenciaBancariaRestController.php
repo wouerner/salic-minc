@@ -1,6 +1,6 @@
 <?php
 
-use Application\Modules\DadosBancarios\Service\InconsistenciaBancaria\InconsistenciaBancaria as InconsistenciaBancariaService;
+use Application\Modules\DadosBancarios\Service\SaldoContas\SaldoContas as InconsistenciaBancariaService;
 
 class DadosBancarios_InconsistenciaBancariaRestController extends MinC_Controller_Rest_Abstract
 {
