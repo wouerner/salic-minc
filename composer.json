@@ -96,7 +96,8 @@
             "Application\\Modules\\DadosBancarios\\Service\\ContasBancarias\\": "./application/modules/dados-bancarios/service/",
             "Application\\Modules\\DadosBancarios\\Service\\ConciliacaoBancaria\\": "./application/modules/dados-bancarios/service/",
             "Application\\Modules\\DadosBancarios\\Service\\InconsistenciaBancaria\\": "./application/modules/dados-bancarios/service/",
-            "Application\\Modules\\DadosBancarios\\Service\\Liberacao\\": "./application/modules/dados-bancarios/service/"
+            "Application\\Modules\\DadosBancarios\\Service\\Liberacao\\": "./application/modules/dados-bancarios/service/",
+            "Application\\Modules\\DadosBancarios\\Service\\SaldoContasService\\": "./application/modules/dados-bancarios/service/"
         }
     },
     "archive": {
