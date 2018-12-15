@@ -34,6 +34,7 @@ export const state = {
     conciliacaoBancaria: [],
     inconsistenciaBancaria: [],
     liberacao: [],
+    saldoContas: [],
 };
 
 export const mutations = {
@@ -135,5 +136,8 @@ export const mutations = {
     },
     [types.SET_LIBERACAO](state, dados) {
         state.liberacao = dados;
+    },
+    [types.SET_SALDO_CONTAS](state, dados) {
+        state.saldoContas = dados;
     },
 };

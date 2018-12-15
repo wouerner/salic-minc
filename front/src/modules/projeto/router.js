@@ -29,6 +29,7 @@ import ContasBancarias from './visualizar/components/dadosBancarios/ContasBancar
 import ConciliacaoBancaria from './visualizar/components/dadosBancarios/ConciliacaoBancaria';
 import InconsistenciaBancaria from './visualizar/components/dadosBancarios/InconsistenciaBancaria';
 import Liberacao from './visualizar/components/dadosBancarios/Liberacao';
+import SaldoContas from './visualizar/components/dadosBancarios/SaldoContas';
 
 Vue.use(Router);
 
@@ -289,6 +290,14 @@ const routes = [
                 component: Liberacao,
                 meta: {
                     title: 'Liberação',
+                },
+            },
+            {
+                path: 'saldo-contas',
+                name: 'SaldoContas',
+                component: SaldoContas,
+                meta: {
+                    title: 'Saldo das Contas',
                 },
             },
         ],

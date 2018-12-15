@@ -288,3 +288,11 @@ export const buscarLiberacao = ({ commit }, idPronac) => {
             commit(types.SET_LIBERACAO, data);
         });
 };
+
+export const buscarSaldoContas = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarSaldoContas(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_SALDO_CONTAS, data);
+        });
+};
