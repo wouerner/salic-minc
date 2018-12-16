@@ -14,11 +14,27 @@
             >
                 <template slot="items" slot-scope="props">
                     <td class="text-xs-left">{{ props.item.Tipo }}</td>
-                    <td class="text-xs-left">{{ props.item.NrConta | cnpjFilter }}</td>
+                    <td
+                            class="text-xs-left"
+                    >
+                        {{ props.item.NrConta }}
+                    </td>
                     <td class="text-xs-left">{{ props.item.TipoSaldo }}</td>
-                    <td class="text-xs-right">{{ props.item.dtSaldoBancario | filtroFormatarParaReal }}</td>
-                    <td class="text-xs-right">{{ props.item.vlSaldoBancario }}</td>
-                    <td class="text-xs-right">{{ props.item.stSaldoBancario }}</td>
+                    <td class="text-xs-right">{{ props.item.dtSaldoBancario | FormatarData }}</td>
+                    <td class="text-xs-right" v-if="props.item.vlSaldoBancario === 0">
+                        {{ '0' | filtroFormatarParaReal }}
+                    </td>
+                    <td v-else class="text-xs-right">
+                        {{ props.item.vlSaldoBancario | filtroFormatarParaReal }}
+                    </td>
+
+                    <td class="text-xs-right blue--text"
+                        v-if="props.item.stSaldoBancario === 'C'">
+                        {{ props.item.stSaldoBancario }}
+                    </td>
+                    <td v-else="">
+                        {{ props.item.stSaldoBancario }}
+                    </td>
                 </template>
                 <template slot="pageText" slot-scope="props">
                     Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
@@ -32,7 +48,6 @@
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
     import moment from 'moment';
-    import cnpjFilter from '@/filters/cnpj';
     import planilhas from '@/mixins/planilhas';
 
     export default {
