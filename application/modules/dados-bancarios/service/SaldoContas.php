@@ -26,15 +26,13 @@ class SaldoContas
         if (strlen($idPronac) > 7) {
             $idPronac = \Seguranca::dencrypt($idPronac);
         }
-//            $order = ("9 DESC");
             $where = array();
             $where['idPronac = ?'] = $idPronac;
 
             $dadosSaldoBancario = new \Projetos();
 
-            $busca = $dadosSaldoBancario->extratoDeSaldoBancario($where, null, null, null)->toArray();
+                $busca = $dadosSaldoBancario->extratoDeSaldoBancario($where, ['dtSaldoBancario DESC'], null, null)->toArray();
 
             return $busca;
     }
 }
-
