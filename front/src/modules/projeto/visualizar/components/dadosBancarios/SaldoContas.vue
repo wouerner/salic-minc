@@ -17,7 +17,7 @@
                     <td
                             class="text-xs-left"
                     >
-                        {{ props.item.NrConta }}
+                        {{ props.item.NrConta | FormatarNrConta }}
                     </td>
                     <td class="text-xs-left">{{ props.item.TipoSaldo }}</td>
                     <td class="text-xs-right">{{ props.item.dtSaldoBancario | FormatarData }}</td>
@@ -115,7 +115,10 @@
                 }
                 return moment(date).format('DD/MM/YYYY');
             },
-            cnpjFilter,
+            FormatarNrConta(valor) {
+                console.log(valor);
+                return valor.replace(/^(\d{2})(\d{3})(\d{3})(\d{3})(\d{1})/, "$1.$2.$3.$4-$5");
+            }
         },
         computed: {
             ...mapGetters({
