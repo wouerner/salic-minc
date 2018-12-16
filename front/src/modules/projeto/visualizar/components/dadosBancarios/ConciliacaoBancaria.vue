@@ -18,20 +18,25 @@
                     <td class="text-xs-left">{{ props.item.Fornecedor }}</td>
                     <td class="text-xs-right">{{ props.item.nrDocumentoDePagamento }}</td>
                     <td class="text-xs-right">{{ props.item.dtPagamento | FormatarData }}</td>
-                    <td class="text-xs-right">{{ props.item.vlPagamento | filtroFormatarParaReal }}</td>
+                    <td class="text-xs-right font-weight-bold">
+                        {{ props.item.vlPagamento | filtroFormatarParaReal }}
+                    </td>
                     <td class="text-xs-left">{{ props.item.dsLancamento }}</td>
-
-                    <td class="text-xs-right" v-if="props.item.vlDebitado">
+                    <td class="text-xs-right font-weight-bold"
+                        v-if="props.item.vlDebitado"
+                    >
                         {{ props.item.vlDebitado | filtroFormatarParaReal }}
                     </td>
-                    <td v-else class="text-xs-right">
+                    <td class="text-xs-right font-weight-bold" v-else>
                         {{ '000' | filtroFormatarParaReal}}
                     </td>
 
-                    <td class="text-xs-right" v-if="props.item.vlDiferenca">
+                    <td class="text-xs-right font-weight-bold red--text"
+                        v-if="props.item.vlDiferenca"
+                    >
                         {{ props.item.vlDiferenca | filtroFormatarParaReal }}
                     </td>
-                    <td v-else class="text-xs-right">
+                    <td class="text-xs-right font-weight-bold" v-else>
                         {{ '000' | filtroFormatarParaReal}}
                     </td>
                 </template>
