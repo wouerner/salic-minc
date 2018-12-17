@@ -74,23 +74,22 @@ class AvaliacaoResultados_DiligenciaController extends MinC_Controller_Rest_Abst
             return;
         }
 
-        $dados = array(
+        $dados = [
             'idPronac' => $idPronac,
             'DtSolicitacao' => new Zend_Db_Expr('GETDATE()'),
-            'Solicitacao' => $solicitacao,
+            'Solicitacao' => utf8_decode($solicitacao),
             'idTipoDiligencia' => $idTipoDiligencia,
             'idProduto' => null,
             'stEstado' => 0,
             'stEnviado' => 'S',
             'idSolicitante' => $idagente
-        );
+        ];
 
         $rowDiligencia = $diligenciaDAO->inserir($dados);
-
         $projeto = new Projetos();
         $projeto->alterarSituacao($idPronac, null, 'E17', 'Diligência na prestação de contas');
 
-        $this->view->assign('data',['message' => 'criado!']);
+        $this->view->assign('data',['message' => 'criadosssss!']);
         $this->getResponse()->setHttpResponseCode(201);
     }
 
