@@ -1,12 +1,16 @@
 <template>
             <v-dialog v-model="dialog" fullscreen transition="dialog-bottom-transition">
 
-                <v-tooltip slot="activator" bottom>
+                <v-tooltip v-if="typeof obj.dsParecer === 'undefined'" slot="activator" bottom>
                     <v-btn slot="activator" flat icon round @click.native="sincState(idPronac)">
                         <v-icon :color="statusButton(obj).color" :change="statusButton(obj).color" class="material-icons">{{ statusButton(obj).icon }}</v-icon>
                     </v-btn>
                     <span>{{ statusButton(obj).texto }}</span>
                 </v-tooltip>
+                <v-btn v-else slot="activator" round dark :color="statusButton(obj).color" @click.native="sincState(idPronac)">
+                    <v-icon class="material-icons">{{ statusButton(obj).icon }}</v-icon>
+                    <span>&nbsp;{{ statusButton(obj).texto }}</span>
+                </v-btn>
 
                 <v-card>
                     <v-toolbar dark color="green">
@@ -71,7 +75,7 @@
 <script>
     import { mapGetters, mapActions } from 'vuex';
     import cnpjFilter from '@/filters/cnpj';
-    
+
     export default {
         name: 'VisualizarParecer',
         props: ['idPronac', 'obj'],
@@ -98,35 +102,33 @@
                 this.getLaudoFinal(id);
             },
             statusButton(obj) {
-                console.log(obj);
                 let status = {};
 
-                if (typeof obj.parecer === 'undefined') {
+                if (typeof obj.dsParecer === 'undefined') {
                     status = {
                         color: '',
                         icon: 'filter_frames',
                         texto: 'Visualizar Objeto',
                     };
+                } else if (typeof obj.dsParecer !== 'undefined' && obj.siManifestacao === 'A') {
+                    status = {
+                        color: 'green darken-4',
+                        icon: 'mood',
+                        texto: 'Aprovado',
+                    };
+                } else if (typeof obj.dsParecer !== 'undefined' && obj.siManifestacao === 'P') {
+                    status = {
+                        color: 'green lighten-1',
+                        icon: 'sentiment_satisfied_alt',
+                        texto: 'Aprovado com ressalva',
+                    };
+                } else if (typeof obj.dsParecer !== 'undefined' && obj.siManifestacao === 'R') {
+                    status = {
+                        color: 'red',
+                        icon: 'sentiment_very_dissatisfied',
+                        texto: 'Reprovado',
+                    };
                 }
-                // else if (obj.item.siManifestacao === 'A') {
-                //     status = {
-                //         color: 'green darken-4',
-                //         icon: 'mood',
-                //         texto: 'Aprovado',
-                //     };
-                // } else if (obj.item.siManifestacao === 'P') {
-                //     status = {
-                //         color: 'green lighten-1',
-                //         icon: 'sentiment_satisfied_alt',
-                //         texto: 'Aprovado com ressalva',
-                //     };
-                // } else if (obj.item.siManifestacao === 'R') {
-                //     status = {
-                //         color: 'red',
-                //         icon: 'sentiment_very_dissatisfied',
-                //         texto: 'Reprovado',
-                //     };
-                // }
                 return status;
             },
         },

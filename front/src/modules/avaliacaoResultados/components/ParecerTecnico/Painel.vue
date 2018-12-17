@@ -23,7 +23,7 @@
                         ></v-progress-circular>
                     </template>
                     <template v-else>
-                        Distribuir 
+                        Distribuir
                         <v-icon>assignment_ind</v-icon>
                     </template>
                 </v-tab>
@@ -221,13 +221,19 @@ export default {
                 usuario: this.getUsuario,
                 atual: '',
                 proximo: '',
-                acoes: [Diligencias, Encaminhar, Historico, VisualizarPlanilhaButtton, VisualizarParecer] },
+                acoes: [
+                    Diligencias,
+                    Encaminhar,
+                    Historico,
+                    VisualizarPlanilhaButtton,
+                    VisualizarParecer,
+                ] },
             listaAcoesAssinarCoordenadorGeral: {
                 usuario: this.getUsuario,
                 atual: CONST.ESTADO_AGUARDANDO_ASSINATURA_COORDENADOR_PARECER,
                 proximo: CONST.ESTADO_ANALISE_PARECER,
                 idTipoDoAtoAdministrativo: CONST.ATO_ADMINISTRATIVO_PARECER_TECNICO,
-                acoes: [Diligencias, Historico, AssinarButton, Devolver, VisualizarPlanilhaButtton, VisualizarParecer],
+                acoes: [Diligencias, Historico, AssinarButton, Devolver, VisualizarPlanilhaButtton],
             },
             distribuirAcoes: { atual: '', proximo: '', acoes: [Encaminhar] },
             historicoAcoes: { atual: '', proximo: '', acoes: [Historico, VisualizarPlanilhaButtton] },
