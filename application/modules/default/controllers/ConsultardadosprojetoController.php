@@ -5015,6 +5015,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $this->view->dataDevolucaoFim = $this->getRequest()->getParam('dtDevolucaoFim');
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     *
+     *
+     */
     public function extratosBancariosAction()
     {
         $params = $this->_request->getParams();

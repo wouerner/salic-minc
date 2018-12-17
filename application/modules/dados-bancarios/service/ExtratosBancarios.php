@@ -30,7 +30,6 @@ class ExtratosBancarios
         if (!empty($idPronac)) {
             $DadosExtrato = new \Projetos();
             $result = $DadosExtrato->painelDadosBancariosExtrato(["idPronac = ?" => $idPronac], null, null, null, false)->toArray();
-            // xd($result);
             return $result;
         }
     }
