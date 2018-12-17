@@ -71,6 +71,27 @@
                  $('#container-loading').fadeOut('slow');
              });
 
+             $(document).on({
+                 mouseenter: function () {
+                     trIndex = $(this).index()+1;
+                     $("table.dataTable").each(function(index) {
+                         $(this).find("tr:eq("+trIndex+")").each(function(index) {
+                             $(this).find("td").addClass("grey lighten-4");
+                             $3(this).find('.fixed-action-btn').openFAB();
+                         });
+                     });
+                 },
+                 mouseleave: function () {
+                     trIndex = $(this).index()+1;
+                     $("table.dataTable").each(function(index) {
+                         $(this).find("tr:eq("+trIndex+")").each(function(index) {
+                             $(this).find("td").removeClass("grey lighten-4");
+                             $3(this).find('.fixed-action-btn').closeFAB();
+                         });
+                     });
+                 }
+             }, ".dataTables_wrapper tr");
+
              var assinaturaProjetos = $('#assinaturaProjetos').DataTable({
                  dom: 'Blfrtip',
                  buttons: [
@@ -185,6 +206,14 @@
                                                    ' <i class="material-icons">search</i>' +
                                                    ' </a>';
 
+                             let botaoVerDespacho = '<a class="btn-floating waves-effect waves-light btn-primary tooltipped" ' +
+                                 ' href="/assinatura/index/visualizar-motivo-devolucao-ajax/idPronac/' + data.IdPRONAC  + '"' +
+                                 ' data-position="top"' +
+                                 ' data-delay="50"' +
+                                 ' data-tooltip="Visualizar">' +
+                                 ' <i class="material-icons">search</i>' +
+                                 ' </a>';
+
                              return '<div style="position: relative; height: 60px;">'
                                   + '<div class="fixed-action-btn horizontal" style="position: absolute; top: 0px; right: 0; z-index: 996; padding: 15px 0 0 15px;">'
                                   + '<a class="btn btn-primary small">'
@@ -192,6 +221,7 @@
                                   + '<ul>'
                                   + '<li>'
                                   + botaoVisualizar
+                                  + botaoVerDespacho
                                   + '</li>'
                                   + '</ul>'
                                   + '</div>';
