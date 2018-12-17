@@ -30,7 +30,7 @@ class DadosReadequacoes
         if (!empty($idPronac)) {
 
             $Readequacao_Model_DbTable_TbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
-            $dadosReadequacoes = $Readequacao_Model_DbTable_TbReadequacao->buscarDadosReadequacoes(array('a.idPronac = ?'=>$idPronac, 'a.siEncaminhamento <> ?' => 12))->toArray();
+            $dadosReadequacoes = $Readequacao_Model_DbTable_TbReadequacao->buscarDadosReadequacoes(array('a.idPronac = ?'=>$idPronac, 'a.siEncaminhamento <> ?' => 12), ['tipoReadequacao'])->toArray();
 
             $dadosReadequacoesDevolvidas = $Readequacao_Model_DbTable_TbReadequacao->buscarDadosReadequacoes(array('a.idPronac = ?'=>$idPronac, 'a.siEncaminhamento = ?' => 12, 'a.stAtendimento = ?' => 'E', 'a.stEstado = ?' => 0))->toArray();
 
