@@ -45,150 +45,149 @@
                             Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
                         </template>
                     </v-data-table>
-                    <!--<v-container fluid>-->
-                        <!--<div v-for="(dado, index) in dadoAgrupado" :key="index">-->
-                            <!--<v-card class="elevation-2">-->
-                                <!--<v-card-text class="pl-5">-->
-                                    <!--<v-container fluid>-->
-                                        <!--<div>-->
-                                            <!--<v-flex lg12 dark class="text-xs-center">-->
-                                                <!--<b>SOLICITAÇÃO DO PROPONENTE</b>-->
-                                            <!--</v-flex>-->
-                                            <!--<v-layout row justify-space-between>-->
-                                                <!--<v-card>-->
-                                                    <!--<v-card-text>-->
-                                                        <!--<b>Arquivo</b><br>-->
-                                                        <!--<a-->
-                                                                <!--v-if="dado.idArquivo"-->
-                                                                <!--:href="`/upload/abrir?id=${dado.idArquivo}`"-->
-                                                        <!--&gt;-->
-                                                            <!--<span v-html="dado.nmArquivo"></span>-->
-                                                        <!--</a>-->
-                                                        <!--<span v-else>-->
-                                                         <!-- - -->
-                                                        <!--</span>-->
-                                                    <!--</v-card-text>-->
-                                                <!--</v-card>-->
-                                                <!--<v-card>-->
-                                                    <!--<v-card-text>-->
-                                                        <!--<b>Data envio</b>-->
-                                                        <!--<p v-if="dado.dtEnvio">-->
-                                                            <!--{{ dado.dtEnvio | formatarData }}-->
-                                                        <!--</p>-->
-                                                        <!--<p v-else>-->
-                                                            <!-- - -->
-                                                        <!--</p>-->
-                                                    <!--</v-card-text>-->
-                                                <!--</v-card>-->
-                                                <!--<v-card>-->
-                                                    <!--<v-card-text>-->
-                                                        <!--<b>Data solicitação</b>-->
-                                                        <!--<p>{{ dado.dtSolicitacao | formatarData }} </p>-->
-                                                    <!--</v-card-text>-->
-                                                <!--</v-card>-->
-                                            <!--</v-layout>-->
-                                            <!--<v-layout row justify-space-between>-->
-                                                <!--<v-card>-->
-                                                    <!--<v-card-text>-->
-                                                        <!--<b>Dados da solicitação</b>-->
-                                                        <!--<p v-html="dado.dsSolicitacao" v-if="dado.dsSolicitacao"></p>-->
-                                                        <!--<p v-else>-->
-                                                            <!-- - -->
-                                                        <!--</p>-->
-                                                    <!--</v-card-text>-->
-                                                <!--</v-card>-->
-                                            <!--</v-layout>-->
-                                            <!--<v-layout row justify-space-between>-->
-                                                <!--<v-card>-->
-                                                    <!--<v-card-text>-->
-                                                        <!--<b>Justificativa da solicitação</b>-->
-                                                        <!--<p v-html="dado.dsJustificativa"></p>-->
-                                                    <!--</v-card-text>-->
-                                                <!--</v-card>-->
-                                            <!--</v-layout>-->
-                                        <!--</div>-->
-                                        <!--<br>-->
-                                        <!--<br>-->
-                                        <!--<div v-if="validarAcessoSituacao(dado.siEncaminhamento)">-->
-                                            <!--<v-flex lg12 dark class="text-xs-center">-->
-                                                <!--<b>&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</b>-->
-                                            <!--</v-flex>-->
-                                            <!--<v-layout row justify-space-between>-->
-                                                <!--<v-card>-->
-                                                    <!--<v-card-text>-->
-                                                        <!--<b>Situação</b>-->
-                                                        <!--<p v-if="dado.stAtendimento === 'I'">-->
-                                                            <!--Rejeitado-->
-                                                        <!--</p>-->
-                                                        <!--<p v-else>-->
-                                                            <!--Recebido-->
-                                                        <!--</p>-->
-                                                    <!--</v-card-text>-->
-                                                <!--</v-card>-->
-                                                <!--<v-card>-->
-                                                    <!--<v-card-text>-->
-                                                        <!--<b>Data avaliação</b>-->
-                                                        <!--<p v-if="dado.dtAvaliador">-->
-                                                            <!--{{ dado.dtAvaliador | formatarData }}-->
-                                                        <!--</p>-->
-                                                        <!--<p v-else>-->
-                                                            <!-- - -->
-                                                        <!--</p>-->
-                                                    <!--</v-card-text>-->
-                                                <!--</v-card>-->
-                                                <!--<v-card>-->
-                                                    <!--<v-card-text>-->
-                                                        <!--<b>Descrição da avaliação</b>-->
-                                                        <!--<p v-html="dado.dsAvaliacao"></p>-->
-                                                    <!--</v-card-text>-->
-                                                <!--</v-card>-->
-                                            <!--</v-layout>-->
-                                        <!--</div>-->
-                                        <!--<br>-->
-                                        <!--<br>-->
-                                        <!--<div v-if="dado.siEncaminhamento === 15">-->
-                                            <!--<v-list v-for="(parecer, index) in dado.pareceres" :key="index">-->
-                                                <!--<v-flex lg12 dark class="text-xs-center">-->
-                                                    <!--<b>&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</b>-->
-                                                <!--</v-flex>-->
-                                                <!--<v-layout row justify-space-between>-->
-                                                    <!--<v-card>-->
-                                                        <!--<v-card-text>-->
-                                                            <!--<b>Parecer favorável?</b>-->
-                                                            <!--<p v-if="parecer.ParecerFavoravel === '2'">-->
-                                                                <!--SIM-->
-                                                            <!--</p>-->
-                                                            <!--<p v-else>-->
-                                                                <!--NÂO-->
-                                                            <!--</p>-->
-                                                        <!--</v-card-text>-->
-                                                    <!--</v-card>-->
+                    <v-dialog v-model="dialog" width="90%">
+                        <div v-for="(dado, index) in dadoAgrupado" :key="index">
+                            <v-card class="elevation-2">
+                                <v-card-text class="pl-5">
+                                    <v-container fluid>
+                                        <div>
+                                            <v-flex lg12 dark class="text-xs-center">
+                                                <b>SOLICITAÇÃO DO PROPONENTE</b>
+                                            </v-flex>
+                                            <v-layout row justify-space-between>
+                                                <v-card>
+                                                    <v-card-text>
+                                                        <b>Arquivo</b><br>
+                                                        <a
+                                                                v-if="dado.idArquivo"
+                                                                :href="`/upload/abrir?id=${dado.idArquivo}`"
+                                                        >
+                                                            <span v-html="dado.nmArquivo"></span>
+                                                        </a>
+                                                        <span v-else>
+                                                          -
+                                                        </span>
+                                                    </v-card-text>
+                                                </v-card>
+                                                <v-card>
+                                                    <v-card-text>
+                                                        <b>Data envio</b>
+                                                        <p v-if="dado.dtEnvio">
+                                                            {{ dado.dtEnvio | formatarData }}
+                                                        </p>
+                                                        <p v-else>
+                                                             -
+                                                        </p>
+                                                    </v-card-text>
+                                                </v-card>
+                                                <v-card>
+                                                    <v-card-text>
+                                                        <b>Data solicitação</b>
+                                                        <p>{{ dado.dtSolicitacao | formatarData }} </p>
+                                                    </v-card-text>
+                                                </v-card>
+                                            </v-layout>
+                                            <v-layout row justify-space-between>
+                                                <v-card>
+                                                    <v-card-text>
+                                                        <b>Dados da solicitação</b>
+                                                        <p v-html="dado.dsSolicitacao" v-if="dado.dsSolicitacao"></p>
+                                                        <p v-else>
+                                                             -
+                                                        </p>
+                                                    </v-card-text>
+                                                </v-card>
+                                            </v-layout>
+                                            <v-layout row justify-space-between>
+                                                <v-card>
+                                                    <v-card-text>
+                                                        <b>Justificativa da solicitação</b>
+                                                        <p v-html="dado.dsJustificativa"></p>
+                                                    </v-card-text>
+                                                </v-card>
+                                            </v-layout>
+                                        </div>
+                                        <br>
+                                        <br>
+                                        <div v-if="validarAcessoSituacao(dado.siEncaminhamento)">
+                                            <v-flex lg12 dark class="text-xs-center">
+                                                <b>----------------------------------------------</b>
+                                            </v-flex>
+                                            <v-layout row justify-space-between>
+                                                <v-card>
+                                                    <v-card-text>
+                                                        <b>Situação</b>
+                                                        <p v-if="dado.stAtendimento === 'I'">
+                                                            Rejeitado
+                                                        </p>
+                                                        <p v-else>
+                                                            Recebido
+                                                        </p>
+                                                    </v-card-text>
+                                                </v-card>
+                                                <v-card>
+                                                    <v-card-text>
+                                                        <b>Data avaliação</b>
+                                                        <p v-if="dado.dtAvaliador">
+                                                            {{ dado.dtAvaliador | formatarData }}
+                                                        </p>
+                                                        <p v-else>
+                                                             -
+                                                        </p>
+                                                    </v-card-text>
+                                                </v-card>
+                                                <v-card>
+                                                    <v-card-text>
+                                                        <b>Descrição da avaliação</b>
+                                                        <p v-html="dado.dsAvaliacao"></p>
+                                                    </v-card-text>
+                                                </v-card>
+                                            </v-layout>
+                                        </div>
+                                        <br>
+                                        <br>
+                                        <div v-if="dado.siEncaminhamento === 15">
+                                            <v-list v-for="(parecer, index) in dado.pareceres" :key="index">
+                                                <v-flex lg12 dark class="text-xs-center">
+                                                    <b>----------------------------------------------</b>
+                                                </v-flex>
+                                                <v-layout row justify-space-between>
+                                                    <v-card>
+                                                        <v-card-text>
+                                                            <b>Parecer favorável?</b>
+                                                            <p v-if="parecer.ParecerFavoravel === '2'">
+                                                                SIM
+                                                            </p>
+                                                            <p v-else>
+                                                                NÂO
+                                                            </p>
+                                                        </v-card-text>
+                                                    </v-card>
 
-                                                    <!--<v-card>-->
-                                                        <!--<v-card-text>-->
-                                                            <!--<b>Data parecer</b>-->
-                                                            <!--<p> {{ parecer.DtParecer | formatarData }}</p>-->
-                                                        <!--</v-card-text>-->
-                                                    <!--</v-card>-->
-                                                <!--</v-layout>-->
-                                                <!--<v-layout row justify-space-between>-->
-                                                    <!--<v-card>-->
-                                                        <!--<v-card-text>-->
-                                                            <!--<b>Descrição do parecer - Técnico / Parecerista</b>-->
-                                                            <!--<p v-html="parecer.ResumoParecer"></p>-->
-                                                        <!--</v-card-text>-->
-                                                    <!--</v-card>-->
-                                                <!--</v-layout>-->
-                                            <!--</v-list>-->
-                                        <!--</div>-->
+                                                    <v-card>
+                                                        <v-card-text>
+                                                            <b>Data parecer</b>
+                                                            <p> {{ parecer.DtParecer | formatarData }}</p>
+                                                        </v-card-text>
+                                                    </v-card>
+                                                </v-layout>
+                                                <v-layout row justify-space-between>
+                                                    <v-card>
+                                                        <v-card-text>
+                                                            <b>Descrição do parecer - Técnico / Parecerista</b>
+                                                            <p v-html="parecer.ResumoParecer"></p>
+                                                        </v-card-text>
+                                                    </v-card>
+                                                </v-layout>
+                                            </v-list>
+                                        </div>
 
-                                    <!--</v-container>-->
-                                <!--</v-card-text>-->
-                            <!--</v-card>-->
-                            <!--<hr/>-->
-                        <!--</div>-->
-                    <!--</v-container>-->
-
+                                    </v-container>
+                                </v-card-text>
+                            </v-card>
+                            <hr/>
+                        </div>
+                    </v-dialog>
                 </v-expansion-panel-content>
             </v-expansion-panel>
 
@@ -208,6 +207,7 @@
         props: ['idPronac'],
         data() {
             return {
+                dialog: false,
                 loading: true,
                 gruposReadequacao: {},
                 headers: [
@@ -258,7 +258,6 @@
             dados() {
                 this.loading = false;
                 this.gruposReadequacao = this.obterGrupoReadequacoes();
-                console.log(this.gruposReadequacao)
             },
         },
         filters: {
@@ -272,21 +271,21 @@
         methods: {
             ...mapActions({
                 buscarDadosReadequacoes: 'projeto/buscarDadosReadequacoes',
+                buscarGrupoReadequacao: 'projeto/buscarGrupoReadequacao',
             }),
             showItem(item) {
-                // const idPronac = item.idPronac;
-                // const valor = item.idAvaliacaoProposta;
-                //
-                // console.log(idPronac);
-                // this.buscarDadosReadequacoes(this.dadosProjeto.idPronac);
-                // this.dialog = true;
+                const idPronac = this.dadosProjeto.idPronac;
+                const valor = item.idReadequacao;
+
+                console.log(valor);
+                this.buscarGrupoReadequacao({ idPronac, valor });
+                this.dialog = true;
             },
             validarAcessoSituacao(siEncaminhamento) {
                 const permitidos = [2, 3, 4, 5, 6, 7, 9, 10, 15];
                 return permitidos.indexOf(siEncaminhamento) !== -1;
             },
             obterGrupoReadequacoes() {
-
                 const gruposReadequacao = {};
                 for (const indiceDadosReadequacao in this.dados.dadosReadequacoes) {
                     const tipoReadequacao = this.dados.dadosReadequacoes[indiceDadosReadequacao].tipoReadequacao;
