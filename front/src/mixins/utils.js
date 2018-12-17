@@ -1,4 +1,9 @@
 import moment from 'moment';
+import numeral from 'numeral';
+import 'numeral/locales';
+
+numeral.locale('pt-br');
+numeral.defaultFormat('0,0.00');
 
 /* eslint-disable */
 export const utils = {
@@ -92,6 +97,10 @@ export const utils = {
             // formato: 99999-9
             conta = parseInt(conta);
             return conta.toString().replace(/(\d)(\d{1})$/, '$1-$2');
+        },
+        filtroFormatarParaReal(value) {
+            const parsedValue = parseFloat(value);
+            return numeral(parsedValue).format('0,0.00');
         },
     },
 }
