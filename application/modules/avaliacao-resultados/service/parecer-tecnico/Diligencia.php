@@ -2,6 +2,8 @@
 
 namespace Application\Modules\AvaliacaoResultados\Service\ParecerTecnico;
 
+use phpDocumentor\Reflection\Types\Object_;
+
 class Diligencia
 {
     /** modules/proposta/controllers/DiligenciarController -> listardiligenciaanalistaAction */
@@ -36,8 +38,17 @@ class Diligencia
                                 )
                          );
 
-                         $diligencias = $Projetosdao->listarDiligencias(array('pro.IdPRONAC = ?' => $idPronac));
-                   return $diligencias;
+                         $diligencias = $Projetosdao->listarDiligencias(array('pro.IdPRONAC = ?' => $idPronac))->toArray();
+
+                         $lista = $diligencias;
+
+                         foreach ( $lista as $key => $value){
+
+                             $value['Arquivos'] = $this->obterAnexosDiligencias($value);
+
+                             $lista[$key] = $value;
+                         }
+                   return $lista;
                    }
                } else {
                     if ($idPreProjeto) {
@@ -156,5 +167,21 @@ class Diligencia
         }
     }
 
+    private function obterAnexosDiligencias($diligencia)
+    {
+        $arquivo = new \Arquivo();
+        $arquivos = $arquivo->buscarAnexosDiligencias($diligencia['idDiligencia']);
+        $arquivoArray = [];
+        foreach ($arquivos as $arquivo) {
+            $objdtEnvio = new \DateTime($arquivo->dtEnvio);
+            $arquivoArray[] = [
+                'idArquivo' => $arquivo->idArquivo,
+                'nmArquivo' => $arquivo->nmArquivo,
+                'dtEnvio' => $objdtEnvio->format('d/m/Y H:i:s'),
+                'idDiligencia' => $arquivo->idDiligencia,
+            ];
+        }
 
+        return $arquivoArray;
+    }
 }
