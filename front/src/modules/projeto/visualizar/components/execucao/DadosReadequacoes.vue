@@ -23,8 +23,7 @@
                     >
                         <template slot="items" slot-scope="props">
                             <td class="text-xs-right"> {{ props.item.dtSolicitacao | formatarData }}</td>
-                            <td class="text-xs-left"> {{ (props.item.stAtendimento === 'I') ? 'Rejeitado' : 'Recebido'
-                                }}
+                            <td class="text-xs-left"> {{ (props.item.stAtendimento === 'I') ? 'Rejeitado' : 'Recebido'}}
                             </td>
 
                             <td class="text-xs-right"> {{ props.item.dtAvaliacao | formatarData }}</td>
