@@ -151,7 +151,7 @@
                      "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Portuguese-Brasil.json"
                  },
                  "ajax": {
-                     url: "/assinatura/index/documentos-devolvidos-ajax/",
+                     url: "/assinatura/index/obter-documentos-devolvidos-ajax/",
                      data: {},
                      type: "POST"
                  },
@@ -199,19 +199,21 @@
                          "data": null,
                          render: (data) => {
                              let botaoVisualizar = '<a class="btn-floating waves-effect waves-light btn-primary tooltipped" ' +
-                                                   ' href="/assinatura/index/visualizar-projeto?idDocumentoAssinatura=' + data.idDocumentoAssinatura + '"' +
-                                                   ' data-position="top"' +
-                                                   ' data-delay="50"' +
-                                                   ' data-tooltip="Visualizar">' +
-                                                   ' <i class="material-icons">search</i>' +
-                                                   ' </a>';
-
-                             let botaoVerDespacho = '<a class="btn-floating waves-effect waves-light btn-primary tooltipped" ' +
-                                 ' href="/assinatura/index/visualizar-motivo-devolucao-ajax/idPronac/' + data.IdPRONAC  + '"' +
+                                 ' href="/assinatura/index/visualizar-projeto?idDocumentoAssinatura=' + data.idDocumentoAssinatura + '&origin=assinatura/index/visualizar-documentos-devolvidos"' +
                                  ' data-position="top"' +
                                  ' data-delay="50"' +
                                  ' data-tooltip="Visualizar">' +
                                  ' <i class="material-icons">search</i>' +
+                                 ' </a>';
+
+                             let botaoVerDespacho = '<a class="btn-floating waves-effect waves-light btn-info tooltipped" ' +
+                                 ' href="javascript:void(0)"' +
+                                 ' data-ajax-modal="/assinatura/index/visualizar-motivo-devolucao-ajax/idPronac/' + data.IdPRONAC + '' +
+                                 ' data-ajax-modal-full="true"' +
+                                 ' data-position="top"' +
+                                 ' data-delay="50"' +
+                                 ' data-tooltip="Visualizar">' +
+                                 ' <i class="material-icons">library_books</i>' +
                                  ' </a>';
 
                              return '<div style="position: relative; height: 60px;">'

@@ -623,14 +623,14 @@ class Assinatura_IndexController extends Assinatura_GenericController
     }
 
 
-    public function documentosDevolvidosAction()
+    public function visualizarDocumentosDevolvidosAction()
     {
         $this->view->idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
         $this->view->dados = [];
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
     }
 
-    public function documentosDevolvidosAjaxAction()
+    public function obterDocumentosDevolvidosAjaxAction()
     {
         $start = $this->getRequest()->getParam('start', -1);
         $length = $this->getRequest()->getParam('length', 100);
@@ -683,5 +683,25 @@ class Assinatura_IndexController extends Assinatura_GenericController
             'draw' => $draw,
             'recordsFiltered' => $recordsFiltered,
         ]);
+    }
+
+    public function visualizarMotivoDevolucaoAjaxAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $idPronac = $this->_request->getParam('idPronac');
+
+        $tbDespacho = new Proposta_Model_DbTable_TbDespacho();
+
+        $projetos = new Projetos();
+        $projeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
+        $this->view->projeto = $projeto;
+
+        $this->view->despachos = $tbDespacho->obterDespachos(
+            [
+                "Projetos.idPronac = ?" => $idPronac,
+                "Tipo = ?" => Verificacao::DESPACHO_ADMISSIBILIDADE,
+            ],
+            ['idDespacho DESC']
+        );
     }
 }

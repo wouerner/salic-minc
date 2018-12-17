@@ -119,6 +119,18 @@ $arrMenu['assinatura']['menu'][] = array(
 );
 
 $arrMenu['assinatura']['menu'][] = array(
+//    'grupo' => array(114,130),
+    'url' => $this->url(
+        array(
+            'module' => 'assinatura',
+            'controller' => 'index',
+            'action' => 'visualizar-documentos-devolvidos'
+        ), '', true),
+    'title' => 'Ir para Visualizar documentos devolvidos',
+    'label' => 'Visualizar Documentos Devolvidos'
+);
+
+$arrMenu['assinatura']['menu'][] = array(
     'url' => $this->url(
         array(
             'module' => 'assinatura',
