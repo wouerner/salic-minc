@@ -6,13 +6,14 @@
         <div v-else>
             <v-card>
                 <v-card-title>
-                    <v-text-field
+                    <v-select
                         v-model="search"
-                        append-icon="search"
-                        label="Digite o que Deseja Filtrar"
-                        single-line
-                        hide-details
-                    ></v-text-field>
+                        :items="tpConta"
+                        item-text="text"
+                        item-value="id"
+                        label="Tipo Conta"
+                    ></v-select>
+                    <v-spacer></v-spacer>
                 </v-card-title>
                 <v-data-table
                         :headers="headers"
@@ -22,6 +23,7 @@
                         :pagination.sync="pagination"
                         :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
                         no-data-text="Nenhum dado encontrado"
+                        no-results-text="Nenhum dado encontrado"
                         :search="search"
                 >
                     <template slot="items" slot-scope="props">
@@ -55,6 +57,21 @@
         data() {
             return {
                 search: '',
+                tpConta: [
+                    {
+                        id:'Captação',
+                        text:'Captação'
+                    },
+                    {
+                        id:'Movimentação',
+                        text:'Movimentação'
+                    },
+                    {
+                        id:'',
+                        text:'Todos'
+                    }
+                ],
+                // tpConta: ['Captação', 'Movimentação'],
                 pagination: {
                     sortBy: 'fat',
                 },
@@ -92,7 +109,7 @@
                         value: 'dtLancamento',
                     },
                     {
-                        text: '	VL. LANÇAMENTO',
+                        text: 'VL. LANÇAMENTO',
                         align: 'center',
                         value: 'vlLancamento',
                     },
