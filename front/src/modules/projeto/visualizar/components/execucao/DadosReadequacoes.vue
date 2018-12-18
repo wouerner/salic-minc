@@ -76,7 +76,7 @@
                                                             {{ dado.dtEnvio | formatarData }}
                                                         </p>
                                                         <p v-else>
-                                                             -
+                                                            -
                                                         </p>
                                                     </v-card-text>
                                                 </v-card>
@@ -93,7 +93,7 @@
                                                         <b>Dados da solicitação</b>
                                                         <p v-html="dado.dsSolicitacao" v-if="dado.dsSolicitacao"></p>
                                                         <p v-else>
-                                                             -
+                                                            -
                                                         </p>
                                                     </v-card-text>
                                                 </v-card>
@@ -132,7 +132,7 @@
                                                             {{ dado.dtAvaliador | formatarData }}
                                                         </p>
                                                         <p v-else>
-                                                             -
+                                                            -
                                                         </p>
                                                     </v-card-text>
                                                 </v-card>
@@ -278,7 +278,7 @@
                 const valor = item.idReadequacao;
 
                 console.log(valor);
-                this.buscarGrupoReadequacao({ idPronac, valor });
+                this.buscarGrupoReadequacao({idPronac, valor});
                 this.dialog = true;
             },
             validarAcessoSituacao(siEncaminhamento) {
