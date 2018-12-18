@@ -524,23 +524,9 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
             $idDocumentoAssinatura = $this->view->documentoAssinatura['idDocumentoAssinatura'];
 
-            $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-
-            $grupoAtoAdministrativo = '';
-            if ($idDocumentoAssinatura != '') {
-                $grupoAtoAdministrativo = $objTbAtoAdministrativo->obterGrupoPorIdDocumentoAssinatura($idDocumentoAssinatura);
-            }
-            $dadosAtoAdministrativoAtual = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
-                $idTipoDoAtoAdministrativo,
-                $this->grupoAtivo->codGrupo,
-                $this->grupoAtivo->codOrgao,
-                $grupoAtoAdministrativo
-            );
-
             $post = $this->getRequest()->getPost();
             if ($post) {
                 try {
-                    $this->view->despac = $post['dsManifestacao'];
                     $documentoAssinatura = $objModelDocumentoAssinatura->findBy(
                         array(
                             'IdPRONAC' => $idPronac,
@@ -553,7 +539,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                     $servicoAssinatura = new \MinC\Assinatura\Servico\Assinatura(
                         [
                             'idPronac' => $idPronac,
-                            'Despacho' => $post['despacho'],
+                            'dsMotivoDevolucao' => $post['dsMotivoDevolucao'],
                             'idAssinante' => $this->auth->getIdentity()->usu_codigo,
                             'idDocumentoAssinatura' => $documentoAssinatura['idDocumentoAssinatura'],
                             'idTipoDoAto' => $idTipoDoAtoAdministrativo,
@@ -581,16 +567,13 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 }
             }
 
-            $objTbAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
-            $assinaturaExistente = $objTbAssinatura->buscar(array(
-                'idPronac = ?' => $idPronac,
-                'idAtoAdministrativo = ?' => $dadosAtoAdministrativoAtual['idAtoAdministrativo'],
-                'idAssinante = ?' => $this->auth->getIdentity()->usu_codigo,
+            $objTbAssinatura = new Assinatura_Model_DbTable_TbMotivoDevolucao();
+            $documentoDevolvido = $objTbAssinatura->buscar(array(
                 'idDocumentoAssinatura = ?' => $idDocumentoAssinatura
             ));
 
-            if (count($assinaturaExistente) > 0) {
-                throw new Exception("O documento j&aacute; foi assinado pelo usu&aacute;rio logado nesta fase atual.");
+            if (count($documentoDevolvido) > 0) {
+                throw new Exception("O documento j&aacute; foi devolvido!");
             }
 
             $objProjeto = new Projeto_Model_DbTable_Projetos();
@@ -620,88 +603,5 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 "/{$this->view->origin}/gerenciar-assinaturas"
             );
         }
-    }
-
-
-    public function visualizarDocumentosDevolvidosAction()
-    {
-        $this->view->idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
-        $this->view->dados = [];
-        $this->view->codGrupo = $this->grupoAtivo->codGrupo;
-    }
-
-    public function obterDocumentosDevolvidosAjaxAction()
-    {
-        $start = $this->getRequest()->getParam('start', -1);
-        $length = $this->getRequest()->getParam('length', 100);
-        $draw = (int)$this->getRequest()->getParam('draw');
-        $search = $this->getRequest()->getParam('search', '');
-        $order = $this->getRequest()->getParam('order');
-        $columns = $this->getRequest()->getParam('columns');
-
-        $order = (!empty($order[0]['dir'])) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : ["idDocumentoAssinatura desc"];
-
-//        if ($search['value'] != '') {
-//            $search['value'] = urldecode($search['value']);
-//            $search['value'] = str_replace('\\', '', $search['value']);
-//        }
-        $get = Zend_Registry::get('get');
-        $idTipoDoAtoAdministrativo = $get->idTipoDoAtoAdministrativo;
-        $idTipoDoAtoAdministrativos = [];
-
-        $stringIdTipoDoAtoAdministrativos = $get->idTipoDoAtoAdministrativos;
-        if (!is_null($stringIdTipoDoAtoAdministrativos) || !empty($stringIdTipoDoAtoAdministrativos)) {
-            array_push($idTipoDoAtoAdministrativos, explode(',', $stringIdTipoDoAtoAdministrativos));
-        }
-
-        if (!is_null($idTipoDoAtoAdministrativo) || !empty($idTipoDoAtoAdministrativo)) {
-            $idTipoDoAtoAdministrativos[] = $idTipoDoAtoAdministrativo;
-        }
-
-        $tbDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-        $where = [];
-
-        $projetosDisponiveis = $tbDocumentoAssinatura->obterDocumentosDevolvidos($where, $order, $start, $length, $search['value'])->toArray();
-
-        $recordsTotal = $tbDocumentoAssinatura->obterTotalDocumentosDevolvidos($where);
-
-        $recordsFiltered = $recordsTotal;
-        if (!empty($search['value'])) {
-            $recordsFiltered = count($projetosDisponiveis);
-        }
-
-        if (count($projetosDisponiveis) > 0) {
-            $projetos = $projetosDisponiveis;
-            array_walk($projetos, function (&$value) {
-                $value = array_map('utf8_encode', $value);
-            });
-        }
-
-        $this->_helper->json([
-            "data" => $projetos,
-            'recordsTotal' => $recordsTotal,
-            'draw' => $draw,
-            'recordsFiltered' => $recordsFiltered,
-        ]);
-    }
-
-    public function visualizarMotivoDevolucaoAjaxAction()
-    {
-        $this->_helper->layout->disableLayout();
-        $idPronac = $this->_request->getParam('idPronac');
-
-        $tbDespacho = new Proposta_Model_DbTable_TbDespacho();
-
-        $projetos = new Projetos();
-        $projeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
-        $this->view->projeto = $projeto;
-
-        $this->view->despachos = $tbDespacho->obterDespachos(
-            [
-                "Projetos.idPronac = ?" => $idPronac,
-                "Tipo = ?" => Verificacao::DESPACHO_ADMISSIBILIDADE,
-            ],
-            ['idDespacho DESC']
-        );
     }
 }

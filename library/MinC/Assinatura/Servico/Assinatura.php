@@ -204,12 +204,20 @@ class Assinatura implements IServico
     public function devolver()
     {
         $modeloTbAssinatura = $this->viewModelAssinatura->modeloTbAssinatura;
-        $modeloTbDespacho = $this->viewModelAssinatura->modeloTbDespacho;
+        $modeloTbMotivoDevolucao = $this->viewModelAssinatura->modeloTbMotivoDevolucao;
+//        $modeloTbDespacho = $this->viewModelAssinatura->modeloTbDespacho; @todo remover
 
-        $objTbDepacho = new \Proposta_Model_DbTable_TbDespacho();
-        $objTbDepacho->devolverProjetoEncaminhadoParaAssinatura(
-            $modeloTbAssinatura->getIdPronac(),
-            $modeloTbDespacho->getDespacho()
+        /* @todo inserir esse despacho na ação devolver do fluxo de admissibilidade */
+//        $objTbDepacho = new \Proposta_Model_DbTable_TbDespacho();
+//        $objTbDepacho->devolverDocumentoEncaminhadoParaAssinatura(
+//            $modeloTbAssinatura->getIdDocumentoAssinatura(),
+//            $modeloTbDespacho->getDespacho()
+//        );
+
+        $objTbMotivoDevolucao = new \Assinatura_Model_DbTable_TbMotivoDevolucao();
+        $objTbMotivoDevolucao->devolverDocumentoEncaminhadoParaAssinatura(
+            $modeloTbAssinatura->getIdDocumentoAssinatura(),
+            $modeloTbMotivoDevolucao->getDsMotivoDevolucao()
         );
 
         $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
@@ -221,9 +229,7 @@ class Assinatura implements IServico
             'idDocumentoAssinatura = ?' => $this->viewModelAssinatura->modeloTbAssinatura->getIdDocumentoAssinatura(),
         ];
 
-        $objDbTableDocumentoAssinatura->update(
-            $data,
-            $where);
+        $objDbTableDocumentoAssinatura->update($data, $where);
 
         $this->executarAcoes('\MinC\Assinatura\Acao\IAcaoDevolver');
     }

@@ -119,18 +119,6 @@ $arrMenu['assinatura']['menu'][] = array(
 );
 
 $arrMenu['assinatura']['menu'][] = array(
-//    'grupo' => array(114,130),
-    'url' => $this->url(
-        array(
-            'module' => 'assinatura',
-            'controller' => 'index',
-            'action' => 'visualizar-documentos-devolvidos'
-        ), '', true),
-    'title' => 'Ir para Visualizar documentos devolvidos',
-    'label' => 'Visualizar Documentos Devolvidos'
-);
-
-$arrMenu['assinatura']['menu'][] = array(
     'url' => $this->url(
         array(
             'module' => 'assinatura',
@@ -160,6 +148,17 @@ $arrMenu['assinatura']['menu'][] = array(
         ), '', true),
     'title' => 'Ir para Readequa&ccedil;&atilde;o - Gerenciar Assinaturas',
     'label' => 'Gerenciar Assinaturas - Readequa&ccedil;&atilde;o'
+);
+
+$arrMenu['assinatura']['menu'][] = array(
+    'url' => $this->url(
+        array(
+            'module' => 'assinatura',
+            'controller' => 'documentos-devolvidos',
+            'action' => 'listar'
+        ), '', true),
+    'title' => 'Ir para Listar documentos devolvidos',
+    'label' => 'Listar Documentos Devolvidos'
 );
 
 $arrMenu['assinatura']['menu'][] = array(
