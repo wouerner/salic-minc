@@ -68,7 +68,7 @@
                         >
                             {{ props.item.stSaldoBancario }}
                         </td>
-                        <td v-else>
+                        <td class="text-xs-right red--text font-weight-bold" v-else>
                             {{ props.item.stSaldoBancario }}
                         </td>
                     </template>
@@ -87,7 +87,7 @@
 
 <script>
 
-    import {mapActions, mapGetters} from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
     import moment from 'moment';
     import planilhas from '@/mixins/planilhas';
@@ -162,8 +162,8 @@
                 return moment(date).format('DD/MM/YYYY');
             },
             FormatarNrConta(valor) {
-                return valor.replace(/^(\d{2})(\d{3})(\d{3})(\d{3})(\d{1})/, "$1.$2.$3.$4-$5");
-            }
+                return valor.replace(/^(\d{2})(\d{3})(\d{3})(\d{3})(\w{1})/, '$1.$2.$3.$4-$5');
+            },
         },
         computed: {
             ...mapGetters({
