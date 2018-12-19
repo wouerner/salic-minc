@@ -1,0 +1,77 @@
+FORMAT: 1A
+HOST: http://localhost
+
+# SALIC API
+
+# Group Autenticação
+
+## Login [/autenticacao/index/login] 
+
+### Realizar Login [POST]
+
++ Request (multipart/form-data; charset=utf-8)
+
+    + Attributes 
+        + from (nullable)
+        + Login: 239.691.561-49 (string, required)
+        + Senha: 123456 (number, required)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Attributes (object)
+        + code: 200 (string)
+        + status: 1 (number)
+        + msg: Login realizado com sucesso! (string)
+        + redirect: /principal (string)
+
+## Troca de perfil [/autenticacao/perfil/alterarperfil]
+
+### Trocar perfil [POST]
+
++ Request (application/x-www-form-urlencoded)
+        
+    + Attributes 
+        + codGrupo: 124 (string, required)
+        + codOrgao: 203 (string, required)
+
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /principal
+
+# Group Sistema
+
+## Página principal [/principal]
+
+### Acessar página principal [GET]
+
++ Response 200 (text/plain)
+
+        Hello World!
+
+
+# Group Avaliação de Resultados
+
+## Projetos Inicio [/avaliacao-resultados/projeto-inicio]
+
+
+### Listar projetos [GET]
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Attributes (object)
+        + code: 200 (string)
+        + items (object)
+            + Pronac: 1012121 (string)
+            + NomeProjeto: Criança é Vida - 15 anos (string)
+            + cdSituacao: E68 (string)
+            + Situacao: E68 (string)
+            + UfProjeto: SP (string)
+            + IdPRONAC: 132451 (string)
+            + Prioridade: 0 (string)
+            + idPronac: 132451 (string)
+
+
+# Group Projeto
