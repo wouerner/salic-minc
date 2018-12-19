@@ -338,3 +338,7 @@ footer {
     width: 100%;
     background-size: 170px;
 }
+
+.calendario-vuetify td, .calendario-vuetify th {
+    padding: 0px;
+}

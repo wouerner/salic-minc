@@ -5,6 +5,43 @@
         </div>
         <div v-else>
             <v-card>
+                <template>
+                    <v-layout row wrap>
+                        <v-flex xs12 sm6 md4>
+                            <v-menu
+                                ref="menu"
+                                :close-on-content-click="false"
+                                v-model="menu"
+                                :nudge-right="40"
+                                :return-value.sync="date"
+                                lazy
+                                transition="scale-transition"
+                                offset-y
+                                full-width
+                                min-width="290px"
+                            >
+                                <v-text-field
+                                slot="activator"
+                                v-model="datestring"
+                                label="Escolha a data inicial"
+                                prepend-icon="event"
+                                readonly
+                                ></v-text-field>
+                                <v-date-picker
+                                    class="calendario-vuetify"
+                                    :max="new Date().toISOString().substr(0, 10)"
+                                    v-model="date"
+                                    no-title
+                                    scrollable
+                                >
+                                    <v-spacer></v-spacer>
+                                    <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
+                                    <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+                                </v-date-picker>
+                            </v-menu>
+                        </v-flex>
+                    </v-layout>
+                </template>
                 <v-card-title>
                     <v-select
                         v-model="search"
@@ -71,7 +108,9 @@
                         text:'Todos'
                     }
                 ],
-                // tpConta: ['Captação', 'Movimentação'],
+                date: new Date().toISOString().substr(0, 10),
+                menu: false,
+                datestring:'',
                 pagination: {
                     sortBy: 'fat',
                 },
@@ -133,7 +172,7 @@
         },
         filters: {
             FormatarData(date) {
-                if (date.length === 0) {
+                if (date != null && date.length === 0) {
                     return '-';
                 }
                 return moment(date).format('DD/MM/YYYY');
@@ -145,11 +184,22 @@
                 dadosExtratosBancarios: 'projeto/extratosBancarios',
             }),
         },
+        watch: {
+            date(val) {
+                this.datestring = this.formatDate(val);
+                console.log(val);
+            }
+        },
         methods: {
             ...mapActions({
                 buscarExtratosBancarios: 'projeto/buscarExtratosBancarios',
             }),
+            formatDate(str) {
+                if (str != null) {
+                    return str.substring(8, 10)+'/'+str.substring(5, 7)+'/'+str.substring(0, 4);
+                }
+                return '';
+            },
         },
     };
 </script>
-
