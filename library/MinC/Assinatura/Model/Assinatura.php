@@ -25,7 +25,6 @@ class Assinatura implements IModel
 
     public $modeloTbAssinatura;
     public $modeloTbAtoAdministrativo;
-//    public $modeloTbDespacho; @todo remover
     public $modeloTbMotivoDevolucao;
     public $modeloTbDocumentoAssinatura;
     public $dbTableTbAssinatura;
@@ -35,8 +34,6 @@ class Assinatura implements IModel
         $this->modeloTbAssinatura = new \Assinatura_Model_TbAssinatura($dadosModelo);
         $this->modeloTbAtoAdministrativo = new \Assinatura_Model_TbAtoAdministrativo($dadosModelo);
 
-//        $dadosModelo['Tipo'] = $dadosModelo['idTipoDoAto']; @todo remover
-//        $this->modeloTbDespacho = new \Proposta_Model_TbDespacho($dadosModelo); @todo remover
         $this->modeloTbMotivoDevolucao = new \Assinatura_Model_TbMotivoDevolucao($dadosModelo);
 
         $this->modeloTbDocumentoAssinatura = new \Assinatura_Model_TbDocumentoAssinatura($dadosModelo);
