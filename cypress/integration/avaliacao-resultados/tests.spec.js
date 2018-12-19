@@ -1,11 +1,9 @@
 describe('Testes da Análise de Resultados', function() {
     before(function () { // Inicia todos os testes na Tela de Análise de Resultados - Perfil Técnico
-      cy.get('#combousuario div input').click()
-      .get('ul li span').eq(59).click();
- 
+      cy.mudarPerfil(124, 303); //perfil Tecnico de Prestacao de Contas
 
       cy.get('ul li a.dropdown-button').contains('Avaliação de Resultados').click()
-        .get('#prestacao-contas li a').contains('Analisar Parecer (Nova)').click();
+        .get('#prestacao-contas li a').contains('Parecer Técnico').click();
     
       cy.wait(4000);
   
