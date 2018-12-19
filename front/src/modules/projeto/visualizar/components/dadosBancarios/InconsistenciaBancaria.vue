@@ -16,8 +16,8 @@
                     <td class="text-xs-left">{{ props.item.ItemOrcamentario }}</td>
                     <td class="text-xs-left" style="width: 250px">{{ props.item.CNPJCPF | cnpjFilter }}</td>
                     <td class="text-xs-left">{{ props.item.Fornecedor }}</td>
-                    <td class="text-xs-right">{{ props.item.vlPagamento | filtroFormatarParaReal }}</td>
-                    <td class="text-xs-right">{{ props.item.vlComprovado | filtroFormatarParaReal }}</td>
+                    <td class="text-xs-right font-weight-bold">{{ props.item.vlPagamento | filtroFormatarParaReal }}</td>
+                    <td class="text-xs-right font-weight-bold">{{ props.item.vlComprovado | filtroFormatarParaReal }}</td>
 
                     <td class="text-xs-right" v-if="props.item.vlDebitado">
                         {{ props.item.vlDebitado | filtroFormatarParaReal }}
