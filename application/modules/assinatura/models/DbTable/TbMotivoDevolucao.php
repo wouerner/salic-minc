@@ -17,17 +17,23 @@ class Assinatura_Model_DbTable_TbMotivoDevolucao extends MinC_Db_Table_Abstract
         return $this;
     }
 
-    public function obterDocumentosDevolvidos($where = [], $order = ['idDocumentoAssinatura DESC'], $inicio = -1, $tamanho = 100, $search = '')
+    public function obterDocumentosDevolvidos(
+        $where = [],
+        $order = ['tbDocumentoAssinatura.idDocumentoAssinatura DESC'],
+        $inicio = -1,
+        $tamanho = 100,
+        $search = ''
+    )
     {
         $query = $this->select();
         $query->setIntegrityCheck(false);
-
         $query->from(
             ["tbMotivoDevolucao" => $this->_name],
             [
                 'tbMotivoDevolucao.idDocumentoAssinatura',
-                'dtDevolucao' => 'DATEDIFF(DAY, dt_criacao, GETDATE())',
+                'dtDevolucao' => 'dtDevolucao',
                 'dias' => 'DATEDIFF(DAY, dtDevolucao, GETDATE())',
+                new Zend_Db_Expr('CAST(dsMotivoDevolucao AS TEXT) AS dsMotivoDevolucao'),
             ],
             $this->_schema
         );
@@ -37,6 +43,13 @@ class Assinatura_Model_DbTable_TbMotivoDevolucao extends MinC_Db_Table_Abstract
             "tbDocumentoAssinatura.idDocumentoAssinatura = tbMotivoDevolucao.idDocumentoAssinatura",
             [],
             $this->_schema
+        );
+
+        $query->joinInner(
+            ["Usuarios" => "Usuarios"],
+            "tbMotivoDevolucao.idUsuario = Usuarios.usu_codigo",
+            ['Usuarios.usu_nome as nomeAvaliador'],
+            $this->getSchema('tabelas')
         );
 
         $query->joinInner(

@@ -27,6 +27,7 @@
                     <tr>
                         <th align="center" width="40">PRONAC</th>
                         <th>Nome do Projeto</th>
+                        <th>Assinante</th>
                         <th>Dias</th>
                         <th>Tipo</th>
                         <th>A&ccedil;&atilde;o</th>
@@ -103,7 +104,7 @@
                             }
                         });
                     });
-                    this.api().columns(3).every(function () {
+                    this.api().columns(4).every(function () {
                         var column = this;
                         var select = $('<select class="btn grey lighten-3 black-text"><option value="">filtrar por Tipo de Assinatura</option></select>')
                             .appendTo($(column.header()).empty())
@@ -145,9 +146,9 @@
                 "autoWidth": false,
                 "serverSide": true,
                 "searchDelay": 350,
-                "order": [2],
+                "order": [3],
                 "columnDefs": [
-                    { "className": "dt-center", "targets": [0, 2, 4] },
+                    { "className": "dt-center", "targets": [0, 3, 5] },
                     { 'bSortable': true, 'aTargets': [1] },
                 ],
                 "columns": [
@@ -169,6 +170,11 @@
                     },
                     {
                         "targets": 2,
+                        "data": "nomeAvaliador",
+                        "name": "nomeAvaliador"
+                    },
+                    {
+                        "targets": 3,
                         "data": null,
                         "name": "dias",
                         render: (data) => {
@@ -176,13 +182,13 @@
                         }
                     },
                     {
-                        "targets": 3,
+                        "targets": 4,
                         "data": 'tipoDoAtoAdministrativo',
                         "name": 'tipoDoAtoAdministrativo',
                         "orderable": false,
                     },
                     {
-                        "targets": 4,
+                        "targets": 5,
                         "data": null,
                         render: (data) => {
                             let botaoVisualizar = '<a class="btn-floating waves-effect waves-light btn-primary tooltipped" ' +

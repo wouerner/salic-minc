@@ -2,7 +2,6 @@
 
 class Assinatura_DocumentosDevolvidosController extends Assinatura_GenericController
 {
-    private $idTipoDoAtoAdministrativo;
     private $grupoAtivo;
     private $cod_usuario;
     public $moduloDeOrigem;
@@ -95,19 +94,23 @@ class Assinatura_DocumentosDevolvidosController extends Assinatura_GenericContro
     {
         $this->_helper->layout->disableLayout();
         $idPronac = $this->_request->getParam('idPronac');
-
-        $tbDespacho = new Proposta_Model_DbTable_TbDespacho();
+        $idDocumentoAssinatura = $this->_request->getParam('idDocumentoAssinatura');
 
         $projetos = new Projetos();
         $projeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->projeto = $projeto;
 
-        $this->view->despachos = $tbDespacho->obterDespachos(
-            [
-                "Projetos.idPronac = ?" => $idPronac,
-                "Tipo = ?" => Verificacao::DESPACHO_ADMISSIBILIDADE,
-            ],
-            ['idDespacho DESC']
-        );
+        $where = [];
+        $where["TbAtoAdministrativo.idOrgaoDoAssinante = ?"] = $this->grupoAtivo->codOrgao;
+        $where["TbAtoAdministrativo.idPerfilDoAssinante = ?"] = $this->grupoAtivo->codGrupo;
+        $where["TbAtoAdministrativo.idOrgaoSuperiorDoAssinante = ?"] = $this->auth->getIdentity()->usu_org_max_superior;
+        $where["TbDocumentoAssinatura.idPronac = ?"] = $idPronac;
+
+        if (!empty($idDocumentoAssinatura)) {
+            $where["TbDocumentoAssinatura.idDocumentoAssinatura = ?"] = $idDocumentoAssinatura;
+        }
+
+        $tbMotivoDevolucao = new Assinatura_Model_DbTable_TbMotivoDevolucao();
+        $this->view->documentos = $tbMotivoDevolucao->obterDocumentosDevolvidos($where, ['TbDocumentoAssinatura.idDocumentoAssinatura DESC'])->toArray();
     }
 }

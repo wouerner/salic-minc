@@ -1,5 +1,5 @@
 <div class="modal-content">
-    <h4>Despachos</h4>
+    <h4>Motivo devolu&ccedil;&atilde;o</h4>
     <div class="row">
         <div class="col s3">
             <b>Pronac</b><br>
@@ -11,25 +11,29 @@
         </div>
     </div>
 
+    <?php if ($this->documentos) : ?>
     <table class="striped bordered">
         <thead>
         <tr>
             <th>Data</th>
             <th>Avaliador</th>
-            <th>Despacho</th>
+            <th>Motivo devolu&ccedil;&atilde;o</th>
         </tr>
         </thead>
 
         <tbody>
-        <?php foreach ($this->despachos as $despacho) : ?>
+        <?php foreach ($this->documentos as $documento) : ?>
             <tr>
-                <td><?= data::dataBrasileira($despacho['Data']); ?></td>
-                <td><?= $despacho['NomeAvaliador']; ?></td>
-                <td><?= $despacho['Despacho']; ?></td>
+                <td><?= data::dataBrasileira($documento['dtDevolucao']); ?></td>
+                <td><?= $documento['nomeAvaliador']; ?></td>
+                <td><?= $documento['dsMotivoDevolucao']; ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
     </table>
+    <?php else : ?>
+        <div class="padding-10 center-align">Nenhum documento encontrado</div>
+    <?php endif; ?>
 </div>
 <div class="modal-footer">
     <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat btn-info">Fechar</a>
