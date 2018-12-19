@@ -184,10 +184,11 @@ export const buscarDiligenciaAdequacao = (idPronac, idAvaliarAdequacaoProjeto) =
     return api.getRequest(path, queryParams);
 };
 
-export const buscarGrupoReadequacao = (idPronac, idReadequacao) => {
+export const visualizarGrupoReadequacao = (idPronac, idReadequacao) => {
     const modulo = '/execucao';
     const controller = '/dados-readequacoes-rest';
-    const path = `${modulo}${controller}`;
+    const metodo = '/get';
+    const path = `${modulo}${controller}${metodo}`;
     const queryParams = `?idPronac=${idPronac}&idReadequacao=${idReadequacao}`;
     return api.getRequest(path, queryParams);
 };

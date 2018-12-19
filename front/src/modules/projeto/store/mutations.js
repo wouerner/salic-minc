@@ -27,7 +27,7 @@ export const state = {
     diligencia: [],
     marcasAnexadas: [],
     dadosReadequacoes: [],
-    buscarGrupoReadequacao: [],
+    gruposReadequacoes: [],
     pedidoProrrogacao: [],
     dadosFiscalizacaoLista: [],
     dadosFiscalizacaoVisualiza: [],
@@ -122,6 +122,6 @@ export const mutations = {
         state.dadosFiscalizacaoVisualiza = dados;
     },
     [types.SET_DADOS_GRUPO_READEQUACAO](state, dados) {
-        state.buscarGrupoReadequacao = dados;
+        state.gruposReadequacoes = dados;
     },
 };
