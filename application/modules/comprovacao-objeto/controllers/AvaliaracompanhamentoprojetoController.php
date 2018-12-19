@@ -143,12 +143,12 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
 
 
         $tbCumprimentoObjeto = new ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
-        $total = $tbCumprimentoObjeto->listaRelatorios($where, $order, null, null, true, $analisados);
+        $total = $tbCumprimentoObjeto->listaRelatorios($where, $order, null, null, true, 'analisados');
         $fim = $inicio + $this->intTamPag;
 
         $totalPag = (int)(($total % $this->intTamPag == 0) ? ($total / $this->intTamPag) : (($total / $this->intTamPag) + 1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
-        $busca = $tbCumprimentoObjeto->listaRelatorios($where, $order, $tamanho, $inicio, false, $analisados);
+        $busca = $tbCumprimentoObjeto->listaRelatorios($where, $order, $tamanho, $inicio, false, 'analisados');
 
         $paginacao = array(
             "pag" => $pag,
@@ -558,13 +558,13 @@ class ComprovacaoObjeto_AvaliaracompanhamentoprojetoController extends MinC_Cont
         }
 
         $tbCumprimentoObjeto = new ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
-        $total = $tbCumprimentoObjeto->listaRelatorios($where, $order, null, null, true);
+        $total = $tbCumprimentoObjeto->listaRelatorios($where, $order, null, null, true, 'painel-tecnico');
         $fim = $inicio + $this->intTamPag;
 
         $totalPag = (int)(($total % $this->intTamPag == 0) ? ($total / $this->intTamPag) : (($total / $this->intTamPag) + 1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
 
-        $busca = $tbCumprimentoObjeto->listaRelatorios($where, $order, $tamanho, $inicio);
+        $busca = $tbCumprimentoObjeto->listaRelatorios($where, $order, $tamanho, $inicio, false , 'painel-tecnico');
 
         $paginacao = array(
             "pag" => $pag,
