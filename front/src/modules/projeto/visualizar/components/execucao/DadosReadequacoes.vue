@@ -23,14 +23,16 @@
                             no-data-text="Nenhum dado encontrado"
                     >
                         <template slot="items" slot-scope="props">
-                            <td class="text-xs-right"> {{ props.item.dtSolicitacao | formatarData }}</td>
                             <td class="text-xs-left">
                                 {{ (props.item.stAtendimento === 'I') ? 'Rejeitado' : 'Recebido'}}
                             </td>
                             <td class="text-xs-right">
-                                {{ props.item.dtAvaliacao | formatarData }}
+                                {{ props.item.dtSolicitacao | formatarData }}
                             </td>
                             <td class="text-xs-left" v-html="props.item.dsAvaliacao"></td>
+                            <td class="text-xs-right">
+                                {{ props.item.dtAvaliacao | formatarData }}
+                            </td>
                             <td class="text-xs-center">
                                 <v-btn flat icon>
                                     <v-tooltip bottom>
@@ -215,24 +217,24 @@
                 gruposReadequacao: {},
                 headers: [
                     {
-                        text: 'DT. SOLICITAÇÃO',
-                        align: 'center',
-                        value: 'dtSolicitacao',
-                    },
-                    {
                         text: 'SITUAÇÃO',
                         align: 'left',
                         value: 'stAtendimento',
                     },
                     {
-                        text: 'DT. AVALIAÇÃO',
+                        text: 'DT. SOLICITAÇÃO',
                         align: 'center',
-                        value: 'dtAvaliacao',
+                        value: 'dtSolicitacao',
                     },
                     {
                         text: 'DESCRIÇÃO DA AVALIAÇÃO',
                         align: 'left',
                         value: 'dsAvaliacao',
+                    },
+                    {
+                        text: 'DT. AVALIAÇÃO',
+                        align: 'center',
+                        value: 'dtAvaliacao',
                     },
                     {
                         text: 'VISUALIZAR',
@@ -335,4 +337,3 @@
         },
     };
 </script>
-
