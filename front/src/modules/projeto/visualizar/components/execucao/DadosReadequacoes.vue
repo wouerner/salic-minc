@@ -55,7 +55,7 @@
                                 <v-container grid-list-md text-xs-left>
                                     <div>
                                         <v-layout justify-space-around row wrap>
-                                            <v-flex lg12 dark class="text-xs-center">
+                                            <v-flex lg12 dark class="text-xs-left">
                                                 <b><h4>SOLICITAÇÃO DO PROPONENTE</h4></b>
                                                 <v-divider class="pb-2"></v-divider>
                                             </v-flex>
@@ -104,7 +104,7 @@
                                     <br>
                                     <div v-if="validarAcessoSituacao(dado.siEncaminhamento)">
                                         <v-layout justify-space-around row wrap>
-                                            <v-flex lg12 dark class="text-xs-center">
+                                            <v-flex lg12 dark class="text-xs-left">
                                                 <b><h4>AVALIAÇÃO</h4></b>
                                                 <v-divider class="pb-2"></v-divider>
                                             </v-flex>
@@ -135,7 +135,7 @@
                                     <br>
                                     <div v-if="dado.siEncaminhamento === 15">
                                         <v-list v-for="(parecer, index) in dado.pareceres" :key="index">
-                                            <v-flex lg12 dark class="text-xs-center">
+                                            <v-flex lg12 dark class="text-xs-left">
                                                 <b><h4>PARECER TÉCNICO</h4></b>
                                                 <v-divider class="pb-2"></v-divider>
                                             </v-flex>
@@ -274,33 +274,33 @@
             filtrarIcone(tipo) {
                 let icone = '';
                 switch (tipo) {
-                    case 1:
-                    case 2:
-                    case 23:
-                    case 22:
-                        icone = 'attach_money';
-                        break;
-                    case 4:
-                        icone = 'account_balance';
-                        break;
-                    case 9:
-                        icone = 'place';
-                        break;
-                    case 10:
-                        icone = 'people';
-                        break;
-                    case 13:
-                        icone = 'timer';
-                        break;
-                    case 12:
-                        icone = 'short_text';
-                        break;
-                    case 14:
-                    case 11:
-                        icone = 'perm_media';
-                        break;
-                    default:
-                        icone = 'subject';
+                case 1:
+                case 2:
+                case 23:
+                case 22:
+                    icone = 'attach_money';
+                    break;
+                case 4:
+                    icone = 'account_balance';
+                    break;
+                case 9:
+                    icone = 'place';
+                    break;
+                case 10:
+                    icone = 'people';
+                    break;
+                case 13:
+                    icone = 'timer';
+                    break;
+                case 12:
+                    icone = 'short_text';
+                    break;
+                case 14:
+                case 11:
+                    icone = 'perm_media';
+                    break;
+                default:
+                    icone = 'subject';
                 }
                 return icone;
             },
