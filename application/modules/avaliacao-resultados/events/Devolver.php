@@ -54,7 +54,7 @@ class AvaliacaoResultados_Events_Devolver
             $GrupoAtivo = new \Zend_Session_Namespace('GrupoAtivo');
             $codGrupo = $GrupoAtivo->codGrupo;
             $dados = [
-                'Despacho' => 'devolvido para o técnico',
+                'dsMotivoDevolucao' => 'devolvido para o técnico',
                 'idTipoDoAto' => $params['idTipoDoAtoAdministrativo'],
                 'idPronac' => $params['idPronac'],
                 'idPerfilDoAssinante' => $codGrupo,

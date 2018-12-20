@@ -116,7 +116,7 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
 
                 $assinaturaService = new \MinC\Assinatura\Servico\Assinatura(
                     [
-                        'Despacho' => $post['motivoDevolucao'],
+                        'dsMotivoDevolucao' => $post['motivoDevolucao'],
                         'idTipoDoAto' => $this->idTipoDoAtoAdministrativo,
                         'idPronac' => $get->IdPRONAC,
                         'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo
