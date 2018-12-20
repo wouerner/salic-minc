@@ -34,7 +34,22 @@ class DadosBancarios_ExtratosBancariosRestController extends MinC_Controller_Res
 
     public function getAction()
     {
-        $this->renderJsonResponse(200);
+        try {
+            $extratosBancarios = new ExtratosBancariosService($this->getRequest(), $this->getResponse());
+            $resposta = $extratosBancarios->buscarPorDataExtratosBancarios();
+            $resposta = \TratarArray::utf8EncodeArray($resposta);
+
+            $this->renderJsonResponse($resposta, 200);
+
+        } catch (Exception $objException) {
+            $this->customRenderJsonResponse([
+                'error' => [
+                    'code' => 404,
+                    'message' => $objException->getMessage()
+                ]
+            ], 404);
+
+        }
     }
 
     public function postAction()

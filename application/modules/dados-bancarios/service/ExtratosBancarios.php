@@ -33,5 +33,31 @@ class ExtratosBancarios
             return $result;
         }
     }
+
+    public function buscarPorDataExtratosBancarios()
+    {
+        $idPronac = $this->request->idPronac;
+        $dtLancamento = $this->request->dtLancamento;
+        $dtLancamentoFim = $this->request->dtLancamentoFim;
+
+        if (strlen($idPronac) > 7) {
+            $idPronac = \Seguranca::dencrypt($idPronac);
+        }
+        if (!empty($idPronac)) {
+            $DadosExtrato = new \Projetos();
+
+            $where = array();
+            $where['idPronac = ?'] = $idPronac;
+
+            if (isset($dtLancamentoFim) && isset($dtLancamentoFim)) {
+                $di = ConverteData($dtLancamentoFim, 13)." 00:00:00";
+                $df = ConverteData($dtLancamentoFim, 13)." 00:00:00";
+                $where["dtLancamento BETWEEN '$di' AND '$df'"] = '';
+            }
+
+            $result = $DadosExtrato->painelDadosBancariosExtrato($where, null, null, null, false)->toArray();
+            return $result;
+        }
+    }
 }
 
