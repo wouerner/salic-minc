@@ -33,3 +33,4 @@ export const conciliacaoBancaria = state => state.conciliacaoBancaria;
 export const liberacao = state => state.liberacao;
 export const saldoContas = state => state.saldoContas;
 export const extratosBancarios = state => state.extratosBancarios;
+export const extratosBancariosConsolidado = state => state.extratosBancariosConsolidado;

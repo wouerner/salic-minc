@@ -304,3 +304,11 @@ export const buscarExtratosBancarios = ({ commit }, idPronac) => {
             commit(types.SET_EXTRATOS_BANCARIOS, data);
         });
 };
+
+export const buscarExtratosBancariosConsolidado = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarExtratosBancariosConsolidado(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_EXTRATOS_BANCARIOS_CONSOLIDADO, data);
+        });
+};

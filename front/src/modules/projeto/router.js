@@ -31,6 +31,7 @@ import InconsistenciaBancaria from './visualizar/components/dadosBancarios/Incon
 import Liberacao from './visualizar/components/dadosBancarios/Liberacao';
 import SaldoContas from './visualizar/components/dadosBancarios/SaldoContas';
 import ExtratosBancarios from './visualizar/components/dadosBancarios/ExtratosBancarios';
+import ExtratosBancariosConsolidado from './visualizar/components/dadosBancarios/ExtratosBancariosConsolidado';
 
 Vue.use(Router);
 
@@ -307,6 +308,14 @@ const routes = [
                 component: ExtratosBancarios,
                 meta: {
                     title: 'Extratos Bancários',
+                },
+            },
+            {
+                path: 'extratos-bancarios-consolidado',
+                name: 'ExtratosBancariosConsolidado',
+                component: ExtratosBancariosConsolidado,
+                meta: {
+                    title: 'Extratos Bancários Consolidado',
                 },
             },
         ],
