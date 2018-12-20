@@ -20,17 +20,16 @@
                     <td class="text-xs-left">{{ props.item.Anexado }}</td>
                     <td class="center">{{ props.item.Data }}</td>
                     <td class="text-xs-left">{{ props.item.Descricao }}</td>
-                    <td class="text-xs-center">
+                    <td class="text-xs-left">
                         <a
                                 :loading="parseInt(props.item.id) === loadingButton"
                                 style="text-decoration: none"
                                 slot="activator"
-                                color="blue"
                                 @click.native="loadingButton = parseInt(props.item.id)"
                                 :href="`/consultardadosprojeto/abrir-documentos-anexados?id=${props.item.idArquivo}&tipo=${props.item.AgenteDoc}&idPronac=${dadosProjeto.idPronac}`"
-                                dark
+
                         >
-                            <v-btn round color="primary" dark small="">{{ props.item.NoArquivo }}</v-btn>
+                            <v-btn round small>{{ props.item.NoArquivo }}</v-btn>
                         </a>
                     </td>
                 </template>
@@ -84,7 +83,7 @@
                         value: 'Descricao',
                     },
                     {
-                        align: 'center',
+                        align: 'left',
                         text: 'DOCUMENTO',
                         value: 'NoArquivo',
                     },
