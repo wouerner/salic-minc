@@ -159,7 +159,7 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
                 }
             }
         }
-        
+
         # Verificar se ha diligencia para responder
         $vDiligencia = $db->select()
            ->from(
@@ -260,9 +260,7 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
             } else {
                 $Readequacao_50 = 1;
                 $ReadequacaoPlanilha = 1;
-                if ($PercentualCaptado >= 100) {
-                    $ReadequacaoSaldoAplicacao = 1;
-                }
+                $ReadequacaoSaldoAplicacao = 1;
             }
 
             $tbCumprimentoObjeto = new ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
