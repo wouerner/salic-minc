@@ -13,7 +13,7 @@ class Devolver implements IAcaoDevolver
 
         $objTbDepacho = new \Proposta_Model_DbTable_TbDespacho();
         $objTbDepacho->devolverProjetoEncaminhadoParaAssinatura(
-            $modeloTbAssinatura->getIdDocumentoAssinatura(),
+            $modeloTbAssinatura->getIdPronac(),
             $modeloTbMotivoDevolucao->getDsMotivoDevolucao()
         );
 
