@@ -5578,9 +5578,9 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
     }
 
     /**
-     * @deprecated migrado para nova estrutura de Rest e Service >
-     *
-     *
+     * @deprecated migrado para nova estrutura de RestControllers e Service >
+     * application/modules/dados-bancarios/controllers/ExtratosBancariosConsolidadoRestController.php
+     * application/modules/dados-bancarios/service/ExtratosBancariosConsolidado.php
      */
     public function extratoContaMovimentoConsolidadoAction()
     {
