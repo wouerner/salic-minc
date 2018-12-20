@@ -36,9 +36,9 @@ class AvaliacaoResultados_DiligenciaController extends MinC_Controller_Rest_Abst
                 'tipoDiligencia' => $this->_request->tpDiligencia
             ]);
             if (!isset($coisa)){
-                $this->renderJsonResponse($coisa->toArray(), 400);
+                $this->renderJsonResponse([], 400);
             }elseif (isset($coisa)){
-                $this->renderJsonResponse(\TratarArray::utf8EncodeArray($coisa->toArray()), 200);
+                $this->renderJsonResponse(\TratarArray::utf8EncodeArray($coisa), 200);
             }
         }
     }
@@ -48,9 +48,9 @@ class AvaliacaoResultados_DiligenciaController extends MinC_Controller_Rest_Abst
         $diligencia = new DiligenciaService();
         $coisa = $diligencia->listaDiligenciaPainel(['idPronac' => $this->getRequest()->getParam('id'), 'situacao' => 'E17', 'tipoDiligencia' => 174]);
         if (!isset($coisa)){
-            $this->renderJsonResponse($coisa->toArray(), 400);
+            $this->renderJsonResponse([], 400);
         }elseif (isset($coisa)){
-            $this->renderJsonResponse(\TratarArray::utf8EncodeArray($coisa->toArray()), 200);
+            $this->renderJsonResponse(\TratarArray::utf8EncodeArray($coisa), 200);
         }
     }
 
@@ -74,23 +74,22 @@ class AvaliacaoResultados_DiligenciaController extends MinC_Controller_Rest_Abst
             return;
         }
 
-        $dados = array(
+        $dados = [
             'idPronac' => $idPronac,
             'DtSolicitacao' => new Zend_Db_Expr('GETDATE()'),
-            'Solicitacao' => $solicitacao,
+            'Solicitacao' => utf8_decode($solicitacao),
             'idTipoDiligencia' => $idTipoDiligencia,
             'idProduto' => null,
             'stEstado' => 0,
             'stEnviado' => 'S',
             'idSolicitante' => $idagente
-        );
+        ];
 
         $rowDiligencia = $diligenciaDAO->inserir($dados);
-
         $projeto = new Projetos();
         $projeto->alterarSituacao($idPronac, null, 'E17', 'Diligência na prestação de contas');
 
-        $this->view->assign('data',['message' => 'criado!']);
+        $this->view->assign('data',['message' => 'criadosssss!']);
         $this->getResponse()->setHttpResponseCode(201);
     }
 
