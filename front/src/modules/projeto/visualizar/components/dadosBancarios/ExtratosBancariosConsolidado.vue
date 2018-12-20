@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="loading">
-            <Carregando :text="'Saldo das Contas'"></Carregando>
+            <Carregando :text="'Extratos Bancários Consolidado'"></Carregando>
         </div>
         <v-card v-else>
             <v-container fluid>
@@ -38,38 +38,37 @@
 
                 <v-data-table
                         :headers="headers"
-                        :items="dadosSaldo"
-                        :search="search"
+                        :items="dadosExtratosConsolidado"
                         class="elevation-1 container-fluid"
                         rows-per-page-text="Items por Página"
+                        :pagination.sync="pagination"
+                        :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
                         no-data-text="Nenhum dado encontrado"
-                        :rows-per-page-items="[10, 25, 50, 100, {'text': 'Todos', value: -1}]"
+                        no-results-text="Nenhum dado encontrado"
+                        :search="search"
                 >
                     <template slot="items" slot-scope="props">
-                        <td class="text-xs-left">{{ props.item.Tipo }}</td>
-                        <td
-                                class="text-xs-left"
-                        >
-                            {{ props.item.NrConta | FormatarNrConta }}
-                        </td>
-                        <td class="text-xs-left">{{ props.item.TipoSaldo }}</td>
-                        <td class="text-xs-right">{{ props.item.dtSaldoBancario | FormatarData }}</td>
+                        <td class="text-xs-left" v-html="props.item.TipoConta"></td>
+                        <td class="text-xs-right">{{ props.item.NrConta | FormatarNrConta }}</td>
+                        <td class="text-xs-right">{{ props.item.Codigo }}</td>
+                        <td class="text-xs-left" v-html="props.item.Lancamento"></td>
+
                         <td class="text-xs-right blue--text font-weight-bold"
-                            v-if="props.item.vlSaldoBancario === 0"
+                            v-if="props.item.stLancamento === 'C'"
                         >
-                            {{ '0' | filtroFormatarParaReal }}
+                            {{ props.item.vlLancamento | filtroFormatarParaReal }}
                         </td>
-                        <td class="text-xs-right blue--text font-weight-bold" v-else>
-                            {{ props.item.vlSaldoBancario | filtroFormatarParaReal }}
+                        <td class="text-xs-right red--text font-weight-bold" v-else>
+                            {{ props.item.vlLancamento | filtroFormatarParaReal }}
                         </td>
 
                         <td class="text-xs-right blue--text font-weight-bold"
-                            v-if="props.item.stSaldoBancario === 'C'"
+                            v-if="props.item.stLancamento === 'C'"
                         >
-                            {{ props.item.stSaldoBancario }}
+                            {{ props.item.stLancamento }}
                         </td>
                         <td class="text-xs-right red--text font-weight-bold" v-else>
-                            {{ props.item.stSaldoBancario }}
+                            {{ props.item.stLancamento }}
                         </td>
                     </template>
                     <template slot="pageText" slot-scope="props">
@@ -83,17 +82,15 @@
         </v-card>
     </div>
 </template>
-
-
 <script>
 
-    import { mapActions, mapGetters } from 'vuex';
+    import {mapActions, mapGetters} from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
+    import {utils} from '@/mixins/utils';
     import moment from 'moment';
-    import planilhas from '@/mixins/planilhas';
 
     export default {
-        name: 'SaldoContas',
+        name: 'ExtratosBancariosConsolidado',
         data() {
             return {
                 items: [
@@ -110,70 +107,63 @@
                     {
                         text: 'TIPO DA CONTA',
                         align: 'left',
-                        value: 'Tipo',
+                        value: 'TipoConta',
                     },
                     {
                         text: 'NR. CONTA',
-                        align: 'left',
+                        align: 'center',
                         value: 'NrConta',
                     },
                     {
-                        text: 'TIPO DE SALDO',
+                        text: 'CÓDIGO',
+                        align: 'center',
+                        value: 'Codigo',
+                    },
+                    {
+                        text: 'LANÇAMENTO',
                         align: 'left',
-                        value: 'TipoSaldo',
+                        value: 'Lancamento',
                     },
                     {
-                        text: 'DATA SALDO',
+                        text: 'VL. LANÇAMENTO',
                         align: 'center',
-                        value: 'dtSaldoBancario',
-                    },
-                    {
-                        text: 'VL. SALDO',
-                        align: 'center',
-                        value: 'vlSaldoBancario',
+                        value: 'vlLancamento',
                     },
                     {
                         text: 'D/C',
                         align: 'center',
-                        value: 'vlDebitado',
+                        value: 'stLancamento',
                     },
                 ],
             };
         },
-        mixins: [planilhas],
+        mixins: [utils],
         components: {
             Carregando,
         },
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-                this.buscarSaldoContas(this.dadosProjeto.idPronac);
+                this.buscarExtratosBancariosConsolidado(this.dadosProjeto.idPronac);
             }
         },
-        watch: {
-            dadosSaldo() {
-                this.loading = false;
-            },
-        },
         filters: {
-            FormatarData(date) {
-                if (date.length === 0) {
-                    return '-';
-                }
-                return moment(date).format('DD/MM/YYYY');
-            },
             FormatarNrConta(valor) {
                 return valor.replace(/^(\d{2})(\d{3})(\d{3})(\d{3})(\w{1})/, '$1.$2.$3.$4-$5');
-            },
+            },},
+        watch: {
+            dadosExtratosConsolidado() {
+                this.loading = false;
+            }
         },
         computed: {
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
-                dadosSaldo: 'projeto/saldoContas',
+                dadosExtratosConsolidado: 'projeto/extratosBancariosConsolidado',
             }),
         },
         methods: {
             ...mapActions({
-                buscarSaldoContas: 'projeto/buscarSaldoContas',
+                buscarExtratosBancariosConsolidado: 'projeto/buscarExtratosBancariosConsolidado',
             }),
         },
     };
