@@ -18,7 +18,7 @@
                 <template slot="items" slot-scope="props">
                     <td class="text-xs-right">{{ props.item.id + 1 }}</td>
                     <td class="text-xs-left">{{ props.item.Anexado }}</td>
-                    <td class="center">{{ props.item.Data }}</td>
+                    <td class="center">{{ props.item.Data | formatarData }}</td>
                     <td class="text-xs-left">{{ props.item.Descricao }}</td>
                     <td class="text-xs-left">
                         <a
@@ -43,6 +43,7 @@
 <script>
     import { mapGetters, mapActions } from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
+    import moment from 'moment';
 
     export default {
         name: 'DocumentosAnexados',
@@ -110,6 +111,14 @@
             ...mapActions({
                 buscarDocumentosAnexados: 'projeto/buscarDocumentosAnexados',
             }),
+        },
+        filters: {
+            formatarData(date) {
+                if (date.length === 0) {
+                    return '-';
+                }
+                return moment(date).format('DD/MM/YYYY');
+            },
         },
         computed: {
             ...mapGetters({
