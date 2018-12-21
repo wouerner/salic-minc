@@ -47,9 +47,6 @@
                     >
                         <template slot="no-data">
                             <tr>
-                                <th colspan="6">Comprova&ccedil;&atilde;o de Pagamento do Item</th>
-                            </tr>
-                            <tr>
                                 <td left><b>Produto:</b></td>
                                 <td>{{dadosItemComprovacao.dadosItem.Produto}}</td>
                                 <td left><b>Etapa:</b></td>
@@ -68,7 +65,7 @@
                         </template>
                     </v-data-table>
 
-                    <v-subheader>Itens</v-subheader>
+                    <v-subheader>Comprovantes</v-subheader>
                     <v-data-table
                         :headers="comprovantesHeaders"
                         :items="dadosItemComprovacao.comprovantes"
@@ -78,6 +75,8 @@
                         <template slot="items" slot-scope="props">
                             <tr @click="props.expanded = !props.expanded">
                                 <td>{{props.item.fornecedor.nome}}</td>
+                                <td>{{ props.item.tpDocumento }}</td>
+                                <td class="text-xs-right">{{ props.item.dtPagamento | formatarData }}</td>
                                 <td class="text-xs-right">{{moeda(props.item.vlComprovacao)}}</td>
                                 <td class="text-xs-right">
                                     <v-chip small
@@ -91,85 +90,125 @@
                             </tr>
                         </template>
                         <template slot="expand" slot-scope="props">
-                            <v-card flat>
-                                <v-card-text>
+                            <v-layout row justify-center class="blue-grey lighten-5 pa-2">
+                                <v-card>
                                     <v-form
-                                        v-if="renderDadosComprovante[i]"
-                                        v-model="form[comprovante.idComprovantePagamento]"
+                                        v-model="form[props.item.idComprovantePagamento]"
                                         ref="form"
                                     >
-                                        <v-container grid-list-md>
-                                            <v-layout wrap>
-                                                <v-flex xs12 sm6 md6>
-                                                    <b>Fornecedor</b>
-                                                    <div v-html="props.item.fornecedor.nome"></div>
-                                                </v-flex>
-                                                <v-flex xs12 sm6 md6>
-                                                    <b>CNPJ/CPF</b>
-                                                    <div>{{ props.item.CNPJCPF }}</div>
-                                                </v-flex>
-                                                <v-flex xs12 sm6 md4>
-                                                    <b>Comprovante</b>
-                                                    <div>{{ props.item.tpDocumento }}</div>
-                                                </v-flex>
-                                                <v-flex xs12 sm6 md4>
-                                                    <b>Número</b>
-                                                    <div>{{ props.item.numero }}</div>
-                                                </v-flex>
-                                                <v-flex xs12 sm6 md4>
-                                                    <b>Série</b>
-                                                    <div>{{ props.item.serie }}</div>
-                                                </v-flex>
-                                                <v-flex xs12 sm6 md3>
-                                                    <b>Dt. Emissão do comprovante de despesa</b>
-                                                    <div>{{ props.item.dataEmissao | formatarData }}</div>
-                                                </v-flex>
-                                                <v-flex xs12 sm6 md3>
-                                                    <b>Forma de Pagamento</b>
-                                                    <div>{{ props.item.tpFormaDePagamento }}</div>
-                                                </v-flex>
-                                                <v-flex xs12 sm6 md3>
-                                                    <b>Dt. do Pagamento</b>
-                                                    <div>{{ props.item.dtPagamento | formatarData }}</div>
-                                                </v-flex>
-                                                <v-flex xs12 sm6 md3>
-                                                    <b>N&ordm; Documento Pagamento</b>
-                                                    <div>{{ props.item.numeroDocumento }}</div>
-                                                </v-flex>
-                                                <v-flex xs12 sm6 md3>
-                                                    <b>Valor</b>
-                                                    <div>{{ moeda(props.item.valor) }}</div>
-                                                </v-flex>
-                                                <v-flex xs12 sm6 md9>
-                                                    <b>Justificativa do Proponente</b>
-                                                    <div v-html="props.item.justificativa"></div>
-                                                </v-flex>
-                                                <v-flex xs12>
-                                                    <b>Avaliação</b>
-                                                    <v-radio-group
-                                                        v-model="stItemAvaliadoModel[props.item.idComprovantePagamento]"
-                                                        :rules="[rules.required]"
-                                                        row
-                                                    >
-                                                        <v-radio label="Aprovado" value="1" name="stItemAvaliadoModel" color="green"></v-radio>
-                                                        <v-radio label="Reprovado" value="3" name="stItemAvaliadoModel" color="red"></v-radio>
-                                                    </v-radio-group>
-                                                </v-flex>
-                                                <v-flex xs12>
-                                                    <b>Avaliação</b>
-                                                    <EditorTexto
-                                                        :value="parecerLaudoFinal.items.dsLaudoFinal"
-                                                        @editor-texto-input="inputLaudo($event)"
-                                                        @editor-texto-counter="validarLaudo($event)"
-                                                        required="required"
-                                                    >
-                                                    </EditorTexto>
-                                                </v-flex>
-                                            </v-layout>
-                                        </v-container>
+                                        <v-card-title class="py-1">
+                                            <h3>{{props.item.tpDocumento}} </h3>
+                                            <v-btn
+                                                round
+                                                small
+                                                :href="`/upload/abrir/id/${props.item.arquivo.id}`"
+                                                target="_blank"
+                                            >
+                                                {{props.item.arquivo.nome}}
+                                                <v-icon right>cloud_download</v-icon>
+                                            </v-btn>
+                                        </v-card-title>
+                                        <v-divider></v-divider>
+                                        <v-card-text>
+                                            <v-container grid-list-md class="pa-0">
+                                                <v-layout wrap>
+                                                    <v-flex xs12 sm6 md4>
+                                                        <b>CNPJ/CPF</b>
+                                                        <div>{{ props.item.CNPJCPF | cnpjFilter }}</div>
+                                                    </v-flex>
+                                                    <v-flex xs12 sm6 md8>
+                                                        <b>Fornecedor</b>
+                                                        <div v-html="props.item.fornecedor.nome"></div>
+                                                    </v-flex>
+                                                    <v-flex xs12 sm6 md4>
+                                                        <b>Comprovante</b>
+                                                        <div>{{ props.item.tpDocumento }}</div>
+                                                    </v-flex>
+                                                    <v-flex xs12 sm6 md3>
+                                                        <b>Número</b>
+                                                        <div>{{ props.item.numero }}</div>
+                                                    </v-flex>
+                                                    <v-flex xs12 sm6 md4>
+                                                        <b>Série</b>
+                                                        <div>{{ props.item.serie }}</div>
+                                                    </v-flex>
+                                                    <v-flex xs12 sm6 md4>
+                                                        <b>Dt. Emissão do comprovante de despesa</b>
+                                                        <div>{{ props.item.dataEmissao | formatarData }}</div>
+                                                    </v-flex>
+                                                    <v-flex xs12 sm6 md3>
+                                                        <b>Forma de Pagamento</b>
+                                                        <div v-html="props.item.tpFormaDePagamento "></div>
+                                                    </v-flex>
+                                                    <v-flex xs12 sm6 md3>
+                                                        <b>Dt. do Pagamento</b>
+                                                        <div>{{ props.item.dtPagamento | formatarData }}</div>
+                                                    </v-flex>
+                                                    <v-flex xs12 sm6 md4>
+                                                        <b>N&ordm; Documento Pagamento</b>
+                                                        <div>{{ props.item.numeroDocumento }}</div>
+                                                    </v-flex>
+                                                    <v-flex xs12 sm6 md3>
+                                                        <b>Valor</b>
+                                                        <div>{{ moeda(props.item.valor) }}</div>
+                                                    </v-flex>
+                                                    <v-flex xs12 sm6 md9>
+                                                        <b>Justificativa do Proponente</b>
+                                                        <div v-html="props.item.justificativa"></div>
+                                                    </v-flex>
+                                                </v-layout>
+                                                <v-divider class="my-3"></v-divider>
+                                                <v-layout wrap>
+
+                                                    <v-flex xs12>
+                                                        <b>Avaliação</b>
+                                                        <v-radio-group
+                                                            v-model="stItemAvaliadoModel[props.item.idComprovantePagamento]"
+                                                            :rules="[rules.required]"
+                                                            row
+                                                        >
+                                                            <v-radio label="Aprovado" value="1"
+                                                                     name="stItemAvaliadoModel" color="green"></v-radio>
+                                                            <v-radio label="Reprovado" value="3"
+                                                                     name="stItemAvaliadoModel" color="red"></v-radio>
+                                                        </v-radio-group>
+                                                    </v-flex>
+                                                    <v-flex xs12>
+                                                        <v-textarea
+                                                            auto-grow
+                                                            box
+                                                            label="Parecer da avaliação"
+                                                            height="180px"
+                                                            v-model="dsJustificativa[props.item.idComprovantePagamento]"
+                                                            autofocus
+                                                            @input="justificativaInput(props.item.idComprovantePagamento, $event)"
+                                                        ></v-textarea>
+                                                    </v-flex>
+
+                                                    <template
+                                                        v-if="(stItemAvaliadoModel[props.item.idComprovantePagamento] === '3'
+                                                            && dsJustificativa[props.item.idComprovantePagamento] == '')">
+                                                        <p color="red--text">Por favor preencher o campo acima!</p>
+                                                    </template>
+                                                </v-layout>
+                                            </v-container>
+                                        </v-card-text>
+                                        <v-card-actions>
+                                            <v-container grid-list-xs text-xs-center ma-0 pa-0>
+                                                <v-btn
+                                                    color="primary"
+                                                    :disabled="!form[props.item.idComprovantePagamento] && !loading"
+                                                    :loading="loading"
+                                                    @click="salvarAvaliacao(props); loader = 'loading'"
+                                                >
+                                                    <v-icon left dark>save</v-icon>
+                                                    Salvar
+                                                </v-btn>
+                                            </v-container>
+                                        </v-card-actions>
                                     </v-form>
-                                </v-card-text>
-                            </v-card>
+                                </v-card>
+                            </v-layout>
                         </template>
                     </v-data-table>
 
@@ -273,10 +312,10 @@
                     <!--:disabled="!form[comprovante.idComprovantePagamento] && !loading"-->
                     <!--:loading="loading"-->
                     <!--@click="salvarAvaliacao({-->
-                    <!--index: i,-->
-                    <!--idComprovantePagamento: comprovante.idComprovantePagamento,-->
-                    <!--stItemAvaliado: stItemAvaliadoModel[comprovante.idComprovantePagamento] || '',-->
-                    <!--dsJustificativa: dsJustificativa[comprovante.idComprovantePagamento] || '',-->
+                    <!--// &lt;!&ndash;index: i,&ndash;&gt;-->
+                    <!--// &lt;!&ndash;idComprovantePagamento: comprovante.idComprovantePagamento,&ndash;&gt;-->
+                    <!--// &lt;!&ndash;stItemAvaliado: stItemAvaliadoModel[comprovante.idComprovantePagamento] || '',&ndash;&gt;-->
+                    <!--// &lt;!&ndash;dsJustificativa: dsJustificativa[comprovante.idComprovantePagamento] || '',&ndash;&gt;-->
                     <!--}); loader = 'loading'"-->
                     <!--&gt;-->
                     <!--Salvar-->
@@ -300,10 +339,12 @@
 </template>
 
 <script>
-    import moment from 'moment';
-    import Carregando from '@/components/CarregandoVuetify';
     import { mapActions, mapGetters } from 'vuex';
-    import Bar from "@/modules/foo/components/Bar";
+    import moment from 'moment';
+    import cnpjFilter from '@/filters/cnpj';
+    import Carregando from '@/components/CarregandoVuetify';
+    import Bar from '@/modules/foo/components/Bar';
+    import EditorTexto from '../components/EditorTexto';
 
     export default {
         name: 'AnalisarItem',
@@ -318,7 +359,7 @@
             'cdProduto',
             'cdUf',
         ],
-        components: { Bar, Carregando },
+        components: { Bar, Carregando, EditorTexto },
         data() {
             return {
                 renderDadosComprovante: [],
@@ -335,12 +376,22 @@
                 rules: {
                     required: v => !!v || 'É necessário preencher este campo',
                 },
+                emAvaliacao: {},
                 comprovantesHeaders: [
                     {
                         text: 'Fornecedor',
                         align: 'left',
                         sortable: true,
                         value: 'fornecedor.nome',
+                    },
+                    {
+                        text: 'Tipo',
+                        value: 'tpDocumento',
+                    },
+                    {
+                        text: 'Dt. Pagamento',
+                        value: 'dataPagamento',
+                        width: '10%',
                     },
                     {
                         text: 'Valor (R$)',
@@ -437,11 +488,11 @@
                 deep: true,
             },
             dadosItemComprovacao() {
-                // this.dadosItemComprovacaoCopia = this.dadosItemComprovacao;
-                // this.dadosItemComprovacaoCopia.comprovantes.forEach((comp) => {
-                //     this.stItemAvaliadoModel[comp.idComprovantePagamento] = comp.stItemAvaliado;
-                //     this.dsJustificativa[comp.idComprovantePagamento] = comp.dsOcorrenciaDoTecnico;
-                // });
+                this.dadosItemComprovacaoCopia = this.dadosItemComprovacao;
+                this.dadosItemComprovacaoCopia.comprovantes.forEach((comp) => {
+                    this.stItemAvaliadoModel[comp.idComprovantePagamento] = comp.stItemAvaliado;
+                    this.dsJustificativa[comp.idComprovantePagamento] = comp.dsOcorrenciaDoTecnico;
+                });
             },
         },
         methods: {
@@ -472,6 +523,8 @@
                 return moeda.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
             },
             salvarAvaliacao(params) {
+                console.log('teste', params);
+                return;
                 if (
                     this.stItemAvaliadoModel[params.idComprovantePagamento] === '3'
                     && this.dsJustificativa[params.idComprovantePagamento] === ''
@@ -547,6 +600,7 @@
             },
         },
         filters: {
+            cnpjFilter,
             formatarData(date) {
                 if (date.length === 0) {
                     return '---';
