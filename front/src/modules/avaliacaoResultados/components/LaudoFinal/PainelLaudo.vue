@@ -119,8 +119,14 @@ export default {
             obterProjetosLaudoFinalizados: 'avaliacaoResultados/obterProjetosLaudoFinalizados',
         }),
         assinarPerfil() {
-            if (getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL) {
+            if (this.getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL) {
                 return { estadoId: 14 };
+            }
+            if (this.getUsuario.grupo_ativo == Const.PERFIL_DIRETOR) {
+                return { estadoId: 11 };
+            }
+            if (this.getUsuario.grupo_ativo == Const.PERFIL_SECRETARIO) {
+                return { estadoId: 16 };
             }
             return null;
         },
