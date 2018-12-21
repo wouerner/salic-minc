@@ -29,7 +29,7 @@
                 </v-tab>
                 <v-tab href="#tab-1"
                        id="assinar"
-                       v-if="getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL"
+                       v-if="getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL || getUsuario.grupo_ativo == Const.PERFIL_DIRETOR || getUsuario.grupo_ativo == Const.PERFIL_SECRETARIO"
                 >
                      Assinar
                     <v-icon>done</v-icon>
@@ -59,7 +59,7 @@
                 <v-tab-item
                     :value="'tab-1'"
                     :key="1"
-                    v-if="getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL"
+                    v-if="getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL || getUsuario.grupo_ativo == Const.PERFIL_DIRETOR || getUsuario.grupo_ativo == Const.PERFIL_SECRETARIO"
                 >
                     <Laudo :dados="getProjetosLaudoAssinar"
                            :estado="Const.ESTADO_LAUDO_FINALIZADO"
@@ -102,7 +102,7 @@ export default {
     },
     created() {
         this.obterProjetosLaudoFinal({ estadoId: 10 });
-        this.obterProjetosLaudoAssinar({ estadoId: 14 });
+        this.obterProjetosLaudoAssinar(this.assinarPerfil());
         this.obterProjetosLaudoEmAssinatura({ estadoId: 11 });
         this.obterProjetosLaudoFinalizados({ estadoId: 12 });
         this.obterDadosTabelaTecnico({ estadoId: 11, idAgente: this.getUsuario.usu_codigo });
@@ -118,6 +118,12 @@ export default {
             obterProjetosLaudoEmAssinatura: 'avaliacaoResultados/obterProjetosLaudoEmAssinatura',
             obterProjetosLaudoFinalizados: 'avaliacaoResultados/obterProjetosLaudoFinalizados',
         }),
+        assinarPerfil() {
+            if (getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL) {
+                return { estadoId: 14 };
+            }
+            return null;
+        },
     },
     computed: {
         ...mapGetters({
