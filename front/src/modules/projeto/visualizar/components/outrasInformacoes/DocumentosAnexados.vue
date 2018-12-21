@@ -18,7 +18,7 @@
                 <template slot="items" slot-scope="props">
                     <td class="text-xs-right">{{ props.item.id + 1 }}</td>
                     <td class="text-xs-left">{{ props.item.Anexado }}</td>
-                    <td class="center">{{ props.item.Data | formatarData }}</td>
+                    <td class="text-xs-right">{{ props.item.Data | formatarData }}</td>
                     <td class="text-xs-left">{{ props.item.Descricao }}</td>
                     <td class="text-xs-left">
                         <a
@@ -74,7 +74,7 @@
                         value: 'Anexado',
                     },
                     {
-                        align: 'center',
+                        align: 'left',
                         text: 'DATA',
                         value: 'Data',
                     },
