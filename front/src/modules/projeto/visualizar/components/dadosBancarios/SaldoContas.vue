@@ -59,6 +59,9 @@
                         >
                             {{ '0' | filtroFormatarParaReal }}
                         </td>
+                        <td class="text-xs-right red--text font-weight-bold" v-else-if="props.item.stSaldoBancario !== 'C'">
+                            {{ props.item.vlSaldoBancario | filtroFormatarParaReal }}
+                        </td>
                         <td class="text-xs-right blue--text font-weight-bold" v-else>
                             {{ props.item.vlSaldoBancario | filtroFormatarParaReal }}
                         </td>
@@ -135,7 +138,7 @@
                     {
                         text: 'D/C',
                         align: 'center',
-                        value: 'vlDebitado',
+                        value: 'stSaldoBancario',
                     },
                 ],
             };
