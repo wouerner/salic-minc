@@ -6,8 +6,7 @@
                     <h3 v-html="text"></h3>
                 </div>
                 <v-progress-circular
-                    :size="60"
-                    :width="6"
+                    :size="50"
                     indeterminate
                     color="primary"
                 >
