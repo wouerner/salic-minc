@@ -10,6 +10,7 @@
                         <v-alert
                             :value="true"
                             type="warning"
+                            class="black--text"
                             >
                             {{ validaCampo().desc }}
                         </v-alert>
@@ -18,6 +19,7 @@
                         <v-alert
                             :value="true"
                             type="success"
+                            class="black--text"
                             >
                             {{ validaCampo().desc }}
                         </v-alert>
@@ -31,7 +33,6 @@
                                 :close-on-content-click="false"
                                 v-model="menu"
                                 :nudge-right="40"
-                                :return-value.sync="date"
                                 lazy
                                 transition="scale-transition"
                                 offset-y
@@ -43,7 +44,9 @@
                                 v-model="datestring"
                                 label="Escolha a data inicial da Pesquisa"
                                 prepend-icon="event"
-                                readonly
+                                @blur="date = parseDate(datestring)"
+                                mask="##/##/####"
+                                return-masked-value
                                 ></v-text-field>
                                 <v-date-picker
                                     class="calendario-vuetify"
@@ -51,10 +54,9 @@
                                     v-model="date"
                                     no-title
                                     scrollable
+                                    locale="pt-br"
+                                    @input="menu = false"
                                 >
-                                    <v-spacer></v-spacer>
-                                    <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-                                    <v-btn flat color="primary" @click="validaCampo();$refs.menu.save(date)">OK</v-btn>
                                 </v-date-picker>
                             </v-menu>
                         </v-flex>
@@ -65,7 +67,6 @@
                                 :close-on-content-click="false"
                                 v-model="menuFim"
                                 :nudge-right="40"
-                                :return-value.sync="dateFim"
                                 lazy
                                 transition="scale-transition"
                                 offset-y
@@ -77,7 +78,9 @@
                                 v-model="datestringFim"
                                 label="Escolha a data Final da Pesquisa"
                                 prepend-icon="event"
-                                readonly
+                                @blur="dateFim = parseDate(datestringFim)"
+                                mask="##/##/####"
+                                return-masked-value
                                 ></v-text-field>
                                 <v-date-picker
                                     class="calendario-vuetify"
@@ -85,15 +88,14 @@
                                     v-model="dateFim"
                                     no-title
                                     scrollable
+                                    locale="pt-br"
+                                    @input="menuFim = false"
                                 >
-                                    <v-spacer></v-spacer>
-                                    <v-btn flat color="primary" @click="menuFim = false">Cancel</v-btn>
-                                    <v-btn flat color="primary" @click="validaCampo();$refs.menuFim.save(dateFim)">OK</v-btn>
                                 </v-date-picker>
                             </v-menu>
                         </v-flex>
                         <div class="pt-4 pl-4">
-                            <v-btn color="teal" class="white--text" :change="validaCampo().validacao" :disabled="!validaCampo().validacao">Pesquisar</v-btn>
+                            <v-btn color="teal" class="white--text" :disabled="!validaCampo().validacao" @click="filtrar()">Pesquisar</v-btn>
                         </div>
                     </v-layout>
                 </template>
@@ -124,7 +126,7 @@
                         <td class="text-xs-right">{{ props.item.cdLancamento }}</td>
                         <td class="text-xs-left" v-html="props.item.Lancamento"></td>
                         <td class="text-xs-right">{{ props.item.nrLancamento }}</td>
-                        <td class="text-xs-right">{{ props.item.dtLancamento | FormatarData }}</td>
+                        <td class="text-xs-right">{{ props.item.dtLancamento | formatarData }}</td>
                         <td class="text-xs-right">{{ props.item.vlLancamento | filtroFormatarParaReal }}</td>
                         <td class="text-xs-right">{{ props.item.stLancamento }}</td>
                     </template>
@@ -165,7 +167,7 @@
                 ],
                 date: new Date().toISOString().substr(0, 10),
                 menu: false,
-                datestring:'',
+                datestring: '',
                 dateFim: new Date().toISOString().substr(0, 10),
                 menuFim: false,
                 datestringFim:'',
@@ -224,18 +226,14 @@
         },
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-                this.buscarExtratosBancarios(this.dadosProjeto.idPronac);
+                const params = {
+                    idPronac: this.dadosProjeto.idPronac,
+                    dtLancamento: '',
+                    dtLancamentoFim: ''
+                };
+                this.buscarExtratosBancarios(params);
                 this.loading = false;
             }
-            // this.validaCampo();
-        },
-        filters: {
-            FormatarData(date) {
-                if (date != null && date.length === 0) {
-                    return '-';
-                }
-                return moment(date).format('DD/MM/YYYY');
-            },
         },
         computed: {
             ...mapGetters({
@@ -246,63 +244,69 @@
         watch: {
             date(val) {
                 this.datestring = this.formatDate(val);
-                console.log(val);
             },
             dateFim(val) {
                 this.datestringFim = this.formatDate(val);
-                console.log(val);
             },
         },
         methods: {
             ...mapActions({
                 buscarExtratosBancarios: 'projeto/buscarExtratosBancarios',
             }),
-            formatDate(str) {
-                if (str != null) {
-                    return str.substring(8, 10)+'/'+str.substring(5, 7)+'/'+str.substring(0, 4);
-                }
-                return '';
+            formatDate (date) {
+                if (!date) return null
+
+                const [year, month, day] = date.split('-')
+                return `${day}/${month}/${year}`
+            },
+            parseDate (date) {
+                if (!date) return null
+
+                const [day, month, year] = date.split('/')
+                return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+            },
+            filtrar() {
+                const params = {
+                    idPronac: this.dadosProjeto.idPronac,
+                    dtLancamento: this.date,
+                    dtLancamentoFim: this.dateFim
+                };
+
+                this.buscarExtratosBancarios(params);
             },
             validaCampo() {
-                // this.menu = true;
                 let status = {
                     desc: '',
                     validacao: false,
                     id: 0
                 };
-                if( this.datestring === '' && this.datestringFim === '') {
-                    console.log('ahahah');
+                if( this.date === '' && this.dateFim === '') {
                     status = { desc: 'hahaaa', validacao: false, id: 2 };
                     return status;
                 }
-                if( this.datestring === '' && this.datestringFim !== '') {
-                    console.log('primeiro preencher data inicial');
+                if( this.date === '' && this.dateFim !== '') {
                     status = { desc: 'preencher data inicial', validacao: false, id: 1 };
                     return status;
                 }
-                else if(this.datestring !== '' && this.datestringFim === '') {
-                    console.log('segundo agora Escolha a data final');
+                else if(this.date !== '' && this.dateFim === '') {
                     status = { desc: 'agora Escolha a data final', validacao: false, id: 1 };
                     return status;
                 }
-                if(this.datestring !== '' &&  this.datestringFim !== '') {
-                    if( Date.parse(this.datestring) > Date.parse(this.datestringFim)){
-                        console.log('data inicial nao pode ser maior que data final');
+                if( this.date === this.dateFim ) {
+                    status = { desc: 'hahaaa', validacao: true, id: 3 };
+                    return status;
+                }
+                if(this.date !== '' &&  this.dateFim !== '') {
+                    if( Date.parse(this.date) > Date.parse(this.dateFim)){
                         status = { desc: 'data inicial nao pode ser maior que data final', validacao: false, id: 1 };
                         return status;
                     }
-                    else if ( !(Date.parse(this.datestring) < Date.parse(this.datestringFim))) {
-                        console.log('data final nao pode ser menor que data inicial222222');
-                        status = { desc: 'data final nao pode ser menor que data inicial2222', validacao: false, id: 1 };
+                    else if ( !(Date.parse(this.date) < Date.parse(this.dateFim))) {
+                        status = { desc: 'data final nao pode ser menor que data inicial', validacao: false, id: 1 };
                         return status;
                     }
                 }
-                // if(this.datestring !== '' &&  this.datestringFim !== '' && Date.parse(this.datestring) > !Date.parse(this.datestringFim)) {
-                //     console.log('data inicial nao pode ser maior que data final');
-                //     status = { desc: 'data inicial nao pode ser maior que data final', validacao: false };
-                //     return status;
-                // }
-                console.log('tudo certo:'+Date.parse(this.datestring),'Tudo certo fim:' + Date.parse(this.datestringFim));
+                
                 status = { desc: 'tudo certo', validacao: true, id: 3 };
                 return status;
 
