@@ -164,6 +164,9 @@
                                                                                 v-if="podeEditar(props.item.varlorComprovado)"
                                                                             >
                                                                                 <analisar-item
+                                                                                     :item="props.item"
+                                                                                     :descricao-produto="produto.produto"
+                                                                                     :descricao-etapa="etapa.etapa"
                                                                                      :id-pronac="idPronac"
                                                                                      :uf="uf.Uf"
                                                                                      :produto="produto.cdProduto"
