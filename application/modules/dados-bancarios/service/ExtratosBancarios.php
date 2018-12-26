@@ -25,6 +25,7 @@ class ExtratosBancarios
         $idPronac = $this->request->idPronac;
         $dtLancamento = $this->request->dtLancamento;
         $dtLancamentoFim = $this->request->dtLancamentoFim;
+        $tpConta = $this->request->tpConta;
 
         if (strlen($idPronac) > 7) {
             $idPronac = \Seguranca::dencrypt($idPronac);
@@ -41,6 +42,9 @@ class ExtratosBancarios
                 $where["dtLancamento BETWEEN '$di' AND '$df'"] = '';
             }
 
+            if (!empty($tpConta)) {
+                $where["stContaLancamento= ?"] = ($tpConta == 'captacao') ? 0 : 1;
+            }
             $result = $DadosExtrato->painelDadosBancariosExtrato($where, null, null, null, false)->toArray();
             return $result;
         }

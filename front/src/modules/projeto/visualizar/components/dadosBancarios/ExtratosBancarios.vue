@@ -95,7 +95,7 @@
                             </v-menu>
                         </v-flex>
                         <div class="pt-4 pl-4">
-                            <v-btn color="teal" class="white--text" :disabled="!validaCampo().validacao" @click="filtrar()">Pesquisar</v-btn>
+                            <v-btn color="teal" class="white--text" :disabled="!validaCampo().validacao" @click="filtrarData()">Pesquisar</v-btn>
                         </div>
                     </v-layout>
                 </template>
@@ -106,6 +106,7 @@
                         item-text="text"
                         item-value="id"
                         label="Tipo Conta"
+                        :change="filtrarTipoConta()"
                     ></v-select>
                     <v-spacer></v-spacer>
                 </v-card-title>
@@ -118,7 +119,6 @@
                         :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
                         no-data-text="Nenhum dado encontrado"
                         no-results-text="Nenhum dado encontrado"
-                        :search="search"
                 >
                     <template slot="items" slot-scope="props">
                         <td class="text-xs-left" v-html="props.item.Tipo"></td>
@@ -229,7 +229,8 @@
                 const params = {
                     idPronac: this.dadosProjeto.idPronac,
                     dtLancamento: '',
-                    dtLancamentoFim: ''
+                    dtLancamentoFim: '',
+                    tpConta: '',
                 };
                 this.buscarExtratosBancarios(params);
                 this.loading = false;
@@ -265,12 +266,28 @@
                 const [day, month, year] = date.split('/')
                 return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
             },
-            filtrar() {
+            filtrarData() {
                 const params = {
                     idPronac: this.dadosProjeto.idPronac,
                     dtLancamento: this.date,
                     dtLancamentoFim: this.dateFim
                 };
+
+                this.buscarExtratosBancarios(params);
+            },
+            filtrarTipoConta() {
+                const params = {
+                    idPronac: this.dadosProjeto.idPronac,
+                    dtLancamento: '',
+                    dtLancamentoFim: '',
+                    tpConta: this.search
+                };
+                if (params.tpConta === 'Captação') {
+                    params.tpConta = 'captacao';
+                }
+                if (params.tpConta === 'Movimentação') {
+                    params.tpConta = 'movimentacao';
+                }
 
                 this.buscarExtratosBancarios(params);
             },
