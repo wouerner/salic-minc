@@ -1,7 +1,7 @@
 <template>
     <v-layout row justify-center>
         <v-dialog
-            v-model="dialog"
+            value="isModalVisible === 'avaliacao-item'"
             scrollable
             fullscreen
             transition="dialog-bottom-transition"
@@ -19,58 +19,50 @@
                     Fechar
                 </v-btn>
             </v-snackbar>
-
-            <v-btn
-                slot="activator"
-                color="red"
-                dark
-                small
-                title="Comprovar Item"
-            >
-                <v-icon>gavel</v-icon>
-            </v-btn>
             <v-card>
                 <v-toolbar dark color="green darken-3">
                     <v-btn icon dark @click.native="fecharModal">
                         <v-icon>close</v-icon>
                     </v-btn>
                     <v-toolbar-title>Avaliar comprovantes
-                        <!--<span v-if="dadosItem">item <b>"{{dadosItem.Item}}"</b></span>-->
+                        <span v-if="item">item <b>"{{ item.item }}"</b></span>
                     </v-toolbar-title>
                 </v-toolbar>
 
                 <v-card-text>
                     <v-subheader>Dados da Comprovação</v-subheader>
-                    <v-data-table
-                        class="elevation-2"
-                        hide-headers
-                        :items="[]"
-                        hide-actions
-                    >
-                        <template slot="no-data">
-                            <tr>
-                                <td left><b>Produto:</b></td>
-                                <td>{{ descricaoProduto }}</td>
-                                <td left><b>Etapa:</b></td>
-                                <td>{{ descricaoEtapa }}</td>
-                                <td left><b>Item de Custo:</b></td>
-                                <td>{{ item.item }}</td>
-                            </tr>
-                            <tr>
-                                <td left><b>Valor Aprovado:</b></td>
-                                <td>{{moeda(item.varlorAprovado)}}</td>
-                                <td left><b>Valor Comprovado:</b></td>
-                                <td>{{moeda(item.varlorComprovado)}}</td>
-                                <td left><b>Comprovação Validada:</b></td>
-                                <td>{{moeda(valorComprovacaoValidada)}}</td>
-                            </tr>
-                        </template>
-                    </v-data-table>
+                    <v-container fluid grid-list-md class="pa-10 elevation-2">
+                        <v-layout wrap>
+                            <v-flex xs12 sm6 md4>
+                                <b>Produto:</b> {{ descricaoProduto }}
+                            </v-flex>
+                            <v-flex xs12 sm6 md4>
+                                <b>Etapa:</b> {{ descricaoEtapa }}
+                            </v-flex>
+                            <v-flex xs12 sm6 md4>
+                                <b>Item de Custo:</b> {{ item.item }}
+                            </v-flex>
+                        </v-layout>
+                        <v-divider class="my-2"></v-divider>
+                        <v-layout wrap>
+                            <v-flex xs12 sm6 md4>
+                                <b>Valor Aprovado:</b> {{ item.varlorAprovado | moeda }}
+                            </v-flex>
+                            <v-flex xs12 sm6 md4>
+                                <b>Valor Comprovado:</b> {{ item.varlorComprovado | moeda }}
+                            </v-flex>
+                            <v-flex xs12 sm6 md4>
+                                <b>Comprovação Validada:</b> {{ valorComprovacaoValidada | moeda }}
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+
                     <div v-if="comprovantes && !comprovantesIsLoading">
                         <v-subheader>Comprovantes</v-subheader>
                         <v-data-table
                             :headers="comprovantesHeaders"
                             :items="comprovantes"
+                            :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
                             class="elevation-1"
                             item-key="idComprovantePagamento"
                         >
@@ -79,7 +71,7 @@
                                     <td>{{props.item.fornecedor.nome}}</td>
                                     <td>{{ props.item.tpDocumento }}</td>
                                     <td class="text-xs-right">{{ props.item.dtPagamento | formatarData }}</td>
-                                    <td class="text-xs-right">{{moeda(props.item.vlComprovacao)}}</td>
+                                    <td class="text-xs-right">{{ props.item.vlComprovacao | moeda}}</td>
                                     <td class="text-xs-right">
                                         <v-chip small
                                                 :color="props.item.stItemAvaliado | filtrarCorSituacao"
@@ -150,7 +142,7 @@
                                                     </v-flex>
                                                     <v-flex xs12 sm6 md3>
                                                         <b>Valor</b>
-                                                        <div>{{ moeda(itemEmAvaliacao.valor) }}</div>
+                                                        <div>{{ itemEmAvaliacao.valor | moeda }}</div>
                                                     </v-flex>
                                                     <v-flex xs12 sm6 md9>
                                                         <b>Justificativa do Proponente</b>
@@ -223,7 +215,6 @@
     import cnpjFilter from '@/filters/cnpj';
     import Carregando from '@/components/CarregandoVuetify';
     import Bar from '@/modules/foo/components/Bar';
-    import EditorTexto from '../components/EditorTexto';
 
     export default {
         name: 'AnalisarItem',
@@ -235,23 +226,17 @@
             'uf',
             'produto',
             'idmunicipio',
-            'idPlanilhaItem',
             'etapa',
-            'stItemAvaliado',
             'cdProduto',
             'cdUf',
         ],
-        components: { Bar, Carregando, EditorTexto },
+        components: { Bar, Carregando },
         data() {
             return {
                 comprovantesIsLoading: false,
                 loading: false,
-                form: {},
                 snackbarAlerta: false,
                 snackbarTexto: '',
-                dsJustificativa: {},
-                stItemAvaliadoModel: {},
-                dialog: false,
                 itemEmAvaliacao: {},
                 valid: true,
                 rules: {
@@ -290,54 +275,36 @@
         },
         computed: {
             ...mapGetters({
-                // dadosItem: 'avaliacaoResultados/dadosItemComprovacao',
                 comprovantes: 'avaliacaoResultados/comprovantes',
+                isModalVisible: 'modal/default',
             }),
             valorComprovacaoValidada() {
                 if (Object.keys(this.comprovantes).length === 0) {
                     return 0;
                 }
-                const total = this.comprovantes
+                return this.comprovantes
                     .map((item) => {
                         if (item.stItemAvaliado === '1') {
                             return item.valor;
                         }
                         return 0;
                     }).reduce((total, valor) => total + valor);
-                return total;
             },
         },
-        watch: {
-            dialog(val) {
-                if (val) this.atualizarComprovantes(true);
-            },
+        mounted() {
+            if (this.isModalVisible === 'avaliacao-item') {
+                this.atualizarComprovantes(true);
+            }
         },
         methods: {
             ...mapActions({
-                // alterarAvaliacaoComprovante: 'avaliacaoResultados/alterarAvaliacaoComprovante',
                 alterarPlanilha: 'avaliacaoResultados/alterarPlanilha',
                 salvarAvaliacaoComprovante: 'avaliacaoResultados/salvarAvaliacaoComprovante',
                 obterDadosItemComprovacao: 'avaliacaoResultados/obterDadosItemComprovacao',
+                modalClose: 'modal/modalClose',
             }),
-            getUrlParamsToJson() {
-                let urlParams = this.$route.params[0];
-                urlParams = urlParams.split('/');
-
-                const dados = {};
-
-                urlParams.forEach((valor, index) => {
-                    if ((index % 2) !== 0) {
-                        dados[urlParams[index - 1]] = valor;
-                    }
-                });
-                return dados;
-            },
             getUrlParams() {
                 return this.$route.params[0];
-            },
-            moeda: (moedaString) => {
-                const moeda = Number(moedaString);
-                return moeda.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
             },
             salvarAvaliacao(avaliacao) {
                 if (!this.$refs.form.validate()) {
@@ -366,7 +333,13 @@
                 if (typeof this.getUrlParams() !== 'undefined') {
                     params = this.getUrlParams();
                 } else {
-                    params = `idPronac/${this.idPronac}/uf/${this.uf}/produto/${this.produto}/idmunicipio/${this.idmunicipio}/idPlanilhaItem/${this.idPlanilhaItem}/etapa/${this.etapa}`;
+                    const idPronac = `idPronac/${this.idPronac}`;
+                    const uf = `uf/${this.uf}`;
+                    const produto = `produto/${this.produto}`;
+                    const idMunicipio = `idmunicipio/${this.idmunicipio}`;
+                    const idPlanilhaItem = `idPlanilhaItem/${this.item.idPlanilhaItens}`;
+                    const etapa = `etapa/${this.etapa}`;
+                    params = `${idPronac}/${idPlanilhaItem}/${produto}/${uf}/${idMunicipio}/${etapa}`;
                 }
 
                 if (loading) {
@@ -377,14 +350,14 @@
                 }
             },
             fecharModal() {
-                this.dialog = false;
+                this.modalClose();
                 this.itemEmAvaliacao = {};
                 this.alterarPlanilha({
                     cdProduto: this.cdProduto,
                     etapa: this.etapa,
                     cdUf: this.cdUf,
                     idmunicipio: this.idmunicipio,
-                    idPlanilhaItem: this.idPlanilhaItem,
+                    idPlanilhaItem: this.item.idPlanilhaItens,
                 });
             },
         },
@@ -426,6 +399,10 @@
                 }
             },
             cnpjFilter,
+            moeda: (moedaString) => {
+                const moeda = Number(moedaString);
+                return moeda.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            },
         },
     };
 </script>

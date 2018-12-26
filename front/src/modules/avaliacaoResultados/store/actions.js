@@ -380,10 +380,8 @@ export const salvarAvaliacaoComprovante = async ({ commit }, avaliacao) => {
             commit(types.EDIT_COMPROVANTE, avaliacao);
             return response.data;
         }).catch((e) => {
-            console.log('error', e);
             throw new TypeError(e.response.data.message, 'salvarAvaliacaoComprovante', 10);
         });
-
     return valor;
 };
 
