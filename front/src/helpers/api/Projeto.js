@@ -285,12 +285,12 @@ export const buscarSaldoContas = (idPronac) => {
     return api.getRequest(path, queryParams);
 };
 
-export const buscarExtratosBancarios = (idPronac) => {
+export const buscarExtratosBancarios = (params) => {
     const modulo = '/dados-bancarios';
     const controller = '/extratos-bancarios-rest';
     const metodo = '/index';
     const path = `${modulo}${controller}${metodo}`;
-    const queryParams = `?idPronac=${idPronac}`;
+    const queryParams = `?idPronac=${params.idPronac}&dtLancamento=${params.dtLancamento}&dtLancamentoFim=${params.dtLancamentoFim}`;
     return api.getRequest(path, queryParams);
 };
 
