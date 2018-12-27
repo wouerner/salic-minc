@@ -15,15 +15,6 @@
                             {{ validaCampo().desc }}
                         </v-alert>
                     </div>
-                    <div v-if="validaCampo().id === 3">
-                        <v-alert
-                            :value="true"
-                            type="success"
-                            class="black--text"
-                            >
-                            {{ validaCampo().desc }}
-                        </v-alert>
-                    </div>
                 </span>
                 <template>
                     <v-layout row wrap>
@@ -106,7 +97,6 @@
                         item-text="text"
                         item-value="id"
                         label="Tipo Conta"
-                        :change="filtrarTipoConta()"
                     ></v-select>
                     <v-spacer></v-spacer>
                 </v-card-title>
@@ -119,6 +109,7 @@
                         :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
                         no-data-text="Nenhum dado encontrado"
                         no-results-text="Nenhum dado encontrado"
+                        :search="search"
                 >
                     <template slot="items" slot-scope="props">
                         <td class="text-xs-left" v-html="props.item.Tipo"></td>
@@ -270,7 +261,8 @@
                 const params = {
                     idPronac: this.dadosProjeto.idPronac,
                     dtLancamento: this.date,
-                    dtLancamentoFim: this.dateFim
+                    dtLancamentoFim: this.dateFim,
+                    tpConta: ''
                 };
 
                 this.buscarExtratosBancarios(params);
