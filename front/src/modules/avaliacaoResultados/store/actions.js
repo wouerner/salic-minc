@@ -191,12 +191,16 @@ export const alterarParecer = ({ commit }, param) => {
     commit(types.SET_PARECER, param);
 };
 
-export const obterDadosItemComprovacao = ({ commit }, params) => avaliacaoResultadosHelperAPI
-    .obterDadosItemComprovacao(params)
-    .then((response) => {
-        const itemComprovacao = response.data.data;
-        commit(types.GET_DADOS_ITEM_COMPROVACAO, itemComprovacao.items);
-    });
+export const obterDadosItemComprovacao = ({ commit }, params) => {
+    commit(types.SET_COMPROVANTES, []);
+    return avaliacaoResultadosHelperAPI
+        .obterDadosItemComprovacao(params)
+        .then((response) => {
+            const dados = response.data.data.items;
+            commit(types.GET_DADOS_ITEM_COMPROVACAO, dados.dadosItem);
+            commit(types.SET_COMPROVANTES, dados.comprovantes);
+        });
+};
 
 export const getLaudoFinal = ({ commit }, params) => {
     avaliacaoResultadosHelperAPI.obterLaudoFinal(params)
@@ -298,6 +302,7 @@ export const projetosRevisao = ({ commit }, params) => {
 };
 
 export const buscarComprovantes = ({ commit }, params) => {
+    commit(types.SET_COMPROVANTES, []);
     avaliacaoResultadosHelperAPI.buscarComprovantes(params)
         .then((response) => {
             const data = response.data;
@@ -364,8 +369,22 @@ export const projetosAssinarCoordenadorGeral = ({ commit }) => {
         });
 };
 
-export const salvarAvaliacaoComprovante = (_, params) =>
-    avaliacaoResultadosHelperAPI.salvarAvaliacaoComprovante(params);
+export const salvarAvaliacaoComprovante = async ({ commit }, avaliacao) => {
+    const params = {
+        idPronac: avaliacao.IdPRONAC,
+        dsJustificativa: avaliacao.dsOcorrenciaDoTecnico,
+        stItemAvaliado: avaliacao.stItemAvaliado,
+        idComprovantePagamento: avaliacao.idComprovantePagamento,
+    };
+    const valor = await avaliacaoResultadosHelperAPI.salvarAvaliacaoComprovante(params)
+        .then((response) => {
+            commit(types.EDIT_COMPROVANTE, avaliacao);
+            return response.data;
+        }).catch((e) => {
+            throw new TypeError(e.response.data.message, 'salvarAvaliacaoComprovante', 10);
+        });
+    return valor;
+};
 
 export const alterarAvaliacaoComprovante = ({ commit }, params) =>
     commit(types.ALTERAR_DADOS_ITEM_COMPROVACAO, params);
