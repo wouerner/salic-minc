@@ -256,4 +256,3 @@ export const buscarDadosFiscalizacaoVisualiza = ({ commit }, value) => {
             commit(types.SET_DADOS_FISCALIZACAO_VISUALIZA, data);
         });
 };
-
