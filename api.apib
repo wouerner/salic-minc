@@ -7,7 +7,7 @@ HOST: http://localhost
 
 ## Login [/autenticacao/index/login] 
 
-### Realizar Login [POST]
+### Login [POST]
 
 + Request (multipart/form-data; charset=utf-8)
 
@@ -24,9 +24,9 @@ HOST: http://localhost
         + msg: Login realizado com sucesso! (string)
         + redirect: /principal (string)
 
-## Troca de perfil [/autenticacao/perfil/alterarperfil]
+## Trocar Perfil [/autenticacao/perfil/alterarperfil]
 
-### Trocar perfil [POST]
+### Trocar Perfil [POST]
 
 + Request (application/x-www-form-urlencoded)
         
@@ -41,37 +41,686 @@ HOST: http://localhost
 
             Location: /principal
 
+## Informações do Usuário Logado [/autenticacao/usuario/usuario/logado]
+
+### Informações do Usuário Logado [GET]
+
++ Response 200 (application/json, charset=utf-8)
+
+    + Body
+
+            {"data":{"code":200,"items":{"usu_codigo":"236","usu_identificacao":"23969156149","usu_nome":"R\u00f4mulo Menh\u00f4 Barbosa","usu_pessoa":"536","usu_orgao":"251","usu_org_max_superior":"251","grupo_ativo":"124","orgao_ativo":"303"}}}
+
+
 # Group Sistema
 
-## Página principal [/principal]
+## Página Principal [/principal]
 
-### Acessar página principal [GET]
+### Página Principal [GET]
 
 + Response 200 (text/plain)
 
         Hello World!
 
+### Informações do Menu Superior [/navegacao/menu-principal]
+
+### Informações do Menu Superior [GET]
+
++ Response 200 (application/json, charset=utf-8)
+
+    + Body
+
+            {"data":{"prestacao-contas":{"id":"prestacao-contas","label":"Avalia\u00e7\u00e3o de Resultados","title":"Ir para Presta&ccedil;&atilde;o de Contas","menu":{"1":{"title":"Ir para Analisar Projeto Parecer","label":"Analisar Comprova&ccedil;&atilde;o do Objeto","grupo":[124,139,148,151],"url":{"module":"comprovacao-objeto","controller":"avaliaracompanhamentoprojeto","action":"index-tecnico"}},"2":{"label":"Analisar Comprova&ccedil;&atilde;o Financeira","title":"Ir para Analisar Comprova&ccedil;&atilde;o Financeira","url":{"module":"avaliacao-resultados","controller":"index","action":"index"},"grupo":[126,125,124]}},"grupo":[100,124,125,126,132,148,151]},"assinatura":{"id":"assinatura","label":"Assinatura","title":"Ir para Assinatura","menu":[{"url":{"module":"assinatura","controller":"index","action":"gerenciar-assinaturas"},"title":"Ir para Gerenciamento de assinaturas","label":"Gerenciar Assinaturas"},{"url":{"module":"assinatura","controller":"index","action":"visualizar-assinaturas"},"title":"Ir para Visualiza\u00e7\u00e3o de Assinaturas","label":"Visualizar Assinaturas"}]},"acompanhamento":{"title":"Ir para Acompanhamento","label":"Acompanhamento","id":"acompanhamento","menu":{"2":{"title":"Ir para Certid&otilde;es Negativas","label":"Certid&otilde;es Negativas","url":{"module":"default","controller":"manterregularidadeproponente","action":"index"},"grupo":[108,121,122,123,124,125,134,135,138,139]}},"grupo":[94,121,122,123,124,125,126,129,134,135,137,138,139,148,151]},"relatorios":{"id":"relatorios","label":"Relat&oacute;rios","title":"Ir para Relat&oacute;rios","menu":{"1":{"url":{"module":"default","controller":"relatorio","action":"index"},"title":"Ir para Propostas","label":"Propostas","grupo":[90,91,92,93,96,97,103,104,110,114,115,119,120,121,122,123,124,125,126,127,128,131,132,135,138,139,148,151]},"2":{"url":{"module":"default","controller":"relatorio","action":"projeto"},"title":"Ir para Projetos","label":"Projetos","grupo":[90,91,92,93,96,97,103,104,110,114,115,119,120,121,122,123,124,125,126,127,128,131,132,135,138,139,148,151]},"3":{"url":{"module":"default","controller":"operacional","action":"index"},"title":"Ir para Operacional","label":"Operacional","grupo":[90,91,92,93,96,97,103,104,110,114,115,119,120,121,122,123,124,125,126,127,128,131,132,135,138,139,148,151]},"4":{"url":{"module":"default","controller":"relatorio","action":"gerencial"},"title":"Ir para Gerencial","label":"Gerencial","grupo":[90,91,92,93,96,97,103,104,110,114,115,119,120,121,122,123,124,125,126,127,128,131,132,135,138,139,148,151]},"5":{"url":{"module":"default","controller":"relatorio","action":"desembolso"},"title":"Ir para Consultar Pontos Culturais","label":"Ponto de Cultura","grupo":[90,91,92,93,96,97,103,104,110,114,115,119,120,121,122,123,124,125,126,127,128,131,132,135,138,139,148,151]},"6":{"url":{"module":"default","controller":"gerarrelatorioreuniao","action":"gerarrelatorioreuniao"},"title":"Ir para Gerenciar Relat&oacute;rio Reuni&atilde;o","label":"Relat&oacute;rio de resultado CNIC","grupo":[90,91,92,93,96,97,103,104,110,114,115,119,120,121,122,123,124,125,126,127,128,131,132,135,138,139,148,151]},"7":{"url":{"module":"default","controller":"gerarrelatorioparecerista","action":"geraldeanalise"},"title":"Ir para Relat&oacute;rio geral de an&aacute;lise","label":"Relat&oacute;rio geral de an&aacute;lise","grupo":[90,91,92,93,96,97,103,104,110,114,115,119,120,121,122,123,124,125,126,127,128,131,132,135,138,139,148,151]}},"grupo":[90,91,92,93,96,97,103,104,110,114,115,119,120,121,122,123,124,125,126,127,128,131,132,135,138,139,148,151]},"seguranca":{"id":"seguranca","label":"Seguran&ccedil;a","title":"Seguran&ccedil;a","menu":{"4":{"url":{"module":"autenticacao","controller":"index","action":"alterarsenhausuario"},"title":"Ir para Alterar Senha","label":"Alterar Senha","grupo":[]}},"grupo":[]},"manutencao":{"id":"manutencao","title":"Ir para Manuten&ccedil;&atilde;o","label":"Manuten&ccedil;&atilde;o","grupo":[148,151,92,93,97,103,104,110,113,114,115,121,122,123,124,125,126,127,128,131,132,134,135,136,137,138,139,140,143],"menu":[{"title":"Ir para Alterar Projeto","label":"Alterar Projeto","url":{"module":"default","controller":"alterarprojeto","action":"consultarprojeto"},"grupo":[148,151,92,93,97,103,104,110,113,114,115,121,122,123,124,125,126,127,128,131,132,134,135,136,137,138,139,140,143]},{"title":"Anexar Documentos","label":"Anexar Documentos","url":{"module":"defalut","controller":"anexardocumentosminc","action":"index"},"grupo":[148,151,92,93,97,103,104,110,113,114,115,121,122,123,124,125,126,127,128,131,132,134,135,136,137,138,139,140,143]},{"title":"Excluir Documentos","label":"Excluir Documentos","url":{"module":"default","controller":"anexardocumentosminc","action":"excluir"},"grupo":[92,93,97,103,104,110,113,114,115,121,122,123,124,125,126,127,128,131,132,134,135,136,137,138,139,140,143]},{"grupo":[148,151,92,93,97,103,104,110,113,114,115,121,122,123,124,125,126,127,128,131,132,134,135,136,137,138,139,140,143],"url":{"module":"default","controller":"rastrearagente","action":"index"},"title":"Ir para Rastrear Agente","label":"Rastrear Agente"},{"title":"Localiza&ccedil;&atilde;o F&iacute;sica do Projeto","label":"Localiza&ccedil;&atilde;o F&iacute;sica do Projeto","url":{"module":"default","controller":"localizacao-fisica","action":"index"},"grupo":[148,151,92,93,97,103,104,110,113,114,115,121,122,123,124,125,126,127,128,131,132,134,135,136,137,138,139,140,143]}]}}}
+
+### Informações do Rodapé [/navegacao/dados-rest/index]
+
+### Informações do Rodapé [GET]
+
++ Response 200 (application/json, charset=utf-8)
+
+    + Body
+
+            {"data":{"code":200,"items":{"versao":["v6.5.8"],"quantidadeSolicitacoes":0}}}
+
 
 # Group Avaliação de Resultados
 
-## Projetos Inicio [/avaliacao-resultados/projeto-inicio]
-
-
-### Listar projetos [GET]
+## Listar Projetos [GET /avaliacao-resultados/projeto-inicio]
 
 + Response 200 (application/json; charset=utf-8)
 
     + Attributes (object)
         + code: 200 (string)
         + items (object)
-            + Pronac: 1012121 (string)
-            + NomeProjeto: Criança é Vida - 15 anos (string)
-            + cdSituacao: E68 (string)
-            + Situacao: E68 (string)
-            + UfProjeto: SP (string)
-            + IdPRONAC: 132451 (string)
-            + Prioridade: 0 (string)
-            + idPronac: 132451 (string)
+            + 0
+                + Pronac: 1012121 (string)
+                + PRONAC: 1012121 (string)
+                + NomeProjeto: Criança é Vida - 15 anos (string)
+                + cdSituacao: E68 (string)
+                + Situacao: E68 (string)
+                + UfProjeto: SP (string)
+                + IdPRONAC: 132451 (string)
+                + Prioridade: 0 (string)
+                + idPronac: 132451 (string)
+            + 1
+                + Pronac: 1210135 (string)
+                + PRONAC: 1210135 (string)
+                + NomeProjeto: FESTIVAL SERRANO DE DANÇAS TRADICIONAIS 2013 (string)
+                + cdSituacao: E68 (string)
+                + Situacao: E68 (string)
+                + UfProjeto: RS (string)
+                + IdPRONAC: 159131 (string)
+                + Prioridade: 0 (string)
+                + idPronac: 159131 (string)
+
+## Parecer Técnico [/avaliacao-resultados/fluxo-projeto?estadoid={estadoid}&idAgente={idAgente}]
+
++ Parameters
+    + estadoid (string, required)
+    + idAgente (string, required)
+
+### Projetos - Análise/Assinar [GET]
+
++ Request Projetos em Analise (application/json)
+    + Attributes
+        + estadoid: 5
+        + idAgente: 236 
+
++ Response 200 (application/json; charset=utf-8)
+    + Headers
+
+            X-My-Message-Header: 42
+
+    + Body 
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": [
+                    {
+                        "id": "2",
+                        "idPronac": "136867",
+                        "estadoId": "5",
+                        "orgao": "1",
+                        "grupo": "1",
+                        "idAgente": "236",
+                        "IdPRONAC": "136867",
+                        "AnoProjeto": "11",
+                        "Sequencial": "3575",
+                        "UfProjeto": "MG",
+                        "Area": "3",
+                        "Segmento": "32",
+                        "Mecanismo": "1",
+                        "NomeProjeto": "Série de Concertos Orquestra Pianíssimo",
+                        "Processo": "01400008374201194",
+                        "CgcCpf": "11861910000185",
+                        "Situacao": "E17",
+                        "DtProtocolo": "2011-05-04 15:21:35",
+                        "DtAnalise": "2011-05-04 15:21:35",
+                        "Modalidade": " ",
+                        "OrgaoOrigem": "262",
+                        "Orgao": "303",
+                        "DtSaida": "",
+                        "DtRetorno": "2013-10-29 00:00:00",
+                        "UnidadeAnalise": " ",
+                        "Analista": " ",
+                        "DtSituacao": "2018-11-21 16:28:07",
+                        "ResumoProjeto": "O projeto prevê a realização de 8 concertos da Orquestra Pianíssimo na cidade de Belo Horizonte/MG, com vistas à formação de público para música erudita/instrumental por meio do repertório clássico para orquestra de câmara.",
+                        "ProvidenciaTomada": "Projeto diligenciado na análise de prestação de contas.",
+                        "Localizacao": " ",
+                        "DtInicioExecucao": "2014-01-07 10:09:09",
+                        "DtFimExecucao": "2014-05-31 00:00:00",
+                        "SolicitadoUfir": "0",
+                        "SolicitadoReal": "366906.0795",
+                        "SolicitadoCusteioUfir": "0",
+                        "SolicitadoCusteioReal": "0",
+                        "SolicitadoCapitalUfir": "0",
+                        "SolicitadoCapitalReal": "0",
+                        "Logon": "236",
+                        "idProjeto": "44995",
+                        "PRONAC": "113575",
+                        "usu_nome": "Rômulo Menhô Barbosa",
+                        "idDocumentoAssinatura": "",
+                        "idTipoDoAtoAdministrativo": "",
+                        "stEstado": "0",
+                        "cdSituacao": "",
+                        "idDiligencia": "78570",
+                        "DtSolicitacao": "2018-11-21 16:28:07",
+                        "DtResposta": "",
+                        "stEnviado": "S"
+                    }]
+                }
+            }
 
 
-# Group Projeto
++ Request Projetos Assinar (application/json)
+    + Attributes
+        + estadoid: 6
+        + idAgente: 236 
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body 
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": [
+                    {
+                        "id": "32",
+                        "idPronac": "157779",
+                        "estadoId": "6",
+                        "orgao": "1",
+                        "grupo": "1",
+                        "idAgente": "236",
+                        "IdPRONAC": "157779",
+                        "AnoProjeto": "12",
+                        "Sequencial": "8843",
+                        "UfProjeto": "PR",
+                        "Area": "1",
+                        "Segmento": "12",
+                        "Mecanismo": "1",
+                        "NomeProjeto": "FESTIVAL CULTURAL DE ARTES  INTEGRADAS - FESTFAG",
+                        "Processo": "01400029889201217",
+                        "CgcCpf": "02203539000173",
+                        "Situacao": "E17",
+                        "DtProtocolo": "2012-10-26 08:14:01",
+                        "DtAnalise": "2012-10-26 08:14:01",
+                        "Modalidade": " ",
+                        "OrgaoOrigem": "262",
+                        "Orgao": "303",
+                        "DtSaida": "",
+                        "DtRetorno": "",
+                        "UnidadeAnalise": " ",
+                        "Analista": " ",
+                        "DtSituacao": "2018-12-13 18:12:57",
+                        "ResumoProjeto": "A Fundação Assis Gurgacz promove um Festival Cultural de Artes Integradas para a 3ª idade, com oficinas de Música, Teatro, Dança e apresentações Artísticas, oportunizando a troca de experiências, o desenvolvimento das habilidades artísticas, estimulando a participação desta camada social em atividades de interação cultural, incluindo cursos e workshops para a 3ª idade e monitores culturais que trabalham com esta faixa etária.",
+                        "ProvidenciaTomada": "Projeto diligenciado na análise de prestação de contas.",
+                        "Localizacao": " ",
+                        "DtInicioExecucao": "2014-01-07 10:09:09",
+                        "DtFimExecucao": "2014-02-28 00:00:00",
+                        "SolicitadoUfir": "0",
+                        "SolicitadoReal": "187070.04",
+                        "SolicitadoCusteioUfir": "0",
+                        "SolicitadoCusteioReal": "0",
+                        "SolicitadoCapitalUfir": "0",
+                        "SolicitadoCapitalReal": "0",
+                        "Logon": "236",
+                        "idProjeto": "86273",
+                        "PRONAC": "128843",
+                        "usu_nome": "Rômulo Menhô Barbosa",
+                        "idDocumentoAssinatura": "14526",
+                        "idTipoDoAtoAdministrativo": "622",
+                        "stEstado": "1",
+                        "cdSituacao": "1",
+                        "idDiligencia": "78576",
+                        "DtSolicitacao": "2018-12-13 16:25:28",
+                        "DtResposta": "2018-12-13 19:14:04",
+                        "stEnviado": "S"
+                    }]
+                }
+            }
+
+## Histórico [/avaliacao-resultados/projeto-assinatura/estado/historico]
+
+### Projetos - Histórico [GET]
+
++ Response 200 (application/json; charset=utf-8)
+    + Headers
+
+            X-My-Message-Header: 42
+
+    + Body 
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": [
+                    {
+                        "IdPRONAC": 134261,
+                        "AnoProjeto": "11",
+                        "Sequencial": "1058",
+                        "UfProjeto": "SC",
+                        "Area": "6",
+                        "Segmento": "61",
+                        "Mecanismo": "1",
+                        "NomeProjeto": "Livro:  Arte Catarinense para Crianças e Adolescentes - 2ª edição",
+                        "Processo": "01400002178201114",
+                        "CgcCpf": "06292251000173",
+                        "Situacao": "E27",
+                        "DtProtocolo": "2011-02-15 08:58:23",
+                        "DtAnalise": "2011-02-15 08:58:23",
+                        "Modalidade": " ",
+                        "OrgaoOrigem": 262,
+                        "Orgao": 303,
+                        "DtSaida": null,
+                        "DtRetorno": "2011-11-01 00:00:00",
+                        "UnidadeAnalise": " ",
+                        "Analista": " ",
+                        "DtSituacao": "2018-12-21 17:35:22",
+                        "ResumoProjeto": "Trata-se de  uma obra de fomento  das artes plásticas de Santa Catarina destinada ao público  escolar , com abordagem informativa, destacando a vida e obra de  20 artistas  plásticos desde a época colonial aos dias  atuais.O material  será apresentado  de forma colorida e dinâmica com brincadeiras, histórias em quadrinhos e animação. Sua primeira edição foi Lançado no Museu  de Arte de SC em 2005.e atualmente  está esgotada e necessita de atualização dos dados.",
+                        "ProvidenciaTomada": "Comprova&ccedil;&atilde;o Financeira do Projeto em AnÃ¡lise",
+                        "Localizacao": " ",
+                        "DtInicioExecucao": "2011-05-06 00:00:00",
+                        "DtFimExecucao": "2016-03-31 00:00:00",
+                        "SolicitadoUfir": 0,
+                        "SolicitadoReal": 104145,
+                        "SolicitadoCusteioUfir": 0,
+                        "SolicitadoCusteioReal": 0,
+                        "SolicitadoCapitalUfir": 0,
+                        "SolicitadoCapitalReal": 0,
+                        "Logon": 236,
+                        "idProjeto": 42333,
+                        "PRONAC": "111058"
+                    }]
+                }
+            }
+
+## Histórico de Encaminhamentos [/avaliacao-resultados/historico/idPronac/{idPronac}]
+
++ Parameters
+    + idPronac (string, required)
+
+### Histórico de Encaminhamentos de um Projeto [GET]
+
++ Request Diligência - Projeto em Análise (application/json)
+    + Attributes
+        + idPronac: 136867
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": [
+                    {
+                        "PRONAC": "113575",
+                        "NomeProjeto": "Série de Concertos Orquestra Pianíssimo",
+                        "dtInicioEncaminhamento": "11/21/2018",
+                        "dsJustificativa": "ContinuaÃ§Ã£o!",
+                        "NomeOrigem": "Rômulo Menhô Barbosa",
+                        "NomeDestino": "Rômulo Menhô Barbosa"
+                    }
+                    ]
+                }
+            }
+
++ Request Diligência - Projeto Assinar (application/json)
+    + Attributes
+        + idPronac: 157779
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": [
+                        {
+                        "PRONAC": "128843",
+                        "NomeProjeto": "FESTIVAL CULTURAL DE ARTES  INTEGRADAS - FESTFAG",
+                        "dtInicioEncaminhamento": "06/17/2015",
+                        "dsJustificativa": ".",
+                        "NomeOrigem": "Pablo.S. Santiago",
+                        "NomeDestino": "Marina de Oliveira"
+                        },
+                        {
+                        "PRONAC": "128843",
+                        "NomeProjeto": "FESTIVAL CULTURAL DE ARTES  INTEGRADAS - FESTFAG",
+                        "dtInicioEncaminhamento": "06/19/2015",
+                        "dsJustificativa": ".",
+                        "NomeOrigem": "Pablo.S. Santiago",
+                        "NomeDestino": "Marina de Oliveira"
+                        },
+                        {
+                        "PRONAC": "128843",
+                        "NomeProjeto": "FESTIVAL CULTURAL DE ARTES  INTEGRADAS - FESTFAG",
+                        "dtInicioEncaminhamento": "06/19/2015",
+                        "dsJustificativa": ".",
+                        "NomeOrigem": "Marina de Oliveira",
+                        "NomeDestino": "Pablo.S. Santiago"
+                        }
+                    ]
+                }
+            }
+
++ Request Diligência - Projeto Histórico (application/json)
+    + Attributes
+        + idPronac: 134261
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": [
+                    {
+                        "PRONAC": "111058",
+                        "NomeProjeto": "Livro:  Arte Catarinense para Crianças e Adolescentes - 2ª edição",
+                        "dtInicioEncaminhamento": "11/20/2018",
+                        "dsJustificativa": "lkjlkj ljklkjj",
+                        "NomeOrigem": "Rômulo Menhô Barbosa",
+                        "NomeDestino": "Douglas V. C. Alves"
+                    },
+                    {
+                        "PRONAC": "111058",
+                        "NomeProjeto": "Livro:  Arte Catarinense para Crianças e Adolescentes - 2ª edição",
+                        "dtInicioEncaminhamento": "12/21/2018",
+                        "dsJustificativa": "bla",
+                        "NomeOrigem": "Rômulo Menhô Barbosa",
+                        "NomeDestino": "Rômulo Menhô Barbosa"
+                    },
+                    {
+                        "PRONAC": "111058",
+                        "NomeProjeto": "Livro:  Arte Catarinense para Crianças e Adolescentes - 2ª edição",
+                        "dtInicioEncaminhamento": "12/21/2018",
+                        "dsJustificativa": "ok",
+                        "NomeOrigem": "Rômulo Menhô Barbosa",
+                        "NomeDestino": "Rômulo Menhô Barbosa"
+                    }
+                    ]
+                }
+                }
+
+## Diligência [/avaliacao-resultados/diligencia?idPronac={idPronac}&situacao={situacao}&tpDiligencia={tpDiligencia}]
+
++ Parameters
+    + idPronac (string, required)
+    + situacao (string, required)
+    + tpDiligencia (string, required)
+
+### Diligências de um Projeto [GET]
+
++ Request Diligência - Projeto em Análise (application/json)
+    + Attributes
+        + idPronac: 136867
+        + situacao: E17 
+        + tpDiligencia: 147 
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "nomeProjeto": "Série de Concertos Orquestra Pianíssimo",
+                "pronac": "113575",
+                "stProrrogacao": null,
+                "idDiligencia": 78570,
+                "dataSolicitacao": "2018-11-21 16:28:07",
+                "dataResposta": null,
+                "Solicitacao": "Coisa testando!",
+                "Resposta": null,
+                "idCodigoDocumentosExigidos": null,
+                "idTipoDiligencia": 174,
+                "stEnviado": "S",
+                "tipoDiligencia": "Diligência na prestação de contas",
+                "produto": null,
+                "Arquivos": []
+            }
+
++ Request Diligência - Projeto Assinar (application/json)
+    + Attributes
+        + idPronac: 157779
+        + situacao: E17 
+        + tpDiligencia: 147 
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+    
+            {
+                "nomeProjeto": "FESTIVAL CULTURAL DE ARTES  INTEGRADAS - FESTFAG",
+                "pronac": "128843",
+                "stProrrogacao": null,
+                "idDiligencia": 28431,
+                "dataSolicitacao": "2013-11-26 16:20:42",
+                "dataResposta": "2013-12-05 08:38:56",
+                "Solicitacao": "<p style=\"margin: 0px; padding: 0px 0px 10px; border: none; line-height: 18.65625px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Georgia, 'Times New Roman', Times, serif;\">\r\n\tSenhor (a) proponente,</p>\r\n<p style=\"margin: 0px; padding: 0px 0px 10px; border: none; line-height: 18.65625px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Georgia, 'Times New Roman', Times, serif;\">\r\n\tEm virtude da implementa&ccedil;&atilde;o do Novo Salic, solicitamos sua colabora&ccedil;&atilde;o atrav&eacute;s do envio do tipo de aporte (patroc&iacute;nio ou doa&ccedil;&atilde;o) referente aos aportes em 31/10/2013, para que seja poss&iacute;vel a atualiza&ccedil;&atilde;o da capta&ccedil;&atilde;o e posterior transfer&ecirc;ncia de recursos.</p>\r\n<p style=\"margin: 0px; padding: 0px 0px 10px; border: none; line-height: 18.65625px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Georgia, 'Times New Roman', Times, serif;\">\r\n\t&nbsp;</p>\r\n<p style=\"margin: 0px; padding: 0px 0px 10px; border: none; line-height: 18.65625px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Georgia, 'Times New Roman', Times, serif;\">\r\n\tAtenciosamente</p>\r\n<p style=\"margin: 0px; padding: 0px 0px 10px; border: none; line-height: 18.65625px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Georgia, 'Times New Roman', Times, serif;\">\r\n\tMinist&eacute;rio da Cultura.</p>\r\n",
+                "Resposta": "Conforme solicita&ccedil;&atilde;o informo que o tipo de aporte referente aos aportes em 31/10/2013 s&atilde;o patroc&iacute;nios, conforme segue:<br />\r\n&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Comunicado do Mecenato n&ordm; 008/2013 de R$ 3.935,45 (tr&ecirc;s mil novecentos e trinta e cinco reais e quarenta e cinco centavos), patroc&iacute;nio do incentivador Farm&aacute;cia Farma&uacute;til Ltda, CNPJ &ndash; 85.035.327/0001-51.<br />\r\n&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Comunicado do Mecenato n&ordm; 009/2013 de R$ 2.132,56 (dois mil cento e trinta e dois reais e cinquenta e seis centavos), patroc&iacute;nio do incentivador Bigolin Materiais de Constru&ccedil;&atilde;o Ltda, CNPJ &ndash; 76.087.964/0001-80.<br />\r\n&nbsp;<br />\r\nAtenciosamente,<br />\r\n&nbsp;<br />\r\nNair Ventorin Gurgacz<br />\r\nPresidente Funda&ccedil;&atilde;o Assis Gurgacz - FAG<br />\r\n",
+                "idCodigoDocumentosExigidos": null,
+                "idTipoDiligencia": 183,
+                "stEnviado": "S",
+                "tipoDiligencia": "Diligência na movimentação bancária",
+                "produto": null,
+                "Arquivos": [
+                {
+                    "idArquivo": 383779,
+                    "nmArquivo": "Ofício informação de depósito.pdf",
+                    "dtEnvio": "05/12/2013 08:38:00",
+                    "idDiligencia": 28431
+                }
+                ]
+            }
+
+## Planilha [/avaliacao-resultados/planilha-aprovada/idPronac/{idPronac}]
+
++ Parameters
+    + idPronac (string, required)
+
+### Planilha [GET]
+
++ Request Planilha Aprovada (application/json)
+    + Attributes
+        + idPronac: 134261
+        
++ Response 200 (application/json; charset=utf-8)
+
+    + Body 
+
+            {
+                "0": {
+                    "etapa": {
+                        "4": {
+                            "UF": {
+                                "42": {
+                                    "cidade": {
+                                        "420240": {
+                                            "itens": {
+                                                "4": {
+                                                    "3235": {
+                                                        "item": "Assistente administrativo",
+                                                        "valor": "1500",
+                                                        "quantidade": 1,
+                                                        "numeroOcorrencias": 1,
+                                                        "varlorAprovado": 1500,
+                                                        "varlorComprovado": 1500,
+                                                        "comprovacaoValidada": 0,
+                                                        "idPlanilhaAprovacao": 126856,
+                                                        "idPlanilhaItens": 3235,
+                                                        "ComprovacaoValidada": 0,
+                                                        "stItemAvaliado": "4"
+                                                    },
+                                                    "3677": {
+                                                        "item": "Coordenação geral",
+                                                        "valor": "6500",
+                                                        "quantidade": 1,
+                                                        "numeroOcorrencias": 1,
+                                                        "varlorAprovado": 6500,
+                                                        "varlorComprovado": 4500,
+                                                        "comprovacaoValidada": 0,
+                                                        "idPlanilhaAprovacao": 126853,
+                                                        "idPlanilhaItens": 3677,
+                                                        "ComprovacaoValidada": 0,
+                                                        "stItemAvaliado": "4"
+                                                    }
+                                                },
+                                                "todos": {
+                                                    "191": {
+                                                        "item": "Contador",
+                                                        "valor": "800",
+                                                        "quantidade": 1,
+                                                        "numeroOcorrencias": 1,
+                                                        "varlorAprovado": 800,
+                                                        "varlorComprovado": 0,
+                                                        "comprovacaoValidada": 0,
+                                                        "idPlanilhaAprovacao": 126854,
+                                                        "idPlanilhaItens": 191,
+                                                        "ComprovacaoValidada": 0,
+                                                        "stItemAvaliado": null
+                                                    },
+                                                    "3235": {
+                                                        "item": "Assistente administrativo",
+                                                        "valor": "1500",
+                                                        "quantidade": 1,
+                                                        "numeroOcorrencias": 1,
+                                                        "varlorAprovado": 1500,
+                                                        "varlorComprovado": 1500,
+                                                        "comprovacaoValidada": 0,
+                                                        "idPlanilhaAprovacao": 126856,
+                                                        "idPlanilhaItens": 3235,
+                                                        "ComprovacaoValidada": 0,
+                                                        "stItemAvaliado": "4"
+                                                    },
+                                                    "3677": {
+                                                        "item": "Coordenação geral",
+                                                        "valor": "6500",
+                                                        "quantidade": 1,
+                                                        "numeroOcorrencias": 1,
+                                                        "varlorAprovado": 6500,
+                                                        "varlorComprovado": 4500,
+                                                        "comprovacaoValidada": 0,
+                                                        "idPlanilhaAprovacao": 126853,
+                                                        "idPlanilhaItens": 3677,
+                                                        "ComprovacaoValidada": 0,
+                                                        "stItemAvaliado": "4"
+                                                    },
+                                                    "5249": {
+                                                        "item": "Remuneração para captação de recursos",
+                                                        "valor": "4500",
+                                                        "quantidade": 1,
+                                                        "numeroOcorrencias": 1,
+                                                        "varlorAprovado": 4500,
+                                                        "varlorComprovado": 0,
+                                                        "comprovacaoValidada": 0,
+                                                        "idPlanilhaAprovacao": 126857,
+                                                        "idPlanilhaItens": 5249,
+                                                        "ComprovacaoValidada": 0,
+                                                        "stItemAvaliado": null
+                                                    },
+                                                    "5250": {
+                                                        "item": "Elaboração de prestação de contas",
+                                                        "valor": "1200",
+                                                        "quantidade": 1,
+                                                        "numeroOcorrencias": 1,
+                                                        "varlorAprovado": 1200,
+                                                        "varlorComprovado": 0,
+                                                        "comprovacaoValidada": 0,
+                                                        "idPlanilhaAprovacao": 126855,
+                                                        "idPlanilhaItens": 5250,
+                                                        "ComprovacaoValidada": 0,
+                                                        "stItemAvaliado": null
+                                                    }
+                                                }
+                                            },
+                                            "cidade": "Blumenau",
+                                            "cdCidade": 420240
+                                        }
+                                    },
+                                    "Uf": "SC",
+                                    "cdUF": 42
+                                }
+                            },
+                            "etapa": "Custos / Administrativos",
+                            "cdEtapa": 4
+                        }
+                    },
+                    "produto": "Administração do Projeto",
+                    "cdProduto": 0
+                }
+            }
+
+## Informações do Projeto [/avaliacao-resultados/projeto/idPronac/{idPronac}]
+
++ Parameters
+    + idPronac (string, required)
+
+### Informações do Projeto [GET]
+
++ Request Informações do Projeto (application/json)
+    + Attributes
+        + idPronac: 134261
+        
++ Response 200 (application/json; charset=utf-8)
+
+    + Body 
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": {
+                    "nomeProjeto": "Livro:  Arte Catarinense para Crianças e Adolescentes - 2ª edição",
+                    "vlTotalComprovar": 43323.95,
+                    "vlAprovado": 88245,
+                    "vlComprovado": 44921.05,
+                    "pronac": "111058",
+                    "diligencia": false,
+                    "estado": {
+                        "id": 1,
+                        "idPronac": 134261,
+                        "estadoId": 14,
+                        "orgao": 1,
+                        "grupo": 1,
+                        "idAgente": 236
+                    },
+                    "documento": []
+                    }
+                }
+                }
+
+# Group Prestação de Contas
+
+## Informações do Projeto [/prestacao-contas/visualizar-projeto/dados-projeto?idPronac={idPronac}]
+
++ Parameters
+    + idPronac (string, required)
+
+### Informações do Projeto [GET]
+
++ Request Informações Prestação de Contas (application/json)
+    + Attributes
+        + idPronac: 134261
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body 
+
+            {"consolidacaoPorProduto":{"lines":[{"dsProduto":"Administra&ccedil;&atilde;o do Projeto","qtComprovantes":"2","vlComprovado":"6.000,00","PercComprovado":"13,36"},
+            {"dsProduto":"Livro","qtComprovantes":"14","vlComprovado":"38.921,05","PercComprovado":"86,64"}],"cols":{"dsProduto":{"name":"Produto","class":""},
+            "qtComprovantes":{"name":"Qtde. Comprovantes","class":"right-align"},"vlComprovado":{"name":"Valor Comprovado","class":"right-align"},"PercComprovado":{"name":"% Comprovado","class":"right-align"}}
+            ,"title":"COMPROVA\u00c7\u00c3O CONSOLIDADA POR PRODUTO","tfoot":{"qtComprovantes":16,"vlComprovado":"44.921,05","dsProduto":"Total"}},"consolidadoPorEtapa":{"lines":[{"Descricao":"Pr\u00e9-Produ\u00e7\u00e3o \/ Prepara\u00e7\u00e3o",
+            "qtComprovantes":"1","vlComprovado":"3.500,00","PercComprovado":"7,79"},{"Descricao":"Produ\u00e7\u00e3o \/ Execu\u00e7\u00e3o","qtComprovantes":"11","vlComprovado":"33.817,50","PercComprovado":"75,28"},{"Descricao":"Divulga\u00e7\u00e3o \/ Comercializa\u00e7\u00e3o",
+            "qtComprovantes":"2","vlComprovado":"1.603,55","PercComprovado":"3,57"},{"Descricao":"Custos \/ Administrativos","qtComprovantes":"2","vlComprovado":"6.000,00","PercComprovado":"13,36"}],"cols":{"Descricao":{"name":"Etapa","class":"left-align"},"qtComprovantes":{"name":"Qtde. Comprovantes",
+            "class":"right-align"},"vlComprovado":{"name":"Valor Comprovado","class":"right-align"},"PercComprovado":{"name":"% Comprovado","class":"right-align"}},"title":"COMPROVA\u00c7\u00c3O CONSOLIDADA POR ETAPA","tfoot":{"qtComprovantes":16,"vlComprovado":"44.921,05","Descricao":"Total"}},
+            "maioresItensComprovados":{"lines":[{"Descricao":"Impress\u00e3o","qtComprovantes":"3","vlComprovado":"18.021,50","PercComprovado":"40,12"},{"Descricao":"Arte-finalista","qtComprovantes":"1","vlComprovado":"5.200,00","PercComprovado":"11,58"},{"Descricao":"Coordena\u00e7\u00e3o geral",
+            "qtComprovantes":"1","vlComprovado":"4.500,00","PercComprovado":"10,02"},{"Descricao":"Pesquisa","qtComprovantes":"1","vlComprovado":"3.500,00","PercComprovado":"7,79"},{"Descricao":"Coordena\u00e7\u00e3o gr\u00e1fica","qtComprovantes":"2","vlComprovado":"2.500,00","PercComprovado":"5,57"},
+            {"Descricao":"Revis\u00e3o de texto","qtComprovantes":"2","vlComprovado":"2.500,00","PercComprovado":"5,57"},{"Descricao":"Redator","qtComprovantes":"1","vlComprovado":"1.996,00","PercComprovado":"4,44"},{"Descricao":"Fotografia art\u00edstica (fot\u00f3grafo, tratamento, revela\u00e7\u00e3o, etc.)",
+            "qtComprovantes":"1","vlComprovado":"1.800,00","PercComprovado":"4,01"},{"Descricao":"Digitaliza\u00e7\u00e3o","qtComprovantes":"1","vlComprovado":"1.800,00","PercComprovado":"4,01"},{"Descricao":"Assistente administrativo","qtComprovantes":"1","vlComprovado":"1.500,00","PercComprovado":"3,34"},
+            {"Descricao":"Cartaz","qtComprovantes":"1","vlComprovado":"1.020,00","PercComprovado":"2,27"},{"Descricao":"Convite\r\n","qtComprovantes":"1","vlComprovado":"583,55","PercComprovado":"1,30"}],"cols":{"Descricao":{"name":"Item Or\u00e7amentario"},"qtComprovantes":{"name":"Qtde. Comprovantes","class":"right-align"},
+            "vlComprovado":{"name":"Valor Comprovado","class":"right-align"},"PercComprovado":{"name":"% Comprovado","class":"right-align"}},"title":"MAIORES ITENS OR\u00c7AMENTARIOS COMPROVADOS","tfoot":{"qtComprovantes":16,"vlComprovado":"44.921,05","Descricao":"Total"}},"comprovacaoConsolidadaUfMunicipio":{"lines":[{"UF":"SC",
+            "qtComprovantes":"16","Municipio":"Blumenau","vlComprovado":"44.921,05","PercComprovado":"100,00"}],"cols":{"UF":{"name":"UF"},"qtComprovantes":{"name":"Qtde. Comprovantes","class":"right-align"},"Municipio":{"name":"Municipio","class":"center-align"},"vlComprovado":{"name":"Valor Comprovado","class":"right-align"},
+            "PercComprovado":{"name":"% Comprovado","class":"right-align"}},"title":"COMPROVA\u00c7\u00c3O CONSOLIDADA POR UF E MUNICIPIO","tfoot":{"qtComprovantes":16,"vlComprovado":"44.921,05","UF":"Total"}},"maioresComprovacaoTipoDocumento":{"lines":[{"tpDocumento":"Recibo de Pagamento","nrComprovante":"000.009.357","nmFornecedor":"Jacy de Castro Higgie ME",
+            "qtComprovacoes":"1","vlComprovado":"10.000,00","PercComprovado":"22,26"},{"tpDocumento":"Recibo de Pagamento","nrComprovante":"000.009.426","nmFornecedor":"Jacy de Castro Higgie ME","qtComprovacoes":"1","vlComprovado":"8.000,00","PercComprovado":"17,81"},{"tpDocumento":"Recibo de Pagamento","nrComprovante":"18","nmFornecedor":"PAULO ESCALEIRA DA SILVA",
+            "qtComprovacoes":"1","vlComprovado":"5.200,00","PercComprovado":"11,58"},{"tpDocumento":"Recibo de Pagamento","nrComprovante":"23","nmFornecedor":"GILBERTO DA SILVA SANTOS","qtComprovacoes":"4","vlComprovado":"4.820,00","PercComprovado":"10,73"},{"tpDocumento":"Recibo de Pagamento","nrComprovante":"17","nmFornecedor":"PAULO ESCALEIRA DA SILVA","qtComprovacoes":"1",
+            "vlComprovado":"4.500,00","PercComprovado":"10,02"},{"tpDocumento":"Recibo de Pagamento","nrComprovante":"19","nmFornecedor":"PAULO ESCALEIRA DA SILVA","qtComprovacoes":"1","vlComprovado":"3.500,00","PercComprovado":"7,79"}, {"tpDocumento":"Recibo de Pagamento","nrComprovante":"24","nmFornecedor":"GILBERTO DA SILVA SANTOS","qtComprovacoes":"2","vlComprovado":"2.383,55",
+            "PercComprovado":"5,31"},{"tpDocumento":"RPA","nrComprovante":"Jus 002","nmFornecedor":"Instituto de Artes Integradas de Blumenau","qtComprovacoes":"1","vlComprovado":"2.000,00","PercComprovado":"4,45"},{"tpDocumento":"RPA","nrComprovante":"001","nmFornecedor":"Instituto de Artes Integradas de Blumenau","qtComprovacoes":"1","vlComprovado":"1.996,00","PercComprovado":"4,44"},
+            {"tpDocumento":"Recibo de Pagamento","nrComprovante":"21","nmFornecedor":"PAULO ESCALEIRA DA SILVA","qtComprovacoes":"1","vlComprovado":"1.500,00","PercComprovado":"3,34"}],"cols":{"tpDocumento":{"name":"Tipo Documento"},"nrComprovante":{"name":"Nr. Comprovante"},"nmFornecedor":{"name":"Fornecedor"},"qtComprovacoes":{"name":"Qtde. Comprovantes","class":"right-align"},
+            "vlComprovado":{"name":"Valor Comprovado","class":"right-align"},"PercComprovado":{"name":"% Comprovado","class":"right-align"}},"title":"MAIORES COMPROVA\u00c7\u00d5ES POR TIPO DE DOCUMENTOS COMPROBAT\u00d3RIOS","tfoot":{"qtComprovacoes":"14","vlComprovado":"43.899,55","tpDocumento":"Total"}},"comprovacaoTipoDocumentoPagamento":{"lines":[{"tpFormaDePagamento":"Cheque",
+            "nrDocumentoDePagamento":"8550012","nmFornecedor":"Jacy de Castro Higgie ME","qtComprovacoes":"1","vlComprovado":"10.000,00","PercComprovado":"22,26"},{"tpFormaDePagamento":"Cheque","nrDocumentoDePagamento":"850014","nmFornecedor":"Jacy de Castro Higgie ME","qtComprovacoes":"1","vlComprovado":"8.000,00","PercComprovado":"17,81"},{"tpFormaDePagamento":"Cheque",
+            "nrDocumentoDePagamento":"850005","nmFornecedor":"PAULO ESCALEIRA DA SILVA","qtComprovacoes":"1","vlComprovado":"5.200,00","PercComprovado":"11,58"},{"tpFormaDePagamento":"Cheque","nrDocumentoDePagamento":"850013","nmFornecedor":"GILBERTO DA SILVA SANTOS","qtComprovacoes":"4","vlComprovado":"4.820,00","PercComprovado":"10,73"},{"tpFormaDePagamento":"Cheque",
+            "nrDocumentoDePagamento":"850002","nmFornecedor":"PAULO ESCALEIRA DA SILVA","qtComprovacoes":"1","vlComprovado":"4.500,00","PercComprovado":"10,02"},{"tpFormaDePagamento":"Cheque","nrDocumentoDePagamento":"850","nmFornecedor":"PAULO ESCALEIRA DA SILVA","qtComprovacoes":"1","vlComprovado":"3.500,00","PercComprovado":"7,79"},{"tpFormaDePagamento":"Cheque",
+            "nrDocumentoDePagamento":"850015","nmFornecedor":"GILBERTO DA SILVA SANTOS","qtComprovacoes":"2","vlComprovado":"2.383,55","PercComprovado":"5,31"},{"tpFormaDePagamento":"Cheque","nrDocumentoDePagamento":"8500007","nmFornecedor":"Instituto de Artes Integradas de Blumenau","qtComprovacoes":"1","vlComprovado":"2.000,00","PercComprovado":"4,45"},
+            {"tpFormaDePagamento":"Cheque","nrDocumentoDePagamento":"850006","nmFornecedor":"Instituto de Artes Integradas de Blumenau","qtComprovacoes":"1","vlComprovado":"1.996,00","PercComprovado":"4,44"},{"tpFormaDePagamento":"Cheque","nrDocumentoDePagamento":"850010","nmFornecedor":"PAULO ESCALEIRA DA SILVA","qtComprovacoes":"1","vlComprovado":"1.500,00","PercComprovado":"3,34"}],
+            "cols":{"tpFormaDePagamento":{"name":"Tipo Documento"},"nrDocumentoDePagamento":{"name":"Nr. Comprovante"},"nmFornecedor":{"name":"Fonecedor"},"qtComprovacoes":{"name":"Qtde. Comprovantes","class":"right-align"},"vlComprovado":{"name":"Valor Comprovado","class":"right-align"},"PercComprovado":{"name":"% Comprovado","class":"right-align"}},"title":"MAIORES COMPROVA\u00c7\u00d5ES POR TIPO DE DOCUMENTOS DE PAGAMENTO",
+            "tfoot":{"qtComprovacoes":14,"vlComprovado":"43.899,55","tpFormaDePagamento":"Total"}},"maioresFornecedoresProjeto":{"lines":[{"nrCNPJCPF":"83.061.234\/0001-76","nmFornecedor":"Jacy de Castro Higgie ME","qtComprovacoes":"2","vlComprovado":"18.000,00","PercComprovado":"40,07"},{"nrCNPJCPF":"15.244.838\/0001-06","nmFornecedor":"PAULO ESCALEIRA DA SILVA","qtComprovacoes":"5",
+            "vlComprovado":"15.700,00","PercComprovado":"34,95"},{"nrCNPJCPF":"20.237.650\/0001-62","nmFornecedor":"GILBERTO DA SILVA SANTOS","qtComprovacoes":"6","vlComprovado":"7.203,55","PercComprovado":"16,04"},{"nrCNPJCPF":"06.292.251\/0001-73","nmFornecedor":"Instituto de Artes Integradas de Blumenau","qtComprovacoes":"2","vlComprovado":"3.996,00","PercComprovado":"8,90"},
+            {"nrCNPJCPF":"00.000.000\/5934-00","nmFornecedor":"BANCO DO BRASIL SA","qtComprovacoes":"1","vlComprovado":"21,50","PercComprovado":"0,05"}],"cols":{"nrCNPJCPF":{"name":"CNPJ\/CPF"},"nmFornecedor":{"name":"Fornecedor"},"qtComprovacoes":{"name":"Qtde. Comprova\u00e7\u00f5es","class":"right-align"},"vlComprovado":{"name":"Valor Comprovado","class":"right-align"},
+            "PercComprovado":{"name":"% Comprovado","class":"right-align"}},"title":"MAIORES FORNECEDORES DO PROJETO","tfoot":{"qtComprovacoes":"30","vlComprovado":"44.964,95","tpFormaDePagamento":"Total","nrCNPJCPF":"Total"}},"fornecedorItemProjeto":{"lines":[{"nrCNPJCPF":"06.292.251\/0001-73","nmFornecedor":"Instituto de Artes Integradas de Blumenau",
+            "Etapa":"Produ\u00e7\u00e3o \/ Execu\u00e7\u00e3o","vlComprovado":"1.996,00","PercComprovado":"4,44"},{"nrCNPJCPF":"06.292.251\/0001-73","nmFornecedor":"Instituto de Artes Integradas de Blumenau","Etapa":"Produ\u00e7\u00e3o \/ Execu\u00e7\u00e3o","vlComprovado":"2.000,00","PercComprovado":"4,45"}],"cols":{"nrCNPJCPF":{"name":"CNPJ\/CPF"},
+            "nmFornecedor":{"name":"Fornecedor"},"Etapa":{"name":"Etapa"},"vlComprovado":{"name":"Valor Comprovado","class":"right-align"},"PercComprovado":{"name":"% Comprovado","class":"right-align"}},"title":"PROPONENTE FORNECEDOR DE ITEM PARA O PROJETO","tfoot":{"qtComprovacoes":32,"vlComprovado":"4.040,96","tpFormaDePagamento":"Total","nrCNPJCPF":"Total"}},
+            "itensOrcamentariosImpugnados":{"lines":[],"cols":{"NomeProjeto":{"name":"Projeto"},"Produto":{"name":"Produto"},"Etapa":{"name":"Etapa"},"Item":{"name":"Item"},"Documento":{"name":"Documento"},"nrComprovante":{"name":"Nr. Comprovante"},"tpFormaDePagamento":{"name":"Forma de Pagamento"},"nrDocumentoDePagamento":{"name":"Documento de Pagamento"},
+            "dsJustificativa":{"name":"Justificativa"},"vlComprovado":{"name":"Valor Comprovado","class":"right-align"}},"title":"ITENS OR\u00c7AMENT\u00c1RIOS IMPUGNADOS NA AVALIA\u00c7\u00c3O FINANCEIRA","tfoot":{"NomeProjeto":"Total","vlComprovado":"0,00"}}}

@@ -3,7 +3,7 @@ describe('Testes da Análise de Resultados', function() {
       cy.mudarPerfil(124, 303); //perfil Tecnico de Prestacao de Contas
 
       cy.get('ul li a.dropdown-button').contains('Avaliação de Resultados').click()
-        .get('#prestacao-contas li a').contains('Parecer Técnico').click();
+        .get('#prestacao-contas li a').contains('Analisar Comprovação Financeira').click();
     
       cy.wait(4000);
   
