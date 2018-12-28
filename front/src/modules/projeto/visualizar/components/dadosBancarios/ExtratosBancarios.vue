@@ -17,78 +17,81 @@
                     </div>
                 </span>
                 <template>
-                    <v-layout row wrap>
-                        <v-flex xs12 sm6 md4>
-                            <v-menu
-                                ref="menu"
-                                :close-on-content-click="false"
-                                v-model="menu"
-                                :nudge-right="40"
-                                lazy
-                                transition="scale-transition"
-                                offset-y
-                                full-width
-                                min-width="290px"
-                            >
-                                <v-text-field
-                                slot="activator"
-                                v-model="datestring"
-                                label="Escolha a data inicial da Pesquisa"
-                                prepend-icon="event"
-                                @blur="date = parseDate(datestring)"
-                                mask="##/##/####"
-                                return-masked-value
-                                ></v-text-field>
-                                <v-date-picker
-                                    class="calendario-vuetify"
-                                    :max="new Date().toISOString().substr(0, 10)"
-                                    v-model="date"
-                                    no-title
-                                    scrollable
-                                    locale="pt-br"
-                                    @input="menu = false"
+                    <v-container fluid>
+                        <v-layout row wrap>
+                            <v-flex xs12 sm6 md4>
+                                <v-menu
+                                    ref="menu"
+                                    :close-on-content-click="false"
+                                    v-model="menu"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
                                 >
-                                </v-date-picker>
-                            </v-menu>
-                        </v-flex>
+                                    <v-text-field
+                                        slot="activator"
+                                        v-model="datestring"
+                                        label="Escolha a data inicial da Pesquisa"
+                                        prepend-icon="event"
+                                        @blur="date = parseDate(datestring)"
+                                        mask="##/##/####"
+                                        return-masked-value
+                                    ></v-text-field>
+                                    <v-date-picker
+                                        class="calendario-vuetify"
+                                        :max="new Date().toISOString().substr(0, 10)"
+                                        v-model="date"
+                                        no-title
+                                        scrollable
+                                        locale="pt-br"
+                                        @input="menu = false"
+                                    >
+                                    </v-date-picker>
+                                </v-menu>
+                            </v-flex>
 
-                        <v-flex xs12 sm6 md4>
-                            <v-menu
-                                ref="menuFim"
-                                :close-on-content-click="false"
-                                v-model="menuFim"
-                                :nudge-right="40"
-                                lazy
-                                transition="scale-transition"
-                                offset-y
-                                full-width
-                                min-width="290px"
-                            >
-                                <v-text-field
-                                slot="activator"
-                                v-model="datestringFim"
-                                label="Escolha a data Final da Pesquisa"
-                                prepend-icon="event"
-                                @blur="dateFim = parseDate(datestringFim)"
-                                mask="##/##/####"
-                                return-masked-value
-                                ></v-text-field>
-                                <v-date-picker
-                                    class="calendario-vuetify"
-                                    :max="new Date().toISOString().substr(0, 10)"
-                                    v-model="dateFim"
-                                    no-title
-                                    scrollable
-                                    locale="pt-br"
-                                    @input="menuFim = false"
+                            <v-flex xs12 sm6 md4>
+                                <v-menu
+                                    ref="menuFim"
+                                    :close-on-content-click="false"
+                                    v-model="menuFim"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                    class="pl-4"
                                 >
-                                </v-date-picker>
-                            </v-menu>
-                        </v-flex>
-                        <div class="pt-4 pl-4">
-                            <v-btn color="teal" class="white--text" :disabled="!validaCampo().validacao" @click="filtrarData()">Pesquisar</v-btn>
-                        </div>
-                    </v-layout>
+                                    <v-text-field
+                                        slot="activator"
+                                        v-model="datestringFim"
+                                        label="Escolha a data Final da Pesquisa"
+                                        prepend-icon="event"
+                                        @blur="dateFim = parseDate(datestringFim)"
+                                        mask="##/##/####"
+                                        return-masked-value
+                                    ></v-text-field>
+                                    <v-date-picker
+                                        class="calendario-vuetify"
+                                        :max="new Date().toISOString().substr(0, 10)"
+                                        v-model="dateFim"
+                                        no-title
+                                        scrollable
+                                        locale="pt-br"
+                                        @input="menuFim = false"
+                                    >
+                                    </v-date-picker>
+                                </v-menu>
+                            </v-flex>
+                            <div class="pt-4 pl-4">
+                                <v-btn color="teal" class="white--text" :disabled="!validaCampo().validacao" @click="filtrarData()">Pesquisar</v-btn>
+                            </div>
+                        </v-layout>
+                    </v-container>
                 </template>
                 <v-card-title>
                     <v-select
@@ -101,15 +104,15 @@
                     <v-spacer></v-spacer>
                 </v-card-title>
                 <v-data-table
-                        :headers="headers"
-                        :items="dadosExtratosBancarios"
-                        class="elevation-1 container-fluid"
-                        rows-per-page-text="Items por Página"
-                        :pagination.sync="pagination"
-                        :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
-                        no-data-text="Nenhum dado encontrado"
-                        no-results-text="Nenhum dado encontrado"
-                        :search="search"
+                    :headers="headers"
+                    :items="dadosExtratosBancarios"
+                    class="elevation-1 container-fluid"
+                    rows-per-page-text="Items por Página"
+                    :pagination.sync="pagination"
+                    :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
+                    no-data-text="Nenhum dado encontrado"
+                    no-results-text="Nenhum dado encontrado"
+                    :search="search"
                 >
                     <template slot="items" slot-scope="props">
                         <td class="text-xs-left" v-html="props.item.Tipo"></td>
