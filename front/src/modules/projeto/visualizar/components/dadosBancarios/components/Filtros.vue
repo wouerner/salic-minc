@@ -181,28 +181,28 @@
                         id: 0
                     };
                     if( this.date === '' && this.dateFim === '') {
-                        status = { desc: 'hahaaa', validacao: false, id: 2 };
+                        status = { desc: '', validacao: false, id: 2 };
                         return status;
                     }
                     if( this.date === '' && this.dateFim !== '') {
-                        status = { desc: 'preencher data inicial', validacao: false, id: 1 };
+                        status = { desc: 'Escolha a data inicial', validacao: false, id: 1 };
                         return status;
                     }
                     else if(this.date !== '' && this.dateFim === '') {
-                        status = { desc: 'agora Escolha a data final', validacao: false, id: 1 };
+                        status = { desc: 'Escolha a data final', validacao: false, id: 1 };
                         return status;
                     }
                     if( this.date === this.dateFim ) {
-                        status = { desc: 'hahaaa', validacao: true, id: 3 };
+                        status = { desc: '', validacao: true, id: 3 };
                         return status;
                     }
                     if(this.date !== '' &&  this.dateFim !== '') {
                         if( Date.parse(this.date) > Date.parse(this.dateFim)){
-                            status = { desc: 'data inicial nao pode ser maior que data final', validacao: false, id: 1 };
+                            status = { desc: 'Data Inicial não pode ser mais recente que a Data Final', validacao: false, id: 1 };
                             return status;
                         }
                         else if ( !(Date.parse(this.date) < Date.parse(this.dateFim))) {
-                            status = { desc: 'data final nao pode ser menor que data inicial', validacao: false, id: 1 };
+                            status = { desc: 'Data Final não pode ser anterior da Data Inicial', validacao: false, id: 1 };
                             return status;
                         }
                     }

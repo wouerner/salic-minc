@@ -3,7 +3,7 @@
         <div v-if="loading">
             <Carregando :text="'Extratos Bancários'"></Carregando>
         </div>
-        <div v-else>
+        <div v-else-if="Object.keys(dadosExtratosBancarios).length > 0">
             <v-card>
                 <filtros
                     v-on:eventoSearch="search = $event"
@@ -115,8 +115,12 @@
                     tpConta: '',
                 };
                 this.buscarExtratosBancarios(params);
-                this.loading = false;
             }
+        },
+        watch: {
+            dadosExtratosBancarios() {
+                this.loading = false;
+            },
         },
         computed: {
             ...mapGetters({
