@@ -91,18 +91,20 @@
                                 <v-btn color="teal" class="white--text" :disabled="!validaCampo().validacao" @click="filtrarData()">Pesquisar</v-btn>
                             </div>
                         </v-layout>
+                        <v-layout>
+                            <v-flex xs4>
+                                <v-select
+                                    v-model="search"
+                                    :items="tpConta"
+                                    item-text="text"
+                                    item-value="id"
+                                    label="Tipo Conta"
+                                ></v-select>
+                                <v-spacer></v-spacer>
+                            </v-flex>
+                        </v-layout>
                     </v-container>
                 </template>
-                <v-card-title>
-                    <v-select
-                        v-model="search"
-                        :items="tpConta"
-                        item-text="text"
-                        item-value="id"
-                        label="Tipo Conta"
-                    ></v-select>
-                    <v-spacer></v-spacer>
-                </v-card-title>
                 <v-data-table
                     :headers="headers"
                     :items="dadosExtratosBancarios"
@@ -159,10 +161,10 @@
                         text:'Todos'
                     }
                 ],
-                date: new Date().toISOString().substr(0, 10),
+                date: '',
                 menu: false,
                 datestring: '',
-                dateFim: new Date().toISOString().substr(0, 10),
+                dateFim: '',
                 menuFim: false,
                 datestringFim:'',
                 pagination: {
