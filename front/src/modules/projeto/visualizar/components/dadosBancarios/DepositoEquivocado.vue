@@ -14,7 +14,6 @@
                         :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
                         no-data-text="Nenhum dado encontrado"
                         no-results-text="Nenhum dado encontrado"
-                        :custom-filter="customFilter"
                 >
                     <template slot="items" slot-scope="props">
                         <td class="text-xs-left" v-html="props.item.Nome"></td>
