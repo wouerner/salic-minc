@@ -312,3 +312,11 @@ export const buscarExtratosBancariosConsolidado = ({ commit }, idPronac) => {
             commit(types.SET_EXTRATOS_BANCARIOS_CONSOLIDADO, data);
         });
 };
+
+export const buscarDepositoEquivocado = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarDepositoEquivocado(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_DEPOSITO_EQUIVOCADO, data);
+        });
+};

@@ -84,9 +84,9 @@
 </template>
 <script>
 
-    import {mapActions, mapGetters} from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
-    import {utils} from '@/mixins/utils';
+    import { utils } from '@/mixins/utils';
     import moment from 'moment';
 
     export default {
@@ -149,11 +149,12 @@
         filters: {
             FormatarNrConta(valor) {
                 return valor.replace(/^(\d{2})(\d{3})(\d{3})(\d{3})(\w{1})/, '$1.$2.$3.$4-$5');
-            },},
+            },
+        },
         watch: {
             dadosExtratosConsolidado() {
                 this.loading = false;
-            }
+            },
         },
         computed: {
             ...mapGetters({

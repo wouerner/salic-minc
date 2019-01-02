@@ -37,6 +37,7 @@ export const state = {
     saldoContas: [],
     extratosBancarios: [],
     extratosBancariosConsolidado: [],
+    depositoEquivocado: [],
 };
 
 export const mutations = {
@@ -147,5 +148,8 @@ export const mutations = {
     },
     [types.SET_EXTRATOS_BANCARIOS_CONSOLIDADO](state, dados) {
         state.extratosBancariosConsolidado = dados;
+    },
+    [types.SET_DEPOSITO_EQUIVOCADO](state, dados) {
+        state.depositoEquivocado = dados;
     },
 };

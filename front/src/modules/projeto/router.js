@@ -32,6 +32,7 @@ import Liberacao from './visualizar/components/dadosBancarios/Liberacao';
 import SaldoContas from './visualizar/components/dadosBancarios/SaldoContas';
 import ExtratosBancarios from './visualizar/components/dadosBancarios/ExtratosBancarios';
 import ExtratosBancariosConsolidado from './visualizar/components/dadosBancarios/ExtratosBancariosConsolidado';
+import DepositoEquivocado from './visualizar/components/dadosBancarios/DepositoEquivocado';
 
 Vue.use(Router);
 
@@ -316,6 +317,14 @@ const routes = [
                 component: ExtratosBancariosConsolidado,
                 meta: {
                     title: 'Extratos Bancários Consolidado',
+                },
+            },
+            {
+                path: 'deposito-equivocado',
+                name: 'DepositoEquivocado',
+                component: DepositoEquivocado,
+                meta: {
+                    title: 'Deposito Equivocado',
                 },
             },
         ],

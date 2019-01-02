@@ -31,13 +31,14 @@ class tbAporteCaptacao extends MinC_Db_Table_Abstract
         $select->joinInner(array('i' => 'Interessado'), 'tbAporteCaptacao.CNPJCPF = i.CgcCPf', array('*'), 'SAC.dbo');
         $select->joinInner(array('a' => 'agentes'), 'a.CNPJCPf = i.CgcCPf', array('*'), 'Agentes.dbo');
         $select->where('nrLote = ?', self::DEPOSITO_EQUIVOCADO_NRLOTE);
+        $select->order('dtLote DESC');
         foreach ($where as $key => $value) {
             $select->where($key, $value);
         }
-        
+
         return $this->fetchAll($select);
     }
-    
+
     /**
      *
      */
@@ -51,11 +52,11 @@ class tbAporteCaptacao extends MinC_Db_Table_Abstract
         foreach ($where as $key => $value) {
             $select->where($key, $value);
         }
-        
+
         if ($dbg) {
             xd($select->assemble());
         }
-        
+
         return $this->fetchAll($select);
     }
 
