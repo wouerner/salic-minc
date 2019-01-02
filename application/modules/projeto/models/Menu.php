@@ -490,7 +490,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             $menu['dadosbancarios']['submenu'][] = [
                 'label' => 'Contas Banc&aacute;rias',
                 'title' => 'Ir para Contas Banc&aacute;rias',
-                'link' => '/default/consultardadosprojeto/dados-bancarios/?idPronac=' . $idPronacHash,
+                'link' => "/projeto/#/{$idPronacHash}/contas-bancarias",
                 'ajax' => false,
                 'grupo' => []
             ];
@@ -522,7 +522,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             $menu['dadosbancarios']['submenu'][] = [
                 'label' => 'Extrato Banc&aacute;rio Consolidado',
                 'title' => 'Ir para Extrato Banc&aacute;rio Consolidado',
-                'link' => '/default/consultardadosprojeto/extrato-conta-movimento-consolidado/?idPronac=' . $idPronacHash,
+                'link' => "/projeto/#/{$idPronacHash}/extratos-bancarios-consolidado",
                 'ajax' => false,
                 'grupo' => []
             ];
@@ -536,9 +536,9 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             ];
 
             $menu['dadosbancarios']['submenu'][] = [
-                'label' => 'Inconsist&ecirc;ncias Banc&aacute;rias',
-                'title' => 'Ir para Inconsist&ecirc;ncias Banc&aacute;rias',
-                'link' => '/default/consultardadosprojeto/inconsistencia-bancaria/?idPronac=' . $idPronacHash,
+                'label' => 'Saldo das Contas',
+                'title' => 'Ir para Saldo das Contas',
+                'link' => "/projeto/#/{$idPronacHash}/saldo-contas",
                 'ajax' => false,
                 'grupo' => []
             ];
