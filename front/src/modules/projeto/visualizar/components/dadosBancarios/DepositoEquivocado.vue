@@ -32,7 +32,6 @@
                                         class="calendario-vuetify"
                                         :max="new Date().toISOString().substr(0, 10)"
                                         v-model="date"
-                                        no-title
                                         scrollable
                                         locale="pt-br"
                                         @input="menu1 = false"
@@ -66,7 +65,6 @@
                                         class="calendario-vuetify"
                                         :max="new Date().toISOString().substr(0, 10)"
                                         v-model="dateFim"
-                                        no-title
                                         scrollable
                                         locale="pt-br"
                                         @input="menuFim = false"
