@@ -5,6 +5,78 @@
         </div>
         <div v-else>
             <v-card>
+                <v-container grid-list-md>
+                    <v-layout row wrap>
+                        <v-flex xs12 lg6>
+                            <v-menu
+                                    ref="menu"
+                                    :close-on-content-click="false"
+                                    v-model="menu1"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                            >
+                                <v-text-field
+                                        slot="activator"
+                                        v-model="datestring"
+                                        label="Escolha a data inicial da Pesquisa"
+                                        prepend-icon="event"
+                                        @blur="date = parseDate(datestring)"
+                                        mask="##/##/####"
+                                        return-masked-value
+                                ></v-text-field>
+                                <v-date-picker
+                                        class="calendario-vuetify"
+                                        :max="new Date().toISOString().substr(0, 10)"
+                                        v-model="date"
+                                        no-title
+                                        scrollable
+                                        locale="pt-br"
+                                        @input="menu1 = false"
+                                >
+                                </v-date-picker>
+                            </v-menu>
+                        </v-flex>
+                        <v-flex xs12 lg6>
+                            <v-menu
+                                    ref="menuFim"
+                                    :close-on-content-click="false"
+                                    v-model="menuFim"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                    class="pl-4"
+                            >
+                                <v-text-field
+                                        slot="activator"
+                                        v-model="datestringFim"
+                                        label="Escolha a data Final da Pesquisa"
+                                        prepend-icon="event"
+                                        @blur="dateFim = parseDate(datestringFim)"
+                                        mask="##/##/####"
+                                        return-masked-value
+                                ></v-text-field>
+                                <v-date-picker
+                                        class="calendario-vuetify"
+                                        :max="new Date().toISOString().substr(0, 10)"
+                                        v-model="dateFim"
+                                        no-title
+                                        scrollable
+                                        locale="pt-br"
+                                        @input="menuFim = false"
+                                >
+                                </v-date-picker>
+                            </v-menu>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
+
                 <v-data-table
                         :headers="headers"
                         :items="dadosDepositoEquivocado"
@@ -40,10 +112,14 @@
         name: 'DepositoEquivocado',
         data() {
             return {
-                filters: {
-                    search: '',
-                    added_by: '',
-                },
+                date: '',
+                modal: false,
+                menu1: false,
+                menu2: false,
+                datestring: '',
+                dateFim: '',
+                menuFim: false,
+                datestringFim: '',
                 search: '',
                 pagination: {
                     sortBy: 'fat',
@@ -87,6 +163,12 @@
             dadosDepositoEquivocado() {
                 this.loading = false;
             },
+            date(val) {
+                this.datestring = this.formatDate(val);
+            },
+            dateFim(val) {
+                this.datestringFim = this.formatDate(val);
+            },
         },
         computed: {
             ...mapGetters({
@@ -98,6 +180,18 @@
             ...mapActions({
                 buscarDepositoEquivocado: 'projeto/buscarDepositoEquivocado',
             }),
+            formatDate(date) {
+                if (!date) return null
+
+                const [year, month, day] = date.split('-')
+                return `${day}/${month}/${year}`
+            },
+            parseDate(date) {
+                if (!date) return null
+
+                const [day, month, year] = date.split('/')
+                return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+            },
         },
     };
 </script>
