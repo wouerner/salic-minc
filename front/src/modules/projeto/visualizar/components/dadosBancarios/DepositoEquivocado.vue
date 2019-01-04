@@ -76,10 +76,9 @@
                         </v-flex>
                     </v-layout>
                 </v-container>
-
                 <v-data-table
                         :headers="headers"
-                        :items="dadosDepositoEquivocado"
+                        :items="filteredItems()"
                         class="elevation-1 container-fluid"
                         rows-per-page-text="Items por Página"
                         :pagination.sync="pagination"
@@ -89,8 +88,8 @@
                 >
                     <template slot="items" slot-scope="props">
                         <td class="text-xs-left" v-html="props.item.Nome"></td>
-                        <td class="text-xs-right">{{ props.item.dtCredito | formatarData }}</td>
-                        <td class="text-xs-right">{{ props.item.dtLote | formatarData }}</td>
+                        <td class="text-xs-right">{{ props.item.dtCredito | FormatarData }}</td>
+                        <td class="text-xs-right">{{ props.item.dtLote | FormatarData }}</td>
                         <td class="text-xs-right">{{ props.item.vlDeposito | filtroFormatarParaReal }}</td>
                     </template>
                     <template slot="pageText" slot-scope="props">
@@ -107,11 +106,13 @@
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
     import planilhas from '@/mixins/planilhas';
+    import moment from 'moment';
 
     export default {
         name: 'DepositoEquivocado',
         data() {
             return {
+                dtLote: null,
                 date: '',
                 modal: false,
                 menu1: false,
@@ -180,17 +181,39 @@
             ...mapActions({
                 buscarDepositoEquivocado: 'projeto/buscarDepositoEquivocado',
             }),
-            formatDate(date) {
-                if (!date) return null
+            filteredItems() {
+                const filtroInicioData = new Date(this.datestring);
+                const filtroFimData = new Date(this.datestringFim);
 
-                const [year, month, day] = date.split('-')
-                return `${day}/${month}/${year}`
+                if (isNaN(filtroInicioData.getTime()) || isNaN(filtroFimData.getTime())) {
+                    return this.dadosDepositoEquivocado;
+                }
+                return this.dadosDepositoEquivocado.filter((row) => {
+                    const dtLoteTimeStamp = new Date(row.dtLote);
+                    return (
+                        (dtLoteTimeStamp.getTime() >= filtroInicioData.getTime()) &&
+                            (dtLoteTimeStamp.getTime() <= filtroFimData.getTime()));
+                });
+            },
+            formatDate(date) {
+                if (!date) return null;
+
+                const [year, month, day] = date.split('-');
+                return `${day}/${month}/${year}`;
             },
             parseDate(date) {
-                if (!date) return null
+                if (!date) return null;
 
-                const [day, month, year] = date.split('/')
-                return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+                const [day, month, year] = date.split('/');
+                return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+            },
+        },
+        filters: {
+            FormatarData(date) {
+                if (date.length === 0) {
+                    return '-';
+                }
+                return moment(date).format('DD/MM/YYYY');
             },
         },
     };
