@@ -86,10 +86,7 @@
         </v-card>
     </div>
 </template>
-
-
 <script>
-
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
     import moment from 'moment';
