@@ -44,7 +44,10 @@
                         <v-flex xs4>
                             <br>
                             <p><b>Dt. Abertura</b></p>
-                            <p>{{ dadosConta.DtLoteRemessaCB | FormatarData }}</p>
+                            <p v-if="dadosConta.DtLoteRemessaCB">
+                                {{ dadosConta.DtLoteRemessaCB | FormatarData }}
+                            </p>
+                            <p v-else> - </p>
                         </v-flex>
                         <v-flex xs4>
                             <br>
@@ -72,7 +75,10 @@
                         <v-flex xs4>
                             <br>
                             <p><b>Dt. Abertura</b></p>
-                            <p>{{ dadosConta.DtLoteRemessaCL | FormatarData}}</p>
+                            <p v-if="dadosConta.DtLoteRemessaCL">
+                                {{ dadosConta.DtLoteRemessaCL | FormatarData}}
+                            </p>
+                            <p v-else> - </p>
                         </v-flex>
                         <v-flex xs4>
                             <br>
