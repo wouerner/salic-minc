@@ -16,8 +16,10 @@
                     <td class="text-xs-left">{{ props.item.ItemOrcamentario }}</td>
                     <td class="text-xs-left" style="width: 250px">{{ props.item.CNPJCPF | cnpjFilter }}</td>
                     <td class="text-xs-left">{{ props.item.Fornecedor }}</td>
-                    <td class="text-xs-right font-weight-bold">{{ props.item.vlPagamento | filtroFormatarParaReal }}</td>
-                    <td class="text-xs-right font-weight-bold">{{ props.item.vlComprovado | filtroFormatarParaReal }}</td>
+                    <td class="text-xs-right font-weight-bold">{{ props.item.vlPagamento | filtroFormatarParaReal }}
+                    </td>
+                    <td class="text-xs-right font-weight-bold">{{ props.item.vlComprovado | filtroFormatarParaReal }}
+                    </td>
 
                     <td class="text-xs-right" v-if="props.item.vlDebitado">
                         {{ props.item.vlDebitado | filtroFormatarParaReal }}
@@ -46,9 +48,8 @@
 
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
-    import moment from 'moment';
     import cnpjFilter from '@/filters/cnpj';
-    import planilhas from '@/mixins/planilhas';
+    import { utils } from '@/mixins/utils';
 
     export default {
         name: 'InconsistenciaBancaria',
@@ -99,7 +100,7 @@
                 ],
             };
         },
-        mixins: [planilhas],
+        mixins: [utils],
         components: {
             Carregando,
         },
@@ -114,12 +115,6 @@
             },
         },
         filters: {
-            FormatarData(date) {
-                if (date.length === 0) {
-                    return '-';
-                }
-                return moment(date).format('DD/MM/YYYY');
-            },
             cnpjFilter,
         },
         computed: {
