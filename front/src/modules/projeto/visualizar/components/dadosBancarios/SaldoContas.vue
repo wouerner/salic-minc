@@ -50,10 +50,10 @@
                         <td
                                 class="text-xs-left"
                         >
-                            {{ props.item.NrConta | FormatarNrConta }}
+                            {{ props.item.NrConta | formatarConta }}
                         </td>
                         <td class="text-xs-left">{{ props.item.TipoSaldo }}</td>
-                        <td class="text-xs-right">{{ props.item.dtSaldoBancario | FormatarData }}</td>
+                        <td class="text-xs-right">{{ props.item.dtSaldoBancario | formatarData }}</td>
                         <td class="text-xs-right blue--text font-weight-bold"
                             v-if="props.item.vlSaldoBancario === 0"
                         >
@@ -89,8 +89,7 @@
 <script>
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
-    import moment from 'moment';
-    import planilhas from '@/mixins/planilhas';
+    import { utils } from '@/mixins/utils';
 
     export default {
         name: 'SaldoContas',
@@ -140,7 +139,7 @@
                 ],
             };
         },
-        mixins: [planilhas],
+        mixins: [utils],
         components: {
             Carregando,
         },
@@ -152,17 +151,6 @@
         watch: {
             dadosSaldo() {
                 this.loading = false;
-            },
-        },
-        filters: {
-            FormatarData(date) {
-                if (date.length === 0) {
-                    return '-';
-                }
-                return moment(date).format('DD/MM/YYYY');
-            },
-            FormatarNrConta(valor) {
-                return valor.replace(/^(\d{2})(\d{3})(\d{3})(\d{3})(\w{1})/, '$1.$2.$3.$4-$5');
             },
         },
         computed: {
