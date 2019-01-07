@@ -17,7 +17,7 @@
                      <td class="text-xs-left" style="width: 200px">{{ props.item.CNPJCPF | cnpjFilter }}</td>
                      <td class="text-xs-left">{{ props.item.Fornecedor }}</td>
                      <td class="text-xs-right">{{ props.item.nrDocumentoDePagamento }}</td>
-                     <td class="text-xs-right">{{ props.item.dtPagamento | FormatarData }}</td>
+                     <td class="text-xs-right">{{ props.item.dtPagamento | formatarData }}</td>
                      <td class="text-xs-right font-weight-bold">
                          {{ props.item.vlPagamento | filtroFormatarParaReal }}
                      </td>
@@ -28,7 +28,7 @@
                          {{ props.item.vlDebitado | filtroFormatarParaReal }}
                      </td>
                      <td class="text-xs-right font-weight-bold" v-else>
-                         {{ '000' | filtroFormatarParaReal}}
+                         {{ '000' | filtroFormatarParaReal }}
                      </td>
 
                      <td class="text-xs-right font-weight-bold red--text"
@@ -64,18 +64,13 @@
 
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
-    import moment from 'moment';
     import cnpjFilter from '@/filters/cnpj';
-    import planilhas from '@/mixins/planilhas';
+    import { utils } from '@/mixins/utils';
 
     export default {
         name: 'ConciliacaoBancaria',
         data() {
             return {
-
-                tblClass: 'table-bordered',
-                pageSizeOptions: [5, 10, 15, 20, 25],
-
                 search: '',
                 pagination: {
                     sortBy: 'fat',
@@ -131,7 +126,7 @@
                 ],
             };
         },
-        mixins: [planilhas],
+        mixins: [utils],
         components: {
             Carregando,
         },
@@ -142,12 +137,6 @@
             }
         },
         filters: {
-            FormatarData(date) {
-                if (date.length === 0) {
-                    return '-';
-                }
-                return moment(date).format('DD/MM/YYYY');
-            },
             cnpjFilter,
         },
         computed: {
