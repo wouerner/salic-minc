@@ -45,7 +45,7 @@
                             <br>
                             <p><b>Dt. Abertura</b></p>
                             <p v-if="dadosConta.DtLoteRemessaCB">
-                                {{ dadosConta.DtLoteRemessaCB | FormatarData }}
+                                {{ dadosConta.DtLoteRemessaCB | formatarData }}
                             </p>
                             <p v-else> - </p>
                         </v-flex>
@@ -76,7 +76,7 @@
                             <br>
                             <p><b>Dt. Abertura</b></p>
                             <p v-if="dadosConta.DtLoteRemessaCL">
-                                {{ dadosConta.DtLoteRemessaCL | FormatarData}}
+                                {{ dadosConta.DtLoteRemessaCL | formatarData}}
                             </p>
                             <p v-else> - </p>
                         </v-flex>
@@ -96,7 +96,7 @@
 
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
-    import moment from 'moment';
+    import { utils } from '@/mixins/utils';
 
     export default {
         name: 'ContasBancarias',
@@ -108,19 +108,12 @@
         components: {
             Carregando,
         },
+        mixins: [utils],
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
                 this.buscarContasBancarias(this.dadosProjeto.idPronac);
                 this.loading = false;
             }
-        },
-        filters: {
-            FormatarData(date) {
-                if (date.length === 0) {
-                    return '-';
-                }
-                return moment(date).format('DD/MM/YYYY');
-            },
         },
         computed: {
             ...mapGetters({
