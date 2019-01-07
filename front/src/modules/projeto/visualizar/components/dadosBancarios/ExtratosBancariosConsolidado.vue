@@ -49,7 +49,7 @@
                 >
                     <template slot="items" slot-scope="props">
                         <td class="text-xs-left" v-html="props.item.TipoConta"></td>
-                        <td class="text-xs-right">{{ props.item.NrConta | FormatarNrConta }}</td>
+                        <td class="text-xs-right">{{ props.item.NrConta | formatarConta }}</td>
                         <td class="text-xs-right">{{ props.item.Codigo }}</td>
                         <td class="text-xs-left" v-html="props.item.Lancamento"></td>
 
@@ -87,7 +87,6 @@
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
     import { utils } from '@/mixins/utils';
-    import moment from 'moment';
 
     export default {
         name: 'ExtratosBancariosConsolidado',
@@ -145,11 +144,6 @@
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
                 this.buscarExtratosBancariosConsolidado(this.dadosProjeto.idPronac);
             }
-        },
-        filters: {
-            FormatarNrConta(valor) {
-                return valor.replace(/^(\d{2})(\d{3})(\d{3})(\d{3})(\w{1})/, '$1.$2.$3.$4-$5');
-            },
         },
         watch: {
             dadosExtratosConsolidado() {

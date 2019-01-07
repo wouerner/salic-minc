@@ -80,7 +80,7 @@ export const utils = {
     },
     filters: {
         formatarData(date) {
-            if (date && date.length === 0) {
+            if (date === null || date.length === 0) {
                 return '-';
             }
             return moment(date)
@@ -95,12 +95,11 @@ export const utils = {
         },
         formatarConta(conta) {
             // formato: 99999-9
-            conta = parseInt(conta);
-            return conta.toString().replace(/(\d)(\d{1})$/, '$1-$2');
+            return conta.toString().replace(/^\d{6}(.+)(\w{1})$/, "$1-$2");
         },
         filtroFormatarParaReal(value) {
             const parsedValue = parseFloat(value);
             return numeral(parsedValue).format('0,0.00');
         },
     },
-}
+};
