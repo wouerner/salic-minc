@@ -39,15 +39,13 @@
                         <v-flex xs4>
                             <br>
                             <p><b>Número</b></p>
-                            <p>{{ dadosConta.ContaBloqueada | formatarConta }}</p>
+                            <p>{{ dadosConta.ContaBloqueada  }}</p>
                         </v-flex>
                         <v-flex xs4>
                             <br>
                             <p><b>Dt. Abertura</b></p>
-                            <p v-if="dadosConta.DtLoteRemessaCB">
-                                {{ dadosConta.DtLoteRemessaCB | formatarData }}
+                            <p >{{ dadosConta.DtLoteRemessaCB | formatarData }}
                             </p>
-                            <p v-else> - </p>
                         </v-flex>
                         <v-flex xs4>
                             <br>
@@ -70,15 +68,13 @@
                         <v-flex xs4>
                             <br>
                             <p><b>Número</b></p>
-                            <p>{{ dadosConta.ContaLivre |formatarConta }}</p>
+                            <p>{{ dadosConta.ContaLivre  }}</p>
                         </v-flex>
                         <v-flex xs4>
                             <br>
                             <p><b>Dt. Abertura</b></p>
-                            <p v-if="dadosConta.DtLoteRemessaCL">
-                                {{ dadosConta.DtLoteRemessaCL | formatarData }}
+                            <p>{{ dadosConta.DtLoteRemessaCL | formatarData }}
                             </p>
-                            <p v-else> - </p>
                         </v-flex>
                         <v-flex xs4>
                             <br>
