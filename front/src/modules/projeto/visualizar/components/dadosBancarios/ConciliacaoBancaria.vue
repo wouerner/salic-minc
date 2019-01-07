@@ -47,7 +47,7 @@
                  <!--</form>-->
                  <!--http://local.salic/consultardadosprojeto/imprimir-conciliacao-bancaria? pag=1&qtde=10&dtLancamento=&dtLancamentoFim=&idPronac=155263&campo=&ordem=ASC&tpConta=-->
              </v-data-table>
-             <div class="text-xs-center">
+             <div v-if="Object.keys(dadosConciliacao).length > 0" class="text-xs-center">
                  <v-btn round
                         dark
                         target="_blank"

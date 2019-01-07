@@ -530,7 +530,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             $menu['dadosbancarios']['submenu'][] = [
                 'label' => 'Concilia&ccedil;&atilde;o Banc&aacute;ria',
                 'title' => 'Ir para Concilia&ccedil;&atilde;o Banc&aacute;ria',
-                'link' => '/default/consultardadosprojeto/conciliacao-bancaria/?idPronac=' . $idPronacHash,
+                'link' => "/projeto/#/{$idPronacHash}/conciliacao-bancaria",
                 'ajax' => false,
                 'grupo' => []
             ];

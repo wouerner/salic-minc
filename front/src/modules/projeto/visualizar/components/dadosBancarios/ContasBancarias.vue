@@ -22,7 +22,7 @@
                         <v-flex xs6 offset-xs2>
                             <br>
                             <p><b>Agência</b></p>
-                            <p>{{ dadosConta.Agencia }}</p>
+                            <p>{{ dadosConta.Agencia | formatarAgencia }}</p>
                         </v-flex>
                     </v-layout>
                 </v-container>
@@ -39,7 +39,7 @@
                         <v-flex xs4>
                             <br>
                             <p><b>Número</b></p>
-                            <p>{{ dadosConta.ContaBloqueada }}</p>
+                            <p>{{ dadosConta.ContaBloqueada | formatarConta }}</p>
                         </v-flex>
                         <v-flex xs4>
                             <br>
@@ -70,13 +70,13 @@
                         <v-flex xs4>
                             <br>
                             <p><b>Número</b></p>
-                            <p>{{ dadosConta.ContaLivre }}</p>
+                            <p>{{ dadosConta.ContaLivre |formatarConta }}</p>
                         </v-flex>
                         <v-flex xs4>
                             <br>
                             <p><b>Dt. Abertura</b></p>
                             <p v-if="dadosConta.DtLoteRemessaCL">
-                                {{ dadosConta.DtLoteRemessaCL | formatarData}}
+                                {{ dadosConta.DtLoteRemessaCL | formatarData }}
                             </p>
                             <p v-else> - </p>
                         </v-flex>
