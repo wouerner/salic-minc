@@ -27,18 +27,9 @@ class DepositoEquivocado
             $idPronac = \Seguranca::dencrypt($idPronac);
         }
 
-        # aportes
         $whereData = ['idPronac = ?' => $idPronac, 'nrLote = ?' => -1];
-//        if ($this->getRequest()->getParam('dtDevolucaoInicio')) {
-//            $whereData['dtLote >= ?'] = ConverteData($this->getRequest()->getParam('dtDevolucaoInicio'), 13);
-//        }
-//        if ($this->getRequest()->getParam('dtDevolucaoFim')) {
-//            $whereData['dtLote <= ?'] = ConverteData($this->getRequest()->getParam('dtDevolucaoFim'), 13);
-//        }
         $aporteModel = new \tbAporteCaptacao();
         $dados = $aporteModel->pesquisarDepositoEquivocado($whereData)->toArray();
-//        $this->view->dataDevolucaoInicio = $this->getRequest()->getParam('dtDevolucaoInicio');
-//        $this->view->dataDevolucaoFim = $this->getRequest()->getParam('dtDevolucaoFim');
 
         return $dados;
     }

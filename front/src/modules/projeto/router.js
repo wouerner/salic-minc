@@ -324,7 +324,7 @@ const routes = [
                 name: 'DepositoEquivocado',
                 component: DepositoEquivocado,
                 meta: {
-                    title: 'Deposito Equivocado',
+                    title: 'Depósito Equivocado',
                 },
             },
         ],
