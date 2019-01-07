@@ -3,7 +3,7 @@
         <div v-if="loading">
             <Carregando :text="'Liberação'"></Carregando>
         </div>
-        <div v-else>
+        <div v-else-if="Object.keys(dadosLiberacao).length > 0">
             <v-card>
                 <v-subheader class="justify-center">
                     <div>
@@ -17,7 +17,7 @@
                         <v-flex xs4 offset-xs1>
                             <br>
                             <p><b>Dt. Liberação</b></p>
-                            <p>{{ dadosLiberacao.DtLiberacao | FormatarData }}</p>
+                            <p>{{ dadosLiberacao.DtLiberacao | formatarData }}</p>
                         </v-flex>
                         <v-flex xs4 offset-xs1>
                             <br>
@@ -33,13 +33,24 @@
                 </v-container>
             </v-card>
         </div>
+        <v-layout v-else>
+            <v-container grid-list-md text-xs-center>
+                <v-layout row wrap>
+                    <v-flex>
+                        <v-card>
+                            <v-card-text class="px-0">Nenhuma Liberação encontrada</v-card-text>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </v-layout>
     </div>
 </template>
 <script>
 
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
-    import moment from 'moment';
+    import { utils } from '@/mixins/utils';
 
     export default {
         name: 'Liberacao',
@@ -57,14 +68,7 @@
                 this.loading = false;
             }
         },
-        filters: {
-            FormatarData(date) {
-                if (date.length === 0) {
-                    return '-';
-                }
-                return moment(date).format('DD/MM/YYYY');
-            },
-        },
+        mixins: [utils],
         computed: {
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',

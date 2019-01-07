@@ -29,7 +29,9 @@ class Liberacao
         }
         if (!empty($idPronac)) {
             $tbLiberacao = new \Liberacao();
-            $rsLiberacao = $tbLiberacao->liberacaoPorProjeto($idPronac)->toArray();
+            $rsLiberacao = $tbLiberacao->liberacaoPorProjeto($idPronac);
+            $rsLiberacao = $rsLiberacao ? $rsLiberacao->toArray() : [];
+
             return $rsLiberacao;
         }
     }
