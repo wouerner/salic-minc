@@ -133,15 +133,15 @@
             ...mapActions({
                 buscarExtratosBancarios: 'projeto/buscarExtratosBancarios',
             }),
-             filtrarData(response) {
-                    const params = {
-                        idPronac: this.dadosProjeto.idPronac,
-                        dtLancamento: response.dtLancamento,
-                        dtLancamentoFim: response.dtLancamentoFim,
-                        tpConta: response.tpConta
-                    };
-                    this.buscarExtratosBancarios(params);
-                },
+            filtrarData(response) {
+                const params = {
+                    idPronac: this.dadosProjeto.idPronac,
+                    dtLancamento: response.dtLancamento,
+                    dtLancamentoFim: response.dtLancamentoFim,
+                    tpConta: response.tpConta
+                };
+                this.buscarExtratosBancarios(params);
+            },
         },
     };
 </script>
