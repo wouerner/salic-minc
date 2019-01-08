@@ -38,6 +38,7 @@ export const state = {
     extratosBancarios: [],
     extratosBancariosConsolidado: [],
     depositoEquivocado: [],
+    captacao: [],
 };
 
 export const mutations = {
@@ -151,5 +152,8 @@ export const mutations = {
     },
     [types.SET_DEPOSITO_EQUIVOCADO](state, dados) {
         state.depositoEquivocado = dados;
+    },
+    [types.SET_CAPTACAO](state, dados) {
+        state.captacao = dados;
     },
 };

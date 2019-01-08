@@ -320,3 +320,11 @@ export const buscarDepositoEquivocado = ({ commit }, idPronac) => {
             commit(types.SET_DEPOSITO_EQUIVOCADO, data);
         });
 };
+
+export const buscarCaptacao = ({ commit }, params) => {
+    projetoHelperAPI.buscarCaptacao(params)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_CAPTACAO, data);
+        });
+};
