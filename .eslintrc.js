@@ -50,5 +50,8 @@ module.exports = {
         'import/prefer-default-export': 'off',
         // Indent with 4 spaces
         "indent": ["error", 4],
+        'vue/html-indent': ['error', 4,  {
+            alignAttributesVertically: true
+        }],
     }
 }
