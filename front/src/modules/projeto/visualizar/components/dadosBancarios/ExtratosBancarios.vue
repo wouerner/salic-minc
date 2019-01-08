@@ -5,10 +5,11 @@
         </div>
         <div v-else-if="Object.keys(dadosExtratosBancarios).length > 0">
             <v-card>
-                <filtros
+                <FiltrosExtratosBancarios
                     v-on:eventoSearch="search = $event"
+                    v-on:eventoFiltrarData="filtrarData"
                 >
-                </filtros>
+                </FiltrosExtratosBancarios>
                 <v-data-table
                     :headers="headers"
                     :items="dadosExtratosBancarios"
@@ -45,7 +46,7 @@
     import Carregando from '@/components/CarregandoVuetify';
     import { utils } from '@/mixins/utils';
     import moment from 'moment';
-    import Filtros  from './components/Filtros';
+    import FiltrosExtratosBancarios  from './components/FiltrosExtratosBancarios';
 
     export default {
         name: 'ExtratosBancarios',
@@ -104,7 +105,7 @@
         mixins: [utils],
         components: {
             Carregando,
-            Filtros,
+            FiltrosExtratosBancarios,
         },
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
@@ -132,6 +133,15 @@
             ...mapActions({
                 buscarExtratosBancarios: 'projeto/buscarExtratosBancarios',
             }),
+             filtrarData(response) {
+                    const params = {
+                        idPronac: this.dadosProjeto.idPronac,
+                        dtLancamento: response.dtLancamento,
+                        dtLancamentoFim: response.dtLancamentoFim,
+                        tpConta: response.tpConta
+                    };
+                    this.buscarExtratosBancarios(params);
+                },
         },
     };
 </script>

@@ -103,10 +103,9 @@
     </div>
 </template>
 <script>
-    import { mapActions, mapGetters } from 'vuex';
 
     export default {
-        name: 'ExtratosBancarios',
+        name: 'FiltrosExtratosBancarios',
         data() {
                 return {
                     search: '',
@@ -132,12 +131,6 @@
                     datestringFim:'',
                 };
             },
-            computed: {
-                ...mapGetters({
-                    dadosProjeto: 'projeto/projeto',
-                    dadosExtratosBancarios: 'projeto/extratosBancarios',
-                }),
-            },
             watch: {
                 date(val) {
                     this.datestring = this.formatDate(val);
@@ -150,9 +143,6 @@
                 },
             },
             methods: {
-                ...mapActions({
-                    buscarExtratosBancarios: 'projeto/buscarExtratosBancarios',
-                }),
                 formatDate (date) {
                     if (!date) return null
 
@@ -167,12 +157,11 @@
                 },
                 filtrarData() {
                     const params = {
-                        idPronac: this.dadosProjeto.idPronac,
                         dtLancamento: this.date,
                         dtLancamentoFim: this.dateFim,
                         tpConta: ''
                     };
-                    this.buscarExtratosBancarios(params);
+                    this.$emit('eventoFiltrarData', params);
                 },
                 validaCampo() {
                     let status = {
