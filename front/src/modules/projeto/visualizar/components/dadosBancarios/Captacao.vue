@@ -5,6 +5,10 @@
         </div>
         <div v-else-if="Object.keys(dadosCaptacao).length > 0">
             <v-card>
+                <FiltroData
+                    v-on:eventoFiltrarData="filtrarData"
+                >
+                </FiltroData>
                 <v-data-table
                     :headers="headers"
                     :items="dadosCaptacao"
@@ -58,6 +62,7 @@
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
     import { utils } from '@/mixins/utils';
+    import FiltroData  from './components/FiltroData';
 
     export default {
         name: 'Captacao',
@@ -116,13 +121,14 @@
         mixins: [utils],
         components: {
             Carregando,
+            FiltroData,
         },
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
                 const params = {
                     idPronac: this.dadosProjeto.idPronac,
-                    dtReciboInicio: '',
-                    dtReciboFim: '',
+                    dtInicio: '',
+                    dtFim: '',
                 };
                 this.buscarCaptacao(params);
             }
@@ -142,6 +148,14 @@
             ...mapActions({
                 buscarCaptacao: 'projeto/buscarCaptacao',
             }),
+            filtrarData(response) {
+                const params = {
+                    idPronac: this.dadosProjeto.idPronac,
+                    dtInicio: response.dtInicio,
+                    dtFim: response.dtFim,
+                };
+                this.buscarCaptacao(params);
+            },
         },
     };
 </script>

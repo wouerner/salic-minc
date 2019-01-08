@@ -317,6 +317,6 @@ export const buscarCaptacao = (params) => {
     const controller = '/captacao-rest';
     const metodo = '/index';
     const path = `${modulo}${controller}${metodo}`;
-    const queryParams = `?idPronac=${params.idPronac}&dtReciboInicio=${params.dtReciboInicio}&dtReciboFim=${params.dtReciboFim}`;
+    const queryParams = `?idPronac=${params.idPronac}&dtReciboInicio=${params.dtInicio}&dtReciboFim=${params.dtFim}`;
     return api.getRequest(path, queryParams);
 };

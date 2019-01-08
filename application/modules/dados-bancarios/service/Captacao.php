@@ -38,7 +38,7 @@ class Captacao
             if (!empty($dtReciboInicio) && !empty($dtReciboFim)) {
                 $di = ConverteData($dtReciboInicio, 13)." 00:00:00";
                 $df = ConverteData($dtReciboFim, 13)." 00:00:00";
-                $where["dtLancamento BETWEEN '$di' AND '$df'"] = '';
+                $where["c.DtRecibo BETWEEN '$di' AND '$df'"] = '';
             }
 
             $result = $Captacao->painelDadosBancariosCaptacao($where, null, null, null, false)->toArray();
