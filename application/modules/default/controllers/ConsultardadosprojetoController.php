@@ -2030,7 +2030,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
                 }
             }
 
-            $isPermitidoVisualizarRelatorio = in_array(
+            $isPermitidoVisualizarRelatorio = $this->view->usuarioInterno || in_array(
                 $dadosProjeto->situacao,
                 Projeto_Model_Situacao::obterSituacoesPermitidoVisualizarPrestacaoContas()
             );
