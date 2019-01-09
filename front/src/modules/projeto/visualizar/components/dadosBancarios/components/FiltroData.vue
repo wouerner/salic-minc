@@ -86,18 +86,6 @@
                         <v-btn color="teal" class="white--text" :disabled="!validaCampo().validacao" @click="filtrarData()">Pesquisar</v-btn>
                     </div>
                 </v-layout>
-                <!-- <v-layout>
-                    <v-flex xs4>
-                        <v-select
-                            v-model="search"
-                            :items="tpConta"
-                            item-text="text"
-                            item-value="id"
-                            label="Tipo Conta"
-                        ></v-select>
-                        <v-spacer></v-spacer>
-                    </v-flex>
-                </v-layout> -->
             </v-container>
         </template>
     </div>
@@ -107,96 +95,78 @@
     export default {
         name: 'FiltroData',
         data() {
-                return {
-                    // search: '',
-                    // tpConta: [
-                    //     {
-                    //         id:'Captação',
-                    //         text:'Captação'
-                    //     },
-                    //     {
-                    //         id:'Movimentação',
-                    //         text:'Movimentação'
-                    //     },
-                    //     {
-                    //         id:'',
-                    //         text:'Todos'
-                    //     }
-                    // ],
-                    date: '',
-                    menu: false,
-                    datestring: '',
-                    dateFim: '',
-                    menuFim: false,
-                    datestringFim:'',
+            return {
+                date: '',
+                menu: false,
+                datestring: '',
+                dateFim: '',
+                menuFim: false,
+                datestringFim:'',
+            };
+        },
+        watch: {
+            date(val) {
+                this.datestring = this.formatDate(val);
+            },
+            dateFim(val) {
+                this.datestringFim = this.formatDate(val);
+            },
+        },
+        methods: {
+            formatDate (date) {
+                if (!date) return null
+
+                const [year, month, day] = date.split('-')
+                return `${day}/${month}/${year}`
+            },
+            parseDate (date) {
+                if (!date) return null
+
+                const [day, month, year] = date.split('/')
+                return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+            },
+            filtrarData() {
+                const params = {
+                    dtInicio: this.date,
+                    dtFim: this.dateFim,
                 };
+                this.$emit('eventoFiltrarData', params);
             },
-            watch: {
-                date(val) {
-                    this.datestring = this.formatDate(val);
-                },
-                dateFim(val) {
-                    this.datestringFim = this.formatDate(val);
-                },
-                // search(val) {
-                //     this.$emit('eventoSearch', val)
-                // },
-            },
-            methods: {
-                formatDate (date) {
-                    if (!date) return null
-
-                    const [year, month, day] = date.split('-')
-                    return `${day}/${month}/${year}`
-                },
-                parseDate (date) {
-                    if (!date) return null
-
-                    const [day, month, year] = date.split('/')
-                    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-                },
-                filtrarData() {
-                    const params = {
-                        dtInicio: this.date,
-                        dtFim: this.dateFim,
-                    };
-                    this.$emit('eventoFiltrarData', params);
-                },
-                validaCampo() {
-                    let status = {
-                        desc: '',
-                        validacao: false,
-                        id: 0
-                    };
-                    if( this.date === '' && this.dateFim === '') {
-                        status = { desc: '', validacao: false, id: 2 };
-                        return status;
-                    }
-                    if( this.date === '' && this.dateFim !== '') {
-                        status = { desc: 'Escolha a data inicial', validacao: false, id: 1 };
-                        return status;
-                    }
-                    else if(this.date !== '' && this.dateFim === '') {
-                        status = { desc: 'Escolha a data final', validacao: false, id: 1 };
-                        return status;
-                    }
-                    if( this.date === this.dateFim ) {
-                        status = { desc: '', validacao: true, id: 3 };
-                        return status;
-                    }
-                    if(this.date !== '' &&  this.dateFim !== '') {
-                        if( Date.parse(this.date) > Date.parse(this.dateFim)){
-                            status = { desc: 'Data Inicial não pode ser mais recente que a Data Final', validacao: false, id: 1 };
-                            return status;
-                        }
-                        else if ( !(Date.parse(this.date) < Date.parse(this.dateFim))) {
-                            status = { desc: 'Data Final não pode ser anterior da Data Inicial', validacao: false, id: 1 };
-                            return status;
-                        }
-                    }
-                    status = { desc: 'tudo certo', validacao: true, id: 3 };
+            validaCampo() {
+                let status = {
+                    desc: '',
+                    validacao: false,
+                    id: 0
+                };
+                if( this.date === '' && this.dateFim === '') {
+                    status = { desc: '', validacao: false, id: 2 };
                     return status;
-                },
+                }
+                if( this.date === '' && this.dateFim !== '') {
+                    status = { desc: 'Escolha a data inicial', validacao: false, id: 1 };
+                    return status;
+                }
+                else if(this.date !== '' && this.dateFim === '') {
+                    status = { desc: 'Escolha a data final', validacao: false, id: 1 };
+                    return status;
+                }
+                if( this.date === this.dateFim ) {
+                    status = { desc: '', validacao: true, id: 3 };
+                    return status;
+                }
+                if(this.date !== '' &&  this.dateFim !== '') {
+                    if( Date.parse(this.date) > Date.parse(this.dateFim)){
+                        status = { desc: 'Data Inicial não pode ser mais recente que a Data Final', validacao: false, id: 1 };
+                        return status;
+                    }
+                    else if ( !(Date.parse(this.date) < Date.parse(this.dateFim))) {
+                        status = { desc: 'Data Final não pode ser anterior da Data Inicial', validacao: false, id: 1 };
+                        return status;
+                    }
+                }
+                status = { desc: 'tudo certo', validacao: true, id: 3 };
+                return status;
             },
+        },
     };
 </script>
