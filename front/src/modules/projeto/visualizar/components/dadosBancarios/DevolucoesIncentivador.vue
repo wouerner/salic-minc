@@ -3,7 +3,7 @@
         <div v-if="loading">
             <Carregando :text="'Devoluções do Incentivador'"></Carregando>
         </div>
-        <div v-else-if="Object.keys(dadosDevolucoesIncentivador).length > 0">
+        <div v-else>
             <v-card>
                 <FiltroData
                     v-on:eventoFiltrarData="filtrarData"

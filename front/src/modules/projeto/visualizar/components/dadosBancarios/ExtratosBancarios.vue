@@ -3,7 +3,7 @@
         <div v-if="loading">
             <Carregando :text="'Extratos Bancários'"></Carregando>
         </div>
-        <div v-else-if="Object.keys(dadosExtratosBancarios).length > 0">
+        <div v-else>
             <v-card>
                 <FiltroData
                     v-on:eventoFiltrarData="filtrarData"
@@ -39,7 +39,7 @@
                     </template>
                 </v-data-table>
             </v-card>
-            
+
         </div>
     </div>
 </template>
@@ -79,7 +79,7 @@
                     },
                     {
                         text: 'LANÇAMENTO',
-                        align: 'center',
+                        align: 'left',
                         value: 'Lancamento',
                     },
                     {
