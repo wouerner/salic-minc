@@ -498,7 +498,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             $menu['dadosbancarios']['submenu'][] = [
                 'label' => 'Libera&ccedil;&atilde;o',
                 'title' => 'Ir para Libera&ccedil;&atilde;o',
-                'link' => '/default/consultardadosprojeto/dados-bancarios-liberacao/?idPronac=' . $idPronacHash,
+                'link' => "/projeto/#/{$idPronacHash}/liberacao",
                 'ajax' => false,
                 'grupo' => []
             ];
@@ -506,7 +506,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             $menu['dadosbancarios']['submenu'][] = [
                 'label' => 'Capta&ccedil;&atilde;o',
                 'title' => 'Ir para Capta&ccedil;&atilde;o',
-                'link' => '/default/consultardadosprojeto/dados-bancarios-captacao/?idPronac=' . $idPronacHash,
+                'link' => "/projeto/#/{$idPronacHash}/captacao",
                 'ajax' => false,
                 'grupo' => []
             ];
@@ -514,7 +514,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             $menu['dadosbancarios']['submenu'][] = [
                 'label' => 'Extrato Banc&aacute;rio',
                 'title' => 'Ir para Extrato Banc&aacute;rio',
-                'link' => '/default/consultardadosprojeto/extratos-bancarios/?idPronac=' . $idPronacHash,
+                'link' => "/projeto/#/{$idPronacHash}/extratos-bancarios",
                 'ajax' => false,
                 'grupo' => []
             ];
@@ -562,7 +562,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             $menu['dadosbancarios']['submenu'][] = [
                 'label' => 'Devolu&ccedil;&otilde;es do Incentivador',
                 'title' => 'Ir para Devolu&ccedil;&otilde;es do Incentivador',
-                'link' => '/default/consultardadosprojeto/devolucoes-do-incentivador/?idPronac=' . $idPronacHash,
+                'link' => "/projeto/#/{$idPronacHash}/devolucoes-incentivador",
                 'ajax' => false,
                 'grupo' => []
             ];
