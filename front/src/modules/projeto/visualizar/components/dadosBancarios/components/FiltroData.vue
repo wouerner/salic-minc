@@ -82,7 +82,7 @@
                             </v-date-picker>
                         </v-menu>
                     </v-flex>
-                    <div class="pt-4 pl-4">
+                    <div class="pt-2 pl-2">
                         <v-btn color="teal" class="white--text" :disabled="!validaCampo().validacao"
                                @click="filtrarData()">Pesquisar
                         </v-btn>
