@@ -5,11 +5,14 @@
         </div>
         <div v-else-if="Object.keys(dadosExtratosBancarios).length > 0">
             <v-card>
-                <FiltrosExtratosBancarios
-                    v-on:eventoSearch="search = $event"
+                <FiltroData
                     v-on:eventoFiltrarData="filtrarData"
                 >
-                </FiltrosExtratosBancarios>
+                </FiltroData>
+                <FiltroTipoConta
+                    v-on:eventoSearch="search = $event"
+                >
+                </FiltroTipoConta>
                 <v-data-table
                     :headers="headers"
                     :items="dadosExtratosBancarios"
@@ -45,8 +48,8 @@
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
     import { utils } from '@/mixins/utils';
-    import moment from 'moment';
-    import FiltrosExtratosBancarios  from './components/FiltrosExtratosBancarios';
+    import FiltroData  from './components/FiltroData';
+    import FiltroTipoConta  from './components/FiltroTipoConta';
 
     export default {
         name: 'ExtratosBancarios',
@@ -105,7 +108,8 @@
         mixins: [utils],
         components: {
             Carregando,
-            FiltrosExtratosBancarios,
+            FiltroData,
+            FiltroTipoConta,
         },
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
@@ -136,9 +140,9 @@
             filtrarData(response) {
                 const params = {
                     idPronac: this.dadosProjeto.idPronac,
-                    dtLancamento: response.dtLancamento,
-                    dtLancamentoFim: response.dtLancamentoFim,
-                    tpConta: response.tpConta
+                    dtLancamento: response.dtInicio,
+                    dtLancamentoFim: response.dtFim,
+                    tpConta: this.search,
                 };
                 this.buscarExtratosBancarios(params);
             },
