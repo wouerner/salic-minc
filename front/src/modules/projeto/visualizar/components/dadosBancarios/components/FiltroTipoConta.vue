@@ -4,13 +4,32 @@
             <v-container fluid>
                 <v-layout>
                     <v-flex xs4>
-                        <v-select
-                            v-model="search"
-                            :items="tpConta"
-                            item-text="text"
-                            item-value="id"
-                            label="Tipo Conta"
-                        ></v-select>
+                        <v-combobox
+                                v-model="search"
+                                :items="items"
+                                label="Tipo da Conta"
+                                chips
+                                solo
+                        >
+                            <template
+                                    slot="selection"
+                                    slot-scope="data"
+                            >
+                                <v-chip
+                                        :selected="data.selected"
+                                        :disabled="data.disabled"
+                                        :key="JSON.stringify(data.item)"
+                                        class="v-chip--select-multi"
+                                        @input="data.parent.selectItem(data.item)"
+                                >
+                                    <v-avatar
+                                            class="primary white--text"
+                                            v-text="data.item.slice(0, 1).toUpperCase()"
+                                    ></v-avatar>
+                                    {{ data.item }}
+                                </v-chip>
+                            </template>
+                        </v-combobox>
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -37,6 +56,10 @@
                         id:'',
                         text:'Todos'
                     }
+                ],
+                items: [
+                    'Captação',
+                    'Movimentação',
                 ],
             };
         },
