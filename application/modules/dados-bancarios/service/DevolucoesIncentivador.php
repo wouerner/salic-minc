@@ -41,7 +41,7 @@ class DevolucoesIncentivador
                 $where["dtLote BETWEEN '$di' AND '$df'"] = '';
             }
 
-            $result = $devolucoesIncentivador->pesquisarDevolucoesIncentivador($where)->toArray();
+            $result = $devolucoesIncentivador->devolucoesDoIncentivador($where)->toArray();
 
             return $result;
         }

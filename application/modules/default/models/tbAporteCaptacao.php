@@ -131,4 +131,39 @@ class tbAporteCaptacao extends MinC_Db_Table_Abstract
         #
         $this->getAdapter()->commit();
     }
+
+    /**
+     *
+     */
+    public function devolucoesDoIncentivador(array $where, $dbg = false)
+    {
+        $select = $this->select()->setIntegrityCheck(false);
+        $select->from($this->_name, [
+            'idPronac',
+            'vlDeposito',
+            'dtLote',
+            "dtCredito" => new Zend_Db_Expr("CASE WHEN dtCredito = '1969-12-31' THEN null ELSE dtCredito END")
+        ]);
+        $select->joinInner(
+            [
+                'i' => 'Interessado'
+            ],
+            'tbAporteCaptacao.CNPJCPF = i.CgcCPf',
+            [
+                'Nome'
+            ],
+            'SAC.dbo'
+        );
+        $select->joinInner(array('a' => 'agentes'), 'a.CNPJCPf = i.CgcCPf', array('*'), 'Agentes.dbo');
+        $select->where('idVerificacao = ?', Verificacao::DEVOLUCAO_FUNDO_NACIONAL_CULTURA);
+        foreach ($where as $key => $value) {
+            $select->where($key, $value);
+        }
+
+        if ($dbg) {
+            xd($select->assemble());
+        }
+
+        return $this->fetchAll($select);
+    }
 }

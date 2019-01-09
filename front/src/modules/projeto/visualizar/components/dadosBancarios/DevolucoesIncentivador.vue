@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="loading">
-            <Carregando :text="'Captação'"></Carregando>
+            <Carregando :text="'Devoluções do Incentivador'"></Carregando>
         </div>
         <div v-else-if="Object.keys(dadosDevolucoesIncentivador).length > 0">
             <v-card>
