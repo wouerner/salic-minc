@@ -265,8 +265,8 @@ export const buscarContasBancarias = ({ commit }, idPronac) => {
         });
 };
 
-export const buscarConciliacaoBancaria = ({ commit }, idPronac) => {
-    projetoHelperAPI.buscarConciliacaoBancaria(idPronac)
+export const buscarConciliacaoBancaria = ({ commit }, params) => {
+    projetoHelperAPI.buscarConciliacaoBancaria(params)
         .then((response) => {
             const data = response.data.data.items;
             commit(types.SET_CONCILIACAO_BANCARIA, data);
@@ -313,8 +313,8 @@ export const buscarExtratosBancariosConsolidado = ({ commit }, idPronac) => {
         });
 };
 
-export const buscarDepositoEquivocado = ({ commit }, idPronac) => {
-    projetoHelperAPI.buscarDepositoEquivocado(idPronac)
+export const buscarDepositoEquivocado = ({ commit }, params) => {
+    projetoHelperAPI.buscarDepositoEquivocado(params)
         .then((response) => {
             const data = response.data.data.items;
             commit(types.SET_DEPOSITO_EQUIVOCADO, data);
