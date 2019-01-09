@@ -36,10 +36,10 @@
                 </v-subheader>
                 <v-container>
                     <v-layout>
-                        <v-flex xs4>
+                        <v-flex xs4 offset-xs2>
                             <br>
                             <p><b>Número</b></p>
-                            <p>{{ dadosConta.ContaBloqueada  }}</p>
+                            <p>{{ dadosConta.ContaBloqueada | formatarConta  }}</p>
                         </v-flex>
                         <v-flex xs4>
                             <br>
@@ -65,10 +65,10 @@
                 </v-subheader>
                 <v-container>
                     <v-layout>
-                        <v-flex xs4>
+                        <v-flex xs4 offset-xs2>
                             <br>
                             <p><b>Número</b></p>
-                            <p>{{ dadosConta.ContaLivre  }}</p>
+                            <p>{{ dadosConta.ContaLivre | formatarConta  }}</p>
                         </v-flex>
                         <v-flex xs4>
                             <br>
