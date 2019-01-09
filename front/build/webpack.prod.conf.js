@@ -1,19 +1,17 @@
-'use strict'
-const path = require('path')
-const utils = require('./utils')
-const webpack = require('webpack')
-const config = require('../config')
-const merge = require('webpack-merge')
-const baseWebpackConfig = require('./webpack.base.conf')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
+'use strict';
+const path = require('path');
+const webpack = require('webpack');
+const config = require('../config');
+const merge = require('webpack-merge');
+const baseWebpackConfig = require('./webpack.base.conf');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin');
+const terserOptions = require('../config/terserOptions');
 
-const env = require('../config/prod.env')
+const env = require('../config/prod.env');
 
 const webpackConfig = merge(baseWebpackConfig, {
     mode: 'production',
@@ -39,15 +37,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         namedModules: true,
         namedChunks: true,
         minimizer: [
-            new UglifyJsPlugin({
-                uglifyOptions: {
-                    compress: {
-                        warnings: false
-                    }
-                },
-                sourceMap: config.build.productionSourceMap,
-                parallel: true
-            }),
+            new TerserPlugin(terserOptions(config.build)),
             new OptimizeCSSAssetsPlugin({})
         ]
     },
