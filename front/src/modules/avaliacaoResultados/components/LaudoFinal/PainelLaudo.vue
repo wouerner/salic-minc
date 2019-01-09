@@ -102,7 +102,7 @@ export default {
     },
     created() {
         this.obterProjetosLaudoFinal({ estadoId: 10 });
-        this.obterProjetosLaudoAssinar({ estadoId: this.assinarPerfil() });
+        this.obterProjetosLaudoAssinar(this.assinarPerfil());
         this.obterProjetosLaudoEmAssinatura({ estadoId: 11 });
         this.obterProjetosLaudoFinalizados({ estadoId: 12 });
         this.obterDadosTabelaTecnico({ estadoId: 11, idAgente: this.getUsuario.usu_codigo });
@@ -119,14 +119,14 @@ export default {
             obterProjetosLaudoFinalizados: 'avaliacaoResultados/obterProjetosLaudoFinalizados',
         }),
         assinarPerfil() {
-            if (this.getUsuario.grupo_ativo == Const.PERFIL_COORDENADOR_GERAL) {
-                return this.const.ESTADO_AGUARDANDO_ASSINATURA_COORDENADOR_GERAL_LAUDO;
+            if (this.getUsuario.grupo_ativo === Const.PERFIL_COORDENADOR_GERAL) {
+                return { estadoId: this.Const.ESTADO_AGUARDANDO_ASSINATURA_COORDENADOR_GERAL_LAUDO };
             }
-            if (this.getUsuario.grupo_ativo == Const.PERFIL_DIRETOR) {
-                return this.const.ESTADO_AGUARDANDO_ASSINATURA_DIRETOR_LAUDO;
+            if (this.getUsuario.grupo_ativo === Const.PERFIL_DIRETOR) {
+                return { estadoId: this.Const.ESTADO_AGUARDANDO_ASSINATURA_DIRETOR_LAUDO };
             }
-            if (this.getUsuario.grupo_ativo == Const.PERFIL_SECRETARIO) {
-                return this.const.ESTADO_AGUARDANDO_ASSINATURA_SECCRETARIO_LAUDO;
+            if (this.getUsuario.grupo_ativo === Const.PERFIL_SECRETARIO) {
+                return { estadoId: this.Const.ESTADO_AGUARDANDO_ASSINATURA_SECCRETARIO_LAUDO };
             }
             return null;
         },
