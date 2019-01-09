@@ -34,6 +34,7 @@ import ExtratosBancarios from './visualizar/components/dadosBancarios/ExtratosBa
 import ExtratosBancariosConsolidado from './visualizar/components/dadosBancarios/ExtratosBancariosConsolidado';
 import DepositoEquivocado from './visualizar/components/dadosBancarios/DepositoEquivocado';
 import Captacao from './visualizar/components/dadosBancarios/Captacao';
+import DevolucoesIncentivador from './visualizar/components/dadosBancarios/DevolucoesIncentivador';
 
 Vue.use(Router);
 
@@ -334,6 +335,14 @@ const routes = [
                 component: Captacao,
                 meta: {
                     title: 'Captação',
+                },
+            },
+            {
+                path: 'devolucoes-incentivador',
+                name: 'DevolucoesIncentivador',
+                component: DevolucoesIncentivador,
+                meta: {
+                    title: 'Devoluções do Incentivador',
                 },
             },
         ],

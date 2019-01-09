@@ -328,3 +328,11 @@ export const buscarCaptacao = ({ commit }, params) => {
             commit(types.SET_CAPTACAO, data);
         });
 };
+
+export const buscarDevolucoesIncentivador = ({ commit }, params) => {
+    projetoHelperAPI.buscarDevolucoesIncentivador(params)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_DEVOLUCOES_INCENTIVADOR, data);
+        });
+};
