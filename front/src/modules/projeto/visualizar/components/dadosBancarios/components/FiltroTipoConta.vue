@@ -3,13 +3,12 @@
         <template>
             <v-container fluid>
                 <v-layout>
-                    <v-flex xs4>
+                    <v-flex xs12 sm6 md3>
                         <v-combobox
                                 v-model="search"
                                 :items="items"
                                 label="Tipo da Conta"
                                 chips
-                                solo
                         >
                             <template
                                     slot="selection"
