@@ -4,49 +4,55 @@
              <Carregando :text="'Conciliação Bancária'"></Carregando>
          </div>
          <div v-else>
-             <v-data-table
-                     :headers="headers"
-                     :items="dadosConciliacao"
-                     class="elevation-1 container-fluid"
-                     rows-per-page-text="Items por Página"
-                     no-data-text="Nenhum dado encontrado"
-                     :rows-per-page-items="[10, 25, 50, 100, {'text': 'Todos', value: -1}]"
-             >
-                 <template slot="items" slot-scope="props">
-                     <td class="text-xs-left">{{ props.item.ItemOrcamentario }}</td>
-                     <td class="text-xs-left" style="width: 200px">{{ props.item.CNPJCPF | cnpjFilter }}</td>
-                     <td class="text-xs-left">{{ props.item.Fornecedor }}</td>
-                     <td class="text-xs-right">{{ props.item.nrDocumentoDePagamento }}</td>
-                     <td class="text-xs-right">{{ props.item.dtPagamento | formatarData }}</td>
-                     <td class="text-xs-right font-weight-bold">
-                         {{ props.item.vlPagamento | filtroFormatarParaReal }}
-                     </td>
-                     <td class="text-xs-left">{{ props.item.dsLancamento }}</td>
-                     <td class="text-xs-right font-weight-bold"
-                         v-if="props.item.vlDebitado"
-                     >
-                         {{ props.item.vlDebitado | filtroFormatarParaReal }}
-                     </td>
-                     <td class="text-xs-right font-weight-bold" v-else>
-                         {{ '000' | filtroFormatarParaReal }}
-                     </td>
+            <v-card>
+                    <FiltroData
+                        v-on:eventoFiltrarData="filtrarData"
+                    >
+                    </FiltroData>
+                   <v-data-table
+                        :headers="headers"
+                        :items="dadosConciliacao"
+                        class="elevation-1 container-fluid"
+                        rows-per-page-text="Items por Página"
+                        no-data-text="Nenhum dado encontrado"
+                        :rows-per-page-items="[10, 25, 50, 100, {'text': 'Todos', value: -1}]"
+                    >
+                    <template slot="items" slot-scope="props">
+                        <td class="text-xs-left">{{ props.item.ItemOrcamentario }}</td>
+                        <td class="text-xs-left" style="width: 200px">{{ props.item.CNPJCPF | cnpjFilter }}</td>
+                        <td class="text-xs-left">{{ props.item.Fornecedor }}</td>
+                        <td class="text-xs-right">{{ props.item.nrDocumentoDePagamento }}</td>
+                        <td class="text-xs-right">{{ props.item.dtPagamento | formatarData }}</td>
+                        <td class="text-xs-right font-weight-bold">
+                            {{ props.item.vlPagamento | filtroFormatarParaReal }}
+                        </td>
+                        <td class="text-xs-left">{{ props.item.dsLancamento }}</td>
+                        <td class="text-xs-right font-weight-bold"
+                            v-if="props.item.vlDebitado"
+                        >
+                            {{ props.item.vlDebitado | filtroFormatarParaReal }}
+                        </td>
+                        <td class="text-xs-right font-weight-bold" v-else>
+                            {{ '000' | filtroFormatarParaReal }}
+                        </td>
 
-                     <td class="text-xs-right font-weight-bold red--text"
-                         v-if="props.item.vlDiferenca"
-                     >
-                         {{ props.item.vlDiferenca | filtroFormatarParaReal }}
-                     </td>
-                     <td class="text-xs-right font-weight-bold" v-else>
-                         {{ '000' | filtroFormatarParaReal}}
-                     </td>
-                 </template>
-                 <template slot="pageText" slot-scope="props">
-                     Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
-                 </template>
-                 <!--<form target="_blank" class="form" name="formImpressao" id="formImpressao" method="post" action='<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'imprimir-conciliacao-bancaria')).'?pag='.$this->paginacao['pag'].'&qtde='.$this->paginacao['qtde'].'&dtLancamento='.$this->dtLancamento.'&dtLancamentoFim='.$this->dtLancamentoFim.'&idPronac='.$this->idPronac.'&campo='.$this->paginacao['campo'].'&ordem='.$this->paginacao['novaOrdem'].'&tpConta='.$this->tpConta;?>'>-->
-                 <!--</form>-->
-                 <!--http://local.salic/consultardadosprojeto/imprimir-conciliacao-bancaria? pag=1&qtde=10&dtLancamento=&dtLancamentoFim=&idPronac=155263&campo=&ordem=ASC&tpConta=-->
-             </v-data-table>
+                        <td class="text-xs-right font-weight-bold red--text"
+                            v-if="props.item.vlDiferenca"
+                        >
+                            {{ props.item.vlDiferenca | filtroFormatarParaReal }}
+                        </td>
+                        <td class="text-xs-right font-weight-bold" v-else>
+                            {{ '000' | filtroFormatarParaReal}}
+                        </td>
+                    </template>
+                    <template slot="pageText" slot-scope="props">
+                        Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                    </template>
+                    <!--<form target="_blank" class="form" name="formImpressao" id="formImpressao" method="post" action='<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'imprimir-conciliacao-bancaria')).'?pag='.$this->paginacao['pag'].'&qtde='.$this->paginacao['qtde'].'&dtLancamento='.$this->dtLancamento.'&dtLancamentoFim='.$this->dtLancamentoFim.'&idPronac='.$this->idPronac.'&campo='.$this->paginacao['campo'].'&ordem='.$this->paginacao['novaOrdem'].'&tpConta='.$this->tpConta;?>'>-->
+                    <!--</form>-->
+                    <!--http://local.salic/consultardadosprojeto/imprimir-conciliacao-bancaria? pag=1&qtde=10&dtLancamento=&dtLancamentoFim=&idPronac=155263&campo=&ordem=ASC&tpConta=-->
+                </v-data-table>
+            </v-card>
              <div v-if="Object.keys(dadosConciliacao).length > 0" class="text-xs-center">
                  <v-btn round
                         dark
@@ -66,6 +72,7 @@
     import Carregando from '@/components/CarregandoVuetify';
     import cnpjFilter from '@/filters/cnpj';
     import { utils } from '@/mixins/utils';
+    import FiltroData from './components/FiltroData';
 
     export default {
         name: 'ConciliacaoBancaria',
@@ -129,10 +136,16 @@
         mixins: [utils],
         components: {
             Carregando,
+            FiltroData,
         },
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-                this.buscarConciliacaoBancaria(this.dadosProjeto.idPronac);
+                const params = {
+                    idPronac: this.dadosProjeto.idPronac,
+                    dtInicio: '',
+                    dtFim: '',
+                };
+                this.buscarConciliacaoBancaria(params);
                 this.loading = false;
             }
         },
@@ -149,6 +162,14 @@
             ...mapActions({
                 buscarConciliacaoBancaria: 'projeto/buscarConciliacaoBancaria',
             }),
+            filtrarData(response) {
+                const params = {
+                    idPronac: this.dadosProjeto.idPronac,
+                    dtInicio: response.dtInicio,
+                    dtFim: response.dtFim,
+                };
+                this.buscarConciliacaoBancaria(params);
+            },
         },
     };
  </script>

@@ -23,6 +23,9 @@ class ConciliacaoBancaria
     public function buscarConciliacaoBancaria()
     {
         $idPronac = $this->request->idPronac;
+        $dtPagamentoInicio = $this->request->dtPagamentoInicio;
+        $dtPagamentoFim = $this->request->dtPagamentoFim;
+
         if (strlen($idPronac) > 7) {
             $idPronac = \Seguranca::dencrypt($idPronac);
         }
@@ -31,6 +34,12 @@ class ConciliacaoBancaria
             $where = array();
             $where['idPronac = ?'] = $idPronac;
             $DadosConciliacao = new \Projetos();
+
+            if (!empty($dtPagamentoInicio) && !empty($dtPagamentoFim)) {
+                $di = ConverteData($dtPagamentoInicio, 13)." 00:00:00";
+                $df = ConverteData($dtPagamentoFim, 13)." 00:00:00";
+                $where["dtPagamento BETWEEN '$di' AND '$df'"] = '';
+            }
 
             $buscaDadosConciliacao = $DadosConciliacao->painelDadosConciliacaoBancaria($where, ['dtPagamento DESC'], null, null)->toArray();
 

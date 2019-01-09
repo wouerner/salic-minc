@@ -22,7 +22,7 @@
                         <v-flex xs4 offset-xs1>
                             <br>
                             <p><b>Vl. Liberado</b></p>
-                            <p>{{ dadosLiberacao.vlLiberado }}</p>
+                            <p>{{ dadosLiberacao.vlLiberado | filtroFormatarParaReal }}</p>
                         </v-flex>
                         <v-flex xs4 offset-xs1>
                             <br>
