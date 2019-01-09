@@ -10,6 +10,13 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const terserOptions = require('../config/terserOptions');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+
+let pathsToClean = [
+    'css',
+    'img',
+    'js',
+]
 
 const env = require('../config/prod.env');
 
@@ -69,6 +76,11 @@ const webpackConfig = merge(baseWebpackConfig, {
         // generate dist index.html with correct asset hash for caching.
         // you can customize output by editing /index.html
         // see https://github.com/ampedandwired/html-webpack-plugin
+        new CleanWebpackPlugin(pathsToClean, {
+            root: config.build.assetsRoot,
+            verbose: false,
+            beforeEmit: true
+        }),
         new HtmlWebpackPlugin({
             template: 'index.html',
             filename: config.build.index,
