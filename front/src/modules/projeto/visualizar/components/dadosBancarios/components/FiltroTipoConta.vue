@@ -43,20 +43,6 @@
         data() {
             return {
                 search: '',
-                tpConta: [
-                    {
-                        id:'Captação',
-                        text:'Captação'
-                    },
-                    {
-                        id:'Movimentação',
-                        text:'Movimentação'
-                    },
-                    {
-                        id:'',
-                        text:'Todos'
-                    }
-                ],
                 items: [
                     'Captação',
                     'Movimentação',

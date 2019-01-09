@@ -4,81 +4,52 @@
             <Carregando :text="'Extratos Bancários Consolidado'"></Carregando>
         </div>
         <v-card v-else>
-            <v-container fluid>
-                <v-layout align-end justify-end reverse fill-height>
-                    <v-flex xs6>
-                        <v-combobox
-                                v-model="search"
-                                :items="items"
-                                label="Tipo da Conta"
-                                chips
-                                solo
-                        >
-                            <template
-                                    slot="selection"
-                                    slot-scope="data"
-                            >
-                                <v-chip
-                                        :selected="data.selected"
-                                        :disabled="data.disabled"
-                                        :key="JSON.stringify(data.item)"
-                                        class="v-chip--select-multi"
-                                        @input="data.parent.selectItem(data.item)"
-                                >
-                                    <v-avatar
-                                            class="primary white--text"
-                                            v-text="data.item.slice(0, 1).toUpperCase()"
-                                    ></v-avatar>
-                                    {{ data.item }}
-                                </v-chip>
-                            </template>
-                        </v-combobox>
-                    </v-flex>
-                </v-layout>
+            <FiltroTipoConta
+                v-on:eventoSearch="search = $event"
+            >
+            </FiltroTipoConta>
+            <v-data-table
+                    :headers="headers"
+                    :items="dadosExtratosConsolidado"
+                    class="elevation-1 container-fluid"
+                    rows-per-page-text="Items por Página"
+                    :pagination.sync="pagination"
+                    :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
+                    no-data-text="Nenhum dado encontrado"
+                    no-results-text="Nenhum dado encontrado"
+                    :search="search"
+            >
+                <template slot="items" slot-scope="props">
+                    <td class="text-xs-left" v-html="props.item.TipoConta"></td>
+                    <td class="text-xs-right">{{ props.item.NrConta | formatarConta }}</td>
+                    <td class="text-xs-right">{{ props.item.Codigo }}</td>
+                    <td class="text-xs-left" v-html="props.item.Lancamento"></td>
 
-                <v-data-table
-                        :headers="headers"
-                        :items="dadosExtratosConsolidado"
-                        class="elevation-1 container-fluid"
-                        rows-per-page-text="Items por Página"
-                        :pagination.sync="pagination"
-                        :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
-                        no-data-text="Nenhum dado encontrado"
-                        no-results-text="Nenhum dado encontrado"
-                        :search="search"
-                >
-                    <template slot="items" slot-scope="props">
-                        <td class="text-xs-left" v-html="props.item.TipoConta"></td>
-                        <td class="text-xs-right">{{ props.item.NrConta | formatarConta }}</td>
-                        <td class="text-xs-right">{{ props.item.Codigo }}</td>
-                        <td class="text-xs-left" v-html="props.item.Lancamento"></td>
+                    <td class="text-xs-right blue--text font-weight-bold"
+                        v-if="props.item.stLancamento === 'C'"
+                    >
+                        {{ props.item.vlLancamento | filtroFormatarParaReal }}
+                    </td>
+                    <td class="text-xs-right red--text font-weight-bold" v-else>
+                        {{ props.item.vlLancamento | filtroFormatarParaReal }}
+                    </td>
 
-                        <td class="text-xs-right blue--text font-weight-bold"
-                            v-if="props.item.stLancamento === 'C'"
-                        >
-                            {{ props.item.vlLancamento | filtroFormatarParaReal }}
-                        </td>
-                        <td class="text-xs-right red--text font-weight-bold" v-else>
-                            {{ props.item.vlLancamento | filtroFormatarParaReal }}
-                        </td>
-
-                        <td class="text-xs-right blue--text font-weight-bold"
-                            v-if="props.item.stLancamento === 'C'"
-                        >
-                            {{ props.item.stLancamento }}
-                        </td>
-                        <td class="text-xs-right red--text font-weight-bold" v-else>
-                            {{ props.item.stLancamento }}
-                        </td>
-                    </template>
-                    <template slot="pageText" slot-scope="props">
-                        Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
-                    </template>
-                    <v-alert slot="no-results" :value="true" color="error" icon="warning">
-                        Sua busca por "{{ search }}" não encontrou nenhum resultado.
-                    </v-alert>
-                </v-data-table>
-            </v-container>
+                    <td class="text-xs-right blue--text font-weight-bold"
+                        v-if="props.item.stLancamento === 'C'"
+                    >
+                        {{ props.item.stLancamento }}
+                    </td>
+                    <td class="text-xs-right red--text font-weight-bold" v-else>
+                        {{ props.item.stLancamento }}
+                    </td>
+                </template>
+                <template slot="pageText" slot-scope="props">
+                    Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                </template>
+                <v-alert slot="no-results" :value="true" color="error" icon="warning">
+                    Sua busca por "{{ search }}" não encontrou nenhum resultado.
+                </v-alert>
+            </v-data-table>
         </v-card>
     </div>
 </template>
@@ -87,6 +58,7 @@
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
     import { utils } from '@/mixins/utils';
+    import FiltroTipoConta from './components/FiltroTipoConta';
 
     export default {
         name: 'ExtratosBancariosConsolidado',
@@ -139,6 +111,7 @@
         mixins: [utils],
         components: {
             Carregando,
+            FiltroTipoConta,
         },
         mounted() {
             if (typeof this.dadosProjeto.idPronac !== 'undefined') {
