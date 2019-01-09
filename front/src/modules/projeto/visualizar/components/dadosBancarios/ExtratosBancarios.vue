@@ -48,8 +48,8 @@
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
     import { utils } from '@/mixins/utils';
-    import FiltroData  from './components/FiltroData';
-    import FiltroTipoConta  from './components/FiltroTipoConta';
+    import FiltroData from './components/FiltroData';
+    import FiltroTipoConta from './components/FiltroTipoConta';
 
     export default {
         name: 'ExtratosBancarios',

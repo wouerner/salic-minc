@@ -62,7 +62,7 @@
     import { mapActions, mapGetters } from 'vuex';
     import Carregando from '@/components/CarregandoVuetify';
     import { utils } from '@/mixins/utils';
-    import FiltroData  from './components/FiltroData';
+    import FiltroData from './components/FiltroData';
 
     export default {
         name: 'Captacao',
