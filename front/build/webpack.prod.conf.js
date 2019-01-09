@@ -16,7 +16,7 @@ let pathsToClean = [
     'css',
     'img',
     'js',
-]
+];
 
 const env = require('../config/prod.env');
 
@@ -110,7 +110,7 @@ const webpackConfig = merge(baseWebpackConfig, {
             }
         ])
     ]
-})
+});
 
 if (config.build.productionGzip) {
     const CompressionWebpackPlugin = require('compression-webpack-plugin')
@@ -139,4 +139,4 @@ if (config.build.bundleAnalyzerReport) {
     webpackConfig.plugins.push(new BundleAnalyzerPlugin(options))
 }
 
-module.exports = webpackConfig
+module.exports = webpackConfig;
