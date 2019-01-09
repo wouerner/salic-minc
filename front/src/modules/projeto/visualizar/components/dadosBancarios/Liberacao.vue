@@ -5,32 +5,43 @@
         </div>
         <div v-else-if="Object.keys(dadosLiberacao).length > 0">
             <v-card>
-                <v-subheader class="justify-center">
-                    <div>
-                        <h4 class="display-1 grey--text text--darken-4 font-weight-light">
-                            Liberação
-                        </h4>
-                    </div>
-                </v-subheader>
-                <v-container>
-                    <v-layout>
-                        <v-flex xs4 offset-xs1>
-                            <br>
-                            <p><b>Dt. Liberação</b></p>
-                            <p>{{ dadosLiberacao.DtLiberacao | formatarData }}</p>
-                        </v-flex>
-                        <v-flex xs4 offset-xs1>
-                            <br>
-                            <p><b>Vl. Liberado</b></p>
-                            <p>{{ dadosLiberacao.vlLiberado | filtroFormatarParaReal }}</p>
-                        </v-flex>
-                        <v-flex xs4 offset-xs1>
-                            <br>
-                            <p><b>Conta liberada por:</b></p>
-                            <p>{{ dadosLiberacao.usu_Nome }}</p>
-                        </v-flex>
-                    </v-layout>
-                </v-container>
+                <v-card-text>
+                    <v-container
+                            grid-list-md
+                            text-xs-left
+                    >
+                        <v-layout
+                                justify-space-around
+                                row
+                                wrap>
+                            <v-flex
+                                    lg12
+                                    dark
+                                    class="text-xs-left">
+                                <b><h4>LIBERAÇÃO</h4></b>
+                                <v-divider class="pb-2"/>
+                            </v-flex>
+                            <v-flex>
+                                <p><b>Dt. Liberação</b></p>
+                                <p>
+                                    {{ dadosLiberacao.DtLiberacao | formatarData }}
+                                </p>
+                            </v-flex>
+                            <v-flex>
+                                <p><b>Vl. Liberado</b></p>
+                                <p>
+                                    {{ dadosLiberacao.vlLiberado | filtroFormatarParaReal }}
+                                </p>
+                            </v-flex>
+                            <v-flex>
+                                <p><b>Conta liberada por:</b></p>
+                                <p>
+                                    {{ dadosLiberacao.usu_Nome }}
+                                </p>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+                </v-card-text>
             </v-card>
         </div>
         <v-layout v-else>

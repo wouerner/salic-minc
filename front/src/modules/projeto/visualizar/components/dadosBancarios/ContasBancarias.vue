@@ -5,85 +5,96 @@
         </div>
         <div v-else>
             <v-card>
-                <v-subheader class="justify-center">
-                    <div>
-                        <h4 class="display-1 grey--text text--darken-4 font-weight-light">
-                            Dados da Conta
-                        </h4>
-                    </div>
-                </v-subheader>
-                <v-container>
-                    <v-layout>
-                        <v-flex xs6 offset-xs2>
-                            <br>
-                            <p><b>Banco</b></p>
-                            <p>{{ dadosConta.Banco }}</p>
-                        </v-flex>
-                        <v-flex xs6 offset-xs2>
-                            <br>
-                            <p><b>Agência</b></p>
-                            <p>{{ dadosConta.Agencia | formatarAgencia }}</p>
-                        </v-flex>
-                    </v-layout>
-                </v-container>
-
-                <v-subheader class="justify-center">
-                    <div>
-                        <h4 class="display-1 grey--text text--darken-4 font-weight-light">
-                            Conta Captação
-                        </h4>
-                    </div>
-                </v-subheader>
-                <v-container>
-                    <v-layout>
-                        <v-flex xs4 offset-xs2>
-                            <br>
-                            <p><b>Número</b></p>
-                            <p>{{ dadosConta.ContaBloqueada | formatarConta  }}</p>
-                        </v-flex>
-                        <v-flex xs4>
-                            <br>
-                            <p><b>Dt. Abertura</b></p>
-                            <p >{{ dadosConta.DtLoteRemessaCB | formatarData }}
-                            </p>
-                        </v-flex>
-                        <v-flex xs4>
-                            <br>
-                            <p><b>Ocorrência</b></p>
-                            <p v-if="dadosConta.OcorrenciaCB">{{ dadosConta.OcorrenciaCB }}</p>
-                            <p v-else> - </p>
-                        </v-flex>
-                    </v-layout>
-                </v-container>
-
-                <v-subheader class="justify-center">
-                    <div>
-                        <h4 class="display-1 grey--text text--darken-4 font-weight-light">
-                            Conta Movimento
-                        </h4>
-                    </div>
-                </v-subheader>
-                <v-container>
-                    <v-layout>
-                        <v-flex xs4 offset-xs2>
-                            <br>
-                            <p><b>Número</b></p>
-                            <p>{{ dadosConta.ContaLivre | formatarConta  }}</p>
-                        </v-flex>
-                        <v-flex xs4>
-                            <br>
-                            <p><b>Dt. Abertura</b></p>
-                            <p>{{ dadosConta.DtLoteRemessaCL | formatarData }}
-                            </p>
-                        </v-flex>
-                        <v-flex xs4>
-                            <br>
-                            <p><b>Ocorrência</b></p>
-                            <p v-if="dadosConta.OcorrenciaCL ">{{ dadosConta.OcorrenciaCL }}</p>
-                            <p v-else> - </p>
-                        </v-flex>
-                    </v-layout>
-                </v-container>
+                <v-card-text>
+                    <v-container grid-list-md
+                                 text-xs-left>
+                        <v-layout
+                                justify-space-around
+                                row
+                                wrap>
+                            <v-flex
+                                    lg12
+                                    dark
+                                    class="text-xs-left">
+                                <b><h4>DADOS DA CONTA</h4></b>
+                                <v-divider class="pb-2"/>
+                            </v-flex>
+                            <v-flex>
+                                <p><b>Banco</b></p>
+                                <p>
+                                    {{ dadosConta.Banco }}
+                                </p>
+                            </v-flex>
+                            <v-flex>
+                                <p><b>Agência</b></p>
+                                <p>
+                                    {{ dadosConta.Agencia | formatarAgencia }}
+                                </p>
+                            </v-flex>
+                            <v-flex></v-flex>
+                        </v-layout>
+                        <v-layout
+                                justify-space-around
+                                row
+                                wrap>
+                            <v-flex
+                                    lg12
+                                    dark
+                                    class="text-xs-left">
+                                <b><h4>CONTA CAPTAÇÃO</h4></b>
+                                <v-divider class="pb-2"/>
+                            </v-flex>
+                            <v-flex>
+                                <p><b>Número</b></p>
+                                <p>
+                                    {{ dadosConta.ContaBloqueada | formatarConta }}
+                                </p>
+                            </v-flex>
+                            <v-flex>
+                                <p><b>Dt. Abertura</b></p>
+                                <p>
+                                    {{ dadosConta.DtLoteRemessaCB | formatarData }}
+                                </p>
+                            </v-flex>
+                            <v-flex>
+                                <p><b>Ocorrência</b></p>
+                                <p v-if="dadosConta.OcorrenciaCB">{{ dadosConta.OcorrenciaCB }}</p>
+                                <p v-else> - </p>
+                            </v-flex>
+                        </v-layout>
+                        <v-layout
+                                justify-space-around
+                                row
+                                wrap>
+                            <v-flex
+                                    lg12
+                                    dark
+                                    class="text-xs-left">
+                                <b><h4>CONTA MOVIMENTO</h4></b>
+                                <v-divider class="pb-2"/>
+                            </v-flex>
+                            <v-flex>
+                                <p><b>Número</b></p>
+                                <p>
+                                    {{ dadosConta.ContaLivre | formatarConta }}
+                                </p>
+                            </v-flex>
+                            <v-flex>
+                                <p><b>Dt. Abertura</b></p>
+                                <p>
+                                    {{ dadosConta.DtLoteRemessaCL | formatarData }}
+                                </p>
+                            </v-flex>
+                            <v-flex>
+                                <p><b>Ocorrência</b></p>
+                                <p v-if="dadosConta.OcorrenciaCL ">
+                                    {{ dadosConta.OcorrenciaCL }}
+                                </p>
+                                <p v-else> - </p>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+                </v-card-text>
             </v-card>
         </div>
     </div>
