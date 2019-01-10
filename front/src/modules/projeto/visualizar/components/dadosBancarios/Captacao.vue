@@ -6,6 +6,7 @@
         <div v-else>
             <v-card>
                 <FiltroData
+                    :text="'Escolha a Dt. Captação:'"
                     v-on:eventoFiltrarData="filtrarData"
                 >
                 </FiltroData>

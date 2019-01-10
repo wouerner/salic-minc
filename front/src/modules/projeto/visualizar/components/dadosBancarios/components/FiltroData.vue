@@ -14,6 +14,11 @@
         <template>
             <v-container fluid>
                 <v-layout row wrap>
+                    <v-flex xs12>
+                        <div>
+                            <h6 v-html="text"/>
+                        </div>
+                    </v-flex>
                     <v-flex xs12 sm6 md3>
                         <v-menu
                                 ref="menu"
@@ -96,6 +101,12 @@
 
     export default {
         name: 'FiltroData',
+        props: {
+            text: {
+                type: String,
+                default: '',
+            },
+        },
         data() {
             return {
                 date: '',
