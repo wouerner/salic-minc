@@ -286,7 +286,7 @@ const routes = [
                 name: 'InconsistenciaBancaria',
                 component: InconsistenciaBancaria,
                 meta: {
-                    title: 'Inconsistencia Bancária',
+                    title: 'Inconsistência Bancária',
                 },
             },
             {
