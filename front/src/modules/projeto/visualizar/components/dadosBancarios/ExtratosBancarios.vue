@@ -32,8 +32,28 @@
                         <td class="text-xs-left" v-html="props.item.Lancamento"></td>
                         <td class="text-xs-right">{{ props.item.nrLancamento }}</td>
                         <td class="text-xs-right">{{ props.item.dtLancamento | formatarData }}</td>
-                        <td class="text-xs-right">{{ props.item.vlLancamento | filtroFormatarParaReal }}</td>
-                        <td class="text-xs-right">{{ props.item.stLancamento }}</td>
+
+                        <td class="text-xs-right blue--text font-weight-bold"
+                            v-if="props.item.stLancamento === 'C'"
+                        >
+                                {{ props.item.vlLancamento | filtroFormatarParaReal }}
+                        </td>
+                        <td class="text-xs-right red--text font-weight-bold"
+                            v-else
+                        >
+                                {{ props.item.vlLancamento | filtroFormatarParaReal }}
+                        </td>
+
+                        <td class="text-xs-right blue--text font-weight-bold"
+                            v-if="props.item.stLancamento === 'C'"
+                        >
+                                {{ props.item.stLancamento }}
+                        </td>
+                        <td class="text-xs-right red--text font-weight-bold"
+                            v-else
+                        >
+                                {{ props.item.stLancamento }}
+                        </td>
                     </template>
                     <template slot="pageText" slot-scope="props">
                         Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
