@@ -236,8 +236,8 @@ export default {
             getUsuario: 'autenticacao/getUsuario',
         }),
         pages() {
-            if (this.pagination.rowsPerPage == null ||
-                    this.pagination.totalItems == null
+            if (this.pagination.rowsPerPage == null
+                    || this.pagination.totalItems == null
             ) return 0;
             return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
         },
@@ -245,8 +245,8 @@ export default {
             let ato = Const.ATO_ADMINISTRATIVO_PARECER_TECNICO;
 
             if (
-                this.usuario &&
-                    (
+                this.usuario
+                    && (
                         Const.PERFIL_DIRETOR === this.getUsuario.grupo_ativo
                         || Const.PERFIL_SECRETARIO === this.getUsuario.grupo_ativo
                     )
