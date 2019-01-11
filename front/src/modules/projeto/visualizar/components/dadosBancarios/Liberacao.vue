@@ -84,10 +84,18 @@ export default {
             dadosLiberacao: 'projeto/liberacao',
         }),
     },
+    watch: {
+        dadosLiberacao() {
+            this.loading = false;
+        },
+        dadosProjeto(value) {
+            this.loading = true;
+            this.buscarLiberacao(value.idPronac);
+        },
+    },
     mounted() {
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             this.buscarLiberacao(this.dadosProjeto.idPronac);
-            this.loading = false;
         }
     },
     methods: {
@@ -97,4 +105,3 @@ export default {
     },
 };
 </script>
-
