@@ -1,54 +1,71 @@
 <template>
     <div>
         <div v-if="loading">
-            <Carregando :text="'Saldo das Contas'"></Carregando>
+            <Carregando :text="'Saldo das Contas'"/>
         </div>
         <v-card v-else>
-            <FiltroTipoConta
-                v-on:eventoSearch="search = $event"
-            >
-            </FiltroTipoConta>
+            <v-container fluid>
+                <FiltroTipoConta
+                    @eventoSearch="search = $event"
+                />
+            </v-container>
             <v-data-table
-                    :headers="headers"
-                    :items="dadosSaldo"
-                    :search="search"
-                    class="elevation-1 container-fluid"
-                    :rows-per-page-items="[10, 25, 50, 100, {'text': 'Todos', value: -1}]"
+                :headers="headers"
+                :items="dadosSaldo"
+                :search="search"
+                :rows-per-page-items="[10, 25, 50, 100, {'text': 'Todos', value: -1}]"
+                class="elevation-1 container-fluid"
             >
-                <template slot="items" slot-scope="props">
+                <template
+                    slot="items"
+                    slot-scope="props">
                     <td class="text-xs-left">{{ props.item.Tipo }}</td>
                     <td
-                            class="text-xs-left"
+                        class="text-xs-left"
                     >
                         {{ props.item.NrConta | formatarConta }}
                     </td>
                     <td class="text-xs-left">{{ props.item.TipoSaldo }}</td>
                     <td class="text-xs-right">{{ props.item.dtSaldoBancario | formatarData }}</td>
-                    <td class="text-xs-right blue--text font-weight-bold"
+                    <td
                         v-if="props.item.vlSaldoBancario === 0"
+                        class="text-xs-right blue--text font-weight-bold"
                     >
                         {{ '0' | filtroFormatarParaReal }}
                     </td>
-                    <td class="text-xs-right red--text font-weight-bold" v-else-if="props.item.stSaldoBancario !== 'C'">
+                    <td
+                        v-else-if="props.item.stSaldoBancario !== 'C'"
+                        class="text-xs-right red--text font-weight-bold">
                         {{ props.item.vlSaldoBancario | filtroFormatarParaReal }}
                     </td>
-                    <td class="text-xs-right blue--text font-weight-bold" v-else>
+                    <td
+                        v-else
+                        class="text-xs-right blue--text font-weight-bold">
                         {{ props.item.vlSaldoBancario | filtroFormatarParaReal }}
                     </td>
 
-                    <td class="text-xs-right blue--text font-weight-bold"
+                    <td
                         v-if="props.item.stSaldoBancario === 'C'"
+                        class="text-xs-right blue--text font-weight-bold"
                     >
                         {{ props.item.stSaldoBancario }}
                     </td>
-                    <td class="text-xs-right red--text font-weight-bold" v-else>
+                    <td
+                        v-else
+                        class="text-xs-right red--text font-weight-bold">
                         {{ props.item.stSaldoBancario }}
                     </td>
                 </template>
-                <template slot="pageText" slot-scope="props">
+                <template
+                    slot="pageText"
+                    slot-scope="props">
                     Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
                 </template>
-                <v-alert slot="no-results" :value="true" color="error" icon="warning">
+                <v-alert
+                    slot="no-results"
+                    :value="true"
+                    color="error"
+                    icon="warning">
                     Sua busca por "{{ search }}" não encontrou nenhum resultado.
                 </v-alert>
             </v-data-table>
@@ -56,84 +73,84 @@
     </div>
 </template>
 <script>
-    import { mapActions, mapGetters } from 'vuex';
-    import Carregando from '@/components/CarregandoVuetify';
-    import { utils } from '@/mixins/utils';
-    import FiltroTipoConta from './components/FiltroTipoConta';
+import { mapActions, mapGetters } from 'vuex';
+import Carregando from '@/components/CarregandoVuetify';
+import { utils } from '@/mixins/utils';
+import FiltroTipoConta from './components/FiltroTipoConta';
 
-    export default {
-        name: 'SaldoContas',
-        data() {
-            return {
-                items: [
-                    'Captação',
-                    'Movimentação',
-                ],
-                search: '',
-                pagination: {
-                    sortBy: 'fat',
-                },
-                selected: [],
-                loading: true,
-                headers: [
-                    {
-                        text: 'TIPO DA CONTA',
-                        align: 'left',
-                        value: 'Tipo',
-                    },
-                    {
-                        text: 'NR. CONTA',
-                        align: 'left',
-                        value: 'NrConta',
-                    },
-                    {
-                        text: 'TIPO DE SALDO',
-                        align: 'left',
-                        value: 'TipoSaldo',
-                    },
-                    {
-                        text: 'DATA SALDO',
-                        align: 'center',
-                        value: 'dtSaldoBancario',
-                    },
-                    {
-                        text: 'VL. SALDO',
-                        align: 'center',
-                        value: 'vlSaldoBancario',
-                    },
-                    {
-                        text: 'D/C',
-                        align: 'center',
-                        value: 'stSaldoBancario',
-                    },
-                ],
-            };
-        },
-        mixins: [utils],
-        components: {
-            Carregando,
-            FiltroTipoConta,
-        },
-        mounted() {
-            if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-                this.buscarSaldoContas(this.dadosProjeto.idPronac);
-            }
-        },
-        watch: {
-            dadosSaldo() {
-                this.loading = false;
+export default {
+    name: 'SaldoContas',
+    components: {
+        Carregando,
+        FiltroTipoConta,
+    },
+    mixins: [utils],
+    data() {
+        return {
+            items: [
+                'Captação',
+                'Movimentação',
+            ],
+            search: '',
+            pagination: {
+                sortBy: 'fat',
             },
+            selected: [],
+            loading: true,
+            headers: [
+                {
+                    text: 'TIPO DA CONTA',
+                    align: 'left',
+                    value: 'Tipo',
+                },
+                {
+                    text: 'NR. CONTA',
+                    align: 'left',
+                    value: 'NrConta',
+                },
+                {
+                    text: 'TIPO DE SALDO',
+                    align: 'left',
+                    value: 'TipoSaldo',
+                },
+                {
+                    text: 'DATA SALDO',
+                    align: 'center',
+                    value: 'dtSaldoBancario',
+                },
+                {
+                    text: 'VL. SALDO',
+                    align: 'center',
+                    value: 'vlSaldoBancario',
+                },
+                {
+                    text: 'D/C',
+                    align: 'center',
+                    value: 'stSaldoBancario',
+                },
+            ],
+        };
+    },
+    computed: {
+        ...mapGetters({
+            dadosProjeto: 'projeto/projeto',
+            dadosSaldo: 'projeto/saldoContas',
+        }),
+    },
+    watch: {
+        dadosSaldo() {
+            this.loading = false;
         },
-        computed: {
-            ...mapGetters({
-                dadosProjeto: 'projeto/projeto',
-                dadosSaldo: 'projeto/saldoContas',
-            }),
-        },
-        methods: {
-            ...mapActions({
-                buscarSaldoContas: 'projeto/buscarSaldoContas',
-            }),
-        },
-    };
+    },
+    mounted() {
+        if (typeof this.dadosProjeto.idPronac !== 'undefined') {
+            this.buscarSaldoContas(this.dadosProjeto.idPronac);
+        }
+    },
+    methods: {
+        ...mapActions({
+            buscarSaldoContas: 'projeto/buscarSaldoContas',
+        }),
+    },
+};
 </script>

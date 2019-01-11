@@ -1,23 +1,23 @@
 <template>
     <div>
         <div v-if="loading">
-            <Carregando :text="'Liberação'"></Carregando>
+            <Carregando :text="'Liberação'"/>
         </div>
         <div v-else-if="Object.keys(dadosLiberacao).length > 0">
             <v-card>
                 <v-card-text>
                     <v-container
-                            grid-list-md
-                            text-xs-left
+                        grid-list-md
+                        text-xs-left
                     >
                         <v-layout
-                                justify-space-around
-                                row
-                                wrap>
+                            justify-space-around
+                            row
+                            wrap>
                             <v-flex
-                                    lg12
-                                    dark
-                                    class="text-xs-left">
+                                lg12
+                                dark
+                                class="text-xs-left">
                                 <b><h4>LIBERAÇÃO</h4></b>
                                 <v-divider class="pb-2"/>
                             </v-flex>
@@ -45,8 +45,12 @@
             </v-card>
         </div>
         <v-layout v-else>
-            <v-container grid-list-md text-xs-center>
-                <v-layout row wrap>
+            <v-container
+                grid-list-md
+                text-xs-center>
+                <v-layout
+                    row
+                    wrap>
                     <v-flex>
                         <v-card>
                             <v-card-text class="px-0">Nenhuma Liberação encontrada</v-card-text>
@@ -59,38 +63,38 @@
 </template>
 <script>
 
-    import { mapActions, mapGetters } from 'vuex';
-    import Carregando from '@/components/CarregandoVuetify';
-    import { utils } from '@/mixins/utils';
+import { mapActions, mapGetters } from 'vuex';
+import Carregando from '@/components/CarregandoVuetify';
+import { utils } from '@/mixins/utils';
 
-    export default {
-        name: 'Liberacao',
-        data() {
-            return {
-                loading: true,
-            };
-        },
-        components: {
-            Carregando,
-        },
-        mounted() {
-            if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-                this.buscarLiberacao(this.dadosProjeto.idPronac);
-                this.loading = false;
-            }
-        },
-        mixins: [utils],
-        computed: {
-            ...mapGetters({
-                dadosProjeto: 'projeto/projeto',
-                dadosLiberacao: 'projeto/liberacao',
-            }),
-        },
-        methods: {
-            ...mapActions({
-                buscarLiberacao: 'projeto/buscarLiberacao',
-            }),
-        },
-    };
+export default {
+    name: 'Liberacao',
+    components: {
+        Carregando,
+    },
+    mixins: [utils],
+    data() {
+        return {
+            loading: true,
+        };
+    },
+    computed: {
+        ...mapGetters({
+            dadosProjeto: 'projeto/projeto',
+            dadosLiberacao: 'projeto/liberacao',
+        }),
+    },
+    mounted() {
+        if (typeof this.dadosProjeto.idPronac !== 'undefined') {
+            this.buscarLiberacao(this.dadosProjeto.idPronac);
+            this.loading = false;
+        }
+    },
+    methods: {
+        ...mapActions({
+            buscarLiberacao: 'projeto/buscarLiberacao',
+        }),
+    },
+};
 </script>
 

@@ -1,21 +1,22 @@
 <template>
     <div>
         <div v-if="loading">
-            <Carregando :text="'Contas Bancárias'"></Carregando>
+            <Carregando :text="'Contas Bancárias'"/>
         </div>
         <div v-else>
             <v-card>
                 <v-card-text>
-                    <v-container grid-list-md
-                                 text-xs-left>
+                    <v-container
+                        grid-list-md
+                        text-xs-left>
                         <v-layout
-                                justify-space-around
-                                row
-                                wrap>
+                            justify-space-around
+                            row
+                            wrap>
                             <v-flex
-                                    lg12
-                                    dark
-                                    class="text-xs-left">
+                                lg12
+                                dark
+                                class="text-xs-left">
                                 <b><h4>DADOS DA CONTA</h4></b>
                                 <v-divider class="pb-2"/>
                             </v-flex>
@@ -31,16 +32,16 @@
                                     {{ dadosConta.Agencia | formatarAgencia }}
                                 </p>
                             </v-flex>
-                            <v-flex></v-flex>
+                            <v-flex/>
                         </v-layout>
                         <v-layout
-                                justify-space-around
-                                row
-                                wrap>
+                            justify-space-around
+                            row
+                            wrap>
                             <v-flex
-                                    lg12
-                                    dark
-                                    class="text-xs-left">
+                                lg12
+                                dark
+                                class="text-xs-left">
                                 <b><h4>CONTA CAPTAÇÃO</h4></b>
                                 <v-divider class="pb-2"/>
                             </v-flex>
@@ -63,13 +64,13 @@
                             </v-flex>
                         </v-layout>
                         <v-layout
-                                justify-space-around
-                                row
-                                wrap>
+                            justify-space-around
+                            row
+                            wrap>
                             <v-flex
-                                    lg12
-                                    dark
-                                    class="text-xs-left">
+                                lg12
+                                dark
+                                class="text-xs-left">
                                 <b><h4>CONTA MOVIMENTO</h4></b>
                                 <v-divider class="pb-2"/>
                             </v-flex>
@@ -101,38 +102,38 @@
 </template>
 <script>
 
-    import { mapActions, mapGetters } from 'vuex';
-    import Carregando from '@/components/CarregandoVuetify';
-    import { utils } from '@/mixins/utils';
+import { mapActions, mapGetters } from 'vuex';
+import Carregando from '@/components/CarregandoVuetify';
+import { utils } from '@/mixins/utils';
 
-    export default {
-        name: 'ContasBancarias',
-        data() {
-            return {
-                loading: true,
-            };
-        },
-        components: {
-            Carregando,
-        },
-        mixins: [utils],
-        mounted() {
-            if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-                this.buscarContasBancarias(this.dadosProjeto.idPronac);
-                this.loading = false;
-            }
-        },
-        computed: {
-            ...mapGetters({
-                dadosProjeto: 'projeto/projeto',
-                dadosConta: 'projeto/contasBancarias',
-            }),
-        },
-        methods: {
-            ...mapActions({
-                buscarContasBancarias: 'projeto/buscarContasBancarias',
-            }),
-        },
-    };
+export default {
+    name: 'ContasBancarias',
+    components: {
+        Carregando,
+    },
+    mixins: [utils],
+    data() {
+        return {
+            loading: true,
+        };
+    },
+    computed: {
+        ...mapGetters({
+            dadosProjeto: 'projeto/projeto',
+            dadosConta: 'projeto/contasBancarias',
+        }),
+    },
+    mounted() {
+        if (typeof this.dadosProjeto.idPronac !== 'undefined') {
+            this.buscarContasBancarias(this.dadosProjeto.idPronac);
+            this.loading = false;
+        }
+    },
+    methods: {
+        ...mapActions({
+            buscarContasBancarias: 'projeto/buscarContasBancarias',
+        }),
+    },
+};
 </script>
 

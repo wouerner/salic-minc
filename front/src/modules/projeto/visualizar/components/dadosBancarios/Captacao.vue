@@ -1,52 +1,88 @@
 <template>
     <div>
         <div v-if="loading">
-            <Carregando :text="'Captação'"></Carregando>
+            <Carregando :text="'Captação'"/>
         </div>
         <div v-else>
             <v-card>
-                <FiltroData
-                    :text="'Escolha a Dt. Captação:'"
-                    v-on:eventoFiltrarData="filtrarData"
-                >
-                </FiltroData>
+                <v-container fluid>
+                    <FiltroData
+                        :text="'Escolha a Dt. Captação:'"
+                        @eventoFiltrarData="filtrarData"
+                    />
+                </v-container>
                 <v-data-table
                     :headers="headers"
                     :items="dadosCaptacao"
-                    class="elevation-1 container-fluid"
                     :pagination.sync="pagination"
                     :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
                     :search="search"
+                    class="elevation-1 container-fluid"
                 >
-                    <template slot="items" slot-scope="props">
-                        <td class="text-xs-left" v-html="props.item.Nome"></td>
+                    <template
+                        slot="items"
+                        slot-scope="props">
+                        <td
+                            class="text-xs-left"
+                            v-html="props.item.Nome"/>
                         <td class="text-xs-right">{{ props.item.NumeroRecibo }}</td>
-                        <td class="text-xs-left" v-html="props.item.TipoApoio"></td>
-                        <td class="text-xs-right">{{ props.item.DtRecibo | formatarData }}</td>
-                        <td class="text-xs-right">{{ props.item.DtTransferenciaRecurso | formatarData }}</td>
-                        <td class="text-xs-right">{{ props.item.CaptacaoReal | filtroFormatarParaReal }}</td>
-                        <td class="text-xs-right">{{ parseFloat(((props.item.CaptacaoReal / (props.item.ValorCaptado))* 100).toFixed(2)) }}</td>
-                        <td class="text-xs-right" v-if="props.item.isBemServico == 0">Não</td>
-                        <td class="text-xs-right" v-else-if="props.item.isBemServico == 1">Sim</td>
+                        <td
+                            class="text-xs-left"
+                            v-html="props.item.TipoApoio"/>
+                        <td class="text-xs-right">
+                            {{ props.item.DtRecibo | formatarData }}
+                        </td>
+                        <td class="text-xs-right">
+                            {{ props.item.DtTransferenciaRecurso | formatarData }}
+                        </td>
+                        <td class="text-xs-right">
+                            {{ props.item.CaptacaoReal | filtroFormatarParaReal }}
+                        </td>
+                        <td class="text-xs-right">
+                            {{ parseFloat(((props.item.CaptacaoReal / (props.item.ValorCaptado))*
+                            100).toFixed(2)) }}
+                        </td>
+                        <td
+                            v-if="props.item.isBemServico == 0"
+                            class="text-xs-right">Não
+                        </td>
+                        <td
+                            v-else-if="props.item.isBemServico == 1"
+                            class="text-xs-right">Sim
+                        </td>
                     </template>
-                    <template slot="pageText" slot-scope="props">
-                        Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                    <template
+                        slot="pageText"
+                        slot-scope="props">
+                        Items {{ props.pageStart }}
+                        - {{ props.pageStop }}
+                        de {{ props.itemsLength }}
                     </template>
                 </v-data-table>
                 <v-container fluid>
-                    <v-layout row wrap>
+                    <v-layout
+                        row
+                        wrap>
                         <v-flex xs6>
                             <h6>Total Captado</h6>
                         </v-flex>
-                        <v-flex xs5 offset-xs1 class=" text-xs-right">
+                        <v-flex
+                            xs5
+                            offset-xs1
+                            class=" text-xs-right">
                             <h6>R$ {{ dadosProjeto.vlCaptado | filtroFormatarParaReal }}</h6>
                         </v-flex>
                     </v-layout>
-                    <v-layout row wrap>
+                    <v-layout
+                        row
+                        wrap>
                         <v-flex xs6>
                             <h6>Total % Captado</h6>
                         </v-flex>
-                        <v-flex xs5 offset-xs1 class=" text-xs-right">
+                        <v-flex
+                            xs5
+                            offset-xs1
+                            class=" text-xs-right">
                             <h6>{{ dadosProjeto.PercentualCaptado }}%</h6>
                         </v-flex>
                     </v-layout>
@@ -57,103 +93,103 @@
 </template>
 <script>
 
-    import { mapActions, mapGetters } from 'vuex';
-    import Carregando from '@/components/CarregandoVuetify';
-    import { utils } from '@/mixins/utils';
-    import FiltroData from './components/FiltroData';
+import { mapActions, mapGetters } from 'vuex';
+import Carregando from '@/components/CarregandoVuetify';
+import { utils } from '@/mixins/utils';
+import FiltroData from './components/FiltroData';
 
-    export default {
-        name: 'Captacao',
-        data() {
-            return {
-                search: '',
-                pagination: {
-                    sortBy: 'fat',
+export default {
+    name: 'Captacao',
+    components: {
+        Carregando,
+        FiltroData,
+    },
+    mixins: [utils],
+    data() {
+        return {
+            search: '',
+            pagination: {
+                sortBy: 'fat',
+            },
+            selected: [],
+            loading: true,
+            headers: [
+                {
+                    text: 'INCENTIVADOR',
+                    align: 'left',
+                    value: 'Nome',
                 },
-                selected: [],
-                loading: true,
-                headers: [
-                    {
-                        text: 'INCENTIVADOR',
-                        align: 'left',
-                        value: 'Nome',
-                    },
-                    {
-                        text: 'NR. RECIBO',
-                        align: 'center',
-                        value: 'NumeroRecibo',
-                    },
-                    {
-                        text: 'TIPO DE APOIO',
-                        align: 'left',
-                        value: 'TipoApoio',
-                    },
-                    {
-                        text: 'DT. CAPTAÇÃO',
-                        align: 'center',
-                        value: 'DtRecibo',
-                    },
-                    {
-                        text: 'DT. TRANSFERÊMCIA',
-                        align: 'left',
-                        value: 'DtTransferenciaRecurso',
-                    },
-                    {
-                        text: 'VL. CAPTADO',
-                        align: 'center',
-                        value: 'CaptacaoReal',
-                    },
-                    {
-                        text: '% CAPTADO',
-                        align: 'center',
-                        value: 'PorcentagemCaptacao',
-                    },
-                    {
-                        text: 'BEM/SERVIÇO',
-                        align: 'center',
-                        value: 'isBemServico',
-                    },
-                ],
+                {
+                    text: 'NR. RECIBO',
+                    align: 'center',
+                    value: 'NumeroRecibo',
+                },
+                {
+                    text: 'TIPO DE APOIO',
+                    align: 'left',
+                    value: 'TipoApoio',
+                },
+                {
+                    text: 'DT. CAPTAÇÃO',
+                    align: 'center',
+                    value: 'DtRecibo',
+                },
+                {
+                    text: 'DT. TRANSFERÊMCIA',
+                    align: 'left',
+                    value: 'DtTransferenciaRecurso',
+                },
+                {
+                    text: 'VL. CAPTADO',
+                    align: 'center',
+                    value: 'CaptacaoReal',
+                },
+                {
+                    text: '% CAPTADO',
+                    align: 'center',
+                    value: 'PorcentagemCaptacao',
+                },
+                {
+                    text: 'BEM/SERVIÇO',
+                    align: 'center',
+                    value: 'isBemServico',
+                },
+            ],
+        };
+    },
+    computed: {
+        ...mapGetters({
+            dadosProjeto: 'projeto/projeto',
+            dadosCaptacao: 'projeto/captacao',
+        }),
+    },
+    watch: {
+        dadosCaptacao() {
+            this.loading = false;
+        },
+    },
+    mounted() {
+        if (typeof this.dadosProjeto.idPronac !== 'undefined') {
+            const params = {
+                idPronac: this.dadosProjeto.idPronac,
+                dtInicio: '',
+                dtFim: '',
             };
+            this.buscarCaptacao(params);
+        }
+    },
+    methods: {
+        ...mapActions({
+            buscarCaptacao: 'projeto/buscarCaptacao',
+        }),
+        filtrarData(response) {
+            const params = {
+                idPronac: this.dadosProjeto.idPronac,
+                dtInicio: response.dtInicio,
+                dtFim: response.dtFim,
+            };
+            this.buscarCaptacao(params);
         },
-        mixins: [utils],
-        components: {
-            Carregando,
-            FiltroData,
-        },
-        mounted() {
-            if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-                const params = {
-                    idPronac: this.dadosProjeto.idPronac,
-                    dtInicio: '',
-                    dtFim: '',
-                };
-                this.buscarCaptacao(params);
-            }
-        },
-        watch: {
-            dadosCaptacao() {
-                this.loading = false;
-            },
-        },
-        computed: {
-            ...mapGetters({
-                dadosProjeto: 'projeto/projeto',
-                dadosCaptacao: 'projeto/captacao',
-            }),
-        },
-        methods: {
-            ...mapActions({
-                buscarCaptacao: 'projeto/buscarCaptacao',
-            }),
-            filtrarData(response) {
-                const params = {
-                    idPronac: this.dadosProjeto.idPronac,
-                    dtInicio: response.dtInicio,
-                    dtFim: response.dtFim,
-                };
-                this.buscarCaptacao(params);
-            },
-        },
-    };
+    },
+};
 </script>

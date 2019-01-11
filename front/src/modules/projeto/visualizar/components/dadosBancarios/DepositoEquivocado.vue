@@ -1,30 +1,45 @@
 <template>
     <div>
         <div v-if="loading">
-            <Carregando :text="'Depósito Equivocado'"></Carregando>
+            <Carregando :text="'Depósito Equivocado'"/>
         </div>
         <div v-else>
             <v-card>
-                <FiltroData
-                    :text="'Escolha a Dt. Devolução:'"
-                    v-on:eventoFiltrarData="filtrarData"
-                >
-                </FiltroData>
+                <v-container fluid>
+                    <FiltroData
+                        :text="'Escolha a Dt. Devolução:'"
+                        @eventoFiltrarData="filtrarData"
+                    />
+                </v-container>
                 <v-data-table
-                        :headers="headers"
-                        :items="dadosDepositoEquivocado"
-                        class="elevation-1 container-fluid"
-                        :pagination.sync="pagination"
-                        :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
+                    :headers="headers"
+                    :items="dadosDepositoEquivocado"
+                    :pagination.sync="pagination"
+                    :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
+                    class="elevation-1 container-fluid"
                 >
-                    <template slot="items" slot-scope="props">
-                        <td class="text-xs-left" v-html="props.item.Nome"></td>
-                        <td class="text-xs-right">{{ props.item.dtCredito | formatarData }}</td>
-                        <td class="text-xs-right">{{ props.item.dtLote | formatarData }}</td>
-                        <td class="text-xs-right">{{ props.item.vlDeposito | filtroFormatarParaReal }}</td>
+                    <template
+                        slot="items"
+                        slot-scope="props">
+                        <td
+                            class="text-xs-left"
+                            v-html="props.item.Nome"/>
+                        <td class="text-xs-right">
+                            {{ props.item.dtCredito | formatarData }}
+                        </td>
+                        <td class="text-xs-right">
+                            {{ props.item.dtLote | formatarData }}
+                        </td>
+                        <td class="text-xs-right">
+                            {{ props.item.vlDeposito | filtroFormatarParaReal }}
+                        </td>
                     </template>
-                    <template slot="pageText" slot-scope="props">
-                        Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                    <template
+                        slot="pageText"
+                        slot-scope="props">
+                        Items {{ props.pageStart }}
+                        - {{ props.pageStop }}
+                        de {{ props.itemsLength }}
                     </template>
                 </v-data-table>
             </v-card>
@@ -33,93 +48,93 @@
 </template>
 <script>
 
-    import { mapActions, mapGetters } from 'vuex';
-    import Carregando from '@/components/CarregandoVuetify';
-    import { utils } from '@/mixins/utils';
-    import FiltroData from './components/FiltroData';
+import { mapActions, mapGetters } from 'vuex';
+import Carregando from '@/components/CarregandoVuetify';
+import { utils } from '@/mixins/utils';
+import FiltroData from './components/FiltroData';
 
-    export default {
-        name: 'DepositoEquivocado',
-        data() {
-            return {
-                dtLote: null,
-                date: '',
-                modal: false,
-                menu1: false,
-                menu2: false,
-                datestring: '',
-                dateFim: '',
-                menuFim: false,
-                datestringFim: '',
-                search: '',
-                pagination: {
-                    sortBy: 'fat',
+export default {
+    name: 'DepositoEquivocado',
+    components: {
+        Carregando,
+        FiltroData,
+    },
+    mixins: [utils],
+    data() {
+        return {
+            dtLote: null,
+            date: '',
+            modal: false,
+            menu1: false,
+            menu2: false,
+            datestring: '',
+            dateFim: '',
+            menuFim: false,
+            datestringFim: '',
+            search: '',
+            pagination: {
+                sortBy: 'fat',
+            },
+            selected: [],
+            loading: true,
+            headers: [
+                {
+                    text: 'INCENTIVADOR',
+                    align: 'left',
+                    value: 'Nome',
                 },
-                selected: [],
-                loading: true,
-                headers: [
-                    {
-                        text: 'INCENTIVADOR',
-                        align: 'left',
-                        value: 'Nome',
-                    },
-                    {
-                        text: 'DT. CRÉDITO',
-                        align: 'center',
-                        value: 'dtCredito',
-                    },
-                    {
-                        text: 'DT. DEVOLUÇÃO',
-                        align: 'center',
-                        value: 'dtLote',
-                    },
-                    {
-                        text: 'VL. CAPTADO',
-                        align: 'center',
-                        value: 'vlDeposito',
-                    },
-                ],
+                {
+                    text: 'DT. CRÉDITO',
+                    align: 'center',
+                    value: 'dtCredito',
+                },
+                {
+                    text: 'DT. DEVOLUÇÃO',
+                    align: 'center',
+                    value: 'dtLote',
+                },
+                {
+                    text: 'VL. CAPTADO',
+                    align: 'center',
+                    value: 'vlDeposito',
+                },
+            ],
+        };
+    },
+    computed: {
+        ...mapGetters({
+            dadosProjeto: 'projeto/projeto',
+            dadosDepositoEquivocado: 'projeto/depositoEquivocado',
+        }),
+    },
+    watch: {
+        dadosDepositoEquivocado() {
+            this.loading = false;
+        },
+    },
+    mounted() {
+        if (typeof this.dadosProjeto.idPronac !== 'undefined') {
+            const params = {
+                idPronac: this.dadosProjeto.idPronac,
+                dtInicio: '',
+                dtFim: '',
             };
-        },
-        mixins: [utils],
-        components: {
-            Carregando,
-            FiltroData
-        },
-        mounted() {
-            if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-                const params = {
-                    idPronac: this.dadosProjeto.idPronac,
-                    dtInicio: '',
-                    dtFim: '',
-                };
 
-                this.buscarDepositoEquivocado(params);
-            }
+            this.buscarDepositoEquivocado(params);
+        }
+    },
+    methods: {
+        ...mapActions({
+            buscarDepositoEquivocado: 'projeto/buscarDepositoEquivocado',
+        }),
+        filtrarData(response) {
+            const params = {
+                idPronac: this.dadosProjeto.idPronac,
+                dtInicio: response.dtInicio,
+                dtFim: response.dtFim,
+            };
+            this.buscarDepositoEquivocado(params);
         },
-        watch: {
-            dadosDepositoEquivocado() {
-                this.loading = false;
-            },
-        },
-        computed: {
-            ...mapGetters({
-                dadosProjeto: 'projeto/projeto',
-                dadosDepositoEquivocado: 'projeto/depositoEquivocado',
-            }),
-        },
-        methods: {
-            ...mapActions({
-                buscarDepositoEquivocado: 'projeto/buscarDepositoEquivocado',
-            }),
-            filtrarData(response) {
-                const params = {
-                    idPronac: this.dadosProjeto.idPronac,
-                    dtInicio: response.dtInicio,
-                    dtFim: response.dtFim,
-                };
-                this.buscarDepositoEquivocado(params);
-            },
-        },
-    };
+    },
+};
 </script>
