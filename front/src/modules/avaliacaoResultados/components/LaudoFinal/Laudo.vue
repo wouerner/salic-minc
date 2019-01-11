@@ -14,9 +14,10 @@
         <v-data-table
             :headers="cabecalho"
             :items="dados.items"
-            :pagination.sync="pagination"
             :search="search"
-            hide-actions
+            item-key="item.index"
+            rows-per-page-text="Items por Página"
+            no-data-text="Nenhum dado encontrado"
         >
             <template
                 slot="items"
@@ -125,18 +126,18 @@
                 Não foi possível encontrar um projeto com a palavra chave '{{ search }}'.
             </v-alert>
         </v-data-table>
-        <div class="text-xs-center pt-2">
-            <div
-                v-if="pagination.totalItems"
-                class="text-xs-center">
-                <v-pagination
-                    v-model="pagination.page"
-                    :length="pages"
-                    :total-visible="3"
-                    color="primary"
-                />
-            </div>
-        </div>
+        <!--<div class="text-xs-center pt-2">-->
+            <!--<div-->
+                <!--v-if="pagination.totalItems"-->
+                <!--class="text-xs-center">-->
+                <!--<v-pagination-->
+                    <!--v-model="pagination.page"-->
+                    <!--:length="pages"-->
+                    <!--:total-visible="3"-->
+                    <!--color="primary"-->
+                <!--/>-->
+            <!--</div>-->
+        <!--</div>-->
     </div>
 </template>
 
