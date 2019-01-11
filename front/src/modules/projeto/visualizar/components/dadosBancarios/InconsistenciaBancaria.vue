@@ -8,8 +8,6 @@
                     :headers="headers"
                     :items="dadosInconsistencia"
                     class="elevation-1 container-fluid"
-                    rows-per-page-text="Items por Página"
-                    no-data-text="Nenhum dado encontrado"
                     :rows-per-page-items="[10, 25, 50, 100, {'text': 'Todos', value: -1}]"
             >
                 <template slot="items" slot-scope="props">
