@@ -141,6 +141,10 @@ export default {
         dadosSaldo() {
             this.loading = false;
         },
+        dadosProjeto(value) {
+            this.loading = false;
+            this.buscarSaldoContas(value.idPronac);
+        },
     },
     mounted() {
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
