@@ -228,7 +228,9 @@ export default {
             return moeda.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
         },
     },
-    props: ['comprovantes'],
+    props: {
+        comprovantes: { type: String, default: '' },
+    },
     data() {
         return {
             loading: true,
