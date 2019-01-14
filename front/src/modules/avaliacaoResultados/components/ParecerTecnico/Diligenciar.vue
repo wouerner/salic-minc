@@ -30,9 +30,7 @@
                                     <v-card-title primary-title>
                                         <div class="headline">
                                             <b>Projeto:</b>
-                                            {{ projeto.AnoProjeto }}
-                                            {{ projeto.Sequencial }}
-                                            - {{ projeto.NomeProjeto }}
+                                            {{ projeto.AnoProjeto }}{{ projeto.Sequencial }} - {{ projeto.NomeProjeto }}
                                         </div>
                                     </v-card-title>
                                     <v-card-text>
@@ -57,8 +55,7 @@
                                             <div
                                                 v-show="solicitacaoRules.show"
                                                 class="text-xs-left">
-                                                <h4 :class="solicitacaoRules.color">
-                                                    {{ solicitacaoRules.msg }}*</h4>
+                                                <h4 :class="solicitacaoRules.color">{{ solicitacaoRules.msg }}*</h4>
                                             </div>
                                             <EditorTexto
                                                 :style="solicitacaoRules.backgroundColor"
@@ -72,8 +69,7 @@
                                     <v-card-actions class="justify-center">
                                         <v-btn
                                             :disabled="!valid || !solicitacaoRules.enable"
-                                            :to="{ name: 'AnalisePlanilha',
-                                                   params:{ id: idPronac }}"
+                                            :to="{ name: 'AnalisePlanilha', params:{ id: idPronac }}"
                                             color="primary"
                                             @click.native="enviarDiligencia()"
                                         >
@@ -118,11 +114,11 @@ export default {
         };
     },
     computed:
-    {
-        ...mapGetters({
-            projeto: 'avaliacaoResultados/projeto',
-        }),
-    },
+        {
+            ...mapGetters({
+                projeto: 'avaliacaoResultados/projeto',
+            }),
+        },
     created() {
         this.getConsolidacao(this.idPronac);
     },
