@@ -149,7 +149,6 @@
                                             <b>Avaliação: </b> {{ itemEmEdicao.stItemAvaliado | filtrarLabelSituacao }}
                                         </v-flex>
                                         <v-flex
-                                            v-if="itemEmEdicao.dsOcorrenciaDoTecnico.length > 3"
                                             xs12
                                             sm12
                                             md12>
@@ -171,12 +170,13 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import moment from 'moment';
 import cnpjFilter from '@/filters/cnpj';
 import Carregando from '@/components/CarregandoVuetify';
 
 export default {
-    name: 'CardComprovantes',
+    name: 'ListaDeComprovantes',
     components: {
         Carregando,
     },
@@ -265,10 +265,14 @@ export default {
             }
         },
     },
+    mounted() {
+        // console.info(Object.keys(this.itemEmEdicao).length > 0);
+        console.info(Object.keys(this.itemEmEdicao).length);
+    },
     methods: {
         editarAvaliacao(props) {
             props.expanded = !props.expanded;
-            this.itemEmEdicao = Object.assign({}, props.item);
+            Vue.set(this, 'itemEmEdicao', props.item);
         },
     },
 };
