@@ -140,10 +140,18 @@ export default {
             dadosConta: 'projeto/contasBancarias',
         }),
     },
+    watch: {
+        dadosConta() {
+            this.loading = false;
+        },
+        dadosProjeto(value) {
+            this.loading = true;
+            this.buscarContasBancarias(value.idPronac);
+        },
+    },
     mounted() {
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             this.buscarContasBancarias(this.dadosProjeto.idPronac);
-            this.loading = false;
         }
     },
     methods: {

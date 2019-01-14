@@ -136,6 +136,10 @@ export default {
         dadosInconsistencia() {
             this.loading = false;
         },
+        dadosProjeto(value) {
+            this.loading = true;
+            this.buscarInconsistenciaBancaria(value.idPronac);
+        },
     },
     mounted() {
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {

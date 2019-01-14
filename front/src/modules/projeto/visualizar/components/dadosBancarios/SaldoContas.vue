@@ -142,7 +142,7 @@ export default {
             this.loading = false;
         },
         dadosProjeto(value) {
-            this.loading = false;
+            this.loading = true;
             this.buscarSaldoContas(value.idPronac);
         },
     },

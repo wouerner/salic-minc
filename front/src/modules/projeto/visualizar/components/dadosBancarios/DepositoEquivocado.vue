@@ -111,6 +111,10 @@ export default {
         dadosDepositoEquivocado() {
             this.loading = false;
         },
+        dadosProjeto(value) {
+            this.loading = true;
+            this.buscarDepositoEquivocado(value.idPronac);
+        },
     },
     mounted() {
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {

@@ -139,6 +139,10 @@ export default {
         dadosExtratosConsolidado() {
             this.loading = false;
         },
+        dadosProjeto(value) {
+            this.loading = true;
+            this.buscarExtratosBancariosConsolidado(value.idPronac);
+        },
     },
     mounted() {
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
