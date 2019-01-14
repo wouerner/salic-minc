@@ -24,7 +24,9 @@
                             small
                             text-color="white">
                             <v-avatar>
-                                <v-icon>{{ props.item.stItemAvaliado | filtrarIconeSituacao }}</v-icon>
+                                <v-icon>
+                                    {{ props.item.stItemAvaliado | filtrarIconeSituacao }}
+                                </v-icon>
                             </v-avatar>
                             {{ props.item.stItemAvaliado | filtrarLabelSituacao }}
                         </v-chip>
@@ -146,7 +148,10 @@
                                             xs12
                                             sm12
                                             md12>
-                                            <b>Avaliação: </b> {{ itemEmEdicao.stItemAvaliado | filtrarLabelSituacao }}
+                                            <b>
+                                                Avaliação:
+                                            </b>
+                                            {{ itemEmEdicao.stItemAvaliado | filtrarLabelSituacao }}
                                         </v-flex>
                                         <v-flex
                                             xs12
@@ -265,13 +270,9 @@ export default {
             }
         },
     },
-    mounted() {
-        // console.info(Object.keys(this.itemEmEdicao).length > 0);
-        console.info(Object.keys(this.itemEmEdicao).length);
-    },
     methods: {
         editarAvaliacao(props) {
-            props.expanded = !props.expanded;
+            // props.expanded = !props.expanded;
             Vue.set(this, 'itemEmEdicao', props.item);
         },
     },
