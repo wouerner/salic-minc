@@ -30,7 +30,9 @@ class ContasBancarias
         if (!empty($idPronac)) {
 
             $tblContaBancaria = new \ContaBancaria();
-            $rsContaBancaria = $tblContaBancaria->contaPorProjeto($idPronac)->toArray();
+            $rsContaBancaria = $tblContaBancaria->contaPorProjeto($idPronac);
+            $rsContaBancaria = $rsContaBancaria ? $rsContaBancaria->toArray() : [];
+
             return $rsContaBancaria;
         }
     }

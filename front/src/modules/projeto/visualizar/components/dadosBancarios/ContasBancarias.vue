@@ -3,7 +3,7 @@
         <div v-if="loading">
             <Carregando :text="'Contas Bancárias'"/>
         </div>
-        <div v-else>
+        <div v-else-if="Object.keys(dadosConta).length > 0">
             <v-card>
                 <v-card-text>
                     <v-container
@@ -98,6 +98,23 @@
                 </v-card-text>
             </v-card>
         </div>
+        <v-layout v-else>
+            <v-container
+                grid-list-md
+                text-xs-center>
+                <v-layout
+                    row
+                    wrap>
+                    <v-flex>
+                        <v-card>
+                            <v-card-text class="px-0">
+                                Nenhuma Contas Bancárias encontrada
+                            </v-card-text>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </v-layout>
     </div>
 </template>
 <script>
@@ -136,4 +153,3 @@ export default {
     },
 };
 </script>
-
