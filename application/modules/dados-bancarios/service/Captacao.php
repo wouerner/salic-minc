@@ -41,10 +41,23 @@ class Captacao
                 $where["DtRecibo BETWEEN '$di' AND '$df'"] = '';
             }
 
-            $result = $Captacao->painelDadosBancariosCaptacao($where, null, null, null, false)->toArray();
+            $dadosCaptacao = $Captacao->painelDadosBancariosCaptacao($where, null, null, null, false)->toArray();
+
+            $valorTotal = $this->calculaValorTotalCaptado($dadosCaptacao);
+
+            $result['vlTotal'] = $valorTotal;
+            $result['captacao'] = $dadosCaptacao;
 
             return $result;
         }
+    }
+
+    private function calculaValorTotalCaptado($value) {
+        foreach ($value as &$item) {
+            $valorTotal += $item['CaptacaoReal'];
+        }
+
+        return $valorTotal;
     }
 }
 

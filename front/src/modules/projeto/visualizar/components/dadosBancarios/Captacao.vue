@@ -5,7 +5,7 @@
         </div>
         <div v-else>
             <v-card>
-                <div v-if="Object.keys(dadosCaptacao).length > 0">
+                <div v-if="Object.keys(dadosCaptacao.captacao).length > 0">
                     <v-container fluid>
                         <FiltroData
                             :text="'Escolha a Dt. Captação:'"
@@ -15,7 +15,7 @@
                 </div>
                 <v-data-table
                     :headers="headers"
-                    :items="dadosCaptacao"
+                    :items="dadosCaptacao.captacao"
                     :pagination.sync="pagination"
                     :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
                     :search="search"
@@ -72,10 +72,10 @@
                             xs5
                             offset-xs1
                             class=" text-xs-right">
-                            <h6>R$ {{ dadosProjeto.vlCaptado | filtroFormatarParaReal }}</h6>
+                            <h6>R$ {{ dadosCaptacao.vlTotal | filtroFormatarParaReal }}</h6>
                         </v-flex>
                     </v-layout>
-                    <div v-if="dadosProjeto.PercentualCaptado">
+                    <div v-if="dadosCaptacao.vlTotal">
                         <v-layout
                             row
                             wrap>
@@ -87,7 +87,7 @@
                                 offset-xs1
                                 class=" text-xs-right"
                             >
-                                <h6>{{ dadosProjeto.PercentualCaptado }}%</h6>
+                                <h6>{{ ((dadosCaptacao.vlTotal / (dadosProjeto.vlAutorizadoOutrasFontes + dadosProjeto.vlAutorizado))* 100).toFixed(1) }}%</h6>
                             </v-flex>
                         </v-layout>
                     </div>
