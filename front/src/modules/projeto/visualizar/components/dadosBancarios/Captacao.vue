@@ -5,12 +5,14 @@
         </div>
         <div v-else>
             <v-card>
-                <v-container fluid>
-                    <FiltroData
-                        :text="'Escolha a Dt. Captação:'"
-                        @eventoFiltrarData="filtrarData"
-                    />
-                </v-container>
+                <div v-if="Object.keys(dadosCaptacao).length > 0">
+                    <v-container fluid>
+                        <FiltroData
+                            :text="'Escolha a Dt. Captação:'"
+                            @eventoFiltrarData="filtrarData"
+                        />
+                    </v-container>
+                </div>
                 <v-data-table
                     :headers="headers"
                     :items="dadosCaptacao"
@@ -73,19 +75,22 @@
                             <h6>R$ {{ dadosProjeto.vlCaptado | filtroFormatarParaReal }}</h6>
                         </v-flex>
                     </v-layout>
-                    <v-layout
-                        row
-                        wrap>
-                        <v-flex xs6>
-                            <h6>Total % Captado</h6>
-                        </v-flex>
-                        <v-flex
-                            xs5
-                            offset-xs1
-                            class=" text-xs-right">
-                            <h6>{{ dadosProjeto.PercentualCaptado }}%</h6>
-                        </v-flex>
-                    </v-layout>
+                    <div v-if="dadosProjeto.PercentualCaptado">
+                        <v-layout
+                            row
+                            wrap>
+                            <v-flex xs6>
+                                <h6>Total % Captado</h6>
+                            </v-flex>
+                            <v-flex
+                                xs5
+                                offset-xs1
+                                class=" text-xs-right"
+                            >
+                                <h6>{{ dadosProjeto.PercentualCaptado }}%</h6>
+                            </v-flex>
+                        </v-layout>
+                    </div>
                 </v-container>
             </v-card>
         </div>
