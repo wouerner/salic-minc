@@ -185,7 +185,9 @@ export default {
     mixins: [
         utils,
     ],
-    props: ['idagente'],
+    props: {
+        idagente: { type: String, default: '' },
+    },
     data() {
         return {
             proponente: [],

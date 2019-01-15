@@ -91,7 +91,11 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
     name: 'TabelaProjetos',
-    props: ['dados', 'componentes', 'mostrarTecnico'],
+    props: {
+        dados: { type: String, default: '' },
+        componentes: { type: String, default: '' },
+        mostrarTecnico: { type: String, default: '' },
+    },
     data() {
         return {
             pagination: {
