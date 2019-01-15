@@ -37,7 +37,12 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
     name: 'UltimaTramitacao',
-    props: ['idPronac'],
+    props: {
+        idPronac: {
+            type: Number,
+            default: 0,
+        },
+    },
     data() {
         return {
             search: '',
@@ -84,15 +89,15 @@ export default {
             ],
         };
     },
-    mounted() {
-        if (typeof this.idPronac !== 'undefined') {
-            this.buscarUltimaTramitacao(this.idPronac);
-        }
-    },
     computed: {
         ...mapGetters({
             dados: 'projeto/ultimaTramitacao',
         }),
+    },
+    mounted() {
+        if (typeof this.idPronac !== 'undefined') {
+            this.buscarUltimaTramitacao(this.idPronac);
+        }
     },
     methods: {
         ...mapActions({

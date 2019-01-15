@@ -23,18 +23,20 @@
                     <td class="text-xs-right">{{ props.item.Data | formatarData }}</td>
                     <td class="text-xs-left">{{ props.item.Descricao }}</td>
                     <td class="text-xs-left">
-                        <a
-                            slot="activator"
+                        <v-btn
                             :loading="parseInt(props.item.id) === loadingButton"
-                            :href="`/consultardadosprojeto/abrir-documentos-anexados?id=${props.item.idArquivo}&tipo=${props.item.AgenteDoc}&idPronac=${dadosProjeto.idPronac}`"
+                            :href="`/consultardadosprojeto`+
+                                `/abrir-documentos-anexados`+
+                                `?id=${props.item.idArquivo}`+
+                                `&tipo=${props.item.AgenteDoc}`+
+                            `&idPronac=${dadosProjeto.idPronac}`"
                             style="text-decoration: none"
-                            @click.native="loadingButton = parseInt(props.item.id)"
-
+                            @click="loadingButton = parseInt(props.item.id)"
+                            round
+                            small
                         >
-                            <v-btn
-                                round
-                                small>{{ props.item.NoArquivo }}</v-btn>
-                        </a>
+                        {{ props.item.NoArquivo }}
+                        </v-btn>
                     </td>
                 </template>
                 <template
@@ -56,7 +58,20 @@ export default {
     components: {
         Carregando,
     },
-    props: ['idPronac'],
+    filters: {
+        formatarData(date) {
+            if (date.length === 0) {
+                return '-';
+            }
+            return moment(date).format('DD/MM/YYYY');
+        },
+    },
+    props: {
+        idPronac: {
+            type: Number,
+            default: 0,
+        },
+    },
     data() {
         return {
             search: '',
@@ -97,35 +112,6 @@ export default {
             ],
         };
     },
-    watch: {
-        dados(value) {
-            this.informacoes = value.informacoes;
-        },
-        documentosAnexados() {
-            this.loading = false;
-        },
-        loadingButton() {
-            setTimeout(() => (this.loadingButton = -1), 2000);
-        },
-    },
-    mounted() {
-        if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-            this.buscarDocumentosAnexados(this.dadosProjeto.idPronac);
-        }
-    },
-    methods: {
-        ...mapActions({
-            buscarDocumentosAnexados: 'projeto/buscarDocumentosAnexados',
-        }),
-    },
-    filters: {
-        formatarData(date) {
-            if (date.length === 0) {
-                return '-';
-            }
-            return moment(date).format('DD/MM/YYYY');
-        },
-    },
     computed: {
         ...mapGetters({
             dadosProjeto: 'projeto/projeto',
@@ -138,6 +124,27 @@ export default {
                 ...item,
             }));
         },
+    },
+    watch: {
+        dados(value) {
+            this.informacoes = value.informacoes;
+        },
+        documentosAnexados() {
+            this.loading = false;
+        },
+        loadingButton() {
+            setTimeout(() => { return this.loadingButton = -1; }, 2000);
+        },
+    },
+    mounted() {
+        if (typeof this.dadosProjeto.idPronac !== 'undefined') {
+            this.buscarDocumentosAnexados(this.dadosProjeto.idPronac);
+        }
+    },
+    methods: {
+        ...mapActions({
+            buscarDocumentosAnexados: 'projeto/buscarDocumentosAnexados',
+        }),
     },
 };
 </script>

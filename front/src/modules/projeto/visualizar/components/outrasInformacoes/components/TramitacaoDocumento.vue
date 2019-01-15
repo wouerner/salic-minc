@@ -18,7 +18,12 @@
                     <td class="text-xs-right">{{ props.item.dtDocumento }}</td>
                     <td class="text-xs-right">{{ props.item.dtAnexacao }}</td>
                     <td class="text-xs-left">
-                        <a :href="`/consultardadosprojeto/abrir-documento-tramitacao?id=${ props.item.idDocumento}&idPronac=${idPronac}`">
+                        <a
+                            :href="`
+                                /consultardadosprojeto
+                                /abrir-documento-tramitacao
+                                ?id=${ props.item.idDocumento}&idPronac=${idPronac}`"
+                        >
                             {{ props.item.noArquivo }}
                         </a>
                     </td>
@@ -41,7 +46,12 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
     name: 'TramitacaoDocumento',
-    props: ['idPronac'],
+    props: {
+        idPronac: {
+            type: Number,
+            default: 0,
+        },
+    },
     data() {
         return {
             search: '',
@@ -88,15 +98,15 @@ export default {
             ],
         };
     },
-    mounted() {
-        if (typeof this.idPronac !== 'undefined') {
-            this.buscarTramitacaoDocumento(this.idPronac);
-        }
-    },
     computed: {
         ...mapGetters({
             dados: 'projeto/tramitacaoDocumento',
         }),
+    },
+    mounted() {
+        if (typeof this.idPronac !== 'undefined') {
+            this.buscarTramitacaoDocumento(this.idPronac);
+        }
     },
     methods: {
         ...mapActions({
