@@ -22,14 +22,17 @@
                     <v-tooltip left>
                         <v-btn
                             slot="activator"
-                            :href="`/assinatura/index/visualizar-documento-assinado/idPronac/${props.item.IdPRONAC}?idDocumentoAssinatura=${props.item.idDocumentoAssinatura}`"
+                            :href="
+                                `/assinatura/index`+
+                                    `/visualizar-documento-assinado`+
+                                    `/idPronac/${props.item.IdPRONAC}`+
+                            `?idDocumentoAssinatura=${props.item.idDocumentoAssinatura}`"
                             style="text-decoration: none"
                             fab
                             dark
                             small
                             color="teal"
                             target="_blank"
-                            dark
                         >
                             <v-icon dark>search</v-icon>
                         </v-btn>
@@ -65,7 +68,12 @@ export default {
     components: {
         Carregando,
     },
-    props: ['idPronac'],
+    props: {
+        idPronac: {
+            type: Number,
+            default: 0,
+        },
+    },
     data() {
         return {
             loading: true,
@@ -104,6 +112,12 @@ export default {
             ],
         };
     },
+    computed: {
+        ...mapGetters({
+            dadosProjeto: 'projeto/projeto',
+            dados: 'projeto/documentosAssinados',
+        }),
+    },
     watch: {
         dados() {
             this.loading = false;
@@ -113,12 +127,6 @@ export default {
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             this.buscarDocumentosAssinados(this.dadosProjeto.idPronac);
         }
-    },
-    computed: {
-        ...mapGetters({
-            dadosProjeto: 'projeto/projeto',
-            dados: 'projeto/documentosAssinados',
-        }),
     },
     methods: {
         ...mapActions({

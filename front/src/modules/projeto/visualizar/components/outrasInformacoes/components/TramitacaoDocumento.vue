@@ -19,10 +19,11 @@
                     <td class="text-xs-right">{{ props.item.dtAnexacao }}</td>
                     <td class="text-xs-left">
                         <a
-                            :href="`
-                                /consultardadosprojeto
-                                /abrir-documento-tramitacao
-                                ?id=${ props.item.idDocumento}&idPronac=${idPronac}`"
+                            :href="
+                                `/consultardadosprojeto`+
+                                    `/abrir-documento-tramitacao`+
+                                    `?id=${ props.item.idDocumento}`+
+                            `&idPronac=${idPronac}`"
                         >
                             {{ props.item.noArquivo }}
                         </a>
@@ -48,8 +49,8 @@ export default {
     name: 'TramitacaoDocumento',
     props: {
         idPronac: {
-            type: Number,
-            default: 0,
+            type: String,
+            default: '',
         },
     },
     data() {

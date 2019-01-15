@@ -31,11 +31,11 @@
                                 `&tipo=${props.item.AgenteDoc}`+
                             `&idPronac=${dadosProjeto.idPronac}`"
                             style="text-decoration: none"
-                            @click="loadingButton = parseInt(props.item.id)"
                             round
                             small
+                            @click="loadingButton = parseInt(props.item.id)"
                         >
-                        {{ props.item.NoArquivo }}
+                            {{ props.item.NoArquivo }}
                         </v-btn>
                     </td>
                 </template>
@@ -133,7 +133,7 @@ export default {
             this.loading = false;
         },
         loadingButton() {
-            setTimeout(() => { return this.loadingButton = -1; }, 2000);
+            setTimeout(() => { this.loadingButton = -1; }, 2000);
         },
     },
     mounted() {

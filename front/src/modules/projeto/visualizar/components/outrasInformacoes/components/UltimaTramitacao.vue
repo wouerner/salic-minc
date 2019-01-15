@@ -39,8 +39,8 @@ export default {
     name: 'UltimaTramitacao',
     props: {
         idPronac: {
-            type: Number,
-            default: 0,
+            type: String,
+            default: '',
         },
     },
     data() {

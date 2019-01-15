@@ -38,8 +38,8 @@ export default {
     name: 'TramitacaoProjeto',
     props: {
         idPronac: {
-            type: Number,
-            default: 0,
+            type: String,
+            default: '',
         },
     },
     data() {
