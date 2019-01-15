@@ -4,11 +4,13 @@
             <Carregando :text="'Extratos Bancários Consolidado'"/>
         </div>
         <v-card v-else>
-            <v-container fluid>
-                <FiltroTipoConta
-                    @eventoSearch="search = $event"
-                />
-            </v-container>
+            <div v-if="Object.keys(dadosExtratosConsolidado).length > 0">
+                <v-container fluid>
+                    <FiltroTipoConta
+                        @eventoSearch="search = $event"
+                    />
+                </v-container>
+            </div>
             <v-data-table
                 :headers="headers"
                 :items="dadosExtratosConsolidado"

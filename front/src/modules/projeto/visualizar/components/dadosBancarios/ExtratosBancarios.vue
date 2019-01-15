@@ -5,15 +5,17 @@
         </div>
         <div v-else>
             <v-card>
-                <v-container fluid>
-                    <FiltroData
-                        :text="'Escolha a Dt. Lançamento:'"
-                        @eventoFiltrarData="filtrarData"
-                    />
-                    <FiltroTipoConta
-                        @eventoSearch="search = $event"
-                    />
-                </v-container>
+                <div v-if="Object.keys(dadosExtratosBancarios).length > 0">
+                    <v-container fluid>
+                        <FiltroData
+                            :text="'Escolha a Dt. Lançamento:'"
+                            @eventoFiltrarData="filtrarData"
+                        />
+                        <FiltroTipoConta
+                            @eventoSearch="search = $event"
+                        />
+                    </v-container>
+                </div>
                 <v-card class="box">
                     <v-data-table
                         :headers="headers"

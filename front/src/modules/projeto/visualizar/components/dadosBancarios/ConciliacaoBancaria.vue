@@ -5,12 +5,14 @@
         </div>
         <div v-else>
             <v-card>
-                <v-container fluid>
-                    <FiltroData
-                        :text="'Escolha a Data:'"
-                        @eventoFiltrarData="filtrarData"
-                    />
-                </v-container>
+                <div v-if="Object.keys(dadosConciliacao).length > 0">
+                    <v-container fluid>
+                        <FiltroData
+                            :text="'Escolha a Data:'"
+                            @eventoFiltrarData="filtrarData"
+                        />
+                    </v-container>
+                </div>
                 <v-card id="geraPdf">
                     <v-data-table
                         :headers="headers"
