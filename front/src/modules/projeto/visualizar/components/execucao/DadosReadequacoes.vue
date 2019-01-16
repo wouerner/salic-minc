@@ -369,13 +369,18 @@ export default {
         },
         obterGrupoReadequacoes() {
             const gruposReadequacao = {};
-            for (const indiceDadosReadequacao in this.dados.dadosReadequacoes) {
-                const { tipoReadequacao } = this.dados.dadosReadequacoes[indiceDadosReadequacao];
-                if (gruposReadequacao[tipoReadequacao] == null || gruposReadequacao[tipoReadequacao].length < 1) {
+            const { dadosReadequacoes } = this.dados;
+
+            dadosReadequacoes.forEach((readequacao) => {
+                const { tipoReadequacao } = readequacao;
+                if (gruposReadequacao[tipoReadequacao] == null
+                    || gruposReadequacao[tipoReadequacao].length < 1) {
                     gruposReadequacao[tipoReadequacao] = [];
                 }
-                gruposReadequacao[tipoReadequacao].push(this.dados.dadosReadequacoes[indiceDadosReadequacao]);
-            }
+                gruposReadequacao[tipoReadequacao].push(
+                    readequacao,
+                );
+            });
 
             return gruposReadequacao;
         },
