@@ -307,6 +307,11 @@ import AnalisarItem from './AnalisarItem';
 
 export default {
     name: 'Planilha',
+    components: {
+        ConsolidacaoAnalise,
+        AnalisarItem,
+        Carregando,
+    },
     data() {
         return {
             headers: [
@@ -361,11 +366,6 @@ export default {
     mounted() {
         this.setPlanilha(this.idPronac);
         this.setProjetoAnalise(this.idPronac);
-    },
-    components: {
-        ConsolidacaoAnalise,
-        AnalisarItem,
-        Carregando,
     },
     methods: {
         ...mapActions({
