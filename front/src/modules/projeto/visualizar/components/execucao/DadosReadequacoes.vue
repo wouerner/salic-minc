@@ -370,7 +370,7 @@ export default {
         obterGrupoReadequacoes() {
             const gruposReadequacao = {};
             for (const indiceDadosReadequacao in this.dados.dadosReadequacoes) {
-                const tipoReadequacao = this.dados.dadosReadequacoes[indiceDadosReadequacao].tipoReadequacao;
+                const { tipoReadequacao } = this.dados.dadosReadequacoes[indiceDadosReadequacao];
                 if (gruposReadequacao[tipoReadequacao] == null || gruposReadequacao[tipoReadequacao].length < 1) {
                     gruposReadequacao[tipoReadequacao] = [];
                 }
