@@ -228,7 +228,6 @@ export default {
         },
         proximoEstado() {
             let proximo;
-            console.info('alo', this.estado);
             if (this.estado.toString() === this.Const.ESTADO_ANALISE_LAUDO.toString()) {
                 proximo = this.Const.ESTADO_ANALISE_PARECER;
             } else if (this.estado.toString() === this.Const.ESTADO_AGUARDANDO_ASSINATURA_COORDENADOR_GERAL_LAUDO.toString()) {
