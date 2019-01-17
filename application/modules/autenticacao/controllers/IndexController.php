@@ -25,6 +25,23 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
         }
     }
 
+    public function index2Action()
+    {
+        $this->_helper->layout->disableLayout();
+
+        /* Zend_Layout::startMvc(array('layout' => 'open')); */
+        /* $oauthConfigArray = Zend_Registry::get("config")->toArray(); */
+        /* $this->view->habilitarServicoLoginCidadao = false; */
+        /* if ($oauthConfigArray && $oauthConfigArray['OAuth']) { */
+        /*     $this->view->habilitarServicoLoginCidadao = (bool)$oauthConfigArray['OAuth']['servicoHabilitado']; */
+        /* } */
+/* //        xd(base64_decode($this->getRequest()->getParam('from', null))); */
+        /* $this->view->from = $this->getRequest()->getParam('from', null); */
+        /* if ($this->view->from) { */
+        /*     $this->view->from = base64_decode($this->view->from); */
+        /* } */
+    }
+
     /**
      * @access public
      * @param void
