@@ -108,7 +108,6 @@ export default {
             this.loading = false;
         },
     },
-
     mounted() {
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             this.buscarProvidenciaTomada(this.dadosProjeto.idPronac);
