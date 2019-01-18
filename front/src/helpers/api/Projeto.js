@@ -260,11 +260,12 @@ export const buscarConciliacaoBancaria = (params) => {
     return api.getRequest(path, queryParams);
 };
 
-export const buscarInconsistenciaBancaria = (idPronac) => {
+export const buscarInconsistenciaBancaria = (params) => {
     const modulo = '/dados-bancarios';
     const controller = '/inconsistencia-bancaria-rest';
-    const path = `${modulo}${controller}`;
-    const queryParams = `?idPronac=${idPronac}`;
+    const metodo = '/index';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPronac=${params.idPronac}&dtPagamentoInicio=${params.dtInicio}&dtPagamentoFim=${params.dtFim}`;
     return api.getRequest(path, queryParams);
 };
 

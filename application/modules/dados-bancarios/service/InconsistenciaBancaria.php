@@ -23,13 +23,21 @@ class InconsistenciaBancaria
     public function buscarInconsistenciaBancaria()
     {
         $idPronac = $this->request->idPronac;
-            $where = array();
-            $where['idPronac = ?'] = $idPronac;
+        $dtPagamentoInicio = $this->request->dtPagamentoInicio;
+        $dtPagamentoFim = $this->request->dtPagamentoFim;
+        $where = array();
+        $where['idPronac = ?'] = $idPronac;
 
-            $dadosProjeto = new \Projetos();
-            $buscaDadosProjeto = $dadosProjeto->inconsistenciasComprovacao($where, null, null, null)->toArray();
+        if (!empty($dtPagamentoInicio) && !empty($dtPagamentoFim)) {
+            $di = ConverteData($dtPagamentoInicio, 13)." 00:00:00";
+            $df = ConverteData($dtPagamentoFim, 13)." 00:00:00";
+            $where["dtPagamento BETWEEN '$di' AND '$df'"] = '';
+        }
 
-            return $buscaDadosProjeto;
+        $dadosProjeto = new \Projetos();
+        $buscaDadosProjeto = $dadosProjeto->inconsistenciasComprovacao($where, null, null, null)->toArray();
+        
+        return $buscaDadosProjeto;
     }
 }
 

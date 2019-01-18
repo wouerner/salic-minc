@@ -8,7 +8,7 @@
                 <div v-if="Object.keys(dadosConciliacao).length > 0">
                     <v-container fluid>
                         <FiltroData
-                            :text="'Escolha a Data:'"
+                            :text="'Escolha a Data de Pagamento:'"
                             @eventoFiltrarData="filtrarData"
                         />
                     </v-container>
@@ -146,7 +146,7 @@ export default {
                     value: 'nrDocumentoDePagamento',
                 },
                 {
-                    text: 'DATA',
+                    text: 'DT. PAGAMENTO',
                     align: 'center',
                     value: 'dtPagamento',
                 },
