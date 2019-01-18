@@ -120,7 +120,9 @@ export default {
                 text-align: left;
                 padding: 1em;
               }
-
+              body {
+                  margin-top: 80px;
+              }
               .v-input , button, .v-icon, .v-datatable__actions__pagination, .v-datatable__actions__select, h6, .pb-2{
                 display: none !important;
               }

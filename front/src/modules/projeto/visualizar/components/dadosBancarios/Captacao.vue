@@ -87,12 +87,31 @@
                                 offset-xs1
                                 class=" text-xs-right"
                             >
-                                <h6>{{ ((dadosCaptacao.vlTotal / (dadosProjeto.vlAutorizadoOutrasFontes + dadosProjeto.vlAutorizado))* 100).toFixed(1) }}%</h6>
+                                <h6>{{ ((dadosCaptacao.vlTotal /
+                                    (dadosProjeto.vlAutorizadoOutrasFontes + dadosProjeto.vlAutorizado)
+                                )* 100).toFixed(1) }}%
+                                </h6>
                             </v-flex>
                         </v-layout>
                     </div>
                 </v-container>
             </v-card>
+            <div
+                v-if="Object.keys(dadosCaptacao).length > 0"
+                class="text-xs-center">
+                <v-btn
+                    round
+                    dark
+                    target="_blank"
+                    @click="print"
+                >
+                    Imprimir
+                    <v-icon
+                        right
+                        dark>local_printshop
+                    </v-icon>
+                </v-btn>
+            </div>
         </div>
     </div>
 </template>
@@ -112,6 +131,31 @@ export default {
     mixins: [utils],
     data() {
         return {
+            cssText: `
+              .box {
+                width: 5000px;
+                text-align: left;
+                padding: 1em;
+              }
+              body {
+                  margin-top: 80px;
+              }
+              .v-input , button, .v-icon, .v-datatable__actions__pagination, .v-datatable__actions__select, h6, .pb-2{
+                display: none !important;
+              }
+
+              th{
+                width: 130px
+              }
+
+              td{
+                width: 120px;
+                text-align: center;
+              }
+              .stBrasao{
+                text-align: center;
+              }
+              `,
             search: '',
             pagination: {
                 sortBy: 'DtRecibo',
@@ -185,6 +229,18 @@ export default {
         },
     },
     mounted() {
+        const { Printd } = window.printd;
+        this.d = new Printd();
+
+        // Print dialog events (v0.0.9+)
+        const { contentWindow } = this.d.getIFrame();
+
+        contentWindow.addEventListener(
+            'beforeprint', () => console.log('before print event!'),
+        );
+        contentWindow.addEventListener(
+            'afterprint', () => console.log('after print event!'),
+        );
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             const params = {
                 idPronac: this.dadosProjeto.idPronac,
@@ -205,6 +261,9 @@ export default {
                 dtFim: response.dtFim,
             };
             this.buscarCaptacao(params);
+        },
+        print() {
+            this.d.print(this.$el, this.cssText);
         },
     },
 };

@@ -86,7 +86,7 @@
                     round
                     dark
                     target="_blank"
-                    @click="createPDF"
+                    @click="print"
                 >
                     Imprimir
                     <v-icon
@@ -118,6 +118,31 @@ export default {
     mixins: [utils],
     data() {
         return {
+            cssText: `
+              .box {
+                width: 5000px;
+                text-align: left;
+                padding: 1em;
+              }
+              body {
+                  margin-top: 80px;
+              }
+              .v-input , button, .v-icon, .v-datatable__actions__pagination, .v-datatable__actions__select, h6, .pb-2{
+                display: none !important;
+              }
+
+              th{
+                width: 130px
+              }
+
+              td{
+                width: 120px;
+                text-align: center;
+              }
+              .stBrasao{
+                text-align: center;
+              }
+              `,
             name: '',
             search: '',
             pagination: {
@@ -196,6 +221,18 @@ export default {
         },
     },
     mounted() {
+        const { Printd } = window.printd;
+        this.d = new Printd();
+
+        // Print dialog events (v0.0.9+)
+        const { contentWindow } = this.d.getIFrame();
+
+        contentWindow.addEventListener(
+            'beforeprint', () => console.log('before print event!'),
+        );
+        contentWindow.addEventListener(
+            'afterprint', () => console.log('after print event!'),
+        );
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             const params = {
                 idPronac: this.dadosProjeto.idPronac,
@@ -217,26 +254,9 @@ export default {
             };
             this.buscarConciliacaoBancaria(params);
         },
-        createPDF() {
-            const pdf = new jsPDF('p', 'pt', 'a4');
-            // pdf.addImage(imgData, 'JPEG', 80, 10, 90, 70);
-            var options = {
-                pagesplit: true,
-            };
-            pdf.addHTML($('#geraPdf'), options, () => {
-                pdf.save('web.pdf');
-            });
-            // const doc = new jsPDF('p', 'pt', 'letter');
-            // doc.addHTML($('#geraPdf'), () => {
-            //     doc.save('teste.pdf');
-            // });
+        print() {
+            this.d.print(this.$el, this.cssText);
         },
-        // download() {
-        //     const pdfName = 'test';
-        //     const doc = new jsPDF();
-        //     doc.text(this.name, 10, 10);
-        //     doc.save(`${pdfName}.pdf`);
-        // },
     },
 };
 </script>
