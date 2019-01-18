@@ -40,7 +40,9 @@
                     <template
                         slot="pageText"
                         slot-scope="props">
-                        Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                        Items {{ props.pageStart }} -
+                        {{ props.pageStop }} de
+                        {{ props.itemsLength }}
                     </template>
                 </v-data-table>
             </v-card>
@@ -66,7 +68,12 @@ export default {
     components: {
         Carregando,
     },
-    props: ['idPronac'],
+    props: {
+        idPronac: {
+            type: Number,
+            default: 0,
+        },
+    },
     data() {
         return {
             search: '',
@@ -101,6 +108,12 @@ export default {
             ],
         };
     },
+    computed: {
+        ...mapGetters({
+            dadosProjeto: 'projeto/projeto',
+            dados: 'projeto/marcasAnexadas',
+        }),
+    },
     watch: {
         loadingButton() {
             setTimeout(() => (this.loadingButton = -1), 2000);
@@ -113,12 +126,6 @@ export default {
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             this.buscarMarcasAnexadas(this.dadosProjeto.idPronac);
         }
-    },
-    computed: {
-        ...mapGetters({
-            dadosProjeto: 'projeto/projeto',
-            dados: 'projeto/marcasAnexadas',
-        }),
     },
     methods: {
         ...mapActions({
