@@ -65,7 +65,6 @@
                     :key="1"
                 >
                     <Laudo
-                        :complementar="dadosTabelaTecnico"
                         :dados="getProjetosLaudoAssinar"
                         :estado="assinarPerfil().toString()"
                     />
@@ -107,7 +106,6 @@ export default {
             getProjetosLaudoAssinar: 'avaliacaoResultados/getProjetosLaudoAssinar',
             getProjetosLaudoEmAssinatura: 'avaliacaoResultados/getProjetosLaudoEmAssinatura',
             getProjetosLaudoFinalizados: 'avaliacaoResultados/getProjetosLaudoFinalizados',
-            dadosTabelaTecnico: 'avaliacaoResultados/dadosTabelaTecnico',
             getUsuario: 'autenticacao/getUsuario',
             route: 'route',
         }),
@@ -116,11 +114,9 @@ export default {
         this.obterProjetosLaudoFinal({ estadoId: 10 });
         this.obterProjetosLaudoAssinar({ estadoId: this.assinarPerfil() });
         this.obterProjetosLaudoFinalizados({ estadoId: 12 });
-        this.obterDadosTabelaTecnico({ estadoid: 11, idAgente: this.getUsuario.usu_codigo });
     },
     methods: {
         ...mapActions({
-            obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
             obterProjetosLaudoFinal: 'avaliacaoResultados/obterProjetosLaudoFinal',
             obterProjetosLaudoAssinar: 'avaliacaoResultados/obterProjetosLaudoAssinar',
             obterProjetosLaudoFinalizados: 'avaliacaoResultados/obterProjetosLaudoFinalizados',
