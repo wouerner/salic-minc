@@ -169,6 +169,16 @@ export default {
         }),
     },
     watch: {
+        dadosProjeto(value) {
+            this.loading = false;
+
+            const params = {
+                idPronac: value.idPronac,
+                dtInicio: '',
+                dtFim: '',
+            };
+            this.buscarCaptacao(params);
+        },
         dadosCaptacao() {
             this.loading = false;
         },
