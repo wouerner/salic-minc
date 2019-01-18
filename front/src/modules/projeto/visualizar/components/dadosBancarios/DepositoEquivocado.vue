@@ -83,7 +83,8 @@ export default {
             datestringFim: '',
             search: '',
             pagination: {
-                sortBy: 'fat',
+                sortBy: 'dtLote',
+                descending: true,
             },
             selected: [],
             loading: true,

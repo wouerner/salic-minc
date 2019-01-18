@@ -139,7 +139,8 @@ export default {
               `,
             search: '',
             pagination: {
-                sortBy: 'fat',
+                sortBy: 'dtLancamento',
+                descending: true,
             },
             selected: [],
             loading: true,

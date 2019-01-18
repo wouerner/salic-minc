@@ -15,6 +15,7 @@
                 :headers="headers"
                 :items="dadosSaldo"
                 :search="search"
+                :pagination.sync="pagination"
                 :rows-per-page-items="[10, 25, 50, 100, {'text': 'Todos', value: -1}]"
                 class="elevation-1 container-fluid"
             >
@@ -95,7 +96,8 @@ export default {
             ],
             search: '',
             pagination: {
-                sortBy: 'fat',
+                sortBy: 'dtSaldoBancario',
+                descending: true,
             },
             selected: [],
             loading: true,

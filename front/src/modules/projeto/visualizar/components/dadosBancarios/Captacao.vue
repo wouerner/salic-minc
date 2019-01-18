@@ -114,7 +114,8 @@ export default {
         return {
             search: '',
             pagination: {
-                sortBy: 'fat',
+                sortBy: 'DtRecibo',
+                descending: true,
             },
             selected: [],
             loading: true,

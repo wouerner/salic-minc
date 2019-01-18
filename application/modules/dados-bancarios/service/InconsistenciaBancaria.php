@@ -35,7 +35,7 @@ class InconsistenciaBancaria
         }
 
         $dadosProjeto = new \Projetos();
-        $buscaDadosProjeto = $dadosProjeto->inconsistenciasComprovacao($where, null, null, null)->toArray();
+        $buscaDadosProjeto = $dadosProjeto->inconsistenciasComprovacao($where, ['dtPagamento DESC'], null, null)->toArray();
         
         return $buscaDadosProjeto;
     }

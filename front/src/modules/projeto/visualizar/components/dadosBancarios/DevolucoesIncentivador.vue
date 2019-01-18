@@ -67,7 +67,8 @@ export default {
         return {
             search: '',
             pagination: {
-                sortBy: 'fat',
+                sortBy: 'dtLote',
+                descending: true,
             },
             selected: [],
             loading: true,

@@ -16,6 +16,7 @@
                 <v-data-table
                     :headers="headers"
                     :items="dadosInconsistencia"
+                    :pagination.sync="pagination"
                     :rows-per-page-items="[10, 25, 50, 100, {'text': 'Todos', value: -1}]"
                     class="elevation-1 container-fluid"
                 >
@@ -101,7 +102,8 @@ export default {
         return {
             search: '',
             pagination: {
-                sortBy: 'fat',
+                sortBy: 'dtPagamento',
+                descending: true,
             },
             selected: [],
             loading: true,

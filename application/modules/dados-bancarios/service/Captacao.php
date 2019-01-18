@@ -41,7 +41,7 @@ class Captacao
                 $where["DtRecibo BETWEEN '$di' AND '$df'"] = '';
             }
 
-            $dadosCaptacao = $Captacao->painelDadosBancariosCaptacao($where, null, null, null, false)->toArray();
+            $dadosCaptacao = $Captacao->painelDadosBancariosCaptacao($where, ['DtRecibo DESC'], null, null, false)->toArray();
 
             $valorTotal = $this->calculaValorTotalCaptado($dadosCaptacao);
 

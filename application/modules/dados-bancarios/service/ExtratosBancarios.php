@@ -45,7 +45,7 @@ class ExtratosBancarios
             if (!empty($tpConta)) {
                 $where["stContaLancamento= ?"] = ($tpConta == 'captacao') ? 0 : 1;
             }
-            $result = $DadosExtrato->painelDadosBancariosExtrato($where, null, null, null, false)->toArray();
+            $result = $DadosExtrato->painelDadosBancariosExtrato($where, ['dtLancamento DESC'], null, null, false)->toArray();
             return $result;
         }
     }
