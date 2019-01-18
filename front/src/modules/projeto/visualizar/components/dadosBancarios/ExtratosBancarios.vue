@@ -194,6 +194,17 @@ export default {
         }),
     },
     watch: {
+        dadosProjeto(value) {
+            this.loading = true;
+
+            const params = {
+                idPronac: value.idPronac,
+                dtLancamento: '',
+                dtLancamentoFim: '',
+                tpConta: '',
+            };
+            this.buscarExtratosBancarios(params);
+        },
         dadosExtratosBancarios() {
             this.loading = false;
         },
