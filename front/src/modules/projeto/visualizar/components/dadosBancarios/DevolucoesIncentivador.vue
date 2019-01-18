@@ -102,6 +102,15 @@ export default {
         }),
     },
     watch: {
+        dadosProjeto(value) {
+            this.loading = true;
+            const params = {
+                idPronac: value.idPronac,
+                dtInicio: '',
+                dtFim: '',
+            };
+            this.buscarDevolucoesIncentivador(params);
+        },
         dadosDevolucoesIncentivador() {
             this.loading = false;
         },

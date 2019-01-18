@@ -179,6 +179,20 @@ export default {
             dadosConciliacao: 'projeto/conciliacaoBancaria',
         }),
     },
+    watch: {
+        dadosConciliacao() {
+            this.loading = false;
+        },
+        dadosProjeto(value) {
+            this.loading = true;
+            const params = {
+                idPronac: value.idPronac,
+                dtInicio: '',
+                dtFim: '',
+            };
+            this.buscarConciliacaoBancaria(params);
+        },
+    },
     mounted() {
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             const params = {
@@ -187,7 +201,6 @@ export default {
                 dtFim: '',
             };
             this.buscarConciliacaoBancaria(params);
-            this.loading = false;
         }
     },
     methods: {
