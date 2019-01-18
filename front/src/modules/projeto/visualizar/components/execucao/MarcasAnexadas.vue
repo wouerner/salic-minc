@@ -20,7 +20,7 @@
                         slot="items"
                         slot-scope="props">
                         <td class="text-xs-left">{{ props.item.dsDocumento }}</td>
-                        <td class="text-xs-right">{{ props.item.dtEnvio | formatarData }}</td>
+                        <td class="text-xs-center pl-5">{{ props.item.dtEnvio | formatarData }}</td>
                         <td class="text-xs-left">{{ props.item.stAtivoDocumentoProjeto }}</td>
                         <td class="text-xs-center">
                             <v-tooltip left>

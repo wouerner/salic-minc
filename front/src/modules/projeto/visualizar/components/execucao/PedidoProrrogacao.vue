@@ -18,9 +18,9 @@
                 <template
                     slot="items"
                     slot-scope="props">
-                    <td class="text-xs-right">{{ props.item.DtPedido | formatarData }}</td>
-                    <td class="text-xs-right">{{ props.item.DtInicio | formatarData }}</td>
-                    <td class="text-xs-right">{{ props.item.DtFinal | formatarData }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.DtPedido | formatarData }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.DtInicio | formatarData }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.DtFinal | formatarData }}</td>
                     <td
                         class="text-xs-left"
                         v-html="props.item.Observacao"/>

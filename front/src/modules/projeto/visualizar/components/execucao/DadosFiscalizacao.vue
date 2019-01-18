@@ -16,9 +16,9 @@
                     slot="items"
                     slot-scope="props">
                     <td
-                        class="text-xs-center"
+                        class="text-xs-center pl-5"
                         v-html="props.item.dtInicio"/>
-                    <td class="text-xs-center">{{ props.item.dtFim }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.dtFim }}</td>
                     <td class="text-xs-left">{{ props.item.cpfTecnico | cnpjFilter }}</td>
                     <td class="text-xs-left">{{ props.item.nmTecnico }}</td>
                     <td class="text-xs-center">
