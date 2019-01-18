@@ -37,7 +37,7 @@
                             <td class="text-xs-right">
                                 {{ props.item.nrDocumentoDePagamento }}
                             </td>
-                            <td class="text-xs-right">
+                            <td class="text-xs-center pl-5">
                                 {{ props.item.dtPagamento | formatarData }}
                             </td>
                             <td class="text-xs-right font-weight-bold">
@@ -147,7 +147,7 @@ export default {
                 },
                 {
                     text: 'DATA',
-                    align: 'left',
+                    align: 'center',
                     value: 'dtPagamento',
                 },
                 {

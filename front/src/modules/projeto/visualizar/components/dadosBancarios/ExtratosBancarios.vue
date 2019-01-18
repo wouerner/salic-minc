@@ -38,7 +38,7 @@
                             class="text-xs-left"
                             v-html="props.item.Lancamento"/>
                         <td class="text-xs-right">{{ props.item.nrLancamento }}</td>
-                        <td class="text-xs-right">
+                        <td class="text-xs-center pl-5">
                             {{ props.item.dtLancamento | formatarData }}
                         </td>
 

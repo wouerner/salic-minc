@@ -31,10 +31,10 @@
                         <td
                             class="text-xs-left"
                             v-html="props.item.TipoApoio"/>
-                        <td class="text-xs-right">
+                        <td class="text-xs-center pl-5">
                             {{ props.item.DtRecibo | formatarData }}
                         </td>
-                        <td class="text-xs-right">
+                        <td class="text-xs-center pl-5">
                             {{ props.item.DtTransferenciaRecurso | formatarData }}
                         </td>
                         <td class="text-xs-right">
@@ -141,7 +141,7 @@ export default {
                 },
                 {
                     text: 'DT. TRANSFERÊMCIA',
-                    align: 'left',
+                    align: 'center',
                     value: 'DtTransferenciaRecurso',
                 },
                 {

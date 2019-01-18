@@ -26,10 +26,10 @@
                         <td
                             class="text-xs-left"
                             v-html="props.item.Nome"/>
-                        <td class="text-xs-right">
+                        <td class="text-xs-center pl-5">
                             {{ props.item.dtCredito | formatarData }}
                         </td>
-                        <td class="text-xs-right">
+                        <td class="text-xs-center pl-5">
                             {{ props.item.dtLote | formatarData }}
                         </td>
                         <td class="text-xs-right">

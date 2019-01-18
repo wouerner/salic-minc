@@ -28,7 +28,7 @@
                         {{ props.item.NrConta | formatarConta }}
                     </td>
                     <td class="text-xs-left">{{ props.item.TipoSaldo }}</td>
-                    <td class="text-xs-right">{{ props.item.dtSaldoBancario | formatarData }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.dtSaldoBancario | formatarData }}</td>
                     <td
                         v-if="props.item.vlSaldoBancario === 0"
                         class="text-xs-right blue--text font-weight-bold"
@@ -48,13 +48,13 @@
 
                     <td
                         v-if="props.item.stSaldoBancario === 'C'"
-                        class="text-xs-right blue--text font-weight-bold"
+                        class="text-xs-center blue--text font-weight-bold pl-5"
                     >
                         {{ props.item.stSaldoBancario }}
                     </td>
                     <td
                         v-else
-                        class="text-xs-right red--text font-weight-bold">
+                        class="text-xs-center red--text font-weight-bold pl-5">
                         {{ props.item.stSaldoBancario }}
                     </td>
                 </template>
@@ -116,7 +116,7 @@ export default {
                     value: 'TipoSaldo',
                 },
                 {
-                    text: 'DATA SALDO',
+                    text: 'DT. SALDO',
                     align: 'center',
                     value: 'dtSaldoBancario',
                 },
