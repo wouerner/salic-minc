@@ -52,7 +52,7 @@
                                     @click:append="() => (e1 = !e1)"
                                 />
                                 <v-layout justify-end>
-                                    <a href="">Recuperar Senha</a>
+                                    <a href="/autenticacao/index/solicitarsenha">Recuperar Senha</a>
                                 </v-layout>
                                 <v-layout justify-space-between>
                                     <v-btn
@@ -60,7 +60,7 @@
                                         color="teal lighten-1"
                                         dark
                                         block
-                                        @click="submit"
+                                        @click="submit()"
                                     >
                                         Entrar
                                     </v-btn>
@@ -70,6 +70,7 @@
                                         outline
                                         color="orange darken-1"
                                         block
+                                        href="/autenticacao/index/cadastrarusuario"
                                     >
                                         Cadastra-se
                                     </v-btn>
@@ -104,13 +105,25 @@ export default {
     computed: {
         ...mapGetters({
             modalVisible: 'modal/default',
+            loginGetter: 'autenticacao/loginGetter',
         }),
+    },
+    watch: {
+        loginGetter(value) {
+            if (value.status) {
+                window.location.replace(value.redirect);
+            }
+        },
     },
     methods: {
         ...mapActions({
-            modalOpen: 'modal/modalOpen',
+            loginAction: 'autenticacao/loginAction',
+            setSnackbar: 'noticias/setDados',
         }),
-        submit() {},
+        submit() {
+            const user = { From: '', Login: this.CPF, Senha: this.senha };
+            this.loginAction(user);
+        },
         TestaCPF(strCPF) {
             let Soma;
             let Resto;
