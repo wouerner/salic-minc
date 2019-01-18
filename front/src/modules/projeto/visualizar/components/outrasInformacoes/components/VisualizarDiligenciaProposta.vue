@@ -118,7 +118,16 @@ export default {
     components: {
         Carregando,
     },
-    props: ['idPronac', 'diligencias'],
+    props: {
+        idPronac: {
+            type: Number,
+            default: 0,
+        },
+        diligencias: {
+            type: Array,
+            default: () => [],
+        },
+    },
     data() {
         return {
             dialog: false,
@@ -150,7 +159,7 @@ export default {
     },
     methods: {
         showItem(item) {
-            const idPreprojeto = item.idPreprojeto;
+            const { idPreprojeto } = item;
             const valor = item.idAvaliacaoProposta;
 
             this.buscarDiligenciaProposta({ idPreprojeto, valor });
