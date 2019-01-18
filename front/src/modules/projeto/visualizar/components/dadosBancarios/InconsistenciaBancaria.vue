@@ -76,23 +76,18 @@
                         Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
                     </template>
                 </v-data-table>
+                <v-card-actions v-if="Object.keys(dadosInconsistencia).length > 0">
+                    <v-spacer/>
+                    <v-btn
+                        small
+                        fab
+                        round
+                        target="_blank"
+                        @click="print">
+                        <v-icon dark>local_printshop</v-icon>
+                    </v-btn>
+                </v-card-actions>
             </v-card>
-            <div
-                v-if="Object.keys(dadosInconsistencia).length > 0"
-                class="text-xs-center">
-                <v-btn
-                    round
-                    dark
-                    target="_blank"
-                    @click="print"
-                >
-                    Imprimir
-                    <v-icon
-                        right
-                        dark>local_printshop
-                    </v-icon>
-                </v-btn>
-            </div>
         </div>
     </div>
 </template>
@@ -221,14 +216,13 @@ export default {
         const { Printd } = window.printd;
         this.d = new Printd();
 
-        // Print dialog events (v0.0.9+)
         const { contentWindow } = this.d.getIFrame();
 
         contentWindow.addEventListener(
-            'beforeprint', () => console.log('before print event!'),
+            'beforeprint', () => {},
         );
         contentWindow.addEventListener(
-            'afterprint', () => console.log('after print event!'),
+            'afterprint', () => {},
         );
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             const params = {
