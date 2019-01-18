@@ -31,7 +31,9 @@
                     <template
                         slot="pageText"
                         slot-scope="props">
-                        Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                        Items {{ props.pageStart }}
+                        - {{ props.pageStop }}
+                        de {{ props.itemsLength }}
                     </template>
                 </v-data-table>
             </v-card>
@@ -60,7 +62,9 @@
                     <template
                         slot="pageText"
                         slot-scope="props">
-                        Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                        Items {{ props.pageStart }}
+                        - {{ props.pageStop }}
+                        de {{ props.itemsLength }}
                     </template>
                 </v-data-table>
             </v-card>
@@ -132,6 +136,12 @@ export default {
             ],
         };
     },
+    computed: {
+        ...mapGetters({
+            dadosProjeto: 'projeto/projeto',
+            dados: 'projeto/localRealizacaoDeslocamento',
+        }),
+    },
     watch: {
         dados() {
             this.loading = false;
@@ -141,12 +151,6 @@ export default {
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             this.buscarLocalRealizacaoDeslocamento(this.dadosProjeto.idPronac);
         }
-    },
-    computed: {
-        ...mapGetters({
-            dadosProjeto: 'projeto/projeto',
-            dados: 'projeto/localRealizacaoDeslocamento',
-        }),
     },
     methods: {
         ...mapActions({

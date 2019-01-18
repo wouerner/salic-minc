@@ -29,7 +29,7 @@
                                     style="text-decoration: none"
                                     color="blue"
                                     dark
-                                    @click.native="loadingButton = parseInt(props.item.idDocumento)"
+                                    @click="loadingButton = parseInt(props.item.idDocumento)"
                                 >
                                     <v-icon dark>cloud_download</v-icon>
                                 </v-btn>
@@ -116,7 +116,7 @@ export default {
     },
     watch: {
         loadingButton() {
-            setTimeout(() => (this.loadingButton = -1), 2000);
+            setTimeout(() => { this.loadingButton = -1; }, 2000);
         },
         dados() {
             this.loading = false;
