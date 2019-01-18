@@ -15,8 +15,8 @@
                     slot="items"
                     slot-scope="props">
                     <td class="text-xs-left">{{ props.item.dsTipoDocumento }}</td>
-                    <td class="text-xs-right">{{ props.item.dtDocumento }}</td>
-                    <td class="text-xs-right">{{ props.item.dtAnexacao }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.dtDocumento }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.dtAnexacao }}</td>
                     <td class="text-xs-left">
                         <a
                             :href="

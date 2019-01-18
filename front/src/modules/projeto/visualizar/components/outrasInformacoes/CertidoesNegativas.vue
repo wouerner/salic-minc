@@ -17,8 +17,8 @@
                     <td
                         class="text-xs-left"
                         v-html="props.item.dsCertidao"/>
-                    <td class="text-xs-right">{{ props.item.DtEmissao }}</td>
-                    <td class="text-xs-right">{{ props.item.DtValidade }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.DtEmissao }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.DtValidade }}</td>
                     <td class="text-xs-right">{{ props.item.Pronac }}</td>
                     <td
                         v-if="props.item.Situacao"

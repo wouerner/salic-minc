@@ -16,7 +16,7 @@
                 <template
                     slot="items"
                     slot-scope="props">
-                    <td class="text-xs-right">{{ props.item.DtSituacao }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.DtSituacao }}</td>
                     <td class="text-xs-right">{{ props.item.Situacao }}</td>
                     <td
                         class="text-xs-left"
@@ -71,7 +71,7 @@ export default {
             headers: [
                 {
                     text: 'DT. SITUAÇÃO',
-                    align: 'right',
+                    align: 'center',
                     value: 'DtSituacao',
                 },
                 {

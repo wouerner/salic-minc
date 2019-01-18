@@ -15,9 +15,9 @@
                     slot="items"
                     slot-scope="props">
                     <td class="text-xs-left">{{ props.item.Emissor }}</td>
-                    <td class="text-xs-right">{{ props.item.dtTramitacaoEnvio }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.dtTramitacaoEnvio }}</td>
                     <td class="text-xs-left">{{ props.item.Receptor }}</td>
-                    <td class="text-xs-right">{{ props.item.dtTramitacaoRecebida }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.dtTramitacaoRecebida }}</td>
                     <td class="text-xs-left">{{ props.item.Situacao }}</td>
                     <td class="text-xs-left">{{ props.item.Destino }}</td>
                     <td class="text-xs-left">{{ props.item.meDespacho }}</td>

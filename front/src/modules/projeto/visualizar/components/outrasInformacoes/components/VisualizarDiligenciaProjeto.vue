@@ -19,9 +19,9 @@
                     v-else
                     class="text-xs-left"> -</td>
                 <td class="text-xs-left">{{ props.item.tipoDiligencia }}</td>
-                <td class="text-xs-right">{{ props.item.dataSolicitacao }}</td>
-                <td class="text-xs-right">{{ props.item.dataResposta }}</td>
-                <td class="text-xs-right">{{ props.item.prazoResposta }}</td>
+                <td class="text-xs-center pl-5">{{ props.item.dataSolicitacao }}</td>
+                <td class="text-xs-center pl-5">{{ props.item.dataResposta }}</td>
+                <td class="text-xs-center pl-5">{{ props.item.prazoResposta }}</td>
                 <td class="text-xs-left">Prorrogado</td>
                 <td class="text-xs-center">
                     <v-tooltip bottom>

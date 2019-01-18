@@ -11,7 +11,7 @@
                 slot="items"
                 slot-scope="props">
                 <td class="text-xs-center">{{ props.item.idPreprojeto }}</td>
-                <td class="text-xs-center">{{ props.item.dataSolicitacao }}</td>
+                <td class="text-xs-center pl-5">{{ props.item.dataSolicitacao }}</td>
                 <td class="text-xs-center">
                     <v-tooltip bottom>
                         <v-btn

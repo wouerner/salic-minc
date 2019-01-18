@@ -20,7 +20,7 @@
                     slot-scope="props">
                     <td class="text-xs-right">{{ props.item.id + 1 }}</td>
                     <td class="text-xs-left">{{ props.item.Anexado }}</td>
-                    <td class="text-xs-right">{{ props.item.Data | formatarData }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.Data | formatarData }}</td>
                     <td class="text-xs-left">{{ props.item.Descricao }}</td>
                     <td class="text-xs-left">
                         <v-btn
@@ -95,7 +95,7 @@ export default {
                     value: 'Anexado',
                 },
                 {
-                    align: 'left',
+                    align: 'center',
                     text: 'DATA',
                     value: 'Data',
                 },

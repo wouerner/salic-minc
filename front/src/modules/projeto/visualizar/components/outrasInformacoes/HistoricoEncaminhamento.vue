@@ -21,8 +21,8 @@
                     <td
                         class="text-xs-left"
                         v-html="props.item.Observacao"/>
-                    <td class="text-xs-right">{{ props.item.DtEnvio }}</td>
-                    <td class="text-xs-right">{{ props.item.DtRetorno }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.DtEnvio }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.DtRetorno }}</td>
                     <td class="text-xs-right">{{ props.item.qtDias }}</td>
                 </template>
                 <template

@@ -17,7 +17,7 @@
                 slot-scope="props">
                 <td class="text-xs-left">{{ props.item.nomeProjeto }}</td>
                 <td class="text-xs-left">{{ props.item.dsAtoAdministrativo }}</td>
-                <td class="text-xs-right">{{ props.item.dt_criacao }}</td>
+                <td class="text-xs-center pl-5">{{ props.item.dt_criacao }}</td>
                 <td class="text-xs-center">
                     <v-tooltip left>
                         <v-btn

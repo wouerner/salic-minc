@@ -10,7 +10,7 @@
             <template
                 slot="items"
                 slot-scope="props">
-                <td class="text-xs-right">{{ props.item.dtAvaliacao }}</td>
+                <td class="text-xs-center pl-5">{{ props.item.dtAvaliacao }}</td>
                 <td
                     class="text-xs-left"
                     v-html="props.item.tipoDiligencia"/>
