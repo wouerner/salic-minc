@@ -147,9 +147,6 @@ export default {
                 width: 120px;
                 text-align: center;
               }
-              .stBrasao{
-                text-align: center;
-              }
               `,
             search: '',
             pagination: {
