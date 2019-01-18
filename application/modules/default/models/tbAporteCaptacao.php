@@ -51,7 +51,8 @@ class tbAporteCaptacao extends MinC_Db_Table_Abstract
             ],
             'a.CNPJCPf = i.CgcCPf',
             [
-                'CNPJCPF'
+                'CNPJCPF',
+                'idAgente'
             ],
             'Agentes.dbo'
         );
