@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="loading">
-            <Carregando :text="'Devoluções do Incentivador'"/>
+            <Carregando :text="'Devoluções'"/>
         </div>
         <div v-else>
             <v-card>
@@ -27,10 +27,13 @@
                         <td
                             class="text-xs-left"
                             v-html="props.item.Nome"/>
-                        <td class="text-xs-right">
+                        <td class="text-xs-left">
+                            {{ props.item.CNPJCPF | cnpjFilter }}
+                        </td>
+                        <td class="text-xs-center pl-5">
                             {{ props.item.dtCredito | formatarData }}
                         </td>
-                        <td class="text-xs-right">
+                        <td class="text-xs-center pl-5">
                             {{ props.item.dtLote | formatarData }}
                         </td>
                         <td class="text-xs-right">
@@ -55,6 +58,7 @@ import { mapActions, mapGetters } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
 import { utils } from '@/mixins/utils';
 import FiltroData from './components/FiltroData';
+import cnpjFilter from '@/filters/cnpj';
 
 export default {
     name: 'DevolucoesIncentivador',
@@ -76,6 +80,11 @@ export default {
                     text: 'INCENTIVADOR',
                     align: 'left',
                     value: 'Nome',
+                },
+                {
+                    text: 'CNPJ',
+                    align: 'left',
+                    value: 'CNPJCPF',
                 },
                 {
                     text: 'DT. CRÉDITO',
@@ -115,6 +124,9 @@ export default {
             };
             this.buscarDevolucoesIncentivador(params);
         }
+    },
+    filters: {
+        cnpjFilter,
     },
     methods: {
         ...mapActions({
