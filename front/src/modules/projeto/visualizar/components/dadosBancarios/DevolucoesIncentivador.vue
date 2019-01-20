@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="loading">
-            <Carregando :text="'Devoluções do Incentivador'"/>
+            <Carregando :text="'Devoluções'"/>
         </div>
         <div v-else>
             <v-card>
@@ -30,8 +30,8 @@
                         <td class="text-xs-left">
                             {{ props.item.CNPJCPF | cnpjFilter }}
                         </td>
-                        <td class="text-xs-center pl-5">
-                            {{ props.item.dtCredito | formatarData }}
+                        <td class="text-xs-left">
+                            {{ props.item.Descricao }}
                         </td>
                         <td class="text-xs-center pl-5">
                             {{ props.item.dtLote | formatarData }}
@@ -87,9 +87,9 @@ export default {
                     value: 'CNPJCPF',
                 },
                 {
-                    text: 'DT. CRÉDITO',
-                    align: 'center',
-                    value: 'dtCredito',
+                    text: 'DESCRIÇÃO',
+                    align: 'left',
+                    value: 'Descricao',
                 },
                 {
                     text: 'DT. DEVOLUÇÃO',
