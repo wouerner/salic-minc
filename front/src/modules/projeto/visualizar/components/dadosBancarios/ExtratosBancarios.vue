@@ -38,7 +38,7 @@
                             class="text-xs-left"
                             v-html="props.item.Lancamento"/>
                         <td class="text-xs-right">{{ props.item.nrLancamento }}</td>
-                        <td class="text-xs-right">
+                        <td class="text-xs-center pl-5">
                             {{ props.item.dtLancamento | formatarData }}
                         </td>
 
@@ -57,13 +57,13 @@
 
                         <td
                             v-if="props.item.stLancamento === 'C'"
-                            class="text-xs-right blue--text font-weight-bold"
+                            class="text-xs-center pl-5 blue--text font-weight-bold"
                         >
                             {{ props.item.stLancamento }}
                         </td>
                         <td
                             v-else
-                            class="text-xs-right red--text font-weight-bold"
+                            class="text-xs-center pl-5 red--text font-weight-bold"
                         >
                             {{ props.item.stLancamento }}
                         </td>
@@ -76,23 +76,18 @@
                         de {{ props.itemsLength }}
                     </template>
                 </v-data-table>
+                <v-card-actions v-if="Object.keys(dadosExtratosBancarios).length > 0">
+                    <v-spacer/>
+                    <v-btn
+                        small
+                        fab
+                        round
+                        target="_blank"
+                        @click="print">
+                        <v-icon dark>local_printshop</v-icon>
+                    </v-btn>
+                </v-card-actions>
             </v-card>
-            <div
-                v-if="Object.keys(dadosExtratosBancarios).length > 0"
-                class="text-xs-center">
-                <v-btn
-                    round
-                    dark
-                    target="_blank"
-                    @click="print"
-                >
-                    Imprimir
-                    <v-icon
-                        right
-                        dark>local_printshop
-                    </v-icon>
-                </v-btn>
-            </div>
         </div>
     </div>
 </template>
@@ -120,7 +115,9 @@ export default {
                 text-align: left;
                 padding: 1em;
               }
-
+              body {
+                  margin-top: 80px;
+              }
               .v-input , button, .v-icon, .v-datatable__actions__pagination, .v-datatable__actions__select, h6, .pb-2{
                 display: none !important;
               }
@@ -133,13 +130,11 @@ export default {
                 width: 120px;
                 text-align: center;
               }
-              .stBrasao{
-                text-align: center;
-              }
               `,
             search: '',
             pagination: {
-                sortBy: 'fat',
+                sortBy: 'dtLancamento',
+                descending: true,
             },
             selected: [],
             loading: true,
@@ -194,6 +189,17 @@ export default {
         }),
     },
     watch: {
+        dadosProjeto(value) {
+            this.loading = true;
+
+            const params = {
+                idPronac: value.idPronac,
+                dtLancamento: '',
+                dtLancamentoFim: '',
+                tpConta: '',
+            };
+            this.buscarExtratosBancarios(params);
+        },
         dadosExtratosBancarios() {
             this.loading = false;
         },
@@ -202,14 +208,13 @@ export default {
         const { Printd } = window.printd;
         this.d = new Printd();
 
-        // Print dialog events (v0.0.9+)
         const { contentWindow } = this.d.getIFrame();
 
         contentWindow.addEventListener(
-            'beforeprint', () => console.log('before print event!'),
+            'beforeprint', () => {},
         );
         contentWindow.addEventListener(
-            'afterprint', () => console.log('after print event!'),
+            'afterprint', () => {},
         );
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             const params = {

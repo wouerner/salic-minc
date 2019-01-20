@@ -61,6 +61,19 @@
 <script>
 export default {
     name: 'TabelaDadosComplementares',
-    props: ['dadoComplementar', 'custosVinculados', 'dsDadoComplementar'],
+    props: {
+        dadoComplementar: {
+            type: String,
+            default: '',
+        },
+        dsDadoComplementar: {
+            type: String,
+            default: '',
+        },
+        custosVinculados: {
+            type: Array,
+            default: () => [],
+        },
+    },
 };
 </script>

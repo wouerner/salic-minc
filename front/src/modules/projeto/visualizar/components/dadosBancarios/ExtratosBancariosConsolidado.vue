@@ -68,6 +68,17 @@
                     Sua busca por "{{ search }}" não encontrou nenhum resultado.
                 </v-alert>
             </v-data-table>
+            <v-card-actions v-if="Object.keys(dadosExtratosConsolidado).length > 0">
+                <v-spacer/>
+                <v-btn
+                    small
+                    fab
+                    round
+                    target="_blank"
+                    @click="print">
+                    <v-icon dark>local_printshop</v-icon>
+                </v-btn>
+            </v-card-actions>
         </v-card>
     </div>
 </template>
@@ -87,6 +98,28 @@ export default {
     mixins: [utils],
     data() {
         return {
+            cssText: `
+              .box {
+                width: 5000px;
+                text-align: left;
+                padding: 1em;
+              }
+              body {
+                  margin-top: 80px;
+              }
+              .v-input , button, .v-icon, .v-datatable__actions__pagination, .v-datatable__actions__select, h6, .pb-2{
+                display: none !important;
+              }
+
+              th{
+                width: 130px
+              }
+
+              td{
+                width: 120px;
+                text-align: center;
+              }
+              `,
             items: [
                 'Captação',
                 'Movimentação',
@@ -147,6 +180,17 @@ export default {
         },
     },
     mounted() {
+        const { Printd } = window.printd;
+        this.d = new Printd();
+
+        const { contentWindow } = this.d.getIFrame();
+
+        contentWindow.addEventListener(
+            'beforeprint', () => {},
+        );
+        contentWindow.addEventListener(
+            'afterprint', () => {},
+        );
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             this.buscarExtratosBancariosConsolidado(this.dadosProjeto.idPronac);
         }
@@ -155,6 +199,9 @@ export default {
         ...mapActions({
             buscarExtratosBancariosConsolidado: 'projeto/buscarExtratosBancariosConsolidado',
         }),
+        print() {
+            this.d.print(this.$el, this.cssText);
+        },
     },
 };
 </script>

@@ -8,7 +8,7 @@
                 <div v-if="Object.keys(dadosConciliacao).length > 0">
                     <v-container fluid>
                         <FiltroData
-                            :text="'Escolha a Data:'"
+                            :text="'Escolha a Data de Pagamento:'"
                             @eventoFiltrarData="filtrarData"
                         />
                     </v-container>
@@ -17,6 +17,7 @@
                     <v-data-table
                         :headers="headers"
                         :items="dadosConciliacao"
+                        :pagination.sync="pagination"
                         :rows-per-page-items="[10, 25, 50, 100, {'text': 'Todos', value: -1}]"
                         class="elevation-1 container-fluid"
                     >
@@ -37,7 +38,7 @@
                             <td class="text-xs-right">
                                 {{ props.item.nrDocumentoDePagamento }}
                             </td>
-                            <td class="text-xs-right">
+                            <td class="text-xs-center pl-5">
                                 {{ props.item.dtPagamento | formatarData }}
                             </td>
                             <td class="text-xs-right font-weight-bold">
@@ -76,24 +77,19 @@
                             de {{ props.itemsLength }}
                         </template>
                     </v-data-table>
+                    <v-card-actions v-if="Object.keys(dadosConciliacao).length > 0">
+                        <v-spacer/>
+                        <v-btn
+                            small
+                            fab
+                            round
+                            target="_blank"
+                            @click="print">
+                            <v-icon dark>local_printshop</v-icon>
+                        </v-btn>
+                    </v-card-actions>
                 </v-card>
             </v-card>
-            <div
-                v-if="Object.keys(dadosConciliacao).length > 0"
-                class="text-xs-center">
-                <v-btn
-                    round
-                    dark
-                    target="_blank"
-                    @click="createPDF"
-                >
-                    Imprimir
-                    <v-icon
-                        right
-                        dark>local_printshop
-                    </v-icon>
-                </v-btn>
-            </div>
         </div>
     </div>
 </template>
@@ -117,10 +113,33 @@ export default {
     mixins: [utils],
     data() {
         return {
+            cssText: `
+              .box {
+                width: 5000px;
+                text-align: left;
+                padding: 1em;
+              }
+              body {
+                  margin-top: 80px;
+              }
+              .v-input , button, .v-icon, .v-datatable__actions__pagination, .v-datatable__actions__select, h6, .pb-2{
+                display: none !important;
+              }
+
+              th{
+                width: 130px
+              }
+
+              td{
+                width: 120px;
+                text-align: center;
+              }
+              `,
             name: '',
             search: '',
             pagination: {
-                sortBy: 'fat',
+                sortBy: 'dtPagamento',
+                descending: true,
             },
             selected: [],
             loading: true,
@@ -146,8 +165,8 @@ export default {
                     value: 'nrDocumentoDePagamento',
                 },
                 {
-                    text: 'DATA',
-                    align: 'left',
+                    text: 'DT. PAGAMENTO',
+                    align: 'center',
                     value: 'dtPagamento',
                 },
                 {
@@ -179,7 +198,32 @@ export default {
             dadosConciliacao: 'projeto/conciliacaoBancaria',
         }),
     },
+    watch: {
+        dadosConciliacao() {
+            this.loading = false;
+        },
+        dadosProjeto(value) {
+            this.loading = true;
+            const params = {
+                idPronac: value.idPronac,
+                dtInicio: '',
+                dtFim: '',
+            };
+            this.buscarConciliacaoBancaria(params);
+        },
+    },
     mounted() {
+        const { Printd } = window.printd;
+        this.d = new Printd();
+
+        const { contentWindow } = this.d.getIFrame();
+
+        contentWindow.addEventListener(
+            'beforeprint', () => {},
+        );
+        contentWindow.addEventListener(
+            'afterprint', () => {},
+        );
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             const params = {
                 idPronac: this.dadosProjeto.idPronac,
@@ -187,7 +231,6 @@ export default {
                 dtFim: '',
             };
             this.buscarConciliacaoBancaria(params);
-            this.loading = false;
         }
     },
     methods: {
@@ -202,26 +245,9 @@ export default {
             };
             this.buscarConciliacaoBancaria(params);
         },
-        createPDF() {
-            const pdf = new jsPDF('p', 'pt', 'a4');
-            // pdf.addImage(imgData, 'JPEG', 80, 10, 90, 70);
-            var options = {
-                pagesplit: true,
-            };
-            pdf.addHTML($('#geraPdf'), options, () => {
-                pdf.save('web.pdf');
-            });
-            // const doc = new jsPDF('p', 'pt', 'letter');
-            // doc.addHTML($('#geraPdf'), () => {
-            //     doc.save('teste.pdf');
-            // });
+        print() {
+            this.d.print(this.$el, this.cssText);
         },
-        // download() {
-        //     const pdfName = 'test';
-        //     const doc = new jsPDF();
-        //     doc.text(this.name, 10, 10);
-        //     doc.save(`${pdfName}.pdf`);
-        // },
     },
 };
 </script>

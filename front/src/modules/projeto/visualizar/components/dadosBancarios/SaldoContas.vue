@@ -15,6 +15,7 @@
                 :headers="headers"
                 :items="dadosSaldo"
                 :search="search"
+                :pagination.sync="pagination"
                 :rows-per-page-items="[10, 25, 50, 100, {'text': 'Todos', value: -1}]"
                 class="elevation-1 container-fluid"
             >
@@ -28,7 +29,7 @@
                         {{ props.item.NrConta | formatarConta }}
                     </td>
                     <td class="text-xs-left">{{ props.item.TipoSaldo }}</td>
-                    <td class="text-xs-right">{{ props.item.dtSaldoBancario | formatarData }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.dtSaldoBancario | formatarData }}</td>
                     <td
                         v-if="props.item.vlSaldoBancario === 0"
                         class="text-xs-right blue--text font-weight-bold"
@@ -48,13 +49,13 @@
 
                     <td
                         v-if="props.item.stSaldoBancario === 'C'"
-                        class="text-xs-right blue--text font-weight-bold"
+                        class="text-xs-center blue--text font-weight-bold pl-5"
                     >
                         {{ props.item.stSaldoBancario }}
                     </td>
                     <td
                         v-else
-                        class="text-xs-right red--text font-weight-bold">
+                        class="text-xs-center red--text font-weight-bold pl-5">
                         {{ props.item.stSaldoBancario }}
                     </td>
                 </template>
@@ -71,6 +72,17 @@
                     Sua busca por "{{ search }}" não encontrou nenhum resultado.
                 </v-alert>
             </v-data-table>
+            <v-card-actions v-if="Object.keys(dadosSaldo).length > 0">
+                <v-spacer/>
+                <v-btn
+                    small
+                    fab
+                    round
+                    target="_blank"
+                    @click="print">
+                    <v-icon dark>local_printshop</v-icon>
+                </v-btn>
+            </v-card-actions>
         </v-card>
     </div>
 </template>
@@ -89,13 +101,36 @@ export default {
     mixins: [utils],
     data() {
         return {
+            cssText: `
+              .box {
+                width: 5000px;
+                text-align: left;
+                padding: 1em;
+              }
+              body {
+                  margin-top: 80px;
+              }
+              .v-input , button, .v-icon, .v-datatable__actions__pagination, .v-datatable__actions__select, h6, .pb-2{
+                display: none !important;
+              }
+
+              th{
+                width: 130px
+              }
+
+              td{
+                width: 120px;
+                text-align: center;
+              }
+              `,
             items: [
                 'Captação',
                 'Movimentação',
             ],
             search: '',
             pagination: {
-                sortBy: 'fat',
+                sortBy: 'dtSaldoBancario',
+                descending: true,
             },
             selected: [],
             loading: true,
@@ -116,7 +151,7 @@ export default {
                     value: 'TipoSaldo',
                 },
                 {
-                    text: 'DATA SALDO',
+                    text: 'DT. SALDO',
                     align: 'center',
                     value: 'dtSaldoBancario',
                 },
@@ -149,6 +184,15 @@ export default {
         },
     },
     mounted() {
+        const { Printd } = window.printd;
+        this.d = new Printd();
+        const { contentWindow } = this.d.getIFrame();
+        contentWindow.addEventListener(
+            'beforeprint', () => {},
+        );
+        contentWindow.addEventListener(
+            'afterprint', () => {},
+        );
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             this.buscarSaldoContas(this.dadosProjeto.idPronac);
         }
@@ -157,6 +201,9 @@ export default {
         ...mapActions({
             buscarSaldoContas: 'projeto/buscarSaldoContas',
         }),
+        print() {
+            this.d.print(this.$el, this.cssText);
+        },
     },
 };
 </script>

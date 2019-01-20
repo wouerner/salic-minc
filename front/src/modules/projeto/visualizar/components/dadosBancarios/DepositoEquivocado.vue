@@ -23,13 +23,21 @@
                     <template
                         slot="items"
                         slot-scope="props">
-                        <td
-                            class="text-xs-left"
-                            v-html="props.item.Nome"/>
-                        <td class="text-xs-right">
+                        <td class="text-xs-left">
+                            <v-btn
+                                :href="`/agente/agentes/agentes/id/${props.item.idAgente}`"
+                                style="text-decoration: none"
+                                round
+                                small
+                            >
+                                <span v-html="props.item.Nome"/>
+                            </v-btn>
+                        </td>
+
+                        <td class="text-xs-center pl-5">
                             {{ props.item.dtCredito | formatarData }}
                         </td>
-                        <td class="text-xs-right">
+                        <td class="text-xs-center pl-5">
                             {{ props.item.dtLote | formatarData }}
                         </td>
                         <td class="text-xs-right">
@@ -75,7 +83,8 @@ export default {
             datestringFim: '',
             search: '',
             pagination: {
-                sortBy: 'fat',
+                sortBy: 'dtLote',
+                descending: true,
             },
             selected: [],
             loading: true,

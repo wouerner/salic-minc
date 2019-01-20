@@ -31,10 +31,10 @@
                         <td
                             class="text-xs-left"
                             v-html="props.item.TipoApoio"/>
-                        <td class="text-xs-right">
+                        <td class="text-xs-center pl-5">
                             {{ props.item.DtRecibo | formatarData }}
                         </td>
-                        <td class="text-xs-right">
+                        <td class="text-xs-center pl-5">
                             {{ props.item.DtTransferenciaRecurso | formatarData }}
                         </td>
                         <td class="text-xs-right">
@@ -87,11 +87,25 @@
                                 offset-xs1
                                 class=" text-xs-right"
                             >
-                                <h6>{{ ((dadosCaptacao.vlTotal / (dadosProjeto.vlAutorizadoOutrasFontes + dadosProjeto.vlAutorizado))* 100).toFixed(1) }}%</h6>
+                                <h6>{{ ((dadosCaptacao.vlTotal /
+                                    (dadosProjeto.vlAutorizadoOutrasFontes + dadosProjeto.vlAutorizado)
+                                )* 100).toFixed(1) }}%
+                                </h6>
                             </v-flex>
                         </v-layout>
                     </div>
                 </v-container>
+                <v-card-actions v-if="Object.keys(dadosCaptacao.captacao).length > 0">
+                    <v-spacer/>
+                    <v-btn
+                        small
+                        fab
+                        round
+                        target="_blank"
+                        @click="print">
+                        <v-icon dark>local_printshop</v-icon>
+                    </v-btn>
+                </v-card-actions>
             </v-card>
         </div>
     </div>
@@ -112,9 +126,32 @@ export default {
     mixins: [utils],
     data() {
         return {
+            cssText: `
+              .box {
+                width: 5000px;
+                text-align: left;
+                padding: 1em;
+              }
+              body {
+                  margin-top: 80px;
+              }
+              .v-input , button, .v-icon, .v-datatable__actions__pagination, .v-datatable__actions__select, h6, .pb-2{
+                display: none !important;
+              }
+
+              th{
+                width: 130px
+              }
+
+              td{
+                width: 120px;
+                text-align: center;
+              }
+              `,
             search: '',
             pagination: {
-                sortBy: 'fat',
+                sortBy: 'DtRecibo',
+                descending: true,
             },
             selected: [],
             loading: true,
@@ -141,7 +178,7 @@ export default {
                 },
                 {
                     text: 'DT. TRANSFERÊMCIA',
-                    align: 'left',
+                    align: 'center',
                     value: 'DtTransferenciaRecurso',
                 },
                 {
@@ -169,11 +206,32 @@ export default {
         }),
     },
     watch: {
+        dadosProjeto(value) {
+            this.loading = false;
+
+            const params = {
+                idPronac: value.idPronac,
+                dtInicio: '',
+                dtFim: '',
+            };
+            this.buscarCaptacao(params);
+        },
         dadosCaptacao() {
             this.loading = false;
         },
     },
     mounted() {
+        const { Printd } = window.printd;
+        this.d = new Printd();
+
+        const { contentWindow } = this.d.getIFrame();
+
+        contentWindow.addEventListener(
+            'beforeprint', () => {},
+        );
+        contentWindow.addEventListener(
+            'afterprint', () => {},
+        );
         if (typeof this.dadosProjeto.idPronac !== 'undefined') {
             const params = {
                 idPronac: this.dadosProjeto.idPronac,
@@ -194,6 +252,9 @@ export default {
                 dtFim: response.dtFim,
             };
             this.buscarCaptacao(params);
+        },
+        print() {
+            this.d.print(this.$el, this.cssText);
         },
     },
 };

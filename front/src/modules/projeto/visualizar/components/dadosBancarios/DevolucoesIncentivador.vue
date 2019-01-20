@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="loading">
-            <Carregando :text="'Devoluções'"/>
+            <Carregando :text="'Devoluções do Incentivador'"/>
         </div>
         <div v-else>
             <v-card>
@@ -111,6 +111,15 @@ export default {
         }),
     },
     watch: {
+        dadosProjeto(value) {
+            this.loading = true;
+            const params = {
+                idPronac: value.idPronac,
+                dtInicio: '',
+                dtFim: '',
+            };
+            this.buscarDevolucoesIncentivador(params);
+        },
         dadosDevolucoesIncentivador() {
             this.loading = false;
         },
