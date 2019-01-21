@@ -32,7 +32,6 @@ import Liberacao from './visualizar/components/dadosBancarios/Liberacao';
 import SaldoContas from './visualizar/components/dadosBancarios/SaldoContas';
 import ExtratosBancarios from './visualizar/components/dadosBancarios/ExtratosBancarios';
 import ExtratosBancariosConsolidado from './visualizar/components/dadosBancarios/ExtratosBancariosConsolidado';
-import DepositoEquivocado from './visualizar/components/dadosBancarios/DepositoEquivocado';
 import Captacao from './visualizar/components/dadosBancarios/Captacao';
 import DevolucoesIncentivador from './visualizar/components/dadosBancarios/DevolucoesIncentivador';
 
@@ -319,14 +318,6 @@ const routes = [
                 component: ExtratosBancariosConsolidado,
                 meta: {
                     title: 'Extratos Bancários Consolidado',
-                },
-            },
-            {
-                path: 'deposito-equivocado',
-                name: 'DepositoEquivocado',
-                component: DepositoEquivocado,
-                meta: {
-                    title: 'Depósito Equivocado',
                 },
             },
             {

@@ -305,15 +305,6 @@ export const buscarExtratosBancariosConsolidado = (idPronac) => {
     return api.getRequest(path, queryParams);
 };
 
-export const buscarDepositoEquivocado = (params) => {
-    const modulo = '/dados-bancarios';
-    const controller = '/deposito-equivocado-rest';
-    const metodo = '/index';
-    const path = `${modulo}${controller}${metodo}`;
-    const queryParams = `?idPronac=${params.idPronac}&dtDevolucaoInicio=${params.dtInicio}&dtDevolucaoFim=${params.dtFim}`;
-    return api.getRequest(path, queryParams);
-};
-
 export const buscarCaptacao = (params) => {
     const modulo = '/dados-bancarios';
     const controller = '/captacao-rest';
