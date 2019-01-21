@@ -33,7 +33,7 @@ import SaldoContas from './visualizar/components/dadosBancarios/SaldoContas';
 import ExtratosBancarios from './visualizar/components/dadosBancarios/ExtratosBancarios';
 import ExtratosBancariosConsolidado from './visualizar/components/dadosBancarios/ExtratosBancariosConsolidado';
 import Captacao from './visualizar/components/dadosBancarios/Captacao';
-import DevolucoesIncentivador from './visualizar/components/dadosBancarios/DevolucoesIncentivador';
+import Devolucoes from './visualizar/components/dadosBancarios/Devolucoes';
 
 Vue.use(Router);
 
@@ -329,11 +329,11 @@ const routes = [
                 },
             },
             {
-                path: 'devolucoes-incentivador',
-                name: 'DevolucoesIncentivador',
-                component: DevolucoesIncentivador,
+                path: 'devolucoes',
+                name: 'Devolucoes',
+                component: Devolucoes,
                 meta: {
-                    title: 'Devoluções do Incentivador',
+                    title: 'Devoluções',
                 },
             },
         ],

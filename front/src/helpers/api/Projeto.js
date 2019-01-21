@@ -316,7 +316,7 @@ export const buscarCaptacao = (params) => {
 
 export const buscarDevolucoesIncentivador = (params) => {
     const modulo = '/dados-bancarios';
-    const controller = '/devolucoes-incentivador-rest';
+    const controller = '/devolucoes-rest';
     const metodo = '/index';
     const path = `${modulo}${controller}${metodo}`;
     const queryParams = `?idPronac=${params.idPronac}&dtDevolucaoInicio=${params.dtInicio}&dtDevolucaoFim=${params.dtFim}`;

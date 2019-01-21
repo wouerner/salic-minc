@@ -552,9 +552,9 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             ];
 
             $menu['dadosbancarios']['submenu'][] = [
-                'label' => 'Devolu&ccedil;&otilde;es do Incentivador',
-                'title' => 'Ir para Devolu&ccedil;&otilde;es do Incentivador',
-                'link' => "/projeto/#/{$idPronacHash}/devolucoes-incentivador",
+                'label' => 'Devolu&ccedil;&otilde;es',
+                'title' => 'Ir para Devolu&ccedil;&otilde;es',
+                'link' => "/projeto/#/{$idPronacHash}/devolucoes",
                 'ajax' => false,
                 'grupo' => []
             ];

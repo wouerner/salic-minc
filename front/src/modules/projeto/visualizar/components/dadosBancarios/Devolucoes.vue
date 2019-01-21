@@ -61,10 +61,13 @@ import FiltroData from './components/FiltroData';
 import cnpjFilter from '@/filters/cnpj';
 
 export default {
-    name: 'DevolucoesIncentivador',
+    name: 'Devolucoes',
     components: {
         Carregando,
         FiltroData,
+    },
+    filters: {
+        cnpjFilter,
     },
     mixins: [utils],
     data() {
@@ -133,9 +136,6 @@ export default {
             };
             this.buscarDevolucoesIncentivador(params);
         }
-    },
-    filters: {
-        cnpjFilter,
     },
     methods: {
         ...mapActions({

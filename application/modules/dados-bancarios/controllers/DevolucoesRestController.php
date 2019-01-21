@@ -1,8 +1,8 @@
 <?php
 
-use Application\Modules\DadosBancarios\Service\DevolucoesIncentivador\DevolucoesIncentivador as DevolucoesIncentivadorService;
+use Application\Modules\DadosBancarios\Service\Devolucoes\Devolucoes as DevolucoesService;
 
-class DadosBancarios_DevolucoesIncentivadorRestController extends MinC_Controller_Rest_Abstract
+class DadosBancarios_DevolucoesRestController extends MinC_Controller_Rest_Abstract
 {
      public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
     {
@@ -14,7 +14,7 @@ class DadosBancarios_DevolucoesIncentivadorRestController extends MinC_Controlle
     public function indexAction()
     {
         try {
-            $devolucoesIncentivador = new DevolucoesIncentivadorService($this->getRequest(), $this->getResponse());
+            $devolucoesIncentivador = new DevolucoesService($this->getRequest(), $this->getResponse());
             $resposta = $devolucoesIncentivador->buscarDevolucoesIncentivador();
             $resposta = \TratarArray::utf8EncodeArray($resposta);
 
@@ -34,7 +34,7 @@ class DadosBancarios_DevolucoesIncentivadorRestController extends MinC_Controlle
 
     public function getAction()
     {
-        
+
     }
 
     public function postAction()

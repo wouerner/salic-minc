@@ -1,8 +1,8 @@
 <?php
 
-namespace Application\Modules\DadosBancarios\Service\DevolucoesIncentivador;
+namespace Application\Modules\DadosBancarios\Service\Devolucoes;
 
-class DevolucoesIncentivador
+class Devolucoes
 {
     /**
      * @var \Zend_Controller_Request_Abstract $request
