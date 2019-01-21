@@ -134,9 +134,11 @@ export const mutations = {
     },
     [types.ALTERAR_DADOS_ITEM_COMPROVACAO](state, params) {
         const { index } = params;
-        delete params.index;
-        Object.keys(params).forEach((key) => {
-            state.dadosItemComprovacao.comprovantes[index][key] = params[key];
+        const valor = params;
+        delete valor.index;
+
+        Object.keys(valor).forEach((key) => {
+            state.dadosItemComprovacao.comprovantes[index][key] = valor[key];
         });
     },
     [types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR](state, dados) {
@@ -201,14 +203,14 @@ export const mutations = {
             4: 0, // aguardando analise
         };
 
-        const itens = state
+        const copiaState = state
             .planilha[params.cdProduto]
             .etapa[params.etapa]
             .UF[params.cdUf]
             .cidade[params.idmunicipio]
             .itens;
 
-        const copiaItem = _.cloneDeep(itens.todos[params.idPlanilhaItem]);
+        const copiaItem = _.cloneDeep(copiaState.todos[params.idPlanilhaItem]);
 
         state.comprovantes.forEach((comprovante) => {
             tiposXQuantidade[comprovante.stItemAvaliado] += 1;
@@ -217,20 +219,20 @@ export const mutations = {
         Object.keys(tiposXQuantidade).forEach((tipo) => {
             const quantidade = tiposXQuantidade[tipo];
             if (quantidade === 0) {
-                if (typeof itens[tipo] !== 'undefined') {
-                    Vue.delete(itens[tipo], params.idPlanilhaItem);
+                if (typeof copiaState[tipo] !== 'undefined') {
+                    Vue.delete(copiaState[tipo], params.idPlanilhaItem);
 
-                    if (Object.keys(itens[tipo]).length === 0) {
-                        Vue.delete(itens, tipo);
+                    if (Object.keys(copiaState[tipo]).length === 0) {
+                        Vue.delete(copiaState, tipo);
                     }
                 }
                 return;
             }
 
-            if (typeof itens[tipo] === 'undefined') {
-                Vue.set(itens, tipo, {});
+            if (typeof copiaState[tipo] === 'undefined') {
+                Vue.set(copiaState, tipo, {});
             }
-            Vue.set(itens[tipo], params.idPlanilhaItem, copiaItem);
+            Vue.set(copiaState[tipo], params.idPlanilhaItem, copiaItem);
         });
     },
 };
