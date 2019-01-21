@@ -31,6 +31,8 @@ class TipoAvaliacao
 
         $informacoes = new \AvaliacaoResultados_Model_DbTable_vwInformacoesConsolidadasParaAvaliacaoFinanceira();
         $informacoes = $informacoes->informacoes($idPronac)->toArray();
+        var_dump($informacoes);
+        die;
         return [ $informacoes[0]];
     }
 

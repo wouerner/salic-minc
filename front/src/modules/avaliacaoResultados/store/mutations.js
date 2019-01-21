@@ -105,7 +105,8 @@ export const mutations = {
         });
     },
     [types.GET_TIPO_AVALIACAO](state, tipoAvaliacao) {
-        state.tipoAvaliacao = tipoAvaliacao[0];
+        const valor = tipoAvaliacao[0];
+        state.tipoAvaliacao = valor;
     },
     [types.LINK_REDIRECIONAMENTO_TIPO_AVALIACAO_RESULTADO](state, redirectLink) {
         state.redirectLink = redirectLink;
@@ -132,7 +133,7 @@ export const mutations = {
         state.dadosItemComprovacao = dados;
     },
     [types.ALTERAR_DADOS_ITEM_COMPROVACAO](state, params) {
-        const index = params.index;
+        const { index } = params;
         delete params.index;
         Object.keys(params).forEach((key) => {
             state.dadosItemComprovacao.comprovantes[index][key] = params[key];
