@@ -94,17 +94,16 @@ export default {
             senha: '',
             CPF: '',
             CPFRules: [
-                v => !!v || 'preencher CPF!',
+                v => !!v || 'Preencher CPF!',
                 v => this.TestaCPF(v) || 'CPF precisa ser valido!',
             ],
             senhaRules: [
-                v => !!v || 'preencher Senha!',
+                v => !!v || 'Preencher Senha!',
             ],
         };
     },
     computed: {
         ...mapGetters({
-            modalVisible: 'modal/default',
             loginGetter: 'autenticacao/loginGetter',
         }),
     },
