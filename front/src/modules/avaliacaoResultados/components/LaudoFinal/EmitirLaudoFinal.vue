@@ -1,5 +1,7 @@
 <template>
-    <v-container row justify-center>
+    <v-container
+        row
+        justify-center>
         <v-form v-model="valid">
             <v-dialog
                 v-model="dialog"
@@ -9,77 +11,108 @@
                 transition="dialog-bottom-transition"
             >
                 <v-card>
-                    <v-toolbar dark color="primary">
-                        <v-btn icon dark :to="{ name: 'Laudo' }">
+                    <v-toolbar
+                        dark
+                        color="primary">
+                        <v-btn
+                            :to="{ name: 'Laudo' }"
+                            icon
+                            dark>
                             <v-icon>close</v-icon>
                         </v-btn>
                         <v-toolbar-title>Avaliação de Resultados - Emitir Laudo Final</v-toolbar-title>
-                        <v-spacer></v-spacer>
+                        <v-spacer/>
                     </v-toolbar>
-
                     <v-card-text>
                         <v-container>
-                            <v-card-text>
-                                <v-card>
-                                    <v-card-title>
-                                        <v-container pa-0 ma-0>
-                                            <div>
-                                                <div class="headline"><b>Projeto:</b> {{projeto.AnoProjeto}}{{projeto.Sequencial}} - {{projeto.NomeProjeto}}</div>
-                                                <span class="black--text"><b>Proponente:</b> {{proponente.CgcCpf | cnpjFilter}} - {{proponente.Nome}}</span>
+                            <v-card>
+                                <v-card-title>
+                                    <v-container
+                                        pa-0
+                                        ma-0>
+                                        <div>
+                                            <div class="headline"><b>Projeto:</b>
+                                                {{ projeto.AnoProjeto }}{{ projeto.Sequencial }} - {{ projeto.NomeProjeto }}
                                             </div>
-                                        </v-container>
-                                    </v-card-title>
-                                    <v-card-text>
-                                        <v-container grid-list-xs text-xs-center ma-0 pa-0>
-                                            <v-layout row wrap>
-                                                <v-flex xs7>
-                                                    <h4 class="text-xs-left">Manifestação *</h4>
-                                                    <v-radio-group :value="parecerLaudoFinal.items.siManifestacao"
-                                                                @change="updateManifestacao"
-                                                                :rules="manifestacaoRules"
-                                                                row
-                                                                class="text-xs-left">
-                                                        <v-radio color="success" label="Aprovado" value="A"></v-radio>
-                                                        <v-radio color="success" label="Aprovado com ressalvas" value="P"></v-radio>
-                                                        <v-radio color="error" label="Reprovado" value="R"></v-radio>
-                                                    </v-radio-group>
-                                                </v-flex>
+                                            <span class="black--text"><b>Proponente:</b> {{ proponente.CgcCpf | cnpjFilter }} - {{ proponente.Nome }}</span>
+                                        </div>
+                                    </v-container>
+                                </v-card-title>
+                                <v-card-text>
+                                    <v-container
+                                        grid-list-xs
+                                        text-xs-center
+                                        ma-0
+                                        pa-0>
+                                        <v-layout
+                                            row
+                                            wrap>
+                                            <v-flex xs7>
+                                                <h4 class="text-xs-left">Manifestação *</h4>
+                                                <v-radio-group
+                                                    :value="parecerLaudoFinal.items.siManifestacao"
+                                                    :rules="manifestacaoRules"
+                                                    row
+                                                    class="text-xs-left"
+                                                    @change="updateManifestacao">
+                                                    <v-radio
+                                                        color="success"
+                                                        label="Aprovado"
+                                                        value="A"/>
+                                                    <v-radio
+                                                        color="success"
+                                                        label="Aprovado com ressalvas"
+                                                        value="P"/>
+                                                    <v-radio
+                                                        color="error"
+                                                        label="Reprovado"
+                                                        value="R"/>
+                                                </v-radio-group>
+                                            </v-flex>
 
-                                                <v-flex md12 xs12 mb-4>
-                                                    <v-card>
-                                                        <v-responsive>
-                                                            <div v-show="laudoRules.show" class="text-xs-left"><h4 :class="laudoRules.color">{{laudoRules.msg}}*</h4></div>
-                                                            <EditorTexto
-                                                                :style="laudoRules.backgroundColor"
-                                                                :value="parecerLaudoFinal.items.dsLaudoFinal"
-                                                                @editor-texto-input="inputLaudo($event)"
-                                                                @editor-texto-counter="validarLaudo($event)"
-                                                                required="required"
-                                                            >
-                                                            </EditorTexto>
-                                                        </v-responsive>
-                                                    </v-card>
-                                                </v-flex>
-                                            </v-layout>
-                                        </v-container>
-                                    </v-card-text>
-                                    <v-card-action>
-                                        <v-container grid-list-xs text-xs-center ma-0 pa-0>
-                                            <v-btn
-                                                color="primary"
-                                                @click.native="salvarLaudoFinal()"
-                                                :disabled="!valid || !laudoRules.enable">Salvar
-                                            </v-btn>
-                                            <v-btn
-                                                color="primary"
-                                                @click.native="finalizarLaudoFinal()"
-                                                :disabled="!valid || !laudoRules.enable"
-                                                :to="{ name: 'Laudo'}">Finalizar
-                                            </v-btn>
-                                        </v-container>
-                                    </v-card-action>
-                                </v-card>
-                            </v-card-text>
+                                            <v-flex
+                                                md12
+                                                xs12
+                                                mb-4>
+                                                <v-card>
+                                                    <v-responsive>
+                                                        <div
+                                                            v-show="laudoRules.show"
+                                                            class="text-xs-left"><h4
+                                                                :class="laudoRules.color">{{ laudoRules.msg }}*</h4></div>
+                                                        <EditorTexto
+                                                            :style="laudoRules.backgroundColor"
+                                                            :value="parecerLaudoFinal.items.dsLaudoFinal"
+                                                            required="required"
+                                                            @editor-texto-input="inputLaudo($event)"
+                                                            @editor-texto-counter="validarLaudo($event)"
+                                                        />
+                                                    </v-responsive>
+                                                </v-card>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-container
+                                        grid-list-xs
+                                        text-xs-center
+                                        ma-0
+                                        pa-0>
+                                        <v-btn
+                                            :disabled="!valid || !laudoRules.enable"
+                                            color="primary"
+                                            @click.native="salvarLaudoFinal()">Salvar
+                                        </v-btn>
+                                        <v-btn
+                                            :disabled="!valid || !laudoRules.enable"
+                                            :to="{ name: 'Laudo'}"
+                                            color="primary"
+                                            @click.native="finalizarLaudoFinal()">Finalizar
+                                        </v-btn>
+                                    </v-container>
+                                </v-card-actions>
+                            </v-card>
                         </v-container>
                     </v-card-text>
                 </v-card>
@@ -113,7 +146,7 @@ export default {
             manifestacaoRules: [
                 v => !!v || 'Tipo de manifestação é obrigatório!',
             ],
-            laudoFinalData: { },
+            laudoFinalData: {},
         };
     },
     methods: {
@@ -125,25 +158,31 @@ export default {
         }),
         validarLaudo(e) {
             if (e < 10) {
-                this.laudoRules = { show: true,
+                this.laudoRules = {
+                    show: true,
                     color: 'red--text',
                     backgroundColor: { 'background-color': '#FFCDD2' },
                     msg: 'O Laudo deve conter mais que 10 characteres',
-                    enable: false };
+                    enable: false,
+                };
             }
             if (e < 1) {
-                this.laudoRules = { show: true,
+                this.laudoRules = {
+                    show: true,
                     color: 'red--text',
                     backgroundColor: { 'background-color': '#FFCDD2' },
                     msg: 'O Laudo é obrigatório!',
-                    enable: false };
+                    enable: false,
+                };
             }
             if (e >= 10) {
-                this.laudoRules = { show: false,
+                this.laudoRules = {
+                    show: false,
                     color: '',
                     backgroundColor: '',
                     msg: '',
-                    enable: true };
+                    enable: true,
+                };
             }
         },
         salvarLaudoFinal() {
