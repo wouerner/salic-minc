@@ -1,5 +1,7 @@
 <?php
 
+use \Firebase\JWT\JWT;
+
 class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
 {
     public $orgaoAtivo;
@@ -78,6 +80,8 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
                     $GrupoAtivo->codGrupo = $Grupo['gru_codigo'];
                     $GrupoAtivo->codOrgao = $Grupo['uog_orgao'];
                     $this->orgaoAtivo = $GrupoAtivo->codOrgao;
+
+                    $this->gerarJWT($auth, $GrupoAtivo);
 
 //                    return $this->_helper->redirector->goToRoute(array('controller' => 'principal'), null, true);
                     $from = $this->getParam('from', '/principal');
@@ -720,5 +724,30 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
         $dados = array_map('utf8_encode', $dados);
 
         $this->_helper->json(array('data' => $dados, 'success' => 'true'));
+    }
+
+    private function gerarjWT($auth, $GrupoAtivo) {
+        $key = '7Fsxc2A865V6';
+        $dados = [
+            'auth' => [
+                'usu_codigo' => $auth['usu_codigo'],
+                'usu_identificacao' => $auth['usu_identificacao']
+            ],
+            'grupoAtivo' => $GrupoAtivo->codOrgao
+        ];
+
+        $issuedAt = time();
+        $expire = $issuedAt + 1000000; // tempo de expiracao do token
+
+        $tokenParam = [
+            'iat'  => $issuedAt,            // timestamp de geracao do token
+            'iss'  => $options['iss'],      // dominio, pode ser usado para descartar tokens de outros dominios
+            'exp'  => $expire,              // expiracao do token
+            'nbf'  => $issuedAt - 1,        // token nao eh valido Antes de
+            'data' => $dados, // Dados do usuario logado
+        ];
+
+        $jwt = new Zend_Session_Namespace('jwt');
+        $jwt->token = JWT::encode($tokenParam, $key);
     }
 }
