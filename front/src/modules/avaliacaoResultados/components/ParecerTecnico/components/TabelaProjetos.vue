@@ -94,7 +94,7 @@ export default {
     props: {
         dados: { type: Object, default: () => {} },
         componentes: { type: Object, default: () => {} },
-        mostrarTecnico: { type: Boolean, default: () => false },
+        mostrarTecnico: { type: Boolean, default: false },
     },
     data() {
         return {
