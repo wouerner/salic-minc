@@ -136,7 +136,7 @@ class tbAporteCaptacao extends MinC_Db_Table_Abstract
     /**
      *
      */
-    public function devolucoesDoIncentivador(array $where, $dbg = false)
+    public function devolucoesDoIncentivador(array $where, $order = array(), $dbg = false)
     {
         $select = $this->select()->setIntegrityCheck(false);
         $select->from($this->_name, [
@@ -160,6 +160,8 @@ class tbAporteCaptacao extends MinC_Db_Table_Abstract
         foreach ($where as $key => $value) {
             $select->where($key, $value);
         }
+
+        $select->order($order);
 
         if ($dbg) {
             xd($select->assemble());
