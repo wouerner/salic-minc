@@ -32,3 +32,8 @@ export const loginAction = ({ commit }, params) => {
             }
         });
 };
+
+export const recoverAction = ({ commit }) => {
+    const user = localStorage.getItem('user');
+    commit(types.SET_LOGIN, JSON.parse(user));
+};

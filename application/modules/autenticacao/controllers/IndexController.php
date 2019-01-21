@@ -727,7 +727,8 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
     }
 
     private function gerarjWT($auth, $GrupoAtivo) {
-        $key = '7Fsxc2A865V6';
+        $key = Zend_Registry::get("config")->toArray()['jwt']['token'];
+
         $dados = [
             'auth' => [
                 'usu_codigo' => $auth['usu_codigo'],
@@ -749,5 +750,56 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
 
         $jwt = new Zend_Session_Namespace('jwt');
         $jwt->token = JWT::encode($tokenParam, $key);
+        return $jwt->token;
+    }
+
+    public function login2Action()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        try {
+            $username = Mascara::delMaskCNPJ(Mascara::delMaskCPF($this->getParam('Login', null)));
+            $password = $this->getParam('Senha', null);
+
+            if (empty($username) || empty($password)) {
+                throw new Exception("Login ou Senha inv&aacute;lidos!");
+            } elseif (strlen($username) == 11 && !Validacao::validarCPF($username)) {
+                throw new Exception("O CPF informado &eacute; inv&aacute;lido!");
+            } elseif (strlen($username) == 14 && !Validacao::validarCNPJ($username)) {
+                throw new Exception("O CPF informado &eacute; inv&aacute;lido!");
+            } else {
+                $Usuario = new Autenticacao_Model_DbTable_Usuario();
+                $buscar = $Usuario->login($username, $password);
+                if ($buscar) {
+                    $auth = array_change_key_case((array)Zend_Auth::getInstance()->getIdentity());
+                    $objUnidades = $Usuario->buscarUnidades($auth['usu_codigo'], 21)->current();
+                    if ($objUnidades) {
+                        $objUnidades = $objUnidades->toArray();
+                    }
+                    // registra o primeiro grupo do usuario (pega unidade autorizada, orgao e grupo do usuario)
+                    $Grupo = array_change_key_case($objUnidades);
+                    $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+                    $GrupoAtivo->codGrupo = $Grupo['gru_codigo'];
+                    $GrupoAtivo->codOrgao = $Grupo['uog_orgao'];
+                    $this->orgaoAtivo = $GrupoAtivo->codOrgao;
+
+                    $token = $this->gerarJWT($auth, $GrupoAtivo);
+
+                    $from = $this->getParam('from', '/principal');
+                    $this->_helper->json(
+                        [
+                            'status' => 1,
+                            'msg' => 'Login realizado com sucesso!',
+                            'redirect' => $from,
+                            'token'=> $token
+                        ]
+                    );
+                } else {
+                    $this->forward("login-proponente", "index", "autenticacao");
+                }
+            }
+        } catch (Exception $objException) {
+            $this->_helper->json(array('status' => false, 'msg' => $objException->getMessage()));
+        }
     }
 }

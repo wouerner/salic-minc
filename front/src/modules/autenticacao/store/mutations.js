@@ -11,5 +11,6 @@ export const mutations = {
     },
     [types.SET_LOGIN](state, dados) {
         state.login = dados;
+        localStorage.setItem('user', JSON.stringify(dados));
     },
 };

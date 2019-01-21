@@ -11,4 +11,4 @@ const buildData = (params) => {
 };
 
 export const usuarioLogado = () => api.getRequest('/autenticacao/usuario/usuario/logado');
-export const login = usuario => api.postRequest('/autenticacao/index/login', buildData(usuario));
+export const login = usuario => api.postRequest('/autenticacao/index/login2', buildData(usuario));
