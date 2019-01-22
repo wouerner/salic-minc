@@ -1,3 +1,5 @@
+import { watchFile } from "fs";
+
 describe('Testes da Análise de Resultados', function () {
   before(function () { // Inicia todos os testes na Tela de Análise de Resultados - Perfil Técnico
     cy.mudarPerfil(124, 303); //perfil Tecnico de Prestacao de Contas
@@ -16,8 +18,8 @@ describe('Testes da Análise de Resultados', function () {
   });
 
   it('Verifica se há pelo menos um item na tabela - Aba "Em análise" ', function () {
-    cy.projetosInicio();
-    cy.get('div.v-tabs__div a').contains('Em Analise').click();
+    cy.mockProjetosInicio();
+
     cy.get('tbody > :nth-child(1) > .text-xs-right').should('not.be.empty');
   });
 

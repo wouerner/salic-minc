@@ -9,22 +9,11 @@ before(() => {
 
     cy.visit('http://localhost/principal');
 
-    cy.wait(1000);
+    
+    // cy.mockDadosSALIC();
+    // cy.mockProjetosInicio()
+    cy.wait(2000);
 
-
-    cy.server()
-    cy.route({
-      method: 'GET',      // Route all GET requests
-      url: '/navegacao/menu-principal',
-    }).as('menuPrincipal')
-
-    cy.server()
-    cy.route({
-      method: 'GET',      // Route all GET requests
-      url: '/avaliacao-resultados/fluxo-projeto?estadoid=5&idAgente=236',
-    }).as('projetosInicio')
 });
-
-
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

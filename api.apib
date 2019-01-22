@@ -113,17 +113,17 @@ HOST: http://localhost
                 + Prioridade: 0 (string)
                 + idPronac: 159131 (string)
 
-## Parecer Técnico [/avaliacao-resultados/fluxo-projeto?estadoid={estadoid}&idAgente={idAgente}]
+## Parecer Técnico [/avaliacao-resultados/fluxo-projeto?estadoid={estadoId}&idAgente={idAgente}]
 
 + Parameters
-    + estadoid (string, required)
+    + estadoId (string, required)
     + idAgente (string, required)
 
 ### Projetos - Análise/Assinar [GET]
 
 + Request Projetos em Analise (application/json)
     + Attributes
-        + estadoid: 5
+        + estadoId: 5
         + idAgente: 236 
 
 + Response 200 (application/json; charset=utf-8)
@@ -195,7 +195,7 @@ HOST: http://localhost
 
 + Request Projetos Assinar (application/json)
     + Attributes
-        + estadoid: 6
+        + estadoId: 6
         + idAgente: 236 
 
 + Response 200 (application/json; charset=utf-8)
