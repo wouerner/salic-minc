@@ -81,7 +81,8 @@ export default {
             loading: true,
             search: '',
             pagination: {
-                sortBy: 'fat',
+                sortBy: 'dt_criacao',
+                descending: true,
             },
             selected: [],
             headers: [

@@ -66,7 +66,8 @@ export default {
             search: '',
             pagination: {
                 rowsPerPage: 10,
-                sortBy: 'fat',
+                sortBy: 'DtSituacao',
+                descending: true,
             },
             selected: [],
             loading: true,

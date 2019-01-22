@@ -50,7 +50,8 @@ export default {
             search: '',
             pagination: {
                 rowsPerPage: 10,
-                sortBy: 'fat',
+                sortBy: 'DtEnvio',
+                descending: true,
             },
             selected: [],
             loading: true,

@@ -70,7 +70,8 @@ export default {
             search: '',
             pagination: {
                 rowsPerPage: 10,
-                sortBy: 'fat',
+                sortBy: 'Data',
+                descending: true,
             },
             indexDocumentosAnexados: 0,
             selected: [],

@@ -5,6 +5,7 @@
         </div>
         <div v-else-if="dadosListagem">
             <v-data-table
+                :pagination.sync="pagination"
                 :headers="headers"
                 :items="dadosListagem"
                 class="elevation-1 container-fluid"
@@ -68,6 +69,11 @@ export default {
         return {
             dialog: false,
             loading: true,
+            pagination: {
+                rowsPerPage: 10,
+                sortBy: 'dtInicio',
+                descending: true,
+            },
             headers: [
                 {
                     text: 'DT. INÍCIO',

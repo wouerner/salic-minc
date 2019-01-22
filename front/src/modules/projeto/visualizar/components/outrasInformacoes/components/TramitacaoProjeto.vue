@@ -5,6 +5,7 @@
                 <h6>Tramita&ccedil;&atilde;o do Projeto</h6>
             </v-card-title>
             <v-data-table
+                :pagination.sync="pagination"
                 :headers="headers"
                 :items="dados"
                 class="elevation-1 container-fluid mb-2"
@@ -48,7 +49,8 @@ export default {
         return {
             search: '',
             pagination: {
-                sortBy: 'fat',
+                sortBy: 'dtTramitacaoEnvio',
+                descending: true,
             },
             selected: [],
             headers: [

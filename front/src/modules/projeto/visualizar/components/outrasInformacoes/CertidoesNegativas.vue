@@ -5,6 +5,7 @@
         </div>
         <div v-else-if="dados.certidoes">
             <v-data-table
+                :pagination.sync="pagination"
                 :headers="headers"
                 :items="dados.certidoes"
                 class="elevation-1 container-fluid"
@@ -55,7 +56,8 @@ export default {
         return {
             search: '',
             pagination: {
-                sortBy: 'fat',
+                sortBy: 'DtEmissao',
+                descending: true,
             },
             selected: [],
             loading: true,

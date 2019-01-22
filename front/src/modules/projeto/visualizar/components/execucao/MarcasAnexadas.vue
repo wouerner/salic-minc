@@ -9,6 +9,7 @@
                     <h6>Marcas Anexadas</h6>
                 </v-card-title>
                 <v-data-table
+                    :pagination.sync="pagination"
                     :headers="headers"
                     :items="dados"
                     :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
@@ -74,7 +75,8 @@ export default {
             search: '',
             pagination: {
                 rowsPerPage: 10,
-                sortBy: 'fat',
+                sortBy: 'dtEnvio',
+                descending: true,
             },
             loading: true,
             loadingButton: -1,

@@ -1,6 +1,7 @@
 <template>
     <div>
         <v-data-table
+            :pagination.sync="pagination"
             :headers="headers"
             :items="diligencias"
             class="elevation-1"
@@ -131,6 +132,10 @@ export default {
     data() {
         return {
             dialog: false,
+            pagination: {
+                sortBy: 'dataSolicitacao',
+                descending: true,
+            },
             headers: [
                 {
                     text: 'NR PROPOSTA',
