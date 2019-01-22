@@ -42,19 +42,12 @@
 import { mapGetters, mapActions } from 'vuex';
 import moment from 'moment';
 import Carregando from '@/components/CarregandoVuetify';
+import { utils } from '@/mixins/utils';
 
 export default {
     name: 'PedidoProrrogacao',
     components: {
         Carregando,
-    },
-    filters: {
-        formatarData(date) {
-            if (date.length === 0) {
-                return '-';
-            }
-            return moment(date).format('DD/MM/YYYY');
-        },
     },
     props: {
         idPronac: {
@@ -62,6 +55,7 @@ export default {
             default: 0,
         },
     },
+    mixins: [utils],
     data() {
         return {
             loading: true,

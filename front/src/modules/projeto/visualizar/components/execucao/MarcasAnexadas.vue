@@ -55,18 +55,10 @@
 
 import { mapActions, mapGetters } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
-import moment from 'moment';
+import { utils } from '@/mixins/utils';
 
 export default {
     name: 'MarcasAnexadas',
-    filters: {
-        formatarData(date) {
-            if (date.length === 0) {
-                return '-';
-            }
-            return moment(date).format('DD/MM/YYYY');
-        },
-    },
     components: {
         Carregando,
     },
@@ -76,6 +68,7 @@ export default {
             default: 0,
         },
     },
+    mixins: [utils],
     data() {
         return {
             search: '',
