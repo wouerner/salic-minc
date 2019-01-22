@@ -15,9 +15,9 @@
                     slot="items"
                     slot-scope="props">
                     <td class="text-xs-left">{{ props.item.Origem }}</td>
-                    <td class="text-xs-center pl-5">{{ props.item.dtTramitacaoEnvio }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.dtTramitacaoEnvio | formatarData }}</td>
                     <td class="text-xs-left">{{ props.item.Destino }}</td>
-                    <td class="text-xs-center pl-5">{{ props.item.dtTramitacaoRecebida }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.dtTramitacaoRecebida | formatarData }}</td>
                     <td class="text-xs-left">{{ props.item.Situacao }}</td>
                     <td class="text-xs-left">{{ props.item.meDespacho }}</td>
                 </template>
@@ -33,6 +33,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { utils } from '@/mixins/utils';
 
 export default {
     name: 'TramitacaoProjeto',
@@ -42,6 +43,7 @@ export default {
             default: '',
         },
     },
+    mixins: [utils],
     data() {
         return {
             search: '',

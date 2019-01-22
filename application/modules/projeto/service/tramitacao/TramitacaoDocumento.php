@@ -62,9 +62,9 @@ class TramitacaoDocumento implements \MinC\Servico\IServicoRestZend
             $resultArray[] = [
                 'idDocumento' => $tramitacao['idDocumento'],
                 'dsTipoDocumento' => $dsTipoDocumento,
-                'dtDocumento' => $objDateTimedtDocumento,
+                'dtDocumento' => $tramitacao['dtDocumento'],
                 'noArquivo' => $noArquivo,
-                'dtAnexacao' => $objDateTimedtJuntada,
+                'dtAnexacao' => $tramitacao['dtJuntada'],
                 'Usuario' => $tramitacao['Usuario'],
                 'idLote' => $tramitacao['idLote'],
                 'Situacao' => $tramitacao['Situacao'],

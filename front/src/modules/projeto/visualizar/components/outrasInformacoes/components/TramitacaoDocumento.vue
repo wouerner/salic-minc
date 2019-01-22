@@ -15,8 +15,8 @@
                     slot="items"
                     slot-scope="props">
                     <td class="text-xs-left">{{ props.item.dsTipoDocumento }}</td>
-                    <td class="text-xs-center pl-5">{{ props.item.dtDocumento }}</td>
-                    <td class="text-xs-center pl-5">{{ props.item.dtAnexacao }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.dtDocumento | formatarData }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.dtAnexacao | formatarData }}</td>
                     <td class="text-xs-left">
                         <a
                             :href="
@@ -44,6 +44,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { utils } from '@/mixins/utils';
 
 export default {
     name: 'TramitacaoDocumento',
@@ -53,6 +54,7 @@ export default {
             default: '',
         },
     },
+    mixins: [utils],
     data() {
         return {
             search: '',
