@@ -19,9 +19,9 @@
                     v-else
                     class="text-xs-left"> -</td>
                 <td class="text-xs-left">{{ props.item.tipoDiligencia }}</td>
-                <td class="text-xs-center pl-5">{{ props.item.dataSolicitacao }}</td>
-                <td class="text-xs-center pl-5">{{ props.item.dataResposta }}</td>
-                <td class="text-xs-center pl-5">{{ props.item.prazoResposta }}</td>
+                <td class="text-xs-center pl-5">{{ props.item.dataSolicitacao | formatarData }}</td>
+                <td class="text-xs-center pl-5">{{ props.item.dataResposta | formatarData }}</td>
+                <td class="text-xs-center pl-5">{{ props.item.prazoResposta | formatarData }}</td>
                 <td class="text-xs-left">Prorrogado</td>
                 <td class="text-xs-center">
                     <v-tooltip bottom>
@@ -61,14 +61,14 @@
                                 offset-lg1
                                 dark>
                                 <b>DATA DA SOLICITA&Ccedil;&Atilde;O</b>
-                                <p>{{ dadosDiligencia.dataSolicitacao }}</p>
+                                <p>{{ dadosDiligencia.dataSolicitacao | formatarData }}</p>
                             </v-flex>
                             <v-flex
                                 s12
                                 m6
                                 lg3>
                                 <b>DATA DA RESPOSTA</b>
-                                <p>{{ dadosDiligencia.dataResposta }}</p>
+                                <p>{{ dadosDiligencia.dataResposta | formatarData }}</p>
                             </v-flex>
                         </v-layout>
                         <div v-if="dadosDiligencia.Solicitacao">
@@ -143,7 +143,7 @@
                                     </v-flex>
                                     <v-flex xs2>
                                         <p>
-                                            {{ arquivo.dtEnvio }}
+                                            {{ arquivo.dtEnvio | formatarData }}
                                         </p>
                                     </v-flex>
                                 </v-layout>
@@ -172,6 +172,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
+import { utils } from '@/mixins/utils';
 
 export default {
     name: 'VisualizarDiligenciaProjeto',
@@ -179,15 +180,12 @@ export default {
         Carregando,
     },
     props: {
-        idPronac: {
-            type: Number,
-            default: 0,
-        },
         diligencias: {
             type: Array,
             default: () => [],
         },
     },
+    mixins: [utils],
     data() {
         return {
             dialog: false,

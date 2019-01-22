@@ -11,7 +11,7 @@
                 slot="items"
                 slot-scope="props">
                 <td class="text-xs-center">{{ props.item.idPreprojeto }}</td>
-                <td class="text-xs-center pl-5">{{ props.item.dataSolicitacao }}</td>
+                <td class="text-xs-center pl-5">{{ props.item.dataSolicitacao | formatarData }}</td>
                 <td class="text-xs-center">
                     <v-tooltip bottom>
                         <v-btn
@@ -49,14 +49,14 @@
                                 offset-lg1
                                 dark>
                                 <b>DATA DA SOLICITA&Ccedil;&Atilde;O</b>
-                                <p>{{ dadosDiligencia.dataSolicitacao }}</p>
+                                <p>{{ dadosDiligencia.dataSolicitacao | formatarData }}</p>
                             </v-flex>
                             <v-flex
                                 s12
                                 m6
                                 lg3>
                                 <b>DATA DA RESPOSTA</b>
-                                <p>{{ dadosDiligencia.dataResposta }}</p>
+                                <p>{{ dadosDiligencia.dataResposta | formatarData }}</p>
                             </v-flex>
                         </v-layout>
 
@@ -114,6 +114,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
+import { utils } from '@/mixins/utils';
 
 export default {
     name: 'VisualizarDiligenciaProposta',
@@ -121,15 +122,12 @@ export default {
         Carregando,
     },
     props: {
-        idPronac: {
-            type: Number,
-            default: 0,
-        },
         diligencias: {
             type: Array,
             default: () => [],
         },
     },
+    mixins: [utils],
     data() {
         return {
             dialog: false,

@@ -10,7 +10,7 @@
             <template
                 slot="items"
                 slot-scope="props">
-                <td class="text-xs-center pl-5">{{ props.item.dtAvaliacao }}</td>
+                <td class="text-xs-center pl-5">{{ props.item.dtAvaliacao | formatarData }}</td>
                 <td
                     class="text-xs-left"
                     v-html="props.item.tipoDiligencia"/>
@@ -80,6 +80,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
+import { utils } from '@/mixins/utils';
 
 export default {
     name: 'VisualizarDiligenciaAdequacao',
@@ -87,15 +88,12 @@ export default {
         Carregando,
     },
     props: {
-        idPronac: {
-            type: Number,
-            default: 0,
-        },
         diligencias: {
             type: Array,
             default: () => [],
         },
     },
+    mixins: [utils],
     data() {
         return {
             dialog: false,
