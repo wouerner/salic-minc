@@ -51,20 +51,12 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
-import moment from 'moment';
+import { utils } from '@/mixins/utils';
 
 export default {
     name: 'DocumentosAnexados',
     components: {
         Carregando,
-    },
-    filters: {
-        formatarData(date) {
-            if (date.length === 0) {
-                return '-';
-            }
-            return moment(date).format('DD/MM/YYYY');
-        },
     },
     props: {
         idPronac: {
@@ -72,6 +64,7 @@ export default {
             default: 0,
         },
     },
+    mixins: [utils],
     data() {
         return {
             search: '',
