@@ -573,21 +573,21 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'grupo' => []
             ];
 
-            $menu['prestacaodecontas']['submenu'][] = [
-                'label' => 'Extrato Banc&aacute;rio',
-                'title' => 'Ir para Extrato Banc&aacute;rio',
-                'link' => '/default/consultardadosprojeto/extratos-bancarios/?idPronac=' . $idPronacHash,
-                'ajax' => false,
-                'grupo' => []
-            ];
+//            $menu['prestacaodecontas']['submenu'][] = [
+//                'label' => 'Extrato Banc&aacute;rio',
+//                'title' => 'Ir para Extrato Banc&aacute;rio',
+//                'link' => '/default/consultardadosprojeto/extratos-bancarios/?idPronac=' . $idPronacHash,
+//                'ajax' => false,
+//                'grupo' => []
+//            ];
 
-            $menu['prestacaodecontas']['submenu'][] = [
-                'label' => 'Concilia&ccedil;&atilde;o Banc&aacute;ria',
-                'title' => 'Ir para Concilia&ccedil;&atilde;o Banc&aacute;ria',
-                'link' => '/default/consultardadosprojeto/conciliacao-bancaria/?idPronac=' . $idPronacHash,
-                'ajax' => false,
-                'grupo' => []
-            ];
+//            $menu['prestacaodecontas']['submenu'][] = [
+//                'label' => 'Concilia&ccedil;&atilde;o Banc&aacute;ria',
+//                'title' => 'Ir para Concilia&ccedil;&atilde;o Banc&aacute;ria',
+//                'link' => '/default/consultardadosprojeto/conciliacao-bancaria/?idPronac=' . $idPronacHash,
+//                'ajax' => false,
+//                'grupo' => []
+//            ];
 
             $menu['prestacaodecontas']['submenu'][] = [
                 'label' => 'Rela&ccedil;&atilde;o de pagamentos',
