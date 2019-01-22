@@ -430,13 +430,13 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
 
             if (in_array($this->permissoesMenu['FaseDoProjeto'], array('2', '3', '4', '5')) || !$this->usuarioExterno || $this->debug) {
 
-                $menu['execucao']['submenu'][] = [
-                    'label' => 'Dados banc&aacute;rios',
-                    'title' => 'Ir para Dados banc&aacute;rios',
-                    'link' => '/default/consultardadosprojeto/dados-bancarios/?idPronac=' . $idPronacHash,
-                    'ajax' => false,
-                    'grupo' => []
-                ];
+//                $menu['execucao']['submenu'][] = [
+//                    'label' => 'Dados banc&aacute;rios',
+//                    'title' => 'Ir para Dados banc&aacute;rios',
+//                    'link' => '/default/consultardadosprojeto/dados-bancarios/?idPronac=' . $idPronacHash,
+//                    'ajax' => false,
+//                    'grupo' => []
+//                ];
 
                 $menu['execucao']['submenu'][] = [
                     'label' => 'Dados da fiscaliza&ccedil;&atilde;o',
