@@ -58,9 +58,6 @@ export default {
             loadingPerfis: true,
         };
     },
-    created() {
-        this.buscarPerfisDisponiveis();
-    },
     computed: {
         ...mapGetters({
             perfis: 'layout/perfisDisponiveis',
@@ -82,6 +79,9 @@ export default {
             this.loadingPerfis = false;
             return perfil || {};
         },
+    },
+    created() {
+        this.buscarPerfisDisponiveis();
     },
     methods: {
         ...mapActions({
