@@ -76,19 +76,18 @@ export default {
                 }
                 return false;
             }).filter(value => (value !== false))[0];
-            // this.loadingPerfis = false;
             return perfil || {};
         },
-    },
-    created() {
-        this.buscarPerfisDisponiveis();
     },
     watch: {
         usuario(value) {
             if (Object.keys(value).length > 0) {
                 this.loadingPerfis = false;
             }
-        }
+        },
+    },
+    created() {
+        this.buscarPerfisDisponiveis();
     },
     methods: {
         ...mapActions({
