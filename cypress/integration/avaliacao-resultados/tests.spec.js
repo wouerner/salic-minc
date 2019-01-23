@@ -7,14 +7,6 @@ describe('Testes da Análise de Resultados', function () {
     cy.get('ul li a.dropdown-button').contains('Avaliação de Resultados').click()
       .get('#prestacao-contas li a').contains('Analisar Comprovação Financeira').click();
 
-    
-    // cy.request('http://localhost:4000/navegacao/menu-principal').then((response) => {
-    //   var mock = response.body
-    // })
-
-    // cy.wait('@menuPrincipal').then((response) => {
-    //   response.body = {}
-    // })
   });
 
   it('Verifica se há pelo menos um item na tabela - Aba "Em análise" ', function () {
