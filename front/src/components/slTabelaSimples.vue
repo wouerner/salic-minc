@@ -68,7 +68,7 @@ export default {
     props: {
         dados: {
             type: Object,
-            default: () => [],
+            default: () => {},
         },
         thead: {
             type: Boolean,
