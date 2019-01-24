@@ -256,3 +256,11 @@ export const buscarDadosFiscalizacaoVisualiza = ({ commit }, value) => {
             commit(types.SET_DADOS_FISCALIZACAO_VISUALIZA, data);
         });
 };
+
+export const buscarAprovacao = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarAprovacao(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_APROVACAO, data);
+        });
+};

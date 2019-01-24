@@ -25,6 +25,8 @@ import MarcasAnexadas from './visualizar/components/execucao/MarcasAnexadas';
 import DadosReadequacoes from './visualizar/components/execucao/DadosReadequacoes';
 import PedidoProrrogacao from './visualizar/components/execucao/PedidoProrrogacao';
 import DadosFiscalizacao from './visualizar/components/execucao/DadosFiscalizacao';
+import Aprovacao from './visualizar/components/analiseAprovacao/Aprovacao';
+
 // import retirados do webpackChunkName
 import DadosProjeto from './visualizar/components/DadosProjeto';
 import Proponente from './visualizar/components/incentivo/Proponente';
@@ -256,6 +258,14 @@ const routes = [
                 component: DadosFiscalizacao,
                 meta: {
                     title: 'Dados Fiscalização',
+                },
+            },
+            {
+                path: 'aprovacao',
+                name: 'Aprovacao',
+                component: Aprovacao,
+                meta: {
+                    title: 'Aprovação',
                 },
             },
         ],

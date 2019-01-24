@@ -30,6 +30,7 @@ export const state = {
     pedidoProrrogacao: [],
     dadosFiscalizacaoLista: [],
     dadosFiscalizacaoVisualiza: {},
+    aprovacao: {},
 };
 
 export const mutations = {
@@ -119,5 +120,8 @@ export const mutations = {
     },
     [types.SET_DADOS_FISCALIZACAO_VISUALIZA](state, dados) {
         state.dadosFiscalizacaoVisualiza = dados;
+    },
+    [types.SET_APROVACAO](state, dados) {
+        state.aprovacao = dados;
     },
 };
