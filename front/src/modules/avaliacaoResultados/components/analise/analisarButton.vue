@@ -1,30 +1,30 @@
 <template>
-    <v-btn flat icon color="green" :to="{ name: 'AnalisePlanilha', params:{ id: idPronac }}">
+    <v-btn
+        :to="{ name: 'AnalisePlanilha', params:{ id: idPronac }}"
+        flat
+        icon
+        color="primary"
+    >
         <v-tooltip bottom>
-            <v-icon 
-                slot="activator" 
-                class="material-icons">compare_arrows
+            <v-icon
+                slot="activator"
+                class="material-icons"
+            >
+                gavel
             </v-icon>
             <span>Analisar Projeto</span>
         </v-tooltip>
     </v-btn>
-
 </template>
-
 <script>
-    export default {
-        name: 'AnalisarButton',
-        props: [
-            'idPronac',
-            'tipo',
-        ],
-        data() {
-            return {
-            };
+
+export default {
+    name: 'AnalisarButton',
+    props: {
+        idPronac: {
+            type: String,
+            default: '',
         },
-        methods: {
-        },
-        computed: {
-        },
-    };
+    },
+};
 </script>

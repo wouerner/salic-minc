@@ -2,8 +2,6 @@
 
 namespace Application\Modules\Projeto\Service\DocumentosAnexados;
 
-use Seguranca;
-
 class DocumentosAnexados implements \MinC\Servico\IServicoRestZend
 {
     /**
@@ -30,15 +28,11 @@ class DocumentosAnexados implements \MinC\Servico\IServicoRestZend
             $idPronac = \Seguranca::dencrypt($idPronac);
         }
 
-        $Projetos = new \Projetos();
-        $projeto = $Projetos->buscar(array('IdPRONAC = ?' => $idPronac))->current();
-
         $tbDoc = new \paDocumentos();
         $documentos = $tbDoc->marcasAnexadas($idPronac);
         $docs = $this->montaArrayDocumentos($documentos);
 
         $resultArray = [];
-
         $resultArray['documentos'] = $docs;
 
         return $resultArray;
@@ -64,11 +58,12 @@ class DocumentosAnexados implements \MinC\Servico\IServicoRestZend
                     $item->Anexado = 'Documento do Projeto';
                     break;
             }
+
             $itemArray = [
                 'Anexado' => $item->Anexado,
                 'Data' => $item->Data,
-                'Descricao' => utf8_encode($item->Descricao),
-                'NoArquivo' => utf8_encode($item->NoArquivo),
+                'Descricao' => $item->Descricao,
+                'NoArquivo' => $item->NoArquivo,
                 'idArquivo' => $item->idDocumentosAgentes,
                 'AgenteDoc' => $item->AgenteDoc,
             ];

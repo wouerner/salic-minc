@@ -28,7 +28,7 @@ class DiligenciaProposta implements \MinC\Servico\IServicoRestZend
     public function visualizarDiligenciaProposta()
     {
         $idPreProjeto = $this->request->idPreProjeto;
-        $idAvaliacaoProposta = (int) $this->request->idAvaliacaoProposta;
+        $idAvaliacaoProposta = (int) $this->request->id;
 
         if (empty($idAvaliacaoProposta) || empty($idPreProjeto)) {
             return [];
@@ -43,22 +43,23 @@ class DiligenciaProposta implements \MinC\Servico\IServicoRestZend
             ]
         )->current();
 
-        return $this->obterDiligenciaProposta($diligenciasProposta);
+        $proposta = $this->obterDiligenciaProposta($diligenciasProposta);
+
+        $proposta = \TratarArray::utf8EncodeArray($proposta);
+
+        return $proposta;
     }
 
     private function obterDiligenciaProposta($diligencia)
     {
-        $Solicitacao = html_entity_decode(utf8_encode($diligencia['Solicitacao']));
-        $Resposta = html_entity_decode(utf8_encode($diligencia['Resposta']));
-        $nomeProjeto = html_entity_decode(utf8_encode($diligencia['nomeProjeto']));
-
-        $objDateTimedataSolicitacao = new \DateTime($diligencia['dataSolicitacao']);
-        $objDateTimedataResposta = new \DateTime($diligencia['dataResposta']);
+        $Solicitacao = $diligencia['Solicitacao'];
+        $Resposta = $diligencia['Resposta'];
+        $nomeProjeto = $diligencia['nomeProjeto'];
 
         $resultArray = [
             'idPreprojeto' => $diligencia['pronac'],
-            'dataSolicitacao' => $objDateTimedataSolicitacao->format('d/m/Y'),
-            'dataResposta' => $objDateTimedataResposta->format('d/m/Y'),
+            'dataSolicitacao' => $diligencia['dataSolicitacao'],
+            'dataResposta' => $diligencia['dataResposta'],
             'nomeProjeto' => $nomeProjeto,
             'Solicitacao' => $Solicitacao,
             'Resposta' => $Resposta,

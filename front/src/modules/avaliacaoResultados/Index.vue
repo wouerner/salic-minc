@@ -1,12 +1,16 @@
 <template>
     <div id="app">
         <v-app :dark="isModoNoturno">
-            <SlNav></SlNav>
+            <SlNav/>
             <v-content>
-                <v-container fluid>
-                  <v-layout>
-                    <router-view></router-view>
-                  </v-layout>
+                <v-container
+                    v-if="Object.keys(usuario).length > 0"
+                    fluid>
+                    <v-layout>
+                        <v-fade-transition mode="out-in">
+                            <router-view/>
+                        </v-fade-transition>
+                    </v-layout>
                 </v-container>
             </v-content>
 
@@ -18,10 +22,10 @@
                 :timeout="2000"
                 @input="fecharSnackbar"
             >
-                {{ this.getSnackbar.text }}
+                {{ getSnackbar.text }}
             </v-snackbar>
-            <Rodape></Rodape>
-      </v-app>
+            <Rodape/>
+        </v-app>
     </div>
 </template>
 
@@ -33,36 +37,41 @@ import SlNav from './components/SlNav';
 export default {
     name: 'Index',
     components: { SlNav, Rodape },
-    methods: {
-        ...mapActions({
-            setSnackbar: 'noticias/setDados',
-            setUsuario: 'autenticacao/usuarioLogado',
-            obterModoNoturno: 'layout/obterModoNoturno',
-        }),
-        fecharSnackbar() {
-            this.setSnackbar({ ativo: false });
-        },
-    },
-    computed: {
-        ...mapGetters({
-            getSnackbar: 'noticias/getDados',
-            isModoNoturno: 'layout/modoNoturno',
-        }),
-    },
-    mounted() {
-        this.setSnackbar({ ativo: false, color: 'success' });
-        this.setUsuario();
-        this.obterModoNoturno();
-    },
     data() {
         return {
             dark: false,
             snackbar: false,
         };
     },
+    computed: {
+        ...mapGetters({
+            getSnackbar: 'noticias/getDados',
+            isModoNoturno: 'layout/modoNoturno',
+            usuario: 'autenticacao/getUsuario',
+        }),
+    },
     watch: {
         getSnackbar(val) {
             this.snackbar = val.ativo;
+        },
+    },
+    created() {
+        this.recoverAction();
+    },
+    mounted() {
+        this.setSnackbar({ ativo: false, color: 'success' });
+        this.setUsuario();
+        this.obterModoNoturno();
+    },
+    methods: {
+        ...mapActions({
+            setSnackbar: 'noticias/setDados',
+            setUsuario: 'autenticacao/usuarioLogado',
+            obterModoNoturno: 'layout/obterModoNoturno',
+            recoverAction: 'autenticacao/recoverAction',
+        }),
+        fecharSnackbar() {
+            this.setSnackbar({ ativo: false });
         },
     },
 };

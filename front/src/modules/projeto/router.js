@@ -1,16 +1,13 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import Listar from './listar/Index';
 import Visualizar from './visualizar/Visualizar';
-import DadosProjeto from './visualizar/components/DadosProjeto';
 import PlanilhaPropostaOriginal from './visualizar/components/incentivo/planilha/PlanilhaPropostaOriginal';
 import PlanilhaPropostaAutorizada from './visualizar/components/incentivo/planilha/PlanilhaPropostaAutorizada';
 import PlanilhaPropostaAdequada from './visualizar/components/incentivo/planilha/PlanilhaPropostaAdequada';
 import PlanilhaHomologada from './visualizar/components/incentivo/planilha/PlanilhaHomologada';
 import PlanilhaReadequada from './visualizar/components/incentivo/planilha/PlanilhaReadequada';
 import RelacaoDePagamentos from './visualizar/components/incentivo/RelacaoDePagamentos';
-import Proponente from './visualizar/components/incentivo/Proponente';
 import Convenente from './visualizar/components/convenio/Convenente';
 import Proposta from './visualizar/components/incentivo/Proposta';
 import CertidoesNegativas from './visualizar/components/outrasInformacoes/CertidoesNegativas';
@@ -24,22 +21,24 @@ import PlanoDistribuicaoIn2017 from './visualizar/components/outrasInformacoes/P
 import ProvidenciaTomada from './visualizar/components/outrasInformacoes/ProvidenciaTomada';
 import DiligenciaProjeto from './visualizar/components/outrasInformacoes/DiligenciaProjeto';
 import Tramitacao from './visualizar/components/outrasInformacoes/Tramitacao';
+import MarcasAnexadas from './visualizar/components/execucao/MarcasAnexadas';
+import DadosReadequacoes from './visualizar/components/execucao/DadosReadequacoes';
+import PedidoProrrogacao from './visualizar/components/execucao/PedidoProrrogacao';
+import DadosFiscalizacao from './visualizar/components/execucao/DadosFiscalizacao';
+// import retirados do webpackChunkName
+import DadosProjeto from './visualizar/components/DadosProjeto';
+import Proponente from './visualizar/components/incentivo/Proponente';
 
 Vue.use(Router);
+
+// const DadosProjeto = () => import(/* webpackChunkName: "dados-projeto" */ './visualizar/components/DadosProjeto');
+// const Proponente = () => import(/* webpackChunkName: "proponente" */ './visualizar/components/incentivo/Proponente');
 
 const templateAjax = {
     template: '<div id="conteudo"></div>',
 };
 
 const routes = [
-    {
-        path: '/',
-        name: 'index',
-        component: Listar,
-        meta: {
-            title: 'Lista de projetos',
-        },
-    },
     {
         path: '/:idPronac',
         component: Visualizar,
@@ -225,6 +224,38 @@ const routes = [
                 component: Tramitacao,
                 meta: {
                     title: 'Tramita&ccedil;&atilde;o',
+                },
+            },
+            {
+                path: 'marcas-anexadas',
+                name: 'MarcasAnexadas',
+                component: MarcasAnexadas,
+                meta: {
+                    title: 'Marcas Anexadas',
+                },
+            },
+            {
+                path: 'readequacoes',
+                name: 'DadosReadequacoes',
+                component: DadosReadequacoes,
+                meta: {
+                    title: 'Dados das Readequações',
+                },
+            },
+            {
+                path: 'pedido-prorrogacao',
+                name: 'PedidoProrrogacao',
+                component: PedidoProrrogacao,
+                meta: {
+                    title: 'Pedido de Prorrogação',
+                },
+            },
+            {
+                path: 'dados-fiscalizacao',
+                name: 'DadosFiscalizacao',
+                component: DadosFiscalizacao,
+                meta: {
+                    title: 'Dados Fiscalização',
                 },
             },
         ],

@@ -9,7 +9,7 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: '',
-    assetsPublicPath: '/',
+    assetsPublicPath: '/public/dist/',
     proxyTable: {
         path: /./,
         target: "http://localhost"
@@ -49,17 +49,17 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../../public/dist/index.html'),
+    // index: path.resolve(__dirname, '../../application/modules/default/views/scripts/index/index.phtml'),
+    index: path.resolve(__dirname, '../../application/layouts/scripts/vue.phtml'),
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../../public/dist'),
     assetsSubDirectory: '',
-    assetsPublicPath: '/',
+    assetsPublicPath: '/public/dist/',
 
     /**
      * Source Maps
      */
-
     productionSourceMap: false,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: 'source-map',
@@ -75,6 +75,7 @@ module.exports = {
     // View the bundle analyzer report after build finishes:
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
-    bundleAnalyzerReport: process.env.npm_config_report
+    bundleAnalyzerReport: process.env.npm_config_report,
+    analyzerPort: 8181
   }
 }

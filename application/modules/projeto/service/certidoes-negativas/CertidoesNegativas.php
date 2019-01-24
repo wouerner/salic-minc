@@ -2,8 +2,6 @@
 
 namespace Application\Modules\Projeto\Service\CertidoesNegativas;
 
-use Seguranca;
-
 class CertidoesNegativas implements \MinC\Servico\IServicoRestZend
 {
     /**
@@ -40,16 +38,20 @@ class CertidoesNegativas implements \MinC\Servico\IServicoRestZend
         $resultArray = [];
 
         foreach ($resultado as $item) {
-            $dsCertidao = html_entity_decode($item['dsCertidao']);
-            $situacao = html_entity_decode($item['Situacao']);
-            $objDateTimeDtEmissao = new \DateTime($item['DtEmissao']);
-            $objDateTimeDtValidade = new \DateTime($item['DtValidade']);
+            $dsCertidao = $item['dsCertidao'];
+            $situacao = $item['Situacao'];
+            $objDateTimeDtEmissao = $item['DtEmissao'];
+            $objDateTimeDtValidade = $item['DtValidade'];
+
+            if ($item['DtValidade'] == '1900-01-01 00:00:00') {
+                $objDateTimeDtValidade = null;
+            }
 
             $itemArray = [
                 'dsCertidao' => $dsCertidao,
                 'CodigoCertidao' => $item['CodigoCertidao'],
-                'DtEmissao' => $objDateTimeDtEmissao->format('d/m/Y H:i:s'),
-                'DtValidade' => $objDateTimeDtValidade->format('d/m/Y H:i:s'),
+                'DtEmissao' => $objDateTimeDtEmissao,
+                'DtValidade' => $objDateTimeDtValidade,
                 'Pronac' => $item['Pronac'],
                 'Situacao' => $situacao,
             ];
@@ -59,6 +61,8 @@ class CertidoesNegativas implements \MinC\Servico\IServicoRestZend
 
 
         $resultArray['certidoes'] = $certidoes;
+
+        $resultArray = \TratarArray::utf8EncodeArray($resultArray);
 
         return $resultArray;
     }

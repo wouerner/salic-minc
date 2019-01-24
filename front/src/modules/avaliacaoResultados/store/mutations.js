@@ -1,3 +1,5 @@
+import _ from 'lodash';
+import Vue from 'vue';
 import * as types from './types';
 import Parecer from '../mocks/Parecer.json';
 import TipoAvaliacao from '../mocks/TipoAvaliacao.json';
@@ -8,11 +10,12 @@ export const state = {
     dadosTabelaTecnico: [],
     dadosHistoricoEncaminhamento: [],
     dadosDestinatarios: [],
+    diligenciasHistorico: [],
     mocks:
-    {
-        parecer: Parecer,
-        tipoAvaliacao: TipoAvaliacao,
-    },
+        {
+            parecer: Parecer,
+            tipoAvaliacao: TipoAvaliacao,
+        },
     parecer: {},
     projeto: {},
     proponente: {},
@@ -27,7 +30,7 @@ export const state = {
     dadosItemComprovacao: {},
     projetosParaDistribuir: {},
     getProjetosAssinatura: [],
-    getProjetosLaudoFinal: [],
+    getProjetosLaudoFinal: {},
     getProjetosLaudoAssinar: {},
     getProjetosLaudoEmAssinatura: {},
     getProjetosLaudoFinalizados: {},
@@ -39,7 +42,9 @@ export const state = {
     devolverProjeto: {},
     objetoParecer: {},
     itensBuscaComprovantes: {},
-    comprovantes: {},
+    comprovantes: [],
+    projetosAssinarCoordenador: {},
+    projetosAssinarCoordenadorGeral: {},
 };
 
 export const mutations = {
@@ -67,7 +72,7 @@ export const mutations = {
         state.dadosTabela.push(registro);
     },
     [types.ATUALIZAR_REGISTRO_TABELA](state, registro) {
-        const dadosTabela = state.dadosTabela;
+        const { dadosTabela } = state;
 
         dadosTabela.forEach((value, index) => {
             if (registro.Codigo === value.Codigo) {
@@ -76,7 +81,7 @@ export const mutations = {
         });
     },
     [types.REMOVER_REGISTRO](state, registro) {
-        const dadosTabela = state.dadosTabela;
+        const { dadosTabela } = state.dadosTabela;
 
         dadosTabela.forEach((value, index) => {
             if (registro.Codigo === value.Codigo) {
@@ -90,6 +95,9 @@ export const mutations = {
     [types.PROJETOS_AVALIACAO_TECNICA](state, dados) {
         state.dadosTabelaTecnico = dados;
     },
+    [types.HISTORICO_DILIGENCIAS](state, diligencias) {
+        state.diligenciasHistorico = diligencias;
+    },
     [types.HISTORICO_ENCAMINHAMENTO](state, dados) {
         state.dadosHistoricoEncaminhamento = [];
         Object.values(dados).forEach((historico) => {
@@ -97,7 +105,8 @@ export const mutations = {
         });
     },
     [types.GET_TIPO_AVALIACAO](state, tipoAvaliacao) {
-        state.tipoAvaliacao = tipoAvaliacao[0];
+        const valor = tipoAvaliacao[0];
+        state.tipoAvaliacao = valor;
     },
     [types.LINK_REDIRECIONAMENTO_TIPO_AVALIACAO_RESULTADO](state, redirectLink) {
         state.redirectLink = redirectLink;
@@ -114,9 +123,6 @@ export const mutations = {
     [types.GET_PARECER_LAUDO_FINAL](state, data) {
         state.getParecerLaudoFinal = data;
     },
-    [types.GET_PROJETO_ANALISE](state, projetoAnalise) {
-        state.projetoAnalise = projetoAnalise;
-    },
     [types.SET_PARECER](state, parecer) {
         state.parecer = parecer;
     },
@@ -125,6 +131,15 @@ export const mutations = {
     },
     [types.GET_DADOS_ITEM_COMPROVACAO](state, dados) {
         state.dadosItemComprovacao = dados;
+    },
+    [types.ALTERAR_DADOS_ITEM_COMPROVACAO](state, params) {
+        const { index } = params;
+        const valor = params;
+        delete valor.index;
+
+        Object.keys(valor).forEach((key) => {
+            state.dadosItemComprovacao.comprovantes[index][key] = valor[key];
+        });
     },
     [types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR](state, dados) {
         state.projetosParaDistribuir = dados;
@@ -168,5 +183,56 @@ export const mutations = {
     },
     [types.SET_COMPROVANTES](state, dados) {
         state.comprovantes = dados;
+    },
+    [types.EDIT_COMPROVANTE](state, comprovante) {
+        const index = state.comprovantes.findIndex(
+            item => item.idComprovantePagamento === comprovante.idComprovantePagamento,
+        );
+        Object.assign(state.comprovantes[index], comprovante);
+    },
+    [types.SYNC_PROJETOS_ASSINAR_COORDENADOR](state, dados) {
+        state.projetosAssinarCoordenador = dados;
+    },
+    [types.SYNC_PROJETOS_ASSINAR_COORDENADOR_GERAL](state, dados) {
+        state.projetosAssinarCoordenadorGeral = dados;
+    },
+    [types.ALTERAR_PLANILHA](state, params) {
+        const tiposXQuantidade = {
+            1: 0, // avaliado
+            3: 0, // impugnado
+            4: 0, // aguardando analise
+        };
+
+        const copiaState = state
+            .planilha[params.cdProduto]
+            .etapa[params.etapa]
+            .UF[params.cdUf]
+            .cidade[params.idmunicipio]
+            .itens;
+
+        const copiaItem = _.cloneDeep(copiaState.todos[params.idPlanilhaItem]);
+
+        state.comprovantes.forEach((comprovante) => {
+            tiposXQuantidade[comprovante.stItemAvaliado] += 1;
+        });
+
+        Object.keys(tiposXQuantidade).forEach((tipo) => {
+            const quantidade = tiposXQuantidade[tipo];
+            if (quantidade === 0) {
+                if (typeof copiaState[tipo] !== 'undefined') {
+                    Vue.delete(copiaState[tipo], params.idPlanilhaItem);
+
+                    if (Object.keys(copiaState[tipo]).length === 0) {
+                        Vue.delete(copiaState, tipo);
+                    }
+                }
+                return;
+            }
+
+            if (typeof copiaState[tipo] === 'undefined') {
+                Vue.set(copiaState, tipo, {});
+            }
+            Vue.set(copiaState[tipo], params.idPlanilhaItem, copiaItem);
+        });
     },
 };

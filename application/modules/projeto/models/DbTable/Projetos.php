@@ -10,7 +10,7 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
     protected $_primary = 'IdPRONAC';
 
 
-    public function buscarProjeto($where = [])
+    public function buscarProjeto($where = [], $order = null, $count = 0, $offset = 20)
     {
         $query = $this->select()
             ->setIntegrityCheck(false)
@@ -38,9 +38,28 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
             $this->getSchema('agentes')
         );
 
+        $query->joinInner(
+            ['s' => 'Situacao'],
+            's.Codigo = p.Situacao',
+            ['Descricao as descricaoSituacao'],
+            $this->_schema
+        );
+
         foreach ($where as $coluna => $valor) {
             $query->where($coluna, $valor);
         }
+
+        if ($order) {
+            $query->order($order);
+        }
+
+
+        if (!is_null($offset) && $count) {
+            $start = (int)$offset;
+            $limit = (int)$count;
+            $query->limit($limit, $start);
+        }
+
         return $this->fetchAll($query);
     }
 
@@ -526,7 +545,7 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
                 new Zend_Db_Expr("sac.dbo.fnVlSolicitadoProposta(a.idPronac) AS vlTotalPropostaOriginal"),
                 new Zend_Db_Expr("sac.dbo.fnVlAutorizadoACaptarIncentivo(a.idPronac) AS vlAutorizado"),
                 new Zend_Db_Expr("sac.dbo.fnVlAutorizadoACaptarOutrasFontes(a.idPronac) AS vlAutorizadoOutrasFontes"),
-                new Zend_Db_Expr("sac.dbo.fnVlAutorizadoACaptarIncentivo(a.idPronac) - sac.dbo.fnVlAutorizadoACaptarOutrasFontes(a.idPronac) AS vlTotalAutorizado"),
+                new Zend_Db_Expr("sac.dbo.fnVlAutorizadoACaptar(a.idPronac) as vlTotalAutorizado"),
                 new Zend_Db_Expr("sac.dbo.fnVlAdequadoIncentivo(a.idPronac) AS vlAdequadoIncentivo"),
                 new Zend_Db_Expr("sac.dbo.fnVlAdequadoOutrasFontes(a.idPronac) AS vlAdequadoOutrasFontes"),
                 new Zend_Db_Expr("sac.dbo.fnVlTotalAdequado(a.idPronac) AS vlTotalAdequado"),

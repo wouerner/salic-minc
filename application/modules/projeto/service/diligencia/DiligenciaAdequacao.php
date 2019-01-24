@@ -30,7 +30,7 @@ class DiligenciaAdequacao implements \MinC\Servico\IServicoRestZend
     public function visualizarDiligenciaAdequacaoProjeto()
     {
         $idPronac = $this->request->idPronac;
-        $idAvaliarAdequacaoProjeto = (int) $this->request->idAvaliarAdequacaoProjeto;
+        $idAvaliarAdequacaoProjeto = (int) $this->request->id;
 
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
@@ -46,18 +46,19 @@ class DiligenciaAdequacao implements \MinC\Servico\IServicoRestZend
 
         $adequacao = $this->obterDiligenciaAdequacaoProjeto($diligenciasAdequacao);
 
+        $adequacao = \TratarArray::utf8EncodeArray($adequacao);
+
         return $adequacao;
     }
 
     private function obterDiligenciaAdequacaoProjeto($diligencia)
     {
-            $dsAvaliacao = html_entity_decode(utf8_encode($diligencia['dsAvaliacao']));
-            $objDateTimeDtAvaliacao = new \DateTime($diligencia['dtAvaliacao']);
+            $dsAvaliacao = $diligencia['dsAvaliacao'];
 
             $resultArray = [
                 'idAvaliarAdequacaoProjeto' => $diligencia['idAvaliarAdequacaoProjeto'],
                 'dsAvaliacao' => $dsAvaliacao,
-                'dtAvaliacao' => $objDateTimeDtAvaliacao->format('d/m/Y'),
+                'dtAvaliacao' => $diligencia['dtAvaliacao'],
             ];
 
         return $resultArray;

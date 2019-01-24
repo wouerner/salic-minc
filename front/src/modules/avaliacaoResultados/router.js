@@ -1,53 +1,27 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import ComponenteEncaminhar from './components/ComponenteEncaminhar';
-import EmitirParecer from './components/EmitirParecer';
-import Painel from './components/Painel';
-import TipoAvaliacao from './components/TipoAvaliacao';
-import Planilha from './components/Planilha';
-import VisualizarPlanilha from './components/VisualizarPlanilha';
-import AnaliseComprovantes from './components/AnaliseComprovantes';
-import Diligenciar from './components/Diligenciar';
-import Historico from './components/Historico';
-import EmitirLaudoFinal from './components/EmitirLaudoFinal';
-import Laudo from './components/PainelLaudo';
-import AnalisarItem from './components/AnalisarItem';
-import VisualizarParecer from './components/VisualizarParecer';
-import VisualizarLaudo from './components/VisualizarLaudo';
+import EmitirParecer from './components/ParecerTecnico/EmitirParecer';
+import HistoricoDiligencias from './components/components/HistoricoDiligencias';
+import Painel from './components/ParecerTecnico/Painel';
+import Planilha from './components/ParecerTecnico/Planilha';
+import VisualizarPlanilha from './components/components/VisualizarPlanilha';
+import AnaliseComprovantes from './components/ParecerTecnico/AnaliseComprovantes';
+import Diligenciar from './components/ParecerTecnico/Diligenciar';
+import EmitirLaudoFinal from './components/LaudoFinal/EmitirLaudoFinal';
+import Laudo from './components/LaudoFinal/PainelLaudo';
+import AnalisarItem from './components/ParecerTecnico/AnalisarItem';
+import VisualizarParecer from './components/components/VisualizarParecer';
+import VisualizarLaudo from './components/LaudoFinal/VisualizarLaudo';
 
 Vue.use(Router);
 
 const routes = [
-    {
-        path: '/componente-encaminhar',
-        name: 'ListBar',
-        component: ComponenteEncaminhar,
-        meta: {
-            title: 'Principal',
-        },
-    },
     {
         path: '/emitir-parecer/:id',
         name: 'EmitirEditar',
         component: EmitirParecer,
         meta: {
             title: 'Principal',
-        },
-    },
-    {
-        path: '/emitir-parecer',
-        name: 'Emitir',
-        component: EmitirParecer,
-        meta: {
-            title: 'Principal',
-        },
-    },
-    {
-        path: '/tipo-avaliacao/:id',
-        name: 'tipoAvaliacao',
-        component: TipoAvaliacao,
-        meta: {
-            title: 'Tipo Avaliacao',
         },
     },
     {
@@ -83,14 +57,6 @@ const routes = [
         },
     },
     {
-        path: '/historico',
-        name: 'historico',
-        component: Historico,
-        meta: {
-            title: 'Historico dos encaminhamentos',
-        },
-    },
-    {
         path: '/emitir-laudo-final/:id',
         name: 'EmitirLaudoFinal',
         component: EmitirLaudoFinal,
@@ -103,7 +69,7 @@ const routes = [
         name: 'Laudo',
         component: Laudo,
         meta: {
-            title: 'Laudo Final de Avaliação de Resultados',
+            title: 'Avaliação de Resultados: Laudo Final',
         },
     },
     {
@@ -131,11 +97,19 @@ const routes = [
         },
     },
     {
+        path: '/diligencias',
+        name: 'HistoricoDiligencias',
+        component: HistoricoDiligencias,
+        meta: {
+            title: 'Avaliação de Resultados: Diligencias do Projeto',
+        },
+    },
+    {
         path: '*',
         name: 'Painel',
         component: Painel,
         meta: {
-            title: 'Painel',
+            title: 'Avaliação de Resultados: Parecer Técnico',
         },
     },
 ];

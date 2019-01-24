@@ -32,10 +32,12 @@ class ProvidenciaTomada implements \MinC\Servico\IServicoRestZend
         $pronacArray['p.IdPRONAC = ?'] = $idPronac;
 
         $tblHisSituacao = new \HistoricoSituacao();
-        $result = $tblHisSituacao->buscarHistoricosEncaminhamentoIdPronac($pronacArray, null, null, null, false);
+        $result = $tblHisSituacao->buscarHistoricosEncaminhamentoIdPronac($pronacArray, ['h.dtSituacao DESC'], null, null, false);
 
         $providenciaTomada = $this->montaArrayProvidenciaTomada($result);
         $resultArray['providenciaTomada'] = $providenciaTomada;
+
+        $resultArray = \TratarArray::utf8EncodeArray($resultArray);
 
         return $resultArray;
     }
@@ -45,11 +47,11 @@ class ProvidenciaTomada implements \MinC\Servico\IServicoRestZend
         $resultArray = [];
 
         foreach ($providenciaTomada as $providencia) {
-            $ProvidenciaTomada = html_entity_decode(utf8_encode($providencia['ProvidenciaTomada']));
-            $usuario = html_entity_decode(utf8_encode($providencia['usuario']));
-            $objDateTimeDtSituacao = new \DateTime($providencia['DtSituacao']);
+            $ProvidenciaTomada = $providencia['ProvidenciaTomada'];
+            $usuario = $providencia['usuario'];
+            
             $resultArray[] = [
-                'DtSituacao' => $objDateTimeDtSituacao->format('d/m/Y H:i:s'),
+                'DtSituacao' => $providencia['DtSituacao'],
                 'Situacao' => $providencia['Situacao'],
                 'ProvidenciaTomada' => $ProvidenciaTomada,
                 'cnpjcpf' => $providencia['cnpjcpf'],

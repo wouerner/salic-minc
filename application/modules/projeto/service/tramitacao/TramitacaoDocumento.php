@@ -35,6 +35,8 @@ class TramitacaoDocumento implements \MinC\Servico\IServicoRestZend
 
         $tramitacoes = $this->obterTramitacaoDocumento($total);
 
+        $tramitacoes = \TratarArray::utf8EncodeArray($tramitacoes);
+
         return $tramitacoes;
     }
 
@@ -42,17 +44,15 @@ class TramitacaoDocumento implements \MinC\Servico\IServicoRestZend
     {
         $resultArray = [];
         foreach ($tramitacoes as $tramitacao) {
-            $dsTipoDocumento = html_entity_decode(utf8_encode($tramitacao['dsTipoDocumento']));
-            $noArquivo = html_entity_decode(utf8_encode($tramitacao['noArquivo']));
-            $objDateTimedtDocumento = new \DateTime($tramitacao['dtDocumento']);
-            $objDateTimedtJuntada = new \DateTime($tramitacao['dtJuntada']);
+            $dsTipoDocumento = $tramitacao['dsTipoDocumento'];
+            $noArquivo = $tramitacao['noArquivo'];
 
             $resultArray[] = [
                 'idDocumento' => $tramitacao['idDocumento'],
                 'dsTipoDocumento' => $dsTipoDocumento,
-                'dtDocumento' => $objDateTimedtDocumento->format('d/m/Y H:i:s'),
+                'dtDocumento' => $tramitacao['dtDocumento'],
                 'noArquivo' => $noArquivo,
-                'dtAnexacao' => $objDateTimedtJuntada->format('d/m/Y H:i:s'),
+                'dtAnexacao' => $tramitacao['dtJuntada'],
                 'Usuario' => $tramitacao['Usuario'],
                 'idLote' => $tramitacao['idLote'],
                 'Situacao' => $tramitacao['Situacao'],

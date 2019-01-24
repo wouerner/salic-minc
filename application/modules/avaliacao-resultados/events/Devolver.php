@@ -1,6 +1,7 @@
 <?php
 
 use Application\Modules\AvaliacaoResultados\Service\Encaminhar\AvaliacaoFinanceira as EncaminharAvaliacaoService;
+use Application\Modules\AvaliacaoResultados\Service\Fluxo\Estado as EstadoService;
 
 class AvaliacaoResultados_Events_Devolver
 {
@@ -18,14 +19,12 @@ class AvaliacaoResultados_Events_Devolver
     }
 
     public function attach() {
-        /* $this->events->attach('run', $this->alterarSituacaoProjeto()); */
-        /* $this->events->attach('run', $this->salvarEncaminhamento()); */
         $this->events->attach('run', $this->alterarEstado());
         $this->events->attach('run', $this->invalidarDocumento());
+        $this->events->attach('run', $this->salvarEncaminhamento());
     }
 
     public function run($params) {
-        /* var_dump($params);die; */
         $this->events->trigger(__FUNCTION__, $this, $params);
     }
 
@@ -37,50 +36,31 @@ class AvaliacaoResultados_Events_Devolver
         };
     }
 
-    public function alterarSituacaoProjeto() {
-        return function($t) {
-            $params = $t->getParams();
-            $projeto = new Projetos();
-            $projeto->alterarSituacao($params['idPronac'], '', 'E27', 'Comprova&ccedil;&atilde;o Financeira do Projeto em Análise');
-        };
-    }
-
     public function alterarEstado() {
         return function($t) {
             $params = $t->getParams();
 
-            $model = new AvaliacaoResultados_Model_FluxosProjeto();
-            $mapper = new AvaliacaoResultados_Model_FluxosProjetoMapper();
-
-            $row = $mapper->find(['idPronac = ?' => $params['idPronac']]);
-
-            if (!empty($row)) {
-                $model->setId($row['id']);
-            }
-
-            $model->setIdPronac($params['idPronac']);
-            $model->setEstadoId(5);
-
-            $mapper->save($model);
+            $estadoService = new EstadoService();
+            $estadoService->alterarEstado($params);
         };
     }
 
     public function invalidarDocumento() {
         return function($t) {
             $params = $t->getParams();
-            
+
             $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
-            $idDocumento = $objDbTableDocumentoAssinatura->getIdDocumentoAssinatura($params['idPronac'], $params['idTipoDoAtoAdministrativo']);            
+            $idDocumento = $objDbTableDocumentoAssinatura->getIdDocumentoAssinatura($params['idPronac'], $params['idTipoDoAtoAdministrativo']);
             $GrupoAtivo = new \Zend_Session_Namespace('GrupoAtivo');
             $codGrupo = $GrupoAtivo->codGrupo;
             $dados = [
-                'Despacho' => 'devolvido para o técnico',
+                'dsMotivoDevolucao' => utf8_decode($params['dsJustificativa']),
                 'idTipoDoAto' => $params['idTipoDoAtoAdministrativo'],
                 'idPronac' => $params['idPronac'],
                 'idPerfilDoAssinante' => $codGrupo,
                 'idDocumentoAssinatura' => $idDocumento
             ];
-            
+
             $assinaturaService = new \MinC\Assinatura\Servico\Assinatura($dados);
 
             $assinaturaService->devolver();

@@ -1,6 +1,7 @@
 <?php
 
 namespace MinC\Assinatura\Servico;
+use Application\Modules\Assinatura\Service\Assinatura\AtoAdministrativo;
 use MinC\Assinatura\Acao\IListaAcoesModulo;
 
 /**
@@ -82,10 +83,14 @@ class Assinatura implements IServico
 
         $usuario = $metodoAutenticacao->obterInformacoesAssinante();
         $objTbAtoAdministrativo = new \Assinatura_Model_DbTable_TbAtoAdministrativo();
+
+        $grupoAtoAdministrativo = $objTbAtoAdministrativo->obterGrupoPorIdDocumentoAssinatura($modeloTbAssinatura->getIdDocumentoAssinatura());
+
         $dadosAtoAdministrativoAtual = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
             $modeloTbAtoAdministrativo->getIdTipoDoAto(),
             $modeloTbAtoAdministrativo->getIdPerfilDoAssinante(),
-            $modeloTbAtoAdministrativo->getIdOrgaoDoAssinante()
+            $modeloTbAtoAdministrativo->getIdOrgaoDoAssinante(),
+            $grupoAtoAdministrativo
         );
 
         if (!$dadosAtoAdministrativoAtual) {
@@ -116,22 +121,26 @@ class Assinatura implements IServico
             'idDocumentoAssinatura' => $modeloTbAssinatura->getIdDocumentoAssinatura()
         ];
 
-        $dbTableTbAssinatura->inserir($dadosInclusaoAssinatura);
-        $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino(
+        $atoAdministrativo = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
             $modeloTbAtoAdministrativo->getIdTipoDoAto(),
-            $modeloTbAtoAdministrativo->getIdOrdemDaAssinatura(),
-            $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()
+            $modeloTbAtoAdministrativo->getIdPerfilDoAssinante(),
+            $modeloTbAtoAdministrativo->getIdOrgaoDoAssinante(),
+            $grupoAtoAdministrativo
         );
 
-        if ($codigoOrgaoDestino) {
+        $dbTableTbAssinatura->inserir($dadosInclusaoAssinatura);
+        $quantidadeAssinaturasRealizadas = $dbTableTbAssinatura->obterQuantidadeAssinaturasRealizadas();
+        $quantidadeMinimaAssinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas(
+            $modeloTbAtoAdministrativo->getIdTipoDoAto(),
+            $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante(),
+            $grupoAtoAdministrativo
+        );
+
+        if ($quantidadeAssinaturasRealizadas < $quantidadeMinimaAssinaturas) {
             $this->encaminhar();
         } else {
             $quantidadeAssinaturasRealizadas = $dbTableTbAssinatura->obterQuantidadeAssinaturasRealizadas();
-            $quantidadeMinimaAssinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas(
-                $modeloTbAtoAdministrativo->getIdTipoDoAto(),
-                $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()
-            );
-            
+
             if ($quantidadeAssinaturasRealizadas == $quantidadeMinimaAssinaturas) {
                 $this->finalizar();
             }
@@ -158,22 +167,36 @@ class Assinatura implements IServico
             throw new \Exception ("O documento precisa ser assinado para que consiga ser movimentado.");
         }
 
-        $objTbAtoAdministrativo = new \Assinatura_Model_DbTable_TbAtoAdministrativo();
-        $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino(
-            $modeloTbAtoAdministrativo->getIdTipoDoAto(),
-            $modeloTbAtoAdministrativo->getIdOrdemDaAssinatura(),
-            $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()
-        );
+        $objAtoAdministrativoMetodoEncaminhamento = new \Assinatura_Model_DbTable_TbAtoAdministrativoMetodoEncaminhamento();
+        $encaminhaProjeto = $objAtoAdministrativoMetodoEncaminhamento->obterEncaminhaProjeto($modeloTbAtoAdministrativo->getIdTipoDoAto());
 
-        if (!$codigoOrgaoDestino) {
-            throw new \Exception("A fase atual do projeto n&atilde;o permite movimentar o projeto.");
+        if ($encaminhaProjeto) {
+            $servicoAtoAdministrativo = new AtoAdministrativo();
+            $grupo = $servicoAtoAdministrativo->obterGrupoAtoAdministrativoAtual(
+                $modeloTbAtoAdministrativo->getIdTipoDoAto(),
+                $modeloTbAtoAdministrativo->getIdPerfilDoAssinante(),
+                $modeloTbAtoAdministrativo->getIdOrgaoDoAssinante(),
+                $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()
+            );
+
+            $objTbAtoAdministrativo = new \Assinatura_Model_DbTable_TbAtoAdministrativo();
+            $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino(
+                $modeloTbAtoAdministrativo->getIdTipoDoAto(),
+                $modeloTbAtoAdministrativo->getIdOrdemDaAssinatura(),
+                $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante(),
+                $grupo
+            );
+
+            if (!$codigoOrgaoDestino) {
+                throw new \Exception("A fase atual do projeto n&atilde;o permite movimentar o projeto.");
+            }
+
+            $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
+            $objTbProjetos->alterarOrgao(
+                $codigoOrgaoDestino,
+                $modeloTbAssinatura->getIdPronac()
+            );
         }
-
-        $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
-        $objTbProjetos->alterarOrgao(
-            $codigoOrgaoDestino,
-            $modeloTbAssinatura->getIdPronac()
-        );
 
         $this->executarAcoes('\MinC\Assinatura\Acao\IAcaoEncaminhar');
     }
@@ -181,12 +204,12 @@ class Assinatura implements IServico
     public function devolver()
     {
         $modeloTbAssinatura = $this->viewModelAssinatura->modeloTbAssinatura;
-        $modeloTbDespacho = $this->viewModelAssinatura->modeloTbDespacho;
+        $modeloTbMotivoDevolucao = $this->viewModelAssinatura->modeloTbMotivoDevolucao;
 
-        $objTbDepacho = new \Proposta_Model_DbTable_TbDespacho();
-        $objTbDepacho->devolverProjetoEncaminhadoParaAssinatura(
-            $modeloTbAssinatura->getIdPronac(),
-            $modeloTbDespacho->getDespacho()
+        $objTbMotivoDevolucao = new \Assinatura_Model_DbTable_TbMotivoDevolucao();
+        $objTbMotivoDevolucao->devolverDocumentoEncaminhadoParaAssinatura(
+            $modeloTbAssinatura->getIdDocumentoAssinatura(),
+            $modeloTbMotivoDevolucao->getDsMotivoDevolucao()
         );
 
         $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
@@ -198,9 +221,7 @@ class Assinatura implements IServico
             'idDocumentoAssinatura = ?' => $this->viewModelAssinatura->modeloTbAssinatura->getIdDocumentoAssinatura(),
         ];
 
-        $objDbTableDocumentoAssinatura->update(
-            $data,
-            $where);
+        $objDbTableDocumentoAssinatura->update($data, $where);
 
         $this->executarAcoes('\MinC\Assinatura\Acao\IAcaoDevolver');
     }

@@ -2,8 +2,6 @@
 
 namespace Application\Modules\Projeto\Service\DocumentosAssinados;
 
-use Seguranca;
-
 class DocumentosAssinados implements \MinC\Servico\IServicoRestZend
 {
     /**
@@ -37,17 +35,17 @@ class DocumentosAssinados implements \MinC\Servico\IServicoRestZend
 
         $itemArray = [];
         foreach ($dados as $dado) {
-            $dtCriacao = new \DateTime($dado['dt_criacao']);
-
             $itemArray[] = [
                 'pronac' => $dado['pronac'],
-                'nomeProjeto' => utf8_encode($dado['nomeProjeto']),
-                'dsAtoAdministrativo' => utf8_encode($dado['dsAtoAdministrativo']),
-                'dt_criacao' => $dtCriacao->format('d/m/Y H:i:s'),
+                'nomeProjeto' => $dado['nomeProjeto'],
+                'dsAtoAdministrativo' => $dado['dsAtoAdministrativo'],
+                'dt_criacao' => $dado['dt_criacao'],
                 'idDocumentoAssinatura' => $dado['idDocumentoAssinatura'],
                 'IdPRONAC' => $dado['IdPRONAC'],
             ];
         }
+
+        $itemArray = \TratarArray::utf8EncodeArray($itemArray);
 
         return $itemArray;
     }

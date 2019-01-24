@@ -159,8 +159,6 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
                 }
             }
         }
-        // Future Flag
-        $ReadequacaoTransferenciaRecursos = 0;
 
         # Verificar se ha diligencia para responder
         $vDiligencia = $db->select()
@@ -262,12 +260,10 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
             } else {
                 $Readequacao_50 = 1;
                 $ReadequacaoPlanilha = 1;
-                if ($PercentualCaptado >= 100) {
-                    $ReadequacaoSaldoAplicacao = 1;
-                }
+                $ReadequacaoSaldoAplicacao = 1;
             }
 
-            $tbCumprimentoObjeto = new tbCumprimentoObjeto();
+            $tbCumprimentoObjeto = new ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
             $possuiRelatorioDeCumprimento = $tbCumprimentoObjeto->possuiRelatorioDeCumprimento($idPronac);
 
             if ($possuiRelatorioDeCumprimento) {
@@ -311,7 +307,7 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
                 $Readequacao = 1;
             }
 
-            $tbCumprimentoObjeto = new tbCumprimentoObjeto();
+            $tbCumprimentoObjeto = new ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
             $possuiRelatorioDeCumprimento = $tbCumprimentoObjeto->possuiRelatorioDeCumprimento($idPronac);
 
             if ($possuiRelatorioDeCumprimento) {

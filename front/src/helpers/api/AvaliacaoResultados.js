@@ -39,7 +39,7 @@ export const obterDadosTabelaTecnico = (params) => {
 
 export const obterHistoricoEncaminhamento = params => api.getRequest(`/avaliacao-resultados/historico/idPronac/${params}`);
 
-export const planilha = params => api.getRequest(`/prestacao-contas/realizar-prestacao-contas/planilha-analise-filtros/idPronac/${params}`);
+export const planilha = params => api.getRequest(`/avaliacao-resultados/planilha-aprovada/idPronac/${params}`);
 
 export const projetoAnalise = params => api.getRequest(`/avaliacao-resultados/projeto/idPronac/${params}`);
 
@@ -47,17 +47,22 @@ export const consolidacaoAnalise = params => api.getRequest(`/prestacao-contas/v
 
 export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/tecnicos');
 
-export const encaminharParaTecnico = params => api.postRequest('/avaliacao-resultados/estado/', buildData(params));
+export const alterarEstado = params => api.postRequest('/avaliacao-resultados/estado/', buildData(params));
 
 export const obterDadosItemComprovacao = params => api.getRequest(`/avaliacao-resultados/avaliacao-comprovante/${params}`);
 
 export const criarParecerLaudoFinal = params => api.postRequest('/avaliacao-resultados/laudo', buildData(params));
 
-export const finalizarParecerLaudoFinal = params => api.postRequest('/avaliacao-resultados/estado', buildData(params));
 
 export const obterProjetosParaDistribuir = () => api.getRequest('/avaliacao-resultados/projeto-inicio');
 
+/** DILIGENCIA */
+
 export const criarDiligencia = params => api.postRequest('/diligencia/diligencia', buildData(params));
+
+export const listarDiligencias = params => api.getRequest(`/avaliacao-resultados/diligencia?idPronac=${params}&situacao=E17&tpDiligencia=147`);
+
+/** FIM DILIGENCIA */
 
 /**  PARECER TECNICO */
 
@@ -65,22 +70,13 @@ export const parecerConsolidacao = params => api.getRequest(`/avaliacao-resultad
 
 export const criarParecer = (params) => {
     const parametro = params.idPronac;
-    delete params.idPronac;
     const data = params;
+    delete data.idPronac;
 
     return api.postRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${parametro}`, buildData(data));
 };
 
-export const finalizarParecer = (params) => {
-    // const parametro = params.idPronac;
-    // delete params.idPronac;
-    const data = params;
-
-    return api.postRequest('/avaliacao-resultados/estado', buildData(data));
-};
-
 /** FIM DO PARECER TECNICO */
-
 
 export const obterLaudoFinal = idPronac => api.getRequest(`/avaliacao-resultados/laudo/get?idPronac=${idPronac}`);
 
@@ -97,27 +93,25 @@ export const projetosRevisao = (params) => {
 
 export const buscarDetalhamentoItens = idPronac => api.getRequest(`/avaliacao-resultados/detalhamento-itens-rest?idPronac=${idPronac}`);
 
-export const buscarComprovantes = (itemBuscaComprovantes) => {
+export const buscarComprovantes = (params) => {
     const modulo = '/prestacao-contas';
     const controller = '/comprovante-pagamento';
 
-    const idPronac = `idPronac=${itemBuscaComprovantes.IdPRONAC}`;
-    const idPlanilhaItem = `idPlanilhaItem=${itemBuscaComprovantes.idPlanilhaItens}`;
-    const produto = `produto=${itemBuscaComprovantes.cdProduto}`;
-    const uf = `uf=${itemBuscaComprovantes.Uf}`;
-    const idMunicipio = `idmunicipio=${itemBuscaComprovantes.cdCidade}`;
-    const etapa = `etapa=${itemBuscaComprovantes.cdEtapa}`;
-    const stItemAvaliado = `stItemAvaliado=${itemBuscaComprovantes.stItemAvaliado}`;
+    const uf = `uf=${params.uf}`;
+    const idPronac = `idPronac=${params.idPronac}`;
+    const idPlanilhaItem = `idPlanilhaItem=${params.idPlanilhaItens}`;
+    const produto = `produto=${params.codigoProduto}`;
+    const idMunicipio = `idmunicipio=${params.codigoCidade}`;
+    const etapa = `etapa=${params.codigoEtapa}`;
+    const stItemAvaliado = `stItemAvaliado=${params.stItemAvaliado}`;
 
     const url = `${modulo}${controller}`;
-    const params = `?${idPronac}&${idPlanilhaItem}&${produto}&${uf}&${idMunicipio}&${stItemAvaliado}&${etapa}`;
+    const queryParams = `?${idPronac}&${idPlanilhaItem}&${produto}&${uf}&${idMunicipio}&${stItemAvaliado}&${etapa}`;
 
-    return api.getRequest(url + params);
+    return api.getRequest(url + queryParams);
 };
 
-export const devolverProjeto = params => api.postRequest('/avaliacao-resultados/estado', buildData(params));
-
-export const projetoPorEstado = (params) => {
+export const projetosPorEstado = (params) => {
     let data = '?';
 
     if (params.estadoid) {
@@ -129,3 +123,5 @@ export const projetoPorEstado = (params) => {
     }
     return api.getRequest(`/avaliacao-resultados/fluxo-projeto${data}`);
 };
+
+export const salvarAvaliacaoComprovante = params => api.postRequest('/avaliacao-resultados/avaliacao-comprovante/', buildData(params));

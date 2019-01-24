@@ -5,7 +5,7 @@ import * as types from './types';
 export const buscaProjeto = ({ commit }, idPronac) => {
     projetoHelperAPI.buscaProjeto(idPronac)
         .then((response) => {
-            const data = response.data;
+            const { data } = response;
             const projeto = data.data;
             commit(types.SET_PROJETO, projeto);
         });
@@ -14,7 +14,7 @@ export const buscaProjeto = ({ commit }, idPronac) => {
 export const buscarProjetoCompleto = ({ commit }, idPronac) => {
     projetoHelperAPI.buscarProjetoCompleto(idPronac)
         .then((response) => {
-            const data = response.data;
+            const { data } = response;
             const projeto = data.data;
             commit(types.SET_PROJETO, projeto);
         });
@@ -23,7 +23,7 @@ export const buscarProjetoCompleto = ({ commit }, idPronac) => {
 export const buscaProponente = ({ commit }, idPronac) => {
     projetoHelperAPI.buscaProponente(idPronac)
         .then((response) => {
-            const data = response.data;
+            const { data } = response;
             const proponente = data.data;
             commit(types.SET_PROPONENTE, proponente);
         });
@@ -32,16 +32,16 @@ export const buscaProponente = ({ commit }, idPronac) => {
 export const buscaPlanilhaHomologada = ({ commit }, idPronac) => {
     projetoHelperAPI.buscaPlanilhaHomologada(idPronac)
         .then((response) => {
-            const data = response.data;
+            const { data } = response;
             const planilhaHomologada = data.data;
             commit(types.SET_PLANILHA_HOMOLOGADA, planilhaHomologada);
         });
 };
 
-export const buscaPlanilhaOriginal = ({ commit }, idPreProjeto) => {
-    projetoHelperAPI.buscaPlanilhaOriginal(idPreProjeto)
+export const buscaPlanilhaOriginal = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscaPlanilhaOriginal(idPronac)
         .then((response) => {
-            const data = response.data;
+            const { data } = response;
             const planilhaOriginal = data.data;
             commit(types.SET_PLANILHA_ORIGINAL, planilhaOriginal);
         });
@@ -50,25 +50,25 @@ export const buscaPlanilhaOriginal = ({ commit }, idPreProjeto) => {
 export const buscaPlanilhaReadequada = ({ commit }, idPronac) => {
     projetoHelperAPI.buscaPlanilhaReadequada(idPronac)
         .then((response) => {
-            const data = response.data;
+            const { data } = response;
             const planilhaReadequada = data.data;
             commit(types.SET_PLANILHA_READEQUADA, planilhaReadequada);
         });
 };
 
-export const buscaPlanilhaAutorizada = ({ commit }, idPreProjeto) => {
-    projetoHelperAPI.buscaPlanilhaAutorizada(idPreProjeto)
+export const buscaPlanilhaAutorizada = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscaPlanilhaAutorizada(idPronac)
         .then((response) => {
-            const data = response.data;
+            const { data } = response;
             const planilhaAutorizada = data.data;
             commit(types.SET_PLANILHA_AUTORIZADA, planilhaAutorizada);
         });
 };
 
-export const buscaPlanilhaAdequada = ({ commit }, idPreProjeto) => {
-    projetoHelperAPI.buscaPlanilhaAdequada(idPreProjeto)
+export const buscaPlanilhaAdequada = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscaPlanilhaAdequada(idPronac)
         .then((response) => {
-            const data = response.data;
+            const { data } = response;
             const planilhaAdequada = data.data;
             commit(types.SET_PLANILHA_ADEQUADA, planilhaAdequada);
         });
@@ -76,11 +76,11 @@ export const buscaPlanilhaAdequada = ({ commit }, idPreProjeto) => {
 
 
 export const buscarTransferenciaRecursos = ({ commit }, acao) => {
-    const projeto = state.projeto;
-    const idPronac = projeto.idPronac;
+    const { projeto } = state;
+    const { idPronac } = projeto;
     projetoHelperAPI.buscarTransferenciaRecursos(idPronac, acao)
         .then((response) => {
-            const data = response.data;
+            const { data } = response;
             const transferenciaRecursos = data.data;
             commit(types.SET_TRANSFERENCIA_RECURSOS, transferenciaRecursos);
         });
@@ -181,8 +181,9 @@ export const buscarPlanoDistribuicaoIn2017 = ({ commit }, idPreProjeto) => {
         });
 };
 
-export const buscarDiligenciaProposta = ({ commit }, dados) => {
-    projetoHelperAPI.buscarDiligenciaProposta(dados)
+export const buscarDiligenciaProposta = ({ commit }, value) => {
+    const { idPreprojeto, valor } = value;
+    projetoHelperAPI.buscarDiligenciaProposta(idPreprojeto, valor)
         .then((response) => {
             const data = response.data.data.items;
             commit(types.SET_DILIGENCIA_PROPOSTA, data);
@@ -212,5 +213,46 @@ export const buscarDiligencia = ({ commit }, idPronac) => {
         .then((response) => {
             const data = response.data.data.items;
             commit(types.SET_DILIGENCIA, data);
+        });
+};
+
+export const buscarMarcasAnexadas = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarMarcasAnexadas(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_MARCAS_ANEXADAS, data);
+        });
+};
+
+export const buscarDadosReadequacoes = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarDadosReadequacoes(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_DADOS_READEQUACOES, data);
+        });
+};
+
+export const buscarPedidoProrrogacao = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarPedidoProrrogacao(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_PEDIDO_PRORROGACAO, data);
+        });
+};
+
+export const buscarDadosFiscalizacaoLista = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscarDadosFiscalizacaoLista(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_DADOS_FISCALIZACAO_LISTA, data);
+        });
+};
+
+export const buscarDadosFiscalizacaoVisualiza = ({ commit }, value) => {
+    const { idPronac, idFiscalizacao } = value;
+    projetoHelperAPI.buscarDadosFiscalizacaoVisualiza(idPronac, idFiscalizacao)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_DADOS_FISCALIZACAO_VISUALIZA, data);
         });
 };
