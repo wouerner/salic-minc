@@ -51,151 +51,162 @@
             </v-expansion-panel-content>
         </v-expansion-panel>
 
-        <!--<v-expansion-panel-->
-        <!--v-if="dados.dadosReconsideracao"-->
-        <!--popout-->
-        <!--focusable>-->
-        <!--<v-expansion-panel-content class="elevation-1">-->
-        <!--<v-layout-->
-        <!--slot="header"-->
-        <!--class="green&#45;&#45;text">-->
-        <!--<v-icon class="mr-3 green&#45;&#45;text">perm_media</v-icon>-->
-        <!--<span v-html="dados.dadosReconsideracao.tpRecursoDesc"/>-->
-        <!--</v-layout>-->
-        <!--<v-card>-->
-        <!--<v-card-text>-->
-        <!--<v-container fluid>-->
-        <!--<v-layout-->
-        <!--justify-space-around-->
-        <!--row-->
-        <!--wrap>-->
-        <!--<v-flex-->
-        <!--lg12-->
-        <!--dark>-->
-        <!--<b>Recurso</b>-->
-        <!--</v-flex>-->
-        <!--<v-flex>-->
-        <!--<span v-html="dados.dadosReconsideracao.dsSolicitacaoRecurso"/>-->
-        <!--</v-flex>-->
-        <!--</v-layout>-->
+        <v-expansion-panel
+            v-else-if="dados.dadosReconsideracao"
+            popout
+            focusable>
+            <v-expansion-panel-content class="elevation-1">
+                <v-layout
+                    slot="header"
+                    class="green--text">
+                    <v-icon class="mr-3 green--text">perm_media</v-icon>
+                    <span v-html="dados.dadosReconsideracao.tpRecursoDesc"/>
+                </v-layout>
+                <v-card>
+                    <v-card-text>
+                        <v-container fluid>
+                            <v-layout
+                                justify-space-around
+                                row
+                                wrap>
+                                <v-flex
+                                    lg12
+                                    dark>
+                                    <b>Recurso</b>
+                                </v-flex>
+                                <v-flex>
+                                    <span v-html="dados.dadosReconsideracao.dsSolicitacaoRecurso"/>
+                                </v-flex>
+                            </v-layout>
 
-        <!--<v-layout-->
-        <!--justify-space-around-->
-        <!--row-->
-        <!--wrap>-->
-        <!--<v-flex-->
-        <!--s12-->
-        <!--m6-->
-        <!--lg2-->
-        <!--offset-lg1-->
-        <!--dark>-->
-        <!--<b>Tipo do Recurso</b><br>-->
-        <!--<span v-html="dados.dadosReconsideracao.tpRecursoDesc"/>-->
-        <!--</v-flex>-->
-        <!--<v-flex-->
-        <!--s12-->
-        <!--m6-->
-        <!--lg3>-->
-        <!--<b>Tipo da Solicitação</b>-->
-        <!--<p>{{ dados.dadosReconsideracao.tpSolicitacaoDesc }}</p>-->
-        <!--</v-flex>-->
-        <!--</v-layout>-->
+                            <v-layout
+                                justify-space-around
+                                row
+                                wrap>
+                                <v-flex
+                                    s12
+                                    m6
+                                    lg2
+                                    offset-lg1
+                                    dark>
+                                    <b>Tipo do Recurso</b><br>
+                                    <span v-html="dados.dadosReconsideracao.tpRecursoDesc"/>
+                                </v-flex>
+                                <v-flex
+                                    s12
+                                    m6
+                                    lg3>
+                                    <b>Tipo da Solicitação</b>
+                                    <p>{{ dados.dadosReconsideracao.tpSolicitacaoDesc }}</p>
+                                </v-flex>
+                            </v-layout>
 
-        <!--<v-layout-->
-        <!--justify-space-around-->
-        <!--row-->
-        <!--wrap>-->
-        <!--<v-flex-->
-        <!--s12-->
-        <!--m6-->
-        <!--lg2-->
-        <!--offset-lg1-->
-        <!--dark>-->
-        <!--<b>Status do Recurso</b>-->
-        <!--<p>{{ dados.dadosReconsideracao.siRecursoDesc }}</p>-->
-        <!--</v-flex>-->
-        <!--<v-flex-->
-        <!--s12-->
-        <!--m6-->
-        <!--lg3>-->
-        <!--<b>Dt. Recurso</b>-->
-        <!--<p>{{ dados.dadosReconsideracao.dtSolicitacaoRecurso }}</p>-->
-        <!--</v-flex>-->
-        <!--</v-layout>-->
+                            <v-layout
+                                justify-space-around
+                                row
+                                wrap>
+                                <v-flex
+                                    s12
+                                    m6
+                                    lg2
+                                    offset-lg1
+                                    dark>
+                                    <b>Status do Recurso</b>
+                                    <p>{{ dados.dadosReconsideracao.siRecursoDesc }}</p>
+                                </v-flex>
+                                <v-flex
+                                    s12
+                                    m6
+                                    lg3>
+                                    <b>Dt. Recurso</b>
+                                    <p>{{ dados.dadosReconsideracao.dtSolicitacaoRecurso | formatarData }}</p>
+                                </v-flex>
+                            </v-layout>
 
-        <!--<div>-->
-        <!--<v-layout-->
-        <!--justify-space-around-->
-        <!--row-->
-        <!--wrap>-->
-        <!--<v-flex-->
-        <!--lg12-->
-        <!--dark>-->
-        <!--<b>Avaliação da Pedido</b>-->
-        <!--</v-flex>-->
-        <!--<v-flex>-->
-        <!--<p>Projeto encaminhado para análise do pedido de reconsideração formulado pelo-->
-        <!--proponente,-->
-        <!--relativo ao reenquadramento no art. 18 da Lei 8.313/91.-->
-        <!--</p>-->
-        <!--</v-flex>-->
-        <!--</v-layout>-->
-        <!--</div>-->
+                            <div>
+                                <v-layout
+                                    justify-space-around
+                                    row
+                                    wrap>
+                                    <v-flex
+                                        lg12
+                                        dark>
+                                        <b>Avaliação da Pedido</b>
+                                    </v-flex>
+                                    <v-flex>
+                                        <p>Projeto encaminhado para análise do pedido de reconsideração formulado pelo
+                                        proponente,
+                                        relativo ao reenquadramento no art. 18 da Lei 8.313/91.
+                                        </p>
+                                    </v-flex>
+                                </v-layout>
+                            </div>
 
-        <!--<div>-->
-        <!--<v-layout-->
-        <!--justify-space-around-->
-        <!--row-->
-        <!--wrap>-->
-        <!--<v-flex-->
-        <!--lg12-->
-        <!--dark>-->
-        <!--<b>Dt. Avaliação</b>-->
-        <!--</v-flex>-->
-        <!--<v-flex>-->
-        <!--<p>11/12/2013</p>-->
-        <!--</v-flex>-->
-        <!--</v-layout>-->
-        <!--</div>-->
+                            <div>
+                                <v-layout
+                                    justify-space-around
+                                    row
+                                    wrap>
+                                    <v-flex
+                                        lg12
+                                        dark>
+                                        <b>Dt. Avaliação</b>
+                                    </v-flex>
+                                    <v-flex>
+                                        <p>{{ dados.dadosReconsideracao.dtAvaliacao | formatarData }}</p>
+                                    </v-flex>
+                                </v-layout>
+                            </div>
 
-        <!--&lt;!&ndash;<div >&ndash;&gt;-->
-        <!--&lt;!&ndash;<v-flex lg12 dark class="text-xs-center">&ndash;&gt;-->
-        <!--&lt;!&ndash;<b>ARQUIVOS ANEXADOS</b>&ndash;&gt;-->
-        <!--&lt;!&ndash;</v-flex>&ndash;&gt;-->
-        <!--&lt;!&ndash;<v-container grid-list-md>&ndash;&gt;-->
-        <!--&lt;!&ndash;<v-layout justify-space-around row wrap>&ndash;&gt;-->
-        <!--&lt;!&ndash;<v-flex xs6>&ndash;&gt;-->
-        <!--&lt;!&ndash;<b>Arquivo</b>&ndash;&gt;-->
-        <!--&lt;!&ndash;</v-flex>&ndash;&gt;-->
-        <!--&lt;!&ndash;<v-flex xs2>&ndash;&gt;-->
-        <!--&lt;!&ndash;<b>Dt.Envio</b>&ndash;&gt;-->
-        <!--&lt;!&ndash;</v-flex>&ndash;&gt;-->
-        <!--&lt;!&ndash;</v-layout>&ndash;&gt;-->
-        <!--&lt;!&ndash;<v-layout justify-space-around align-center row&ndash;&gt;-->
-        <!--&lt;!&ndash;v-for="arquivo of dadosDiligencia.arquivos"&ndash;&gt;-->
-        <!--&lt;!&ndash;:key="arquivo.idArquivo"&ndash;&gt;-->
-        <!--&lt;!&ndash;&gt;&ndash;&gt;-->
-        <!--&lt;!&ndash;<v-flex xs6>&ndash;&gt;-->
-        <!--&lt;!&ndash;<p>&ndash;&gt;-->
-        <!--&lt;!&ndash;<a :href="`/upload/abrir?id=${arquivo.idArquivo}`"&ndash;&gt;-->
-        <!--&lt;!&ndash;target="_blank">&ndash;&gt;-->
-        <!--&lt;!&ndash;{{ arquivo.nmArquivo }}&ndash;&gt;-->
-        <!--&lt;!&ndash;</a>&ndash;&gt;-->
-        <!--&lt;!&ndash;</p>&ndash;&gt;-->
-        <!--&lt;!&ndash;</v-flex>&ndash;&gt;-->
-        <!--&lt;!&ndash;<v-flex xs2>&ndash;&gt;-->
-        <!--&lt;!&ndash;<p>&ndash;&gt;-->
-        <!--&lt;!&ndash;{{ arquivo.dtEnvio }}&ndash;&gt;-->
-        <!--&lt;!&ndash;</p>&ndash;&gt;-->
-        <!--&lt;!&ndash;</v-flex>&ndash;&gt;-->
-        <!--&lt;!&ndash;</v-layout>&ndash;&gt;-->
-        <!--&lt;!&ndash;</v-container>&ndash;&gt;-->
-        <!--&lt;!&ndash;</div>&ndash;&gt;-->
-        <!--</v-container>-->
-        <!--</v-card-text>-->
-        <!--</v-card>-->
-        <!--</v-expansion-panel-content>-->
-        <!--</v-expansion-panel>-->
+                            <div
+                                v-if="dados.dadosReconsideracao.tpSolicitacao === 'PI' ||
+                                    dados.dadosReconsideracao.tpSolicitacao === 'EO' ||
+                                dados.dadosReconsideracao.tpSolicitacao === 'OR' "
+                            >
+                                Parecer Técnico/ Produtos
+                                <span
+                                    v-for="(dado, index) in dados.produtosReconsideracao"
+                                    v-html="dado.ParecerDeConteudo"/>
+                            </div>
+
+                            <!--<div >-->
+                            <!--<v-flex lg12 dark class="text-xs-center">-->
+                            <!--<b>ARQUIVOS ANEXADOS</b>-->
+                            <!--</v-flex>-->
+                            <!--<v-container grid-list-md>-->
+                            <!--<v-layout justify-space-around row wrap>-->
+                            <!--<v-flex xs6>-->
+                            <!--<b>Arquivo</b>-->
+                            <!--</v-flex>-->
+                            <!--<v-flex xs2>-->
+                            <!--<b>Dt.Envio</b>-->
+                            <!--</v-flex>-->
+                            <!--</v-layout>-->
+                            <!--<v-layout justify-space-around align-center row-->
+                            <!--v-for="arquivo of dadosDiligencia.arquivos"-->
+                            <!--:key="arquivo.idArquivo"-->
+                            <!--&gt;-->
+                            <!--<v-flex xs6>-->
+                            <!--<p>-->
+                            <!--<a :href="`/upload/abrir?id=${arquivo.idArquivo}`"-->
+                            <!--target="_blank">-->
+                            <!--{{ arquivo.nmArquivo }}-->
+                            <!--</a>-->
+                            <!--</p>-->
+                            <!--</v-flex>-->
+                            <!--<v-flex xs2>-->
+                            <!--<p>-->
+                            <!--{{ arquivo.dtEnvio }}-->
+                            <!--</p>-->
+                            <!--</v-flex>-->
+                            <!--</v-layout>-->
+                            <!--</v-container>-->
+                            <!--</div>-->
+                        </v-container>
+                    </v-card-text>
+                </v-card>
+            </v-expansion-panel-content>
+        </v-expansion-panel>
     </div>
 </template>
 <script>
@@ -210,44 +221,6 @@ export default {
         Carregando,
     },
     mixins: [utils],
-    // data() {
-    //     return {
-    //         search: '',
-    //         pagination: {
-    //             sortBy: 'DtEmissao',
-    //             descending: true,
-    //         },
-    //         selected: [],
-    //         loading: true,
-    //         headers: [
-    //             {
-    //                 text: 'CERTIDÕES',
-    //                 align: 'left',
-    //                 value: 'dsCertidao',
-    //             },
-    //             {
-    //                 text: 'DATA DE EMISSÃO',
-    //                 align: 'center',
-    //                 value: 'DtEmissao',
-    //             },
-    //             {
-    //                 text: 'DATA DE VALIDADE',
-    //                 align: 'center',
-    //                 value: 'DtValidade',
-    //             },
-    //             {
-    //                 text: 'PRONAC',
-    //                 align: 'center',
-    //                 value: 'Pronac',
-    //             },
-    //             {
-    //                 text: 'SITUAÇÃO',
-    //                 align: 'left',
-    //                 value: 'Situacao',
-    //             },
-    //         ],
-    //     };
-    // },
     computed: {
         ...mapGetters({
             dadosProjeto: 'projeto/projeto',
