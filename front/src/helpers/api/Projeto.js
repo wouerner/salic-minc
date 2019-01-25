@@ -171,33 +171,81 @@ export const buscarPlanoDistribuicaoIn2017 = (idPreProjeto) => {
 export const buscarDiligenciaProposta = (idPreprojeto, idAvaliacaoProposta) => {
     const modulo = '/projeto';
     const controller = '/diligencia-proposta-rest';
-    const metodo = '/get';
-    const path = `${modulo}${controller}${metodo}`;
-    const queryParams = `?idPreProjeto=${idPreprojeto}&idAvaliacaoProposta=${idAvaliacaoProposta}`;
+    const path = `${modulo}${controller}`;
+    const queryParams = `?idPreProjeto=${idPreprojeto}&id=${idAvaliacaoProposta}`;
     return api.getRequest(path, queryParams);
 };
 
 export const buscarDiligenciaAdequacao = (idPronac, idAvaliarAdequacaoProjeto) => {
     const modulo = '/projeto';
     const controller = '/diligencia-adequacao-rest';
-    const metodo = '/get';
-    const path = `${modulo}${controller}${metodo}`;
-    const queryParams = `?idPronac=${idPronac}&idAvaliarAdequacaoProjeto=${idAvaliarAdequacaoProjeto}`;
+    const path = `${modulo}${controller}`;
+    const queryParams = `?idPronac=${idPronac}&id=${idAvaliarAdequacaoProjeto}`;
     return api.getRequest(path, queryParams);
 };
 
 export const buscarDiligenciaProjeto = (idPronac, idDiligencia) => {
     const modulo = '/projeto';
     const controller = '/diligencia-projeto-rest';
-    const metodo = '/get';
-    const path = `${modulo}${controller}${metodo}`;
-    const queryParams = `?idPronac=${idPronac}&idDiligencia=${idDiligencia}`;
+    const path = `${modulo}${controller}`;
+    const queryParams = `?idPronac=${idPronac}&id=${idDiligencia}`;
     return api.getRequest(path, queryParams);
 };
 
 export const buscarDiligencia = (idPronac) => {
     const modulo = '/projeto';
     const controller = '/diligencia-projeto-rest';
+    const path = `${modulo}${controller}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};
+
+export const buscarMarcasAnexadas = (idPronac) => {
+    const modulo = '/execucao';
+    const controller = '/marcas-anexadas-rest';
+    const metodo = '/index';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};
+
+export const buscarDadosReadequacoes = (idPronac) => {
+    const modulo = '/execucao';
+    const controller = '/dados-readequacoes-rest';
+    const metodo = '/index';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};
+
+export const buscarPedidoProrrogacao = (idPronac) => {
+    const modulo = '/execucao';
+    const controller = '/pedido-prorrogacao-rest';
+    const metodo = '/index';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};
+
+export const buscarDadosFiscalizacaoLista = (idPronac) => {
+    const modulo = '/execucao';
+    const controller = '/fiscalizacao-rest';
+    const path = `${modulo}${controller}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};
+
+export const buscarDadosFiscalizacaoVisualiza = (idPronac, idFiscalizacao) => {
+    const modulo = '/execucao';
+    const controller = '/fiscalizacao-rest';
+    const path = `${modulo}${controller}`;
+    const queryParams = `?id=${idFiscalizacao}&idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};
+
+export const buscarAprovacao = (idPronac) => {
+    const modulo = '/analise';
+    const controller = '/aprovacao-rest';
     const metodo = '/index';
     const path = `${modulo}${controller}${metodo}`;
     const queryParams = `?idPronac=${idPronac}`;

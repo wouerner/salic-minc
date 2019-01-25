@@ -17,7 +17,8 @@ class Analise_AprovacaoRestController extends MinC_Controller_Rest_Abstract
         try {
             $AprovacaoService = new AprovacaoService($this->getRequest(), $this->getResponse());
             $resposta = $AprovacaoService->buscarAprovacao();
-
+            $resposta = \TratarArray::utf8EncodeArray($resposta);
+            
             $this->RenderJsonResponse($resposta, 200);
 
         } catch (Exception $objException) {

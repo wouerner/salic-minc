@@ -48,24 +48,16 @@ class Aprovacao implements \MinC\Servico\IServicoRestZend
         $resultArray = [];
 
         foreach ($aprovacoes as $aprovacao) {
-            $TipoAprovacao = html_entity_decode(utf8_encode($aprovacao['TipoAprovacao']));
-            $ResumoAprovacao = html_entity_decode(utf8_encode($aprovacao['ResumoAprovacao']));
-            $objDateTimeDtAprovacao = new \DateTime($aprovacao['DtAprovacao']);
-            $objDateTimeDtPortariaAprovacao = new \DateTime($aprovacao['DtPortariaAprovacao']);
-            $objDateTimeDtPublicacaoAprovacao = new \DateTime($aprovacao['DtPublicacaoAprovacao']);
-            $objDateTimeDtInicioCaptacao = new \DateTime($aprovacao['DtInicioCaptacao']);
-            $objDateTimeDtFimCaptacao = new \DateTime($aprovacao['DtFimCaptacao']);
             $resultArray[] = [
-                'TipoAprovacao' => $TipoAprovacao,
-                'DtAprovacao' => $objDateTimeDtAprovacao->format('d/m/Y'),
-                'DtPortariaAprovacao' => $objDateTimeDtPortariaAprovacao->format('d/m/Y'),
+                'TipoAprovacao' => $aprovacao['TipoAprovacao'],
+                'DtAprovacao' => $aprovacao['DtAprovacao'],
+                'DtPortariaAprovacao' => $aprovacao['DtPortariaAprovacao'],
                 'PortariaAprovacao' => $aprovacao['PortariaAprovacao'],
-                'DtPublicacaoAprovacao' => $objDateTimeDtPublicacaoAprovacao->format('d/m/Y'),
-                'DtInicioCaptacao' => $objDateTimeDtInicioCaptacao->format('d/m/Y'),
-                'DtFimCaptacao' => $objDateTimeDtFimCaptacao->format('d/m/Y'),
+                'DtPublicacaoAprovacao' => $aprovacao['DtPublicacaoAprovacao'],
+                'DtInicioCaptacao' => $aprovacao['DtInicioCaptacao'],
+                'DtFimCaptacao' => $aprovacao['DtFimCaptacao'],
                 'Mecanismo' => $aprovacao['Mecanismo'],
-                'ResumoAprovacao' => $ResumoAprovacao,
-                'AprovadoReal' => $aprovacao['AprovadoReal']
+                'ResumoAprovacao' => $aprovacao['ResumoAprovacao']
             ];
         }
 

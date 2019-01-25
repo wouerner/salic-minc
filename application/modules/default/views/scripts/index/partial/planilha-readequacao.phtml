@@ -107,16 +107,12 @@
                                 $vlUnitario = 0;
                                 $vlAprovado = 0;
                                 foreach ($this->planilha[$fonte][$produto][$etapa][$cidade] as $planilha) {
-                                    $podeEditarItem =
-                                                    (
-                                                        $this->link &&
-                                                        $planilha['vlComprovado'] < $planilha['vlAprovado'] &&
-                                                        $disponivelParaEdicaoReadequacaoPlanilha &&
-                                                        (
-                                                            $planilha['tpAcao'] != 'E' &&
-                                                            $nrfonte == '0'
-                                                        )
-                                                    );
+                                    $podeEditarItem = $this->itemDisponivelParaEdicaoReadequacao(
+                                        $planilha,
+                                        $nrfonte,
+                                        $this->link,
+                                        $disponivelParaEdicaoReadequacaoPlanilha
+                                    );
                                     
                                     $vlAprovado += $planilha['vlAprovado'];
                                     // soma somente quando não tiver excluído o item
@@ -171,7 +167,7 @@
                                         <td class="excluirItem centro" style="width: 1%;">
                                         <?php if($this->link && $this->idPerfil == Autenticacao_Model_Grupos::PROPONENTE){ ?>
                                             <?php if($planilha['tpAcao'] == 'E'){ ?>
-                                                Item excluído
+                                            Item exclu&iacute;do
                                                 <img src="<?php echo $this->baseUrl(); ?>/public/img/refresh.gif" style="cursor: pointer;" class="restaurarItem" tipo="<?php echo $planilha['tpAcao']; ?>" idPlanilha="<?php echo $planilha['idPlanilhaAprovacao']; ?>" title="<?php echo 'restaurar item'; ?>"/>
                                             <?php } else { ?>
                                                 <?php if(empty($planilha['vlComprovado'])){ ?>

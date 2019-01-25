@@ -1,44 +1,59 @@
 <template>
     <div>
         <v-data-table
-                :headers="headers"
-                :items="diligencias"
-                class="elevation-1"
-                rows-per-page-text="Items por Página"
-                no-data-text="Nenhum dado encontrado"
+            :pagination.sync="pagination"
+            :headers="headers"
+            :items="diligencias"
+            class="elevation-1"
+            rows-per-page-text="Items por Página"
+            no-data-text="Nenhum dado encontrado"
         >
-            <template slot="items" slot-scope="props">
+            <template
+                slot="items"
+                slot-scope="props">
+                <td class="text-xs-center pl-5">{{ props.item.dtAvaliacao | formatarData }}</td>
+                <td
+                    class="text-xs-left"
+                    v-html="props.item.tipoDiligencia"/>
                 <td class="text-xs-center">
-                    <v-btn flat icon>
-                        <v-tooltip bottom>
-                            <v-icon
-                                    slot="activator"
-                                    @click="showItem(props.item)"
-                                    class="material-icons">visibility
-                            </v-icon>
-                            <span>Visualizar Projeto</span>
-                        </v-tooltip>
-                    </v-btn>
+                    <v-tooltip bottom>
+                        <v-btn
+                            slot="activator"
+                            flat
+                            icon
+                            @click="showItem(props.item)"
+                        >
+                            <v-icon>visibility</v-icon>
+                        </v-btn>
+                        <span>Visualizar Projeto</span>
+                    </v-tooltip>
                 </td>
-                <td class="text-xs-center">{{ props.item.dtAvaliacao }}</td>
-                <td class="text-xs-center">{{ props.item.tipoDiligencia }}</td>
             </template>
-            <template slot="pageText" slot-scope="props">
+            <template
+                slot="pageText"
+                slot-scope="props">
                 Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
             </template>
         </v-data-table>
 
-        <v-dialog v-model="dialog" width="80%">
+        <v-dialog
+            v-model="dialog"
+            width="80%">
             <v-card>
                 <v-card-text v-if="Object.keys(dadosDiligencia).length > 0">
                     <v-container fluid>
                         <div v-if="dadosDiligencia.dsAvaliacao">
-                            <v-layout justify-space-around row wrap>
-                                <v-flex lg12 dark>
+                            <v-layout
+                                justify-space-around
+                                row
+                                wrap>
+                                <v-flex
+                                    lg12
+                                    dark>
                                     <b>SOLICITAÇÃO</b>
                                 </v-flex>
                                 <v-flex>
-                                    <p v-html="dadosDiligencia.dsAvaliacao"></p>
+                                    <p v-html="dadosDiligencia.dsAvaliacao"/>
                                 </v-flex>
                             </v-layout>
                         </div>
@@ -46,27 +61,15 @@
                     </v-container>
                 </v-card-text>
                 <v-card-text v-else>
-                    <div style="align: center" class="text-xs-center">
-                        <div style="padding-top: 25px">
-                            <v-progress-circular
-                                    :size="50"
-                                    color="primary"
-                                    indeterminate
-                            ></v-progress-circular>
-                        </div>
-                        <br>
-                        <div style="padding-top: 20px">
-                            Carregando...
-                        </div>
-                    </div>
+                    <Carregando :text="'Carregando ...'"/>
                 </v-card-text>
-                <v-divider></v-divider>
+                <v-divider/>
                 <v-card-actions>
-                    <v-spacer></v-spacer>
+                    <v-spacer/>
                     <v-btn
-                            color="red"
-                            flat
-                            @click="dialog = false">
+                        color="red"
+                        flat
+                        @click="dialog = false">
                         Fechar
                     </v-btn>
                 </v-card-actions>
@@ -76,52 +79,67 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+import Carregando from '@/components/CarregandoVuetify';
+import { utils } from '@/mixins/utils';
 
-    export default {
-        name: 'VisualizarDiligenciaAdequacao',
-        props: ['idPronac', 'diligencias'],
-        data() {
-            return {
-                dialog: false,
-                headers: [
-                    {
-                        text: 'VISUALIZAR',
-                        align: 'center',
-                        sortable: false,
-                        value: '',
-                    },
-                    {
-                        text: 'DATA DA AVALIAÇÃO',
-                        align: 'center',
-                        value: 'dtAvaliacao',
-                    },
-                    {
-                        text: 'TIPO DE DILIGÊNCIA',
-                        align: 'center',
-                        value: 'tipoDiligencia',
-                    },
-                ],
-            };
+export default {
+    name: 'VisualizarDiligenciaAdequacao',
+    components: {
+        Carregando,
+    },
+    mixins: [utils],
+    props: {
+        diligencias: {
+            type: Array,
+            default: () => [],
         },
-        computed: {
-            ...mapGetters({
-                dadosProjeto: 'projeto/projeto',
-                dadosDiligencia: 'projeto/diligenciaAdequacao',
-            }),
-        },
-        methods: {
-            showItem(item) {
-                const idPronac = this.dadosProjeto.idPronac;
-                const valor = item.idAvaliarAdequacaoProjeto;
-
-                this.buscarDiligenciaAdequacao({ idPronac, valor });
-                this.dialog = true;
+    },
+    data() {
+        return {
+            dialog: false,
+            pagination: {
+                rowsPerPage: 10,
+                sortBy: 'dtAvaliacao',
+                descending: true,
             },
-            ...mapActions({
-                buscarDiligenciaAdequacao: 'projeto/buscarDiligenciaAdequacao',
-            }),
-        },
-    };
-</script>
+            headers: [
+                {
+                    text: 'DATA DA AVALIAÇÃO',
+                    align: 'center',
+                    value: 'dtAvaliacao',
+                },
+                {
+                    text: 'TIPO DE DILIGÊNCIA',
+                    align: 'left',
+                    value: 'tipoDiligencia',
+                },
+                {
+                    text: 'VISUALIZAR',
+                    align: 'center',
+                    sortable: false,
+                    value: '',
+                },
+            ],
+        };
+    },
+    computed: {
+        ...mapGetters({
+            dadosProjeto: 'projeto/projeto',
+            dadosDiligencia: 'projeto/diligenciaAdequacao',
+        }),
+    },
+    methods: {
+        showItem(item) {
+            const { idPronac } = this.dadosProjeto;
+            const valor = item.idAvaliarAdequacaoProjeto;
 
+            this.buscarDiligenciaAdequacao({ idPronac, valor });
+            this.dialog = true;
+        },
+        ...mapActions({
+            buscarDiligenciaAdequacao: 'projeto/buscarDiligenciaAdequacao',
+        }),
+    },
+};
+</script>

@@ -1,139 +1,116 @@
 <template>
-    <div id="conteudo">
-        <div v-if="loading">
-            <Carregando :text="'Carregando Aprova&ccedil;&atilde;o'"></Carregando>
+    <div>
+        {{ dados }}
+        <!-- <div v-if="loading">
+            <Carregando :text="'Carregando Certidoes Negativas'"/>
         </div>
-        <div v-else-if="dados.Aprovacao">
-            <IdentificacaoProjeto
-                :pronac="dadosProjeto.Pronac"
-                :nomeProjeto="dadosProjeto.NomeProjeto">
-            </IdentificacaoProjeto>
-            <div v-for="(dado, index) in dados.Aprovacao" :key="index">
-                <table class="tabela">
-                    <tbody>
-                        <tr>
-                            <td align="left">
-                                <input type="button"
-                                    class="btn_adicionar"
-                                    id="objetivos"
-                                    @click="setAbaAtiva(index)">
-                                <b v-html="dado.TipoAprovacao"></b>
-                            </td>
-                        </tr>
-                        <tr v-if="abaAtiva === index && ativo && Object.keys(dado).length > 0" align="left" style="padding: 5px">
-                            <table class="tabela">
-                                <tbody>
-                                    <tr>
-                                        <th align="center">Portaria / Datas</th>
-                                        <th align="center">Per&iacute;odo de Capta&ccedil;&atilde;o</th>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <table>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>{{dado.TipoAprovacao}}</td>
-                                                        <td>{{dado.DtAprovacao}}</td>
-                                                        <td>{{dado.PortariaAprovacao}}</td>
-                                                        <td>{{dado.DtPortariaAprovacao}}</td>
-                                                        <td>{{dado.DtPublicacaoAprovacao}}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </td>
-                                        <td>
-                                            <table>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>{{dado.DtInicioCaptacao}}</td>
-                                                        <td>{{dado.DtFimCaptacao}}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <table v-if="dado.ResumoAprovacao" class="tabela">
-                                <tbody>
-                                    <tr>
-                                        <th align="center">S&iacute;ntese Aprova&ccedil;&atilde;o</th>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-left: 20px" v-html="dado.ResumoAprovacao"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <table v-if="dado.AprovadoReal > 0" class="tabela">
-                                <tbody>
-                                    <tr>
-                                        <th align="center">{{dado.Mecanismo}}</th>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <b>Vl. Aprova&ccedil;&atilde;o</b> <br>
-                                            <b>R$ {{dado.AprovadoReal | filtroFormatarParaReal}}</b>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <div v-else-if="dados.certidoes">
+            <v-data-table
+                :pagination.sync="pagination"
+                :headers="headers"
+                :items="dados.certidoes"
+                class="elevation-1 container-fluid"
+                rows-per-page-text="Items por Página"
+                no-data-text="Nenhum dado encontrado"
+            >
+                <template
+                    slot="items"
+                    slot-scope="props">
+                    <td
+                        class="text-xs-left"
+                        v-html="props.item.dsCertidao"/>
+                    <td class="text-xs-center pl-5">{{ props.item.DtEmissao | formatarData }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.DtValidade | formatarData }}</td>
+                    <td class="text-xs-right">{{ props.item.Pronac }}</td>
+                    <td
+                        v-if="props.item.Situacao"
+                        class="text-xs-left"
+                        v-html="props.item.Situacao"/>
+                    <td
+                        v-else
+                        class="text-xs-left">
+                        Vencida
+                    </td>
+                </template>
+                <template
+                    slot="pageText"
+                    slot-scope="props">
+                    Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                </template>
+            </v-data-table>
+        </div> -->
     </div>
 </template>
 <script>
 
-    import { mapActions, mapGetters } from 'vuex';
-    import Carregando from '@/components/Carregando';
-    import IdentificacaoProjeto from '@/components/Projeto/IdentificacaoProjeto'
-    import planilhas from '@/mixins/planilhas'
-    export default {
-        name: 'Aprovacao',
-        props: ['idPronac'],
-        data() {
-            return {
-                loading: true,
-                abaAtiva: -1,
-                ativo: false,
-            };
-        },
-        components: {
-            Carregando,
-            IdentificacaoProjeto,
-        },
-        mixins: [planilhas],
-        mounted() {
-            if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-                this.buscarAprovacao(this.dadosProjeto.idPronac);
-            }
-        },
-        watch: {
-            dados() {
-                this.loading = false;
-            }
-        },
-        computed: {
-            ...mapGetters({
-                dados: 'projeto/aprovacao',
-                dadosProjeto: 'projeto/projeto',
-            }),
-        },
-        methods: {
-            setAbaAtiva(index) {
-                if (this.abaAtiva === index) {
-                    this.ativo = !this.ativo;
-                } else {
-                    this.abaAtiva = index;
-                    this.ativo = true;
-                }
-            },
-            ...mapActions({
-                buscarAprovacao: 'projeto/buscarAprovacao',
-            }),
-        },
-    };
-</script>
+import { mapActions, mapGetters } from 'vuex';
+import Carregando from '@/components/CarregandoVuetify';
+import { utils } from '@/mixins/utils';
 
+export default {
+    name: 'CertidoesNegativas',
+    components: {
+        Carregando,
+    },
+    mixins: [utils],
+    data() {
+        return {
+            search: '',
+            pagination: {
+                sortBy: 'DtEmissao',
+                descending: true,
+            },
+            selected: [],
+            loading: true,
+            headers: [
+                {
+                    text: 'CERTIDÕES',
+                    align: 'left',
+                    value: 'dsCertidao',
+                },
+                {
+                    text: 'DATA DE EMISSÃO',
+                    align: 'center',
+                    value: 'DtEmissao',
+                },
+                {
+                    text: 'DATA DE VALIDADE',
+                    align: 'center',
+                    value: 'DtValidade',
+                },
+                {
+                    text: 'PRONAC',
+                    align: 'center',
+                    value: 'Pronac',
+                },
+                {
+                    text: 'SITUAÇÃO',
+                    align: 'left',
+                    value: 'Situacao',
+                },
+            ],
+        };
+    },
+    computed: {
+        ...mapGetters({
+            dadosProjeto: 'projeto/projeto',
+            dados: 'projeto/aprovacao',
+        }),
+    },
+    watch: {
+        dados() {
+            this.loading = false;
+        },
+    },
+    mounted() {
+        if (typeof this.dadosProjeto.idPronac !== 'undefined') {
+            this.buscarAprovacao(this.dadosProjeto.idPronac);
+        }
+    },
+    methods: {
+        ...mapActions({
+            buscarAprovacao: 'projeto/buscarAprovacao',
+        }),
+    },
+};
+</script>

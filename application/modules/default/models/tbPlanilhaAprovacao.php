@@ -337,6 +337,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             )
         );
         $select->where('a.idPronac = ?', $idPronac);
+        $select->where(new Zend_Db_Expr('a.tpAcao <> ? OR a.tpAcao IS NULL'), 'E');
         $select->where('a.stAtivo = ?', 'S');
 
         if (!empty($nrFonteRecurso)) {
@@ -662,7 +663,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             'SAC.dbo'
         );
         $select->joinInner(
-            ['e' => 'tbCumprimentoObjeto'],
+            ['e' => 'TbCumprimentoObjeto'],
             'd.IdPRONAC = e.idPronac',
             [''],
             'SAC.dbo'
@@ -848,7 +849,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             'SAC.dbo'
         );
         $select->joinInner(
-            ['e' => 'tbCumprimentoObjeto'],
+            ['e' => 'TbCumprimentoObjeto'],
             'd.IdPRONAC = e.idPronac',
             [''],
             'SAC.dbo'
@@ -912,5 +913,72 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
         /* echo $select;die; */
 
         return $this->fetchAll($select);
+    }
+    
+    public function projetoContemEtapasCustosDivulgacao($idPronac)
+    {
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        
+        $objQuery->from(
+            array(
+                'tbPlanilhaAprovacao' => $this->_name
+            ),
+            'idPronac',
+            $this->_schema
+        );
+
+        $objQuery->where('tbPlanilhaAprovacao.tpPlanilha = ?', 'CO');
+        $objQuery->where('tbPlanilhaAprovacao.idEtapa IN(?)', [
+            PlanilhaEtapa::ETAPA_CUSTOS_ADMINISTRATIVOS,
+            PlanilhaEtapa::ETAPA_DIVULGACAO_COMERCIALIZACAO
+        ]);
+        $objQuery->where('tbPlanilhaAprovacao.IdPRONAC = ?', $idPronac);
+        
+        $result = $this->fetchAll($objQuery);
+        
+        if (count($result > 0)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function obterPlanilhaReadequacao($idReadequacao)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+
+        $select->from(
+            array('a' => $this->_name),
+            '*'
+        );
+
+        $select->where('a.idReadequacao = ?', $idReadequacao);
+        
+        return $this->fetchAll($select);
+    }
+
+    public function obterValorRemuneracaoCaptacaoAprovado($idPronac)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        
+        $select->from(
+            array('a' => $this->_name),
+            'a.vlUnitario'
+        );
+
+        $idRemuneracaoCaptacao = 5249;
+        
+        $select->where('a.idPronac = ?', $idPronac);
+        $select->where('a.tpPlanilha = ?', 'CO');
+        $select->where('a.idPlanilhaItem = ?', $idRemuneracaoCaptacao);
+        
+        $result = $this->fetchRow($select);
+
+        if (!empty($result)) {
+            return $result['vlUnitario'];
+        }
+        return $result;
     }
 }
