@@ -79,7 +79,9 @@ class Recurso implements \MinC\Servico\IServicoRestZend
 //                            $data['combosegmentosculturaisReconsideracao'] = $objSegmentocultural->buscarSegmento($data['projetosENReconsideracao']['cdArea']);
 
                             $parecer = new \Parecer();
-                            $data['ParecerReconsideracao'] = $parecer->buscar(array('IdPRONAC = ?' => $dados['IdPRONAC'], 'TipoParecer in (?)' => array(1,7), 'stAtivo = ?' => 1))->current()->toArray();
+
+                            $parecer = $parecer->buscar(array('IdPRONAC = ?' => $dados['IdPRONAC'], 'TipoParecer in (?)' => array(1,7), 'stAtivo = ?' => 1));
+                            $data['ParecerReconsideracao'] = $parecer ? $parecer->toArray() : [];
                         }
                     }
 
