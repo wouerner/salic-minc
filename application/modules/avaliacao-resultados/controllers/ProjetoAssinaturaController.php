@@ -18,19 +18,47 @@ class AvaliacaoResultados_ProjetoAssinaturaController extends MinC_Controller_Re
         parent::__construct($request, $response, $invokeArgs);
     }
 
-    public function indexAction()
-    {
+    public function indexAction(){}
+
+    public function getAction(){
         $projetosAssinaturaService = new FluxoProjetoAssinaturaService($this->getRequest(), $this->getResponse());
-        $projetos = $projetosAssinaturaService->projetosAguardandoAssinatura();
+        $projetos = [];
 
-        $this->renderJsonResponse(\TratarArray::utf8EncodeArray($projetos->toArray()), 200);
+        switch ($this->getRequest()->getParam('estado')) {
+            case 'assinar':
+                $projetos = $projetosAssinaturaService->obterProjetosAguardandoAssinaturaTecnico()->toArray();
+                break;
+            case 'em_assinatura':
+                $projetos = $projetosAssinaturaService->obterProjetosAguardandoAssinaturasSuperiores()->toArray();
+                break;
+            case 'historico':
+                $projetos = $projetosAssinaturaService->obterProjetosComAssinaturasFinalizadaPorTecnico()->toArray();
+                break;
+            default:
+                $this->customRenderJsonResponse($projetos, 404);
+        }
+
+        $this->renderJsonResponse(
+            \TratarArray::utf8EncodeArray($projetos),
+            200);
     }
-
-    public function getAction(){}
 
     public function headAction(){}
 
-    public function postAction(){}
+    public function postAction(){
+        $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $assinaturaService = new \MinC\Assinatura\Servico\Assinatura(
+            [
+                'Despacho' => 'devolvi pq eu quis',
+                'idTipoDoAto' => 622,
+                'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo,
+                'idPronac' => 132451,
+                'idDocumentoAssinatura' => 2262,
+                'stEstado' => 1
+            ]
+        );
+        $assinaturaService->devolver();
+    }
 
     public function putAction(){}
 

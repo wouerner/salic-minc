@@ -1,6 +1,8 @@
 <?php
 
-class AvaliacaoResultados_TipoLaudoController extends MinC_Controller_Rest_Abstract
+use Application\Modules\AvaliacaoResultados\Service\LaudoFinal\Laudo as LaudoService;
+
+class AvaliacaoResultados_LaudoController extends MinC_Controller_Rest_Abstract
 {
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
     {
@@ -10,10 +12,7 @@ class AvaliacaoResultados_TipoLaudoController extends MinC_Controller_Rest_Abstr
             Autenticacao_Model_Grupos::COORDENADOR_GERAL_PRESTACAO_DE_CONTAS,
         ];
 
-        $permissionsPerMethod  = [
-//            'index' => $profiles,
-//            'post' => $profiles
-        ];
+        $permissionsPerMethod  = [];
         $this->setProtectedMethodsProfilesPermission($permissionsPerMethod);
 
         parent::__construct($request, $response, $invokeArgs);
@@ -26,16 +25,37 @@ class AvaliacaoResultados_TipoLaudoController extends MinC_Controller_Rest_Abstr
 
     public function indexAction()
     {
-        $this->renderJsonResponse(["Nenhum conteúdo"], 204);
+        $estadoId = $this->getRequest()->getParam('estadoId');
+        $service = new LaudoService();
+        $projetos = $service->obterProjetos($estadoId);
+
+        $this->renderJsonResponse(
+            \TratarArray::utf8EncodeArray($projetos),
+            200
+        );
     }
 
     public function getAction()
     {
+        $idPronac = $this->getRequest()->getParam('idPronac');
+        $service = new LaudoService();
+        $data = $service->obterLaudo($idPronac)? $service->obterLaudo($idPronac):[];
+        $this->renderJsonResponse( \TratarArray::utf8EncodeArray($data), 200);
+
     }
 
     public function postAction()
     {
-        // TODO: Implement postAction() method.
+        $idLaudoFinal = $this->getRequest()->getParam('idLaudoFinal');
+        $idPronac = $this->getRequest()->getParam('idPronac');
+        $dtLaudoFinal = $this->getRequest()->getParam('dtLaudoFinal');
+        $siManifestacao = $this->getRequest()->getParam('siManifestacao');
+        $dsLaudoFinal = $this->getRequest()->getParam('dsLaudoFinal');
+        $idUsuario = $this->getRequest()->getParam('idUsuario');
+
+        $service = new LaudoService();
+        $data = $service->salvarLaudo($idLaudoFinal, $idPronac, $siManifestacao, $dsLaudoFinal);
+        $this->renderJsonResponse([$data], 200);
     }
 
     public function putAction()

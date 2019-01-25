@@ -140,10 +140,10 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
                 'tbDocumentoAssinatura.cdSituacao',
                 'tbDocumentoAssinatura.stEstado',
                 'tbDocumentoAssinatura.idDocumentoAssinatura',
-                'possuiAssinatura'=> new Zend_Db_Expr(" 
-                    (select top 1 {$this->_schema}.TbAssinatura.idAssinatura 
+                'possuiAssinatura'=> new Zend_Db_Expr("
+                    (select top 1 {$this->_schema}.TbAssinatura.idAssinatura
                        from {$this->_schema}.TbAssinatura
-                      inner join {$this->_schema}.TbAtoAdministrativo 
+                      inner join {$this->_schema}.TbAtoAdministrativo
                          ON {$this->_schema}.TbAtoAdministrativo.idAtoAdministrativo = {$this->_schema}.TbAssinatura.idAtoAdministrativo
                         AND {$this->_schema}.TbAtoAdministrativo.idOrgaoDoAssinante = {$idOrgaoDoAssinante}
                         AND {$this->_schema}.TbAtoAdministrativo.idPerfilDoAssinante = {$idPerfilDoAssinante}
@@ -153,15 +153,15 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
                 "),
                 'possuiProximaAssinatura'=> new Zend_Db_Expr("
                     (
-                    
+
                     select top 1 {$this->_schema}.TbAtoAdministrativo.idOrdemDaAssinatura
                       from {$this->_schema}.TbAtoAdministrativo
                      where {$this->_schema}.TbAtoAdministrativo.idTipoDoAto = {$this->_schema}.tbDocumentoAssinatura.idTipoDoAtoAdministrativo
                        and {$this->_schema}.TbAtoAdministrativo.idOrdemDaAssinatura > (
-                       
-                         select top 1 {$this->_schema}.TbAtoAdministrativo.idOrdemDaAssinatura 
+
+                         select top 1 {$this->_schema}.TbAtoAdministrativo.idOrdemDaAssinatura
                            from {$this->_schema}.TbAssinatura
-                          inner join {$this->_schema}.TbAtoAdministrativo 
+                          inner join {$this->_schema}.TbAtoAdministrativo
                              ON {$this->_schema}.TbAtoAdministrativo.idAtoAdministrativo = {$this->_schema}.TbAssinatura.idAtoAdministrativo
                             AND {$this->_schema}.TbAtoAdministrativo.idOrgaoDoAssinante = {$idOrgaoDoAssinante}
                             AND {$this->_schema}.TbAtoAdministrativo.idPerfilDoAssinante = {$idPerfilDoAssinante}
@@ -391,4 +391,41 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
 
         return (count($result) > 0);
     }
+    
+    public function obterProximaAssinatura(
+        $idDocumentoAssinatura,
+        $idPronac
+    )
+    {
+        $query = $this->select();
+        $query->setIntegrityCheck(false);
+        
+        $query->from(
+            [$this->_name],
+            ['ordemDaProximaAssinatura' => new Zend_Db_Expr('ISNULL(TbAtoAdministrativo.idOrdemDaAssinatura, 0) + 2')],
+            $this->_schema
+        );
+
+        $query->joinInner(
+            ["TbAssinatura" => "TbAssinatura"],
+            "(TbAssinatura.idDocumentoAssinatura = TbDocumentoAssinatura.idDocumentoAssinatura)",
+            [],
+            $this->_schema
+        );
+
+        $query->joinInner(
+            ["TbAtoAdministrativo" => "TbAtoAdministrativo"],
+            "(TbAssinatura.idAtoAdministrativo = TbAtoAdministrativo.idAtoAdministrativo)",
+            [],
+            $this->_schema
+        );
+
+        $query->where('TbDocumentoAssinatura.idDocumentoAssinatura = ?', $idDocumentoAssinatura);
+        $query->where('TbDocumentoAssinatura.idPronac = ?', $idPronac);
+        $query->order('TbAtoAdministrativo.idOrdemDaAssinatura DESC');
+
+        $db = Zend_Db_Table::getDefaultAdapter();
+        return $db->fetchOne($query);
+    }
+    
 }

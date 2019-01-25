@@ -20,6 +20,52 @@ export const atualizarRegistro = params => api.putRequest(path, buildData(params
 
 export const removerRegistro = params => api.deleteRequest(path, params.Codigo);
 
+export const getTeste = params => api.postRequest('/realizarprestacaodecontas/carregar-destinatarios/', buildData(params));
+
+export const getTipoAvaliacao = params => api.getRequest(`/avaliacao-resultados/tipo-avaliacao-rest/idPronac/${params}`);
+
+export const obterDadosTabelaTecnico = (params) => {
+    let data = '?';
+
+    if (params.estadoid) {
+        data += `estadoid=${params.estadoid}`;
+    }
+
+    if (params.idAgente) {
+        data += `&idAgente=${params.idAgente}`;
+    }
+    return api.getRequest(`/avaliacao-resultados/fluxo-projeto${data}`);
+};
+
+export const obterHistoricoEncaminhamento = params => api.getRequest(`/avaliacao-resultados/historico/idPronac/${params}`);
+
+export const planilha = params => api.getRequest(`/avaliacao-resultados/planilha-aprovada/idPronac/${params}`);
+
+export const projetoAnalise = params => api.getRequest(`/avaliacao-resultados/projeto/idPronac/${params}`);
+
+export const consolidacaoAnalise = params => api.getRequest(`/prestacao-contas/visualizar-projeto/dados-projeto?idPronac=${params}`);
+
+export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/tecnicos');
+
+export const alterarEstado = params => api.postRequest('/avaliacao-resultados/estado/', buildData(params));
+
+export const obterDadosItemComprovacao = params => api.getRequest(`/avaliacao-resultados/avaliacao-comprovante/${params}`);
+
+export const criarParecerLaudoFinal = params => api.postRequest('/avaliacao-resultados/laudo', buildData(params));
+
+
+export const obterProjetosParaDistribuir = () => api.getRequest('/avaliacao-resultados/projeto-inicio');
+
+/** DILIGENCIA */
+
+export const criarDiligencia = params => api.postRequest('/diligencia/diligencia', buildData(params));
+
+export const listarDiligencias = params => api.getRequest(`/avaliacao-resultados/diligencia?idPronac=${params}&situacao=E17&tpDiligencia=147`);
+
+/** FIM DILIGENCIA */
+
+/**  PARECER TECNICO */
+
 export const parecerConsolidacao = params => api.getRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${params}`);
 
 export const criarParecer = (params) => {
@@ -30,58 +76,52 @@ export const criarParecer = (params) => {
     return api.postRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${parametro}`, buildData(data));
 };
 
-export const getTeste = params => api.postRequest('/realizarprestacaodecontas/carregar-destinatarios/', buildData(params));
+/** FIM DO PARECER TECNICO */
 
-export const getTipoAvaliacao = params => api.getRequest(`/avaliacao-resultados/tipo-avaliacao-rest/idPronac/${params}`);
+export const obterLaudoFinal = idPronac => api.getRequest(`/avaliacao-resultados/laudo/get?idPronac=${idPronac}`);
 
-export const obterDadosTabelaTecnico = (params) => {
+export const obterProjetosLaudoFinal = param => api.getRequest(`/avaliacao-resultados/laudo/index?estadoId=${param.estadoId}`);
+
+export const alterarPerfil = (grupoAtivo, orgaoAtivo) => api.getRequest(`perfil/perfil-rest/index?codGrupo=${grupoAtivo}&codOrgao=${orgaoAtivo}`);
+
+export const obterProjetosAssinatura = params => api.getRequest(`/avaliacao-resultados/projeto-assinatura/estado/${params.estado}`);
+
+export const projetosRevisao = (params) => {
     const data = params;
     return api.getRequest(`/avaliacao-resultados/fluxo-projeto?estadoid=${data.estadoid}&idAgente=${data.idAgente}`);
 };
 
-export const obterHistoricoEncaminhamento = params => api.getRequest(`/avaliacao-resultados/historico/idPronac/${params}`);
+export const buscarDetalhamentoItens = idPronac => api.getRequest(`/avaliacao-resultados/detalhamento-itens-rest?idPronac=${idPronac}`);
 
-export const planilha = params => api.getRequest(`/prestacao-contas/realizar-prestacao-contas/planilha-analise-filtros/idPronac/${params}`);
+export const buscarComprovantes = (params) => {
+    const modulo = '/prestacao-contas';
+    const controller = '/comprovante-pagamento';
 
-export const projetoAnalise = params => api.getRequest(`/avaliacao-resultados/projeto/idPronac/${params}`);
+    const uf = `uf=${params.uf}`;
+    const idPronac = `idPronac=${params.idPronac}`;
+    const idPlanilhaItem = `idPlanilhaItem=${params.idPlanilhaItens}`;
+    const produto = `produto=${params.codigoProduto}`;
+    const idMunicipio = `idmunicipio=${params.codigoCidade}`;
+    const etapa = `etapa=${params.codigoEtapa}`;
+    const stItemAvaliado = `stItemAvaliado=${params.stItemAvaliado}`;
 
-export const consolidacaoAnalise = params => api.getRequest(`/prestacao-contas/visualizar-projeto/dados-projeto?idPronac=${params}`);
+    const url = `${modulo}${controller}`;
+    const queryParams = `?${idPronac}&${idPlanilhaItem}&${produto}&${uf}&${idMunicipio}&${stItemAvaliado}&${etapa}`;
 
-export const finalizarParecer = (params) => {
-    // const parametro = params.idPronac;
-    // delete params.idPronac;
-    const data = params;
-
-    return api.postRequest('/avaliacao-resultados/estado', buildData(data));
+    return api.getRequest(url + queryParams);
 };
 
-export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/tecnicos');
+export const projetosPorEstado = (params) => {
+    let data = '?';
 
-export const encaminharParaTecnico = params => api.postRequest('/avaliacao-resultados/estado/', buildData(params));
+    if (params.estadoid) {
+        data += `estadoid=${params.estadoid}`;
+    }
 
-export const obterDadosItemComprovacao = params => api.getRequest(`/avaliacao-resultados/avaliacao-comprovante/${params}`);
-
-export const criarParecerLaudoFinal = (params) => {
-    console.log(params);
-    // const parametro = params.idPronac;
-    // delete params.idPronac;
-    // const data = params;
-
-    // return api.postRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${parametro}`, buildData(data));
+    if (params.idAgente) {
+        data += `&idAgente=${params.idAgente}`;
+    }
+    return api.getRequest(`/avaliacao-resultados/fluxo-projeto${data}`);
 };
 
-export const finalizarParecerLaudoFinal = (params) => {
-    console.log(params);
-    // const parametro = params.idPronac;
-    // delete params.idPronac;
-    // const data = params;
-
-    // return api.postRequest('/avaliacao-resultados/estado', buildData(data));
-};
-
-export const obterProjetosParaDistribuir = () => api.getRequest('/prestacao-contas/prestacao-contas/obter-analise-financeira-virtual');
-
-export const criarDiligencia = params => api.postRequest('/diligencia/diligencia', buildData(params));
-
-export const obterProjetosParaAssinatura = () => api.getRequest('/avaliacao-resultados/projeto-assinatura');
-
+export const salvarAvaliacaoComprovante = params => api.postRequest('/avaliacao-resultados/avaliacao-comprovante/', buildData(params));

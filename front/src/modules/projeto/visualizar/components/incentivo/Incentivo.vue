@@ -174,10 +174,10 @@
                     >{{ dadosProjeto.DtFimExecucao | formatarData }}
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="dadosProjeto.NrPortariaVigente"/>
+                        <SalicTextoSimples :texto="dadosProjeto.TipoPortariaVigente"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="dadosProjeto.TipoPortariaVigente"/>
+                        <SalicTextoSimples :texto="dadosProjeto.NrPortariaVigente"/>
                     </td>
                     <td align="center">
                         <SalicTextoSimples :texto="dadosProjeto.DtPublicacaoPortariaVigente"/>
@@ -206,7 +206,7 @@
                     </td>
                     <td class="centro" rowspan="2" width="10%">
                         <b>
-                            Conta Liberada
+                            Liberado para Execu&ccedil;&atilde;o
                         </b>
                     </td>
                     <td class="centro" rowspan="2">
