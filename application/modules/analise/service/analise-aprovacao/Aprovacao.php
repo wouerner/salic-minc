@@ -57,7 +57,8 @@ class Aprovacao implements \MinC\Servico\IServicoRestZend
                 'DtInicioCaptacao' => $aprovacao['DtInicioCaptacao'],
                 'DtFimCaptacao' => $aprovacao['DtFimCaptacao'],
                 'Mecanismo' => $aprovacao['Mecanismo'],
-                'ResumoAprovacao' => $aprovacao['ResumoAprovacao']
+                'ResumoAprovacao' => $aprovacao['ResumoAprovacao'],
+                'AprovadoReal' => $aprovacao['AprovadoReal']
             ];
         }
 
