@@ -29,3 +29,4 @@ export const pedidoProrrogacao = state => state.pedidoProrrogacao;
 export const dadosFiscalizacaoLista = state => state.dadosFiscalizacaoLista;
 export const dadosFiscalizacaoVisualiza = state => state.dadosFiscalizacaoVisualiza;
 export const aprovacao = state => state.aprovacao;
+export const recurso = state => state.recurso;

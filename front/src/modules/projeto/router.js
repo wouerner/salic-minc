@@ -26,6 +26,7 @@ import DadosReadequacoes from './visualizar/components/execucao/DadosReadequacoe
 import PedidoProrrogacao from './visualizar/components/execucao/PedidoProrrogacao';
 import DadosFiscalizacao from './visualizar/components/execucao/DadosFiscalizacao';
 import Aprovacao from './visualizar/components/analiseAprovacao/Aprovacao';
+import Recurso from './visualizar/components/analiseAprovacao/Recurso';
 
 // import retirados do webpackChunkName
 import DadosProjeto from './visualizar/components/DadosProjeto';
@@ -266,6 +267,14 @@ const routes = [
                 component: Aprovacao,
                 meta: {
                     title: 'Aprovação',
+                },
+            },
+            {
+                path: 'recurso',
+                name: 'Recurso',
+                component: Recurso,
+                meta: {
+                    title: 'Recurso',
                 },
             },
         ],

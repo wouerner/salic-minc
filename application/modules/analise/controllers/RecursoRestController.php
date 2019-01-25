@@ -1,8 +1,8 @@
 <?php
 
-use Application\Modules\Analise\Service\AnaliseAprovacao\Recurso  as RecursosService;
+use Application\Modules\Analise\Service\AnaliseAprovacao\Recurso  as RecursoService;
 
-class Analise_RecursosRestController extends MinC_Controller_Rest_Abstract
+class Analise_RecursoRestController extends MinC_Controller_Rest_Abstract
 {
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
@@ -15,7 +15,7 @@ class Analise_RecursosRestController extends MinC_Controller_Rest_Abstract
     public function indexAction()
     {
         try {
-            $RecursosService = new RecursosService($this->getRequest(), $this->getResponse());
+            $RecursosService = new RecursoService($this->getRequest(), $this->getResponse());
             $resposta = $RecursosService->buscarRecursos();
             $resposta = \TratarArray::utf8EncodeArray($resposta);
 
