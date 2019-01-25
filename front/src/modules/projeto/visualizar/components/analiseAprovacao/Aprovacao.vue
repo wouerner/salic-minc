@@ -1,44 +1,139 @@
 <template>
     <div>
-        {{ dados }}
-        <!-- <div v-if="loading">
-            <Carregando :text="'Carregando Certidoes Negativas'"/>
+        <div v-if="loading">
+            <Carregando :text="'Carregando Aprovação'"/>
         </div>
-        <div v-else-if="dados.certidoes">
-            <v-data-table
-                :pagination.sync="pagination"
-                :headers="headers"
-                :items="dados.certidoes"
-                class="elevation-1 container-fluid"
-                rows-per-page-text="Items por Página"
-                no-data-text="Nenhum dado encontrado"
-            >
-                <template
-                    slot="items"
-                    slot-scope="props">
-                    <td
-                        class="text-xs-left"
-                        v-html="props.item.dsCertidao"/>
-                    <td class="text-xs-center pl-5">{{ props.item.DtEmissao | formatarData }}</td>
-                    <td class="text-xs-center pl-5">{{ props.item.DtValidade | formatarData }}</td>
-                    <td class="text-xs-right">{{ props.item.Pronac }}</td>
-                    <td
-                        v-if="props.item.Situacao"
-                        class="text-xs-left"
-                        v-html="props.item.Situacao"/>
-                    <td
-                        v-else
-                        class="text-xs-left">
-                        Vencida
-                    </td>
-                </template>
-                <template
-                    slot="pageText"
-                    slot-scope="props">
-                    Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
-                </template>
-            </v-data-table>
-        </div> -->
+        <div v-else-if="dados.Aprovacao">
+            <v-expansion-panel popout>
+                <v-expansion-panel-content
+                    v-for="(dado, index) in dados.Aprovacao"
+                    :key="index"
+                    class="elevation-1"
+                >
+                    <v-layout
+                        slot="header"
+                        class="primary--text">
+                        <v-icon class="mr-3 primary--text">subject</v-icon>
+                        <span v-html="dado.TipoAprovacao"/>
+                    </v-layout>
+                    <v-container fluid>
+                        <v-card
+                            class="elevation-2"
+                            color="grey lighten-4">
+                            <v-card-text class="pl-5">
+                                <v-container
+                                    grid-list-md
+                                    text-xs-left>
+                                    <v-layout
+                                        justify-space-around
+                                        row
+                                        wrap>
+                                        <v-flex
+                                            lg12
+                                            dark
+                                            class="text-xs-left">
+                                            <b><h4>PORTARIA / DATAS</h4></b>
+                                            <v-divider class="pb-2"/>
+                                        </v-flex>
+                                        <v-flex>
+                                            <p><b>Tipo</b></p>
+                                            <p v-html="dado.TipoAprovacao"/>
+                                        </v-flex>
+                                        <v-flex>
+                                            <p><b>Dt. Aprovação</b></p>
+                                            <p>
+                                                {{ dado.DtAprovacao | formatarData }}
+                                            </p>
+                                        </v-flex>
+                                        <v-flex>
+                                            <p><b>Portaria</b></p>
+                                            <p>
+                                                {{ dado.PortariaAprovacao }}
+                                            </p>
+                                        </v-flex>
+                                        <v-flex>
+                                            <p><b>Dt. Portaria</b></p>
+                                            <p>
+                                                {{ dado.DtPortariaAprovacao | formatarData }}
+                                            </p>
+                                        </v-flex>
+                                        <v-flex>
+                                            <p><b>Dt. Publicação</b></p>
+                                            <p>
+                                                {{ dado.DtPublicacaoAprovacao | formatarData }}
+                                            </p>
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout
+                                        justify-space-around
+                                        row
+                                        wrap>
+                                        <v-flex
+                                            lg12
+                                            dark
+                                            class="text-xs-left">
+                                            <b><h4>PERÍODO DE CAPTAÇÃO</h4></b>
+                                            <v-divider class="pb-2"/>
+                                        </v-flex>
+                                        <v-flex>
+                                            <p><b>Dt. Início</b></p>
+                                            <p>
+                                                {{ dado.DtInicioCaptacao | formatarData }}
+                                            </p>
+                                        </v-flex>
+                                        <v-flex>
+                                            <p><b>Dt. Fim</b></p>
+                                            <p>
+                                                {{ dado.DtFimCaptacao | formatarData }}
+                                            </p>
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout
+                                        justify-space-around
+                                        row
+                                        wrap>
+                                        <v-flex
+                                            lg12
+                                            dark
+                                            class="text-xs-left">
+                                            <b><h4>SÍNTESE APROVAÇÃO</h4></b>
+                                            <v-divider class="pb-2"/>
+                                        </v-flex>
+                                        <v-flex>
+                                            <p v-html="dado.ResumoAprovacao"/>
+                                        </v-flex>
+                                    </v-layout>
+                                    <div v-if="dado.AprovadoReal > 0">
+                                        <v-layout
+                                            justify-space-around
+                                            row
+                                            wrap>
+                                            <v-flex
+                                                lg12
+                                                dark
+                                                class="text-xs-left">
+                                                <b><h4>MECENATO</h4></b>
+                                                <v-divider class="pb-2"/>
+                                            </v-flex>
+                                            <v-flex>
+                                                <p><b>Vl. Aprovação</b></p>
+                                                <b>
+                                                    <p>
+                                                        {{
+                                                            converterParaMoedaPontuado(dado.AprovadoReal)
+                                                        }}
+                                                    </p>
+                                                </b>
+                                            </v-flex>
+                                        </v-layout>
+                                    </div>
+                                </v-container>
+                            </v-card-text>
+                        </v-card>
+                    </v-container>
+                </v-expansion-panel-content>
+            </v-expansion-panel>
+        </div>
     </div>
 </template>
 <script>
@@ -48,47 +143,14 @@ import Carregando from '@/components/CarregandoVuetify';
 import { utils } from '@/mixins/utils';
 
 export default {
-    name: 'CertidoesNegativas',
+    name: 'Aprovacao',
     components: {
         Carregando,
     },
     mixins: [utils],
     data() {
         return {
-            search: '',
-            pagination: {
-                sortBy: 'DtEmissao',
-                descending: true,
-            },
-            selected: [],
             loading: true,
-            headers: [
-                {
-                    text: 'CERTIDÕES',
-                    align: 'left',
-                    value: 'dsCertidao',
-                },
-                {
-                    text: 'DATA DE EMISSÃO',
-                    align: 'center',
-                    value: 'DtEmissao',
-                },
-                {
-                    text: 'DATA DE VALIDADE',
-                    align: 'center',
-                    value: 'DtValidade',
-                },
-                {
-                    text: 'PRONAC',
-                    align: 'center',
-                    value: 'Pronac',
-                },
-                {
-                    text: 'SITUAÇÃO',
-                    align: 'left',
-                    value: 'Situacao',
-                },
-            ],
         };
     },
     computed: {
