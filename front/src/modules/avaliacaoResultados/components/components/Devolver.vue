@@ -4,7 +4,9 @@
         v-model="dialog"
         width="650"
     >
-        <v-tooltip slot="activator" bottom>
+        <v-tooltip
+            slot="activator"
+            bottom>
             <v-btn
                 slot="activator"
                 color="green lighten-2"
@@ -13,32 +15,42 @@
                 icon
                 light
             >
-                <v-icon color="error" class="material-icons">undo</v-icon>
+                <v-icon
+                    color="error"
+                    class="material-icons">undo</v-icon>
             </v-btn>
             <span>Devolver Projeto</span>
         </v-tooltip>
 
-        
+
         <v-card>
-            <v-card-title class="headline primary" primary-title>
+            <v-card-title
+                class="headline primary"
+                primary-title>
                 <span class="white--text">
-                    Devolver Projeto 
+                    Devolver Projeto
                 </span>
             </v-card-title>
             <v-container grid-list-md>
                 <v-card-text class="subheading">
-                    <div v-if="tecnico !== undefined && tecnico !== null && tecnico !== '' && tecnico.nome !== 'sysLaudo'">
-                        Você deseja devolver o projeto '{{ pronac }} - {{ nomeProjeto }}' para análise do Tecnico: {{tecnico.nome}}?
+                    <div
+                        v-if="tecnico !== undefined
+                            && tecnico !== null
+                            && tecnico !== ''
+                        && tecnico.nome !== 'sysLaudo'">
+                        Você deseja devolver o projeto '{{ pronac }} - {{ nomeProjeto }}'
+                        para análise do Tecnico: {{ tecnico.nome }}?
                     </div>
                     <div v-else>
-                        Você deseja devolver o projeto <b> {{ pronac }} - {{ nomeProjeto }}</b> para a etapa anterior?
+                        Você deseja devolver o projeto
+                        <b> {{ pronac }} - {{ nomeProjeto }}</b> para a etapa anterior?
                     </div>
                     <v-textarea
                         v-model="justificativa"
                         outline
                         name="input-7-4"
                         label="Justificativa"
-                        ></v-textarea>
+                    />
                 </v-card-text>
             </v-container>
             <v-card-actions>
@@ -68,19 +80,13 @@ import { mapActions } from 'vuex';
 
 export default {
     name: 'Devolver',
-    data() {
-        return {
-            dialog: false,
-            justificativa: '',
-        };
-    },
     props: {
-        idPronac: String,
-        usuario: Object,
-        atual: String,
-        proximo: String,
-        nomeProjeto: String,
-        pronac: String,
+        idPronac: { type: String, default: '' },
+        usuario: { type: Object, default: () => {} },
+        atual: { type: String, default: '' },
+        proximo: { type: String, default: '' },
+        nomeProjeto: { type: String, default: '' },
+        pronac: { type: String, default: '' },
         idTipoDoAtoAdministrativo: {
             type: String,
             default: '',
@@ -88,7 +94,13 @@ export default {
                 return ['622', '623'].includes(value);
             },
         },
-        tecnico: Object,
+        tecnico: { type: Object, default: () => {} },
+    },
+    data() {
+        return {
+            dialog: false,
+            justificativa: '',
+        };
     },
     methods: {
         ...mapActions({
