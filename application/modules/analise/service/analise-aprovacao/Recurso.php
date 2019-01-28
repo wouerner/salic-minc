@@ -70,9 +70,12 @@ class Recurso implements \MinC\Servico\IServicoRestZend
                             }
                         }
 
-                        if ($dados['tpSolicitacao'] == 'DR' || $dados['tpSolicitacao'] == 'EO' || $dados['tpSolicitacao'] == 'OR' || $dados['tpSolicitacao'] == 'PI') {
+                        if ($dados['tpSolicitacao'] == 'EN' || $dados['tpSolicitacao'] == 'EO' || $dados['tpSolicitacao'] == 'OR' || $dados['tpSolicitacao'] == 'PI') {
                             $data['projetosENReconsideracao'] = $Projetos->buscaAreaSegmentoProjeto($dados['IdPRONAC'])->toArray();
-//
+
+                            $data['projetosENReconsideracao']['artigo'] = $this->obterArtigoEnquadramento(
+                                $data['projetosENReconsideracao']['cdSegmento']
+                            );
                             $data['comboareasculturaisReconsideracao']= $mapperArea->fetchPairs('codigo', 'descricao');
 
 //                            $objSegmentocultural = new \Segmentocultural();
@@ -88,39 +91,44 @@ class Recurso implements \MinC\Servico\IServicoRestZend
 
 //                    if ($r->tpRecurso == 2) {
 //                        $pedidoRecurso = $r->idRecurso;
-//                        $dados = $tbRecurso->buscarDadosRecursos(array('idRecurso = ?'=>$r->idRecurso))->current();
-//                        $this->view->dadosRecurso = $dados;
+//                        $dados = $tbRecurso->buscarDadosRecursos(array('idRecurso = ?'=>$r->idRecurso))->toArray();
+//                        $data['dadosRecurso'] = $dados;
 //
+//                        $data['desistenciaRecurso'] = false;
 //                        if ($r->siRecurso == 0) {
-//                            $this->view->desistenciaRecurso = true;
-//                        } else {
-//                            $this->view->desistenciaRecurso = false;
-//                            if ($dados->siFaseProjeto == 2) {
-//                                if ($dados->tpSolicitacao == 'PI' || $dados->tpSolicitacao == 'EO' || $dados->tpSolicitacao == 'OR') {
-//                                    $PlanoDistribuicaoProduto = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
-//                                    $dadosProdutos = $PlanoDistribuicaoProduto->buscarProdutosProjeto($dados->IdPRONAC);
-//                                    $this->view->produtosRecurso = $dadosProdutos;
+//                            $data['desistenciaRecurso'] = true;
+//                        }
 //
-//                                    $tipoDaPlanilha = 2; // 2=Planilha Aprovada Parecerista
-//                                    if ($dados->tpSolicitacao == 'EO' || $dados->tpSolicitacao == 'OR') {
-//                                        $tipoDaPlanilha = 4; // 4=Cortes Or�ament�rios Aprovados
-//                                    }
-//                                    $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
-//                                    $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($dados->IdPRONAC, $tipoDaPlanilha);
-//                                    $this->view->planilhaRecurso = $this->montarPlanilhaOrcamentaria($planilhaOrcamentaria, $tipoDaPlanilha);
+//                        if ($dados['siFaseProjeto'] == 2) {
+//                            if ($dados['tpSolicitacao'] == 'PI' || $dados['tpSolicitacao'] == 'EO' || $dados['tpSolicitacao'] == 'OR') {
+//                                $PlanoDistribuicaoProduto = new \Proposta_Model_DbTable_PlanoDistribuicaoProduto();
+//                                $dadosProdutos = $PlanoDistribuicaoProduto->buscarProdutosProjeto($dados['IdPRONAC'])->toArray();
+//                                $data['produtosRecurso'] = $dadosProdutos;
+//
+//                                $tipoDaPlanilha = 2; // 2=Planilha Aprovada Parecerista
+//                                    if ($data['tpSolicitacao'] == 'EO' || $data['tpSolicitacao'] == 'OR') {
+//                                    $tipoDaPlanilha = 4; // 4=Cortes Or�ament�rios Aprovados
 //                                }
-//                            }
-//                            if ($dados->tpSolicitacao == 'EN' || $dados->tpSolicitacao == 'EO' || $dados->tpSolicitacao == 'OR' || $dados->tpSolicitacao == 'PI') {
-//                                $this->view->projetosENRecurso = $Projetos->buscaAreaSegmentoProjeto($dados->IdPRONAC);
-//
-//                                $this->view->comboareasculturais = $mapperArea->fetchPairs('codigo', 'descricao');
-//                                $objSegmentocultural = new Segmentocultural();
-//                                $this->view->combosegmentosculturaisRecurso = $objSegmentocultural->buscarSegmento($this->view->projetosENRecurso->cdArea);
-//
-//                                $parecer = new Parecer();
-//                                $this->view->ParecerRecurso = $parecer->buscar(array('IdPRONAC = ?' => $dados->IdPRONAC, 'TipoParecer = ?' => 7, 'stAtivo = ?' => 1))->current();
+////                                $spPlanilhaOrcamentaria = new \spPlanilhaOrcamentaria();
+////
+////                                $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($dados['IdPRONAC'], $tipoDaPlanilha);
+////                                $data['planilhaRecurso'] = $this->montarPlanilhaOrcamentaria($planilhaOrcamentaria, $tipoDaPlanilha);
 //                            }
 //                        }
+//                        if ($dados['tpSolicitacao'] == 'EN' || $dados['tpSolicitacao'] == 'EO' || $dados['tpSolicitacao'] == 'OR' || $dados['tpSolicitacao'] == 'PI') {
+//                            $data['projetosENRecurso'] = $Projetos->buscaAreaSegmentoProjeto($dados['IdPRONAC']);
+//
+////                            $this->view->comboareasculturais = $mapperArea->fetchPairs('codigo', 'descricao');
+////                            $objSegmentocultural = new Segmentocultural();
+////                            $this->view->combosegmentosculturaisRecurso = $objSegmentocultural->buscarSegmento($this->view->projetosENRecurso->cdArea);
+//
+//                            $parecer = new \Parecer();
+//
+//                            $parecer = $parecer->buscar(array('IdPRONAC = ?' => $dados['IdPRONAC'], 'TipoParecer in (?)' => 7, 'stAtivo = ?' => 1));
+//                            $data['ParecerReconsideracao'] = $parecer ? $parecer->toArray() : [];
+//
+//                        }
+//
 //                    }
                 }
         return $data;
@@ -129,5 +137,9 @@ class Recurso implements \MinC\Servico\IServicoRestZend
 //            $this->view->pedidoReconsideracao = $pedidoReconsideracao;
 //            $this->view->pedidoRecurso = $pedidoRecurso;
         }
+    }
+
+    private function obterArtigoEnquadramento($segmento) {
+        return in_array($segmento, \Segmento::SEGMENTOS_ARTIGO_18) ? 'Artigo 18' : 'Artigo 16';
     }
 }
