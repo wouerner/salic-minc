@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: http://localhost
+HOST: http://localhost:4000
 
 # SALIC API
 
@@ -113,6 +113,7 @@ HOST: http://localhost
                     + IdPRONAC: 159131 (string)
                     + Prioridade: 0 (string)
                     + idPronac: 159131 (string)
+
 
 ## Projetos Análise [GET /avaliacao-resultados/fluxo-projeto?estadoid=5&idAgente=236]
 
@@ -244,9 +245,7 @@ HOST: http://localhost
                 }
             }
 
-## Histórico [/avaliacao-resultados/projeto-assinatura/estado/historico]
-
-### Projetos - Histórico [GET]
+## Projetos Histórico [GET /avaliacao-resultados/projeto-assinatura/estado/historico]
 
 + Response 200 (application/json; charset=utf-8)
     + Headers
@@ -299,16 +298,8 @@ HOST: http://localhost
                 }
             }
 
-## Histórico de Encaminhamentos [/avaliacao-resultados/historico/idPronac/{idPronac}]
 
-+ Parameters
-    + idPronac (string, required)
-
-### Histórico de Encaminhamentos de um Projeto [GET]
-
-+ Request Diligência - Projeto em Análise (application/json)
-    + Attributes
-        + idPronac: 136867
+## Histórico de Encaminhamentos - Aba Análise [GET /avaliacao-resultados/historico/idPronac/136867]
 
 + Response 200 (application/json; charset=utf-8)
 
@@ -318,21 +309,19 @@ HOST: http://localhost
                 "data": {
                     "code": 200,
                     "items": [
-                    {
-                        "PRONAC": "113575",
-                        "NomeProjeto": "Série de Concertos Orquestra Pianíssimo",
-                        "dtInicioEncaminhamento": "11/21/2018",
-                        "dsJustificativa": "ContinuaÃ§Ã£o!",
-                        "NomeOrigem": "Rômulo Menhô Barbosa",
-                        "NomeDestino": "Rômulo Menhô Barbosa"
-                    }
+                        {
+                            "PRONAC": "113575",
+                            "NomeProjeto": "Série de Concertos Orquestra Pianíssimo",
+                            "dtInicioEncaminhamento": "11/21/2018",
+                            "dsJustificativa": "ContinuaÃ§Ã£o!",
+                            "NomeOrigem": "Rômulo Menhô Barbosa",
+                            "NomeDestino": "Rômulo Menhô Barbosa"
+                        }
                     ]
                 }
             }
 
-+ Request Diligência - Projeto Assinar (application/json)
-    + Attributes
-        + idPronac: 157779
+## Histórico de Encaminhamentos - Aba Assinar [GET /avaliacao-resultados/historico/idPronac/157779]
 
 + Response 200 (application/json; charset=utf-8)
 
@@ -370,9 +359,7 @@ HOST: http://localhost
                 }
             }
 
-+ Request Diligência - Projeto Histórico (application/json)
-    + Attributes
-        + idPronac: 134261
+## Histórico de Encaminhamentos - Aba Histórico [GET /avaliacao-resultados/historico/idPronac/134261]
 
 + Response 200 (application/json; charset=utf-8)
 
@@ -410,70 +397,341 @@ HOST: http://localhost
                 }
                 }
 
-## Diligência [GET /avaliacao-resultados/diligencia?idPronac=136867&situacao=E17&tpDiligencia=147]
+## Diligências - Aba Análise [GET /avaliacao-resultados/diligencia?idPronac=136867&situacao=E17&tpDiligencia=147]
 
 + Response 200 (application/json; charset=utf-8)
 
     + Body
 
             {
-                "nomeProjeto": "Série de Concertos Orquestra Pianíssimo",
-                "pronac": "113575",
-                "stProrrogacao": null,
-                "idDiligencia": 78570,
-                "dataSolicitacao": "2018-11-21 16:28:07",
-                "dataResposta": null,
-                "Solicitacao": "Coisa testando!",
-                "Resposta": null,
-                "idCodigoDocumentosExigidos": null,
-                "idTipoDiligencia": 174,
-                "stEnviado": "S",
-                "tipoDiligencia": "Diligência na prestação de contas",
-                "produto": null,
-                "Arquivos": []
-            }
-
-## Diligência [GET /avaliacao-resultados/diligencia?idPronac=157779&situacao=E17&tpDiligencia=147]
-
-+ Response 200 (application/json; charset=utf-8)
-
-    + Body
-    
-            {
-                "nomeProjeto": "FESTIVAL CULTURAL DE ARTES  INTEGRADAS - FESTFAG",
-                "pronac": "128843",
-                "stProrrogacao": null,
-                "idDiligencia": 28431,
-                "dataSolicitacao": "2013-11-26 16:20:42",
-                "dataResposta": "2013-12-05 08:38:56",
-                "Solicitacao": "<p style=\"margin: 0px; padding: 0px 0px 10px; border: none; line-height: 18.65625px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Georgia, 'Times New Roman', Times, serif;\">\r\n\tSenhor (a) proponente,</p>\r\n<p style=\"margin: 0px; padding: 0px 0px 10px; border: none; line-height: 18.65625px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Georgia, 'Times New Roman', Times, serif;\">\r\n\tEm virtude da implementa&ccedil;&atilde;o do Novo Salic, solicitamos sua colabora&ccedil;&atilde;o atrav&eacute;s do envio do tipo de aporte (patroc&iacute;nio ou doa&ccedil;&atilde;o) referente aos aportes em 31/10/2013, para que seja poss&iacute;vel a atualiza&ccedil;&atilde;o da capta&ccedil;&atilde;o e posterior transfer&ecirc;ncia de recursos.</p>\r\n<p style=\"margin: 0px; padding: 0px 0px 10px; border: none; line-height: 18.65625px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Georgia, 'Times New Roman', Times, serif;\">\r\n\t&nbsp;</p>\r\n<p style=\"margin: 0px; padding: 0px 0px 10px; border: none; line-height: 18.65625px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Georgia, 'Times New Roman', Times, serif;\">\r\n\tAtenciosamente</p>\r\n<p style=\"margin: 0px; padding: 0px 0px 10px; border: none; line-height: 18.65625px; color: rgb(0, 0, 0); font-family: 'Trebuchet MS', Georgia, 'Times New Roman', Times, serif;\">\r\n\tMinist&eacute;rio da Cultura.</p>\r\n",
-                "Resposta": "Conforme solicita&ccedil;&atilde;o informo que o tipo de aporte referente aos aportes em 31/10/2013 s&atilde;o patroc&iacute;nios, conforme segue:<br />\r\n&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Comunicado do Mecenato n&ordm; 008/2013 de R$ 3.935,45 (tr&ecirc;s mil novecentos e trinta e cinco reais e quarenta e cinco centavos), patroc&iacute;nio do incentivador Farm&aacute;cia Farma&uacute;til Ltda, CNPJ &ndash; 85.035.327/0001-51.<br />\r\n&middot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Comunicado do Mecenato n&ordm; 009/2013 de R$ 2.132,56 (dois mil cento e trinta e dois reais e cinquenta e seis centavos), patroc&iacute;nio do incentivador Bigolin Materiais de Constru&ccedil;&atilde;o Ltda, CNPJ &ndash; 76.087.964/0001-80.<br />\r\n&nbsp;<br />\r\nAtenciosamente,<br />\r\n&nbsp;<br />\r\nNair Ventorin Gurgacz<br />\r\nPresidente Funda&ccedil;&atilde;o Assis Gurgacz - FAG<br />\r\n",
-                "idCodigoDocumentosExigidos": null,
-                "idTipoDiligencia": 183,
-                "stEnviado": "S",
-                "tipoDiligencia": "Diligência na movimentação bancária",
-                "produto": null,
-                "Arquivos": [
-                {
-                    "idArquivo": 383779,
-                    "nmArquivo": "Ofício informação de depósito.pdf",
-                    "dtEnvio": "05/12/2013 08:38:00",
-                    "idDiligencia": 28431
+                "data": {
+                    "code": 200,
+                    "items": [
+                    {
+                        "nomeProjeto": "Série de Concertos Orquestra Pianíssimo",
+                        "pronac": "113575",
+                        "stProrrogacao": null,
+                        "idDiligencia": 78570,
+                        "dataSolicitacao": "2018-11-21 16:28:07",
+                        "dataResposta": "2019-01-07 09:31:04",
+                        "Solicitacao": "Coisa testando!",
+                        "Resposta": "ok!<br />\r\n",
+                        "idCodigoDocumentosExigidos": null,
+                        "idTipoDiligencia": 174,
+                        "stEnviado": "S",
+                        "tipoDiligencia": "Diligência na prestação de contas",
+                        "produto": null,
+                        "Arquivos": []
+                    },
+                    {
+                        "nomeProjeto": "Série de Concertos Orquestra Pianíssimo",
+                        "pronac": "113575",
+                        "stProrrogacao": null,
+                        "idDiligencia": 78630,
+                        "dataSolicitacao": "2019-01-07 09:32:40",
+                        "dataResposta": "2019-01-14 15:22:41",
+                        "Solicitacao": "<p>blablablablabla</p>",
+                        "Resposta": "Resposta",
+                        "idCodigoDocumentosExigidos": null,
+                        "idTipoDiligencia": 174,
+                        "stEnviado": "S",
+                        "tipoDiligencia": "Diligência na prestação de contas",
+                        "produto": null,
+                        "Arquivos": []
+                    },
+                    {
+                        "nomeProjeto": "Série de Concertos Orquestra Pianíssimo",
+                        "pronac": "113575",
+                        "stProrrogacao": null,
+                        "idDiligencia": 8728,
+                        "dataSolicitacao": "2011-05-05 19:50:00",
+                        "dataResposta": "2011-05-07 15:40:49",
+                        "Solicitacao": "<p>A Funarte foi designada para realizar a an&aacute;lise do <strong>Projeto 113575 - S&eacute;rie de Concertos Orquestra Pian&iacute;ssimo 2011</strong>, encaminhado por V.Sa. Para que possamos dar continuidade &agrave; an&aacute;lise t&eacute;cnica necessitamos das seguintes informa&ccedil;&otilde;es. O prazo de resposta &eacute; de 20 dias (art. 93, &sect; 1&ordm;, Instru&ccedil;&atilde;o Normativa n. 1, de 05/10/2010):</p>\r\n<p><strong>Descri&ccedil;&atilde;o da orquestra</strong><br />. Quantos m&uacute;sicos possui a orquestra no total e em cada naipe?<br />. Em todos os concertos a orquestra vai manter a mesma forma&ccedil;&atilde;o?</p>\r\n<p><strong>M&uacute;sicos</strong><br />. M&uacute;sicos, com or&ccedil;amento de R$ 43.200,00, confirmar: s&atilde;o 12 m&uacute;sicos de cordas atuando em 8 concertos?<br />. M&uacute;sicos, com or&ccedil;amento de R$ 43.200,00, esclarecer: este or&ccedil;amento inclui o cach&ecirc; do spalla?<br />. M&uacute;sicos, com or&ccedil;amento de R$ 12.000,00, confirmar: s&atilde;o 8 m&uacute;sicos de sopro atuando em 4 concertos (este n&uacute;mero est&aacute; na Justificativa do Proponente)?<br />. M&uacute;sicos, com or&ccedil;amento de R$ 12.000,00, esclarecer: este or&ccedil;amento inclui o cach&ecirc; dos chefes de naipe (violino, viola, violoncelo)?</p>\r\n<p><strong>Chefes de naipe</strong><br />. M&uacute;sicos, com or&ccedil;amento de R$ 19.200,00, confirmar: s&atilde;o 4 chefes de naipe em 8 concertos (este n&uacute;mero est&aacute; na Justificativa do Proponente)?<br />. M&uacute;sicos, com or&ccedil;amento de R$ 19.200,00, esclarecer: o \"servi&ccedil;o de chefe de naipe\" inclui o cach&ecirc; do concerto?<br />. Spalla, com or&ccedil;amento de R$ 9.000,00, esclarecer: o \"servi&ccedil;o de spalla da orquestra\" inclui o cach&ecirc; do concerto?</p>\r\n<p><strong>Divulga&ccedil;&atilde;o MinC</strong><br />. O proponente deve atender &agrave;s instru&ccedil;&otilde;es do Manual de Uso de Marcas publicado no Di&aacute;rio Oficial de 26/04/2011. <br />. No programa, como em todas as pe&ccedil;as de divulga&ccedil;&atilde;o, &eacute; preciso constar o cr&eacute;dito na forma estabelecida para projetos enquadrados no art. 18 da Lei 8.313/91: \"Minist&eacute;rio da Cultura apresenta...\" (art. 47, Decreto 5761/2006).</p>\r\n<p>OBSERVA&Ccedil;&Atilde;O IMPORTANTE: Solicitamos que a resposta &agrave; dilig&ecirc;ncia seja inserida no corpo desta mensagem, para que possamos ter acesso &agrave;s informa&ccedil;&otilde;es. Favor n&atilde;o enviar documentos \"anexados\", pois os mesmos n&atilde;o podem ser abertos e/ou visualizados pelo sistema SALIC na fase da an&aacute;lise t&eacute;cnica.</p>\r\n<p>&nbsp;</p>",
+                        "Resposta": "<p>Seguem as informa&ccedil;&otilde;es solicitadas.</p>\r\n<p><strong>Descri&ccedil;&atilde;o da orquestra:</strong></p>\r\n<p>-\r\n A orquestra possui um total de 17 m&uacute;sicos, sendo 5 primeiros violinos, 4\r\n segundos violinos, 4 violas, 3 violoncelos e 1 contrabaixo. Deste \r\ntotal, 12 ser&atilde;o m&uacute;sicos de fila, 1 spalla, 1 chefe de naipe de segundos \r\nviolinos, 1 chefe de naipe de viola, 1 chefe de naipe de violoncelo e 1 \r\nchefe de naipe de contrabaixo. Essa &eacute; a \r\nforma&ccedil;&atilde;o b&aacute;sica que atuar&aacute; nos 8 concertos propostos.</p>\r\n<p>- Em 4 concertos propostos,a orquestra base de cordas ter&aacute; a adi&ccedil;&atilde;o \r\nde um naipe de sopros (madeiras), composto por 8 instrumentistas, de \r\nacordo com o repert&oacute;rio a ser executado.</p>\r\n<p><strong>M&uacute;sicos:</strong></p>\r\n<p>- O\r\n or&ccedil;amento de R$ 43.200,00 &eacute; referente a 12 m&uacute;sicos de cordas atuando em\r\n 8 concertos. Neste grupo n&atilde;o est&atilde;o inclu&iacute;dos os cach&ecirc;s do spalla e dos \r\nchefes de naipe, que constam em outro itens or&ccedil;ament&aacute;rios.</p>\r\n<p>- O \r\nitem or&ccedil;ament&aacute;rio de R$12.000,00 &eacute; referente a 8 m&uacute;sicos de sopro \r\natuando em 4 concertos, por&eacute;m nesse item n&atilde;o est&atilde;o inclusos os chefes de\r\n naipe (violino, viola, violoncelo e contrabaixo). O item or&ccedil;ament&aacute;rio \r\nque se refere &agrave; remunera&ccedil;&atilde;o dos chefes de naipe tem o valor de R$ \r\n19.200,00, referente a atua&ccedil;&atilde;o destes em 8 concertos.</p>\r\n<p><strong>Chefes de naipe:</strong></p>\r\n<p>-\r\n A remunera&ccedil;&atilde;o de m&uacute;sicos com valor de R$19.200,00 constante do \r\nor&ccedil;amento &eacute; referente ao pagamento de 4 chefes de naipe de cordas para a\r\n realiza&ccedil;&atilde;o dos 8 concertos propostos.</p>\r\n<p>- O servi&ccedil;o de chefe de \r\nnaipe inclui a realiza&ccedil;&atilde;o de todos os ensaios e dos 8 concertos \r\npropostos, estando, portanto, inclu&iacute;do o cach&ecirc; dos concertos no valor \r\ntotal proposto de R$ 19.200,00.</p>\r\n<p>- O servi&ccedil;o de spalla inclui a realiza&ccedil;&atilde;o de todos os ensaios e \r\ndos 8 concertos propostos, estando, portanto, inclu&iacute;do o cach&ecirc; dos \r\nconcertos no valor total proposto de R$ 9.000,00.</p>\r\n<p><strong>Divulga&ccedil;&atilde;o MinC:</strong></p>\r\n<p>-\r\n Atenderemos a todas as instru&ccedil;&otilde;es do Manual de Uso de Marcas de \r\n26/04/2011. Constar&aacute; no programa e em todas as pe&ccedil;as de divulga&ccedil;&atilde;o o \r\ncr&eacute;dito do Minist&eacute;rio da Cultura da forma proposta no Decreto 5761/2006 \r\n(\"Minist&eacute;rio da Cultura apresenta...\").</p>\r\n<p>&nbsp;</p>",
+                        "idCodigoDocumentosExigidos": null,
+                        "idTipoDiligencia": 124,
+                        "stEnviado": "S",
+                        "tipoDiligencia": "Diligência na Análise Técnica Inicial",
+                        "produto": "Apresentação Musical",
+                        "Arquivos": []
+                    }
+                    ]
                 }
-                ]
             }
 
-## Planilha [/avaliacao-resultados/planilha-aprovada/idPronac/{idPronac}]
+## Diligências - Aba Assinar [GET /avaliacao-resultados/diligencia?idPronac=157779&situacao=E17&tpDiligencia=147]
 
-+ Parameters
-    + idPronac (string, required)
++ Response 200 (application/json; charset=utf-8)
 
-### Planilha [GET]
+    + Body
 
-+ Request Planilha Aprovada (application/json)
-    + Attributes
-        + idPronac: 134261
-        
+            {
+                "data": {
+                    "code": 200,
+                    "items": [
+                    {
+                        "nomeProjeto": "FESTIVAL CULTURAL DE ARTES  INTEGRADAS - FESTFAG",
+                        "pronac": "128843",
+                        "stProrrogacao": null,
+                        "idDiligencia": 51955,
+                        "dataSolicitacao": "2015-08-26 15:53:36",
+                        "dataResposta": "2015-09-08 16:55:23",
+                        "Solicitacao": "<p>\r\n\tPrezado proponente,</p>\r\n<p>\r\n\tEm an&aacute;lise da presta&ccedil;&atilde;o de contas, constataram-se ocorr&ecirc;ncias que podem ensejar sua reprova&ccedil;&atilde;o. Os documentos impugnados retornaram ao seu perfil e aqui elencamos as ocorr&ecirc;ncias encontradas em cada um, junto com as respectivas sugest&otilde;es de provid&ecirc;ncias a serem tomadas para sanar as impropriedades, de acordo com o n&uacute;mero do item da Rela&ccedil;&atilde;o de Pagamentos. Para responder a esta dilig&ecirc;ncia, no caso de substitui&ccedil;&atilde;o dos comprovantes fiscais, dirija-se ao item impugnado. No caso de envio de outros documentos, como o comprovante de pagamento da GRU, utilize o campo de resposta abaixo. Ressalta-se que, em caso de recolhimento ao Fundo Nacional da Cultura, o valor a ser devolvido por GRU, atualizado monetariamente conforme o art. 91 da Instru&ccedil;&atilde;o Normativa MinC 1/2013, constam nas sugest&otilde;es de provid&ecirc;ncias elencadas em cada item. As instru&ccedil;&otilde;es para gera&ccedil;&atilde;o da GRU constam ao final desta dilig&ecirc;ncia.</p>\r\n<p>\r\n\t1. Item 9 - INSS. O recolhimento foi de ISSQN e a rubrica &eacute; de INSS. Al&eacute;m disso, nota fiscal apresentada, que gerou a obriga&ccedil;&atilde;o do INSS, est&aacute; fora do prazo de execu&ccedil;&atilde;o. O valor desta nota tamb&eacute;m est&aacute; sendo motivo de glosa, vide item 4 desta dilig&ecirc;ncia. Prop&otilde;e-se a restitui&ccedil;&atilde;o do valor de R$ 60,73.</p>\r\n<p>\r\n\t2. Item 1 - Assistentes. No recibo de pagamento aut&ocirc;nomo n&atilde;o h&aacute; descri&ccedil;&atilde;o do servi&ccedil;o prestado, nem consta assinatura por parte do prestador de servi&ccedil;o. Prop&otilde;e-se que seja encaminhado novo recibo com a inser&ccedil;&atilde;o do servi&ccedil;o prestado e devidamente assinado pelo credor.</p>\r\n<p>\r\n\t3. Item 2 - Assistentes. No recibo de pagamento aut&ocirc;nomo n&atilde;o h&aacute; descri&ccedil;&atilde;o do servi&ccedil;o prestado, nem consta assinatura por parte do prestador de servi&ccedil;o. Prop&otilde;e-se que seja encaminhado novo recibo com a inser&ccedil;&atilde;o do servi&ccedil;o prestado e devidamente assinado pelo credor.</p>\r\n<p>\r\n\t4. Item 7 &ndash; Grupos folcl&oacute;ricos. A nota fiscal emitida em 24/03/2014, est&aacute; fora do prazo de execu&ccedil;&atilde;o do projeto, findo em 28/02/2014. Esta nota fiscal foi citada no item 1 desta dilig&ecirc;ncia. Prop&otilde;e-se a restitui&ccedil;&atilde;o do valor de R$ 1.153,86.</p>\r\n<p>\r\n\tCabe registrar que a documenta&ccedil;&atilde;o solicitada dever&aacute; ser encaminhada no prazo m&aacute;ximo de 20 dias, a contar do envio deste e-mail. Qualquer d&uacute;vida, estamos &agrave; disposi&ccedil;&atilde;o por meio do e-mail prestacaodecontas.incentivo@cultura.gov.br ou pelo telefone (61) 2024-2090.</p>\r\n<p>\r\n\tINSTRU&Ccedil;&Otilde;ES PARA EMISS&Atilde;O DA GRU:<br />\r\n\t- Acessar o link: http://consulta.tesouro.fazenda.gov.br/gru_novosite/gru_simples.asp<br />\r\n\t- Selecionar a op&ccedil;&atilde;o SIAFI /GRU - Guia de Recolhimento da Uni&atilde;o/GRU Simples;<br />\r\n\t- Preencher os seguintes campos da GRU:<br />\r\n\t. Unidade Favorecida: informar a Unidade Gestora (340001) e Gest&atilde;o (00001);<br />\r\n\t. N&uacute;mero de Refer&ecirc;ncia da GRU: informar o n&uacute;mero do PRONAC do projeto a que se refere &agrave; devolu&ccedil;&atilde;o;<br />\r\n\t. C&oacute;digo de recolhimento: informar o c&oacute;digo 20082-4;<br />\r\n\t. Dados do contribuinte/proponente: informar o CNPJ ou CPF do proponente e o respectivo nome;<br />\r\n\t- Imprimir e efetuar o pagamento da guia no Banco do Brasil.</p>\r\n<p>\r\n\tAtenciosamente,</p>\r\n<p>\r\n\tPABLO SILVA SANTIAGO<br />\r\n\tChefe da Divis&atilde;o de An&aacute;lise e Apoio T&eacute;cnico<br />\r\n\tCIFAT/CGEPC/DIC/SEFIC/MINIST&Eacute;RIO DA CULTURA<br />\r\n\tE-mail: pablo.santiago@cultura.gov.br<br />\r\n\t&nbsp;</p>\r\n",
+                        "Resposta": "Prezado Sr. Pablo,<br />\r\nEm resposta a dilig&ecirc;ncia datada em 26/08/2015, segue nossas considera&ccedil;&otilde;es:<br />\r\n1. Item 9 - INSS. O recolhimento foi de ISSQN e a rubrica &eacute; de INSS. Al&eacute;m disso, nota fiscal apresentada, que gerou a obriga&ccedil;&atilde;o do INSS, est&aacute; fora do prazo de execu&ccedil;&atilde;o. O valor desta nota tamb&eacute;m est&aacute; sendo motivo de glosa, vide item 4 desta dilig&ecirc;ncia. Prop&otilde;e-se a restitui&ccedil;&atilde;o do valor de R$ 60,73.<br />\r\nResposta: Comprovante de restitui&ccedil;&atilde;o constante do anexo.<br />\r\n2. Item 1 - Assistentes. No recibo de pagamento aut&ocirc;nomo n&atilde;o h&aacute; descri&ccedil;&atilde;o do servi&ccedil;o prestado, nem consta assinatura por parte do prestador de servi&ccedil;o. Prop&otilde;e-se que seja encaminhado novo recibo com a inser&ccedil;&atilde;o do servi&ccedil;o prestado e devidamente assinado pelo credor.<br />\r\nResposta: Novo recibo com a inser&ccedil;&atilde;o do servi&ccedil;o prestado e devidamente assinado pelo credor, constante do anexo.<br />\r\n3. Item 2 - Assistentes. No recibo de pagamento aut&ocirc;nomo n&atilde;o h&aacute; descri&ccedil;&atilde;o do servi&ccedil;o prestado, nem consta assinatura por parte do prestador de servi&ccedil;o. Prop&otilde;e-se que seja encaminhado novo recibo com a inser&ccedil;&atilde;o do servi&ccedil;o prestado e devidamente assinado pelo credor.<br />\r\nResposta: Novo recibo com a inser&ccedil;&atilde;o do servi&ccedil;o prestado e devidamente assinado pelo credor, constante do anexo.<br />\r\n4. Item 7 &ndash; Grupos folcl&oacute;ricos. A nota fiscal emitida em 24/03/2014, est&aacute; fora do prazo de execu&ccedil;&atilde;o do projeto, findo em 28/02/2014. Esta nota fiscal foi citada no item 1 desta dilig&ecirc;ncia. Prop&otilde;e-se a restitui&ccedil;&atilde;o do valor de R$ 1.153,86.<br />\r\nResposta:Comprovante de restitui&ccedil;&atilde;o constante do anexo.<br />\r\nQualquer d&uacute;vida estamos a disposi&ccedil;&atilde;o.<br />\r\nAtenciosamente<br />\r\nAssessoria de Projetos<br />\r\nFunda&ccedil;&atilde;o Assis Gurgacz",
+                        "idCodigoDocumentosExigidos": null,
+                        "idTipoDiligencia": 174,
+                        "stEnviado": "S",
+                        "tipoDiligencia": "Diligência na prestação de contas",
+                        "produto": null,
+                        "Arquivos": [
+                        {
+                            "idArquivo": 744371,
+                            "nmArquivo": "Diligência Pronac 128843.pdf",
+                            "dtEnvio": "08/09/2015 16:55:03",
+                            "idDiligencia": 51955
+                        }
+                        ]
+                    },
+                    {
+                        "nomeProjeto": "FESTIVAL CULTURAL DE ARTES  INTEGRADAS - FESTFAG",
+                        "pronac": "128843",
+                        "stProrrogacao": null,
+                        "idDiligencia": 52585,
+                        "dataSolicitacao": "2015-09-23 09:06:19",
+                        "dataResposta": "2015-09-25 10:04:31",
+                        "Solicitacao": "<p>\r\n\tPrezado proponente,</p>\r\n<p>\r\n\t<br />\r\n\tInformo que, para que seja validado o comprovante de despesa referente ao item 2 da Dilig&ecirc;ncia, encaminhado em sua resposta, &eacute; necess&aacute;rio que seja anexado em substitui&ccedil;&atilde;o ao comprovante de despesa impugnado, ou seja, &eacute; necess&aacute;rio inserir tal comprovante no item de custo a ele referente. Vale ainda informar que o comprovante referente ao item 3 n&atilde;o foi encaminhado, e deve seguir as mesmas instru&ccedil;&otilde;es relativas ao item 2.</p>\r\n<p>\r\n\t<br />\r\n\tEstou &agrave; disposi&ccedil;&atilde;o para sanar poss&iacute;veis d&uacute;vidas, por meio do e-mail leticia.goncalves@cultura.gov.br.</p>\r\n<p>\r\n\tAtenciosamente,</p>\r\n<p>\r\n\t<br />\r\n\tLET&Iacute;CIA MOREIRA DA S. GON&Ccedil;ALVES<br />\r\n\tT&eacute;cnica de N&iacute;vel Superior<br />\r\n\tCGEPC/DIC/SEFIC/MINIST&Eacute;RIO DA CULTURA<br />\r\n\tE-mail: leticia.goncalves@cultura.gov.br</p>\r\n",
+                        "Resposta": "Prezada Let&iacute;cia,<br />\r\nInformamos que, anexamos os comprovantes de despesa do item 2 e 3 em substitui&ccedil;&atilde;o ao comprovante de despesa impugnado, no item de custo a ele referente.<br />\r\nQualquer d&uacute;vida estamos a disposi&ccedil;&atilde;o.<br />\r\n<br />\r\nAtenciosamente<br />\r\n<br />\r\nLucas Prates Chiarello<br />\r\nAssessoria de Projetos",
+                        "idCodigoDocumentosExigidos": null,
+                        "idTipoDiligencia": 174,
+                        "stEnviado": "S",
+                        "tipoDiligencia": "Diligência na prestação de contas",
+                        "produto": null,
+                        "Arquivos": []
+                    },
+                    {
+                        "nomeProjeto": "FESTIVAL CULTURAL DE ARTES  INTEGRADAS - FESTFAG",
+                        "pronac": "128843",
+                        "stProrrogacao": null,
+                        "idDiligencia": 56676,
+                        "dataSolicitacao": "2016-01-27 14:36:46",
+                        "dataResposta": "2016-02-03 10:15:43",
+                        "Solicitacao": "<p>\r\n\tPrezado Proponente,</p>\r\n<p>\r\n\tEm an&aacute;lise da presta&ccedil;&atilde;o de contas do seu projeto n&atilde;o encontramos comprovante de despesa anexado ao Salic que demonstre o gasto com o cheque 850020 no valor de R$ 306,64.</p>\r\n<p>\r\n\tRecomendamos que encaminhe em anexo a sua resposta &agrave; dilig&ecirc;ncia o comprovante devidamente identificado, no termos da reda&ccedil;&atilde;o contida no &sect; 1&ordm; do artigo 83 da Instru&ccedil;&atilde;o Normativa n&ordm; 1/2013.</p>\r\n<p>\r\n\tAtenciosamente,</p>\r\n<p>\r\n\t<br />\r\n\tLET&Iacute;CIA MOREIRA DA S. GON&Ccedil;ALVES<br />\r\n\tT&eacute;cnica de N&iacute;vel Superior<br />\r\n\tCGEPC/DIC/SEFIC/MINIST&Eacute;RIO DA CULTURA<br />\r\n\tE-mail: leticia.goncalves@cultura.gov.br</p>\r\n",
+                        "Resposta": "Prezada, Let&iacute;ca Moreira da S. Gon&ccedil;alves!<br />\r\nConforme solicita&ccedil;&atilde;o, encaminhamos comprovante de despesa do gasto com o cheque 850020 no valor de R$ 306,64 referente a GRU de devolu&ccedil;&atilde;o de saldo remanescente. Informo que enviamos o mesmo na presta&ccedil;&atilde;o de contas por meio f&iacute;sico.<br />\r\nDeste modo, nos colocamos a disposi&ccedil;&atilde;o para maiores esclarecimentos caso seja necess&aacute;rio.<br />\r\n<br />\r\nAtenciosamente<br />\r\n<br />\r\nAssessoria de Projetos<br />\r\nFunda&ccedil;&atilde;o Assis Gurgacz",
+                        "idCodigoDocumentosExigidos": null,
+                        "idTipoDiligencia": 174,
+                        "stEnviado": "S",
+                        "tipoDiligencia": "Diligência na prestação de contas",
+                        "produto": null,
+                        "Arquivos": [
+                        {
+                            "idArquivo": 900214,
+                            "nmArquivo": "Comprovante de despasa R$ 306,64.pdf",
+                            "dtEnvio": "03/02/2016 10:08:05",
+                            "idDiligencia": 56676
+                        }
+                        ]
+                    },
+                    {
+                        "nomeProjeto": "FESTIVAL CULTURAL DE ARTES  INTEGRADAS - FESTFAG",
+                        "pronac": "128843",
+                        "stProrrogacao": null,
+                        "idDiligencia": 78576,
+                        "dataSolicitacao": "2018-12-13 16:25:28",
+                        "dataResposta": "2018-12-13 19:14:04",
+                        "Solicitacao": "<p>Ã k AÃ£ Ã¢ _ jiocsnaÃ§k Ã  Ã¡ { }</p>",
+                        "Resposta": "coisa",
+                        "idCodigoDocumentosExigidos": null,
+                        "idTipoDiligencia": 174,
+                        "stEnviado": "S",
+                        "tipoDiligencia": "Diligência na prestação de contas",
+                        "produto": null,
+                        "Arquivos": []
+                    }
+                    ]
+                }
+                }
+
+## Visualizar Parecer - Aba Análise [GET /avaliacao-resultados/emissao-parecer-rest/idPronac/136867]
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": {
+                    "consolidacaoComprovantes": {
+                        "qtTotalComprovante": 62,
+                        "qtComprovantesValidadosProjeto": 0,
+                        "qtComprovantesRecusadosProjeto": 0,
+                        "qtComprovantesNaoAvaliados": 62,
+                        "vlComprovadoProjeto": 71144.69,
+                        "vlComprovadoValidado": 0,
+                        "vlComprovadoRecusado": 0,
+                        "vlNaoComprovado": -1044.69
+                    },
+                    "projeto": {
+                        "IdPRONAC": 136867,
+                        "AnoProjeto": "11",
+                        "Sequencial": "3575",
+                        "UfProjeto": "MG",
+                        "Area": "3",
+                        "Segmento": "32",
+                        "Mecanismo": "1",
+                        "NomeProjeto": "Série de Concertos Orquestra Pianíssimo",
+                        "Processo": "01400008374201194",
+                        "CgcCpf": "11861910000185",
+                        "Situacao": "D53",
+                        "DtProtocolo": "2011-05-04 15:21:35",
+                        "DtAnalise": "2011-05-04 15:21:35",
+                        "Modalidade": " ",
+                        "OrgaoOrigem": 262,
+                        "Orgao": 272,
+                        "DtSaida": null,
+                        "DtRetorno": "2013-10-29 00:00:00",
+                        "UnidadeAnalise": " ",
+                        "Analista": " ",
+                        "DtSituacao": "2019-01-14 15:34:05",
+                        "ResumoProjeto": "O projeto prevê a realização de 8 concertos da Orquestra Pianíssimo na cidade de Belo Horizonte/MG, com vistas à formação de público para música erudita/instrumental por meio do repertório clássico para orquestra de câmara.",
+                        "ProvidenciaTomada": "Projeto encaminhado para o setor de elabora&ccedil;&atilde;o de portaria",
+                        "Localizacao": " ",
+                        "DtInicioExecucao": "2014-01-07 10:09:09",
+                        "DtFimExecucao": "2014-05-31 00:00:00",
+                        "SolicitadoUfir": 0,
+                        "SolicitadoReal": 366906.0795,
+                        "SolicitadoCusteioUfir": 0,
+                        "SolicitadoCusteioReal": 0,
+                        "SolicitadoCapitalUfir": 0,
+                        "SolicitadoCapitalReal": 0,
+                        "Logon": 236,
+                        "idProjeto": 44995
+                    },
+                    "proponente": {
+                        "tipoPessoa": "Pessoa Jur&iacute;dica",
+                        "Nome": "PIANÍSSIMO PRODUÇOES MUSICAIS E ARTÍSTICAS",
+                        "Endereco": "do Contorno - 4614 - sala 603 - Funcionários",
+                        "CgcCpf": "11861910000185",
+                        "Uf": "MG",
+                        "Cidade": "Belo Horizonte",
+                        "Esfera": null,
+                        "Responsavel": "César Timóteo de Oliveira Santos",
+                        "Cep": "30110028",
+                        "Administracao": null,
+                        "Utilidade": "1",
+                        "Direito": 2
+                    },
+                    "parecer": {
+                        "idAvaliacaoFinanceira": 35,
+                        "idPronac": 136867,
+                        "dtAvaliacaoFinanceira": "2019-01-14 03:24:08",
+                        "tpAvaliacaoFinanceira": 1,
+                        "siManifestacao": "A",
+                        "dsParecer": "<p>Aprovação - Teste Assinatura Diretor e Secretário</p>",
+                        "idUsuario": 236
+                    },
+                    "objetoParecer": {
+                        "DtEnvioDaPrestacaoContas": null,
+                        "stResultadoAvaliacao": "P",
+                        "dsManifestacaoObjeto": "APROVADO COM RESSALVAS",
+                        "dsParecerDeCumprimentoDoObjeto": "<b>PARECER DE AVALIA&Ccedil;&Atilde;O T&Eacute;CNICA DO CUMPRIMENTO DO OBJETO</B><br/><br/>A análise técnica referente ao cumprimento do objeto e objetivos do projeto foram consolidadas no parecer nº 276/2015 e encontra-se anexada ao Salic.<b>ORIENTA&Ccedil;&Otilde;ES</B><br/><br/> <b>CONCLUS&Atilde;O DO PARECER DE AVALIA&Ccedil;&Atilde;O T&Eacute;CNICA QUANTO &Agrave; EXECU&Ccedil;&Atilde;O DO OBJETO E DOS OBJETIVOS DO PROJETO</B><br/><br/>Conclui-se pelo cumprimento parcial do objeto. Registra-se que foram observados de forma satisfatória os requisitos expostos nos incisos de I a III e V a VIII do art. 80 da IN nº 01/2013, no entanto, o projeto não pôde ser executado integralmente em razão da não captação total dos recursos."
+                    }
+                    }
+                }
+            }
+
+
+## Visualizar Parecer - Aba Assinar [GET /avaliacao-resultados/emissao-parecer-rest/idPronac/157779]
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": {
+                    "consolidacaoComprovantes": {
+                        "qtTotalComprovante": 20,
+                        "qtComprovantesValidadosProjeto": 19,
+                        "qtComprovantesRecusadosProjeto": 1,
+                        "qtComprovantesNaoAvaliados": 0,
+                        "vlComprovadoProjeto": 64677.16,
+                        "vlComprovadoValidado": 63632.16,
+                        "vlComprovadoRecusado": 1045,
+                        "vlNaoComprovado": 234.39
+                    },
+                    "projeto": {
+                        "IdPRONAC": 157779,
+                        "AnoProjeto": "12",
+                        "Sequencial": "8843",
+                        "UfProjeto": "PR",
+                        "Area": "1",
+                        "Segmento": "12",
+                        "Mecanismo": "1",
+                        "NomeProjeto": "FESTIVAL CULTURAL DE ARTES  INTEGRADAS - FESTFAG",
+                        "Processo": "01400029889201217",
+                        "CgcCpf": "02203539000173",
+                        "Situacao": "D53",
+                        "DtProtocolo": "2012-10-26 08:14:01",
+                        "DtAnalise": "2012-10-26 08:14:01",
+                        "Modalidade": " ",
+                        "OrgaoOrigem": 262,
+                        "Orgao": 272,
+                        "DtSaida": null,
+                        "DtRetorno": null,
+                        "UnidadeAnalise": " ",
+                        "Analista": " ",
+                        "DtSituacao": "2019-01-14 12:03:27",
+                        "ResumoProjeto": "A Fundação Assis Gurgacz promove um Festival Cultural de Artes Integradas para a 3ª idade, com oficinas de Música, Teatro, Dança e apresentações Artísticas, oportunizando a troca de experiências, o desenvolvimento das habilidades artísticas, estimulando a participação desta camada social em atividades de interação cultural, incluindo cursos e workshops para a 3ª idade e monitores culturais que trabalham com esta faixa etária.",
+                        "ProvidenciaTomada": "Projeto encaminhado para o setor de elabora&ccedil;&atilde;o de portaria",
+                        "Localizacao": " ",
+                        "DtInicioExecucao": "2014-01-07 10:09:09",
+                        "DtFimExecucao": "2014-02-28 00:00:00",
+                        "SolicitadoUfir": 0,
+                        "SolicitadoReal": 187070.04,
+                        "SolicitadoCusteioUfir": 0,
+                        "SolicitadoCusteioReal": 0,
+                        "SolicitadoCapitalUfir": 0,
+                        "SolicitadoCapitalReal": 0,
+                        "Logon": 236,
+                        "idProjeto": 86273
+                    },
+                    "proponente": {
+                        "tipoPessoa": "Pessoa Jur&iacute;dica",
+                        "Nome": "FUNDAÇÃO ASSIS GURGACZ",
+                        "Endereco": "das Torres - Santa Cruz",
+                        "CgcCpf": "02203539000173",
+                        "Uf": "PR",
+                        "Cidade": "Cascavel",
+                        "Esfera": null,
+                        "Responsavel": "salete Gerardi de Lima Chrun",
+                        "Cep": "85806095",
+                        "Administracao": null,
+                        "Utilidade": "2",
+                        "Direito": 35
+                    },
+                    "parecer": {
+                        "idAvaliacaoFinanceira": 30,
+                        "idPronac": 157779,
+                        "dtAvaliacaoFinanceira": "2018-12-27 03:07:43",
+                        "tpAvaliacaoFinanceira": 1,
+                        "siManifestacao": "A",
+                        "dsParecer": "<p>Teste do parecer!</p>",
+                        "idUsuario": 236
+                    },
+                    "objetoParecer": {
+                        "DtEnvioDaPrestacaoContas": null,
+                        "stResultadoAvaliacao": "A",
+                        "dsManifestacaoObjeto": "APROVADO",
+                        "dsParecerDeCumprimentoDoObjeto": "<b>PARECER DE AVALIA&Ccedil;&Atilde;O T&Eacute;CNICA DO CUMPRIMENTO DO OBJETO</B><br/><br/>Na concepção deste relatório, para averiguação do cumprimento do objeto e objetivos do projeto, bem como para aferição do retorno social e dos impactos socioculturais, econômicos e ambientais, tomou-se como base de análise o Plano Básico de Divulgação, o Plano de Distribuição e os documentos/informações apresentados pela entidade proponente visando à prestação de contas da execução. 1)Empregos e qualificações decorrentes do projeto: conforme o Relatório Físico - Anexo IV, foram contratados serviços de profissionais da área de execução do projeto, bem como de serviços de apoio. 2)Medidas preventivas quanto a impactos ambientais: não se aplica ao projeto. 3)Medidas de acessibilidade física: de acordo com o clipping de imprensa, o evento foi realizado no Auditório do Bloco 4 da Faculdade Assis Gurgacz, edificação acessível para portadores de necessidades especiais, conforme demonstrado por fotografias que retratam rampas, elevadores, banheiros adaptados, bebedouros acessíveis e estacionamento com vagas reservadas para portadores de necessidades especiais. Além disso, a própria temática do festival está relacionada à promoção da acessibilidade, ao desenvolver atividades voltadas para a formação cultural e a inclusão de idosos. 4)Medidas de estímulo à fruição e à democratização de acesso do público: conforme o clipping de imprensa, as inscrições para o evento foram gratuitas. 5)Plano de Divulgação: na análise dos documentos encaminhados pela entidade proponente, verifica-se que os itens executados do Plano Básico de Divulgação, com exceção do jornal/encarte de jornal, atenderam ao disposto no art. 47 do Decreto n. 5.761, de 27 de abril de 2006, que define a obrigatoriedade da inserção da logomarca do Ministério da Cultura nos produtos culturais provenientes de recursos incentivados. Observa-se, ainda, que o material atendeu aos requisitos do Manual de Uso das Marcas do Pronac, exibindo a marca da Lei de Incentivo à Cultura e a assinatura do Ministério da Cultura, acompanhada da marca do Governo Federal. 6)Plano de Distribuição: conforme relatório do proponente, o festival beneficiou cerca de 450 pessoas, entre alunos de terceira idade, cuidadores de idosos e representantes de programas sociais de entidades de 37 municípios da região oeste do estado de Paraná. Verificou-se, por meio da análise de registros fotográficos e videográficos, que o projeto alcançou um número representativo de beneficiários e obteve repercussão e alcance social significativos.<b>ORIENTA&Ccedil;&Otilde;ES</B><br/><br/> Não se aplica ao projeto.<b>CONCLUS&Atilde;O DO PARECER DE AVALIA&Ccedil;&Atilde;O T&Eacute;CNICA QUANTO &Agrave; EXECU&Ccedil;&Atilde;O DO OBJETO E DOS OBJETIVOS DO PROJETO</B><br/><br/>Diante do exposto, tendo em vista que o proponente apresentou a prestação de contas final em 04/04/2014, que as contas vinculadas ao projeto encontram-se zeradas e bloqueadas para novos aportes, o que evidencia a finalização da execução do projeto, CONCLUI-SE QUE O OBJETO E OBJETIVOS FORAM ALCANÇADOS, conforme demonstrado na análise dos documentos anexados ao Salic. Assim, sugere-se a remessa dos autos à Coordenação-Geral de Prestação de Contas/DIC/SEFIC/MinC para análise financeira da prestação de contas."
+                    }
+                    }
+                }
+            }
+
+## Visualizar Planilha Projeto - Aba Histórico [GET /avaliacao-resultados/planilha-aprovada/idPronac/134261]
+
 + Response 200 (application/json; charset=utf-8)
 
     + Body 
@@ -600,17 +858,8 @@ HOST: http://localhost
                 }
             }
 
-## Informações do Projeto [/avaliacao-resultados/projeto/idPronac/{idPronac}]
+## Informações do Projeto - Aba Histórico [GET /avaliacao-resultados/projeto/idPronac/134261]
 
-+ Parameters
-    + idPronac (string, required)
-
-### Informações do Projeto [GET]
-
-+ Request Informações do Projeto (application/json)
-    + Attributes
-        + idPronac: 134261
-        
 + Response 200 (application/json; charset=utf-8)
 
     + Body 
@@ -637,6 +886,96 @@ HOST: http://localhost
                     }
                 }
                 }
+
+## Analisar Projeto - Aba Análise [GET /avaliacao-resultados/planilha-aprovada/idPronac/136867]
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body 
+
+            {
+                "0": {
+                    "etapa": {
+                    "5": {
+                        "UF": {
+                        "31": {
+                            "cidade": {
+                            "310620": {
+                                "itens": {
+                                "todos": {
+                                    "200": {
+                                    "item": "INSS",
+                                    "valor": "2386",
+                                    "quantidade": 1,
+                                    "numeroOcorrencias": 6,
+                                    "varlorAprovado": 14316,
+                                    "varlorComprovado": 0,
+                                    "comprovacaoValidada": 0,
+                                    "idPlanilhaAprovacao": 216279,
+                                    "idPlanilhaItens": 200,
+                                    "ComprovacaoValidada": 0,
+                                    "stItemAvaliado": null
+                                    },
+                                    "4380": {
+                                    "item": "FGTS",
+                                    "valor": "955",
+                                    "quantidade": 1,
+                                    "numeroOcorrencias": 6,
+                                    "varlorAprovado": 5730,
+                                    "varlorComprovado": 0,
+                                    "comprovacaoValidada": 0,
+                                    "idPlanilhaAprovacao": 216280,
+                                    "idPlanilhaItens": 4380,
+                                    "ComprovacaoValidada": 0,
+                                    "stItemAvaliado": null
+                                    }
+                                }
+                                },
+                                "cidade": "Belo Horizonte",
+                                "cdCidade": 310620
+                            }
+                            },
+                            "Uf": "MG",
+                            "cdUF": 31
+                        }
+                        },
+                        "etapa": "Recolhimentos",
+                        "cdEtapa": 5
+                    }
+                    },
+                    "produto": "Administração do Projeto",
+                    "cdProduto": 0
+                },
+                }
+
+## Informações do Projeto - Aba Análise [GET /avaliacao-resultados/projeto/idPronac/136867]
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body 
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": {
+                    "nomeProjeto": "Série de Concertos Orquestra Pianíssimo",
+                    "vlTotalComprovar": 278255.09,
+                    "vlAprovado": 349399.78,
+                    "vlComprovado": 71144.69,
+                    "pronac": "113575",
+                    "diligencia": false,
+                    "estado": {
+                        "id": 2,
+                        "idPronac": 136867,
+                        "estadoId": 12,
+                        "orgao": 1,
+                        "grupo": 1,
+                        "idAgente": 236
+                    },
+                    "documento": []
+                    }
+                }
+            }
 
 # Group Prestação de Contas
 
@@ -690,3 +1029,4 @@ HOST: http://localhost
             "nmFornecedor":{"name":"Fornecedor"},"Etapa":{"name":"Etapa"},"vlComprovado":{"name":"Valor Comprovado","class":"right-align"},"PercComprovado":{"name":"% Comprovado","class":"right-align"}},"title":"PROPONENTE FORNECEDOR DE ITEM PARA O PROJETO","tfoot":{"qtComprovacoes":32,"vlComprovado":"4.040,96","tpFormaDePagamento":"Total","nrCNPJCPF":"Total"}},
             "itensOrcamentariosImpugnados":{"lines":[],"cols":{"NomeProjeto":{"name":"Projeto"},"Produto":{"name":"Produto"},"Etapa":{"name":"Etapa"},"Item":{"name":"Item"},"Documento":{"name":"Documento"},"nrComprovante":{"name":"Nr. Comprovante"},"tpFormaDePagamento":{"name":"Forma de Pagamento"},"nrDocumentoDePagamento":{"name":"Documento de Pagamento"},
             "dsJustificativa":{"name":"Justificativa"},"vlComprovado":{"name":"Valor Comprovado","class":"right-align"}},"title":"ITENS OR\u00c7AMENT\u00c1RIOS IMPUGNADOS NA AVALIA\u00c7\u00c3O FINANCEIRA","tfoot":{"NomeProjeto":"Total","vlComprovado":"0,00"}}}
+
