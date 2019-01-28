@@ -45,7 +45,7 @@ export const projetoAnalise = params => api.getRequest(`/avaliacao-resultados/pr
 
 export const consolidacaoAnalise = params => api.getRequest(`/prestacao-contas/visualizar-projeto/dados-projeto?idPronac=${params}`);
 
-export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/tecnicos');
+export const obterDestinatarios = params => api.getRequest(`/avaliacao-resultados/tecnicos/${params}`);
 
 export const alterarEstado = params => api.postRequest('/avaliacao-resultados/estado/', buildData(params));
 
@@ -70,8 +70,8 @@ export const parecerConsolidacao = params => api.getRequest(`/avaliacao-resultad
 
 export const criarParecer = (params) => {
     const parametro = params.idPronac;
-    delete params.idPronac;
     const data = params;
+    delete data.idPronac;
 
     return api.postRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${parametro}`, buildData(data));
 };

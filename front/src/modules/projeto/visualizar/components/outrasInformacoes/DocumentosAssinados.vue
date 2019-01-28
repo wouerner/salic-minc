@@ -9,15 +9,13 @@
             :search="search"
             :pagination.sync="pagination"
             class="elevation-1"
-            rows-per-page-text="Items por Página"
-            no-data-text="Nenhum dado encontrado"
         >
             <template
                 slot="items"
                 slot-scope="props">
                 <td class="text-xs-left">{{ props.item.nomeProjeto }}</td>
                 <td class="text-xs-left">{{ props.item.dsAtoAdministrativo }}</td>
-                <td class="text-xs-right">{{ props.item.dt_criacao }}</td>
+                <td class="text-xs-center pl-5">{{ props.item.dt_criacao | formatarData }}</td>
                 <td class="text-xs-center">
                     <v-tooltip left>
                         <v-btn
@@ -62,12 +60,14 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
+import { utils } from '@/mixins/utils';
 
 export default {
     name: 'DocumentosAssinados',
     components: {
         Carregando,
     },
+    mixins: [utils],
     props: {
         idPronac: {
             type: Number,
@@ -79,7 +79,8 @@ export default {
             loading: true,
             search: '',
             pagination: {
-                sortBy: 'fat',
+                sortBy: 'dt_criacao',
+                descending: true,
             },
             selected: [],
             headers: [

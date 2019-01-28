@@ -10,17 +10,16 @@
             <v-data-table
                 :headers="headers"
                 :items="dados"
+                :pagination.sync="pagination"
                 :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
                 class="elevation-1 container-fluid mb-2"
-                rows-per-page-text="Items por Página"
-                no-data-text="Nenhum dado encontrado"
             >
                 <template
                     slot="items"
                     slot-scope="props">
-                    <td class="text-xs-right">{{ props.item.DtPedido | formatarData }}</td>
-                    <td class="text-xs-right">{{ props.item.DtInicio | formatarData }}</td>
-                    <td class="text-xs-right">{{ props.item.DtFinal | formatarData }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.DtPedido | formatarData }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.DtInicio | formatarData }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.DtFinal | formatarData }}</td>
                     <td
                         class="text-xs-left"
                         v-html="props.item.Observacao"/>
@@ -40,22 +39,15 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import moment from 'moment';
 import Carregando from '@/components/CarregandoVuetify';
+import { utils } from '@/mixins/utils';
 
 export default {
     name: 'PedidoProrrogacao',
     components: {
         Carregando,
     },
-    filters: {
-        formatarData(date) {
-            if (date.length === 0) {
-                return '-';
-            }
-            return moment(date).format('DD/MM/YYYY');
-        },
-    },
+    mixins: [utils],
     props: {
         idPronac: {
             type: Number,
@@ -68,7 +60,8 @@ export default {
             search: '',
             pagination: {
                 rowsPerPage: 10,
-                sortBy: 'fat',
+                sortBy: 'DtInicio',
+                descending: true,
             },
             selected: [],
             headers: [

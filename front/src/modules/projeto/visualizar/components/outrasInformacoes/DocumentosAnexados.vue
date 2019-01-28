@@ -12,15 +12,13 @@
                 :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
                 item-key="id"
                 class="elevation-1"
-                rows-per-page-text="Items por Página"
-                no-data-text="Nenhum dado encontrado"
             >
                 <template
                     slot="items"
                     slot-scope="props">
                     <td class="text-xs-right">{{ props.item.id + 1 }}</td>
                     <td class="text-xs-left">{{ props.item.Anexado }}</td>
-                    <td class="text-xs-right">{{ props.item.Data | formatarData }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.Data | formatarData }}</td>
                     <td class="text-xs-left">{{ props.item.Descricao }}</td>
                     <td class="text-xs-left">
                         <v-btn
@@ -51,21 +49,14 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
-import moment from 'moment';
+import { utils } from '@/mixins/utils';
 
 export default {
     name: 'DocumentosAnexados',
     components: {
         Carregando,
     },
-    filters: {
-        formatarData(date) {
-            if (date.length === 0) {
-                return '-';
-            }
-            return moment(date).format('DD/MM/YYYY');
-        },
-    },
+    mixins: [utils],
     props: {
         idPronac: {
             type: Number,
@@ -77,7 +68,8 @@ export default {
             search: '',
             pagination: {
                 rowsPerPage: 10,
-                sortBy: 'fat',
+                sortBy: 'Data',
+                descending: true,
             },
             indexDocumentosAnexados: 0,
             selected: [],
@@ -95,7 +87,7 @@ export default {
                     value: 'Anexado',
                 },
                 {
-                    align: 'left',
+                    align: 'center',
                     text: 'DATA',
                     value: 'Data',
                 },

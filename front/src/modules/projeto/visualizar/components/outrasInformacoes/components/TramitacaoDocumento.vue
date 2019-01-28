@@ -5,18 +5,17 @@
                 <h6>Tramita&ccedil;&atilde;o Documento</h6>
             </v-card-title>
             <v-data-table
+                :pagination.sync="pagination"
                 :headers="headers"
                 :items="dados"
                 class="elevation-1 container-fluid mb-2"
-                rows-per-page-text="Items por Página"
-                no-data-text="Nenhum dado encontrado"
             >
                 <template
                     slot="items"
                     slot-scope="props">
                     <td class="text-xs-left">{{ props.item.dsTipoDocumento }}</td>
-                    <td class="text-xs-right">{{ props.item.dtDocumento }}</td>
-                    <td class="text-xs-right">{{ props.item.dtAnexacao }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.dtDocumento | formatarData }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.dtAnexacao | formatarData }}</td>
                     <td class="text-xs-left">
                         <a
                             :href="
@@ -44,9 +43,11 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { utils } from '@/mixins/utils';
 
 export default {
     name: 'TramitacaoDocumento',
+    mixins: [utils],
     props: {
         idPronac: {
             type: String,
@@ -57,7 +58,8 @@ export default {
         return {
             search: '',
             pagination: {
-                sortBy: 'fat',
+                sortBy: 'dtDocumento',
+                descending: true,
             },
             selected: [],
             headers: [

@@ -10,13 +10,11 @@
                 :pagination.sync="pagination"
                 :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
                 class="elevation-1 container-fluid"
-                rows-per-page-text="Items por Página"
-                no-data-text="Nenhum dado encontrado"
             >
                 <template
                     slot="items"
                     slot-scope="props">
-                    <td class="text-xs-right">{{ props.item.DtSituacao }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.DtSituacao | formatarData }}</td>
                     <td class="text-xs-right">{{ props.item.Situacao }}</td>
                     <td
                         class="text-xs-left"
@@ -51,6 +49,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
 import cnpjFilter from '@/filters/cnpj';
+import { utils } from '@/mixins/utils';
 
 export default {
     components: {
@@ -59,19 +58,21 @@ export default {
     filters: {
         cnpjFilter,
     },
+    mixins: [utils],
     data() {
         return {
             search: '',
             pagination: {
                 rowsPerPage: 10,
-                sortBy: 'fat',
+                sortBy: 'DtSituacao',
+                descending: true,
             },
             selected: [],
             loading: true,
             headers: [
                 {
                     text: 'DT. SITUAÇÃO',
-                    align: 'right',
+                    align: 'center',
                     value: 'DtSituacao',
                 },
                 {

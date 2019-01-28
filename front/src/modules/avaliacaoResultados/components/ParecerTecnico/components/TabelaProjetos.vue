@@ -49,7 +49,7 @@
                             :is="c"
                             :link-direto-assinatura="true"
                             :documento="props.item.idDocumentoAssinatura"
-                            :id-pronac="props.item.IdPRONAC"
+                            :id-pronac="props.item.IdPRONAC.toString()"
                             :pronac="props.item.PRONAC"
                             :nome-projeto="props.item.NomeProjeto"
                             :atual="componentes.atual"

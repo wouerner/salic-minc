@@ -53,8 +53,8 @@ export const mockAvaliacaDesempenho = ({ commit }) => {
     commit(types.MOCK_AVALIACAO_RESULTADOS);
 };
 
-export const obterDestinatarios = ({ commit }) => {
-    avaliacaoResultadosHelperAPI.obterDestinatarios()
+export const obterDestinatarios = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.obterDestinatarios(params)
         .then((response) => {
             const { data } = response;
             const destinatariosEncaminhamento = data.data;
@@ -66,7 +66,7 @@ export const obterDadosTabelaTecnico = ({ commit }, params) => {
     commit(types.PROJETOS_AVALIACAO_TECNICA, {});
     avaliacaoResultadosHelperAPI.obterDadosTabelaTecnico(params)
         .then((response) => {
-            const data = response.data.data;
+            const { data } = response.data;
             data.items.forEach((a, index) => {
                 avaliacaoResultadosHelperAPI.listarDiligencias(a.idPronac).then(
                     (resp) => {

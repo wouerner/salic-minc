@@ -10,8 +10,6 @@
                 :pagination.sync="pagination"
                 :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
                 class="elevation-1 container-fluid"
-                rows-per-page-text="Items por Página"
-                no-data-text="Nenhum dado encontrado"
             >
                 <template
                     slot="items"
@@ -21,8 +19,8 @@
                     <td
                         class="text-xs-left"
                         v-html="props.item.Observacao"/>
-                    <td class="text-xs-right">{{ props.item.DtEnvio }}</td>
-                    <td class="text-xs-right">{{ props.item.DtRetorno }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.DtEnvio | formatarData }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.DtRetorno | formatarData }}</td>
                     <td class="text-xs-right">{{ props.item.qtDias }}</td>
                 </template>
                 <template
@@ -37,18 +35,21 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
+import { utils } from '@/mixins/utils';
 
 export default {
     name: 'HistoricoEncaminhamento',
     components: {
         Carregando,
     },
+    mixins: [utils],
     data() {
         return {
             search: '',
             pagination: {
                 rowsPerPage: 10,
-                sortBy: 'fat',
+                sortBy: 'DtEnvio',
+                descending: true,
             },
             selected: [],
             loading: true,
