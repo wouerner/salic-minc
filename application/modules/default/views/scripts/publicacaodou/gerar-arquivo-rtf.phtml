@@ -64,7 +64,7 @@ p.saltoLinha_primeira {
 $relatorio .= '<body>
 
 <div id="Texto" class="formatacao">
-    <p class="TituloSecundario">##ATO PORTARIA N.&ordm; ' . $this->portaria[0]->PortariaAprovacao . ', DE ' . $dia . ' DE ' . strtoupper($this->mes($mes)) . ' DE ' . $ano . '</p>';
+    <p class="TituloSecundario">##ATO PORTARIA N.&ordm; ' . $this->PortariaAprovacao . ', DE ' . $dia . ' DE ' . strtoupper($this->mes($mes)) . ' DE ' . $ano . '</p>';
 
 
 if($this->tipoPublicacao == 'prorrogacao') {
@@ -488,6 +488,6 @@ $relatorio .= '</div></body>
 </html>';
 //echo $relatorio;
 //die;
-$rtf = new PDF($relatorio, 'rtf', 'portaria','portaria'.$this->portaria[0]->PortariaAprovacao);
+$rtf = new PDF($relatorio, 'rtf', 'portaria','portaria'.$this->PortariaAprovacao);
 echo $rtf->gerarRelatorio();
 ?>
