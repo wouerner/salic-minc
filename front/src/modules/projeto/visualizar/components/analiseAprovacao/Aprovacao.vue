@@ -117,13 +117,7 @@
                                             </v-flex>
                                             <v-flex>
                                                 <p><b>Vl. Aprovação</b></p>
-                                                <b>
-                                                    <p>
-                                                        {{
-                                                            converterParaMoedaPontuado(dado.AprovadoReal)
-                                                        }}
-                                                    </p>
-                                                </b>
+                                                <p> R$ {{ dado.AprovadoReal | filtroFormatarParaReal }}</p>
                                             </v-flex>
                                         </v-layout>
                                     </div>
