@@ -866,13 +866,14 @@ class PublicacaoDouController extends MinC_Controller_Action_Abstract
 
         $Orgaos = new Orgaos();
         $orgaoSuperior = $Orgaos->codigoOrgaoSuperior($orgaoAtivo)->current();
-
+// xd($this->view->tipoPublicacao);
         if ($this->view->tipoPublicacao == 'readequacao') {
             $portaria = PublicacaoDouDAO::ProjetoPortariaGerarRTFReadequacoes($_POST['nrportaria'], $orgaoSuperior);
         } else {
             $portaria = PublicacaoDouDAO::ProjetoPortariaGerarRTF($_POST['nrportaria'], $orgaoSuperior);
         }
         $this->view->portaria = $portaria;
+        // xd($portaria);
     }
 
     public function imprimirTabelaPortariaAction()
