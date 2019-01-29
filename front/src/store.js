@@ -12,6 +12,7 @@ import autenticacao from './modules/autenticacao/store';
 import noticias from './modules/noticias/store';
 import dateFilter from './filters/date';
 import dadosBancarios from './modules/dadosBancarios/store';
+import execucao from './modules/execucao/store';
 
 Vue.use(Vuex);
 Vue.filter('date', dateFilter);
@@ -30,6 +31,7 @@ export default new Vuex.Store({
         autenticacao,
         noticias,
         dadosBancarios,
+        execucao,
     },
     getters: {
         route: state => state.route,
