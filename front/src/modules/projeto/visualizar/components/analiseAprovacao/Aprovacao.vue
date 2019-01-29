@@ -150,7 +150,7 @@ export default {
     computed: {
         ...mapGetters({
             dadosProjeto: 'projeto/projeto',
-            dados: 'projeto/aprovacao',
+            dados: 'analise/aprovacao',
         }),
     },
     watch: {
@@ -165,7 +165,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            buscarAprovacao: 'projeto/buscarAprovacao',
+            buscarAprovacao: 'analise/buscarAprovacao',
         }),
     },
 };
