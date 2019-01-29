@@ -37,5 +37,4 @@ export const extratosBancarios = state => state.extratosBancarios;
 export const extratosBancariosConsolidado = state => state.extratosBancariosConsolidado;
 export const captacao = state => state.captacao;
 export const devolucoesIncentivador = state => state.devolucoesIncentivador;
-export const aprovacao = state => state.aprovacao;
 export const recurso = state => state.recurso;
