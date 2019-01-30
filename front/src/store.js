@@ -11,6 +11,7 @@ import proposta from './modules/proposta/store';
 import autenticacao from './modules/autenticacao/store';
 import noticias from './modules/noticias/store';
 import dateFilter from './filters/date';
+import analise from './modules/analise/store';
 
 Vue.use(Vuex);
 Vue.filter('date', dateFilter);
@@ -28,6 +29,7 @@ export default new Vuex.Store({
         proposta,
         autenticacao,
         noticias,
+        analise,
     },
     getters: {
         route: state => state.route,
