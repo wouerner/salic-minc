@@ -11,7 +11,7 @@ axios.interceptors.request.use((config) => {
     return conf;
 }, err => Promise.reject(err));
 
-const API_ENDPOINT = 'http://localhost:4000';
+var API_ENDPOINT = process.env.API === 'test' ? test.API_ENDPOINT : dev.API_ENDPOINT;
 
 const instance = axios.create({
   baseURL: API_ENDPOINT,
