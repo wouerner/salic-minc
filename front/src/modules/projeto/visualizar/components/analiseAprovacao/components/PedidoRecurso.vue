@@ -311,21 +311,7 @@
                                             <p>{{ dados.projetosENRecurso.artigo }}</p>
                                         </v-flex>
                                     </v-layout>
-                                    <!--resumo do parecer-->
-                                    <!--<v-layout-->
-                                    <!--v-if="dados.dadosReconsideracao.siRecurso === '9 '"-->
-                                    <!--justify-space-around-->
-                                    <!--row-->
-                                    <!--wrap>-->
-                                    <!--<v-flex-->
-                                    <!--v-for="(dadosParecer, index) in dados.ParecerReconsideracao"-->
-                                    <!--:key="index">-->
-                                    <!--<b>Resumo do Parecer</b>-->
-                                    <!--<p v-html="dadosParecer.ResumoParecer"/>-->
-                                    <!--</v-flex>-->
-                                    <!--</v-layout>-->
                                 </div>
-
                             </v-container>
                         </v-card-text>
                     </v-card>
