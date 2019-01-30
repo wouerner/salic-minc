@@ -56,7 +56,6 @@
                     </v-card>
                 </v-expansion-panel-content>
             </v-expansion-panel>
-
             <v-expansion-panel
                 v-else-if="dados.dadosReconsideracao"
                 popout
@@ -141,6 +140,7 @@
                                         </v-flex>
                                         <v-expansion-panel
                                             v-for="(dadosprodutos, index) in dados.produtosReconsideracao"
+                                            :key="index"
                                             popout
                                             focusable>
                                             <v-expansion-panel-content
@@ -168,7 +168,7 @@
                                                                         <v-divider class="pb-2"/>
                                                                     </v-flex>
                                                                     <v-flex>
-                                                                        <p><b>Enquadramento Favorável? *</b></p>
+                                                                        <b>Enquadramento Favorável? *</b>
                                                                         <p>
                                                                             {{
                                                                                 (dadosprodutos.ParecerFavoravel === 0) ?
@@ -178,8 +178,8 @@
                                                                         </p>
                                                                     </v-flex>
                                                                     <v-flex>
-                                                                        <p><b>Lei 8.313/91 alterada pela Lei 9.874/1999
-                                                                        *</b></p>
+                                                                        <b>Lei 8.313/91 alterada pela Lei 9.874/1999
+                                                                        *</b>
                                                                         <p>
                                                                             {{ (dadosprodutos.Lei8313 === 1) ? 'Sim' :
                                                                             'Não'
@@ -187,45 +187,78 @@
                                                                         </p>
                                                                     </v-flex>
                                                                     <v-flex>
-                                                                        <p><b>Artigo 3°</b></p>
+                                                                        <b>Artigo 3°</b>
                                                                         <p>
-                                                                            {{ (dadosprodutos.Lei5761 === 1) ? 'Sim' :
+                                                                            {{ (dadosprodutos.Artigo3 === 1) ? 'Sim' :
                                                                             'Não'
                                                                             }}
                                                                         </p>
                                                                     </v-flex>
                                                                     <v-flex>
-                                                                        <p><b>Inciso</b></p>
-                                                                        <p/>
+                                                                        <b>Inciso</b>
+                                                                        <p>Inciso {{ dadosprodutos.IncisoArtigo3 }}</p>
                                                                     </v-flex>
                                                                     <v-flex>
-                                                                        <p><b>Alinea Artigo 3</b></p>
-                                                                        <p/>
+                                                                        <b>Alinea Artigo 3</b>
+                                                                        <p>{{ dadosprodutos.AlineaArtigo3 }}</p>
                                                                     </v-flex>
                                                                     <v-flex>
-                                                                        <p><b>Artigo Enquadramento</b></p>
-                                                                        <p/>
+                                                                        <b>Artigo Enquadramento</b>
+                                                                        <p>
+                                                                            {{ (dadosprodutos.Artigo18 === 1) ? 'Artigo 18' : 'Artigo  26' }}
+                                                                        </p>
                                                                     </v-flex>
                                                                     <v-flex>
-                                                                        <p><b>Alínea Artigo 18</b></p>
-                                                                        <p/>
+                                                                        <b>Alínea Artigo 18</b>
+                                                                        <p>{{ dadosprodutos.AlineaArtigo18 }}</p>
+                                                                    </v-flex>
+                                                                </v-layout>
+                                                                <v-layout
+                                                                    justify-space-around
+                                                                    row
+                                                                    wrap>
+                                                                    <v-flex>
+                                                                        <b>Decreto 5761/2006 *</b>
+                                                                        <p>{{ (dadosprodutos.Lei5761 === 1) ? 'Sim' : 'Não' }}</p>
                                                                     </v-flex>
                                                                     <v-flex>
-                                                                        <p><b>Decreto 5761/2006 *</b></p>
-                                                                        <p/>
+                                                                        <b>Artigo 27°</b>
+                                                                        <p>{{ (dadosprodutos.Artigo27 === 1) ? 'Sim' : 'Não' }}</p>
                                                                     </v-flex>
                                                                     <v-flex>
-                                                                        <p><b>Artigo 27°</b></p>
-                                                                        <p/>
+                                                                        <b>Inciso(s)</b>
+                                                                        <v-checkbox
+                                                                            v-model="dadosprodutos.IncisoArtigo27_I"
+                                                                            label="I"
+                                                                            value
+                                                                            disabled
+                                                                        />
+                                                                        <v-checkbox
+                                                                            v-model="dadosprodutos.IncisoArtigo27_II"
+                                                                            label="II"
+                                                                            value
+                                                                            disabled
+                                                                        />
+                                                                        <v-checkbox
+                                                                            v-model="dadosprodutos.IncisoArtigo27_III"
+                                                                            label="III"
+                                                                            value
+                                                                            disabled
+                                                                        />
+                                                                        <v-checkbox
+                                                                            v-model="dadosprodutos.IncisoArtigo27_IV"
+                                                                            label="IV"
+                                                                            value
+                                                                            disabled
+                                                                        />
                                                                     </v-flex>
+                                                                </v-layout>
+                                                                <v-layout
+                                                                    justify-space-around
+                                                                    row
+                                                                    wrap>
                                                                     <v-flex>
-                                                                        <p><b>Inciso(s)</b></p>
-                                                                        <p/>
-                                                                    </v-flex>
-                                                                    <br>
-                                                                    <br>
-                                                                    <v-flex>
-                                                                        <p><b>Justificativa *</b></p>
+                                                                        <b>Justificativa *</b>
                                                                         <span v-html="dadosprodutos.ParecerDeConteudo"/>
                                                                     </v-flex>
                                                                 </v-layout>
