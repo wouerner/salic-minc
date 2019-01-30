@@ -1,11 +1,8 @@
 <template>
     <div>
-        <div v-if="loading">
-            <Carregando :text="'Recurso'"/>
-        </div>
         <div>
             <v-expansion-panel
-                v-if="dados.desistenciaReconsideracao"
+                v-if="dados.desistenciaRecurso"
                 popout
                 focusable>
                 <v-expansion-panel-content class="elevation-1">
@@ -13,7 +10,7 @@
                         slot="header"
                         class="green--text">
                         <v-icon class="mr-3 green--text">perm_media</v-icon>
-                        <span v-html="dados.dadosReconsideracao.tpRecursoDesc"/>
+                        <span>Pedido de Recurso</span>
                     </v-layout>
                     <v-card>
                         <v-card-text>
@@ -31,7 +28,7 @@
                                         </v-flex>
                                         <v-flex>
                                             <b>Recurso</b><br>
-                                            <span v-html="dados.dadosReconsideracao.dsSolicitacaoRecurso"/>
+                                            <span v-html="dados.dadosRecurso.dsSolicitacaoRecurso"/>
                                         </v-flex>
                                     </v-layout>
                                 </div>
@@ -47,7 +44,7 @@
                                             <b>Dt. Desistência do Recurso</b>
                                         </v-flex>
                                         <v-flex>
-                                            <p>{{ dados.dadosReconsideracao.dtSolicitacaoRecurso | formatarData }}</p>
+                                            <p>{{ dados.dadosRecurso.dtSolicitacaoRecurso | formatarData }}</p>
                                         </v-flex>
                                     </v-layout>
                                 </div>
@@ -57,7 +54,7 @@
                 </v-expansion-panel-content>
             </v-expansion-panel>
             <v-expansion-panel
-                v-else-if="dados.dadosReconsideracao"
+                v-else-if="dados.dadosRecurso"
                 popout
                 focusable>
                 <v-expansion-panel-content class="elevation-1">
@@ -65,7 +62,7 @@
                         slot="header"
                         class="green--text">
                         <v-icon class="mr-3 green--text">perm_media</v-icon>
-                        <span v-html="dados.dadosReconsideracao.tpRecursoDesc"/>
+                        <span>Pedido de Recurso</span>
                     </v-layout>
                     <v-card>
                         <v-card-text>
@@ -78,28 +75,28 @@
                                     <v-flex
                                         lg12
                                         dark>
-                                        <b><h4>DADOS DO RECURSO</h4></b>
+                                        <b><h4>AVALIAÇÃO DO COORDENADOR</h4></b>
                                         <v-divider class="pb-2"/>
                                     </v-flex>
                                     <v-flex>
                                         <b>Recurso</b><br>
-                                        <span v-html="dados.dadosReconsideracao.dsSolicitacaoRecurso"/>
+                                        <span v-html="dados.dadosRecurso.dsSolicitacaoRecurso"/>
                                     </v-flex>
                                     <v-flex>
                                         <b>Tipo do Recurso</b><br>
-                                        <span v-html="dados.dadosReconsideracao.tpRecursoDesc"/>
+                                        <span v-html="dados.dadosRecurso.tpRecursoDesc"/>
                                     </v-flex>
                                     <v-flex>
                                         <b>Tipo da Solicitação</b>
-                                        <p v-html="dados.dadosReconsideracao.tpSolicitacaoDesc"/>
+                                        <p v-html="dados.dadosRecurso.tpSolicitacaoDesc"/>
                                     </v-flex>
                                     <v-flex>
                                         <b>Status do Recurso</b>
-                                        <p>{{ dados.dadosReconsideracao.siRecursoDesc }}</p>
+                                        <p>{{ dados.dadosRecurso.siRecursoDesc }}</p>
                                     </v-flex>
                                     <v-flex>
                                         <b>Dt. Recurso</b>
-                                        <p>{{ dados.dadosReconsideracao.dtSolicitacaoRecurso | formatarData }}</p>
+                                        <p>{{ dados.dadosRecurso.dtSolicitacaoRecurso | formatarData }}</p>
                                     </v-flex>
                                 </v-layout>
                                 <div>
@@ -108,20 +105,23 @@
                                         row
                                         wrap>
                                         <v-flex>
-                                            <b>Avaliação do Pedido</b>
-                                            <p v-html="dados.dadosReconsideracao.dsAvaliacao"/>
+                                            <b>Descrição</b>
+                                            <p v-html="dados.dadosRecurso.dsAvaliacao"/>
                                         </v-flex>
                                         <v-flex>
                                             <b>Dt. Avaliação</b>
-                                            <p>{{ dados.dadosReconsideracao.dtAvaliacao | formatarData }}</p>
+                                            <p>{{ dados.dadosRecurso.dtAvaliacao | formatarData }}</p>
+                                        </v-flex>
+                                        <v-flex>
+                                            <b>Situação </b>
+                                            <p>{{ (dados.dadosRecurso.stAtendimento === 'I') ? 'Indeferido' : 'Deferido' }}</p>
                                         </v-flex>
                                     </v-layout>
                                 </div>
+
+
                                 <div>
                                     <v-layout
-                                        v-if="dados.dadosReconsideracao.tpSolicitacao === 'PI' ||
-                                            dados.dadosReconsideracao.tpSolicitacao === 'EO' ||
-                                        dados.dadosReconsideracao.tpSolicitacao === 'OR'"
                                         justify-space-around
                                         row
                                         wrap>
@@ -139,7 +139,7 @@
                                             <h6>Produtos: </h6>
                                         </v-flex>
                                         <v-expansion-panel
-                                            v-for="(dadosprodutos, index) in dados.produtosReconsideracao"
+                                            v-for="(dadosprodutos, index) in dados.produtosRecurso"
                                             :key="index"
                                             popout
                                             focusable>
@@ -280,9 +280,9 @@
                                             <b><h4>ENQUADRAMENTO</h4></b>
                                             <v-divider class="pb-2"/>
                                         </v-flex>
-                                        <v-flex v-if="Object.keys(dados.ParecerReconsideracao).length > 0">
+                                        <v-flex v-if="Object.keys(dados.ParecerRecurso).length > 0">
                                             <v-flex
-                                                v-for="(dadosParecer, index) in dados.ParecerReconsideracao"
+                                                v-for="(dadosParecer, index) in dados.ParecerRecurso"
                                                 :key="index">
                                                 <v-flex>
                                                     <b>Parecer Favorável?</b>
@@ -300,30 +300,30 @@
                                         </v-flex>
                                         <v-flex>
                                             <b>Área</b>
-                                            <p v-html="dados.projetosENReconsideracao.area"/>
+                                            <p v-html="dados.projetosENRecurso.area"/>
                                         </v-flex>
                                         <v-flex>
                                             <b>Segmento</b>
-                                            <p v-html="dados.projetosENReconsideracao.segmento"/>
+                                            <p v-html="dados.projetosENRecurso.segmento"/>
                                         </v-flex>
                                         <v-flex>
                                             <b>Enquadramento</b>
-                                            <p>{{ dados.projetosENReconsideracao.artigo }}</p>
+                                            <p>{{ dados.projetosENRecurso.artigo }}</p>
                                         </v-flex>
                                     </v-layout>
                                     <!--resumo do parecer-->
-                                    <v-layout
-                                        v-if="dados.dadosReconsideracao.siRecurso === '9 '"
-                                        justify-space-around
-                                        row
-                                        wrap>
-                                        <v-flex
-                                            v-for="(dadosParecer, index) in dados.ParecerReconsideracao"
-                                            :key="index">
-                                            <b>Resumo do Parecer</b>
-                                            <p v-html="dadosParecer.ResumoParecer"/>
-                                        </v-flex>
-                                    </v-layout>
+                                    <!--<v-layout-->
+                                    <!--v-if="dados.dadosReconsideracao.siRecurso === '9 '"-->
+                                    <!--justify-space-around-->
+                                    <!--row-->
+                                    <!--wrap>-->
+                                    <!--<v-flex-->
+                                    <!--v-for="(dadosParecer, index) in dados.ParecerReconsideracao"-->
+                                    <!--:key="index">-->
+                                    <!--<b>Resumo do Parecer</b>-->
+                                    <!--<p v-html="dadosParecer.ResumoParecer"/>-->
+                                    <!--</v-flex>-->
+                                    <!--</v-layout>-->
                                 </div>
 
                             </v-container>
@@ -331,7 +331,6 @@
                     </v-card>
                 </v-expansion-panel-content>
             </v-expansion-panel>
-            <PedidoRecurso/>
         </div>
     </div>
 </template>
@@ -339,21 +338,14 @@
 
 import { mapActions, mapGetters } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
-import PedidoRecurso from './components/PedidoRecurso';
 import { utils } from '@/mixins/utils';
 
 export default {
-    name: 'Recurso',
+    name: 'PedidoRecurso',
     components: {
         Carregando,
-        PedidoRecurso,
     },
     mixins: [utils],
-    data() {
-        return {
-            loading: true,
-        };
-    },
     computed: {
         ...mapGetters({
             dadosProjeto: 'projeto/projeto',
@@ -363,9 +355,6 @@ export default {
     watch: {
         dadosProjeto(value) {
             this.buscarRecurso(value.idPronac);
-        },
-        dados() {
-            this.loading = false;
         },
     },
     mounted() {
