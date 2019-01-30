@@ -289,7 +289,7 @@ if($this->tipoPublicacao == 'readequacao') {
     
 } else {
     
-    // inï¿½cio foreach Artigo 18
+    // Inicio foreach Artigo 18
     $existeArt18 = false;
     $areaprojetoAnterior = 0;
     $areaprojetoAnterior2 = 0;
@@ -306,8 +306,8 @@ if($this->tipoPublicacao == 'readequacao') {
         $iniciocaptacao        = $portaria->DataInicio;
         $fimcaptacao           = $portaria->DataFim;
         $resumoprojeto         = $portaria->ResumoProjeto;
-        $areaprojeto           = strtoupper(strtr($portaria->Area ,"&aacute;&eacute;&iacute;&oacute;&uacute;&acirc;&ecirc;&ocirc;&atilde;&otilde;&agrave;&egrave;&igrave;&ograve;&ugrave;&ccedil;","&Aacute;&Eacute;&Iacute;&Oacute;&Uacute;&Acirc;&Ecirc;&Ocirc;&Atilde;&Otilde;&Agrave;&Egrave;&Igrave;&Ograve;&Ugrave;&Ccedil;"));
-        $areaprojetoCodigo     = strtoupper(strtr($portaria->AreaCodigo ,"&aacute;&eacute;&iacute;&oacute;&uacute;&acirc;&ecirc;&ocirc;&atilde;&otilde;&agrave;&egrave;&igrave;&ograve;&ugrave;&ccedil;","&Aacute;&Eacute;&Iacute;&Oacute;&Uacute;&Acirc;&Ecirc;&Ocirc;&Atilde;&Otilde;&Agrave;&Egrave;&Igrave;&Ograve;&Ugrave;&Ccedil;"));
+        $areaprojeto           = strtoupper(strtr($portaria->Area ,"áéíóúâêôãõàèìòùç","ÁÉÍÓÚÂÊÔÃÕÀÈÌÒÙÇ"));
+        $areaprojetoCodigo     = strtoupper(strtr($portaria->AreaCodigo ,"áéíóúâêôãõàèìòùç","ÁÉÍÓÚÂÊÔÃÕÀÈÌÒÙÇ"));
         $situacaoprojeto       = $portaria->Situacao;
         $artigo                = $portaria->Artigo;
         $PortariaAprovacao     = $portaria->PortariaAprovacao;
@@ -387,7 +387,7 @@ if($this->tipoPublicacao == 'readequacao') {
         } // fecha if
         $areaprojetoAnterior = $areaprojetoCodigo;
     } // fim foreach Artigo 18
-    // inï¿½cio foreach Artigo 26
+    // Inicio foreach Artigo 26
     $existeArt26 = false;
     foreach ($this->portaria as $portaria)
     {
@@ -402,8 +402,8 @@ if($this->tipoPublicacao == 'readequacao') {
         $iniciocaptacao = $portaria->DataInicio;
         $fimcaptacao = $portaria->DataFim;
         $resumoprojeto = $portaria->ResumoProjeto;
-        $areaprojeto = strtoupper(strtr($portaria->Area ,"&aacute;&eacute;&iacute;&oacute;&uacute;&acirc;&ecirc;&ocirc;&atilde;&otilde;&agrave;&egrave;&igrave;&ograve;&ugrave;&ccedil;","&Aacute;&Eacute;&Iacute;&Oacute;&Uacute;&Acirc;&Ecirc;&Ocirc;&Atilde;&Otilde;&Agrave;&Egrave;&Igrave;&Ograve;&Ugrave;&Ccedil;"));
-        $areaprojetoCodigo = strtoupper(strtr($portaria->AreaCodigo ,"&aacute;&eacute;&iacute;&oacute;&uacute;&acirc;&ecirc;&ocirc;&atilde;&otilde;&agrave;&egrave;&igrave;&ograve;&ugrave;&ccedil;","&Aacute;&Eacute;&Iacute;&Oacute;&Uacute;&Acirc;&Ecirc;&Ocirc;&Atilde;&Otilde;&Agrave;&Egrave;&Igrave;&Ograve;&Ugrave;&Ccedil;"));
+        $areaprojeto = strtoupper(strtr($portaria->Area ,"áéíóúâêôãõàèìòùç","ÁÉÍÓÚÂÊÔÃÕÀÈÌÒÙÇ"));
+        $areaprojetoCodigo = strtoupper(strtr($portaria->AreaCodigo ,"áéíóúâêôãõàèìòùç","ÁÉÍÓÚÂÊÔÃÕÀÈÌÒÙÇ"));
         $situacaoprojeto = $portaria->Situacao;
         $artigo = $portaria->Artigo;
         $PortariaAprovacao = $portaria->PortariaAprovacao;
