@@ -5,24 +5,23 @@ HOST: http://localhost:4000
 
 # Group Autenticação
 
-## Login [/autenticacao/index/login] 
+## Login [/autenticacao/index/login2] 
 
 ### Login [POST]
 
 + Request (multipart/form-data; charset=utf-8)
 
     + Attributes 
-        + from (nullable)
         + Login: 239.691.561-49 (string, required)
         + Senha: 123456 (number, required)
 
 + Response 200 (application/json; charset=utf-8)
 
     + Attributes (object)
-        + code: 200 (string)
         + status: 1 (number)
         + msg: Login realizado com sucesso! (string)
-        + redirect: /principal (string)
+        + redirect: `/principal` (string)
+        + token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NDg5NTMxMjgsImlzcyI6bnVsbCwiZXhwIjoxNTQ5OTUzMTI4LCJuYmYiOjE1NDg5NTMxMjcsImRhdGEiOnsiYXV0aCI6eyJ1c3VfY29kaWdvIjoyMzYsInVzdV9pZGVudGlmaWNhY2FvIjoiMjM5NjkxNTYxNDkgICAgICJ9LCJncnVwb0F0aXZvIjo5M319.6HPj8rB9OH0MPQNHrLyz_ZUzcwo3GS8FQEqRJsK_xC8 (string)
 
 ## Trocar Perfil [/autenticacao/perfil/alterarperfil]
 
@@ -1030,6 +1029,116 @@ HOST: http://localhost:4000
                     ]
                 }
                 }
+
+## LAUDO FINAL [/avaliacao-resultados/laudo/index?estadoId={estadoId}]
+
++ Parameters
+    + estadoId: 10 (string)
+
+### Laudo Final [GET]
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": [
+                    {
+                        "IdPronac": 149520,
+                        "NomeProjeto": "Formação de Novos Escritores Infantis - Write in Canela",
+                        "PRONAC": "120718",
+                        "idAvaliacaoFinanceira": 34,
+                        "idPronac": 149520,
+                        "dtAvaliacaoFinanceira": "2019-01-31 05:45:15",
+                        "tpAvaliacaoFinanceira": 1,
+                        "siManifestacao": "A",
+                        "dsParecer": "<p>dA  X XA S CSA CSAC </p>",
+                        "idUsuario": 236,
+                        "dsResutaldoAvaliacaoObjeto": "A",
+                        "usu_nome": "Rômulo Menhô Barbosa",
+                        "usu_codigo": 236
+                    }
+                    ]
+                }
+            }
+
++ Request
+    + Parameters
+        + estadoId: 12 (string)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": [
+                        {
+                            "IdPronac": 153408,
+                            "NomeProjeto": "São Marcos - espetáculos culturais",
+                            "PRONAC": "124545",
+                            "idAvaliacaoFinanceira": 3,
+                            "idPronac": 153408,
+                            "dtAvaliacaoFinanceira": "2018-11-29 11:16:11",
+                            "tpAvaliacaoFinanceira": 1,
+                            "siManifestacao": "R",
+                            "dsParecer": "123 123 123 ",
+                            "idUsuario": 236,
+                            "dsResutaldoAvaliacaoObjeto": "R",
+                            "usu_nome": "Rômulo Menhô Barbosa",
+                            "usu_codigo": 236
+                        },
+                        {
+                            "IdPronac": 154267,
+                            "NomeProjeto": "1o. Edital de Teatro do CESCB",
+                            "PRONAC": "125360",
+                            "idAvaliacaoFinanceira": 4,
+                            "idPronac": 154267,
+                            "dtAvaliacaoFinanceira": "2018-11-29 11:16:25",
+                            "tpAvaliacaoFinanceira": 1,
+                            "siManifestacao": "A",
+                            "dsParecer": "123 123 123 ",
+                            "idUsuario": 236,
+                            "dsResutaldoAvaliacaoObjeto": "A",
+                            "usu_nome": "Rômulo Menhô Barbosa",
+                            "usu_codigo": 236
+                        }
+                    ]
+                }
+            }
+
++ Request
+    + Parameters
+        + estadoId: 14 (string)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": []
+                }
+            }
+
++ Request
+    + Parameters
+        + estadoId: null (string)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": []
+                }
+            }
 
 # Group Prestação de Contas
 
