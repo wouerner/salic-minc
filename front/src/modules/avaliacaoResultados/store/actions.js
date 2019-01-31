@@ -333,8 +333,7 @@ export const devolverProjeto = ({ commit, dispatch }, params) => {
         };
     }
 
-    switch (params.idTipoDoAtoAdministrativo, params.proximo) {
-    case '622', '5':
+    if (params.idTipoDoAtoAdministrativo, params.proximo === '622', '5') {
         return avaliacaoResultadosHelperAPI.alterarEstado(params)
             .then((response) => {
                 const devolverProjetoData = response.data;
@@ -345,7 +344,7 @@ export const devolverProjeto = ({ commit, dispatch }, params) => {
                 dispatch('obterDadosTabelaTecnico', projetosTecnico);
                 dispatch('obterProjetosLaudoFinal', { estadoId: '10' });
             });
-    case '623', '10':
+    } if (params.idTipoDoAtoAdministrativo, params.proximo === '623', '10') {
         return avaliacaoResultadosHelperAPI.alterarEstado(params)
             .then((response) => {
                 const devolverProjetoData = response.data;
@@ -353,12 +352,11 @@ export const devolverProjeto = ({ commit, dispatch }, params) => {
                 dispatch('obterProjetosLaudoFinal', { estadoId: '10' });
                 dispatch('obterProjetosLaudoAssinar', laudoDevolver);
             });
-    default:
-        dispatch('projetosFinalizados', projetosFinalizadosEstatos);
-        dispatch('obterDadosTabelaTecnico', projetosTecnico);
-        dispatch('obterProjetosLaudoFinal', { estadoId: '10' });
-        break;
     }
+    dispatch('projetosFinalizados', projetosFinalizadosEstatos);
+    dispatch('obterDadosTabelaTecnico', projetosTecnico);
+    dispatch('obterProjetosLaudoFinal', { estadoId: '10' });
+
     return null;
 };
 
