@@ -53,6 +53,7 @@
             "Application\\Modules\\Projeto\\Service\\Assinatura\\Acao\\": "./application/modules/projeto/service/assinatura/acao/",
             "Application\\Modules\\PrestacaoContas\\": "./application/modules/prestacao-contas/",
             "Application\\Modules\\PrestacaoContas\\Service\\": "./application/modules/prestacao-contas/service/",
+            "Application\\Modules\\PrestacaoContas\\Service\\PagamentoConsolidados\\": "./application/modules/prestacao-contas/service/",
             "Application\\Modules\\PrestacaoContas\\Service\\Assinatura\\": "./application/modules/prestacao-contas/service/assinatura/",
             "Application\\Modules\\PrestacaoContas\\Service\\Assinatura\\Laudo\\": "./application/modules/prestacao-contas/service/assinatura/laudo/",
             "Application\\Modules\\PrestacaoContas\\Service\\Assinatura\\Laudo\\Acao\\": "./application/modules/prestacao-contas/service/assinatura/laudo/acao/",

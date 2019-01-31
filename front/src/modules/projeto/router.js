@@ -34,6 +34,8 @@ import ExtratosBancarios from './visualizar/components/dadosBancarios/ExtratosBa
 import ExtratosBancariosConsolidado from './visualizar/components/dadosBancarios/ExtratosBancariosConsolidado';
 import Captacao from './visualizar/components/dadosBancarios/Captacao';
 import Devolucoes from './visualizar/components/dadosBancarios/Devolucoes';
+import PagamentosConsolidados from './visualizar/components/prestacaoContas/PagamentosConsolidados';
+
 // import retirados do webpackChunkName
 import DadosProjeto from './visualizar/components/DadosProjeto';
 import Proponente from './visualizar/components/incentivo/Proponente';
@@ -337,6 +339,14 @@ const routes = [
                 component: Devolucoes,
                 meta: {
                     title: 'Devoluções',
+                },
+            },
+            {
+                path: 'pagamentos-consolidados',
+                name: 'PagamentosConsolidados',
+                component: PagamentosConsolidados,
+                meta: {
+                    title: 'Pagamentos Consolidados',
                 },
             },
         ],
