@@ -334,22 +334,17 @@ export const devolverProjeto = ({ commit, dispatch }, params) => {
     }
 
     if (params.idTipoDoAtoAdministrativo, params.proximo === '622', '5') {
-        return avaliacaoResultadosHelperAPI.alterarEstado(params)
+        avaliacaoResultadosHelperAPI.alterarEstado(params)
             .then((response) => {
                 const devolverProjetoData = response.data;
                 commit(types.SET_DEVOLVER_PROJETO, devolverProjetoData);
-
-                dispatch('projetosFinalizados', projetosFinalizadosEstatos);
                 dispatch('projetosAssinarCoordenador', { estadoid: 9 });
-                dispatch('obterDadosTabelaTecnico', projetosTecnico);
-                dispatch('obterProjetosLaudoFinal', { estadoId: '10' });
             });
     } if (params.idTipoDoAtoAdministrativo, params.proximo === '623', '10') {
-        return avaliacaoResultadosHelperAPI.alterarEstado(params)
+        avaliacaoResultadosHelperAPI.alterarEstado(params)
             .then((response) => {
                 const devolverProjetoData = response.data;
                 commit(types.SET_DEVOLVER_PROJETO, devolverProjetoData);
-                dispatch('obterProjetosLaudoFinal', { estadoId: '10' });
                 dispatch('obterProjetosLaudoAssinar', laudoDevolver);
             });
     }
