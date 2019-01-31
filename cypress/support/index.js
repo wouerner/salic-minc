@@ -2,16 +2,21 @@
 import './commands'
 
 before(() => {
-    cy.visit('localhost');
-    var login = cy.get('#Login').type('239.691.561-49'); // Login
-    var senha = cy.get('#Senha').type('123456'); // Senha
-    cy.get('form').submit();
+    function visit(url) {
+        cy.visit(url, {
+            onBeforeLoad: (win) => {
+            win.onerror = () => {}
+            }
+        });
+    }
 
-    cy.visit('http://localhost/principal');
+    visit('http://localhost/autenticacao/index/index')
 
+    var login = cy.get('#Login'); // Login
+    login.type('239.691.561-49')
+    cy.get('#Senha').type('123456'); // Senha
+    cy.get('#btConfirmar').click();
     
-    // cy.mockDadosSALIC();
-    // cy.mockProjetosInicio()
     cy.wait(2000);
 
 });

@@ -4,11 +4,16 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+Cypress.Commands.add("Login", () => {
+  cy.request('POST', 
+          'http://localhost:3000/autenticacao/index/login', 
+          [{ from: '', Login: '239.691.561-49', Senha: '123456' }])
+
+
+})
+
 Cypress.Commands.add("mudarPerfil", (codGrupo, codOrgao) => {
   cy.request(`http://localhost/autenticacao/perfil/alterarperfil?codGrupo=${codGrupo}&codOrgao=${codOrgao}`);
-
-  cy.visit('http://localhost/principal');
-
 })
 
 
