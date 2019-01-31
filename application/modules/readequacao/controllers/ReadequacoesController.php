@@ -505,10 +505,9 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                 'idPlanilhaItem = ?' => $item['idPlanilhaItens'],
                 'idReadequacao = ?' => $idReadequacao
             ])->current();
-
-            //print "idPlanilhaAprovacao: ";
-            //print_r($editarItem['idPlanilhaAprovacao']);
+            
             $editarItem->vlUnitario = $item['valorUnitario'];
+            $editarItem->tpAcao = 'A';
             $editarItem->save();
         }
     }
