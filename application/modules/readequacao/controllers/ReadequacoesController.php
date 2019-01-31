@@ -521,9 +521,15 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
-
+        
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
         $editarItem = $tbPlanilhaAprovacao->buscar(array('idPlanilhaAprovacao=?' => $_POST['idPlanilha']))->current();
+
+        $this->atualizaCustosVinculados(
+            $editarItem['IdPRONAC'],
+            $editarItem['idReadequacao']
+        );
+        
         //$editarItem->idAgente = $idAgente;
         if ($editarItem->tpAcao == 'E') {
             $editarItem->tpAcao = 'N';
@@ -550,7 +556,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             $editarItem->tpAcao = 'N';
         }
         $editarItem->save();
-
+        
         $this->_helper->json(array('resposta' => true, 'msg' => 'Dados salvos com sucesso!'));
         $this->_helper->viewRenderer->setNoRender(true);
     }
@@ -1905,12 +1911,13 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $p = $Projetos->buscarProjetoXProponente(array('idPronac = ?' => $dados->idPronac))->current();
         $this->view->projeto = $p;
 
-//        $d = array();
-//        $d['ProvidenciaTomada'] = 'Readequa&ccedil;&atilde;o enviada para avalia&ccedil;&atilde;o t&eacute;cnica.';
-//        $d['dtSituacao'] = new Zend_Db_Expr('GETDATE()');
-//        $where = "IdPRONAC = $dados->idPronac";
-//        $Projetos->update($d, $where);
-
+        $mensagemCustosVinculados = "";
+        if ($this->isProjetoTransicaoIn2017($dados->idPronac)) {
+            // fazer a comparacao com a data
+            $mensagemCustosVinculados = "<div align='center'><strong>ATEN&Ccedil;&Atilde;O:</strong><br/> Projetos adequados &agrave; realidade de execu&ccedil;&atilde;o at&eacute; a data de <strong>26/10/2018</strong> ter&atilde;o seus custos vinculados e de remunera&ccedil;&atilde;o de capta&ccedil;&atilde;o de recursos recalculados no momento em que for realizada uma readequa&ccedil;&atilde;o.</div>";
+        }
+        $this->view->mensagemCustosVinculados = $mensagemCustosVinculados;
+        
         $TbPlanilhaUnidade = new Proposta_Model_DbTable_TbPlanilhaUnidade();
         $buscarUnidade = $TbPlanilhaUnidade->buscarUnidade();
         $this->view->Unidade = $buscarUnidade;
