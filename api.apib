@@ -1,4 +1,4 @@
-FORMAT: 1A
+0FORMAT: 1A
 HOST: http://localhost:4000
 
 # SALIC API
@@ -48,7 +48,7 @@ HOST: http://localhost:4000
 
     + Body
 
-            {"data":{"code":200,"items":{"usu_codigo":"236","usu_identificacao":"23969156149","usu_nome":"R\u00f4mulo Menh\u00f4 Barbosa","usu_pessoa":"536","usu_orgao":"251","usu_org_max_superior":"251","grupo_ativo":"124","orgao_ativo":"303"}}}
+            {"data":{"code":200,"items":{"usu_codigo":"236","usu_identificacao":"23969156149","usu_nome":"R\u00f4mulo Menh\u00f4 Barbosa","usu_pessoa":"536","usu_orgao":"251","usu_org_max_superior":"251","grupo_ativo":"126","orgao_ativo":"303"}}}
 
 
 # Group Sistema
@@ -864,6 +864,138 @@ HOST: http://localhost:4000
                 }
             }
 
+## LAUDO FINAL - Análise [/avaliacao-resultados/laudo/index?estadoId=10]
+
+### LAUDO - Aba em Análise [GET]
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": [
+                        {
+                            "IdPronac": 149520,
+                            "NomeProjeto": "Formação de Novos Escritores Infantis - Write in Canela",
+                            "PRONAC": "120718",
+                            "idAvaliacaoFinanceira": 34,
+                            "idPronac": 149520,
+                            "dtAvaliacaoFinanceira": "2019-01-31 05:45:15",
+                            "tpAvaliacaoFinanceira": 1,
+                            "siManifestacao": "A",
+                            "dsParecer": "<p>dA  X XA S CSA CSAC </p>",
+                            "idUsuario": 236,
+                            "dsResutaldoAvaliacaoObjeto": "A",
+                            "usu_nome": "Rômulo Menhô Barbosa",
+                            "usu_codigo": 236
+                        }]
+                }
+            }
+
+
+## LAUDO FINAL - Assinar [/avaliacao-resultados/laudo/index?estadoId=12]
+
+### LAUDO - Aba em Assinar [GET]
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": [
+                        {
+                            "IdPronac": 153408,
+                            "NomeProjeto": "São Marcos - espetáculos culturais",
+                            "PRONAC": "124545",
+                            "idAvaliacaoFinanceira": 3,
+                            "idPronac": 153408,
+                            "dtAvaliacaoFinanceira": "2018-11-29 11:16:11",
+                            "tpAvaliacaoFinanceira": 1,
+                            "siManifestacao": "R",
+                            "dsParecer": "123 123 123 ",
+                            "idUsuario": 236,
+                            "dsResutaldoAvaliacaoObjeto": "R",
+                            "usu_nome": "Rômulo Menhô Barbosa",
+                            "usu_codigo": 236
+                        },
+                        {
+                            "IdPronac": 154267,
+                            "NomeProjeto": "1o. Edital de Teatro do CESCB",
+                            "PRONAC": "125360",
+                            "idAvaliacaoFinanceira": 4,
+                            "idPronac": 154267,
+                            "dtAvaliacaoFinanceira": "2018-11-29 11:16:25",
+                            "tpAvaliacaoFinanceira": 1,
+                            "siManifestacao": "A",
+                            "dsParecer": "123 123 123 ",
+                            "idUsuario": 236,
+                            "dsResutaldoAvaliacaoObjeto": "A",
+                            "usu_nome": "Rômulo Menhô Barbosa",
+                            "usu_codigo": 236
+                        }
+                    ]
+                }
+            }
+
+## LAUDO FINAL - Finalizados [/avaliacao-resultados/laudo/index?estadoId=14]
+
+### LAUDO - Aba Finalizados [GET]
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": [
+                        {
+                        }
+                    ]
+                }
+            }
+
+
+## LAUDO FINAL [/avaliacao-resultados/laudo/index?estadoId=null]
+
+### LAUDO - Null [GET]
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": [
+                        {
+                        }
+                    ]
+                }
+            }
+
+## LAUDO FINAL [/avaliacao-resultados/laudo/get?idPronac=149520]
+
+### LAUDO - idPronac 149520 [GET]
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "data": {
+                    "code": 200,
+                    "items": {
+                    "idLaudoFinal": 39,
+                    "siManifestacao": "A",
+                    "dsLaudoFinal": "<p>Teste assinatura </p>"
+                    }
+                }
+            }           
 
 ## DILIGÊNCIAS [/avaliacao-resultados/diligencia?idPronac={idPronac}&situacao={situacao}&tpDiligencia={tpDiligencia}]
 
@@ -1029,116 +1161,6 @@ HOST: http://localhost:4000
                     ]
                 }
                 }
-
-## LAUDO FINAL [/avaliacao-resultados/laudo/index?estadoId={estadoId}]
-
-+ Parameters
-    + estadoId: 10 (string)
-
-### Laudo Final [GET]
-
-+ Response 200 (application/json; charset=utf-8)
-
-    + Body
-
-            {
-                "data": {
-                    "code": 200,
-                    "items": [
-                    {
-                        "IdPronac": 149520,
-                        "NomeProjeto": "Formação de Novos Escritores Infantis - Write in Canela",
-                        "PRONAC": "120718",
-                        "idAvaliacaoFinanceira": 34,
-                        "idPronac": 149520,
-                        "dtAvaliacaoFinanceira": "2019-01-31 05:45:15",
-                        "tpAvaliacaoFinanceira": 1,
-                        "siManifestacao": "A",
-                        "dsParecer": "<p>dA  X XA S CSA CSAC </p>",
-                        "idUsuario": 236,
-                        "dsResutaldoAvaliacaoObjeto": "A",
-                        "usu_nome": "Rômulo Menhô Barbosa",
-                        "usu_codigo": 236
-                    }
-                    ]
-                }
-            }
-
-+ Request
-    + Parameters
-        + estadoId: 12 (string)
-
-+ Response 200 (application/json; charset=utf-8)
-
-    + Body
-
-            {
-                "data": {
-                    "code": 200,
-                    "items": [
-                        {
-                            "IdPronac": 153408,
-                            "NomeProjeto": "São Marcos - espetáculos culturais",
-                            "PRONAC": "124545",
-                            "idAvaliacaoFinanceira": 3,
-                            "idPronac": 153408,
-                            "dtAvaliacaoFinanceira": "2018-11-29 11:16:11",
-                            "tpAvaliacaoFinanceira": 1,
-                            "siManifestacao": "R",
-                            "dsParecer": "123 123 123 ",
-                            "idUsuario": 236,
-                            "dsResutaldoAvaliacaoObjeto": "R",
-                            "usu_nome": "Rômulo Menhô Barbosa",
-                            "usu_codigo": 236
-                        },
-                        {
-                            "IdPronac": 154267,
-                            "NomeProjeto": "1o. Edital de Teatro do CESCB",
-                            "PRONAC": "125360",
-                            "idAvaliacaoFinanceira": 4,
-                            "idPronac": 154267,
-                            "dtAvaliacaoFinanceira": "2018-11-29 11:16:25",
-                            "tpAvaliacaoFinanceira": 1,
-                            "siManifestacao": "A",
-                            "dsParecer": "123 123 123 ",
-                            "idUsuario": 236,
-                            "dsResutaldoAvaliacaoObjeto": "A",
-                            "usu_nome": "Rômulo Menhô Barbosa",
-                            "usu_codigo": 236
-                        }
-                    ]
-                }
-            }
-
-+ Request
-    + Parameters
-        + estadoId: 14 (string)
-
-+ Response 200 (application/json; charset=utf-8)
-
-    + Body
-
-            {
-                "data": {
-                    "code": 200,
-                    "items": []
-                }
-            }
-
-+ Request
-    + Parameters
-        + estadoId: null (string)
-
-+ Response 200 (application/json; charset=utf-8)
-
-    + Body
-
-            {
-                "data": {
-                    "code": 200,
-                    "items": []
-                }
-            }
 
 # Group Prestação de Contas
 
