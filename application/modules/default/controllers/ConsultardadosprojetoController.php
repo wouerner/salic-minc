@@ -1645,6 +1645,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/prestacao-contas/service/PagamentoUfMunicipio.php
+     */
     public function pagamentosPorUfMunicipioAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout

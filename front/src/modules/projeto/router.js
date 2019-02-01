@@ -35,6 +35,7 @@ import ExtratosBancariosConsolidado from './visualizar/components/dadosBancarios
 import Captacao from './visualizar/components/dadosBancarios/Captacao';
 import Devolucoes from './visualizar/components/dadosBancarios/Devolucoes';
 import PagamentosConsolidados from './visualizar/components/prestacaoContas/PagamentosConsolidados';
+import PagamentosUfMunicipio from './visualizar/components/prestacaoContas/PagamentosUfMunicipio';
 
 // import retirados do webpackChunkName
 import DadosProjeto from './visualizar/components/DadosProjeto';
@@ -347,6 +348,14 @@ const routes = [
                 component: PagamentosConsolidados,
                 meta: {
                     title: 'Pagamentos Consolidados',
+                },
+            },
+            {
+                path: 'pagamentos-uf-municipio',
+                name: 'PagamentosUfMunicipio',
+                component: PagamentosUfMunicipio,
+                meta: {
+                    title: 'Pagamentos Por UF / Município',
                 },
             },
         ],

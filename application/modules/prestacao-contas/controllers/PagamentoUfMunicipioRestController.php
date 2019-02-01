@@ -1,8 +1,8 @@
 <?php
 
-use Application\Modules\PrestacaoContas\Service\PagamentoConsolidados\PagamentoConsolidados as PagamentoConsolidadosService;
+use Application\Modules\PrestacaoContas\Service\PagamentoUfMunicipio\PagamentoUfMunicipio as PagamentoUfMunicipioService;
 
-class PrestacaoContas_PagamentoConsolidadosRestController extends MinC_Controller_Rest_Abstract
+class PrestacaoContas_PagamentoUfMunicipioRestController extends MinC_Controller_Rest_Abstract
 {
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
@@ -15,8 +15,8 @@ class PrestacaoContas_PagamentoConsolidadosRestController extends MinC_Controlle
     public function indexAction()
     {
         try {
-            $pagamentoConsolidadosService = new PagamentoConsolidadosService($this->getRequest(), $this->getResponse());
-            $resposta = $pagamentoConsolidadosService->listaPagamentoConsolidados();
+            $pagamentoUfMunicipioService = new PagamentoUfMunicipioService($this->getRequest(), $this->getResponse());
+            $resposta = $pagamentoUfMunicipioService->listaPagamentoUfMunicipio();
             $resposta = \TratarArray::utf8EncodeArray($resposta);
 
             $this->renderJsonResponse($resposta, 200);
