@@ -16,3 +16,11 @@ export const buscarPagamentosUfMunicipio = ({ commit }, idPronac) => {
             commit(types.SET_PAGAMENTOS_UF_MUNICIPIO, data);
         });
 };
+
+export const buscarRelatoriosTrimestrais = ({ commit }, idPronac) => {
+    prestacaoContasHelperAPI.buscarRelatoriosTrimestrais(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_RELATORIOS_TRIMESTRAIS, data);
+        });
+};

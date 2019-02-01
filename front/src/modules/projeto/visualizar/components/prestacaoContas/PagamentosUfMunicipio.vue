@@ -76,6 +76,7 @@ export default {
     data() {
         return {
             search: '',
+            loadingButton: -1,
             items: [
                 'UF',
                 'Item',

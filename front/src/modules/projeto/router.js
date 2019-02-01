@@ -36,6 +36,7 @@ import Captacao from './visualizar/components/dadosBancarios/Captacao';
 import Devolucoes from './visualizar/components/dadosBancarios/Devolucoes';
 import PagamentosConsolidados from './visualizar/components/prestacaoContas/PagamentosConsolidados';
 import PagamentosUfMunicipio from './visualizar/components/prestacaoContas/PagamentosUfMunicipio';
+import RelatoriosTrimestrais from './visualizar/components/prestacaoContas/RelatoriosTrimestrais';
 
 // import retirados do webpackChunkName
 import DadosProjeto from './visualizar/components/DadosProjeto';
@@ -356,6 +357,14 @@ const routes = [
                 component: PagamentosUfMunicipio,
                 meta: {
                     title: 'Pagamentos Por UF / Município',
+                },
+            },
+            {
+                path: 'relatorios-trimestrais',
+                name: 'RelatoriosTrimestrais',
+                component: RelatoriosTrimestrais,
+                meta: {
+                    title: 'Relatórios Trimestrais',
                 },
             },
         ],
