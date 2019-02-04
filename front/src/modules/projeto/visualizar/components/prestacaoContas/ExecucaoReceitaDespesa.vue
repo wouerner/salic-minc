@@ -70,23 +70,6 @@ export default {
                 descending: true,
             },
             loading: true,
-            headers: [
-                {
-                    text: 'CNPJ/CPF',
-                    align: 'left',
-                    value: 'CgcCpfMecena',
-                },
-                {
-                    text: 'INCENTIVADOR',
-                    align: 'left',
-                    value: 'Nome',
-                },
-                {
-                    text: 'VALOR',
-                    align: 'left',
-                    value: 'vlIncentivado',
-                },
-            ],
         };
     },
     computed: {

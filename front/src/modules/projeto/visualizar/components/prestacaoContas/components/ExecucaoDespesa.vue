@@ -16,12 +16,13 @@
                     <v-data-table
                         :pagination.sync="pagination"
                         :headers="headers"
-                        :items="dados.relatorioExecucaoDespesa"
+                        :items="indexItems"
                         class="elevation-1 container-fluid mb-2"
                     >
                         <template
                             slot="items"
                             slot-scope="props">
+                            <td class="text-xs-center">{{ props.item.id + 1 }}</td>
                             <td class="text-xs-left">{{ props.item.Etapa }}</td>
                             <td class="text-xs-left">{{ props.item.Item }}</td>
                             <td class="text-xs-right">{{ props.item.vlPagamento | filtroFormatarParaReal }}</td>
@@ -79,6 +80,11 @@ export default {
             },
             headers: [
                 {
+                    text: 'N°',
+                    align: 'center',
+                    value: 'id',
+                },
+                {
                     text: 'ETAPA',
                     align: 'left',
                     value: 'Etapa',
@@ -100,6 +106,13 @@ export default {
         ...mapGetters({
             dados: 'prestacaoContas/execucaoReceitaDespesa',
         }),
+        indexItems() {
+            const currentItems = this.dados.relatorioExecucaoDespesa;
+            return currentItems.map((item, index) => ({
+                id: index,
+                ...item,
+            }));
+        }
     },
 };
 </script>
