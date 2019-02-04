@@ -3,18 +3,20 @@ import axios from 'axios';
 axios.interceptors.request.use((config) => {
     const user = JSON.parse(localStorage.getItem('user'));
     const conf = config;
-    
+
     if (user) {
         conf.headers.Authorization = `Bearer ${user.token}`;
     }
-    
+
     return conf;
 }, err => Promise.reject(err));
 
-var API_ENDPOINT = process.env.API === 'test' ? test.API_ENDPOINT : dev.API_ENDPOINT;
+/* global test, dev */
+
+const API_ENDPOINT = process.env.API === 'test' ? test.API_ENDPOINT : dev.API_ENDPOINT;
 
 const instance = axios.create({
-  baseURL: API_ENDPOINT,
+    baseURL: API_ENDPOINT,
 });
 
 export const getRequest = (path, queryParams = '') => instance.get(`${path}${queryParams}`);
