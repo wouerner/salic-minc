@@ -57,17 +57,124 @@
                 </v-expansion-panel-content>
             </v-expansion-panel>
             <v-expansion-panel
-                v-else-if="dados.dadosReconsideracao"
+                v-else-if="dados.dados"
                 popout
                 focusable>
-                <v-expansion-panel-content class="elevation-1">
+                <v-expansion-panel-content
+                    v-for="(dado, index) in dados.dados"
+                    :key="index"
+                    class="elevation-1">
                     <v-layout
                         slot="header"
                         class="green--text">
                         <v-icon class="mr-3 green--text">perm_media</v-icon>
-                        <span v-html="dados.dadosReconsideracao.tpRecursoDesc"/>
+                        <span v-html="dado.tpRecursoDesc"/>
                     </v-layout>
                     <v-card>
+                        <v-card-text>
+                            <v-container fluid>
+                                <!--RECURSOS-->
+                                <v-layout
+                                    v-if="dado.tpRecurso === '2'"
+                                    justify-space-around
+                                    row
+                                    wrap>
+                                    <v-flex
+                                        lg12
+                                        dark>
+                                        <b><h4>AVALIAÇÃO DO COORDENADOR</h4></b>
+                                        <v-divider class="pb-2"/>
+                                    </v-flex>
+                                    <v-flex>
+                                        <b>Recurso</b><br>
+                                        <span v-html="dado.dsSolicitacaoRecurso"/>
+                                    </v-flex>
+                                    <v-flex>
+                                        <b>Tipo do Recurso</b><br>
+                                        <span v-html="dado.tpRecursoDesc"/>
+                                    </v-flex>
+                                    <v-flex>
+                                        <b>Tipo da Solicitação</b>
+                                        <p v-html="dado.tpSolicitacaoDesc"/>
+                                    </v-flex>
+                                    <v-flex>
+                                        <b>Status do Recurso</b>
+                                        <p>{{ dado.siRecursoDesc }}</p>
+                                    </v-flex>
+                                    <v-flex>
+                                        <b>Dt. Recurso</b>
+                                        <p>{{ dado.dtSolicitacaoRecurso | formatarData }}</p>
+                                    </v-flex>
+                                </v-layout>
+                                <v-layout
+                                    v-else
+                                    justify-space-around
+                                    row
+                                    wrap>
+                                    <v-flex>
+                                        <b>Descrição</b>
+                                        <p v-html="dado.dsAvaliacao"/>
+                                    </v-flex>
+                                    <v-flex>
+                                        <b>Dt. Avaliação</b>
+                                        <p>{{ dados.dtAvaliacao | formatarData }}</p>
+                                    </v-flex>
+                                    <v-flex>
+                                        <b>Situação </b>
+                                        <p>{{ (dados.stAtendimento === 'I') ? 'Indeferido' : 'Deferido' }}</p>
+                                    </v-flex>
+                                </v-layout>
+                                <div/>
+
+
+                                <!--<div>-->
+                                <!--&lt;!&ndash;Enquadramento &ndash;&gt;-->
+                                <!--<v-layout-->
+                                <!--justify-space-around-->
+                                <!--row-->
+                                <!--wrap>-->
+                                <!--<v-flex-->
+                                <!--lg12-->
+                                <!--dark>-->
+                                <!--<b><h4>ENQUADRAMENTO</h4></b>-->
+                                <!--<v-divider class="pb-2"/>-->
+                                <!--</v-flex>-->
+                                <!--<v-flex v-if="Object.keys(dados.ParecerRecurso).length > 0">-->
+                                <!--<v-flex-->
+                                <!--v-for="(dadosParecer, index) in dados.ParecerRecurso"-->
+                                <!--:key="index">-->
+                                <!--<v-flex>-->
+                                <!--<b>Parecer Favorável?</b>-->
+                                <!--<p>-->
+                                <!--{{ (dadosParecer.ParecerFavoravel === '2') ? 'Sim' : 'Não' }}-->
+                                <!--</p>-->
+                                <!--</v-flex>-->
+                                <!--<v-flex>-->
+                                <!--<b>Dt. Parecer</b>-->
+                                <!--<p>-->
+                                <!--{{ dadosParecer.DtParecer | formatarData }}-->
+                                <!--</p>-->
+                                <!--</v-flex>-->
+                                <!--</v-flex>-->
+                                <!--</v-flex>-->
+                                <!--<v-flex>-->
+                                <!--<b>Área</b>-->
+                                <!--<p v-html="dados.projetosENRecurso.area"/>-->
+                                <!--</v-flex>-->
+                                <!--<v-flex>-->
+                                <!--<b>Segmento</b>-->
+                                <!--<p v-html="dados.projetosENRecurso.segmento"/>-->
+                                <!--</v-flex>-->
+                                <!--<v-flex>-->
+                                <!--<b>Enquadramento</b>-->
+                                <!--<p>{{ dados.projetosENRecurso.artigo }}</p>-->
+                                <!--</v-flex>-->
+                                <!--</v-layout>-->
+                                <!--</div>-->
+                            </v-container>
+                        </v-card-text>
+
+
                         <v-card-text>
                             <v-container fluid>
                                 <!--RECURSOS-->
@@ -83,23 +190,23 @@
                                     </v-flex>
                                     <v-flex>
                                         <b>Recurso</b><br>
-                                        <span v-html="dados.dadosReconsideracao.dsSolicitacaoRecurso"/>
+                                        <span v-html="dado.dsSolicitacaoRecurso"/>
                                     </v-flex>
                                     <v-flex>
                                         <b>Tipo do Recurso</b><br>
-                                        <span v-html="dados.dadosReconsideracao.tpRecursoDesc"/>
+                                        <span v-html="dado.tpRecursoDesc"/>
                                     </v-flex>
                                     <v-flex>
                                         <b>Tipo da Solicitação</b>
-                                        <p v-html="dados.dadosReconsideracao.tpSolicitacaoDesc"/>
+                                        <p v-html="dado.tpSolicitacaoDesc"/>
                                     </v-flex>
                                     <v-flex>
                                         <b>Status do Recurso</b>
-                                        <p>{{ dados.dadosReconsideracao.siRecursoDesc }}</p>
+                                        <p>{{ dados.siRecursoDesc }}</p>
                                     </v-flex>
                                     <v-flex>
                                         <b>Dt. Recurso</b>
-                                        <p>{{ dados.dadosReconsideracao.dtSolicitacaoRecurso | formatarData }}</p>
+                                        <p>{{ dados.dtSolicitacaoRecurso | formatarData }}</p>
                                     </v-flex>
                                 </v-layout>
                                 <div>
@@ -109,11 +216,11 @@
                                         wrap>
                                         <v-flex>
                                             <b>Avaliação do Pedido</b>
-                                            <p v-html="dados.dadosReconsideracao.dsAvaliacao"/>
+                                            <p v-html="dados.dsAvaliacao"/>
                                         </v-flex>
                                         <v-flex>
                                             <b>Dt. Avaliação</b>
-                                            <p>{{ dados.dadosReconsideracao.dtAvaliacao | formatarData }}</p>
+                                            <p>{{ dados.dtAvaliacao | formatarData }}</p>
                                         </v-flex>
                                     </v-layout>
                                 </div>
@@ -213,46 +320,46 @@
                                                                         <p>{{ dadosprodutos.AlineaArtigo18 }}</p>
                                                                     </v-flex>
                                                                 </v-layout>
-                                                                <v-layout
-                                                                    justify-space-around
-                                                                    row
-                                                                    wrap>
-                                                                    <v-flex>
-                                                                        <b>Decreto 5761/2006 *</b>
-                                                                        <p>{{ (dadosprodutos.Lei5761 === 1) ? 'Sim' : 'Não' }}</p>
-                                                                    </v-flex>
-                                                                    <v-flex>
-                                                                        <b>Artigo 27°</b>
-                                                                        <p>{{ (dadosprodutos.Artigo27 === 1) ? 'Sim' : 'Não' }}</p>
-                                                                    </v-flex>
-                                                                    <v-flex>
-                                                                        <b>Inciso(s)</b>
-                                                                        <v-checkbox
-                                                                            v-model="dadosprodutos.IncisoArtigo27_I"
-                                                                            label="I"
-                                                                            value
-                                                                            disabled
-                                                                        />
-                                                                        <v-checkbox
-                                                                            v-model="dadosprodutos.IncisoArtigo27_II"
-                                                                            label="II"
-                                                                            value
-                                                                            disabled
-                                                                        />
-                                                                        <v-checkbox
-                                                                            v-model="dadosprodutos.IncisoArtigo27_III"
-                                                                            label="III"
-                                                                            value
-                                                                            disabled
-                                                                        />
-                                                                        <v-checkbox
-                                                                            v-model="dadosprodutos.IncisoArtigo27_IV"
-                                                                            label="IV"
-                                                                            value
-                                                                            disabled
-                                                                        />
-                                                                    </v-flex>
-                                                                </v-layout>
+                                                                <!--<v-layout-->
+                                                                    <!--justify-space-around-->
+                                                                    <!--row-->
+                                                                    <!--wrap>-->
+                                                                    <!--<v-flex>-->
+                                                                        <!--<b>Decreto 5761/2006 *</b>-->
+                                                                        <!--<p>{{ (dadosprodutos.Lei5761 === 1) ? 'Sim' : 'Não' }}</p>-->
+                                                                    <!--</v-flex>-->
+                                                                    <!--<v-flex>-->
+                                                                        <!--<b>Artigo 27°</b>-->
+                                                                        <!--<p>{{ (dadosprodutos.Artigo27 === 1) ? 'Sim' : 'Não' }}</p>-->
+                                                                    <!--</v-flex>-->
+                                                                    <!--<v-flex>-->
+                                                                        <!--<b>Inciso(s)</b>-->
+                                                                        <!--<v-checkbox-->
+                                                                            <!--v-model="dadosprodutos.IncisoArtigo27_I"-->
+                                                                            <!--label="I"-->
+                                                                            <!--value-->
+                                                                            <!--disabled-->
+                                                                        <!--/>-->
+                                                                        <!--<v-checkbox-->
+                                                                            <!--v-model="dadosprodutos.IncisoArtigo27_II"-->
+                                                                            <!--label="II"-->
+                                                                            <!--value-->
+                                                                            <!--disabled-->
+                                                                        <!--/>-->
+                                                                        <!--<v-checkbox-->
+                                                                            <!--v-model="dadosprodutos.IncisoArtigo27_III"-->
+                                                                            <!--label="III"-->
+                                                                            <!--value-->
+                                                                            <!--disabled-->
+                                                                        <!--/>-->
+                                                                        <!--<v-checkbox-->
+                                                                            <!--v-model="dadosprodutos.IncisoArtigo27_IV"-->
+                                                                            <!--label="IV"-->
+                                                                            <!--value-->
+                                                                            <!--disabled-->
+                                                                        <!--/>-->
+                                                                    <!--</v-flex>-->
+                                                                <!--</v-layout>-->
                                                                 <v-layout
                                                                     justify-space-around
                                                                     row
@@ -270,60 +377,60 @@
                                         </v-expansion-panel>
                                     </v-layout>
                                     <!--Enquadramento -->
-                                    <v-layout
-                                        justify-space-around
-                                        row
-                                        wrap>
-                                        <v-flex
-                                            lg12
-                                            dark>
-                                            <b><h4>ENQUADRAMENTO</h4></b>
-                                            <v-divider class="pb-2"/>
-                                        </v-flex>
-                                        <v-flex v-if="Object.keys(dados.ParecerReconsideracao).length > 0">
-                                            <v-flex
-                                                v-for="(dadosParecer, index) in dados.ParecerReconsideracao"
-                                                :key="index">
-                                                <v-flex>
-                                                    <b>Parecer Favorável?</b>
-                                                    <p>
-                                                        {{ (dadosParecer.ParecerFavoravel === '2') ? 'Sim' : 'Não' }}
-                                                    </p>
-                                                </v-flex>
-                                                <v-flex>
-                                                    <b>Dt. Parecer</b>
-                                                    <p>
-                                                        {{ dadosParecer.DtParecer | formatarData }}
-                                                    </p>
-                                                </v-flex>
-                                            </v-flex>
-                                        </v-flex>
-                                        <v-flex>
-                                            <b>Área</b>
-                                            <p v-html="dados.projetosENReconsideracao.area"/>
-                                        </v-flex>
-                                        <v-flex>
-                                            <b>Segmento</b>
-                                            <p v-html="dados.projetosENReconsideracao.segmento"/>
-                                        </v-flex>
-                                        <v-flex>
-                                            <b>Enquadramento</b>
-                                            <p>{{ dados.projetosENReconsideracao.artigo }}</p>
-                                        </v-flex>
-                                    </v-layout>
+                                    <!--<v-layout-->
+                                        <!--justify-space-around-->
+                                        <!--row-->
+                                        <!--wrap>-->
+                                        <!--<v-flex-->
+                                            <!--lg12-->
+                                            <!--dark>-->
+                                            <!--<b><h4>ENQUADRAMENTO</h4></b>-->
+                                            <!--<v-divider class="pb-2"/>-->
+                                        <!--</v-flex>-->
+                                        <!--<v-flex v-if="Object.keys(dados.ParecerReconsideracao).length > 0">-->
+                                            <!--<v-flex-->
+                                                <!--v-for="(dadosParecer, index) in dados.ParecerReconsideracao"-->
+                                                <!--:key="index">-->
+                                                <!--<v-flex>-->
+                                                    <!--<b>Parecer Favorável?</b>-->
+                                                    <!--<p>-->
+                                                        <!--{{ (dadosParecer.ParecerFavoravel === '2') ? 'Sim' : 'Não' }}-->
+                                                    <!--</p>-->
+                                                <!--</v-flex>-->
+                                                <!--<v-flex>-->
+                                                    <!--<b>Dt. Parecer</b>-->
+                                                    <!--<p>-->
+                                                        <!--{{ dadosParecer.DtParecer | formatarData }}-->
+                                                    <!--</p>-->
+                                                <!--</v-flex>-->
+                                            <!--</v-flex>-->
+                                        <!--</v-flex>-->
+                                        <!--<v-flex>-->
+                                            <!--<b>Área</b>-->
+                                            <!--<p v-html="dados.projetosENReconsideracao.area"/>-->
+                                        <!--</v-flex>-->
+                                        <!--<v-flex>-->
+                                            <!--<b>Segmento</b>-->
+                                            <!--<p v-html="dados.projetosENReconsideracao.segmento"/>-->
+                                        <!--</v-flex>-->
+                                        <!--<v-flex>-->
+                                            <!--<b>Enquadramento</b>-->
+                                            <!--<p>{{ dados.projetosENReconsideracao.artigo }}</p>-->
+                                        <!--</v-flex>-->
+                                    <!--</v-layout>-->
                                     <!--resumo do parecer-->
-                                    <v-layout
-                                        v-if="dados.dadosReconsideracao.siRecurso === '9 '"
-                                        justify-space-around
-                                        row
-                                        wrap>
-                                        <v-flex
-                                            v-for="(dadosParecer, index) in dados.ParecerReconsideracao"
-                                            :key="index">
-                                            <b>Resumo do Parecer</b>
-                                            <p v-html="dadosParecer.ResumoParecer"/>
-                                        </v-flex>
-                                    </v-layout>
+                                    <!--<v-layout-->
+                                        <!--v-if="dados.dadosReconsideracao.siRecurso === '9 '"-->
+                                        <!--justify-space-around-->
+                                        <!--row-->
+                                        <!--wrap>-->
+                                        <!--<v-flex-->
+                                            <!--v-for="(dadosParecer, index) in dados.ParecerReconsideracao"-->
+                                            <!--:key="index">-->
+                                            <!--<b>Resumo do Parecer</b>-->
+                                            <!--<p v-html="dadosParecer.ResumoParecer"/>-->
+                                        <!--</v-flex>-->
+                                    <!--</v-layout>-->
                                 </div>
 
                             </v-container>
@@ -331,7 +438,6 @@
                     </v-card>
                 </v-expansion-panel-content>
             </v-expansion-panel>
-            <PedidoRecurso/>
         </div>
     </div>
 </template>
