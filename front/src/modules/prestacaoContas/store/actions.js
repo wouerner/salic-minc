@@ -26,7 +26,6 @@ export const buscarRelatoriosTrimestrais = ({ commit }, idPronac) => {
 };
 
 export const buscarExecucaoReceitaDespesa = ({ commit }, idPronac) => {
-    console.log(idPronac, 'aki aki');
     prestacaoContasHelperAPI.buscarExecucaoReceitaDespesa(idPronac)
         .then((response) => {
             const data = response.data.data.items;
