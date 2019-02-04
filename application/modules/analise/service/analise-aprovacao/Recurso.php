@@ -46,8 +46,8 @@ class Recurso implements \MinC\Servico\IServicoRestZend
                 foreach ($recursos as $r) {
                     if ($r->tpRecurso == 1 || $r->tpRecurso == 2) {
                         $pedidoReconsideracao = $r->idRecurso;
-                        $dados = $tbRecurso->buscarDadosRecursos(array('idPronac = ?'=> $r->IdPRONAC))->toArray();
-                        $data['dados'] = $dados;
+                        $dados = $tbRecurso->buscarDadosRecursos(array('idRecurso = ?'=>$r->idRecurso))->toArray();
+                        $data['dadosReconsideracao'] = $dados;
 
                         $data['desistenciaReconsideracao'] = false;
                         if ($r->siRecurso == 0) {
@@ -140,6 +140,6 @@ class Recurso implements \MinC\Servico\IServicoRestZend
     }
 
     private function obterArtigoEnquadramento($segmento) {
-        return in_array($segmento, \Segmento::SEGMENTOS_ARTIGO_18) ? 'Artigo 18' : 'Artigo 16';
+        return in_array($segmento, \Segmento::SEGMENTOS_ARTIGO_18) ? 'Artigo 18' : 'Artigo 26';
     }
 }

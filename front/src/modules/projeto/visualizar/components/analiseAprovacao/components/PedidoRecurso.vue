@@ -122,6 +122,9 @@
 
                                 <div>
                                     <v-layout
+                                        v-if="dados.dadosRecurso.tpSolicitacao === 'PI'
+                                            || dados.dadosRecurso.tpSolicitacao === 'EO'
+                                        || dados.dadosRecurso.tpSolicitacao === 'OR'"
                                         justify-space-around
                                         row
                                         wrap>
@@ -269,6 +272,7 @@
                                             </v-expansion-panel-content>
                                         </v-expansion-panel>
                                     </v-layout>
+
                                     <!--Enquadramento -->
                                     <v-layout
                                         justify-space-around
@@ -280,20 +284,20 @@
                                             <b><h4>ENQUADRAMENTO</h4></b>
                                             <v-divider class="pb-2"/>
                                         </v-flex>
-                                        <v-flex v-if="Object.keys(dados.ParecerRecurso).length > 0">
-                                            <v-flex
-                                                v-for="(dadosParecer, index) in dados.ParecerRecurso"
-                                                :key="index">
+                                        <v-flex
+                                            v-for="(dados, index) in dados.ParecerRecurso"
+                                            :key="index">
+                                            <v-flex>
                                                 <v-flex>
                                                     <b>Parecer Favorável?</b>
                                                     <p>
-                                                        {{ (dadosParecer.ParecerFavoravel === '2') ? 'Sim' : 'Não' }}
+                                                        {{ (dados.ParecerRecurso === '2') ? 'Sim' : 'Não' }}
                                                     </p>
                                                 </v-flex>
                                                 <v-flex>
                                                     <b>Dt. Parecer</b>
                                                     <p>
-                                                        {{ dadosParecer.DtParecer | formatarData }}
+                                                        {{ dados.ParecerRecurso | formatarData }}
                                                     </p>
                                                 </v-flex>
                                             </v-flex>
@@ -311,6 +315,25 @@
                                             <p>{{ dados.projetosENRecurso.artigo }}</p>
                                         </v-flex>
                                     </v-layout>
+                                    <v-layout
+                                        v-for="(dados, index) in dados.ParecerRecurso"
+                                        :key="index"
+                                        justify-space-around
+                                        row
+                                        wrap>
+                                        <!--resumo Parecer-->
+                                        <v-flex v-if="dados.ResumoParecer">
+                                            <b>Resumo</b>
+                                            <p v-html="dados.ResumoParecer"/>
+                                        </v-flex>
+                                    </v-layout>
+
+
+                                    <v-layout
+                                        justify-space-around
+                                        row
+                                        wrap>
+                                    <v-flex/></v-layout>
                                 </div>
                             </v-container>
                         </v-card-text>
