@@ -1,9 +1,9 @@
 <?php
 
-namespace Application\Modules\PrestacaoContas\Service\ExecucaoReceitaDespesa;
+namespace Application\Modules\PrestacaoContas\Service\RelatorioFisico;
 
 
-class ExecucaoReceitaDespesa implements \MinC\Servico\IServicoRestZend
+class RelatorioFisico implements \MinC\Servico\IServicoRestZend
 {
     /**
      * @var \Zend_Controller_Request_Abstract $request
@@ -21,7 +21,7 @@ class ExecucaoReceitaDespesa implements \MinC\Servico\IServicoRestZend
         $this->response = $response;
     }
 
-    public function listarExecucaoReceitaDespesa()
+    public function listarRelatorioFisico()
     {
         $idPronac = $this->request->idPronac;
         if (strlen($idPronac) > 7) {
@@ -30,13 +30,10 @@ class ExecucaoReceitaDespesa implements \MinC\Servico\IServicoRestZend
 
         if (!empty($idPronac)) {
             $tbComprovante = new \tbComprovantePagamentoxPlanilhaAprovacao();
-            $relatorioExecucaoReceita = $tbComprovante->buscarRelatorioExecucaoReceita($idPronac)->toArray();
-            $relatorioExecucaoDespesa = $tbComprovante->buscarRelatorioExecucaoDespesa($idPronac)->toArray();
+            $relatorioFisico = $tbComprovante->buscarRelatorioFisico($idPronac)->toArray();
 
-            $relatorio['relatorioExecucaoReceita'] = $relatorioExecucaoReceita;
-            $relatorio['relatorioExecucaoDespesa'] = $relatorioExecucaoDespesa;
-
-            return $relatorio;
+            return $relatorioFisico;
         }
     }
+
 }

@@ -32,3 +32,11 @@ export const buscarExecucaoReceitaDespesa = ({ commit }, idPronac) => {
             commit(types.SET_EXECUCAO_RECEITA_DESPESA, data);
         });
 };
+
+export const buscarRelatorioFisico = ({ commit }, idPronac) => {
+    prestacaoContasHelperAPI.buscarRelatorioFisico(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_RELATORIO_FISICO, data);
+        });
+};

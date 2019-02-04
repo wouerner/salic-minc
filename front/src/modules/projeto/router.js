@@ -38,6 +38,7 @@ import PagamentosConsolidados from './visualizar/components/prestacaoContas/Paga
 import PagamentosUfMunicipio from './visualizar/components/prestacaoContas/PagamentosUfMunicipio';
 import RelatoriosTrimestrais from './visualizar/components/prestacaoContas/RelatoriosTrimestrais';
 import ExecucaoReceitaDespesa from './visualizar/components/prestacaoContas/ExecucaoReceitaDespesa';
+import RelatorioFisico from './visualizar/components/prestacaoContas/RelatorioFisico';
 
 // import retirados do webpackChunkName
 import DadosProjeto from './visualizar/components/DadosProjeto';
@@ -374,6 +375,14 @@ const routes = [
                 component: ExecucaoReceitaDespesa,
                 meta: {
                     title: 'Execução da Receita e Despesa',
+                },
+            },
+            {
+                path: 'relatorio-fisico',
+                name: 'RelatorioFisico',
+                component: RelatorioFisico,
+                meta: {
+                    title: 'Relatório Físico',
                 },
             },
         ],
