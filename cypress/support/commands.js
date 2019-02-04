@@ -6,7 +6,7 @@
 
 Cypress.Commands.add("Login", () => {
   cy.request('POST', 
-          'http://localhost:3000/autenticacao/index/login', 
+          'http://localhost/autenticacao/index/login', 
           [{ from: '', Login: '239.691.561-49', Senha: '123456' }])
 
 
