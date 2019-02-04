@@ -24,3 +24,12 @@ export const buscarRelatoriosTrimestrais = ({ commit }, idPronac) => {
             commit(types.SET_RELATORIOS_TRIMESTRAIS, data);
         });
 };
+
+export const buscarExecucaoReceitaDespesa = ({ commit }, idPronac) => {
+    console.log(idPronac, 'aki aki');
+    prestacaoContasHelperAPI.buscarExecucaoReceitaDespesa(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_EXECUCAO_RECEITA_DESPESA, data);
+        });
+};

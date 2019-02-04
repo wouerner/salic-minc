@@ -1723,6 +1723,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
     }
 
+    /**
+     * @deprecated migrado para nova estrutura de Rest e Service >
+     * application/modules/prestacao-contas/controllers/ExecucaoReceitaDespesaController.php
+     * application/modules/prestacao-contas/service/ExecucaoReceitaDespesa.php
+     */
     public function execucaoReceitaDespesaAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout

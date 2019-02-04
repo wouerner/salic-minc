@@ -26,3 +26,12 @@ export const buscarRelatoriosTrimestrais = (idPronac) => {
     const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscarExecucaoReceitaDespesa = (idPronac) => {
+    const modulo = '/prestacao-contas';
+    const controller = '/execucao-receita-despesa-rest';
+    const metodo = '/index';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};

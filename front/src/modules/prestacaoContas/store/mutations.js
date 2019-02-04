@@ -4,6 +4,7 @@ export const state = {
     pagamentosConsolidados: [],
     pagamentosUfMunicipio: [],
     relatoriosTrimestrais: [],
+    execucaoReceitaDespesa: [],
 };
 
 export const mutations = {
@@ -15,5 +16,8 @@ export const mutations = {
     },
     [types.SET_RELATORIOS_TRIMESTRAIS](state, dados) {
         state.relatoriosTrimestrais = dados;
+    },
+    [types.SET_EXECUCAO_RECEITA_DESPESA](state, dados) {
+        state.execucaoReceitaDespesa = dados;
     },
 };

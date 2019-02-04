@@ -37,6 +37,7 @@ import Devolucoes from './visualizar/components/dadosBancarios/Devolucoes';
 import PagamentosConsolidados from './visualizar/components/prestacaoContas/PagamentosConsolidados';
 import PagamentosUfMunicipio from './visualizar/components/prestacaoContas/PagamentosUfMunicipio';
 import RelatoriosTrimestrais from './visualizar/components/prestacaoContas/RelatoriosTrimestrais';
+import ExecucaoReceitaDespesa from './visualizar/components/prestacaoContas/ExecucaoReceitaDespesa';
 
 // import retirados do webpackChunkName
 import DadosProjeto from './visualizar/components/DadosProjeto';
@@ -365,6 +366,14 @@ const routes = [
                 component: RelatoriosTrimestrais,
                 meta: {
                     title: 'Relatórios Trimestrais',
+                },
+            },
+            {
+                path: 'execucao-receita-despesa',
+                name: 'ExecucaoReceitaDespesa',
+                component: ExecucaoReceitaDespesa,
+                meta: {
+                    title: 'Execução da Receita e Despesa',
                 },
             },
         ],
