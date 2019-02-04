@@ -576,8 +576,8 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             $menu['prestacaodecontas']['submenu'][] = [
                 'label' => 'Execu&ccedil;&atilde;o da receita e despesa',
                 'title' => 'Ir para Execu&ccedil;&atilde;o da receita e despesa',
-                'link' => '/default/consultardadosprojeto/execucao-receita-despesa/?idPronac=' . $idPronacHash,
-                'ajax' => true,
+                'link' => "/projeto/#/{$idPronacHash}/execucao-receita-despesa",
+                'ajax' => false,
                 'grupo' => []
             ];
 
