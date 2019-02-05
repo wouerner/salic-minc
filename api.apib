@@ -87,7 +87,7 @@ HOST: http://localhost:4000
 
 ### Página Principal [GET]
 
-+ Response 200 (application/json)
++ Response 200 (application/json, charset=utf-8)
 
     + Body
 
@@ -398,10 +398,7 @@ HOST: http://localhost:4000
                 }
             }
 
-## PLANILHA-APROVADA - Visualizar [/avaliacao-resultados/planilha-aprovada/idPronac/{idPronac}]
-
-+ Parameters
-    + idPronac: 134261
+## PLANILHA-APROVADA - Visualizar [/avaliacao-resultados/planilha-aprovada/idPronac/134261]
 
 ### PLANILHA-APROVADA - Visualizar [GET]
 
@@ -412,139 +409,9 @@ HOST: http://localhost:4000
             {
                 "0": {
                     "etapa": {
-                        "4": {
-                            "UF": {
-                                "42": {
-                                    "cidade": {
-                                        "420240": {
-                                            "itens": {
-                                                "4": {
-                                                    "3235": {
-                                                        "item": "Assistente administrativo",
-                                                        "valor": "1500",
-                                                        "quantidade": 1,
-                                                        "numeroOcorrencias": 1,
-                                                        "varlorAprovado": 1500,
-                                                        "varlorComprovado": 1500,
-                                                        "comprovacaoValidada": 0,
-                                                        "idPlanilhaAprovacao": 126856,
-                                                        "idPlanilhaItens": 3235,
-                                                        "ComprovacaoValidada": 0,
-                                                        "stItemAvaliado": "4"
-                                                    },
-                                                    "3677": {
-                                                        "item": "Coordenação geral",
-                                                        "valor": "6500",
-                                                        "quantidade": 1,
-                                                        "numeroOcorrencias": 1,
-                                                        "varlorAprovado": 6500,
-                                                        "varlorComprovado": 4500,
-                                                        "comprovacaoValidada": 0,
-                                                        "idPlanilhaAprovacao": 126853,
-                                                        "idPlanilhaItens": 3677,
-                                                        "ComprovacaoValidada": 0,
-                                                        "stItemAvaliado": "4"
-                                                    }
-                                                },
-                                                "todos": {
-                                                    "191": {
-                                                        "item": "Contador",
-                                                        "valor": "800",
-                                                        "quantidade": 1,
-                                                        "numeroOcorrencias": 1,
-                                                        "varlorAprovado": 800,
-                                                        "varlorComprovado": 0,
-                                                        "comprovacaoValidada": 0,
-                                                        "idPlanilhaAprovacao": 126854,
-                                                        "idPlanilhaItens": 191,
-                                                        "ComprovacaoValidada": 0,
-                                                        "stItemAvaliado": null
-                                                    },
-                                                    "3235": {
-                                                        "item": "Assistente administrativo",
-                                                        "valor": "1500",
-                                                        "quantidade": 1,
-                                                        "numeroOcorrencias": 1,
-                                                        "varlorAprovado": 1500,
-                                                        "varlorComprovado": 1500,
-                                                        "comprovacaoValidada": 0,
-                                                        "idPlanilhaAprovacao": 126856,
-                                                        "idPlanilhaItens": 3235,
-                                                        "ComprovacaoValidada": 0,
-                                                        "stItemAvaliado": "4"
-                                                    },
-                                                    "3677": {
-                                                        "item": "Coordenação geral",
-                                                        "valor": "6500",
-                                                        "quantidade": 1,
-                                                        "numeroOcorrencias": 1,
-                                                        "varlorAprovado": 6500,
-                                                        "varlorComprovado": 4500,
-                                                        "comprovacaoValidada": 0,
-                                                        "idPlanilhaAprovacao": 126853,
-                                                        "idPlanilhaItens": 3677,
-                                                        "ComprovacaoValidada": 0,
-                                                        "stItemAvaliado": "4"
-                                                    },
-                                                    "5249": {
-                                                        "item": "Remuneração para captação de recursos",
-                                                        "valor": "4500",
-                                                        "quantidade": 1,
-                                                        "numeroOcorrencias": 1,
-                                                        "varlorAprovado": 4500,
-                                                        "varlorComprovado": 0,
-                                                        "comprovacaoValidada": 0,
-                                                        "idPlanilhaAprovacao": 126857,
-                                                        "idPlanilhaItens": 5249,
-                                                        "ComprovacaoValidada": 0,
-                                                        "stItemAvaliado": null
-                                                    },
-                                                    "5250": {
-                                                        "item": "Elaboração de prestação de contas",
-                                                        "valor": "1200",
-                                                        "quantidade": 1,
-                                                        "numeroOcorrencias": 1,
-                                                        "varlorAprovado": 1200,
-                                                        "varlorComprovado": 0,
-                                                        "comprovacaoValidada": 0,
-                                                        "idPlanilhaAprovacao": 126855,
-                                                        "idPlanilhaItens": 5250,
-                                                        "ComprovacaoValidada": 0,
-                                                        "stItemAvaliado": null
-                                                    }
-                                                }
-                                            },
-                                            "cidade": "Blumenau",
-                                            "cdCidade": 420240
-                                        }
-                                    },
-                                    "Uf": "SC",
-                                    "cdUF": 42
-                                }
-                            },
-                            "etapa": "Custos / Administrativos",
-                            "cdEtapa": 4
-                        }
-                    },
-                    "produto": "Administração do Projeto",
-                    "cdProduto": 0
-                }
-            }
-
-+ Request
-    + Parameters
-        + idPronac: 136867
-
-+ Response 200 (application/json; charset=utf-8)
-
-    + Body 
-
-            {
-                "0": {
-                    "etapa": {
-                    "5": {
+                        "5": {
                         "UF": {
-                        "31": {
+                            "31": {
                             "cidade": {
                             "310620": {
                                 "itens": {
@@ -591,8 +458,69 @@ HOST: http://localhost:4000
                     },
                     "produto": "Administração do Projeto",
                     "cdProduto": 0
-                },
                 }
+            }
+
+## PLANILHA-APROVADA - Visualizar [/avaliacao-resultados/planilha-aprovada/idPronac/136867]
+
+### PLANILHA-APROVADA - Visualizar [GET]
+
++ Response 200 (application/json; charset=utf=8; charset=utf-8)
+
+        {
+            "0": {
+                "etapa": {
+                    "5": {
+                        "UF": {
+                            "31": {
+                                "cidade": {
+                                    "310620": {
+                                        "itens": {
+                                            "todos": {
+                                                "200": {
+                                                    "item": "INSS",
+                                                    "valor": "2386",
+                                                    "quantidade": 1,
+                                                    "numeroOcorrencias": 6,
+                                                    "varlorAprovado": 14316,
+                                                    "varlorComprovado": 0,
+                                                    "comprovacaoValidada": 0,
+                                                    "idPlanilhaAprovacao": 216279,
+                                                    "idPlanilhaItens": 200,
+                                                    "ComprovacaoValidada": 0,
+                                                    "stItemAvaliado": null
+                                                },
+                                                "4380": {
+                                                    "item": "FGTS",
+                                                    "valor": "955",
+                                                    "quantidade": 1,
+                                                    "numeroOcorrencias": 6,
+                                                    "varlorAprovado": 5730,
+                                                    "varlorComprovado": 0,
+                                                    "comprovacaoValidada": 0,
+                                                    "idPlanilhaAprovacao": 216280,
+                                                    "idPlanilhaItens": 4380,
+                                                    "ComprovacaoValidada": 0,
+                                                    "stItemAvaliado": null
+                                                }
+                                            }
+                                        },
+                                        "cidade": "Belo Horizonte",
+                                        "cdCidade": 310620
+                                    }
+                                },
+                                "Uf": "MG",
+                                "cdUF": 31
+                            }
+                        },
+                        "etapa": "Recolhimentos",
+                        "cdEtapa": 5
+                    }
+                },
+                "produto": "Administração do Projeto",
+                "cdProduto": 0
+            }
+        }
 
 ## PROJETO - Informações [/avaliacao-resultados/projeto/idPronac/{idPronac}]
 
@@ -1257,7 +1185,7 @@ HOST: http://localhost:4000
 ## Informações do Projeto [/prestacao-contas/visualizar-projeto/dados-projeto?idPronac={idPronac}]
 
 + Parameters
-    + idPronac (string, required)
+    + idPronac: 134261 (string, required)
 
 ### Informações do Projeto [GET]
 
