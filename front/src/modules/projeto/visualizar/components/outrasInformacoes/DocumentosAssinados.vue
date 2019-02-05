@@ -1,85 +1,138 @@
 <template>
-    <div id="conteudo">
-        <div v-if="loading">
-            <Carregando :text="'Carregando Documentos Assinados'"></Carregando>
-        </div>
-        <table v-else-if="Object.keys(dados).length > 0">
-            <thead>
-            <tr class="destacar">
-                <th class="center">PRONAC</th>
-                <th class="center">NOME DO PROJETO</th>
-                <th class="center">ATO ADMINISTRATIVO</th>
-                <th class="center">DATA</th>
-                <th class="center">VER</th>
-            </tr>
-            </thead>
-            <tbody v-for="(dado, index) in dados" :key="index">
-            <tr>
-                <td class="center">
-                    <router-link :to="{ name: 'dadosprojeto', params: { idPronac: dado.IdPRONAC }}"
-                                 class='waves-effect waves-dark btn white black-text'>
-                        <u>{{ dado.pronac }}</u>
-                    </router-link>
+    <div v-if="loading">
+        <Carregando :text="'Carregando Documentos Assinados'"/>
+    </div>
+    <div v-else>
+        <v-data-table
+            :headers="headers"
+            :items="dados"
+            :search="search"
+            :pagination.sync="pagination"
+            class="elevation-1"
+        >
+            <template
+                slot="items"
+                slot-scope="props">
+                <td class="text-xs-left">{{ props.item.nomeProjeto }}</td>
+                <td class="text-xs-left">{{ props.item.dsAtoAdministrativo }}</td>
+                <td class="text-xs-center pl-5">{{ props.item.dt_criacao | formatarData }}</td>
+                <td class="text-xs-center">
+                    <v-tooltip left>
+                        <v-btn
+                            slot="activator"
+                            :href="
+                                `/assinatura/index`+
+                                    `/visualizar-documento-assinado`+
+                                    `/idPronac/${props.item.IdPRONAC}`+
+                            `?idDocumentoAssinatura=${props.item.idDocumentoAssinatura}`"
+                            style="text-decoration: none"
+                            fab
+                            dark
+                            small
+                            color="teal"
+                            target="_blank"
+                        >
+                            <v-icon dark>search</v-icon>
+                        </v-btn>
+                        <span>Visualizar</span>
+                    </v-tooltip>
                 </td>
-                <td class="center">{{ dado.nomeProjeto }}</td>
-                <td class="center">{{ dado.dsAtoAdministrativo }}</td>
-                <td class="center">{{ dado.dt_criacao }}</td>
-                <td class="center">
-                    <a class="btn waves-effect waves-light tooltipped small white-text"
-                       :href="`/assinatura/index/visualizar-documento-assinado/idPronac/${dado.IdPRONAC}?idDocumentoAssinatura=${dado.idDocumentoAssinatura}`"
-                       target="_blank"
-                       data-position="top" data-delay="50" data-tooltip="Visualizar">
-                        <i class="material-icons">search</i>
-                    </a>
+                <td class="text-xs-center">
+                    <v-btn
+                        slot="activator"
+                        :to="{ name: 'dadosprojeto', params: { idPronac: dadosProjeto.idPronac }}"
+                        style="text-decoration: none"
+                        color="primary"
+                        class="center">
+                        {{ props.item.pronac }}
+                    </v-btn>
                 </td>
-            </tr>
-            </tbody>
-        </table>
-        <div v-else>
-            <fieldset>
-                <legend>Documentos assinados</legend>
-                <div class="center">
-                    <em>Sem documentos assinados para este projeto.</em>
-                </div>
-            </fieldset>
-        </div>
+            </template>
+            <template
+                slot="pageText"
+                slot-scope="props">
+                Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+            </template>
+        </v-data-table>
     </div>
 </template>
-<script>
-    import { mapActions, mapGetters } from 'vuex';
-    import Carregando from '@/components/Carregando';
 
-    export default {
-        name: 'DocumentosAssinados',
-        props: ['idPronac'],
-        data() {
-            return {
-                loading: true,
-            };
+<script>
+import { mapActions, mapGetters } from 'vuex';
+import Carregando from '@/components/CarregandoVuetify';
+import { utils } from '@/mixins/utils';
+
+export default {
+    name: 'DocumentosAssinados',
+    components: {
+        Carregando,
+    },
+    mixins: [utils],
+    props: {
+        idPronac: {
+            type: Number,
+            default: 0,
         },
-        components: {
-            Carregando,
-        },
-        mounted() {
-            if (typeof this.dadosProjeto.idPronac !== 'undefined') {
-                this.buscarDocumentosAssinados(this.dadosProjeto.idPronac);
-            }
-        },
-        watch: {
-            dados() {
-                this.loading = false;
+    },
+    data() {
+        return {
+            loading: true,
+            search: '',
+            pagination: {
+                sortBy: 'dt_criacao',
+                descending: true,
             },
+            selected: [],
+            headers: [
+                {
+                    align: 'left',
+                    text: 'NOME DO PROJETO',
+                    value: 'nomeProjeto',
+                },
+                {
+                    align: 'left',
+                    text: 'ATO ADMINISTRATIVO',
+                    value: 'dsAtoAdministrativo',
+                },
+                {
+                    align: 'center',
+                    text: 'DATA',
+                    value: 'dt_criacao',
+                },
+                {
+                    align: 'center',
+                    sortable: false,
+                    text: 'VER',
+                },
+                {
+                    align: 'center',
+                    text: 'PRONAC',
+                    sortable: false,
+                    value: 'pronac',
+                },
+            ],
+        };
+    },
+    computed: {
+        ...mapGetters({
+            dadosProjeto: 'projeto/projeto',
+            dados: 'outrasInformacoes/documentosAssinados',
+        }),
+    },
+    watch: {
+        dados() {
+            this.loading = false;
         },
-        computed: {
-            ...mapGetters({
-                dadosProjeto: 'projeto/projeto',
-                dados: 'projeto/documentosAssinados',
-            }),
-        },
-        methods: {
-            ...mapActions({
-                buscarDocumentosAssinados: 'projeto/buscarDocumentosAssinados',
-            }),
-        },
-    };
+    },
+    mounted() {
+        if (typeof this.dadosProjeto.idPronac !== 'undefined') {
+            this.buscarDocumentosAssinados(this.dadosProjeto.idPronac);
+        }
+    },
+    methods: {
+        ...mapActions({
+            buscarDocumentosAssinados: 'outrasInformacoes/buscarDocumentosAssinados',
+        }),
+    },
+};
 </script>

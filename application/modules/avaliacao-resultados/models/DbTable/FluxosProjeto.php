@@ -28,10 +28,37 @@ class AvaliacaoResultados_Model_DbTable_FluxosProjeto extends MinC_Db_Table_Abst
             ['u.usu_nome'],
             'Tabelas.dbo'
         )
+            ->joinLeft(
+                ['doc' => new Zend_Db_Expr(
+                    '(SELECT idDocumentoAssinatura,
+                                       IdPRONAC,
+                                       idTipoDoAtoAdministrativo,
+                                       stEstado,
+                                       cdSituacao
+                                FROM "SAC"."dbo"."tbDocumentoAssinatura"
+                                WHERE idTipoDoAtoAdministrativo = 622
+                                  AND cdSituacao = 1
+                                  AND stEstado = 1)')],
+                'doc.IdPRONAC = p.idpronac',
+                ['idDocumentoAssinatura',
+                    'idTipoDoAtoAdministrativo',
+                    'stEstado',
+                    'cdSituacao']
+            )
         ->joinLeft(
-            ['dil' => new Zend_Db_Expr('(SELECT TOP 1 * FROM "sac"."dbo"."tbDiligencia" ORDER BY "DtSolicitacao" DESC)')],
+            ['dil' => new Zend_Db_Expr('(SELECT a.idPronac, 
+                                                          a.idDiligencia, 
+                                                          a.DtSolicitacao, 
+                                                          a.DtResposta, a.stEnviado 
+                                                   FROM "sac"."dbo"."tbDiligencia" as a 
+                                                   where a.DtSolicitacao = (select max(DtSolicitacao) 
+                                                                            from sac..tbDiligencia 
+                                                                            where a.idPronac = idPronac))')],
             'dil.idPronac = p.IdPRONAC',
-            ['*']
+            ['idDiligencia',
+             'DtSolicitacao',
+             'DtResposta',
+             'stEnviado']
             )
         ->where('estadoId = ? ', $estadoId);
 

@@ -1,10 +1,32 @@
 import axios from 'axios';
 
-export const getRequest = (path, queryParams = '') => axios.get(`${path}${queryParams}`);
+axios.interceptors.request.use((config) => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const conf = config;
 
-export const postRequest = (path, data) => axios.post(path, data);
+    if (user) {
+        conf.headers.Authorization = `Bearer ${user.token}`;
+    }
 
-export const putRequest = (path, bodyFormData, id) => axios.post(`${path}/${id}`, bodyFormData);
+    return conf;
+}, err => Promise.reject(err));
 
-export const deleteRequest = (path, id) => axios.delete(`${path}/${id}`);
+let instance = {};
+/* global test, dev */
+if (process.env.NODE_ENV !== 'production') {
+    const API_ENDPOINT = process.env.API === 'test' ? test.API_ENDPOINT : dev.API_ENDPOINT;
 
+    instance = axios.create({
+        baseURL: API_ENDPOINT,
+    });
+} else {
+    instance = axios.create({});
+}
+
+export const getRequest = (path, queryParams = '') => instance.get(`${path}${queryParams}`);
+
+export const postRequest = (path, data) => instance.post(path, data);
+
+export const putRequest = (path, bodyFormData, id) => instance.post(`${path}/${id}`, bodyFormData);
+
+export const deleteRequest = (path, id) => instance.delete(`${path}/${id}`);
