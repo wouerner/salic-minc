@@ -44,3 +44,12 @@ export const buscarRelatorioFisico = (idPronac) => {
     const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscarRelacaoPagamento = (idPronac) => {
+    const modulo = '/prestacao-contas';
+    const controller = '/relacao-pagamento-rest';
+    const metodo = '/index';
+    const path = `${modulo}${controller}${metodo}`;
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};

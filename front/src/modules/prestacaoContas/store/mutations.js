@@ -6,6 +6,7 @@ export const state = {
     relatoriosTrimestrais: [],
     execucaoReceitaDespesa: [],
     relatorioFisico: [],
+    relacaoPagamento: [],
 };
 
 export const mutations = {
@@ -23,5 +24,8 @@ export const mutations = {
     },
     [types.SET_RELATORIO_FISICO](state, dados) {
         state.relatorioFisico = dados;
+    },
+    [types.SET_RELACAO_PAGAMENTO](state, dados) {
+        state.relacaoPagamento = dados;
     },
 };

@@ -55,6 +55,7 @@
             "Application\\Modules\\PrestacaoContas\\Service\\": "./application/modules/prestacao-contas/service/",
             "Application\\Modules\\PrestacaoContas\\Service\\PagamentoConsolidados\\": "./application/modules/prestacao-contas/service/",
             "Application\\Modules\\PrestacaoContas\\Service\\PagamentoUfMunicipio\\": "./application/modules/prestacao-contas/service/",
+            "Application\\Modules\\PrestacaoContas\\Service\\RelacaoPagamento\\": "./application/modules/prestacao-contas/service/",
             "Application\\Modules\\PrestacaoContas\\Service\\RelatoriosTrimestrais\\": "./application/modules/prestacao-contas/service/",
             "Application\\Modules\\PrestacaoContas\\Service\\Assinatura\\": "./application/modules/prestacao-contas/service/assinatura/",
             "Application\\Modules\\PrestacaoContas\\Service\\Assinatura\\Laudo\\": "./application/modules/prestacao-contas/service/assinatura/laudo/",

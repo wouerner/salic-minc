@@ -39,6 +39,7 @@ import PagamentosUfMunicipio from './visualizar/components/prestacaoContas/Pagam
 import RelatoriosTrimestrais from './visualizar/components/prestacaoContas/RelatoriosTrimestrais';
 import ExecucaoReceitaDespesa from './visualizar/components/prestacaoContas/ExecucaoReceitaDespesa';
 import RelatorioFisico from './visualizar/components/prestacaoContas/RelatorioFisico';
+import RelacaoPagamento from './visualizar/components/prestacaoContas/RelacaoPagamento';
 
 // import retirados do webpackChunkName
 import DadosProjeto from './visualizar/components/DadosProjeto';
@@ -383,6 +384,14 @@ const routes = [
                 component: RelatorioFisico,
                 meta: {
                     title: 'Relatório Físico',
+                },
+            },
+            {
+                path: 'relacao-pagamento',
+                name: 'RelacaoPagamento',
+                component: RelacaoPagamento,
+                meta: {
+                    title: 'Relação de Pagamentos',
                 },
             },
         ],
