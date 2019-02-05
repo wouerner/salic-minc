@@ -15,9 +15,15 @@
                 <template
                     slot="items"
                     slot-scope="props">
-                    <td class="text-xs-left">{{ props.item.dtInicio | formatarData}} até {{ props.item.dtFim | formatarData }} </td>
+                    <td class="text-xs-left">
+                        {{ props.item.dtInicio | formatarData }}
+                        até
+                        {{ props.item.dtFim | formatarData }}
+                    </td>
                     <td class="text-xs-center pl-5">{{ props.item.dtComprovante | formatarData }}</td>
-                    <td class="text-xs-left" v-html="props.item.siComprovanteTrimestral"/>
+                    <td
+                        class="text-xs-left"
+                        v-html="props.item.siComprovanteTrimestral"/>
                 </template>
             </v-data-table>
         </div>

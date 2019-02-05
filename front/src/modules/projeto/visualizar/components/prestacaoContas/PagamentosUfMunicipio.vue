@@ -16,9 +16,9 @@
                     :headers="headers"
                     :items="indexItems"
                     :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
+                    :search="search"
                     item-key="id"
                     class="elevation-1 container-fluid"
-                    :search="search"
                 >
                     <template
                         slot="items"
@@ -30,25 +30,25 @@
                         <td
                             class="text-xs-center pl-5"
                             style="width: 200px">
-                                {{ props.item.CNPJCPF | cnpjFilter }}
+                            {{ props.item.CNPJCPF | cnpjFilter }}
                         </td>
                         <td class="text-xs-left">{{ props.item.Fornecedor }}</td>
                         <td class="text-xs-center pl-5">{{ props.item.DtComprovacao | formatarData }}</td>
                         <td class="text-xs-right">{{ props.item.vlPagamento | filtroFormatarParaReal }}</td>
                         <td class="text-xs-left">
                             <v-btn
-                            :loading="parseInt(props.item.id) === loadingButton"
-                            :href="`/upload`+
-                                `/abrir`+
+                                :loading="parseInt(props.item.id) === loadingButton"
+                                :href="`/upload`+
+                                    `/abrir`+
                                 `?id=${props.item.idArquivo}`"
-                            style="text-decoration: none"
-                            round
-                            small
-                            @click="loadingButton = parseInt(props.item.id)"
-                        >
-                            {{ props.item.nmArquivo }}
-                        </v-btn>
-                    </td>
+                                style="text-decoration: none"
+                                round
+                                small
+                                @click="loadingButton = parseInt(props.item.id)"
+                            >
+                                {{ props.item.nmArquivo }}
+                            </v-btn>
+                        </td>
                     </template>
                 </v-data-table>
             </v-card>
