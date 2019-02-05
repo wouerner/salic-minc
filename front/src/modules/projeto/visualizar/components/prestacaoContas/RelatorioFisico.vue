@@ -1,9 +1,35 @@
 <template>
     <div>
         <div v-if="loading">
-            <Carregando :text="'Relatorio Fisico'"/>
+            <Carregando :text="'Relatório Físico'"/>
         </div>
-        <div v-else/>
+        <div v-else>
+            <v-data-table
+                    :pagination.sync="pagination"
+                    :headers="headers"
+                    :items="dados"
+                    class="elevation-1 container-fluid"
+            >
+                <template
+                        slot="items"
+                        slot-scope="props">
+                    <!--<td class="text-xs-center pl-5">{{ props.item.id + 1 }}</td>-->
+                    <td class="text-xs-center pl-5">{{ props.item.Etapa }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.Item }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.Unidade }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.qteProgramada }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.vlProgramado | filtroFormatarParaReal }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.PercExecutado | filtroFormatarParaReal }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.vlExecutado | filtroFormatarParaReal }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.PercAExecutar | filtroFormatarParaReal }}</td>
+                </template>
+                <template
+                        slot="pageText"
+                        slot-scope="props">
+                    Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                </template>
+            </v-data-table>
+        </div>
     </div>
 </template>
 <script>
@@ -25,6 +51,53 @@ export default {
                 descending: true,
             },
             loading: true,
+            headers: [
+                {
+                    text: 'N°',
+                    align: 'center',
+                    value: 'id',
+                },
+                {
+                    text: 'ETAPA',
+                    align: 'left',
+                    value: 'Etapa',
+                },
+                {
+                    text: 'ITEM',
+                    align: 'left',
+                    value: 'Item',
+                },
+                {
+                    text: 'UNIDADE',
+                    align: 'left',
+                    value: 'Unidade',
+                },
+                {
+                    text: 'QTDE PROGRAMADA',
+                    align: 'left',
+                    value: 'qteProgramada',
+                },
+                {
+                    text: 'VL. PROGRAMADO',
+                    align: 'left',
+                    value: 'vlProgramado',
+                },
+                {
+                    text: '% EXECUTADO',
+                    align: 'left',
+                    value: 'PercExecutado',
+                },
+                {
+                    text: 'VL. EXECUTADO',
+                    align: 'left',
+                    value: 'vlExecutado',
+                },
+                {
+                    text: '% A EXECUTAR',
+                    align: 'left',
+                    value: 'PercAExecutar',
+                },
+            ]
         };
     },
     computed: {
