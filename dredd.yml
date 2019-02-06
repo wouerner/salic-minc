@@ -10,7 +10,9 @@ names: false
 only: []
 reporter: []
 output: []
-header: []
+header: [
+    'Content-Type: application/json; charset=utf-8',
+]
 sorted: false
 user: null
 inline-errors: false
