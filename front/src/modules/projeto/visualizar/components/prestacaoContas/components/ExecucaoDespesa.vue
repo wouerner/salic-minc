@@ -112,7 +112,7 @@ export default {
                 id: index,
                 ...item,
             }));
-        }
+        },
     },
 };
 </script>

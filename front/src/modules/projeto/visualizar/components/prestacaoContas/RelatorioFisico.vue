@@ -5,15 +5,15 @@
         </div>
         <div v-else>
             <v-data-table
-                    :pagination.sync="pagination"
-                    :headers="headers"
-                    :items="dados"
-                    class="elevation-1 container-fluid"
+                :pagination.sync="pagination"
+                :headers="headers"
+                :items="indexItems"
+                class="elevation-1 container-fluid"
             >
                 <template
-                        slot="items"
-                        slot-scope="props">
-                    <!--<td class="text-xs-center pl-5">{{ props.item.id + 1 }}</td>-->
+                    slot="items"
+                    slot-scope="props">
+                    <td class="text-xs-center pl-5">{{ props.item.id + 1 }}</td>
                     <td class="text-xs-center pl-5">{{ props.item.Etapa }}</td>
                     <td class="text-xs-center pl-5">{{ props.item.Item }}</td>
                     <td class="text-xs-center pl-5">{{ props.item.Unidade }}</td>
@@ -24,8 +24,8 @@
                     <td class="text-xs-center pl-5">{{ props.item.PercAExecutar | filtroFormatarParaReal }}</td>
                 </template>
                 <template
-                        slot="pageText"
-                        slot-scope="props">
+                    slot="pageText"
+                    slot-scope="props">
                     Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
                 </template>
             </v-data-table>
@@ -97,7 +97,7 @@ export default {
                     align: 'left',
                     value: 'PercAExecutar',
                 },
-            ]
+            ],
         };
     },
     computed: {
@@ -124,6 +124,13 @@ export default {
         ...mapActions({
             buscarRelatorioFisico: 'prestacaoContas/buscarRelatorioFisico',
         }),
+        indexItems() {
+            const currentItems = this.dados;
+            return currentItems.map((item, index) => ({
+                id: index,
+                ...item,
+            }));
+        },
     },
 };
 </script>
