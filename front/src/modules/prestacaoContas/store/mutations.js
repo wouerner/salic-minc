@@ -7,6 +7,7 @@ export const state = {
     execucaoReceitaDespesa: [],
     relatorioFisico: [],
     relacaoPagamento: [],
+    relatorioCumprimentoObjeto: [],
 };
 
 export const mutations = {
@@ -27,5 +28,8 @@ export const mutations = {
     },
     [types.SET_RELACAO_PAGAMENTO](state, dados) {
         state.relacaoPagamento = dados;
+    },
+    [types.SET_RELATORIO_CUMPRIMENTO_OBJETO](state, dados) {
+        state.relatorioCumprimentoObjeto = dados;
     },
 };

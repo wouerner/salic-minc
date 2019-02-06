@@ -48,3 +48,11 @@ export const buscarRelacaoPagamento = ({ commit }, idPronac) => {
             commit(types.SET_RELACAO_PAGAMENTO, data);
         });
 };
+
+export const buscarRelatorioCumprimentoObjeto = ({ commit }, idPronac) => {
+    prestacaoContasHelperAPI.buscarRelatorioCumprimentoObjeto(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_RELATORIO_CUMPRIMENTO_OBJETO, data);
+        });
+};

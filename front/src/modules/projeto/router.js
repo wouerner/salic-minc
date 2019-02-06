@@ -40,6 +40,7 @@ import RelatoriosTrimestrais from './visualizar/components/prestacaoContas/Relat
 import ExecucaoReceitaDespesa from './visualizar/components/prestacaoContas/ExecucaoReceitaDespesa';
 import RelatorioFisico from './visualizar/components/prestacaoContas/RelatorioFisico';
 import RelacaoPagamento from './visualizar/components/prestacaoContas/RelacaoPagamento';
+import RelatorioCumprimentoObjeto from './visualizar/components/prestacaoContas/RelatorioCumprimentoObjeto';
 
 // import retirados do webpackChunkName
 import DadosProjeto from './visualizar/components/DadosProjeto';
@@ -392,6 +393,14 @@ const routes = [
                 component: RelacaoPagamento,
                 meta: {
                     title: 'Relação de Pagamentos',
+                },
+            },
+            {
+                path: 'relatorio-cumprimento-objeto',
+                name: 'RelatorioCumprimentoObjeto',
+                component: RelatorioCumprimentoObjeto,
+                meta: {
+                    title: 'Relatório de cumprimento do Objeto',
                 },
             },
         ],
