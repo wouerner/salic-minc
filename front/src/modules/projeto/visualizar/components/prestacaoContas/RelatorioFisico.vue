@@ -7,21 +7,21 @@
             <v-data-table
                 :pagination.sync="pagination"
                 :headers="headers"
-                :items="indexItems"
+                :items="indexItems()"
                 class="elevation-1 container-fluid"
             >
                 <template
                     slot="items"
                     slot-scope="props">
                     <td class="text-xs-center">{{ props.item.id + 1 }}</td>
-                    <td class="text-xs-center">{{ props.item.Etapa }}</td>
-                    <td class="text-xs-center">{{ props.item.Item }}</td>
-                    <td class="text-xs-center">{{ props.item.Unidade }}</td>
-                    <td class="text-xs-center">{{ props.item.qteProgramada }}</td>
-                    <td class="text-xs-center">{{ props.item.vlProgramado | filtroFormatarParaReal }}</td>
-                    <td class="text-xs-center">{{ props.item.PercExecutado | filtroFormatarParaReal }}</td>
-                    <td class="text-xs-center">{{ props.item.vlExecutado | filtroFormatarParaReal }}</td>
-                    <td class="text-xs-center">{{ props.item.PercAExecutar | filtroFormatarParaReal }}</td>
+                    <td class="text-xs-left">{{ props.item.Etapa }}</td>
+                    <td class="text-xs-left">{{ props.item.Item }}</td>
+                    <td class="text-xs-left">{{ props.item.Unidade }}</td>
+                    <td class="text-xs-right">{{ props.item.qteProgramada }}</td>
+                    <td class="text-xs-right">{{ props.item.vlProgramado | filtroFormatarParaReal }}</td>
+                    <td class="text-xs-right">{{ props.item.PercExecutado | filtroFormatarParaReal }}</td>
+                    <td class="text-xs-right">{{ props.item.vlExecutado | filtroFormatarParaReal }}</td>
+                    <td class="text-xs-right">{{ props.item.PercAExecutar | filtroFormatarParaReal }}</td>
                 </template>
                 <template
                     slot="pageText"
