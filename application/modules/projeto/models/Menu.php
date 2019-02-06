@@ -584,8 +584,8 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             $menu['prestacaodecontas']['submenu'][] = [
                 'label' => 'Relat&oacute;rio f&iacute;sico',
                 'title' => 'Ir para Relat&oacute;rio f&iacute;sico',
-                'link' => '/default/consultardadosprojeto/relatorio-fisico/?idPronac=' . $idPronacHash,
-                'ajax' => true,
+                'link' => "/projeto/#/{$idPronacHash}/relatorio-fisico",
+                'ajax' => false,
                 'grupo' => []
             ];
 

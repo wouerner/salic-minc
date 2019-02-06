@@ -13,15 +13,15 @@
                 <template
                     slot="items"
                     slot-scope="props">
-                    <td class="text-xs-center pl-5">{{ props.item.id + 1 }}</td>
-                    <td class="text-xs-center pl-5">{{ props.item.Etapa }}</td>
-                    <td class="text-xs-center pl-5">{{ props.item.Item }}</td>
-                    <td class="text-xs-center pl-5">{{ props.item.Unidade }}</td>
-                    <td class="text-xs-center pl-5">{{ props.item.qteProgramada }}</td>
-                    <td class="text-xs-center pl-5">{{ props.item.vlProgramado | filtroFormatarParaReal }}</td>
-                    <td class="text-xs-center pl-5">{{ props.item.PercExecutado | filtroFormatarParaReal }}</td>
-                    <td class="text-xs-center pl-5">{{ props.item.vlExecutado | filtroFormatarParaReal }}</td>
-                    <td class="text-xs-center pl-5">{{ props.item.PercAExecutar | filtroFormatarParaReal }}</td>
+                    <td class="text-xs-center">{{ props.item.id + 1 }}</td>
+                    <td class="text-xs-center">{{ props.item.Etapa }}</td>
+                    <td class="text-xs-center">{{ props.item.Item }}</td>
+                    <td class="text-xs-center">{{ props.item.Unidade }}</td>
+                    <td class="text-xs-center">{{ props.item.qteProgramada }}</td>
+                    <td class="text-xs-center">{{ props.item.vlProgramado | filtroFormatarParaReal }}</td>
+                    <td class="text-xs-center">{{ props.item.PercExecutado | filtroFormatarParaReal }}</td>
+                    <td class="text-xs-center">{{ props.item.vlExecutado | filtroFormatarParaReal }}</td>
+                    <td class="text-xs-center">{{ props.item.PercAExecutar | filtroFormatarParaReal }}</td>
                 </template>
                 <template
                     slot="pageText"
