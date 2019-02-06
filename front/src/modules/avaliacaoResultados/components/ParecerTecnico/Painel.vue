@@ -327,8 +327,6 @@ export default {
         Vue.set(this.listaAcoesCoordenador, 'usuario', this.getUsuario);
         Vue.set(this.listaAcoesAssinarCoordenadorGeral, 'usuario', this.getUsuario);
     },
-    mounted() {
-    },
     methods: {
         ...mapActions({
             obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
