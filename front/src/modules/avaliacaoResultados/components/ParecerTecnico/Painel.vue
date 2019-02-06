@@ -39,12 +39,12 @@
                                 max-width="400"
                             >
                                 <v-card-title>
-                                    <span class="title font-weight-light">{{index}}</span>
+                                    <span class="title font-weight-light">{{ index }}</span>
                                 </v-card-title>
 
                                 <v-card-text class="headline font-weight-bold ">
                                     <p class="display-3 text-xs-center">
-                                        <a :href="dashboad.url">{{dashboad.valor}}</a>
+                                        <a :href="dashboad.url">{{ dashboad.valor }}</a>
                                     </p>
                                 </v-card-text>
                             </v-card>
@@ -102,7 +102,7 @@
                     </template>
                 </v-tab>
 
-                <v-tab 
+                <v-tab
                     href="#tab-4"
                     @click="r('/painel/historico')"
                 >
