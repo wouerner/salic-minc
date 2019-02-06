@@ -150,7 +150,7 @@ export default {
                 return;
             }
             this.readequacao.dsSolicitacao = this.$parent.$refs.formulario.$children[0].dsSolicitacao;
-            this.updateReadequacao(this.readequacao);
+            this.updateReadequacaoSaldoAplicacao(this.readequacao);
         },
         prepararAdicionarDocumento() {
             const arquivos = document.getElementById('arquivo');

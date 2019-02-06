@@ -38,7 +38,7 @@ export default {
             this.updateReadequacaoDsSolicitacao(event.target.value);
         },
         ...mapActions({
-            updateReadequacaoDsSolicitacao: 'readequacao/updateReadequacaoDsSolicitacao',
+            updateReadequacaoDsSolicitacao: 'readequacao/updateReadequacaoSaldoAplicacaoDsSolicitacao',
         }),
     },
     watch: {
