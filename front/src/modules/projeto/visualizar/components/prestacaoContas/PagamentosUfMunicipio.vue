@@ -7,7 +7,18 @@
             <v-card>
                 <v-container fluid>
                     <Filtro
-                        :label="'Pesquise Item/UF/Municipio'"
+                        :items="montaArray('Item')"
+                        :label="'Pesquise Item'"
+                        @eventoSearch="search = $event"
+                    />
+                    <Filtro
+                        :items="montaArray('UFFornecedor')"
+                        :label="'Pesquise UF'"
+                        @eventoSearch="search = $event"
+                    />
+                    <Filtro
+                        :items="montaArray('MunicipioFornecedor')"
+                        :label="'Pesquise Municipio'"
                         @eventoSearch="search = $event"
                     />
                 </v-container>
@@ -166,6 +177,19 @@ export default {
         ...mapActions({
             buscarPagamentosUfMunicipio: 'prestacaoContas/buscarPagamentosUfMunicipio',
         }),
+        montaArray(value) {
+            const dadosListagem = [];
+            let arrayFiltro = this.dados;
+            arrayFiltro = arrayFiltro.filter((element, i, array) => {
+                return array.map(x => x[value]).indexOf(element[value]) === i;
+            });
+
+            arrayFiltro.forEach((element) => {
+                dadosListagem.push(element[value]);
+            });
+
+            return dadosListagem;
+        },
     },
 };
 </script>
