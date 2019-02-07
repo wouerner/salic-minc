@@ -20,11 +20,11 @@
                 <td class="text-xs-right">{{ props.item.qtRecebida }}</td>
                 <td class="text-xs-left">
                     <v-btn
-                            :loading="parseInt(props.item.id) === loadingButton"
+                            :href="`/upload/abrir?id=${props.item.idArquivo}`"
+                            target="_blank"
                             style="text-decoration: none"
                             round
                             small
-                            @click="loadingButton = parseInt(props.item.id)"
                     >
                         {{ props.item.nmArquivo }}
                     </v-btn>
