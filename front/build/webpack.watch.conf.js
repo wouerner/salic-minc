@@ -51,8 +51,11 @@ const watchWebpackConfig = merge(baseWebpackConfig, {
     // cheap-module-eval-source-map is faster for development
     devtool: config.dev.devtool,
     plugins: [
+        new webpack.EnvironmentPlugin([
+            'API',
+        ]),
         new webpack.DefinePlugin({
-            'process.env': require('../config/dev.env')
+            'test': require('../config/test.env'),
         }),
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
@@ -85,7 +88,7 @@ const watchWebpackConfig = merge(baseWebpackConfig, {
 
             // server: { baseDir: [config.dev.assetsSubDirectory] }
         })
-    ]
+    ],
 })
 
 module.exports = watchWebpackConfig
