@@ -47,13 +47,13 @@ class RelatorioCumprimentoObjeto implements \MinC\Servico\IServicoRestZend
 //            $this->view->PlanoDeDistribuicao = $PlanoDeDistribuicao;
 
             $tbBeneficiarioProdutoCultural = new \tbBeneficiarioProdutoCultural();
-            $PlanosCadastrados = $tbBeneficiarioProdutoCultural->buscarPlanosCadastrados($idPronac);
+            $PlanosCadastrados = $tbBeneficiarioProdutoCultural->buscarPlanosCadastrados($idPronac)->toArray();
 //            $this->view->PlanosCadastrados = $PlanosCadastrados;
 
             $DadosCompMetas = $projetos->buscarMetasComprovadas($idPronac);
 //            $this->view->DadosCompMetas = $DadosCompMetas;
 
-            $DadosItensOrcam = $projetos->buscarItensComprovados($idPronac);
+            $DadosItensOrcam = $projetos->buscarItensComprovados($idPronac)->toArray();
 //            $this->view->DadosItensOrcam = $DadosItensOrcam;
 
             $Arquivo = new \Arquivo();
@@ -79,8 +79,11 @@ class RelatorioCumprimentoObjeto implements \MinC\Servico\IServicoRestZend
                 }
             }
 
-            return $DadosRelatorio;
+            $arrrayDados['dadosRelatorio'] = $DadosRelatorio;
+            $arrrayDados['planosCadastrados'] = $PlanosCadastrados;
+            $arrrayDados['dadosItensOrcamentarios'] = $DadosItensOrcam;
 
+            return $arrrayDados;
             $isPermitidoVisualizarRelatorio = $this->view->usuarioInterno || in_array(
                     $dadosProjeto->situacao,
                     Projeto_Model_Situacao::obterSituacoesPermitidoVisualizarPrestacaoContas()
