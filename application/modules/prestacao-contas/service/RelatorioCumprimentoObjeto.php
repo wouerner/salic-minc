@@ -61,8 +61,8 @@ class RelatorioCumprimentoObjeto implements \MinC\Servico\IServicoRestZend
 //            $this->view->DadosComprovantes = $dadosComprovantes;
 
             $tbTermoAceiteObra = new \ComprovacaoObjeto_Model_DbTable_TbTermoAceiteObra();
-            $AceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idPronac));
-//            $this->view->AceiteObras = $AceiteObras;
+            $aceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idPronac));
+//            $this->view->$aceiteObras = $aceiteObras;
 
             $tbBensDoados = new \ComprovacaoObjeto_Model_DbTable_TbBensDoados();
             $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idPronac), array('b.Descricao'));
