@@ -2,22 +2,21 @@
     <div>
         <v-card>
             <v-card-title>
-                <h6>BENEFICIÁRIOS DE PRODUTO CULTURAL</h6>
+                <h6>PLANO DE DIVULGAÇÃO</h6>
             </v-card-title>
             <v-data-table
                 :pagination.sync="pagination"
                 :headers="headers"
-                :items="dados.planosCadastrados"
+                :items="dados.planoDeDivulgacao"
                 class="elevation-1 container-fluid"
             >
                 <template
                     slot="items"
                     slot-scope="props">
-                    <td class="text-xs-left">{{ props.item.Produto }}</td>
-                    <td class="text-xs-left">{{ props.item.idTipoBeneficiario | tipoBeneficiario }}</td>
-                    <td class="text-xs-left">{{ props.item.CNPJCPF | cnpjFilter }}</td>
-                    <td class="text-xs-left">{{ props.item.Beneficiario }}</td>
-                    <td class="text-xs-right">{{ props.item.qtRecebida }}</td>
+                    <td class="text-xs-left">{{ props.item.Peca }}</td>
+                    <td class="text-xs-left">{{ props.item.Veiculo }}</td>
+                    <td class="text-xs-right">{{ props.item.siPlanoDeDivulgacao | tipoPlanoDivulgacao }}</td>
+                    <td class="text-xs-right">Falta icones </td>
                     <td class="text-xs-left">
                         <v-btn
                             :href="`/upload/abrir?id=${props.item.idArquivo}`"
@@ -29,6 +28,7 @@
                             {{ props.item.nmArquivo }}
                         </v-btn>
                     </td>
+                    <td class="text-xs-right">{{ props.item.dtEnvio | formatarData }}</td>
                 </template>
                 <template
                     slot="pageText"
@@ -42,25 +42,29 @@
 <script>
 import { mapGetters } from 'vuex';
 import { utils } from '@/mixins/utils';
-import cnpjFilter from '@/filters/cnpj';
 
 export default {
-    name: 'BeneficiariosProdutoCultural',
+    name: 'PlanoDivulgacao',
     filters: {
-        cnpjFilter,
-        tipoBeneficiario(idTipoBeneficiario) {
-            let tipoBeneficiario = '';
-            switch (idTipoBeneficiario) {
-            case 19:
-                tipoBeneficiario = 'Patrocinador';
+        tipoPlanoDivulgacao(siPlanoDeDivulgacao) {
+            let planoDeDivulgacao = '';
+            switch (siPlanoDeDivulgacao) {
+            case '0':
+                planoDeDivulgacao = 'Sem Informação';
                 break;
-            case 20:
-                tipoBeneficiario = 'Divulgação';
+            case '1':
+                planoDeDivulgacao = 'Não Realizado';
+                break;
+            case '2':
+                planoDeDivulgacao = 'Realizado';
+                break;
+            case '3':
+                planoDeDivulgacao = 'Realizado com outras fontes';
                 break;
             default:
-                tipoBeneficiario = 'Beneficiário';
+                planoDeDivulgacao = '';
             }
-            return tipoBeneficiario;
+            return planoDeDivulgacao;
         },
     },
     mixins: [utils],
@@ -72,34 +76,34 @@ export default {
             },
             headers: [
                 {
-                    text: 'Produto',
+                    text: 'Peça',
                     align: 'left',
-                    value: 'Produto',
+                    value: 'Peca',
                 },
                 {
-                    text: 'Tipo Beneficiário',
+                    text: 'Veículo',
                     align: 'left',
-                    value: 'idTipoBeneficiario',
+                    value: 'Veiculo',
                 },
                 {
-                    text: 'CNPJ/CPF',
-                    align: 'left',
-                    value: 'CNPJCPF',
-                },
-                {
-                    text: 'Nome',
-                    align: 'left',
-                    value: 'Beneficiario',
-                },
-                {
-                    text: 'Quantidade',
+                    text: 'Realizado',
                     align: 'right',
-                    value: 'qtRecebida',
+                    value: 'qtFisicaExecutada',
+                },
+                {
+                    text: 'Comprovado',
+                    align: 'right',
+                    value: 'PercFinanceiro',
                 },
                 {
                     text: 'Arquivo',
                     align: 'left',
                     value: 'nmArquivo',
+                },
+                {
+                    text: 'Data da Anexação',
+                    align: 'left',
+                    value: 'dtEnvio',
                 },
             ],
         };

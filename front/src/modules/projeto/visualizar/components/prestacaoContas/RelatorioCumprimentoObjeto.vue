@@ -7,35 +7,36 @@
             <v-card>
                 <v-card-text>
                     <v-container
-                            grid-list-md
-                            text-xs-left
+                        fluid
+                        grid-list-md
+                        text-xs-left
                     >
                         <v-layout
-                                justify-space-around
-                                row
-                                wrap>
+                            justify-space-around
+                            row
+                            wrap>
                             <v-flex
-                                    lg12
-                                    dark
-                                    class="text-xs-left">
+                                lg12
+                                dark
+                                class="text-xs-left">
                                 <b><h4>ETAPAS DE TRABALHO</h4></b>
                                 <v-divider class="pb-2"/>
                             </v-flex>
                             <v-flex>
                                 <p><b>Etapas de Trabalho Executadas</b></p>
-                                <p v-html="dados.dadosRelatorio.dsEtapasConcluidas"></p>
+                                <p v-html="dados.dadosRelatorio.dsEtapasConcluidas"/>
                             </v-flex>
                             <v-flex>
                                 <p><b>Medidas de Acessibilidade, nos Termos da Portaria de Aprovação</b></p>
-                                <p v-html="dados.dadosRelatorio.dsMedidasAcessibilidade"></p>
+                                <p v-html="dados.dadosRelatorio.dsMedidasAcessibilidade"/>
                             </v-flex>
                             <v-flex>
                                 <p><b>Medidas de Democratização do acesso, nos termos da portaria de aprovação</b></p>
-                                <p v-html="dados.dadosRelatorio.dsMedidasFruicao"></p>
+                                <p v-html="dados.dadosRelatorio.dsMedidasFruicao"/>
                             </v-flex>
                             <v-flex>
                                 <p><b>MEDIDAS PREVENTIVAS QUANTO A IMPACTOS AMBIENTAIS</b></p>
-                                <p v-html="dados.dadosRelatorio.dsMedidasPreventivas"></p>
+                                <p v-html="dados.dadosRelatorio.dsMedidasPreventivas"/>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -43,9 +44,17 @@
             </v-card>
 
             <!--COMPROVAÇÃO DE ITENS ORÇAMENTÁRIOS-->
-            <ComprovacaoItensOrcamentarios ></ComprovacaoItensOrcamentarios>
-
-            <BeneficiariosProdutoCultural></BeneficiariosProdutoCultural>
+            <v-container fluid>
+                <ComprovacaoItensOrcamentarios />
+            </v-container>
+            <v-container fluid>
+                <BeneficiariosProdutoCultural/>
+            </v-container>
+            <v-container fluid>
+                <PlanoDivulgacao/>
+            </v-container><v-container fluid>
+                <locaisRealizacao/>
+            </v-container>
         </div>
     </div>
 </template>
@@ -56,6 +65,8 @@ import Carregando from '@/components/CarregandoVuetify';
 import { utils } from '@/mixins/utils';
 import ComprovacaoItensOrcamentarios from './components/ComprovacaoItensOrcamentarios';
 import BeneficiariosProdutoCultural from './components/BeneficiariosProdutoCultural';
+import PlanoDivulgacao from './components/PlanoDivulgacao';
+import locaisRealizacao from './components/LocaisRealizacao';
 
 export default {
     name: 'RelatorioCumprimentoObjeto',
@@ -63,6 +74,8 @@ export default {
         Carregando,
         ComprovacaoItensOrcamentarios,
         BeneficiariosProdutoCultural,
+        PlanoDivulgacao,
+        locaisRealizacao,
     },
     mixins: [utils],
     data() {

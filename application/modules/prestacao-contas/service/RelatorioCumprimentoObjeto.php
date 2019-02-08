@@ -37,9 +37,9 @@ class RelatorioCumprimentoObjeto implements \MinC\Servico\IServicoRestZend
 
         if (!empty($DadosRelatorio)) {
 //            $this->view->DadosRelatorio = $DadosRelatorio;
-            $LocaisDeRealizacao = $projetos->buscarLocaisDeRealizacao($idPronac);
+            $locaisRealizacao = $projetos->buscarLocaisDeRealizacao($idPronac)->toArray();
 //            $this->view->LocaisDeRealizacao = $LocaisDeRealizacao;
-            $PlanoDeDivulgacao = $projetos->buscarPlanoDeDivulgacao($idPronac);
+            $planoDeDivulgacao = $projetos->buscarPlanoDeDivulgacao($idPronac)->toArray();
 //            $this->view->PlanoDeDivulgacao = $PlanoDeDivulgacao;
 
             $PlanoDistribuicaoProduto = new \Proposta_Model_DbTable_PlanoDistribuicaoProduto();
@@ -81,6 +81,8 @@ class RelatorioCumprimentoObjeto implements \MinC\Servico\IServicoRestZend
 
             $arrrayDados['dadosRelatorio'] = $DadosRelatorio;
             $arrrayDados['planosCadastrados'] = $PlanosCadastrados;
+            $arrrayDados['planoDeDivulgacao'] = $planoDeDivulgacao;
+            $arrrayDados['locaisRealizacao'] = $locaisRealizacao;
             $arrrayDados['dadosItensOrcamentarios'] = $DadosItensOrcam;
 
             return $arrrayDados;
