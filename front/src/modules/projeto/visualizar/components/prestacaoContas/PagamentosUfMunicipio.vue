@@ -6,21 +6,28 @@
         <div v-else-if="dados">
             <v-card>
                 <v-container fluid>
-                    <Filtro
-                        :items="montaArray('Item')"
-                        :label="'Pesquise Item'"
-                        @eventoSearch="search = $event"
-                    />
-                    <Filtro
-                        :items="montaArray('UFFornecedor')"
-                        :label="'Pesquise UF'"
-                        @eventoSearch="search = $event"
-                    />
-                    <Filtro
-                        :items="montaArray('MunicipioFornecedor')"
-                        :label="'Pesquise Municipio'"
-                        @eventoSearch="search = $event"
-                    />
+                    <v-layout
+                        justify-start
+                        row
+                        wrap>
+                        <Filtro
+                            :items="montaArray('Item')"
+                            :label="'Pesquise Item'"
+                            @eventoSearch="search = $event"
+                            class="pr-5"
+                        />
+                        <Filtro
+                            :items="montaArray('UFFornecedor')"
+                            :label="'Pesquise UF'"
+                            @eventoSearch="search = $event"
+                            class="pr-5"
+                        />
+                        <Filtro
+                            :items="montaArray('MunicipioFornecedor')"
+                            :label="'Pesquise Municipio'"
+                            @eventoSearch="search = $event"
+                        />
+                    </v-layout>
                 </v-container>
                 <v-data-table
                     :pagination.sync="pagination"
