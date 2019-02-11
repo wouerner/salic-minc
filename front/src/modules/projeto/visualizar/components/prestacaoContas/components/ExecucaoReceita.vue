@@ -9,6 +9,7 @@
                 <v-layout
                     slot="header"
                     class="blue--text">
+                    <v-icon class="mr-3 blue--text">trending_up</v-icon>
                     RECEITA
                 </v-layout>
                 <v-card/>
@@ -55,7 +56,7 @@
                     </v-container>
                 </v-card>
             </v-expansion-panel-content>
-        </v-expansion-panel>
+        </v-layout></v-expansion-panel-content></v-expansion-panel>
     </div>
 </template>
 <script>

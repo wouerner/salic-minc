@@ -9,6 +9,7 @@
                 <v-layout
                     slot="header"
                     class="red--text">
+                    <v-icon class="mr-3 red--text">trending_down</v-icon>
                     DESPESA
                 </v-layout>
                 <v-card/>
