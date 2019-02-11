@@ -1,6 +1,6 @@
 <?php
 
-use Application\Modules\Readequacao\Service\Readequacao as ReadequacaoService;
+use Application\Modules\Readequacao\Service\Readequacao\Readequacao as ReadequacaoService;
 
 class Readequacao_DadosReadequacaoController extends MinC_Controller_Rest_Abstract
 {
@@ -17,7 +17,7 @@ class Readequacao_DadosReadequacaoController extends MinC_Controller_Rest_Abstra
         $permissionsPerMethod  = [
         ];
         $this->setProtectedMethodsProfilesPermission($permissionsPerMethod);
-        print_r($request);
+        
         parent::__construct($request, $response, $invokeArgs);
     }
 
@@ -30,8 +30,9 @@ class Readequacao_DadosReadequacaoController extends MinC_Controller_Rest_Abstra
         $data['idPronac'] = $idPronac;
         $data['idReadequacao'] = $idReadequacao;
         $data['texto'] = 'agojaeogh aiughaeuigh aeuihg euiahgiuaeh giuah gi';
-            
-        //        $data = \TratarArray::utf8EncodeArray($data);
+
+        $readequacaoService = new ReadequacaoService($this->getRequest(), $this->getResponse());
+        $data = $readequacaoService->buscar($idReadequacao);
         
         $this->renderJsonResponse($data, $code);
     }
@@ -42,7 +43,12 @@ class Readequacao_DadosReadequacaoController extends MinC_Controller_Rest_Abstra
 
     public function postAction(){}
 
-    public function putAction(){}
+    public function putAction(){
+        $readequacaoService = new ReadequacaoService($this->getRequest(), $this->getResponse());
+        $resposta = $readequacaoService->atualizar();
+        
+        $this->renderJsonResponse($resposta, 200);
+    }
 
     public function deleteAction(){}
 
