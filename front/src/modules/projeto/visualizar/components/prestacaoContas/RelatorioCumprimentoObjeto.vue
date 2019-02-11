@@ -3,59 +3,85 @@
         <div v-if="loading">
             <Carregando :text="'Relatório de cumprimento do objeto'"/>
         </div>
-        <div v-else>
-            <v-card>
-                <v-card-text>
-                    <v-container
-                        fluid
-                        grid-list-md
-                        text-xs-left
-                    >
-                        <v-layout
-                            justify-space-around
-                            row
-                            wrap>
-                            <v-flex
-                                lg12
-                                dark
-                                class="text-xs-left">
-                                <b><h4>ETAPAS DE TRABALHO</h4></b>
-                                <v-divider class="pb-2"/>
-                            </v-flex>
-                            <v-flex>
-                                <p><b>Etapas de Trabalho Executadas</b></p>
-                                <p v-html="dados.dadosRelatorio.dsEtapasConcluidas"/>
-                            </v-flex>
-                            <v-flex>
-                                <p><b>Medidas de Acessibilidade, nos Termos da Portaria de Aprovação</b></p>
-                                <p v-html="dados.dadosRelatorio.dsMedidasAcessibilidade"/>
-                            </v-flex>
-                            <v-flex>
-                                <p><b>Medidas de Democratização do acesso, nos termos da portaria de aprovação</b></p>
-                                <p v-html="dados.dadosRelatorio.dsMedidasFruicao"/>
-                            </v-flex>
-                            <v-flex>
-                                <p><b>MEDIDAS PREVENTIVAS QUANTO A IMPACTOS AMBIENTAIS</b></p>
-                                <p v-html="dados.dadosRelatorio.dsMedidasPreventivas"/>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
-                </v-card-text>
-            </v-card>
+        <div v-else-if="Object.keys(dados).length > 0">
+            <v-container
+                v-if="Object.keys(dados.dadosRelatorio).length > 0"
+                fluid>
+                <EtapaTrabalho/>
+            </v-container>
 
-            <!--COMPROVAÇÃO DE ITENS ORÇAMENTÁRIOS-->
-            <v-container fluid>
-                <ComprovacaoItensOrcamentarios />
+            <v-container
+                v-if="Object.keys(dados.dadosItensOrcamentarios).length > 0"
+                fluid>
+                <ComprovacaoItensOrcamentarios/>
             </v-container>
-            <v-container fluid>
-                <BeneficiariosProdutoCultural/>
-            </v-container>
-            <v-container fluid>
-                <PlanoDivulgacao/>
-            </v-container><v-container fluid>
+            <v-container
+                v-if="Object.keys(dados.locaisRealizacao).length > 0"
+                fluid>
                 <locaisRealizacao/>
             </v-container>
+            <v-container
+                v-if="Object.keys(dados.planoDeDivulgacao).length > 0"
+                fluid>
+                <PlanoDivulgacao/>
+            </v-container>
+
+            <v-container
+                v-if="Object.keys(dados.dadosCompMetas).length > 0"
+                fluid>
+                <ComprovacaoMetas/>
+            </v-container>
+
+            <v-container
+                v-if="Object.keys(dados.dadosComprovantes).length > 0"
+                fluid>
+                <ComprovanteCadastrado/>
+            </v-container>
+
+            <v-container
+                v-if="Object.keys(dados.planoDistribuicao).length > 0"
+                fluid>
+                <PlanoDistribuicao/>
+            </v-container>
+
+            <v-container
+                v-if="Object.keys(dados.bensCadastrados).length > 0"
+                fluid>
+                <BensImoveisMoveisDoados/>
+            </v-container>
+
+            <v-container
+                v-if="Object.keys(dados.planosCadastrados).length > 0"
+                fluid>
+                <BeneficiariosProdutoCultural/>
+            </v-container>
+
+            <v-container
+                v-if="dados.isPermitidoVisualizarRelatorio && dados.dadosRelatorio.siCumprimentoObjeto === '6'"
+                fluid>
+                <ParecerAvaliacaoTecnica/>
+            </v-container>
+            <v-container
+                v-if="Object.keys(dados.aceiteObras).length > 0"
+                fluid>
+                <AceiteObra/>
+            </v-container>
         </div>
+        <v-layout v-else>
+            <v-container
+                grid-list-md
+                text-xs-center>
+                <v-layout
+                    row
+                    wrap>
+                    <v-flex>
+                        <v-card>
+                            <v-card-text class="px-0">Nenhum Relatório encontrado</v-card-text>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </v-layout>
     </div>
 </template>
 <script>
@@ -63,19 +89,33 @@
 import { mapActions, mapGetters } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
 import { utils } from '@/mixins/utils';
+import EtapaTrabalho from './components/EtapaTrabalho';
 import ComprovacaoItensOrcamentarios from './components/ComprovacaoItensOrcamentarios';
 import BeneficiariosProdutoCultural from './components/BeneficiariosProdutoCultural';
 import PlanoDivulgacao from './components/PlanoDivulgacao';
-import locaisRealizacao from './components/LocaisRealizacao';
+import LocaisRealizacao from './components/LocaisRealizacao';
+import ComprovacaoMetas from './components/ComprovacaoMetas';
+import ComprovanteCadastrado from './components/ComprovanteCadastrado';
+import BensImoveisMoveisDoados from './components/BensImoveisMoveisDoados';
+import AceiteObra from './components/AceiteObra';
+import PlanoDistribuicao from './components/PlanoDistribuicao';
+import ParecerAvaliacaoTecnica from './components/ParecerAvaliacaoTecnica';
 
 export default {
     name: 'RelatorioCumprimentoObjeto',
     components: {
         Carregando,
+        EtapaTrabalho,
         ComprovacaoItensOrcamentarios,
         BeneficiariosProdutoCultural,
         PlanoDivulgacao,
-        locaisRealizacao,
+        LocaisRealizacao,
+        AceiteObra,
+        BensImoveisMoveisDoados,
+        PlanoDistribuicao,
+        ComprovanteCadastrado,
+        ComprovacaoMetas,
+        ParecerAvaliacaoTecnica,
     },
     mixins: [utils],
     data() {
@@ -85,9 +125,6 @@ export default {
                 descending: true,
             },
             loading: true,
-            headers: [
-
-            ],
         };
     },
     computed: {
@@ -114,13 +151,6 @@ export default {
         ...mapActions({
             buscarRelatorioCumprimentoObjeto: 'prestacaoContas/buscarRelatorioCumprimentoObjeto',
         }),
-        indexItems() {
-            const currentItems = this.dados;
-            return currentItems.map((item, index) => ({
-                id: index,
-                ...item,
-            }));
-        },
     },
 };
 </script>

@@ -2,23 +2,19 @@
     <div>
         <v-card>
             <v-card-title>
-                <h6>PLANO DE DIVULGAÇÃO</h6>
+                <h6>COMPROVANTES CADASTRADOS</h6>
             </v-card-title>
             <v-data-table
                 :pagination.sync="pagination"
                 :headers="headers"
-                :items="dados.planoDeDivulgacao"
+                :items="dados.dadosComprovantes"
                 class="elevation-1 container-fluid"
             >
                 <template
                     slot="items"
                     slot-scope="props">
-                    <td class="text-xs-left">{{ props.item.Peca }}</td>
-                    <td class="text-xs-left">{{ props.item.Veiculo }}</td>
-                    <td class="text-xs-left">{{ props.item.siPlanoDeDivulgacao | tipoPlanoDivulgacao }}</td>
-                    <td
-                        v-if="props.item.nmArquivo"
-                        class="text-xs-left">
+                    <td class="text-xs-left">{{ props.item.idTipoDocumento | tipoDocumento }}</td>
+                    <td class="text-xs-left">
                         <v-btn
                             :href="`/upload/abrir?id=${props.item.idArquivo}`"
                             target="_blank"
@@ -29,8 +25,8 @@
                             {{ props.item.nmArquivo }}
                         </v-btn>
                     </td>
-                    <td v-else> - </td>
-                    <td class="text-xs-center pl-5">{{ props.item.dtEnvio | formatarData }}</td>
+                    <td class="text-xs-center pl-5">R$ {{ props.item.dtEnvio | formatarData }}</td>
+                    <td class="text-xs-left">{{ props.item.dsDocumento }}</td>
                 </template>
             </v-data-table>
         </v-card>
@@ -41,27 +37,24 @@ import { mapGetters } from 'vuex';
 import { utils } from '@/mixins/utils';
 
 export default {
-    name: 'PlanoDivulgacao',
+    name: 'ComprovanteCadastrado',
     filters: {
-        tipoPlanoDivulgacao(siPlanoDeDivulgacao) {
-            let planoDeDivulgacao = '';
-            switch (siPlanoDeDivulgacao) {
-            case '0':
-                planoDeDivulgacao = 'Sem Informação';
+        tipoDocumento(idTipoDocumento) {
+            let tipoDocumento = '';
+            switch (idTipoDocumento) {
+            case 22:
+                tipoDocumento = 'Fotos';
                 break;
-            case '1':
-                planoDeDivulgacao = 'Não Realizado';
+            case 23:
+                tipoDocumento = 'Vídeos';
                 break;
-            case '2':
-                planoDeDivulgacao = 'Realizado';
-                break;
-            case '3':
-                planoDeDivulgacao = 'Realizado com outras fontes';
+            case 24:
+                tipoDocumento = 'Arquivo';
                 break;
             default:
-                planoDeDivulgacao = '';
+                tipoDocumento = '';
             }
-            return planoDeDivulgacao;
+            return tipoDocumento;
         },
     },
     mixins: [utils],
@@ -73,29 +66,24 @@ export default {
             },
             headers: [
                 {
-                    text: 'Peça',
+                    text: 'Tipo de Comprovante',
                     align: 'left',
-                    value: 'Peca',
+                    value: 'idTipoDocumento',
                 },
                 {
-                    text: 'Veículo',
-                    align: 'left',
-                    value: 'Veiculo',
-                },
-                {
-                    text: 'Realizado',
-                    align: 'left',
-                    value: 'qtFisicaExecutada',
-                },
-                {
-                    text: 'Arquivo',
+                    text: 'Nome do Arquivo',
                     align: 'left',
                     value: 'nmArquivo',
                 },
                 {
-                    text: 'Data da Anexação',
+                    text: 'Data de Envio',
                     align: 'center',
                     value: 'dtEnvio',
+                },
+                {
+                    text: 'Observações',
+                    align: 'left',
+                    value: 'dsDocumento',
                 },
             ],
         };

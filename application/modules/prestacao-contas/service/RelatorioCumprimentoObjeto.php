@@ -15,10 +15,15 @@ class RelatorioCumprimentoObjeto implements \MinC\Servico\IServicoRestZend
      */
     private $response;
 
+    private $isUsuarioInterno = false;
+
     function __construct($request, $response)
     {
         $this->request = $request;
         $this->response = $response;
+
+        $auth = \Zend_Auth::getInstance();
+        $this->isUsuarioInterno = isset($auth->getIdentity()->usu_codigo);
     }
 
     public function listarRelatorioCumprimentoObjeto()
@@ -27,74 +32,57 @@ class RelatorioCumprimentoObjeto implements \MinC\Servico\IServicoRestZend
         if (strlen($idPronac) > 7) {
             $idPronac = \Seguranca::dencrypt($idPronac);
         }
+        $arrayDados = [];
 
         $projetos = new \Projetos();
         $dadosProjeto = $projetos->dadosProjeto(array('idPronac = ?' => $idPronac))->current();
-//        $this->view->DadosProjeto = $dadosProjeto;
-//        $this->view->idPronac = $idpronac;
-        $tbCumprimentoObjeto = new \ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
-        $DadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idPronac))->toArray();
 
-        if (!empty($DadosRelatorio)) {
-//            $this->view->DadosRelatorio = $DadosRelatorio;
-            $locaisRealizacao = $projetos->buscarLocaisDeRealizacao($idPronac)->toArray();
-//            $this->view->LocaisDeRealizacao = $LocaisDeRealizacao;
-            $planoDeDivulgacao = $projetos->buscarPlanoDeDivulgacao($idPronac)->toArray();
-//            $this->view->PlanoDeDivulgacao = $PlanoDeDivulgacao;
+        $tbCumprimentoObjeto = new \ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();
+        $dadosRelatorio = $tbCumprimentoObjeto->buscarCumprimentoObjeto(array('idPronac = ?' => $idPronac));
+        $dadosRelatorio = $dadosRelatorio ? $dadosRelatorio->toArray() : [];
+
+        if (!empty($dadosRelatorio)) {
+            $arrayDados['locaisRealizacao'] = $locaisRealizacao = $projetos->buscarLocaisDeRealizacao($idPronac)->toArray();
+            $arrayDados['planoDeDivulgacao'] = $planoDeDivulgacao = $projetos->buscarPlanoDeDivulgacao($idPronac)->toArray();
 
             $PlanoDistribuicaoProduto = new \Proposta_Model_DbTable_PlanoDistribuicaoProduto();
-            $PlanoDeDistribuicao = $PlanoDistribuicaoProduto->buscarPlanoDeDistribuicao($idPronac);
-//            $this->view->PlanoDeDistribuicao = $PlanoDeDistribuicao;
+            $arrayDados['planoDistribuicao'] = $planoDistribuicao = $PlanoDistribuicaoProduto->buscarPlanoDeDistribuicao($idPronac)->toArray();
 
             $tbBeneficiarioProdutoCultural = new \tbBeneficiarioProdutoCultural();
-            $PlanosCadastrados = $tbBeneficiarioProdutoCultural->buscarPlanosCadastrados($idPronac)->toArray();
-//            $this->view->PlanosCadastrados = $PlanosCadastrados;
+            $arrayDados['planosCadastrados'] = $PlanosCadastrados = $tbBeneficiarioProdutoCultural->buscarPlanosCadastrados($idPronac)->toArray();
 
-            $DadosCompMetas = $projetos->buscarMetasComprovadas($idPronac);
-//            $this->view->DadosCompMetas = $DadosCompMetas;
+            $arrayDados['dadosCompMetas'] = $projetos->buscarMetasComprovadas($idPronac)->toArray();
 
-            $DadosItensOrcam = $projetos->buscarItensComprovados($idPronac)->toArray();
-//            $this->view->DadosItensOrcam = $DadosItensOrcam;
+            $arrayDados['dadosItensOrcamentarios'] = $dadosItensOrcamacemtar = $projetos->buscarItensComprovados($idPronac)->toArray();
 
-            $Arquivo = new \Arquivo();
-            $dadosComprovantes = $Arquivo->buscarComprovantesExecucao($idPronac);
-//            $this->view->DadosComprovantes = $dadosComprovantes;
+            $arquivo = new \Arquivo();
+            $arrayDados['dadosComprovantes'] = $arquivo->buscarComprovantesExecucao($idPronac);
 
             $tbTermoAceiteObra = new \ComprovacaoObjeto_Model_DbTable_TbTermoAceiteObra();
-            $aceiteObras = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idPronac));
-//            $this->view->$aceiteObras = $aceiteObras;
+            $arrayDados['aceiteObras'] = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idPronac), true)->toArray();
 
             $tbBensDoados = new \ComprovacaoObjeto_Model_DbTable_TbBensDoados();
-            $BensCadastrados = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idPronac), array('b.Descricao'));
-//            $this->view->BensCadastrados = $BensCadastrados;
+            $arrayDados['bensCadastrados'] = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idPronac), array('b.Descricao'))->toArray();
 
-            if ($DadosRelatorio->siCumprimentoObjeto == 6) {
-                $Usuario = new \UsuarioDAO();
-                $nmUsuarioCadastrador = $Usuario->buscarUsuario($DadosRelatorio->idTecnicoAvaliador);
-//                $this->view->TecnicoAvaliador = $nmUsuarioCadastrador;
+            if ($dadosRelatorio['siCumprimentoObjeto'] == 6) {
+                $tbUsuario = new \Autenticacao_Model_DbTable_Usuario();
+                $arrayDados['tecnicoAvaliador'] = $tbUsuario->nomeUsuario($dadosRelatorio['idTecnicoAvaliador'])->toArray();
 
-                if ($DadosRelatorio->idChefiaImediata) {
-                    $nmChefiaImediata = $Usuario->buscarUsuario($DadosRelatorio->idChefiaImediata);
-//                    $this->view->ChefiaImediata = $nmChefiaImediata;
+                if ($dadosRelatorio['idChefiaImediata']) {
+                    $arrayDados['chefiaImediata'] = $tbUsuario->nomeUsuario($dadosRelatorio['idChefiaImediata'])->toArray();
                 }
             }
 
-            $arrrayDados['dadosRelatorio'] = $DadosRelatorio;
-            $arrrayDados['planosCadastrados'] = $PlanosCadastrados;
-            $arrrayDados['planoDeDivulgacao'] = $planoDeDivulgacao;
-            $arrrayDados['locaisRealizacao'] = $locaisRealizacao;
-            $arrrayDados['dadosItensOrcamentarios'] = $DadosItensOrcam;
+            $arrayDados['dadosRelatorio'] = $dadosRelatorio;
 
-            return $arrrayDados;
-            $isPermitidoVisualizarRelatorio = $this->view->usuarioInterno || in_array(
+            $isPermitidoVisualizarRelatorio = in_array(
                     $dadosProjeto->situacao,
-                    Projeto_Model_Situacao::obterSituacoesPermitidoVisualizarPrestacaoContas()
-                );
+                    \Projeto_Model_Situacao::obterSituacoesPermitidoVisualizarPrestacaoContas()
+            );
 
-            $auth = Zend_Auth::getInstance();
-            $this->view->visualizarRelatorio =  isset($auth->getIdentity()->usu_codigo) ? true : $isPermitidoVisualizarRelatorio;
-
+            $arrayDados['isPermitidoVisualizarRelatorio'] = $this->isUsuarioInterno || $isPermitidoVisualizarRelatorio;
         }
 
+        return $arrayDados;
     }
 }

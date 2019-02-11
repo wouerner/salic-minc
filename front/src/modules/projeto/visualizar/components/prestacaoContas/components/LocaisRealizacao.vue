@@ -17,16 +17,55 @@
                     <td class="text-xs-left">{{ props.item.UF }}</td>
                     <td class="text-xs-left">{{ props.item.Municipio }}</td>
                     <td class="text-xs-left">{{ props.item.siAbrangencia | tipoAbrangencia }}</td>
-                    <td class="text-xs-right">{{ props.item.dtInicioRealizacao | formatarData }}</td>
-                    <td class="text-xs-right">{{ props.item.dtFimRealizacao | formatarData }}</td>
-                    <td class="text-xs-left">{{ props.item.dsJustificativa }}</td>
-                </template>
-                <template
-                    slot="pageText"
-                    slot-scope="props">
-                    Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                    <td class="text-xs-center pl-5">{{ props.item.dtInicioRealizacao | formatarData }}</td>
+                    <td class="text-xs-center pl-5">{{ props.item.dtFimRealizacao | formatarData }}</td>
+                    <!--<td class="text-xs-left">{{ props.item.dsJustificativa }}</td>-->
+                    <td
+                        v-if="props.item.dsJustificativa"
+                        class="text-xs-center">
+                        <v-btn
+                            slot="activator"
+                            flat
+                            icon
+                            @click="showItem(props.item)"
+                        >
+                            <v-icon>visibility</v-icon>
+                        </v-btn>
+                    </td>
+                    <td
+                        v-else
+                        class="text-xs-center"> - </td>
                 </template>
             </v-data-table>
+            <v-dialog
+                v-model="dialog"
+                width="500"
+            >
+                <v-card>
+                    <v-card-title
+                        class="headline grey lighten-2"
+                        primary-title
+                    >
+                        Justificativa
+                    </v-card-title>
+
+                    <v-card-text>
+                        {{ itemEmVisualizacao.dsJustificativa }}
+                    </v-card-text>
+                    <v-divider/>
+
+                    <v-card-actions>
+                        <v-spacer/>
+                        <v-btn
+                            color="red lighten-2"
+                            flat
+                            @click="dialog = false"
+                        >
+                            Fechar
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-card>
     </div>
 </template>
@@ -61,6 +100,8 @@ export default {
     mixins: [utils],
     data() {
         return {
+            itemEmVisualizacao: {},
+            dialog: false,
             pagination: {
                 sortBy: '',
                 descending: true,
@@ -88,17 +129,17 @@ export default {
                 },
                 {
                     text: 'Dt. Início Realização',
-                    align: 'left',
+                    align: 'center',
                     value: 'dtInicioRealizacao',
                 },
                 {
                     text: 'Dt. Fim Realização',
-                    align: 'left',
+                    align: 'center',
                     value: 'dtFimRealizacao',
                 },
                 {
                     text: 'Justificativa',
-                    align: 'left',
+                    align: 'center',
                     value: 'dsJustificativa',
                 },
             ],
@@ -108,6 +149,12 @@ export default {
         ...mapGetters({
             dados: 'prestacaoContas/relatorioCumprimentoObjeto',
         }),
+    },
+    methods: {
+        showItem(item) {
+            this.itemEmVisualizacao = Object.assign({}, item);
+            this.dialog = true;
+        },
     },
 };
 </script>
