@@ -620,8 +620,8 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 $menu['prestacaodecontas']['submenu'][] = [
                     'label' => 'Relat&oacute;rio de cumprimento do objeto',
                     'title' => 'Ir para Relat&oacute;rio de cumprimento do objeto',
-                    'link' => '/default/consultardadosprojeto/relatorio-final/?idPronac=' . $idPronacHash,
-                    'ajax' => true,
+                    'link' => "/projeto/#/{$idPronacHash}/relatorio-cumprimento-objeto",
+                    'ajax' => false,
                     'grupo' => []
                 ];
             }
