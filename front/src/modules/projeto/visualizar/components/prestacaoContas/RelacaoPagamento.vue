@@ -79,7 +79,10 @@
                                     </v-flex>
                                     <v-flex>
                                         <b class="pl-4">Data Pagamento</b>
-                                        <p class="pl-4" v-if="dadosPagamento.DtPagamento">
+                                        <p
+                                            v-if="dadosPagamento.DtPagamento"
+                                            class="pl-4"
+                                        >
                                             {{ dadosPagamento.DtPagamento | formatarData }}
                                         </p>
                                         <p v-else>

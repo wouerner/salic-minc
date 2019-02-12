@@ -13,14 +13,14 @@
                         <Filtro
                             :items="montaArray('Item')"
                             :label="'Pesquise Item'"
-                            @eventoSearch="search = $event"
                             class="pr-5"
+                            @eventoSearch="search = $event"
                         />
                         <Filtro
                             :items="montaArray('UFFornecedor')"
                             :label="'Pesquise UF'"
-                            @eventoSearch="search = $event"
                             class="pr-5"
+                            @eventoSearch="search = $event"
                         />
                         <Filtro
                             :items="montaArray('MunicipioFornecedor')"
