@@ -41,12 +41,6 @@ export default {
         },
     },
     mixins: [utils],
-    props: {
-        valorDespesaTotal: {
-            type: Number,
-            default: 0,
-        },
-    },
     data() {
         return {
             pagination: {
