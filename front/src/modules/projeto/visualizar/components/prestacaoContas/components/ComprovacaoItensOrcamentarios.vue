@@ -34,7 +34,10 @@ export default {
     name: 'ComprovacaoItensOrcamentarios',
     filters: {
         tipoExecucao(qtFisicaExecutada) {
-            return (qtFisicaExecutada).toFixed(2);
+            if (qtFisicaExecutada !== null) {
+                return (qtFisicaExecutada).toFixed(2);
+            }
+            return '0,00';
         },
         tipoExecucaoRound(qtFisicaExecutada) {
             return Math.round(qtFisicaExecutada);
