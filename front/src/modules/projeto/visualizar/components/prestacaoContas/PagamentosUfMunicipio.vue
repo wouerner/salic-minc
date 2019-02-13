@@ -70,6 +70,29 @@
                     </template>
                 </v-data-table>
             </v-card>
+            <v-card>
+                <v-container fluid>
+                    <v-layout
+                        row
+                        wrap>
+                        <v-flex xs6>
+                            <h6 class="mr-3">VALOR TOTAL</h6>
+                        </v-flex>
+                        <v-flex
+                            xs5
+                            offset-xs1
+                            class="text-xs-right">
+                            <h6>
+                                <v-chip
+                                    outline
+                                    color="black"
+                                >R$ {{ valorTotal | filtroFormatarParaReal }}
+                                </v-chip>
+                            </h6>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
+            </v-card>
         </div>
     </div>
 </template>
@@ -165,6 +188,19 @@ export default {
                 id: index,
                 ...item,
             }));
+        },
+        valorTotal() {
+            if (Object.keys(this.dados).length === 0) {
+                return 0;
+            }
+            const table = this.dados;
+            let soma = 0;
+
+            Object.entries(table).forEach(([, row]) => {
+                soma += parseFloat(row.vlPagamento);
+            });
+
+            return soma;
         },
     },
     watch: {
