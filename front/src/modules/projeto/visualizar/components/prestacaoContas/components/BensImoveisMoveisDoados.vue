@@ -12,7 +12,8 @@
             >
                 <template
                     slot="items"
-                    slot-scope="props">
+                    slot-scope="props"
+                >
                     <td class="text-xs-left">{{ (props.item.tpBem === 'M') ? 'Móvel' : 'Imóvel' }}</td>
                     <td class="text-xs-left">{{ props.item.ItemOrcamentario }}</td>
                     <td class="text-xs-left">{{ props.item.CNPJCPF | cnpjFilter }}</td>
@@ -42,12 +43,12 @@
                         >
                             Visualizar
                         </v-card-title>
-
                         <v-card-text>
                             <v-flex>
                                 <span><b>Observações</b></span>
-                                <p/>
-                                <p>{{ itemEmVisualizacao.dsObservacao }}</p>
+                                <p>
+                                    {{ itemEmVisualizacao.dsObservacao }}
+                                </p>
                             </v-flex>
                         </v-card-text>
                         <v-divider/>

@@ -19,7 +19,6 @@
                     <td class="text-xs-left">{{ props.item.siAbrangencia | tipoAbrangencia }}</td>
                     <td class="text-xs-center pl-5">{{ props.item.dtInicioRealizacao | formatarData }}</td>
                     <td class="text-xs-center pl-5">{{ props.item.dtFimRealizacao | formatarData }}</td>
-                    <!--<td class="text-xs-left">{{ props.item.dsJustificativa }}</td>-->
                     <td
                         v-if="props.item.dsJustificativa"
                         class="text-xs-center">

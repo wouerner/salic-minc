@@ -28,11 +28,6 @@
                             <td class="text-xs-left">{{ props.item.Item }}</td>
                             <td class="text-xs-right">{{ props.item.vlPagamento | filtroFormatarParaReal }}</td>
                         </template>
-                        <template
-                            slot="pageText"
-                            slot-scope="props">
-                            Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
-                        </template>
                     </v-data-table>
                     <v-container fluid>
                         <v-layout

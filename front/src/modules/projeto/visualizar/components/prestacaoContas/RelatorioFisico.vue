@@ -23,11 +23,6 @@
                     <td class="text-xs-right">{{ props.item.vlExecutado | filtroFormatarParaReal }}</td>
                     <td class="text-xs-right">{{ props.item.PercAExecutar | filtroFormatarParaReal }}</td>
                 </template>
-                <template
-                    slot="pageText"
-                    slot-scope="props">
-                    Items {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
-                </template>
             </v-data-table>
         </div>
     </div>
