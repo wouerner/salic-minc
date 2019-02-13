@@ -41,13 +41,33 @@ class Readequacao implements IServicoRestZend
 
         return $modelTbReadequacao->findBy($where);
     }
+
+    public function buscarReadequacoesPorPronacTipo($idPronac, $idTipoReadequacao)
+    {
+        $modelTbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
+        $where = [
+            'idPronac' => $idPronac,
+            'idTipoReadequacao' => $idTipoReadequacao,
+        ];
+        
+        return $modelTbReadequacao->findBy($where);
+    }    
     
     public function salvar()
     {
         $parametros = $this->request->getParams();
-        $modelTbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao($parametros);
+        
+        $dados = [];
+        $dados['idReadequacao'] = $parametros['idReadequacao'];
+        $dados['idPronac'] = $parametros['idPronac'];
+        $dados['dsJustificativa'] = $parametros['dsJustificativa'];
+        $dados['dsSolicitacao'] = $parametros['dsSolicitacao'];
+        $dados['dtSolicitacao'] = $parametros['dtSolicitacao'];
+        $dados['stAtendimento'] = $parametros['stAtendimento'];
+        $dados['idDocumento'] = $parametros['idDocumento'];
+
         $mapper = new \Readequacao_Model_TbReadequacaoMapper();
-        $idReadequacao = $mapper->save($modelTbReadequacao);
+        $idReadequacao = $mapper->salvarSolicitacaoReadequacao($dados);
         
         return $this->buscar($idReadequacao);
     }

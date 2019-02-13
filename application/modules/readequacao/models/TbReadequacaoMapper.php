@@ -26,13 +26,16 @@ class Readequacao_Model_TbReadequacaoMapper extends MinC_Db_Mapper
 
             $objReadequacao = new Readequacao_Model_TbReadequacao();
             $objReadequacao->setIdReadequacao($arrData['idReadequacao']);
-            $objReadequacao->setIdPronac($arrData['idPronac']);
             $objReadequacao->setDtSolicitacao(new Zend_Db_Expr('GETDATE()'));
             $objReadequacao->setIdSolicitante($rsAgente->idAgente);
             $objReadequacao->setStAtendimento('N');
             $objReadequacao->setSiEncaminhamento(Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE);
             $objReadequacao->setStEstado(0);
 
+            if (isset($arrData['idPronac'])) {
+                $objReadequacao->setIdPronac($arrData['idPronac']);
+            }
+            
             if (isset($arrData['stAtendimento'])) {
                 $objReadequacao->setStAtendimento($arrData['stAtendimento']);
             }
@@ -52,7 +55,7 @@ class Readequacao_Model_TbReadequacaoMapper extends MinC_Db_Mapper
             if ($arrData['idDocumento']) {
                 $objReadequacao->setIdDocumento($arrData['idDocumento']);
             }
-
+            
             $id = $this->save($objReadequacao);
             if ($this->getMessage()) {
                 throw new Exception($this->getMessage());

@@ -2,7 +2,7 @@
 
 use Application\Modules\Readequacao\Service\Readequacao\Readequacao as ReadequacaoService;
 
-class Readequacao_DadosReadequacaoController extends MinC_Controller_Rest_Abstract
+class Readequacao_FiltrarPronacTipoController extends MinC_Controller_Rest_Abstract
 {
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
@@ -22,12 +22,18 @@ class Readequacao_DadosReadequacaoController extends MinC_Controller_Rest_Abstra
     }
 
     public function getAction() {
-        $idReadequacao = $this->getRequest()->getParam('idReadequacao');
+        $idPronac = $this->getRequest()->getParam('idPronac');
+        $idTipoReadequacao = $this->getRequest()->getParam('idTipoReadequacao');
+        
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
+        }
+        
         $data = [];
         $code = 200;
         
         $readequacaoService = new ReadequacaoService($this->getRequest(), $this->getResponse());
-        $data = $readequacaoService->buscar($idReadequacao, $idTipoReadequacao);
+        $data = $readequacaoService->buscarReadequacoesPorPronacTipo($idPronac, $idTipoReadequacao);
         
         $this->renderJsonResponse($data, $code);
     }
@@ -38,12 +44,7 @@ class Readequacao_DadosReadequacaoController extends MinC_Controller_Rest_Abstra
 
     public function postAction(){}
 
-    public function putAction(){
-        $readequacaoService = new ReadequacaoService($this->getRequest(), $this->getResponse());
-        $resposta = $readequacaoService->salvar();
-        
-        $this->renderJsonResponse($resposta, 200);
-    }
+    public function putAction(){}
 
     public function deleteAction(){}
 

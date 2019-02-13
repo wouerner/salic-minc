@@ -14,7 +14,8 @@ class Readequacao_Bootstrap extends Zend_Application_Module_Bootstrap
             [],
             [
                 'readequacao' => [
-                    'dados-readequacao'
+                    'dados-readequacao',
+                    'filtrar-pronac-tipo'
                 ]
             ]
         );
