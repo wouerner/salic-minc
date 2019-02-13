@@ -4,19 +4,34 @@ HOST: http://localhost:4000
 
 # Group Readequacao
 
-## Readequacao - Dados readequação [/readequacao/dados-readequacao/idReadequacao/{idReadequacao}]
+## Readequacao - Visualizar lista de readequações [/readequacao/dados-readequacao]
 
-+ Parameters
-    + idReadequacao: 14100 (number, required)
-
-### Visualizar dados readequação [GET]
+### Visualizar lista de readequações [GET]
 
 + Response 200 (application/json; charset=utf-8)
 
     + Body
         
-            {
-                "data": {
+            [
+                {
+                    "idPronac": 217336,
+                    "idReadequacao": 217336,
+                    "tpoReadequacao": 6,
+                    "dtSolicitacao": "2019-01-22",
+                    "idSolicitante": 267,
+                    "dsSolicitacao": "blabalbalbalablabalb",
+                    "dsJustificativa": "É necessário",
+                    "idDocumento": 19440,
+                    "idAvaliador": 335,
+                    "dsAvaliacao": "queuqeuqueuq",
+                    "stAtendimento": "N",
+                    "siEncaminhamento": 15,
+                    "idNrReuniao": 45654,
+                    "stEstado": 1,
+                    "dtEnvio": "2019-01-23",
+                    "stEstagioAtual": "proponente"
+                },
+                {
                     "idPronac": 217336,
                     "idReadequacao": 217336,
                     "tpoReadequacao": 6,
@@ -28,14 +43,120 @@ HOST: http://localhost:4000
                     "idAvaliador": 335,
                     "dsAvaliacao": "queuqeuqueuq",
                     "stAtendimento": "N",
-                    "siEncaminhamento": 86942,
+                    "siEncaminhamento": 15,
                     "idNrReuniao": 45654,
                     "stEstado": 1,
-                    "dtEnvio": "2019-01-23"
+                    "dtEnvio": "2019-01-23",
+                    "stEstagioAtual": "proponente"
                 }
+            ]
+
+### Criar nova readequação [POST]
+
++ Request (multipart/form-data; charset=utf-8)
+
+    + Attributes 
+        + idPronac (number, required)
+        + tpoReadequacao (number, required)
+        + dsSolicitacao (string, required)
+        + dsJustificativa (string)
+        + idDocumento (number)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                    "idPronac": 217336,
+                    "idReadequacao": 217336,
+                    "tpoReadequacao": 6,
+                    "dtSolicitacao": "2019-01-22",
+                    "idSolicitante": 267,
+                    "dsSolicitacao": "blabalbalbalablabalb",
+                    "dsJustificativa": "É necessário",
+                    "idDocumento": 19440,
+                    "idAvaliador": 335,
+                    "dsAvaliacao": "queuqeuqueuq",
+                    "stAtendimento": "N",
+                    "siEncaminhamento": 15,
+                    "idNrReuniao": 45654,
+                    "stEstado": 1,
+                    "dtEnvio": "2019-01-23",
+                    "stEstagioAtual": "proponente"
             }
 
-## Readequacao - Proponente Visualizar [/readequacao/readequacao-proponente/idPronac/{idPronac}]
+
+## Readequacao - Dados readequação [/readequacao/dados-readequacao/{idReadequacao}]
+
++ Parameters
+    + idReadequacao: 14100 (number, required)
+
+### Visualizar dados readequação [GET]
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+        
+            {
+                "idPronac": 217336,
+                "idReadequacao": 217336,
+                "tpoReadequacao": 6,
+                "dtSolicitacao": "2019-01-22",
+                "idSolicitante": 267,
+                "dsSolicitacao": "blabalbalbalablabalb",
+                "dsJustificativa": "É necessário",
+                "idDocumento": 19440,
+                "idAvaliador": 335,
+                "dsAvaliacao": "queuqeuqueuq",
+                "stAtendimento": "N",
+                "siEncaminhamento": 15,
+                "idNrReuniao": 45654,
+                "stEstado": 1,
+                "dtEnvio": "2019-01-23",
+                "stEstagioAtual": "proponente"
+            }
+
+
+### Atualizar dados readequação [PUT]
+
++ Request (application/json; charset=utf-8)
+
+    + Attributes 
+            
+            {
+                "dsSolicitacao": "Solicitação alterada",
+                "dsJustificativa": "É necessário! ",
+                "idDocumento": 19440,
+                "idAvaliador": 0,
+                "dsAvaliacao": "Avaliação do Tecnico",
+            }
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+        
+            {
+                "idPronac": 217336,
+                "idReadequacao": 217336,
+                "tpoReadequacao": 6,
+                "dtSolicitacao": "2019-01-22",
+                "idSolicitante": 267,
+                "dsSolicitacao": "blabalbalbalablabalb",
+                "dsJustificativa": "É necessário",
+                "idDocumento": 19440,
+                "idAvaliador": 335,
+                "dsAvaliacao": "queuqeuqueuq",
+                "stAtendimento": "N",
+                "siEncaminhamento": 15,
+                "idNrReuniao": 45654,
+                "stEstado": 1,
+                "dtEnvio": "2019-01-23",
+                "stEstagioAtual": "proponente"
+            }
+
+
+
+## Readequacao - Proponente Visualizar [/readequacao/readequacao-proponente/{idPronac}]
 
 + Parameters
     + idPronac: 217336 (number, required)
@@ -56,7 +177,7 @@ HOST: http://localhost:4000
                             "dtSolicitacao": "2019-01-22",
                             "idSolicitante": 267,
                             "dsSolicitacao": "blabalbalbalablabalb",
-                            "dsJustificativa": "É nescessário",
+                            "dsJustificativa": "É necessário",
                             "idDocumento": 19440,
                             "idAvaliador": 335,
                             "dsAvaliacao": "queuqeuqueuq",
@@ -73,7 +194,7 @@ HOST: http://localhost:4000
                             "dtSolicitacao": "2019-01-22",
                             "idSolicitante": 267,
                             "dsSolicitacao": "blabalbalbalablabalb",
-                            "dsJustificativa": "É nescessário",
+                            "dsJustificativa": "É necessário",
                             "idDocumento": 19440,
                             "idAvaliador": 335,
                             "dsAvaliacao": "queuqeuqueuq",
