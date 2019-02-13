@@ -257,10 +257,10 @@ export default {
                 this.buscaProjeto(this.idPronac);
             }
         }
-        if (typeof this.dadosReadequacao.idReadequacao === 'undefined') {
+        if (typeof this.dadosReadequacao.items === 'undefined') {
             const idPronac = this.idPronac;
             const idTipoReadequacao = this.idTipoReadequacao;
-            this.buscaReadequacao({ idPronac, idTipoReadequacao });
+            this.buscaReadequacaoPronacTipo({ idPronac, idTipoReadequacao });
         }
         $3(document).ajaxStart(() => {
             $3('#container-loading').fadeIn('slow');
@@ -282,7 +282,7 @@ export default {
                 () => {
                     const idPronac = self.idPronac;
                     const idTipoReadequacao = self.idTipoReadequacao;
-                    self.buscaReadequacao({ idPronac, idTipoReadequacao });
+                    self.buscaReadequacaoPronacTipo({ idPronac, idTipoReadequacao });
                     self.exibirPaineis = true;
                     self.exibirBotaoIniciar = false;
                     self.disponivelEdicaoReadequacaoPlanilha(self.idPronac);
@@ -342,7 +342,7 @@ export default {
                 url: '/readequacao/saldo-aplicacao/finalizar-readequacao',
                 data: {
                     idPronac: self.idPronac,
-                    idReadequacao: self.readequacao.idReadequacao,
+                    idReadequacao: self.dadosReadequacao.idReadequacao,
                 },
             }).done(
                 (response) => {
@@ -350,7 +350,7 @@ export default {
                     self.exibirPaineis = false;
                     self.exibirBotaoIniciar = false;
                     self.mostrarMensagemFinal = true;
-                    self.readequacao.idReadequacao = '';
+                    self.dadosReadequacao.idReadequacao = '';
                     $3('#modalFinalizar').modal('close');
                 },
             ).fail(
@@ -383,7 +383,7 @@ export default {
         },
         ...mapActions({
             buscaProjeto: 'projeto/buscaProjeto',
-            buscaReadequacao: 'readequacao/buscaReadequacao',
+            buscaReadequacaoPronacTipo: 'readequacao/buscaReadequacaoPronacTipo',
             excluirReadequacao: 'readequacao/excluirReadequacao',
             obterDisponivelEdicaoReadequacaoPlanilha: 'readequacao/obterDisponivelEdicaoItemSaldoAplicacao',
         }),
@@ -397,15 +397,16 @@ export default {
                 const idPronac = to.params.idPronac;
                 const idTipoReadequacao = this.idTipoReadequacao;
                 const URL_MENU = '';
-                this.buscaReadequacao({ idPronac, idTipoReadequacao });
+                this.buscaReadequacaoPronacTipo({ idPronac, idTipoReadequacao });
                 this.urlAjax = URL_MENU + to.params.idPronac;
             }
         },
         dadosReadequacao() {
-            if (typeof this.dadosReadequacao.dsSolicitacao !== 'undefined') {
+            if (typeof this.dadosReadequacao !== 'undefined') {
                 this.exibirBotaoIniciar = false;
                 $3('.collapsible').collapsible();
-                this.obterDisponivelEdicaoReadequacaoPlanilha(this.dadosReadequacao.idPronac);
+                const idPronac = this.dadosProjeto.idPronac;
+                this.obterDisponivelEdicaoReadequacaoPlanilha(idPronac);
                 this.carregarValorEntrePlanilhas();
                 this.solicitacaoIniciada = true;
                 this.exibirPaineis = true;
@@ -492,7 +493,7 @@ export default {
             return false;
         },
         mostrarBotoes() {
-            if (typeof this.dadosReadequacao.idPronac === 'undefined') {
+            if (typeof this.dadosReadequacao === 'undefined') {
                 return false;
             }
             return true;

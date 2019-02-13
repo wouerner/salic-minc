@@ -4,7 +4,7 @@
             <label>Saldo dispon&iacute;vel *</label>
             <input-money
 	      ref="readequacaoSaldo"
-	      v-model="saldoDisponivel"
+              :value="dadosReadequacao.items.dsSolicitacao"
 	      v-on:blur.native="alterarSaldo"
 	      >
             </input-money>
@@ -17,7 +17,7 @@
 
 <script>
 import InputMoney from '@/components/InputMoney';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
     name: 'ReadequacaoSaldoAplicacaoSaldo',
@@ -28,23 +28,22 @@ export default {
         'dsSolicitacao',
         'disabled',
     ],
-    data() {
-        return {
-            saldoDisponivel: 0,
-        };
-    },
     methods: {
         alterarSaldo(event) {
-            this.updateReadequacaoDsSolicitacao(event.target.value);
+            const params = {
+                "dsSolicitacao": event.target.value,
+                "idReadequacao": this.dadosReadequacao.items.idReadequacao
+            };
+            this.updateReadequacaoDsSolicitacao(params);
         },
         ...mapActions({
-            updateReadequacaoDsSolicitacao: 'readequacao/updateReadequacaoSaldoAplicacaoDsSolicitacao',
+            updateReadequacaoDsSolicitacao: 'readequacao/updateReadequacao',
         }),
     },
-    watch: {
-        dsSolicitacao(valor) {
-            this.saldoDisponivel = valor;
-        },
+    computed: {
+        ...mapGetters({
+            dadosReadequacao: 'readequacao/readequacao',
+        }),
     },
 };
 </script>

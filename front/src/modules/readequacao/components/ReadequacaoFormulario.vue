@@ -7,12 +7,12 @@
         <div class="row">
           <div class="input-field col s12">
             <textarea
-              id="textarea1"
+              id="dsJustificativa"
               class="materialize-textarea"
               ref="readequacaoJustificativa"
               :disabled="disabled"
-	      :value="dadosReadequacao.justificativa"
-	      @input="updateJustificativa"
+              :value="dadosReadequacao.items.dsJustificativa"
+              @change="atualizarDadosReadequacao"
 	      ></textarea>
             <label for="textarea1">Justificativa *</label>
           </div>
@@ -76,12 +76,12 @@
 	<div class="card-content">
 	  <span class="card-title">Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</span>
 	  <p>
-	    {{dadosReadequacao.justificativa}}
+	    {{dadosReadequacao.dsJustificativa}}
 	  </p>
 	</div>
 	<div
 	  class="card-content"
-	  v-if="readequacao.idDocumento"
+	  v-if="dadosReadequacao.idDocumento"
 	  >
 	  <span class="card-title">Arquivo anexado</span>
 	  <a
@@ -109,14 +109,9 @@ export default {
     data() {
         return {
             readequacao: {
-                idPronac: '',
-                idReadequacao: '',
-                justificativa: '',
-                arquivo: '',
-                idTipoReadequacao: '',
-                dsSolicitacao: '',
-                idDocumento: '',
-                nomeArquivo: '',
+                dsJustificativa: "",
+                idDocumento: "",
+                dsSolicitacao: "",
             },
             exibirInfo: false,
             minCaracteresJustificativa: 10,
@@ -130,19 +125,19 @@ export default {
     props: {
         idPronac: '',
         idTipoReadequacao: '',
-        objReadequacao: {},
         disabled: false,
         componenteDsSolicitacao: '',
     },
     mixins: [utils],
     methods: {
         salvarReadequacao() {
-            if (this.dadosReadequacao.dsSolicitacao === 0 || this.dadosReadequacao.dsSolicitacao === '0,00') {
+            // TODO:
+            if (this.readequacao.dsSolicitacao === 0 || this.readequacao.dsSolicitacao === '0,00') {
                 this.mensagemAlerta('\xC9 obrigat\xF3rio informar o saldo dispon\xEDvel; o valor deve ser diferente de R$ 0,00!');
                 this.$children[0].$children[0].$refs.input.focus();
                 return;
             }
-            if (this.readequacao.justificativa.length < this.minCaracteresJustificativa) {
+            if (this.readequacao.dsJustificativa.length < this.minCaracteresJustificativa) {
                 this.mensagemAlerta(
                     `\xC9 obrigat\xF3rio preencher a justificativa da readequa\xE7\xE3o! M\xEDnimo de ${this.minCaracteresJustificativa} caracteres.`,
                 );
@@ -150,7 +145,8 @@ export default {
                 return;
             }
             this.readequacao.dsSolicitacao = this.$parent.$refs.formulario.$children[0].dsSolicitacao;
-            this.updateReadequacaoSaldoAplicacao(this.readequacao);
+            this.readequacao.idReadequacao = this.dadosReadequacao.items.idReadequacao;
+            this.updateReadequacao(this.readequacao);
         },
         prepararAdicionarDocumento() {
             const arquivos = document.getElementById('arquivo');
@@ -158,6 +154,7 @@ export default {
             if (!this.validarDocumento(arquivo)) {
                 return;
             }
+            
             this.adicionarDocumento({
                 arquivo,
                 idPronac: this.dadosReadequacao.idPronac,
@@ -165,6 +162,8 @@ export default {
                 idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
                 idDocumentoAtual: this.dadosReadequacao.idDocumento,
             });
+            
+            this.readequacao.idDocumentoAtual = this.dadosReadequacao.idDocumento;
         },
         preparaExcluirDocumento() {
             this.excluindoDocumento = true;
@@ -196,8 +195,10 @@ export default {
             }
             return true;
         },
-        updateJustificativa(event) {
-            this.readequacao.justificativa = event.target.value;
+        atualizarDadosReadequacao(e) {
+            let key = e.target.id;
+            let valor = e.target.value;
+            this.readequacao[key] = valor;
         },
         ...mapActions({
             updateReadequacao: 'readequacao/updateReadequacao',
@@ -214,18 +215,6 @@ export default {
                 return true;
             }
             return false;
-        },
-    },
-    watch: {
-        objReadequacao() {
-            if (!_.isEmpty(this.objReadequacao)) {
-                this.readequacao.idReadequacao = this.objReadequacao.idReadequacao;
-                this.readequacao.idTipoReadequacao = this.objReadequacao.idTipoReadequacao;
-                this.readequacao.nomeArquivo = this.objReadequacao.nomeArquivo;
-                this.readequacao.idDocumento = this.objReadequacao.idDocumento;
-                this.readequacao.idPronac = this.objReadequacao.idPronac;
-                this.readequacao.justificativa = this.objReadequacao.justificativa;
-            }
         },
     },
 };

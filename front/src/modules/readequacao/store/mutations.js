@@ -26,6 +26,9 @@ export const mutations = {
         state.readequacao.idDocumento = '';
         state.readequacao.nomeArquivo = '';
     },
+    [types.UPDATE_READEQUACAO_DS_SOLICITACAO](state, dsSolicitacao) {
+        state.readequacao.items.dsSolicitacao = dsSolicitacao;
+    },    
     [types.UPDATE_READEQUACAO_SALDO_APLICACAO_DS_SOLICITACAO](state, dsSolicitacao) {
         state.readequacao.saldoAplicacaoDsSolicitacao = dsSolicitacao;
     },

@@ -10,6 +10,15 @@ export const buscaReadequacao = ({ commit }, params) => {
         });
 };
 
+export const buscaReadequacaoPronacTipo = ({ commit }, params) => {
+    readequacaoHelperAPI.buscaReadequacaoPronacTipo(params)
+        .then((response) => {
+            const data = response.data;
+            const readequacao = data.data;
+            commit(types.SET_READEQUACAO, readequacao);
+        });
+};
+
 export const adicionarDocumento = ({ commit }, params) => {
     readequacaoHelperAPI.adicionarDocumento(params)
         .then((response) => {
@@ -32,6 +41,19 @@ export const excluirReadequacao = ({ commit }, params) => {
         });
 };
 
+export const updateReadequacao = ({ commit }, params) => {
+    readequacaoHelperAPI.updateReadequacao(params)
+        .then((response) => {
+              const data = response.data;
+              const readequacao = data.data;
+              commit(types.UPDATE_READEQUACAO, readequacao);
+        });
+};
+
+export const updateReadequacaoDsSolicitacao = ( { commit }, params) => {
+    commit(types.UPDATE_READEQUACAO_DS_SOLICITACAO, params);
+};
+
 export const updateReadequacaoSaldoAplicacao = ({ commit }, params) => {
     readequacaoHelperAPI.updateReadequacaoSaldoAplicacao(params)
         .then((response) => {
@@ -45,8 +67,8 @@ export const updateReadequacaoSaldoAplicacaoDsSolicitacao = ({ commit }, dsSolic
     commit(types.UPDATE_READEQUACAO_SALDO_APLICACAO_DS_SOLICITACAO, dsSolicitacao);
 };
 
-export const obterDisponivelEdicaoItemSaldoAplicacao = ({ commit }, idPronac) => {
-    readequacaoHelperAPI.obterDisponivelEdicaoItemSaldoAplicacao(idPronac)
+export const obterDisponivelEdicaoItemSaldoAplicacao = ({ commit }, params) => {
+    readequacaoHelperAPI.obterDisponivelEdicaoItemSaldoAplicacao(params)
         .then((response) => {
             const data = response.data.disponivelParaEdicao;
             commit(types.OBTER_DISPONIVEL_EDICAO_ITEM_SALDO_APLICACAO, data);
