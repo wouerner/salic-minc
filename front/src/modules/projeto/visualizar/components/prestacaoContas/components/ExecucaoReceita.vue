@@ -56,7 +56,7 @@
                     </v-container>
                 </v-card>
             </v-expansion-panel-content>
-        </v-layout></v-expansion-panel-content></v-expansion-panel>
+        </v-expansion-panel>
     </div>
 </template>
 <script>

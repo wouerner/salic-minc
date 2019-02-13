@@ -16,12 +16,35 @@
                     slot="items"
                     slot-scope="props">
                     <td class="text-xs-center">{{ props.item.id + 1 }}</td>
-                    <td class="text-xs-center pl-5">{{ props.item.UFFornecedor }}</td>
-                    <td class="text-xs-left pl-5">{{ props.item.MunicipioFornecedor }}</td>
+                    <td class="text-xs-left">{{ props.item.UFFornecedor }}</td>
+                    <td class="text-xs-left">{{ props.item.MunicipioFornecedor }}</td>
                     <td class="text-xs-right">{{ props.item.vlPagamento | filtroFormatarParaReal }}</td>
                 </template>
             </v-data-table>
         </div>
+        <v-card>
+            <v-container fluid>
+                <v-layout
+                    row
+                    wrap>
+                    <v-flex xs6>
+                        <h6 class="mr-3">Total dos Pagamentos</h6>
+                    </v-flex>
+                    <v-flex
+                        xs5
+                        offset-xs1
+                        class="text-xs-right">
+                        <h6>
+                            <v-chip
+                                outline
+                                color="black"
+                            >R$ {{ valorPagamentoTotal | filtroFormatarParaReal }}
+                            </v-chip>
+                        </h6>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </v-card>
     </div>
 </template>
 <script>
@@ -53,7 +76,7 @@ export default {
                 },
                 {
                     text: 'UF Fornecedor',
-                    align: 'center',
+                    align: 'left',
                     value: 'UFFornecedor',
                 },
                 {
@@ -80,6 +103,19 @@ export default {
                 id: index,
                 ...item,
             }));
+        },
+        valorPagamentoTotal() {
+            if (Object.keys(this.dados).length === 0) {
+                return 0;
+            }
+            const table = this.dados;
+            let valor = 0;
+
+            Object.entries(table).forEach(([, row]) => {
+                valor += parseFloat(row.vlPagamento);
+            });
+
+            return valor;
         },
     },
     watch: {
