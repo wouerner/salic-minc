@@ -4,49 +4,88 @@
             <Carregando :text="'Carregando Relação de Pagamentos'"/>
         </div>
         <div v-else-if="dados">
-            <v-data-table
-                :pagination.sync="pagination"
-                :headers="headers"
-                :items="dados"
-                :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
-                item-key="id"
-                class="elevation-1 container-fluid"
-            >
-                <template
-                    slot="items"
-                    slot-scope="props">
-                    <td class="text-xs-left"><b>{{ props.item.Item }}</b></td>
-                    <td class="text-xs-left">{{ props.item.Fornecedor }}</td>
-                    <td class="text-xs-left">{{ props.item.tbDocumento }}</td>
-                    <td class="text-xs-center pl-5">{{ props.item.DtPagamento | formatarData }}</td>
-                    <td
-                        class="text-xs-left"
-                        v-html="props.item.tpFormaDePagamento"/>
-                    <td class="text-xs-right">{{ props.item.vlPagamento | filtroFormatarParaReal }}</td>
-                    <td class="text-xs-left">
-                        <a
-                            :href="`/upload`+
-                                `/abrir`+
-                            `?id=${props.item.idArquivo}`"
-                        >
-                            {{ props.item.nmArquivo }}
-                        </a>
-                    </td>
-                    <td class="text-xs-center">
-                        <v-tooltip bottom>
-                            <v-btn
-                                slot="activator"
-                                flat
-                                icon
-                                @click="showItem(props.item)"
+            <v-card>
+                <v-container fluid>
+                    <v-layout
+                        justify-start
+                        row
+                        wrap>
+                        <Filtro
+                            :items="montaArray('Item')"
+                            :label="'Pesquise Item'"
+                            class="pr-5"
+                            @eventoSearch="search = $event"
+                        />
+                    </v-layout>
+                </v-container>
+                <v-data-table
+                    :pagination.sync="pagination"
+                    :headers="headers"
+                    :items="dados"
+                    :search="search"
+                    :rows-per-page-items="[10, 25, 50, {'text': 'Todos', value: -1}]"
+                    item-key="id"
+                    class="elevation-1 container-fluid"
+                >
+                    <template
+                        slot="items"
+                        slot-scope="props">
+                        <td class="text-xs-left"><b>{{ props.item.Item }}</b></td>
+                        <td class="text-xs-left">{{ props.item.Fornecedor }}</td>
+                        <td class="text-xs-left">{{ props.item.tbDocumento }}</td>
+                        <td class="text-xs-center pl-5">{{ props.item.DtPagamento | formatarData }}</td>
+                        <td
+                            class="text-xs-left"
+                            v-html="props.item.tpFormaDePagamento"/>
+                        <td class="text-xs-right">{{ props.item.vlPagamento | filtroFormatarParaReal }}</td>
+                        <td class="text-xs-left">
+                            <a
+                                :href="`/upload`+
+                                    `/abrir`+
+                                `?id=${props.item.idArquivo}`"
                             >
-                                <v-icon>visibility</v-icon>
-                            </v-btn>
-                            <span>Visualizar Pagamento</span>
-                        </v-tooltip>
-                    </td>
-                </template>
-            </v-data-table>
+                                {{ props.item.nmArquivo }}
+                            </a>
+                        </td>
+                        <td class="text-xs-center">
+                            <v-tooltip bottom>
+                                <v-btn
+                                    slot="activator"
+                                    flat
+                                    icon
+                                    @click="showItem(props.item)"
+                                >
+                                    <v-icon>visibility</v-icon>
+                                </v-btn>
+                                <span>Visualizar Pagamento</span>
+                            </v-tooltip>
+                        </td>
+                    </template>
+                </v-data-table>
+            </v-card>
+            <v-card>
+                <v-container fluid>
+                    <v-layout
+                        row
+                        wrap>
+                        <v-flex xs6>
+                            <h6 class="mr-3">VALOR TOTAL</h6>
+                        </v-flex>
+                        <v-flex
+                            xs5
+                            offset-xs1
+                            class="text-xs-right">
+                            <h6>
+                                <v-chip
+                                    outline
+                                    color="black"
+                                >R$ {{ valorTotal | filtroFormatarParaReal }}
+                                </v-chip>
+                            </h6>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
+            </v-card>
             <v-dialog v-model="dialog">
                 <v-card>
                     <v-card-text v-if="dadosPagamento">
@@ -206,11 +245,13 @@ import { mapActions, mapGetters } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
 import cnpjFilter from '@/filters/cnpj';
 import { utils } from '@/mixins/utils';
+import Filtro from './components/Filtro';
 
 export default {
     name: 'RelacaoPagamento',
     components: {
         Carregando,
+        Filtro,
     },
     filters: {
         cnpjFilter,
@@ -283,6 +324,19 @@ export default {
                 conteudo: item,
             }));
         },
+        valorTotal() {
+            if (Object.keys(this.dados).length === 0) {
+                return 0;
+            }
+            const table = this.dados;
+            let soma = 0;
+
+            Object.entries(table).forEach(([, row]) => {
+                soma += parseFloat(row.vlPagamento);
+            });
+
+            return soma;
+        },
     },
     watch: {
         dados() {
@@ -301,6 +355,19 @@ export default {
         showItem(item) {
             this.dadosPagamento = item;
             this.dialog = true;
+        },
+        montaArray(value) {
+            const dadosListagem = [];
+            let arrayFiltro = this.dados;
+            arrayFiltro = arrayFiltro.filter((element, i, array) => {
+                return array.map(x => x[value]).indexOf(element[value]) === i;
+            });
+
+            arrayFiltro.forEach((element) => {
+                dadosListagem.push(element[value]);
+            });
+
+            return dadosListagem;
         },
     },
 };
