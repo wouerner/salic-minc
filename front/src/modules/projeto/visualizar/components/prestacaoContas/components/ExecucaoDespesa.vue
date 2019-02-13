@@ -88,12 +88,12 @@ export default {
                 {
                     text: 'ITEM ORÇAMENTÁRIO',
                     align: 'left',
-                    value: 'vlIncentivado',
+                    value: 'Item',
                 },
                 {
                     text: 'VALOR',
                     align: 'left',
-                    value: 'vlIncentivado',
+                    value: 'vlPagamento',
                 },
             ],
         };
