@@ -38,15 +38,6 @@
                             class="text-xs-left"
                             v-html="props.item.tpFormaDePagamento"/>
                         <td class="text-xs-right">{{ props.item.vlPagamento | filtroFormatarParaReal }}</td>
-                        <td class="text-xs-left">
-                            <a
-                                :href="`/upload`+
-                                    `/abrir`+
-                                `?id=${props.item.idArquivo}`"
-                            >
-                                {{ props.item.nmArquivo }}
-                            </a>
-                        </td>
                         <td class="text-xs-center">
                             <v-tooltip bottom>
                                 <v-btn
@@ -298,11 +289,6 @@ export default {
                     text: 'Vl. Pagamento',
                     align: 'right',
                     value: 'vlPagamento',
-                },
-                {
-                    text: 'Anexo',
-                    align: 'left',
-                    value: 'nmArquivo',
                 },
                 {
                     text: 'VISUALIZAR',
