@@ -44,7 +44,7 @@
                             lg12
                             dark
                             class="text-xs-left">
-                            <span><b>EMPREGOS E QUALIFICA&Ccedil;ÕES DECORRENTES DO PROJETO</b></span>
+                            <span><b>EMPREGOS E QUALIFICAÇÕES DECORRENTES DO PROJETO</b></span>
                         </v-flex>
                         <v-flex>
                             <span><b>Diretos</b></span>

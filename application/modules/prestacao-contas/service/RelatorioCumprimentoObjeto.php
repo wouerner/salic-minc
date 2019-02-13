@@ -42,18 +42,16 @@ class RelatorioCumprimentoObjeto implements \MinC\Servico\IServicoRestZend
         $dadosRelatorio = $dadosRelatorio ? $dadosRelatorio->toArray() : [];
 
         if (!empty($dadosRelatorio)) {
-            $arrayDados['locaisRealizacao'] = $locaisRealizacao = $projetos->buscarLocaisDeRealizacao($idPronac)->toArray();
-            $arrayDados['planoDeDivulgacao'] = $planoDeDivulgacao = $projetos->buscarPlanoDeDivulgacao($idPronac)->toArray();
+            $arrayDados['locaisRealizacao'] = $projetos->buscarLocaisDeRealizacao($idPronac)->toArray();
+            $arrayDados['planoDeDivulgacao'] = $projetos->buscarPlanoDeDivulgacao($idPronac)->toArray();
+            $arrayDados['dadosCompMetas'] = $projetos->buscarMetasComprovadas($idPronac)->toArray();
+            $arrayDados['dadosItensOrcamentarios'] = $projetos->buscarItensComprovados($idPronac)->toArray();
 
-            $PlanoDistribuicaoProduto = new \Proposta_Model_DbTable_PlanoDistribuicaoProduto();
-            $arrayDados['planoDistribuicao'] = $planoDistribuicao = $PlanoDistribuicaoProduto->buscarPlanoDeDistribuicao($idPronac)->toArray();
+            $planoDistribuicaoProduto = new \Proposta_Model_DbTable_PlanoDistribuicaoProduto();
+            $arrayDados['planoDistribuicao'] = $planoDistribuicaoProduto->buscarPlanoDeDistribuicao($idPronac)->toArray();
 
             $tbBeneficiarioProdutoCultural = new \tbBeneficiarioProdutoCultural();
-            $arrayDados['planosCadastrados'] = $PlanosCadastrados = $tbBeneficiarioProdutoCultural->buscarPlanosCadastrados($idPronac)->toArray();
-
-            $arrayDados['dadosCompMetas'] = $projetos->buscarMetasComprovadas($idPronac)->toArray();
-
-            $arrayDados['dadosItensOrcamentarios'] = $dadosItensOrcamacemtar = $projetos->buscarItensComprovados($idPronac)->toArray();
+            $arrayDados['planosCadastrados'] = $tbBeneficiarioProdutoCultural->buscarPlanosCadastrados($idPronac)->toArray();
 
             $arquivo = new \Arquivo();
             $arrayDados['dadosComprovantes'] = $arquivo->buscarComprovantesExecucao($idPronac);
@@ -61,8 +59,8 @@ class RelatorioCumprimentoObjeto implements \MinC\Servico\IServicoRestZend
             $tbTermoAceiteObra = new \ComprovacaoObjeto_Model_DbTable_TbTermoAceiteObra();
             $arrayDados['aceiteObras'] = $tbTermoAceiteObra->buscarTermoAceiteObraArquivos(array('idPronac=?'=>$idPronac), true)->toArray();
 
-            $tbBensDoados = new \ComprovacaoObjeto_Model_DbTable_TbBensDoados();
-            $arrayDados['bensCadastrados'] = $tbBensDoados->buscarBensCadastrados(array('a.idPronac=?'=>$idPronac), array('b.Descricao'))->toArray();
+            $bensCadastrados= new \ComprovacaoObjeto_Model_DbTable_TbBensDoados();
+            $arrayDados['bensCadastrados'] = $bensCadastrados->buscarBensCadastrados(array('a.idPronac=?'=>$idPronac), array('b.Descricao'))->toArray();
 
             if ($dadosRelatorio['siCumprimentoObjeto'] == 6) {
                 $tbUsuario = new \Autenticacao_Model_DbTable_Usuario();

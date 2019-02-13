@@ -75,15 +75,4 @@ class RelatoriosTrimestrais implements \MinC\Servico\IServicoRestZend
 
         return $result;
     }
-
-    // if($relCadastrados->siComprovanteTrimestral == 1){
-    //     $msg = 'Em cadastramento';
-    // } else if($relCadastrados->siComprovanteTrimestral == 2) {
-    //     $msg = 'Enviado';
-    // } else if($relCadastrados->siComprovanteTrimestral == 3 || $relCadastrados->siComprovanteTrimestral == 4 || $relCadastrados->siComprovanteTrimestral == 5) {
-    //     $msg = 'Em análise';
-    // } else if($relCadastrados->siComprovanteTrimestral == 6) {
-    //     $msg = 'Analisado';
-    // }
-
 }
