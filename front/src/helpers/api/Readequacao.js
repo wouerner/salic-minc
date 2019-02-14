@@ -10,15 +10,15 @@ const buildData = (params) => {
     return bodyFormData;
 };
 
-export const buscaReadequacao = (params) => {
-    const { idTipoReadequacao } = params;
-    const path = `/readequacao/dados-readequacao/`;
-    return api.getRequest(path, buildData(params));
+export const dadosReadequacao = (params) => {
+    const { idReadequacao } = params;
+    const path = `/readequacao/dados-readequacao/idReadequacao/${idReadequacao}`;
+    return api.getRequest(path);
 };
 
 export const buscaReadequacaoPronacTipo = (params) => {
-    const { idPronac, idTipoReadequacao } = params;
-    const path = `/readequacao/filtrar-pronac-tipo/idPronac/${idPronac}/idTipoReadequacao/${idTipoReadequacao}`;
+    const { idPronac, idTipoReadequacao, stEstagioAtual } = params;
+    const path = `/readequacao/dados-readequacao/idPronac/${idPronac}/idTipoReadequacao/${idTipoReadequacao}/stEstagioAtual/${stEstagioAtual}`;
     return api.getRequest(path);
 };
 

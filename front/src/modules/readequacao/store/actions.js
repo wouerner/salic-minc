@@ -5,7 +5,7 @@ export const buscaReadequacao = ({ commit }, params) => {
     readequacaoHelperAPI.buscaReadequacao(params)
         .then((response) => {
             const data = response.data;
-            const readequacao = data.data;
+            const readequacao = data.data.items;
             commit(types.SET_READEQUACAO, readequacao);
         });
 };
@@ -14,7 +14,12 @@ export const buscaReadequacaoPronacTipo = ({ commit }, params) => {
     readequacaoHelperAPI.buscaReadequacaoPronacTipo(params)
         .then((response) => {
             const data = response.data;
-            const readequacao = data.data;
+            let readequacao = {};
+            if (data.data.items > 1) {
+                readequacao = data.data.items;
+            } else {
+                readequacao = data.data.items[0];
+            }
             commit(types.SET_READEQUACAO, readequacao);
         });
 };
@@ -45,7 +50,7 @@ export const updateReadequacao = ({ commit }, params) => {
     readequacaoHelperAPI.updateReadequacao(params)
         .then((response) => {
               const data = response.data;
-              const readequacao = data.data;
+              const readequacao = data.data.items;
               commit(types.UPDATE_READEQUACAO, readequacao);
         });
 };

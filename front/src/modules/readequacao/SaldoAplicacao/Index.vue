@@ -257,10 +257,11 @@ export default {
                 this.buscaProjeto(this.idPronac);
             }
         }
-        if (typeof this.dadosReadequacao.items === 'undefined') {
+        if (typeof this.dadosReadequacao.idReadequacao === 'undefined') {
             const idPronac = this.idPronac;
             const idTipoReadequacao = this.idTipoReadequacao;
-            this.buscaReadequacaoPronacTipo({ idPronac, idTipoReadequacao });
+            const stEstagioAtual = 'proponente';
+            this.buscaReadequacaoPronacTipo({ idPronac, idTipoReadequacao, stEstagioAtual });
         }
         $3(document).ajaxStart(() => {
             $3('#container-loading').fadeIn('slow');
@@ -282,7 +283,8 @@ export default {
                 () => {
                     const idPronac = self.idPronac;
                     const idTipoReadequacao = self.idTipoReadequacao;
-                    self.buscaReadequacaoPronacTipo({ idPronac, idTipoReadequacao });
+                    const stEstagioAtual = 'proponente';
+                    self.buscaReadequacaoPronacTipo({ idPronac, idTipoReadequacao, stEstagioAtual });
                     self.exibirPaineis = true;
                     self.exibirBotaoIniciar = false;
                     self.disponivelEdicaoReadequacaoPlanilha(self.idPronac);
@@ -397,7 +399,8 @@ export default {
                 const idPronac = to.params.idPronac;
                 const idTipoReadequacao = this.idTipoReadequacao;
                 const URL_MENU = '';
-                this.buscaReadequacaoPronacTipo({ idPronac, idTipoReadequacao });
+                const stEstagioAtual = 'proponente';
+                this.buscaReadequacaoPronacTipo({ idPronac, idTipoReadequacao, stEstagioAtual });
                 this.urlAjax = URL_MENU + to.params.idPronac;
             }
         },

@@ -11,7 +11,7 @@
               class="materialize-textarea"
               ref="readequacaoJustificativa"
               :disabled="disabled"
-              :value="dadosReadequacao.items.dsJustificativa"
+              :value="dadosReadequacao.dsJustificativa"
               @change="atualizarDadosReadequacao"
 	      ></textarea>
             <label for="textarea1">Justificativa *</label>
@@ -37,6 +37,7 @@
                 <input class="file-path validate" type="text">
               </div>
               <input type="hidden"
+                     id="idDocumento"
 		     :value="dadosReadequacao.idDocumento"
 		     />
             </div>
@@ -131,7 +132,6 @@ export default {
     mixins: [utils],
     methods: {
         salvarReadequacao() {
-            // TODO:
             if (this.readequacao.dsSolicitacao === 0 || this.readequacao.dsSolicitacao === '0,00') {
                 this.mensagemAlerta('\xC9 obrigat\xF3rio informar o saldo dispon\xEDvel; o valor deve ser diferente de R$ 0,00!');
                 this.$children[0].$children[0].$refs.input.focus();
@@ -145,7 +145,7 @@ export default {
                 return;
             }
             this.readequacao.dsSolicitacao = this.$parent.$refs.formulario.$children[0].dsSolicitacao;
-            this.readequacao.idReadequacao = this.dadosReadequacao.items.idReadequacao;
+            this.readequacao.idReadequacao = this.dadosReadequacao.idReadequacao;
             this.updateReadequacao(this.readequacao);
         },
         prepararAdicionarDocumento() {
@@ -196,9 +196,9 @@ export default {
             return true;
         },
         atualizarDadosReadequacao(e) {
-            let key = e.target.id;
-            let valor = e.target.value;
-            this.readequacao[key] = valor;
+            const chave = e.target.id;
+            const valor = e.target.value;
+            this.readequacao[chave] = valor;
         },
         ...mapActions({
             updateReadequacao: 'readequacao/updateReadequacao',
@@ -215,6 +215,11 @@ export default {
                 return true;
             }
             return false;
+        },
+    },
+    watch: {
+        dadosReadequacao() {
+            this.readequacao = this.dadosReadequacao;
         },
     },
 };

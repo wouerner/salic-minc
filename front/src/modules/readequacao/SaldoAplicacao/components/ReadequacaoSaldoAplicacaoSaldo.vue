@@ -4,7 +4,7 @@
             <label>Saldo dispon&iacute;vel *</label>
             <input-money
 	      ref="readequacaoSaldo"
-              :value="dadosReadequacao.items.dsSolicitacao"
+              :value="dadosReadequacao.dsSolicitacao"
 	      v-on:blur.native="alterarSaldo"
 	      >
             </input-money>
@@ -32,7 +32,7 @@ export default {
         alterarSaldo(event) {
             const params = {
                 "dsSolicitacao": event.target.value,
-                "idReadequacao": this.dadosReadequacao.items.idReadequacao
+                "idReadequacao": this.dadosReadequacao.idReadequacao
             };
             this.updateReadequacaoDsSolicitacao(params);
         },
