@@ -32,14 +32,32 @@ class Readequacao implements IServicoRestZend
         return $modelTbReadequacao->findBy($where);
     }
 
-    public function buscarReadequacoes($idPronac)
+    public function buscarReadequacoes($idPronac, $idTipoReadequacao = '', $stEstagioAtual = '')
     {
         $modelTbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
         $where = [
-            'idPronac' => $idPronac
+            'idPronac = ?' => $idPronac
         ];
 
-        return $modelTbReadequacao->findBy($where);
+        if ($idTipoReadequacao != '') {
+            $where['idTipoReadequacao = ?'] = $idTipoReadequacao;
+        }
+        
+        switch ($stEstagioAtual) {
+            case 'proponente':
+                $where['siEncaminhamento = ?'] = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE;
+                break;
+            case 'análise':
+                $where['siEncaminhamento != ?'] = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE;
+                break;
+            default:
+                break;
+        }
+        
+        $resultArray = $modelTbReadequacao->buscar($where)->toArray();
+        $resultArray = \TratarArray::utf8EncodeArray($resultArray);
+        
+        return $resultArray;
     }
 
     public function buscarReadequacoesPorPronacTipo($idPronac, $idTipoReadequacao)

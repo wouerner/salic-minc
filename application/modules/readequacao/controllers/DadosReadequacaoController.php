@@ -22,13 +22,26 @@ class Readequacao_DadosReadequacaoController extends MinC_Controller_Rest_Abstra
     }
 
     public function getAction() {
-        $idReadequacao = $this->getRequest()->getParam('idReadequacao');
         $data = [];
         $code = 200;
-        
         $readequacaoService = new ReadequacaoService($this->getRequest(), $this->getResponse());
-        $data = $readequacaoService->buscar($idReadequacao, $idTipoReadequacao);
         
+        if ($this->getRequest()->getParam('idReadequacao')) {
+            $idReadequacao = $this->getRequest()->getParam('idReadequacao');           
+            $data = $readequacaoService->buscar($idReadequacao);
+            
+        } else if ($this->getRequest()->getParam('idPronac')) {
+            $idPronac = $this->getRequest()->getParam('idPronac');
+            if (strlen($idPronac) > 7) {
+                $idPronac = Seguranca::dencrypt($idPronac);
+            }
+            
+            $idTipoReadequacao = $this->getRequest()->getParam('idTipoReadequacao');
+            $stEstagioAtual = $this->getRequest()->getParam('stEstagioAtual');
+            
+            $data = $readequacaoService->buscarReadequacoes($idPronac, $idTipoReadequacao, $stEstagioAtual);
+        }
+            
         $this->renderJsonResponse($data, $code);
     }
 
