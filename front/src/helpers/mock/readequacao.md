@@ -16,7 +16,7 @@ HOST: http://localhost:4000
                 {
                     "idPronac": 217336,
                     "idReadequacao": 217336,
-                    "tpoReadequacao": 6,
+                    "idTipoReadequacao": 6,
                     "dtSolicitacao": "2019-01-22",
                     "idSolicitante": 267,
                     "dsSolicitacao": "blabalbalbalablabalb",
@@ -34,7 +34,7 @@ HOST: http://localhost:4000
                 {
                     "idPronac": 217336,
                     "idReadequacao": 217336,
-                    "tpoReadequacao": 6,
+                    "idTipoReadequacao": 6,
                     "dtSolicitacao": "2019-01-22",
                     "idSolicitante": 267,
                     "dsSolicitacao": "blabalbalbalablabalb",
@@ -57,19 +57,19 @@ HOST: http://localhost:4000
 
     + Attributes 
         + idPronac (number, required)
-        + tpoReadequacao (number, required)
-        + dsSolicitacao (string, required)
+        + idTipoReadequacao (number, required)
+        + dsSolicitacao (string)
         + dsJustificativa (string)
-        + idDocumento (number)
+        + binDocumento (file)
 
-+ Response 200 (application/json; charset=utf-8)
++ Response 201 (application/json; charset=utf-8)
 
     + Body
 
             {
                     "idPronac": 217336,
                     "idReadequacao": 217336,
-                    "tpoReadequacao": 6,
+                    "idTipoReadequacao": 6,
                     "dtSolicitacao": "2019-01-22",
                     "idSolicitante": 267,
                     "dsSolicitacao": "blabalbalbalablabalb",
@@ -100,7 +100,7 @@ HOST: http://localhost:4000
             {
                 "idPronac": 217336,
                 "idReadequacao": 217336,
-                "tpoReadequacao": 6,
+                "idTipoReadequacao": 6,
                 "dtSolicitacao": "2019-01-22",
                 "idSolicitante": 267,
                 "dsSolicitacao": "blabalbalbalablabalb",
@@ -124,7 +124,7 @@ HOST: http://localhost:4000
     + Attributes 
         + dsSolicitacao (string)
         + dsJustificativa (string)
-        + idDocumento (number)
+        + binDocumento (file)
         + idAvaliador (number)
         + dsAvaliacao (string)
 
@@ -135,7 +135,7 @@ HOST: http://localhost:4000
             {
                 "idPronac": 217336,
                 "idReadequacao": 217336,
-                "tpoReadequacao": 6,
+                "idTipoReadequacao": 6,
                 "dtSolicitacao": "2019-01-22",
                 "idSolicitante": 267,
                 "dsSolicitacao": "blabalbalbalablabalb",
@@ -169,25 +169,34 @@ HOST: http://localhost:4000
             [
                 {
                     "idTipoReadequacao": 3,
+                    "tpCampo": "input",
                     "descricao": "Alteração de Razão Social"
                 },
                 {
                     "idTipoReadequacao": 4,
+                    "tpCampo": "input"
                     "descricao": "Agência Bancária"
                 },
                 {
                     "idTipoReadequacao": 5,
+                    "tpCampo": "textarea",
                     "descricao": "Sinópse da Obra"
                 },
                 {
                     "idTipoReadequacao": 6,
+                    "tpCampo": "textarea",
                     "descricao": "Impacto Ambiental"
+                },
+                {
+                    "idTipoReadequacao": 13,
+                    "tpCampo": "data",
+                    "descricao": "Período de Execução"
                 }
             ]
 
 + Request
     + Attributes
-        + modalidade: planilha        
+        + modalidade: planilha
 
 + Response 200 (application/json; charset=utf-8)
 
@@ -196,24 +205,28 @@ HOST: http://localhost:4000
             [
                 {
                     "idTipoReadequacao": 1,
+                    "tpCampo": "",
                     "descricao": "Remanejamento até 50 %"
                 },
                 {
                     "idTipoReadequacao": 2,
+                    "tpCampo": "",
                     "descricao": "Planilha Orçamentária"
                 },
                 {
                     "idTipoReadequacao": 22,
+                    "tpCampo": "",
                     "descricao": "Saldo de Aplicação"
                 },
                 {
                     "idTipoReadequacao": 23,
+                    "tpCampo": "",
                     "descricao": "Transferência de recursos entre projetos"
                 }
             ]
     
 
-## Readequacao - Buscar campos por tipo readequação [/readequacao/campo-para-editar/]
+## Readequacao - Buscar campos por tipo readequação [/readequacao/campo-atual-projeto?idPronac=216312&idTipoReadequacao=3]
 
 + Parameters
     + idPronac: 217336 (number, required)
@@ -232,31 +245,17 @@ HOST: http://localhost:4000
                 }
             }
 
-## Readequacao - Visualizar tipos [/readequacao/tipos-planilha/]
+## Readequação - Documento [/readequacao/51151/documento]   [DELETE]
 
-### Visualizar tipos de readequação [GET]
++ Parameters
+    + idReadequacao: 15122 (number, required)
+
+### Remover documento de uma readequação [DELETE]
 
 + Response 200 (application/json; charset=utf-8)
-
+  
     + Body
-
-            [
-                {
-                    "idTipoReadequacao": 1,
-                    "descricao": "Remanejamento até 50 %"
-                },
-                {
-                    "idTipoReadequacao": 2,
-                    "descricao": "Planilha Orçamentária"
-                },
-                {
-                    "idTipoReadequacao": 22,
-                    "descricao": "Saldo de Aplicação"
-                },
-                {
-                    "idTipoReadequacao": 23,
-                    "descricao": "Transferência de recursos entre projetos"
-                },
-            ]
-
-###
+      
+            {
+                "mensagem": "Arquivo removido com sucesso!"
+            }
