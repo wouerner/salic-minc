@@ -119,17 +119,14 @@ HOST: http://localhost:4000
 
 ### Atualizar dados readequação [PUT]
 
-+ Request (application/json; charset=utf-8)
++ Request (multipart/form-data; charset=utf-8)
 
     + Attributes 
-            
-            {
-                "dsSolicitacao": "Solicitação alterada",
-                "dsJustificativa": "É necessário! ",
-                "idDocumento": 19440,
-                "idAvaliador": 0,
-                "dsAvaliacao": "Avaliação do Tecnico",
-            }
+        + dsSolicitacao (string)
+        + dsJustificativa (string)
+        + idDocumento (number)
+        + idAvaliador (number)
+        + dsAvaliacao (string)
 
 + Response 200 (application/json; charset=utf-8)
 
@@ -154,84 +151,16 @@ HOST: http://localhost:4000
                 "stEstagioAtual": "proponente"
             }
 
-
-
-## Readequacao - Proponente Visualizar [/readequacao/readequacao-proponente/{idPronac}]
+## Readequacao - Visualizar tipos [/readequacao/tipos?modalidade={modalidade}]
 
 + Parameters
-    + idPronac: 217336 (number, required)
+    + modalidade (string, required) - Modalidade da Readequação - diversas ou planilha 
 
-### Proponente visualizar readequação [GET]
+### Visualizar tipos [GET]
 
-+ Response 200 (application/json; charset=utf-8)
-
-    + Body
-        
-            {
-                "data": {
-                    "itens": [
-                        {
-                            "idPronac": 217336,
-                            "idReadequacao": 546,
-                            "tpoReadequacao": 6,
-                            "dtSolicitacao": "2019-01-22",
-                            "idSolicitante": 267,
-                            "dsSolicitacao": "blabalbalbalablabalb",
-                            "dsJustificativa": "É necessário",
-                            "idDocumento": 19440,
-                            "idAvaliador": 335,
-                            "dsAvaliacao": "queuqeuqueuq",
-                            "stAtendimento": "N",
-                            "siEncaminhamento": 86942,
-                            "idNrReuniao": 45654,
-                            "stEstado": 1,
-                            "dtEnvio": "2019-01-23"
-                        },
-                        {
-                            "idPronac": 217336,
-                            "idReadequacao": 74987,
-                            "tpoReadequacao": 6,
-                            "dtSolicitacao": "2019-01-22",
-                            "idSolicitante": 267,
-                            "dsSolicitacao": "blabalbalbalablabalb",
-                            "dsJustificativa": "É necessário",
-                            "idDocumento": 19440,
-                            "idAvaliador": 335,
-                            "dsAvaliacao": "queuqeuqueuq",
-                            "stAtendimento": "N",
-                            "siEncaminhamento": 86942,
-                            "idNrReuniao": 45654,
-                            "stEstado": 1,
-                            "dtEnvio": "2019-01-23"
-                        }
-                    ]
-                }
-            }
-
-### Proponente enviar readequação [POST]
-
-+ Request (application/json; charset=utf-8)
-
-    + Attributes 
-
-            {
-                "idPronac": 217336
-                "idTipoReadequacao": 4
-                "dsSolicitacao": "novo nome para o projeto"
-                "dsJustificativa": "porque sim" 
-                "idDocumento": ""
-            }
-
-+ Response 201 (application/json; charset=utf-8)
-
-    + Attributes (object)
-        + status: 1 (number)
-        + msg: Readequação criada com sucesso! (string)
-        + redirect: `/readequacao/readequacao-proponente/idPronac/217336` (string)
-
-## Readequacao - Visualizar tipos [/readequacao/readequacao-proponente/tipos-diversos/]
-
-### Visualizar tipos de readequação [GET]
++ Request
+    + Attributes
+        + modalidade: diversas 
 
 + Response 200 (application/json; charset=utf-8)
 
@@ -240,21 +169,49 @@ HOST: http://localhost:4000
             [
                 {
                     "idTipoReadequacao": 3,
-                    "descricao": "Alteração de Razão Social",
+                    "descricao": "Alteração de Razão Social"
                 },
                 {
                     "idTipoReadequacao": 4,
-                    "descricao": "Agência Bancária",
+                    "descricao": "Agência Bancária"
                 },
                 {
                     "idTipoReadequacao": 5,
-                    "descricao": "Sinópse da Obra",
+                    "descricao": "Sinópse da Obra"
                 },
                 {
                     "idTipoReadequacao": 6,
-                    "descricao": "Impacto Ambiental",
-                },
+                    "descricao": "Impacto Ambiental"
+                }
             ]
+
++ Request
+    + Attributes
+        + modalidade: planilha        
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            [
+                {
+                    "idTipoReadequacao": 1,
+                    "descricao": "Remanejamento até 50 %"
+                },
+                {
+                    "idTipoReadequacao": 2,
+                    "descricao": "Planilha Orçamentária"
+                },
+                {
+                    "idTipoReadequacao": 22,
+                    "descricao": "Saldo de Aplicação"
+                },
+                {
+                    "idTipoReadequacao": 23,
+                    "descricao": "Transferência de recursos entre projetos"
+                }
+            ]
+    
 
 ## Readequacao - Buscar campos por tipo readequação [/readequacao/campo-para-editar/]
 
@@ -286,19 +243,19 @@ HOST: http://localhost:4000
             [
                 {
                     "idTipoReadequacao": 1,
-                    "descricao": "Remanejamento até 50 %",
+                    "descricao": "Remanejamento até 50 %"
                 },
                 {
                     "idTipoReadequacao": 2,
-                    "descricao": "Planilha Orçamentária",
+                    "descricao": "Planilha Orçamentária"
                 },
                 {
                     "idTipoReadequacao": 22,
-                    "descricao": "Saldo de Aplicação",
+                    "descricao": "Saldo de Aplicação"
                 },
                 {
                     "idTipoReadequacao": 23,
-                    "descricao": "Transferência de recursos entre projetos",
+                    "descricao": "Transferência de recursos entre projetos"
                 },
             ]
 
