@@ -40,16 +40,19 @@ class RelatoriosTrimestrais implements \MinC\Servico\IServicoRestZend
 
     private function montaArrayRelatoriosTrimestrais($dados)
     {
-        foreach ($dados as $item) {
-            $result[] = [
-                'dtInicio' => $item['dtInicioPeriodo'],
-                'dtFim' => $item['dtFimPeriodo'],
-                'dtComprovante' => $item['dtComprovante'],
-                'siComprovanteTrimestral' => $this->situacaoComprovanteTrimestral($item['siComprovanteTrimestral']),
-            ];
-
+        if ($dados) {
+            foreach ($dados as $item) {
+                $result[] = [
+                    'dtInicio' => $item['dtInicioPeriodo'],
+                    'dtFim' => $item['dtFimPeriodo'],
+                    'dtComprovante' => $item['dtComprovante'],
+                    'siComprovanteTrimestral' => $this->situacaoComprovanteTrimestral($item['siComprovanteTrimestral']),
+                ];
+    
+            }
+            return $result;
         }
-        return $result;
+        return [];
     }
 
     private function situacaoComprovanteTrimestral($dado)
