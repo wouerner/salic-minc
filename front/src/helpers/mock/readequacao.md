@@ -4,7 +4,10 @@ HOST: http://localhost:4000
 
 # Group Readequacao
 
-## Readequacao - Visualizar lista de readequações [/readequacao/dados-readequacao]
+## Readequacao - Visualizar lista de readequações [/readequacao?idPronac={idPronac}]
+
++ Parameters
+    + idPronac: 14100 (number, required)
 
 ### Visualizar lista de readequações [GET]
 
@@ -136,15 +139,6 @@ HOST: http://localhost:4000
 
 ### Atualizar dados readequação [PUT]
 
-+ Request (multipart/form-data; boundary=---BOUNDARY)
-
-    + Attributes 
-        + dsSolicitacao (string)
-        + dsJustificativa (string)
-        + binDocumento (string)
-        + idAvaliador (number)
-        + dsAvaliacao (string)
-
 + Request (multipart/form-data; boundary=BOUNDARY)
 
         --BOUNDARY
@@ -161,6 +155,9 @@ HOST: http://localhost:4000
         236
         --BOUNDARY
         Content-Disposition: form-data; name="dsAvaliacao"
+        
+        --BOUNDARY
+        Content-Disposition: form-data; name="stAcao"
         
         Aprovado!
         --BOUNDARY
