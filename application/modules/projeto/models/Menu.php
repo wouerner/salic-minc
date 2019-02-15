@@ -568,8 +568,8 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             $menu['prestacaodecontas']['submenu'][] = [
                 'label' => 'Rela&ccedil;&atilde;o de pagamentos',
                 'title' => 'Ir para Rela&ccedil;&atilde;o de Pagamentos',
-                'link' => '/default/consultardadosprojeto/dados-relacao-pagamentos/?idPronac=' . $idPronacHash,
-                'ajax' => true,
+                'link' => "/projeto/#/{$idPronacHash}/relacao-pagamento",
+                'ajax' => false,
                 'grupo' => []
             ];
 
@@ -591,18 +591,18 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
 
 
             $menu['prestacaodecontas']['submenu'][] = [
-              'label' => 'Pagamentos por UF / Munic&iacute;pio',
-              'title' => 'Ir para Pagamentos por UF / Munic&iacute;pio',
-              'link' => '/default/consultardadosprojeto/pagamentos-por-uf-municipio/?idPronac=' . $idPronacHash,
-              'ajax' => true,
-              'grupo' => []
+                'label' => 'Pagamentos por UF / Munic&iacute;pio',
+                'title' => 'Ir para Pagamentos por UF / Munic&iacute;pio',
+                'link' => "/projeto/#/{$idPronacHash}/pagamentos-uf-municipio",
+                'ajax' => false,
+                'grupo' => []
             ];
 
             $menu['prestacaodecontas']['submenu'][] = [
                 'label' => 'Pagamentos Consolidados',
                 'title' => 'Ir para Pagamentos Consolidados',
-                'link' => '/default/consultardadosprojeto/pagamentos-consolidados-por-uf-municipio/?idPronac=' . $idPronacHash,
-                'ajax' => true,
+                'link' => "/projeto/#/{$idPronacHash}/pagamentos-consolidados",
+                'ajax' => false,
                 'grupo' => []
             ];
 
@@ -610,8 +610,8 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 $menu['prestacaodecontas']['submenu'][] = [
                     'label' => 'Relat&oacute;rios trimestrais',
                     'title' => 'Ir para Relat&oacute;rios trimestrais',
-                    'link' => '/default/consultardadosprojeto/relatorios-trimestrais/?idPronac=' . $idPronacHash,
-                    'ajax' => true,
+                    'link' => "/projeto/#/{$idPronacHash}/relatorios-trimestrais",
+                    'ajax' => false,
                     'grupo' => []
                 ];
             }
