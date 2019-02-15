@@ -345,9 +345,7 @@ export default {
         montaArray(value) {
             const dadosListagem = [];
             let arrayFiltro = this.dados;
-            arrayFiltro = arrayFiltro.filter((element, i, array) => {
-                return array.map(x => x[value]).indexOf(element[value]) === i;
-            });
+            arrayFiltro = arrayFiltro.filter((element, i, array) => array.map(x => x[value]).indexOf(element[value]) === i);
 
             arrayFiltro.forEach((element) => {
                 dadosListagem.push(element[value]);

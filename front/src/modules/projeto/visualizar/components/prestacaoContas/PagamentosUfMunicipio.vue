@@ -11,20 +11,15 @@
                         row
                         wrap>
                         <Filtro
-                            :items="montaArray('Item')"
+                            :items="montaArray('Item', dados)"
                             :label="'Pesquise Item'"
                             class="pr-5"
                             @eventoSearch="search = $event"
                         />
                         <Filtro
-                            :items="montaArray('UFFornecedor')"
+                            :items="montaArray('UFFornecedor', dados)"
                             :label="'Pesquise UF'"
                             class="pr-5"
-                            @eventoSearch="search = $event"
-                        />
-                        <Filtro
-                            :items="montaArray('MunicipioFornecedor')"
-                            :label="'Pesquise Municipio'"
                             @eventoSearch="search = $event"
                         />
                     </v-layout>
@@ -126,6 +121,7 @@ export default {
                 sortBy: 'id',
                 ascending: true,
             },
+            itensFiltrados: [],
             selected: [],
             loading: true,
             headers: [
@@ -220,12 +216,10 @@ export default {
         ...mapActions({
             buscarPagamentosUfMunicipio: 'prestacaoContas/buscarPagamentosUfMunicipio',
         }),
-        montaArray(value) {
+        montaArray(value, dados = []) {
             const dadosListagem = [];
-            let arrayFiltro = this.dados;
-            arrayFiltro = arrayFiltro.filter((element, i, array) => {
-                return array.map(x => x[value]).indexOf(element[value]) === i;
-            });
+            let arrayFiltro = dados;
+            arrayFiltro = arrayFiltro.filter((element, i, array) => array.map(x => x[value]).indexOf(element[value]) === i);
 
             arrayFiltro.forEach((element) => {
                 dadosListagem.push(element[value]);

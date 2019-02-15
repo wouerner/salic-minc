@@ -5,6 +5,7 @@
                 v-model="search"
                 :label="label"
                 :items="items"
+                v-bind="$attrs"
                 chips
             >
                 <template
