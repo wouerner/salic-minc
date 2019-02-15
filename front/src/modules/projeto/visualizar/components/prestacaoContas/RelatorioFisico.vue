@@ -19,9 +19,9 @@
                     <td class="text-xs-left">{{ props.item.Unidade }}</td>
                     <td class="text-xs-right">{{ props.item.qteProgramada }}</td>
                     <td class="text-xs-right">{{ props.item.vlProgramado | filtroFormatarParaReal }}</td>
-                    <td class="text-xs-right">{{ props.item.PercExecutado | filtroFormatarParaReal }}</td>
+                    <td class="text-xs-right">{{ props.item.PercExecutado | filtroFormatarParaReal }} %</td>
                     <td class="text-xs-right">{{ props.item.vlExecutado | filtroFormatarParaReal }}</td>
-                    <td class="text-xs-right">{{ props.item.PercAExecutar | filtroFormatarParaReal }}</td>
+                    <td class="text-xs-right">{{ props.item.PercAExecutar | filtroFormatarParaReal }} %</td>
                 </template>
             </v-data-table>
         </div>
