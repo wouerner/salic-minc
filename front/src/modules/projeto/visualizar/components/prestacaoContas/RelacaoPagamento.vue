@@ -325,6 +325,10 @@ export default {
         },
     },
     watch: {
+        dadosProjeto(value) {
+            this.loading = false;
+            this.buscarRelacaoPagamento(value.idPronac);
+        },
         dados() {
             this.loading = false;
         },

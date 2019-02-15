@@ -76,6 +76,10 @@ export default {
         }),
     },
     watch: {
+        dadosProjeto(value) {
+            this.loading = false;
+            this.buscarRelatoriosTrimestrais(value.idPronac);
+        },
         dados() {
             this.loading = false;
         },

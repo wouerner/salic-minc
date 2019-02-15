@@ -64,30 +64,50 @@
                         </td>
                     </template>
                 </v-data-table>
-            </v-card>
-            <v-card>
                 <v-container fluid>
                     <v-layout
                         row
                         wrap>
                         <v-flex xs6>
-                            <h6 class="mr-3">VALOR TOTAL</h6>
+                            <h6 class="mr-3 black--text">VALOR TOTAL</h6>
                         </v-flex>
                         <v-flex
                             xs5
                             offset-xs1
-                            class="text-xs-right">
+                            class=" text-xs-right">
                             <h6>
                                 <v-chip
                                     outline
-                                    color="black"
-                                >R$ {{ valorTotal | filtroFormatarParaReal }}
+                                    color="black">R$ {{ valorTotal | filtroFormatarParaReal }}
                                 </v-chip>
                             </h6>
                         </v-flex>
                     </v-layout>
                 </v-container>
             </v-card>
+            <!--<v-card>-->
+            <!--<v-container fluid>-->
+            <!--<v-layout-->
+            <!--row-->
+            <!--wrap>-->
+            <!--<v-flex xs6>-->
+            <!--<h6 class="mr-3">VALOR TOTAL</h6>-->
+            <!--</v-flex>-->
+            <!--<v-flex-->
+            <!--xs5-->
+            <!--offset-xs1-->
+            <!--class="text-xs-right">-->
+            <!--<h6>-->
+            <!--<v-chip-->
+            <!--outline-->
+            <!--color="black"-->
+            <!--&gt;R$ {{ valorTotal | filtroFormatarParaReal }}-->
+            <!--</v-chip>-->
+            <!--</h6>-->
+            <!--</v-flex>-->
+            <!--</v-layout>-->
+            <!--</v-container>-->
+            <!--</v-card>-->
         </div>
     </div>
 </template>
@@ -200,6 +220,10 @@ export default {
         },
     },
     watch: {
+        dadosProjeto(value) {
+            this.loading = false;
+            this.buscarPagamentosUfMunicipio(value.idPronac);
+        },
         dados() {
             this.loading = false;
         },

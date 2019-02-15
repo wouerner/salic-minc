@@ -28,7 +28,7 @@
                     row
                     wrap>
                     <v-flex xs6>
-                        <h6 class="mr-3">Total dos Pagamentos</h6>
+                        <h6 class="mr-3">TOTAL DOS PAGAMENTOS</h6>
                     </v-flex>
                     <v-flex
                         xs5
@@ -119,6 +119,10 @@ export default {
         },
     },
     watch: {
+        dadosProjeto(value) {
+            this.loading = false;
+            this.buscarPagamentosConsolidados(value.idPronac);
+        },
         dados() {
             this.loading = false;
         },
