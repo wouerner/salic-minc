@@ -192,16 +192,29 @@ HOST: http://localhost:4000
                 "stEstagioAtual": "proponente"
             }
 
-## Readequacao - Visualizar tipos [/readequacao/tipos?modalidade={modalidade}]
+### Excluir readequação [DELETE]
 
 + Parameters
-    + modalidade (string, required) - Modalidade da Readequação - diversas ou planilha 
+    + idReadequacao (string, required) - ID da Readequação  
 
-### Visualizar tipos [GET]
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "mensagem": "Readequação removida com sucesso!"
+            }
+
+## Readequacao - Visualizar tipos de Readequação disponíveis para criação por Pronac [/readequacao/tipos-disponiveis?idPronac={idPronac}]
+
++ Parameters
+    + idPronac (string, required)
+
+### Visualizar tipos de Readequação disponíveis para criação por Pronac [GET]
 
 + Request
     + Attributes
-        + modalidade: diversas 
+        + idPronac: 141001 
 
 + Response 200 (application/json; charset=utf-8)
 
@@ -232,18 +245,7 @@ HOST: http://localhost:4000
                     "idTipoReadequacao": 13,
                     "tpCampo": "data",
                     "descricao": "Período de Execução"
-                }
-            ]
-
-+ Request
-    + Attributes
-        + modalidade: planilha
-
-+ Response 200 (application/json; charset=utf-8)
-
-    + Body
-
-            [
+                },
                 {
                     "idTipoReadequacao": 1,
                     "tpCampo": "",
@@ -265,7 +267,6 @@ HOST: http://localhost:4000
                     "descricao": "Transferência de recursos entre projetos"
                 }
             ]
-    
 
 ## Readequacao - Buscar campos por tipo readequação [/readequacao/campo-atual-projeto?idPronac={idPronac}&idTipoReadequacao={idTipoReadequacao}]
 
