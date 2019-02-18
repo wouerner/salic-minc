@@ -38,7 +38,7 @@
                             class="text-xs-left"
                             v-html="props.item.tpFormaDePagamento"/>
                         <td class="text-xs-right">{{ props.item.vlPagamento | filtroFormatarParaReal }}</td>
-                        <td class="text-xs-center">
+                        <td class="text-xs-center pr-2">
                             <v-tooltip bottom>
                                 <v-btn
                                     slot="activator"
@@ -101,7 +101,9 @@
                                             v-if="dadosPagamento.idArquivo"
                                             :href="`/upload/abrir?id=${dadosPagamento.idArquivo}`"
                                         >
-                                            <span v-html="dadosPagamento.nmArquivo"/>
+                                            <u>
+                                                <p v-html="dadosPagamento.nmArquivo"/>
+                                            </u>
                                         </a>
                                         <span v-else>
                                             -
@@ -111,7 +113,7 @@
                                         <b class="pl-4">Data Pagamento</b>
                                         <p
                                             v-if="dadosPagamento.DtPagamento"
-                                            class="pl-4"
+                                            class="text-xs-center pr-5"
                                         >
                                             {{ dadosPagamento.DtPagamento | formatarData }}
                                         </p>
@@ -121,7 +123,10 @@
                                     </v-flex>
                                     <v-flex>
                                         <b>Data Emissão</b>
-                                        <p v-if="dadosPagamento.DtPagamento">
+                                        <p
+                                            v-if="dadosPagamento.DtPagamento"
+                                            class="pl-2"
+                                        >
                                             {{ dadosPagamento.DtEmissao | formatarData }}
                                         </p>
                                         <p v-else>
@@ -130,7 +135,10 @@
                                     </v-flex>
                                     <v-flex>
                                         <b>Valor Pagamento</b>
-                                        <p v-if="dadosPagamento.vlPagamento">
+                                        <p
+                                            v-if="dadosPagamento.vlPagamento"
+                                            class="text-xs-center pr-5"
+                                        >
                                             R$ {{ dadosPagamento.vlPagamento | filtroFormatarParaReal }}
                                         </p>
                                         <p v-else>
@@ -151,8 +159,11 @@
                                         </p>
                                     </v-flex>
                                     <v-flex xs6>
-                                        <b>CNPJ/CPF</b>
-                                        <p v-if="dadosPagamento.CNPJCPF">
+                                        <b class="pr-2">CNPJ/CPF</b>
+                                        <p
+                                            v-if="dadosPagamento.CNPJCPF"
+                                            class="pr-2"
+                                        >
                                             {{ dadosPagamento.CNPJCPF | cnpjFilter }}
                                         </p>
                                         <p v-else>
@@ -170,8 +181,11 @@
                                             v-html="dadosPagamento.tbDocumento"/>
                                     </v-flex>
                                     <v-flex xs6>
-                                        <b>Nº Documento</b>
-                                        <p v-if="dadosPagamento.nrComprovante">
+                                        <b class="pr-2">Nº Documento</b>
+                                        <p
+                                            v-if="dadosPagamento.nrComprovante"
+                                            class="pl-4"
+                                        >
                                             {{ dadosPagamento.nrComprovante }}
                                         </p>
                                         <p v-else>
@@ -189,8 +203,11 @@
                                             v-html="dadosPagamento.tpFormaDePagamento"/>
                                     </v-flex>
                                     <v-flex xs6>
-                                        <b>Nº Documento Pagamento</b>
-                                        <p v-if="dadosPagamento.nrDocumentoDePagamento">
+                                        <b class="pr-2">Nº Documento Pagamento</b>
+                                        <p
+                                            v-if="dadosPagamento.nrDocumentoDePagamento"
+                                            class="pl-5"
+                                        >
                                             {{ dadosPagamento.nrDocumentoDePagamento }}
                                         </p>
                                         <p v-else>
