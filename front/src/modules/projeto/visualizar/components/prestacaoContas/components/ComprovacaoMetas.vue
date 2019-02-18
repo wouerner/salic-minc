@@ -55,7 +55,7 @@ export default {
                 },
                 {
                     text: 'Aprovada',
-                    align: 'left',
+                    align: 'right',
                     value: 'qtFisicaAprovada',
                 },
                 {
@@ -70,24 +70,24 @@ export default {
                 },
                 {
                     text: 'Aprovada',
-                    align: 'left',
+                    align: 'right',
                     value: 'vlAprovado',
                 },
 
                 {
                     text: 'Executada',
-                    align: 'left',
+                    align: 'right',
                     value: 'vlExecutado',
                 },
 
                 {
                     text: '% Executado',
-                    align: 'left',
+                    align: 'right',
                     value: 'PerFisica',
                 },
                 {
                     text: 'Saldo à Executar',
-                    align: 'left',
+                    align: 'right',
                     value: 'SaldoAExecutar',
                 },
             ],

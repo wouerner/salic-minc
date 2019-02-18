@@ -101,5 +101,9 @@ export const utils = {
             const parsedValue = parseFloat(value);
             return numeral(parsedValue).format('0,0.00');
         },
+        filtroFormatarValor(value) {
+            const parsedValue = parseFloat(value);
+            return numeral(parsedValue).format('0,0');
+        }
     },
 };
