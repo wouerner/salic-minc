@@ -24,19 +24,19 @@
             <v-card>
                 <v-container fluid>
                     <v-layout
-                            row
-                            wrap>
+                        row
+                        wrap>
                         <v-flex xs6>
                             <h6 class="mr-3">TOTAL DOS PAGAMENTOS</h6>
                         </v-flex>
                         <v-flex
-                                xs5
-                                offset-xs1
-                                class="text-xs-right">
+                            xs5
+                            offset-xs1
+                            class="text-xs-right">
                             <h6>
                                 <v-chip
-                                        outline
-                                        color="black"
+                                    outline
+                                    color="black"
                                 >R$ {{ valorPagamentoTotal | filtroFormatarParaReal }}
                                 </v-chip>
                             </h6>
