@@ -14,8 +14,12 @@
                     slot="items"
                     slot-scope="props">
                     <td class="text-xs-left">{{ props.item.Etapa }}</td>
-                    <td class="text-xs-right">{{ props.item.qtFisicaAprovada }}</td>
-                    <td class="text-xs-right">{{ props.item.qtFisicaExecutada | tipoExecucaoRound }}</td>
+                    <td class="text-xs-right">
+                        {{ props.item.qtFisicaAprovada | tipoExecucaoRound | filtroFormatarValor }}
+                    </td>
+                    <td class="text-xs-right">
+                        {{ props.item.qtFisicaExecutada | tipoExecucaoRound | filtroFormatarValor }}
+                    </td>
                     <td class="text-xs-right">{{ props.item.PerFisica | tipoExecucao }} %</td>
                     <td class="text-xs-right">R$ {{ props.item.vlAprovado | filtroFormatarParaReal }}</td>
                     <td class="text-xs-right">R$ {{ props.item.vlExecutado | filtroFormatarParaReal }}</td>
