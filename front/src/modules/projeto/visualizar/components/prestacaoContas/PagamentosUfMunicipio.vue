@@ -49,18 +49,15 @@
                         <td class="text-xs-center pl-5">{{ props.item.DtComprovacao | formatarData }}</td>
                         <td class="text-xs-right">{{ props.item.vlPagamento | filtroFormatarParaReal }}</td>
                         <td class="text-xs-left">
-                            <v-btn
-                                :loading="parseInt(props.item.id) === loadingButton"
+                            <a
                                 :href="`/upload`+
                                     `/abrir`+
                                 `?id=${props.item.idArquivo}`"
-                                style="text-decoration: none"
-                                round
-                                small
-                                @click="loadingButton = parseInt(props.item.id)"
                             >
-                                {{ props.item.nmArquivo }}
-                            </v-btn>
+                                <u>
+                                    <p v-html="props.item.nmArquivo"/>
+                                </u>
+                            </a>
                         </td>
                     </template>
                 </v-data-table>
