@@ -20,6 +20,12 @@ class Readequacao_DadosReadequacaoController extends MinC_Controller_Rest_Abstra
             ]
         ];
         $this->setProtectedMethodsProfilesPermission($permissionsPerMethod);
+
+        $subRoutes = [
+            'readequacao/dados-readequacao/{idReadequacao}/documento/{idDocumento}'
+        ];
+        
+        $this->registrarSubRoutes($subRoutes);
         
         parent::__construct($request, $response, $invokeArgs);
     }
