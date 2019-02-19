@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Index from './index/Index';
 import SaldoAplicacaoTemplate from './SaldoAplicacao/Index';
+import PainelReadequacoes from './components/PainelReadequacoes';
 
 Vue.use(Router);
 
@@ -19,6 +20,13 @@ const routes = [
         component: SaldoAplicacaoTemplate,
         meta: {
             title: 'Saldo de aplicação',
+        },
+    },
+    {
+        path: '/readequacoes',
+        component: PainelReadequacoes,
+        meta: {
+            title: 'Painel de Readequações',
         },
     },
 ];
