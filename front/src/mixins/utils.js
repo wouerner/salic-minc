@@ -1,6 +1,7 @@
 import moment from 'moment';
 import numeral from 'numeral';
 import 'numeral/locales';
+import filtersQuantidade from '@/filters/quantidade';
 
 numeral.locale('pt-br');
 numeral.defaultFormat('0,0.00');
@@ -101,9 +102,9 @@ export const utils = {
             const parsedValue = parseFloat(value);
             return numeral(parsedValue).format('0,0.00');
         },
-        filtroFormatarValor(value) {
+        filtroFormatarQuantidade(value) {
             const parsedValue = parseFloat(value);
-            return numeral(parsedValue).format('0,0');
+            return filtersQuantidade(parsedValue);
         }
     },
 };
