@@ -20,6 +20,8 @@ abstract class MinC_Controller_Rest_Abstract extends Zend_Controller_Action
 
     protected $_checkUserIsLogged = false;
 
+    protected $_subRoutes = [];
+
 
     const ALL_METHODS = '*';
     const COD_ORGAO_PROPONENTE = 1111;
@@ -47,6 +49,8 @@ abstract class MinC_Controller_Rest_Abstract extends Zend_Controller_Action
             ->addActionContext('delete', 'json')
             ->initContext('json');
 
+        $this->checkSubRoutes();
+        
         $this->_request = $this->getRequest();
         $this->_response = $this->getResponse();
 
@@ -75,6 +79,10 @@ abstract class MinC_Controller_Rest_Abstract extends Zend_Controller_Action
         $this->_checkUserIsLogged = true;
     }
 
+    final protected function registrarSubRoutes(array $subRoutes)
+    {
+        $this->_subRoutes = $subRoutes;
+    }
 
     final private function checkPermission() : bool
     {
@@ -106,6 +114,73 @@ abstract class MinC_Controller_Rest_Abstract extends Zend_Controller_Action
                 'message' => 'Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!'
             ]
         ]);
+    }
+
+    final protected function checkSubRoutes()
+    {
+        $arrRequest = $this->getAllParams();
+       $currentUrl = $arrRequest['module'] . '/' .  $arrRequest['controller'];
+       
+        if (array_key_exists('id', $arrRequest) && $arrRequest['action'] == 'get') {
+            $currentUrl .= '/' . $arrRequest['id'];
+        } else {
+            $otherParams = $arrRequest;
+            unset($otherParams['module']);
+            unset($otherParams['controller']);
+            unset($otherParams['action']);
+
+            foreach ($otherParams as $key => $value) {
+                $currentUrl .= '/' . $key;
+                if ($value) {
+                    $currentUrl .= '/' . $value;
+                }
+            }
+        }
+        
+        $currentUrlPieces = preg_split('/\//', $currentUrl);
+        $capturedParams = [];
+        $capturedActions = [];
+        
+        if (array_key_exists('module', $arrRequest) &&
+            array_key_exists('controller', $arrRequest) &&
+            array_key_exists('action', $arrRequest) &&
+            in_array('get', $arrRequest)            
+        ) {
+            foreach ($this->_subRoutes as $definedRoute) {
+                $pieceMatch = [];
+                $routePieces = preg_split('/\//', $definedRoute);
+                
+                if (count($currentUrlPieces) == count($routePieces)) {
+                    foreach ($currentUrlPieces as $key => $piece) {
+                        if ($routePieces[$key] == $currentUrlPieces[$key]) {
+                            $pieceMatch[$key] = true;
+                            $capturedActions[] = $piece;
+                        } else if (!preg_match('/[{].*[}]/', $piece)) {
+                            $capturedParams[$routePieces[$key]] = $piece;
+                            $pieceMatch[$key] = true;
+                        } else {
+                            $pieceMatch[$key] = false;
+                        }
+                    }
+                    
+                    if (!in_array(false, $pieceMatch)) {
+                        // redirect to proper Controller
+                        $controllerName = preg_replace_callback(
+                            '/[-]([a-z]{1})/',
+                            function($match) { return ucfirst($match[1]); },
+                            $capturedActions[1] . ucfirst($capturedActions[2])
+                        );
+                        
+                        $this->forward(
+                            '',
+                            $capturedActions[1] . '-' . $capturedActions[2],
+                            $arrRequest['module'],
+                            $capturedParams
+                        );
+                    }
+                }
+            }
+        }
     }
 
     final public function renderJsonResponse(array $data, int $code)
