@@ -1,10 +1,8 @@
 <template>
     <TabelaReadequacoes
     :dados="getReadequacoes"
-    :componentes="listaAcoesProponente"
-    >
-    </TabelaReadequacoes>
-    
+      >
+      </TabelaReadequacoes>
 </template>
 
 <script>
@@ -20,11 +18,6 @@ import TabelaReadequacoes from './TabelaReadequacoes';
         },
         data() {
             return {
-                listaAcoesProponente: {
-                    atual: '',
-                    proximo: '',
-                    acoes: [],
-                },
             }
         },
         computed: {
@@ -34,7 +27,8 @@ import TabelaReadequacoes from './TabelaReadequacoes';
             }),
         },
         created() {
-            this.obterListaDeReadequacoes(14100);
+            const idPronac = this.$route.params.idPronac;
+            this.obterListaDeReadequacoes(idPronac);
         },
         methods: {
             ...mapActions({

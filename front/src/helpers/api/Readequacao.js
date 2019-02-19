@@ -20,7 +20,7 @@ const parseQueryParams = (params) => {
 };
 
 export const getReadequacoes = (idPronac) => {
-    const path = `/readequacao/readequacoes?idPronac=${idPronac}`;
+    const path = `/readequacao?idPronac=${idPronac}`;
     return api.getRequest(path);
 };
 

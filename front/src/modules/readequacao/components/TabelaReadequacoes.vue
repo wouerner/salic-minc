@@ -12,11 +12,12 @@
         </v-card-title>
         <v-data-table
             :headers="headers()"
-            :items="dados"
+            :items="dados.items"
             :pagination.sync="pagination"
             :search="search"
             hide-actions
-        >
+          >
+          
             <template
                 slot="items"
                 slot-scope="props">
@@ -110,9 +111,6 @@ export default {
             ) return 0;
             return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
         },
-    },
-    created() {
-            this.obterListaDeReadequacoes(14100);
     },
     methods: {
         ...mapActions({

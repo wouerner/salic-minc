@@ -15,44 +15,46 @@ HOST: http://localhost:4000
 
     + Body
         
-            [
-                {
-                    "idPronac": 217336,
-                    "idReadequacao": 217336,
-                    "idTipoReadequacao": 6,
-                    "dtSolicitacao": "2019-01-22",
-                    "idSolicitante": 267,
-                    "dsSolicitacao": "blabalbalbalablabalb",
-                    "dsJustificativa": "É necessário",
-                    "idDocumento": 19440,
-                    "idAvaliador": 335,
-                    "dsAvaliacao": "queuqeuqueuq",
-                    "stAtendimento": "N",
-                    "siEncaminhamento": 15,
-                    "idNrReuniao": 45654,
-                    "stEstado": 1,
-                    "dtEnvio": "2019-01-23",
-                    "stEstagioAtual": "proponente"
-                },
-                {
-                    "idPronac": 217336,
-                    "idReadequacao": 217336,
-                    "idTipoReadequacao": 6,
-                    "dtSolicitacao": "2019-01-22",
-                    "idSolicitante": 267,
-                    "dsSolicitacao": "blabalbalbalablabalb",
-                    "dsJustificativa": "É nescessário",
-                    "idDocumento": 19440,
-                    "idAvaliador": 335,
-                    "dsAvaliacao": "queuqeuqueuq",
-                    "stAtendimento": "N",
-                    "siEncaminhamento": 15,
-                    "idNrReuniao": 45654,
-                    "stEstado": 1,
-                    "dtEnvio": "2019-01-23",
-                    "stEstagioAtual": "proponente"
-                }
-            ]
+            {
+                "items": [
+                    {
+                        "idPronac": 217336,
+                        "idReadequacao": 217336,
+                        "idTipoReadequacao": 6,
+                        "dtSolicitacao": "2019-01-22",
+                        "idSolicitante": 267,
+                        "dsSolicitacao": "blabalbalbalablabalb",
+                        "dsJustificativa": "É necessário",
+                        "idDocumento": 19440,
+                        "idAvaliador": 335,
+                        "dsAvaliacao": "queuqeuqueuq",
+                        "stAtendimento": "N",
+                        "siEncaminhamento": 15,
+                        "idNrReuniao": 45654,
+                        "stEstado": 1,
+                        "dtEnvio": "2019-01-23",
+                        "stEstagioAtual": "proponente"
+                    },
+                    {
+                        "idPronac": 217336,
+                        "idReadequacao": 217336,
+                        "idTipoReadequacao": 6,
+                        "dtSolicitacao": "2019-01-22",
+                        "idSolicitante": 267,
+                        "dsSolicitacao": "blabalbalbalablabalb",
+                        "dsJustificativa": "É nescessário",
+                        "idDocumento": 19440,
+                        "idAvaliador": 335,
+                        "dsAvaliacao": "queuqeuqueuq",
+                        "stAtendimento": "N",
+                        "siEncaminhamento": 15,
+                        "idNrReuniao": 45654,
+                        "stEstado": 1,
+                        "dtEnvio": "2019-01-23",
+                        "stEstagioAtual": "proponente"
+                    }
+                ]
+            }
 
 ### Criar nova readequação [POST]
 
@@ -109,7 +111,7 @@ HOST: http://localhost:4000
 ## Readequacao - Dados readequação [/readequacao/dados-readequacao/{idReadequacao}]
 
 + Parameters
-    + idReadequacao: 14100 (number, required)
+    + idReadequacao: 141000 (number, required)
 
 ### Visualizar dados readequação [GET]
 

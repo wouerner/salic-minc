@@ -23,7 +23,7 @@ const routes = [
         },
     },
     {
-        path: '/readequacoes',
+        path: '/readequacoes/:idPronac',
         component: PainelReadequacoes,
         meta: {
             title: 'Painel de Readequações',
