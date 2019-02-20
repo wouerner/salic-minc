@@ -1,65 +1,29 @@
 <template>
     <div>
-        <v-card-title>
-            <v-spacer/>
-            <v-text-field
-                v-model="search"
-                append-icon="search"
-                label="Pesquisar"
-                single-line
-                hide-details
-            />
-        </v-card-title>
         <v-data-table
-            :headers="headers()"
+            :headers="head"
             :items="dados.items"
             :pagination.sync="pagination"
             :search="search"
             hide-actions
-          >
+        >
           
             <template
                 slot="items"
                 slot-scope="props">
                 <td>{{ props.index+1 }}</td>
                 <td class="text-xs-right">
-                    <v-flex
-                        xs12
-                        sm4
-                        text-xs-center>
-                        <div>
-                            <v-btn
-                                :href="'/projeto/#/'+ props.item.idPronac"
-                                flat>{{ props.item.idPronac }}</v-btn>
-                        </div>
-                    </v-flex>
+                    <div>
+                        <v-btn
+                            :href="'/projeto/#/'+ props.item.idPronac"
+                            flat>{{ props.item.idPronac }}
+                        </v-btn>
+                    </div>
                 </td>
                 <td class="text-xs-left">{{ props.item.idTipoReadequacao }}</td>
                 <td class="text-xs-center">{{ props.item.dtSolicitacao }}</td>
                 <td class="text-xs-center">{{ props.item.idDocumento }}</td>
-                <td
-                    class="text-xs-center">{{ props.item.dsJustificativa }}</td>
-                <td class="text-xs-center">
-                    <!-- <template
-                        v-for="(c, index) in componentes.acoes"
-                        d-inline-block>
-                        <component
-                            :key="index"
-                            :obj="props.item"
-                            :is="c"
-                            :link-direto-assinatura="true"
-                            :documento="props.item.idDocumentoAssinatura"
-                            :id-pronac="props.item.IdPRONAC.toString()"
-                            :pronac="props.item.PRONAC"
-                            :nome-projeto="props.item.NomeProjeto"
-                            :usuario="componentes.usuario"
-                            :tecnico="{
-                                idAgente: props.item.idAgente,
-                                nome: props.item.usu_nome
-                            }"
-                        />
-                    </template> -->
-                </td>
+                <td class="text-xs-center">{{ props.item.dsJustificativa }}</td>
             </template>
             <template slot="no-data">
                 <v-alert
@@ -70,16 +34,6 @@
                 </v-alert>
             </template>
         </v-data-table>
-        <div class="text-xs-center">
-            <div class="text-xs-center pt-2">
-                <v-pagination
-                    v-model="pagination.page"
-                    :length="pages"
-                    :total-visible="4"
-                    color="primary "
-                />
-            </div>
-        </div>
     </div>
 </template>
 
@@ -97,29 +51,7 @@ export default {
             pagination: {
                 rowsPerPage: 10,
             },
-            selected: [],
-            search: '',
-        };
-    },
-    computed: {
-        ...mapGetters({
-            getReadequacoes: 'readequacao/getReadequacoes',
-        }),
-        pages() {
-            if (this.pagination.rowsPerPage == null
-                || this.pagination.totalItems == null
-            ) return 0;
-            return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
-        },
-    },
-    methods: {
-        ...mapActions({
-            obterListaDeReadequacoes: 'readequacao/obterListaDeReadequacoes',
-        }),
-        headers() {
-            let dados = [];
-
-            dados = [
+            head: [
                 {
                     text: '#',
                     align: 'left',
@@ -149,10 +81,17 @@ export default {
                     align: 'center',
                     value: 'dsJustificativa',
                 },
-            ];
+            ],
 
-            return dados;
-        },
+        };
+    },
+    computed: {
+        ...mapGetters({
+        }),
+    },
+    methods: {
+        ...mapActions({
+        }),
     },
 };
 </script>

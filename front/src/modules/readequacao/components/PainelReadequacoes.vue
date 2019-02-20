@@ -1,8 +1,21 @@
 <template>
-    <TabelaReadequacoes
-    :dados="getReadequacoes"
-      >
-      </TabelaReadequacoes>
+<v-container fluid>
+    <v-layout olumn >
+
+        <v-flex xs9>
+            <v-subheader>
+                <h2>Nome do Projeto</h2>
+            </v-subheader>
+
+            <v-card>
+                <TabelaReadequacoes
+                :dados="getReadequacoes"
+                >
+                </TabelaReadequacoes>
+            </v-card>
+        </v-flex>
+    </v-layout>
+</v-container>
 </template>
 
 <script>
@@ -13,12 +26,6 @@ import TabelaReadequacoes from './TabelaReadequacoes';
         name: 'PainelReadequacoes',
         components: {
             TabelaReadequacoes,
-        },
-        props: {
-        },
-        data() {
-            return {
-            }
         },
         computed: {
             ...mapGetters({
