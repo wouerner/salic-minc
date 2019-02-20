@@ -84,7 +84,6 @@ class Recurso implements \MinC\Servico\IServicoRestZend
                         'projetosENRecurso' => $projetosENRecurso,
                         'parecerRecurso' => $parecer
                     ];
-    //                xd($data);
                 }
             }
         }
