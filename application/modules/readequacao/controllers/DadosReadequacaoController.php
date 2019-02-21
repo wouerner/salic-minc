@@ -33,6 +33,7 @@ class Readequacao_DadosReadequacaoController extends MinC_Controller_Rest_Abstra
     public function getAction() {
         $data = [];
         $code = 200;
+        
         $idReadequacao = $this->getRequest()->getParam('id');
         
         $readequacaoService = new ReadequacaoService($this->getRequest(), $this->getResponse());
@@ -46,7 +47,6 @@ class Readequacao_DadosReadequacaoController extends MinC_Controller_Rest_Abstra
         $code = 200;
         
         $idReadequacao = $this->getRequest()->getParam('idReadequacao');
-
         $idPronac = $this->getRequest()->getParam('idPronac');
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);

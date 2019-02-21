@@ -25,7 +25,17 @@ class Readequacao_DadosReadequacaoDocumentoController extends MinC_Controller_Re
     }
 
     public function getAction() {
-        print 'get DOC';die;
+        $data = [];
+        $code = 200;
+        
+        $idReadequacao = $this->getRequest()->getParam('idDocumento');
+        
+        $idDocumento = $this->getRequest()->getParam('idDocumento');
+        
+        $readequacaoService = new ReadequacaoService($this->getRequest(), $this->getResponse());
+        $data = $readequacaoService->buscarReadequacaoDocumento($idReadequacao, $idDocumento);
+        
+        $this->renderJsonResponse($data, $code);        
     }
 
     public function indexAction() {

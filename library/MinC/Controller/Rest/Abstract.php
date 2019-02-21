@@ -49,11 +49,11 @@ abstract class MinC_Controller_Rest_Abstract extends Zend_Controller_Action
             ->addActionContext('delete', 'json')
             ->initContext('json');
 
-        $this->checkSubRoutes();
-        
         $this->_request = $this->getRequest();
         $this->_response = $this->getResponse();
 
+        $routeData = $this->verifySubRoutes();
+        
         if($authInstance->hasIdentity() && !empty($authObject->usu_codigo)){
             //Usuario Interno
             $this->_usu_codigo = $authObject->usu_codigo;
@@ -116,10 +116,25 @@ abstract class MinC_Controller_Rest_Abstract extends Zend_Controller_Action
         ]);
     }
 
-    final protected function checkSubRoutes()
+    /**
+     * verifySubRoutes
+     *
+     * Adiciona compatibilidade com rotas REST aninhadas, recebendo nested urls 
+     * e transformado numa forma em que a controller pode ler.
+     * 
+     * Busca as subrotas mapeadas; caso encontre uma que bate com o padrão,
+     * redireciona para a controller na forma abaixo:
+     *
+     * readequacao/dados-readequacao/15522/documento/112
+     *                         |
+     *                         V
+     * readequacao/dados-readequacao-documento/idReadequacao/15522/idDocumento/112
+     *
+     */    
+    final protected function verifySubRoutes()
     {
         $arrRequest = $this->getAllParams();
-       $currentUrl = $arrRequest['module'] . '/' .  $arrRequest['controller'];
+        $currentUrl = $arrRequest['module'] . '/' .  $arrRequest['controller'];
        
         if (array_key_exists('id', $arrRequest) && $arrRequest['action'] == 'get') {
             $currentUrl .= '/' . $arrRequest['id'];
@@ -156,7 +171,8 @@ abstract class MinC_Controller_Rest_Abstract extends Zend_Controller_Action
                             $pieceMatch[$key] = true;
                             $capturedActions[] = $piece;
                         } else if (!preg_match('/[{].*[}]/', $piece)) {
-                            $capturedParams[$routePieces[$key]] = $piece;
+                            $keyName = preg_replace('/[{}]/', '', $routePieces[$key]);
+                            $capturedParams[$keyName] = $piece;
                             $pieceMatch[$key] = true;
                         } else {
                             $pieceMatch[$key] = false;
@@ -164,23 +180,24 @@ abstract class MinC_Controller_Rest_Abstract extends Zend_Controller_Action
                     }
                     
                     if (!in_array(false, $pieceMatch)) {
-                        // redirect to proper Controller
-                        $controllerName = preg_replace_callback(
-                            '/[-]([a-z]{1})/',
-                            function($match) { return ucfirst($match[1]); },
-                            $capturedActions[1] . ucfirst($capturedActions[2])
-                        );
+                        $moduleName = $capturedActions[0];
+                        $controllerName = 'controllerName' => $capturedActions[1] . '-' . $capturedActions[2];
                         
-                        $this->forward(
-                            '',
-                            $capturedActions[1] . '-' . $capturedActions[2],
-                            $arrRequest['module'],
-                            $capturedParams
-                        );
+                        $params = '';
+                        foreach ($routeData['params'] as $key => $value) {
+                            if ($value != '') {
+                                $params .= "$key/$value/";
+                            } else {
+                                $params .= "$key/";
+                            }
+                        }
+                        
+                        $this->redirect($moduleName . '/' $controllerName . '/' . $params);
                     }
                 }
             }
         }
+        return false;
     }
 
     final public function renderJsonResponse(array $data, int $code)
