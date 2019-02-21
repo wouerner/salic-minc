@@ -286,8 +286,6 @@ export default {
         return {
             search: '',
             pagination: {
-                // sortBy: 'DtPagamento',
-                // descending: true,
             },
             selected: [],
             dadosPagamento: {},
