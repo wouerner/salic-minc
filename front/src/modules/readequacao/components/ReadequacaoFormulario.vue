@@ -155,12 +155,11 @@ export default {
                 return;
             }
             
-            this.adicionarDocumento({
-                arquivo,
+            this.adicionarReadequacao({
+                documento: arquivo,
                 idPronac: this.dadosReadequacao.idPronac,
                 idReadequacao: this.dadosReadequacao.idReadequacao,
                 idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
-                idDocumentoAtual: this.dadosReadequacao.idDocumento,
             });
             
             this.readequacao.idDocumentoAtual = this.dadosReadequacao.idDocumento;
@@ -202,7 +201,7 @@ export default {
         },
         ...mapActions({
             updateReadequacao: 'readequacao/updateReadequacao',
-            adicionarDocumento: 'readequacao/adicionarDocumento',
+            adicionarReadequacao: 'readequacao/dados-readequacao',
             excluirDocumento: 'readequacao/excluirDocumento',
         }),
     },

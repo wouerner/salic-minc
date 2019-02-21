@@ -51,11 +51,11 @@ export const obterDisponivelEdicaoItemSaldoAplicacao = (idPronac) => {
 };
 
 export const adicionarDocumento = (params) => {
-    const path = `/readequacao/readequacoes/salvar-documento/`;
-    return api.postRequest(path, buildData(params));
+    const path = `/readequacao/dados-readequacao`;
+    return api.postRequest(path, parseQueryParams(params));
 };
 
-export const excluirDocumento = (params) => {
-    const path = `/readequacao/readequacoes/excluir-documento/`;
-    return api.postRequest(path, buildData(params));
+export const excluirDocumento = (idDocumento) => {
+    const path = `/readequacao/${idReadequacao}/documento/${idDocumento}`;
+    return api.deleteRequest(path);
 };
