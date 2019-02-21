@@ -1,26 +1,20 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Index from './index/Index';
-import SaldoAplicacaoTemplate from './SaldoAplicacao/Index';
+import SaldoAplicacao from './views/SaldoAplicacaoView';
+import PainelReadequacoes from './views/PainelReadequacoesView';
 
-Vue.use(Router);
-
-const routes = [
+export default [
     {
-        path: '/',
-        name: 'index',
-        component: Index,
-        meta: {
-            title: 'Principal',
-        },
-    },
-    {
-        path: '/saldo-aplicacao/:idPronac',
-        component: SaldoAplicacaoTemplate,
+        path: '/readequacao/saldo-aplicacao/:idPronac',
+        component: SaldoAplicacao,
         meta: {
             title: 'Saldo de aplicação',
         },
     },
+    {
+        path: '/readequacao/painel/:idPronac',
+        name: 'PainelReadequacoes',
+        component: PainelReadequacoes,
+        meta: {
+            title: 'Painel de Readequações',
+        },
+    },
 ];
-
-export default new Router({ routes });

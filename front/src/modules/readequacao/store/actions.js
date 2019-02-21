@@ -1,6 +1,14 @@
 import * as readequacaoHelperAPI from '@/helpers/api/Readequacao';
 import * as types from './types';
 
+export const obterListaDeReadequacoes = ({ commit }, idPronac) => {
+    readequacaoHelperAPI.getReadequacoes(idPronac)
+        .then((response) => {
+            const data = response.data;
+            commit(types.GET_READEQUACOES, data);
+        });
+};
+
 export const buscaReadequacao = ({ commit }, params) => {
     readequacaoHelperAPI.buscaReadequacao(params)
         .then((response) => {
@@ -79,4 +87,3 @@ export const obterDisponivelEdicaoItemSaldoAplicacao = ({ commit }, params) => {
             commit(types.OBTER_DISPONIVEL_EDICAO_ITEM_SALDO_APLICACAO, data);
         });
 };
-

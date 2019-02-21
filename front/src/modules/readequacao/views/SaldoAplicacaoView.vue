@@ -209,16 +209,16 @@
 
 import { mapActions, mapGetters } from 'vuex';
 import { utils } from '@/mixins/utils';
-import ReadequacaoSaldoAplicacaoSaldo from './components/ReadequacaoSaldoAplicacaoSaldo';
-import ReadequacaoSaldoAplicacaoResumo from './components/ReadequacaoSaldoAplicacaoResumo';
+import ReadequacaoSaldoAplicacaoSaldo from '../components/ReadequacaoSaldoAplicacaoSaldo';
+import ReadequacaoSaldoAplicacaoResumo from '../components/ReadequacaoSaldoAplicacaoResumo';
 import ReadequacaoFormulario from '../components/ReadequacaoFormulario';
-import ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria from './components/ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria';
+import ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria from '../components/ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria';
 import PlanilhaOrcamentariaAlterarItem from '../components/PlanilhaOrcamentariaAlterarItem';
 import PlanilhaOrcamentariaIncluirItem from '../components/PlanilhaOrcamentariaIncluirItem';
 import PlanilhaOrcamentaria from '../components/PlanilhaOrcamentaria';
 
 export default {
-    name: 'Index',
+    name: 'SaldoAplicacaoView',
     components: {
         ReadequacaoSaldoAplicacaoResumo,
         ReadequacaoSaldoAplicacaoSaldo,
