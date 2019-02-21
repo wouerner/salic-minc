@@ -4,10 +4,8 @@
             :headers="head"
             :items="dados.items"
             :pagination.sync="pagination"
-            :search="search"
             hide-actions
-        >
-          
+        >         
             <template
                 slot="items"
                 slot-scope="props">

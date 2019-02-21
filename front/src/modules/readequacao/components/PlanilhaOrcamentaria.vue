@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria from '../SaldoAplicacao/components/ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria';
+    import ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria from './ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria';
     import PlanilhaOrcamentariaAlterarItem from './PlanilhaOrcamentariaAlterarItem';
     import PlanilhaOrcamentariaIncluirItem from './PlanilhaOrcamentariaIncluirItem';
 

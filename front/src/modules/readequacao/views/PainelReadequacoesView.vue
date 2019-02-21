@@ -1,6 +1,6 @@
 <template>
 <v-container fluid>
-    <v-layout olumn >
+    <v-layout column >
 
         <v-flex xs9>
             <v-subheader>
@@ -20,10 +20,10 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import TabelaReadequacoes from './TabelaReadequacoes';
+import TabelaReadequacoes from '../components/TabelaReadequacoes';
 
     export default {
-        name: 'PainelReadequacoes',
+        name: 'PainelReadequacoesView',
         components: {
             TabelaReadequacoes,
         },

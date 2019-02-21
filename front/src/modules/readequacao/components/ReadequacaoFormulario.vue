@@ -100,7 +100,7 @@ import { utils } from '@/mixins/utils';
 import { mapActions, mapGetters } from 'vuex';
 
 // TODO: implementar usando slot para não ter que importar os módulos
-import ReadequacaoSaldoAplicacaoSaldo from '../SaldoAplicacao/components/ReadequacaoSaldoAplicacaoSaldo';
+import ReadequacaoSaldoAplicacaoSaldo from './ReadequacaoSaldoAplicacaoSaldo';
 
 export default {
     name: 'ReadequacaoFormulario',

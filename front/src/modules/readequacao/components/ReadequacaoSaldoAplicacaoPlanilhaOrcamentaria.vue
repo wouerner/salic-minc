@@ -163,8 +163,8 @@
     import {
         utils,
     } from '@/mixins/utils';
-    import PlanilhaOrcamentariaAlterarItem from '../../components/PlanilhaOrcamentariaAlterarItem';
-    import PlanilhaOrcamentariaIncluirItem from '../../components/PlanilhaOrcamentariaIncluirItem';
+    import PlanilhaOrcamentariaAlterarItem from './PlanilhaOrcamentariaAlterarItem';
+    import PlanilhaOrcamentariaIncluirItem from './PlanilhaOrcamentariaIncluirItem';
 
     export default {
         name: 'ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria',
