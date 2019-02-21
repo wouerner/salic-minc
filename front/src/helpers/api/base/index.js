@@ -30,3 +30,5 @@ export const postRequest = (path, data) => instance.post(path, data);
 export const putRequest = (path, bodyFormData, id) => instance.post(`${path}/${id}`, bodyFormData);
 
 export const deleteRequest = (path, id) => instance.delete(`${path}/${id}`);
+
+export const HTTP = () => axios.create({});
