@@ -1,35 +1,59 @@
 <?php
 
-class Readequacao_IndexController extends Projeto_GenericController
+use Application\Modules\Readequacao\Service\Readequacao\Readequacao as ReadequacaoService;
+
+class Readequacao_IndexController extends MinC_Controller_Rest_Abstract
 {
-    public function init()
+
+    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
     {
-        parent::init();
-        $this->validarPerfis();
+        $profiles = [
+            Autenticacao_Model_Grupos::PROPONENTE,
+            Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO,
+            Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO,
+            Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO,
+        ];
+        
+        $permissionsPerMethod  = [
+            'post' => [
+                Autenticacao_Model_Grupos::PROPONENTE
+            ]
+        ];
+        $this->setProtectedMethodsProfilesPermission($permissionsPerMethod);
+
+        $subRoutes = [];
+        $this->registrarSubRoutes($subRoutes);
+        
+        parent::__construct($request, $response, $invokeArgs);
     }
 
-    private function validarPerfis()
-    {
-        $auth = Zend_Auth::getInstance();
+    public function getAction() {}
 
-        $PermissoesGrupo = array();
-        $PermissoesGrupo[] = Autenticacao_Model_Grupos::PROPONENTE;
-        $PermissoesGrupo[] = Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO;
-        $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO;
-        $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO;
-    }
-    
-    private function carregarScripts()
-    {
-        $gitTag = '?v=' . $this->view->gitTag();
-        $this->view->headScript()->offsetSetFile(99, '/public/dist/js/manifest.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
-        $this->view->headScript()->offsetSetFile(100, '/public/dist/js/vendor.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
-        $this->view->headScript()->offsetSetFile(101, '/public/dist/js/readequacao.js'. $gitTag, 'text/javascript', array('charset' => 'utf-8'));
+    public function indexAction(){
+        $data = [];
+        $code = 200;
+        
+        $idReadequacao = $this->getRequest()->getParam('idReadequacao');
+        $idPronac = $this->getRequest()->getParam('idPronac');
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
+        }
+        
+        $idTipoReadequacao = $this->getRequest()->getParam('idTipoReadequacao');
+        $stEstagioAtual = $this->getRequest()->getParam('stEstagioAtual');
+        
+        $readequacaoService = new ReadequacaoService($this->getRequest(), $this->getResponse());
+        $data = $readequacaoService->buscarReadequacoes($idPronac, $idTipoReadequacao, $stEstagioAtual);
+        
+        $this->renderJsonResponse($data, $code);
     }
 
-    public function indexAction()
-    {
-        $this->carregarScripts();
-    }
+    public function headAction(){}
+
+    public function postAction(){}
+
+    public function putAction(){}
+
+    public function deleteAction(){}
 
 }
