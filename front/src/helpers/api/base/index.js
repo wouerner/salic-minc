@@ -20,7 +20,9 @@ if (process.env.NODE_ENV !== 'production') {
         baseURL: API_ENDPOINT,
     });
 } else {
-    instance = axios.create({});
+    instance = axios.create({
+        baseURL: '',
+    });
 }
 
 export const getRequest = (path, queryParams = '') => instance.get(`${path}${queryParams}`);
