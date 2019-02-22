@@ -263,16 +263,19 @@ export default {
             const stEstagioAtual = 'proponente';
             this.buscaReadequacaoPronacTipo({ idPronac, idTipoReadequacao, stEstagioAtual });
         }
+	/*
         $3(document).ajaxStart(() => {
             $3('#container-loading').fadeIn('slow');
         });
         $3(document).ajaxComplete(() => {
             $3('#container-loading').fadeOut('slow');
         });
+*/
     },
     methods: {
         solicitarUsoSaldo() {
             const self = this;
+	    /*
             $3.ajax({
                 url: '/readequacao/saldo-aplicacao/solicitar-uso-saldo',
                 type: 'POST',
@@ -291,6 +294,7 @@ export default {
                     self.carregarValorEntrePlanilhas();
                 },
             );
+*/
         },
         atualizarReadequacao(readequacao) {
             this.readequacaoAlterada = true;
@@ -298,6 +302,7 @@ export default {
         },
         carregarValorEntrePlanilhas() {
             const self = this;
+	    /*
             $3.ajax({
                 type: 'GET',
                 url: '/readequacao/saldo-aplicacao/carregar-valor-entre-planilhas',
@@ -308,6 +313,7 @@ export default {
             }).done((response) => {
                 self.valorEntrePlanilhas = response.valorEntrePlanilhas;
             });
+*/
         },
         prepararExcluirReadequacao() {
             this.excluirReadequacao({
@@ -339,6 +345,7 @@ export default {
         },
         finalizarReadequacao() {
             const self = this;
+	    /*
             $3.ajax({
                 type: 'POST',
                 url: '/readequacao/saldo-aplicacao/finalizar-readequacao',
@@ -359,7 +366,7 @@ export default {
                 (response) => {
                     self.mensagemErro(response.responseJSON.msg);
                 },
-            );
+            );*/
         },
         restaurarFormulario() {
             this.readequacao = {
@@ -407,7 +414,7 @@ export default {
         dadosReadequacao() {
             if (typeof this.dadosReadequacao !== 'undefined') {
                 this.exibirBotaoIniciar = false;
-                $3('.collapsible').collapsible();
+                //$3('.collapsible').collapsible();
                 const idPronac = this.dadosProjeto.idPronac;
                 this.obterDisponivelEdicaoReadequacaoPlanilha(idPronac);
                 this.carregarValorEntrePlanilhas();
@@ -418,10 +425,10 @@ export default {
             }
         },
         solicitacaoIniciada() {
-            $3('#modalExcluir').modal();
-            $3('#modalExcluir').css('height', '20%');
-            $3('#modalFinalizar').modal();
-            $3('#modalFinalizar').css('height', '20%');
+            //$3('#modalExcluir').modal();
+            //$3('#modalExcluir').css('height', '20%');
+            //$3('#modalFinalizar').modal();
+            //$3('#modalFinalizar').css('height', '20%');
         },
     },
     computed: {

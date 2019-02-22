@@ -51,7 +51,7 @@ export const excluirReadequacaoSaldoAplicacao = (params) => {
 };
 
 export const obterDisponivelEdicaoItemSaldoAplicacao = (idPronac) => {
-    const path = `/readequacao/saldo-aplicacao/disponivel-edicao-item/idPronac/${idPronac}`;
+    const path = `/readequacao/saldo-disponivel-edicao-item/${idPronac}`;
     return api.getRequest(path);
 };
 

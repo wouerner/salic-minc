@@ -301,3 +301,18 @@ HOST: http://localhost:4000
             {
                 "mensagem": "Arquivo removido com sucesso!"
             }
+
+## Readequação - Saldo: disponível para edição de item [/readequacao/saldo-disponivel-edicao-item/{idPronac}]
+
+### Verifica se está disponível para editar item [GET]
+
++ Parameters
+    + idPronac: 217336 (number, required)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+      
+            {
+                "disponivelEdicaoItem": "true"
+            }
