@@ -7,12 +7,65 @@
                 <h2>Nome do Projeto</h2>
             </v-subheader>
 
-            <v-card>
-                <TabelaReadequacoes
-                :dados="getReadequacoes"
-                >
-                </TabelaReadequacoes>
-            </v-card>
+
+        <v-tabs
+            color="#0a420e"
+            centered
+            dark
+            icons-and-text
+        >
+            <v-tabs-slider color="yellow"></v-tabs-slider>
+
+            <v-tab href="#tab-1">
+            Edição
+            <v-icon>edit</v-icon>
+            </v-tab>
+
+            <v-tab href="#tab-2">
+            Análise
+            <v-icon>gavel</v-icon>
+            </v-tab>
+
+            <v-tab href="#tab-3">
+            Finalizadas
+            <v-icon>check</v-icon>
+            </v-tab>
+
+            <v-tab-item
+            :value="'tab-1'"
+            >
+                <v-card>
+                    <TabelaReadequacoes
+                    :dados="getReadequacoesProponente"
+                    >
+                    </TabelaReadequacoes>
+                </v-card>
+            </v-tab-item>
+
+            <v-tab-item
+            :value="'tab-2'"
+            >
+                <v-card>
+                    <TabelaReadequacoes
+                    :dados="getReadequacoesAnalise"
+                    >
+                    </TabelaReadequacoes>
+                </v-card>
+
+            </v-tab-item>
+                        <v-tab-item
+            :value="'tab-3'"
+            >
+                <v-card>
+                    <TabelaReadequacoes
+                    :dados="getReadequacoesFinalizadas"
+                    >
+                    </TabelaReadequacoes>
+                </v-card>
+            </v-tab-item>
+        </v-tabs>
+                
+
         </v-flex>
     </v-layout>
 </v-container>
@@ -27,20 +80,38 @@ import TabelaReadequacoes from '../components/TabelaReadequacoes';
         components: {
             TabelaReadequacoes,
         },
+        data() {
+            return {
+                listaStatus: [
+                    'proponente',
+                    'analise',
+                    'finalizadas'
+                ]
+            }
+        },
         computed: {
             ...mapGetters({
                 getUsuario: 'autenticacao/getUsuario',
-                getReadequacoes: 'readequacao/getReadequacoes',
+                getReadequacoesProponente: 'readequacao/getReadequacoesProponente',
+                getReadequacoesAnalise: 'readequacao/getReadequacoesAnalise',
+                getReadequacoesFinalizadas: 'readequacao/getReadequacoesFinalizadas',
             }),
         },
         created() {
-            const idPronac = this.$route.params.idPronac;
-            this.obterListaDeReadequacoes(idPronac);
+            this.listaStatus.forEach(status => {
+                this.obterReadequacoesPorStatus(status);
+            });
         },
         methods: {
             ...mapActions({
                 obterListaDeReadequacoes: 'readequacao/obterListaDeReadequacoes',
             }),
+            obterReadequacoesPorStatus(status) {
+                if (this.listaStatus.includes(status)) {
+                    const idPronac = this.$route.params.idPronac;
+                    this.obterListaDeReadequacoes({idPronac, status});
+                }
+            }
         },
     };
 </script>

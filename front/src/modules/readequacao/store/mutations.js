@@ -1,15 +1,22 @@
 import * as types from './types';
 
 export const state = {
-    readequacoes: {},
-    readequacao: {},
+    readequacoesProponente: {},
+    readequacoesAnalise: {},
+    readequacoesFinalizadas: {},
     saldoAplicacao: {},
     saldoAplicacaoDisponivelEdicaoItem: {},
 };
 
 export const mutations = {
-    [types.GET_READEQUACOES](state, readequacoes) {
-        state.readequacoes = readequacoes;
+    [types.GET_READEQUACOES_PROPONENTE](state, readequacoes) {
+        state.readequacoesProponente = readequacoes;
+    },
+    [types.GET_READEQUACOES_ANALISE](state, readequacoes) {
+        state.readequacoesAnalise = readequacoes;
+    },
+    [types.GET_READEQUACOES_FINALIZADAS](state, readequacoes) {
+        state.readequacoesFinalizadas = readequacoes;
     },
     [types.SET_READEQUACAO](state, readequacao) {
         state.readequacao = readequacao;

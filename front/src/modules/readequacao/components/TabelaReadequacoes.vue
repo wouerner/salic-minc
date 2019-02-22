@@ -10,18 +10,11 @@
                 slot="items"
                 slot-scope="props">
                 <td>{{ props.index+1 }}</td>
-                <td class="text-xs-right">
-                    <div>
-                        <v-btn
-                            :href="'/projeto/#/'+ props.item.idPronac"
-                            flat>{{ props.item.idPronac }}
-                        </v-btn>
-                    </div>
-                </td>
-                <td class="text-xs-left">{{ props.item.idTipoReadequacao }}</td>
+                <td class="text-xs-left">{{ props.item.dsTipoReadequacao }}</td>
                 <td class="text-xs-center">{{ props.item.dtSolicitacao }}</td>
                 <td class="text-xs-center">{{ props.item.idDocumento }}</td>
                 <td class="text-xs-center">{{ props.item.dsJustificativa }}</td>
+                <td class="text-xs-center"></td>
             </template>
             <template slot="no-data">
                 <v-alert
@@ -57,12 +50,8 @@ export default {
                     value: 'numero',
                 },
                 {
-                    text: 'idPronac',
-                    value: 'idPronac',
-                },
-                {
                     text: 'Tipo de Readequação',
-                    value: 'idTipoReadequacao',
+                    value: 'dsTipoReadequacao',
                 },
                 {
                     text: 'Data da Solicitação',
@@ -78,6 +67,11 @@ export default {
                     text: 'Justificativa',
                     align: 'center',
                     value: 'dsJustificativa',
+                },
+                {
+                    text: 'Ações',
+                    align: 'center',
+                    value: '',
                 },
             ],
 
