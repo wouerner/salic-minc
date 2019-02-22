@@ -71,7 +71,7 @@ class Readequacao implements IServicoRestZend
         return $modelTbReadequacao->findBy($where);
     }    
 
-    public buscarReadequacaoDocumento($idReadequacao, $idDocumento)
+    public function buscarReadequacaoDocumento($idReadequacao, $idDocumento)
     {
         return [];
     }
