@@ -19,9 +19,9 @@ const parseQueryParams = (params) => {
     return queryParams;
 };
 
-export const getReadequacoes = (idPronac) => {
-    const path = `/readequacao?idPronac=${idPronac}`;
-    return api.getRequest(path);
+export const getReadequacoes = (params) => {
+    const path = `/readequacao`;
+    return api.getRequest(path + parseQueryParams(params));
 };
 
 export const dadosReadequacao = (params) => {
