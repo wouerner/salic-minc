@@ -41,7 +41,6 @@
                             sm4
                             text-xs-center>
                             <div>
-                                {{ mostrarFiltro }}
                                 <v-btn
                                     :href="'/projeto/#/'+ props.item.idPronac"
                                     flat>{{ props.item.PRONAC }}</v-btn>
