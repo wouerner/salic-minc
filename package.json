@@ -11,7 +11,9 @@
     "pre-push-action": "sh git_hooks/pre-push.sh",
     "prepare-commit-msg-action": "bash git_hooks/prepare-commit-msg.sh",
     "watch": "webpack --watch --config front/build/webpack.watch.conf.js",
+    "watch:test": "API=test webpack --watch --config front/build/webpack.watch.conf.js",
     "dev": "webpack-dev-server --inline --progress --config front/build/webpack.dev.conf.js",
+    "dev:test": "API=test webpack-dev-server --inline --progress --config front/build/webpack.dev.conf.js",
     "build": "node front/build/build.js",
     "test": "npm run unit",
     "unit": "jest --config front/test/unit/jest.conf.js --coverage",
@@ -19,7 +21,10 @@
     "cypress:open": "cypress open",
     "cypress": "cypress run",
     "lint": "eslint --ext .js,.vue front/src front/test/unit front/test/e2e/specs",
-    "lint-fix": "eslint --fix --ext .js,.vue front/src front/test/unit front/test/e2e/specs"
+    "lint-fix": "eslint --fix --ext .js,.vue front/src front/test/unit front/test/e2e/specs",
+    "dredd": "dredd",
+    "api-mock": "drakov -f 'front/src/helpers/mock/*.md' -p 4000",
+    "api-mock:watch": "drakov -f 'front/src/helpers/mock/*.md' -p 4000 —watch"
   },
   "husky": {
     "hooks": {
@@ -46,6 +51,7 @@
     "@babel/plugin-syntax-jsx": "^7.0.0",
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.1.6",
+    "aglio": "^2.3.0",
     "autoprefixer": "^7.1.2",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
@@ -60,6 +66,9 @@
     "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^1.0.1",
     "cypress": "^3.1.4",
+    "dotenv": "^6.2.0",
+    "drakov": "^1.0.4",
+    "dredd": "^7.2.1",
     "eslint": "^4.15.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-friendly-formatter": "^4.0.1",

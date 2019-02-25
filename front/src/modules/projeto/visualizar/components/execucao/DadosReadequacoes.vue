@@ -107,6 +107,12 @@
                                         <b>Data solicitação</b>
                                         <p>{{ readequacao.dtSolicitacao | formatarData }} </p>
                                     </v-flex>
+                                    <v-flex class="text-xs-center">
+                                        <b>Data solicitação teste paulo hen</b>
+                                        <p class="text-xs-center">
+                                            {{ readequacao.dtSolicitacao | formatarData }}
+                                        </p>
+                                    </v-flex>
                                 </v-layout>
                                 <v-layout
                                     row
@@ -334,7 +340,7 @@ export default {
     computed: {
         ...mapGetters({
             dadosProjeto: 'projeto/projeto',
-            dados: 'projeto/dadosReadequacoes',
+            dados: 'execucao/dadosReadequacoes',
         }),
     },
     watch: {
@@ -354,7 +360,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            buscarDadosReadequacoes: 'projeto/buscarDadosReadequacoes',
+            buscarDadosReadequacoes: 'execucao/buscarDadosReadequacoes',
         }),
         showItem(item) {
             this.readequacao = item;
