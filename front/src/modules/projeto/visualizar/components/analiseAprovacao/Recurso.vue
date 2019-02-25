@@ -3,9 +3,8 @@
         <div v-if="loading">
             <Carregando :text="'Recursos'"/>
         </div>
-        <div>
+        <div v-else-if="dados.length > 0">
             <v-expansion-panel
-                v-if="dados.length > 0"
                 popout
                 focusable>
                 <v-expansion-panel-content
@@ -27,6 +26,21 @@
                     />
                 </v-expansion-panel-content>
             </v-expansion-panel>
+        </div>
+        <div v-else>
+            <v-container
+                grid-list-md
+                text-xs-center>
+                <v-layout
+                    row
+                    wrap>
+                    <v-flex>
+                        <v-card>
+                            <v-card-text>Nenhum Recurso encontrado</v-card-text>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+            </v-container>
         </div>
     </div>
 </template>
@@ -54,7 +68,7 @@ export default {
     computed: {
         ...mapGetters({
             dadosProjeto: 'projeto/projeto',
-            dados: 'projeto/recurso',
+            dados: 'analise/recurso',
         }),
     },
     watch: {
@@ -72,7 +86,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            buscarRecurso: 'projeto/buscarRecurso',
+            buscarRecurso: 'analise/buscarRecurso',
         }),
     },
 };

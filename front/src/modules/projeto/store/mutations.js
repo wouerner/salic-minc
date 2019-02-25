@@ -39,7 +39,6 @@ export const state = {
     extratosBancariosConsolidado: [],
     captacao: [],
     devolucoesIncentivador: [],
-    recurso: [],
 };
 
 export const mutations = {
@@ -156,8 +155,5 @@ export const mutations = {
     },
     [types.SET_DEVOLUCOES_INCENTIVADOR](state, dados) {
         state.devolucoesIncentivador = dados;
-    },
-    [types.SET_RECURSO](state, dados) {
-        state.recurso = dados;
     },
 };

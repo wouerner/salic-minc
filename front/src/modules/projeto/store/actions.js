@@ -328,11 +328,3 @@ export const buscarDevolucoesIncentivador = ({ commit }, params) => {
             commit(types.SET_DEVOLUCOES_INCENTIVADOR, data);
         });
 };
-
-export const buscarRecurso = ({ commit }, idPronac) => {
-    projetoHelperAPI.buscarRecurso(idPronac)
-        .then((response) => {
-            const data = response.data.data.items;
-            commit(types.SET_RECURSO, data);
-        });
-};

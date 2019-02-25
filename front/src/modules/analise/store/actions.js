@@ -8,3 +8,11 @@ export const buscarAprovacao = ({ commit }, idPronac) => {
             commit(types.SET_APROVACAO, data);
         });
 };
+
+export const buscarRecurso = ({ commit }, idPronac) => {
+    analiseHelperAPI.buscarRecurso(idPronac)
+        .then((response) => {
+            const data = response.data.data.items;
+            commit(types.SET_RECURSO, data);
+        });
+};

@@ -327,12 +327,3 @@ export const buscarDevolucoesIncentivador = (params) => {
     const queryParams = `?idPronac=${params.idPronac}&dtDevolucaoInicio=${params.dtInicio}&dtDevolucaoFim=${params.dtFim}`;
     return api.getRequest(path, queryParams);
 };
-
-export const buscarRecurso = (idPronac) => {
-    const modulo = '/analise';
-    const controller = '/recurso-rest';
-    const metodo = '/index';
-    const path = `${modulo}${controller}${metodo}`;
-    const queryParams = `?idPronac=${idPronac}`;
-    return api.getRequest(path, queryParams);
-};
