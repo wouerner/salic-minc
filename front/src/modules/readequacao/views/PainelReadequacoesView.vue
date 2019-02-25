@@ -4,7 +4,7 @@
 
         <v-flex xs9>
             <v-subheader>
-                <h2>Nome do Projeto</h2>
+                <h2>Projeto: 7º Festival do Japão do Rio Grande do Sul - 217336</h2>
             </v-subheader>
 
 
@@ -65,10 +65,9 @@
                 </v-card>
             </v-tab-item>
         </v-tabs>
-                
 
-        </v-flex>
-    </v-layout>
+    </v-flex>
+</v-layout>
 </v-container>
 </template>
 
@@ -76,49 +75,51 @@
 import { mapActions, mapGetters } from 'vuex';
 import TabelaReadequacoes from '../components/TabelaReadequacoes';
 import ExcluirButton from '../components/ExcluirButton';
+import EditarReadequacaoButton from '../components/EditarReadequacaoButton'
 
     export default {
-        name: 'PainelReadequacoesView',
-        components: {
-            TabelaReadequacoes,
-            ExcluirButton,
+    name: 'PainelReadequacoesView',
+    components: {
+        TabelaReadequacoes,
+        ExcluirButton,
+        EditarReadequacaoButton,
+    },
+    data() {
+    return {
+        listaStatus: [
+            'proponente',
+            'analise',
+            'finalizadas'
+        ],
+        acoesProponente: {
+            usuario: '',
+            acoes: [ExcluirButton, EditarReadequacaoButton],
         },
-        data() {
-            return {
-                listaStatus: [
-                    'proponente',
-                    'analise',
-                    'finalizadas'
-                ],
-                acoesProponente: {
-                    usuario: '',
-                    acoes: [ExcluirButton],
-                },
+    }
+    },
+    computed: {
+        ...mapGetters({
+            getUsuario: 'autenticacao/getUsuario',
+            getReadequacoesProponente: 'readequacao/getReadequacoesProponente',
+            getReadequacoesAnalise: 'readequacao/getReadequacoesAnalise',
+            getReadequacoesFinalizadas: 'readequacao/getReadequacoesFinalizadas',
+        }),
+    },
+    created() {
+        this.listaStatus.forEach(status => {
+            this.obterReadequacoesPorStatus(status);
+        });
+    },
+    methods: {
+        ...mapActions({
+            obterListaDeReadequacoes: 'readequacao/obterListaDeReadequacoes',
+        }),
+        obterReadequacoesPorStatus(status) {
+            if (this.listaStatus.includes(status)) {
+                const idPronac = this.$route.params.idPronac;
+                this.obterListaDeReadequacoes({ idPronac, status });
             }
         },
-        computed: {
-            ...mapGetters({
-                getUsuario: 'autenticacao/getUsuario',
-                getReadequacoesProponente: 'readequacao/getReadequacoesProponente',
-                getReadequacoesAnalise: 'readequacao/getReadequacoesAnalise',
-                getReadequacoesFinalizadas: 'readequacao/getReadequacoesFinalizadas',
-            }),
-        },
-        created() {
-            this.listaStatus.forEach(status => {
-                this.obterReadequacoesPorStatus(status);
-            });
-        },
-        methods: {
-            ...mapActions({
-                obterListaDeReadequacoes: 'readequacao/obterListaDeReadequacoes',
-            }),
-            obterReadequacoesPorStatus(status) {
-                if (this.listaStatus.includes(status)) {
-                    const idPronac = this.$route.params.idPronac;
-                    this.obterListaDeReadequacoes({idPronac, status});
-                }
-            }
-        },
-    };
+    },
+};
 </script>

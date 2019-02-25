@@ -15,17 +15,23 @@
                 <td class="text-xs-center">{{ props.item.idDocumento }}</td>
                 <td class="text-xs-center">{{ props.item.dsJustificativa }}</td>
                 <td class="text-xs-center">
+                <v-layout 
+                    row 
+                    justify-center
+                    align-end
+                >
                     <template
-                        v-for="(c, index) in componentes.acoes"
+                        v-for="(component, index) in componentes.acoes"
                         d-inline-block>
                         <component
                             :key="index"
                             :obj="props.item"
-                            :is="c"
+                            :is="component"
                             :idReadequacao="props.item.idReadequacao"
                             :usuario="componentes.usuario"
                         />
                     </template>
+                </v-layout>
                 </td>
             </template>
             <template slot="no-data">
