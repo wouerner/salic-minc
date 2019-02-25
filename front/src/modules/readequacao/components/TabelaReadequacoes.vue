@@ -14,7 +14,19 @@
                 <td class="text-xs-center">{{ props.item.dtSolicitacao }}</td>
                 <td class="text-xs-center">{{ props.item.idDocumento }}</td>
                 <td class="text-xs-center">{{ props.item.dsJustificativa }}</td>
-                <td class="text-xs-center"></td>
+                <td class="text-xs-center">
+                    <template
+                        v-for="(c, index) in componentes.acoes"
+                        d-inline-block>
+                        <component
+                            :key="index"
+                            :obj="props.item"
+                            :is="c"
+                            :idReadequacao="props.item.idReadequacao"
+                            :usuario="componentes.usuario"
+                        />
+                    </template>
+                </td>
             </template>
             <template slot="no-data">
                 <v-alert

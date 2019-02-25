@@ -22,7 +22,7 @@
             </v-tab>
 
             <v-tab href="#tab-2">
-            Análise
+            Em Análise
             <v-icon>gavel</v-icon>
             </v-tab>
 
@@ -37,6 +37,7 @@
                 <v-card>
                     <TabelaReadequacoes
                     :dados="getReadequacoesProponente"
+                    :componentes="acoesProponente"
                     >
                     </TabelaReadequacoes>
                 </v-card>
@@ -74,11 +75,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import TabelaReadequacoes from '../components/TabelaReadequacoes';
+import ExcluirButton from '../components/ExcluirButton';
 
     export default {
         name: 'PainelReadequacoesView',
         components: {
             TabelaReadequacoes,
+            ExcluirButton,
         },
         data() {
             return {
@@ -86,7 +89,11 @@ import TabelaReadequacoes from '../components/TabelaReadequacoes';
                     'proponente',
                     'analise',
                     'finalizadas'
-                ]
+                ],
+                acoesProponente: {
+                    usuario: '',
+                    acoes: [ExcluirButton],
+                },
             }
         },
         computed: {
