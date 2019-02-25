@@ -13,6 +13,7 @@
                 flat
                 icon
                 @click.native="obterDiligencias(obj.idPronac)">
+                {{ filtros }}
                 <v-icon
                     :color="statusDiligencia(obj).color"
                     :change="statusDiligencia(obj).color"
@@ -191,7 +192,10 @@ export default {
     components: {
         Carregando,
     },
-    props: { obj: { type: Object, default: () => {} } },
+    props: {
+        obj: { type: Object, default: () => {} },
+        filtros: { type: String, default: '' },
+    },
     data() {
         return {
             dialog: false,
@@ -251,6 +255,11 @@ export default {
 
         sortByDate() {
             return _.orderBy(this.diligencias.items, 'dataSolicitacao', 'desc');
+        },
+    },
+    watch: {
+        filtros(e) {
+            this.filtros = e;
         },
     },
     updated() {
