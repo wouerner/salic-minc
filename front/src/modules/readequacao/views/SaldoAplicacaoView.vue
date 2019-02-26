@@ -1,38 +1,69 @@
 <template>
+<div>
+  <v-container fluid>
+    <v-toolbar
+      color="#0A420E"
+      dark
+      >
+      <v-btn icon
+	     color="#0A420E"
+	     href="javascript:voltar()"
+	     >
+	<v-icon color="white">arrow_back</v-icon>
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-toolbar-title>Readequação Saldo de Aplicação</v-toolbar-title>
+    </v-toolbar>
+    
+    <v-layout column row pb-2>
+      <v-flex xs12>
+	<v-card class="card--flex-toolbar">
+	  <v-toolbar
+	    color="green"
+	    dark
+	    >
+	    <v-toolbar-title>{{ dadosProjeto.Pronac }} - {{ dadosProjeto.NomeProjeto }}</v-toolbar-title>
+	  </v-toolbar>
+	</v-card>
+	
+	<v-expansion-panel>
+	  <v-expansion-panel-content
+	    :key="formulario_readequacao"
+	    >
+	    <div slot="header">Dados da readequação</div>
+	    <v-card>
+	      <ReadequacaoFormulario
+		:dados="getReadequacao"
+		>		
+	      </ReadequacaoFormulario>
+	    </v-card>
+	  </v-expansion-panel-content>
+	  <v-expansion-panel-content
+	    :key="planilha"
+	    >
+	    <div slot="header">Edição da Planilha</div>
+	    <v-card>
+	      edição da planilha
+	    </v-card>
+	  </v-expansion-panel-content>
+	</v-expansion-panel>    
+	  
+	</v-flex>
+    </v-layout>
+
+    <div v-show="exibirBotaoIniciar">
+      <button class="waves-effect waves-light btn btn-primary small btn-novaproposta"
+              id="novo"
+              v-on:click="solicitarUsoSaldo()"
+              >
+	<i class="material-icons left">border_color</i>Solicitar uso do saldo de aplica&ccedil;&atilde;o
+      </button>
+    </div>
+  
+</v-container>
+
 <div class="readequacao-saldo-aplicacao container-fluid">
-  <div class="page-title">
-    <div class="row">
-      <div class="col s12 m9 l10">
-        <h1>Readequação Saldo de aplicação</h1>
-      </div>
-      <div class="col s12 m3 l2 right-align">
-        <a href="javascript:voltar();" title="Página Anterior"
-           class="btn small grey lighten-3 grey-text z-depth-0 chat-toggle"><i class="material-icons">arrow_back</i>
-        </a>
-      </div>
-    </div>
-  </div>
   
-  <div class="card" v-if="!disabled">
-    <div class="card-content">
-      <div class="col s2">
-        <b>Pronac: </b>{{ dadosProjeto.Pronac }}<br>
-      </div>
-      <div class="col s8">
-        <b>Projeto: </b><span v-html="dadosProjeto.NomeProjeto"></span>
-      </div>
-      <br/>
-    </div>
-  </div>
-  
-  <div v-show="exibirBotaoIniciar">
-    <button class="waves-effect waves-light btn btn-primary small btn-novaproposta"
-            id="novo"
-            v-on:click="solicitarUsoSaldo()"
-            >
-      <i class="material-icons left">border_color</i>Solicitar uso do saldo de aplica&ccedil;&atilde;o
-    </button>
-  </div>
   <ul
     class="collapsible"
     v-if="!disabled"
@@ -198,12 +229,14 @@
           <p><b>Solicita&ccedil;&atilde;o enviada com sucesso!</b></p>
           <p>Sua solicita&ccedil;&atilde;o agora est&aacute; para an&aacute;lise t&eacute;cnica do MinC.</p>
           <p>Para acompanhar, acesse o menu lateral 'Execu&ccedil;&atilde;o -> Dados das readequa&ccedil;&otilde;es'
-                  em <a :href="'/projeto/#incentivo/' + idPronac">consultar dados do projeto</a>.</p>
-              </div>
-            </div>
-          </div>
+            em <a :href="'/projeto/#incentivo/' + idPronac">consultar dados do projeto</a>.</p>
         </div>
+      </div>
     </div>
+  </div>
+</div>
+
+</div> <!-- remover quando finalizar migraçao para vuetify -->
 </template>
 <script>
 
