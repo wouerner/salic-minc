@@ -5,6 +5,7 @@
         <v-flex xs4>
             <br/>
             <v-switch
+                v-if="$route.path == '/painel/aba-em-analise'"
                 v-model="filtro"
                 input-value="true"
                 color="success"
