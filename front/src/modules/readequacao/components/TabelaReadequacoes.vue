@@ -5,7 +5,7 @@
             :items="dados.items"
             :pagination.sync="pagination"
             hide-actions
-        >         
+        >
             <template
                 slot="items"
                 slot-scope="props">
@@ -14,7 +14,7 @@
                 <td class="text-xs-center">{{ props.item.dtSolicitacao }}</td>
                 <td class="text-xs-center">{{ props.item.idDocumento }}</td>
                 <td class="text-xs-center">{{ props.item.dsJustificativa }}</td>
-                <td class="text-xs-center">
+                <td class="text-xs-center" v-if="componentes.acoes">
                 <v-layout 
                     row 
                     justify-center
@@ -29,6 +29,7 @@
                             :is="componente"
                             :idReadequacao="props.item.idReadequacao"
                             :idTipoReadequacao="props.item.idTipoReadequacao"
+                            :dadosProjeto="dadosProjeto"
                           />
                     </template>
                 </v-layout>
@@ -54,6 +55,7 @@ export default {
     props: {
         dados: { type: Object, default: () => {} },
         componentes: { type: Object, default: () => {} },
+	dadosProjeto: { type: Object, default: () => {} },
     },
     data() {
         return {

@@ -1,14 +1,19 @@
 <template>
 <v-container fluid>
-    <v-layout column >
-
-        <v-flex xs9>
-            <v-subheader>
-                <h2>Projeto: 7º Festival do Japão do Rio Grande do Sul - 217336</h2>
-            </v-subheader>
-
-
-        <v-tabs
+  <v-layout column >
+    
+    <v-flex xs9>
+      <v-subheader>
+	<h2 class="grey--text text--darken-4">
+	  Painel de Readequações
+	</h2>
+	<v-spacer/>
+        <h3 class="grey--text text--darken-4">
+	  {{ dadosProjeto.Pronac }} - {{ dadosProjeto.NomeProjeto }}
+	</h3>
+      </v-subheader>
+      
+      <v-tabs
             color="#0a420e"
             centered
             dark
@@ -38,7 +43,8 @@
                     <TabelaReadequacoes
                     :dados="getReadequacoesProponente"
                     :componentes="acoesProponente"
-                    >
+		    :dadosProjeto="dadosProjeto"
+                     >
                     </TabelaReadequacoes>
                 </v-card>
             </v-tab-item>
@@ -49,7 +55,8 @@
                 <v-card>
                     <TabelaReadequacoes
                     :dados="getReadequacoesAnalise"
-                    :componentes="acoesProponente"
+                    :componentes="acoesAnalise"
+		    :dadosProjeto="dadosProjeto"
                       >
                     </TabelaReadequacoes>
                 </v-card>
@@ -61,7 +68,8 @@
                 <v-card>
                     <TabelaReadequacoes
                     :dados="getReadequacoesFinalizadas"
-                    :componentes="acoesProponente"
+                    :componentes="acoesFinalizadas"
+		    :dadosProjeto="dadosProjeto"
                       >
                     </TabelaReadequacoes>
                 </v-card>
@@ -77,7 +85,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import TabelaReadequacoes from '../components/TabelaReadequacoes';
 import ExcluirButton from '../components/ExcluirButton';
-import EditarReadequacaoButton from '../components/EditarReadequacaoButton'
+import EditarReadequacaoButton from '../components/EditarReadequacaoButton';
 
     export default {
     name: 'PainelReadequacoesView',
@@ -97,6 +105,12 @@ import EditarReadequacaoButton from '../components/EditarReadequacaoButton'
             usuario: '',
             acoes: [ExcluirButton, EditarReadequacaoButton],
         },
+	acoesAnalise: {
+	    acoes: [],
+	},
+	acoesFinalizadas: {
+	    acoes: [],
+	},
     }
     },
     computed: {
@@ -105,9 +119,16 @@ import EditarReadequacaoButton from '../components/EditarReadequacaoButton'
             getReadequacoesProponente: 'readequacao/getReadequacoesProponente',
             getReadequacoesAnalise: 'readequacao/getReadequacoesAnalise',
             getReadequacoesFinalizadas: 'readequacao/getReadequacoesFinalizadas',
+            dadosProjeto: 'projeto/projeto',
         }),
     },
     created() {
+        if (typeof this.$route.params.idPronac !== 'undefined') {
+            this.idPronac = this.$route.params.idPronac;
+            if (Object.keys(this.dadosProjeto).length === 0) {
+                this.buscaProjeto(this.idPronac);
+            }
+        }
         this.listaStatus.forEach(status => {
             this.obterReadequacoesPorStatus(status);
         });
@@ -115,6 +136,7 @@ import EditarReadequacaoButton from '../components/EditarReadequacaoButton'
     methods: {
         ...mapActions({
             obterListaDeReadequacoes: 'readequacao/obterListaDeReadequacoes',
+	    buscaProjeto: 'projeto/buscaProjeto',
         }),
         obterReadequacoesPorStatus(status) {
             if (this.listaStatus.includes(status)) {

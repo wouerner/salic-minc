@@ -33,14 +33,9 @@
                     </v-btn>
                     <v-toolbar-title>Readequação - Plano de Distribuição</v-toolbar-title>
                     <v-spacer/>
+		    <v-toolbar-title>{{ dadosProjeto.Pronac }} - {{ dadosProjeto.NomeProjeto }}</v-toolbar-title>
                 </v-toolbar>
 
-                <v-card-text>
-                    <h6 class="subheading font-weight-medium">Projeto: 7º Festival do Japão do Rio Grande do Sul</h6>
-                    <h6 class="subheading font-weight-medium">Readequação do Tipo: Plano de Distribuição</h6>
-                    <h6 class="subheading font-weight-medium">Data de abertura: 04/12/2018 14:24:43</h6>
-                </v-card-text>
-                
                 <v-card-text>
                     <template
                         v-for="(componente, index) in templateEdicao"
@@ -91,6 +86,7 @@ export default {
     props: {
         idReadequacao: { type: Number, default: 0 },
         idTipoReadequacao: { type: Number, default: 0 },
+	dadosProjeto: { type: Object, default: () => {} },
     },
     data() {
         return {
