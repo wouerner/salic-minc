@@ -1,4 +1,46 @@
 <template>
+<div>
+  <v-form>
+    <v-container>
+      <v-layout row wrap>
+	<v-textarea
+	  label="Justificativa da readequação *"
+	  :value="dadosReadequacao.dsJustificativa"
+	  @change="atualizarDadosReadequacao"
+	  ></v-textarea>
+      </v-layout>
+      
+      <v-layout row>
+	<v-btn
+	  label="Anexar arquivo"
+	  :value="dadosReadequacao.idDocumento"
+	  @change="prepararAdicionarDocumento"
+	  >Anexar arquivo</v-btn>
+	<v-text-field
+	  :label="arquivo"
+	  ></v-text-field>
+      </v-layout>
+
+      <v-layout row>
+        <component
+          :ds-solicitacao="dadosReadequacao.dsSolicitacao"
+          :disabled="disabled"
+          v-bind:is="componenteDsSolicitacao"
+          ></component>
+      </v-layout>
+
+      <v-layout>
+	<v-btn
+	  v-on:click="salvarReadequacao"
+	  label="Salvar"></v-btn>
+      </v-layout>
+    </v-container>
+  </v-form>
+
+
+  <hr>
+  velho:
+<br/><br/>
   <div class="card">
       <div v-if="!disabled" class="card-content">
 	<span class="card-title">Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</span>
@@ -93,6 +135,7 @@
 	</div>
       </div>
   </div>
+</div>
 </template>
 <script>
 import _ from 'lodash';
@@ -203,11 +246,13 @@ export default {
             updateReadequacao: 'readequacao/updateReadequacao',
             adicionarReadequacao: 'readequacao/dados-readequacao',
             excluirDocumento: 'readequacao/excluirDocumento',
+	    buscaReadequacaoPronacTipo: 'readequacao/buscaReadequacaoPronacTipo',
         }),
     },
+    created() {},
     computed: {
         ...mapGetters({
-            dadosReadequacao: 'readequacao/readequacao',
+            dadosReadequacao: 'readequacao/getReadequacao',
         }),
         arquivoAnexado() {
             if (this.dadosReadequacao.idDocumento !== '') {

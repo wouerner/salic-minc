@@ -185,6 +185,7 @@
                     return;
                 }
                 const self = this;
+		/*
                 $3.ajax({
                     type: 'POST',
                     url: '/readequacao/readequacoes/incluir-item-planilha-readequacao',
@@ -212,6 +213,7 @@
                         self.resetData();
                     },
                 );
+*/
             },
             cancelar() {
                 this.resetData();

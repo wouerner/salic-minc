@@ -181,7 +181,7 @@ abstract class MinC_Controller_Rest_Abstract extends Zend_Controller_Action
                     
                     if (!in_array(false, $pieceMatch)) {
                         $moduleName = $capturedActions[0];
-                        $controllerName = 'controllerName' => $capturedActions[1] . '-' . $capturedActions[2];
+                        $controllerName = $capturedActions[1] . '-' . $capturedActions[2];
                         
                         $params = '';
                         foreach ($routeData['params'] as $key => $value) {
@@ -192,7 +192,7 @@ abstract class MinC_Controller_Rest_Abstract extends Zend_Controller_Action
                             }
                         }
                         
-                        $this->redirect($moduleName . '/' $controllerName . '/' . $params);
+                        $this->redirect($moduleName . '/' . $controllerName . '/' . $params);
                     }
                 }
             }

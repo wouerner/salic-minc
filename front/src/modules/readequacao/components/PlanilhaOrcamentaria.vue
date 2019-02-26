@@ -40,6 +40,7 @@
         methods: {
             montarPlanilhaOrcamentaria() {
                 const self = this;
+		/*
                 $3.ajax({
                     type: 'GET',
                     url: '/readequacao/readequacoes/obter-planilha-orcamentaria',
@@ -53,6 +54,7 @@
                         self.planilhaOrcamentaria = response.planilhaOrcamentaria;
                     },
                 );
+*/
             },
             atualizarSaldoEntrePlanilhas() {
                 this.$emit('atualizarSaldoEntrePlanilhas');
