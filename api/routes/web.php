@@ -51,6 +51,16 @@ $router->group(
             'projetos-similares/{idpronac}',
             ['uses' => 'ProjetosSimilaresController@index']
         );
+
+        $router->get(
+            'assinaturas',
+            ['uses' => 'AssinaturasController@get']
+        );
+
+        
+
+
     }
+
 );
 
