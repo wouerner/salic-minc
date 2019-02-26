@@ -21,6 +21,7 @@ HOST: http://localhost:4000
                         "idPronac": 217336,
                         "idReadequacao": 217336,
                         "idTipoReadequacao": 6,
+                        "dsTipoReadequacao": "Razão Social",
                         "dtSolicitacao": "2019-01-22",
                         "idSolicitante": 267,
                         "dsSolicitacao": "blabalbalbalablabalb",
@@ -33,12 +34,13 @@ HOST: http://localhost:4000
                         "idNrReuniao": 45654,
                         "stEstado": 1,
                         "dtEnvio": "2019-01-23",
-                        "stEstagioAtual": "proponente"
-                    },
+                        "stStatusAtual": "proponente"
+                   },
                     {
                         "idPronac": 217336,
                         "idReadequacao": 217336,
                         "idTipoReadequacao": 6,
+                        "dsTipoReadequacao": "Razão Social",
                         "dtSolicitacao": "2019-01-22",
                         "idSolicitante": 267,
                         "dsSolicitacao": "blabalbalbalablabalb",
@@ -51,7 +53,7 @@ HOST: http://localhost:4000
                         "idNrReuniao": 45654,
                         "stEstado": 1,
                         "dtEnvio": "2019-01-23",
-                        "stEstagioAtual": "proponente"
+                       "stStatusAtual": "proponente"
                     }
                 ]
             }
@@ -104,7 +106,7 @@ HOST: http://localhost:4000
                     "idNrReuniao": 45654,
                     "stEstado": 1,
                     "dtEnvio": "2019-01-23",
-                    "stEstagioAtual": "proponente"
+                    "stStatusAtual": "proponente"
             }
 
 
@@ -135,7 +137,7 @@ HOST: http://localhost:4000
                 "idNrReuniao": 45654,
                 "stEstado": 1,
                 "dtEnvio": "2019-01-23",
-                "stEstagioAtual": "proponente"
+                "stStatusAtual": "proponente"
             }
 
 
@@ -191,7 +193,7 @@ HOST: http://localhost:4000
                 "idNrReuniao": 45654,
                 "stEstado": 1,
                 "dtEnvio": "2019-01-23",
-                "stEstagioAtual": "proponente"
+                "stStatusAtual": "proponente"
             }
 
 ### Excluir readequação [DELETE]
