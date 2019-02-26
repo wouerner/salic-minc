@@ -4,6 +4,7 @@ export const state = {
     readequacoesProponente: {},
     readequacoesAnalise: {},
     readequacoesFinalizadas: {},
+    readequacao: {},
     saldoAplicacao: {},
     saldoAplicacaoDisponivelEdicaoItem: {},
 };
@@ -19,6 +20,9 @@ export const mutations = {
         state.readequacoesFinalizadas = readequacoes;
     },
     [types.SET_READEQUACAO](state, readequacao) {
+        state.readequacao = readequacao;
+    },
+    [types.GET_READEQUACAO](state, readequacao) {
         state.readequacao = readequacao;
     },
     [types.UPDATE_READEQUACAO](state, readequacao) {

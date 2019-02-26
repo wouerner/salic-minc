@@ -33,7 +33,7 @@ export const buscaReadequacaoPronacTipo = ({ commit }, params) => {
         .then((response) => {
             const data = response.data;
             let readequacao = {};
-            if (data.items > 1) {
+            if (data.items.length > 1) {
                 readequacao = data.items;
             } else {
                 readequacao = data.items[0];

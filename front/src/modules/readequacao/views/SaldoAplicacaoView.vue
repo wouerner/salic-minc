@@ -412,7 +412,7 @@ export default {
             }
         },
         dadosReadequacao() {
-            if (typeof this.dadosReadequacao !== 'undefined') {
+            if (typeof this.dadosReadequacao.idReadequacao !== 'undefined') {
                 this.exibirBotaoIniciar = false;
                 //$3('.collapsible').collapsible();
                 const idPronac = this.dadosProjeto.idPronac;
@@ -434,7 +434,7 @@ export default {
     computed: {
         ...mapGetters({
             dadosProjeto: 'projeto/projeto',
-            dadosReadequacao: 'readequacao/readequacao',
+            dadosReadequacao: 'readequacao/getReadequacao',
         }),
         vlDiferencaEntrePlanilhas() {
             if (typeof this.valorEntrePlanilhas.vlDiferencaPlanilhas !== 'undefined') {
