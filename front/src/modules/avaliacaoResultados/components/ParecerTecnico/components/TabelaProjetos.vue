@@ -32,6 +32,7 @@
                 hide-actions
             >
                 <template
+                    v-if="filtragem(statusDiligencia(props.item).desc,filtro)"
                     slot="items"
                     slot-scope="props">
                     <td>{{ props.index+1 }}</td>
@@ -106,9 +107,11 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import statusDiligencia from '../../../mixins/statusDiligencia';
 
 export default {
     name: 'TabelaProjetos',
+    mixins: [statusDiligencia],
     props: {
         dados: { type: Object, default: () => {} },
         componentes: { type: Object, default: () => {} },
@@ -154,7 +157,12 @@ export default {
         ...mapActions({
             obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
         }),
-
+        filtragem(projeto, filtro) {
+            if (filtro === 'Todos projetos' || this.filtro === '') {
+                return true;
+            }
+            return projeto === filtro;
+        },
         filtroDiligencia(val) {
             this.filtro = val;
             this.$emit('filtros', this.filtro);
