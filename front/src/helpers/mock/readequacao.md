@@ -67,7 +67,7 @@ HOST: http://localhost:4000
                         "stEstado": 1,
                         "dtEnvio": "2019-01-23",
                         "stStatusAtual": "proponente"
-                    },
+                   },
                     {
                         "idPronac": 217336,
                         "idReadequacao": 217336,
@@ -85,7 +85,7 @@ HOST: http://localhost:4000
                         "idNrReuniao": 45654,
                         "stEstado": 1,
                         "dtEnvio": "2019-01-23",
-                        "stStatusAtual": "proponente"
+                       "stStatusAtual": "proponente"
                     }
                 ]
             }

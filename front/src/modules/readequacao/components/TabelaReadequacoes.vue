@@ -70,6 +70,7 @@ export default {
                 {
                     text: 'Tipo de Readequação',
                     value: 'dsTipoReadequacao',
+
                 },
                 {
                     text: 'Data da Solicitação',

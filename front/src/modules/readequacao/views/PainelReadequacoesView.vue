@@ -14,7 +14,10 @@
             dark
             icons-and-text
         >
-            <v-tabs-slider color="yellow"></v-tabs-slider>
+            <v-tabs-slider color="yellow"></v-tabs-slider><<<<<<< f/readequacao-migracao-front/diversas
+78
+ 
+
 
             <v-tab href="#tab-1">
             Edição

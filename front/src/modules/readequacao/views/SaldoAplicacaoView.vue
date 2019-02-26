@@ -238,23 +238,56 @@
 
 </div> <!-- remover quando finalizar migraçao para vuetify -->
 </template>
-
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import TabelaReadequacoes from '../components/TabelaReadequacoes';
 
-    export default {
-        name: 'PainelReadequacoesView',
-        components: {
-            TabelaReadequacoes,
-        },
-        data() {
-            return {
-                listaStatus: [
-                    'proponente',
-                    'analise',
-                    'finalizadas'
-                ]
+import { mapActions, mapGetters } from 'vuex';
+import { utils } from '@/mixins/utils';
+import ReadequacaoSaldoAplicacaoSaldo from '../components/ReadequacaoSaldoAplicacaoSaldo';
+import ReadequacaoSaldoAplicacaoResumo from '../components/ReadequacaoSaldoAplicacaoResumo';
+import ReadequacaoFormulario from '../components/ReadequacaoFormulario';
+import ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria from '../components/ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria';
+import PlanilhaOrcamentariaAlterarItem from '../components/PlanilhaOrcamentariaAlterarItem';
+import PlanilhaOrcamentariaIncluirItem from '../components/PlanilhaOrcamentariaIncluirItem';
+import PlanilhaOrcamentaria from '../components/PlanilhaOrcamentaria';
+
+export default {
+    name: 'SaldoAplicacaoView',
+    components: {
+        ReadequacaoSaldoAplicacaoResumo,
+        ReadequacaoSaldoAplicacaoSaldo,
+        ReadequacaoFormulario,
+        PlanilhaOrcamentariaAlterarItem,
+        PlanilhaOrcamentariaIncluirItem,
+        ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria,
+        PlanilhaOrcamentaria,
+    },
+    mixins: [utils],
+    data() {
+        return {
+            disabled: false,
+            idPronac: '',
+            pronac: '',
+            nomeProjeto: '',
+            idTipoReadequacao: 22,
+            siEncaminhamento: 12,
+            perfil: 1111,
+            exibirBotaoIniciar: false,
+            exibirPaineis: false,
+            solicitacaoIniciada: false,
+            mostrarMensagemFinal: false,
+            valorEntrePlanilhas: [],
+            tipoPlanilha: 7,
+            componenteFormulario: 'ReadequacaoSaldoAplicacaoSaldo',
+            componentePlanilha: 'ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria',
+            disponivelParaAdicaoItensReadequacaoPlanilha: false,
+            readequacaoAlterada: false,
+        };
+    },
+    created() {
+        if (typeof this.$route.params.idPronac !== 'undefined') {
+            this.idPronac = this.$route.params.idPronac;
+            if (Object.keys(this.dadosProjeto).length === 0) {
+                this.buscaProjeto(this.idPronac);
             }
         }
         if (typeof this.dadosReadequacao.idReadequacao === 'undefined') {
@@ -315,14 +348,21 @@ import TabelaReadequacoes from '../components/TabelaReadequacoes';
             });
 */
         },
-        methods: {
-            ...mapActions({
-                obterListaDeReadequacoes: 'readequacao/obterListaDeReadequacoes',
-            }),
-            obterReadequacoesPorStatus(stStatusAtual) {
-                if (this.listaStatus.includes(stStatusAtual)) {
-                    const idPronac = this.$route.params.idPronac;
-                    this.obterListaDeReadequacoes({idPronac, stStatusAtual});
+        prepararExcluirReadequacao() {
+            this.excluirReadequacao({
+                idPronac: this.idPronac,
+                idReadequacao: this.dadosReadequacao.idReadequacao,
+            });
+            /*
+            $3('#modalExcluir .modal-content h4').html('');
+            $3('#modalExcluir .modal-footer').html('<h5>Removendo os dados, aguarde...</h5>');
+            let self = this;
+            $3.ajax({
+                type: "GET",
+                url: "/readequacao/saldo-aplicacao/excluir-readequacao",
+                data: {
+                    idPronac: self.idPronac,
+                    idReadequacao: self.dadosReadequacao.idReadequacao
                 }
             }).done(function (response) {
                 // TODO: alterar o store
@@ -499,6 +539,8 @@ import TabelaReadequacoes from '../components/TabelaReadequacoes';
             if (typeof this.dadosReadequacao === 'undefined') {
                 return false;
             }
+            return true;
         },
-    };
+    },
+};
 </script>
