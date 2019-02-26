@@ -31,23 +31,52 @@
                     >
                         <v-icon>close</v-icon>
                     </v-btn>
-                    <v-toolbar-title>Readequação - Plano de Distribuição</v-toolbar-title>
+                    <v-toolbar-title>Readequação - {{ dadosReadequacao.dsTipoReadequacao }}</v-toolbar-title>
                     <v-spacer/>
 		    <v-toolbar-title>{{ dadosProjeto.Pronac }} - {{ dadosProjeto.NomeProjeto }}</v-toolbar-title>
                 </v-toolbar>
 
-                <v-card-text>
-                    <template
-                        v-for="(componente, index) in templateEdicao"
-                        d-inline-block>
-                        <component
+		<v-expansion-panel
+		  v-model="panel"
+		  expand
+		  >
+		  <v-expansion-panel-content
+		    >
+		    <div slot="header">Edição</div>
+		    <v-card>
+		      <template
+                          v-for="(componente, index) in templateEdicao"
+                          d-inline-block>
+                          <component
                             :key="index"
                             :is="componente"
-                            :idReadequacao="idReadequacao"
-                          />
-                    </template>
-                </v-card-text>
+                            :dadosReadequacao="dadosReadequacao"
+			    :campoEdicao="dadosReadequacao.dsSolicitacao"
+                            />
+			</template>
+		    </v-card>
+		  </v-expansion-panel-content>
+		  
+		  <v-expansion-panel-content
+		    >
+		    <div slot="header">Justificativa da readequação</div>
+		    <v-card>
+                      <v-card-text>
+			<FormReadequacao
+			  :dadosReadequacao="dadosReadequacao"
+			  ></FormReadequacao>
+                      </v-card-text>
+		    </v-card>
+		    
+		    <v-btn
+		      label="Anexar arquivo"
+		      :value="dadosReadequacao.idDocumento"
+		      @change="prepararAdicionarDocumento"
+		      >Anexar documento</v-btn>
 
+		  </v-expansion-panel-content>
+		</v-expansion-panel>
+		
                 <v-card-actions>
                     <v-spacer/>
 
@@ -76,36 +105,41 @@
 
 <script>
 import FormReadequacao from './FormReadequacao';
+import TemplateTextarea from './TemplateTextarea';
 import TemplatePlanilha from './TemplatePlanilha';
 
 export default {
     name: 'EditarReadequacaoButton',
     components: {
 	FormReadequacao,
+	TemplateTextarea,
+	TemplatePlanilha,
     },
     props: {
-        idReadequacao: { type: Number, default: 0 },
-        idTipoReadequacao: { type: Number, default: 0 },
+	dadosReadequacao: { type: Object, default: () => {} },
 	dadosProjeto: { type: Object, default: () => {} },
     },
     data() {
         return {
             dialog: false,
             tiposReadequacoes: {
-                1: TemplatePlanilha,
-                2: TemplatePlanilha,
+		"textarea": "TemplateTextarea",
+		"input": "TemplateInput",
+		"date": "TemplateDate",
+		"planilha": "TemplatePlanilha",
             },
-            templateEdicao: [FormReadequacao]
+	    templateEdicao: [ TemplateTextarea ],
+	    panel: [false, true]
         };
     },
     created() {
-        if (this.tiposReadequacoes.hasOwnProperty(this.idTipoReadequacao)) {
-            this.templateEdicao = [ this.tiposReadequacoes[this.idTipoReadequacao] ];
-        }
+	// tipo específico dessa readequacao (idTip
     },
     computed: {
     },
     methods: {
+	prepararAdicionarDocumento() {
+	},
     },
 };
 </script>

@@ -2,7 +2,7 @@
     <div>
         <v-data-table
             :headers="head"
-            :items="dados.items"
+            :items="dadosReadequacao.items"
             :pagination.sync="pagination"
             hide-actions
         >
@@ -27,8 +27,7 @@
                             :key="index"
                             :obj="props.item"
                             :is="componente"
-                            :idReadequacao="props.item.idReadequacao"
-                            :idTipoReadequacao="props.item.idTipoReadequacao"
+                            :dadosReadequacao="props.item"
                             :dadosProjeto="dadosProjeto"
                           />
                     </template>
@@ -53,7 +52,7 @@ import { mapActions, mapGetters } from 'vuex';
 export default {
     name: 'TabelaReadequacoes',
     props: {
-        dados: { type: Object, default: () => {} },
+        dadosReadequacao: { type: Object, default: () => {} },
         componentes: { type: Object, default: () => {} },
 	dadosProjeto: { type: Object, default: () => {} },
     },

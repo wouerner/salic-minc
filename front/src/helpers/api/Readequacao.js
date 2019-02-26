@@ -64,3 +64,8 @@ export const excluirDocumento = (idDocumento) => {
     const path = `/readequacao/${idReadequacao}/documento/${idDocumento}`;
     return api.deleteRequest(path);
 };
+
+export const obterTiposReadequacao = (params) => {
+    const path = `/readequacao/tipos-disponiveis`;
+    return api.getRequest(path, paramsQueryParams(params));
+};

@@ -1,11 +1,11 @@
 <template>
-<v-layout row wrap>
+<v-layout row wrap>   
     <v-flex xs10 offset-xs1>
-        <h6 class="subheading font-weight-medium">Plano de Distribuição</h6>
+        <h6 class="subheading font-weight-medium">Justificativa da Readequação</h6>
         <v-card>
             <EditorTexto
                 :style="''"
-                :value="dadosTipoReadequacao.data"
+                :value="dadosReadequacao.dsJustificativa"
                 required="required"
             ></EditorTexto>
         </v-card>
@@ -22,7 +22,7 @@ export default {
         EditorTexto,
     },
     props: {
-        idReadequacao: { type: Number, default: 0 },
+	dadosReadequacao: { type: Object, default: () => {} },
     },
     data() {
         return {

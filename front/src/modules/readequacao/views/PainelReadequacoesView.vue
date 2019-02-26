@@ -41,7 +41,7 @@
             >
                 <v-card>
                     <TabelaReadequacoes
-                    :dados="getReadequacoesProponente"
+                    :dadosReadequacao="getReadequacoesProponente"
                     :componentes="acoesProponente"
 		    :dadosProjeto="dadosProjeto"
                      >
@@ -54,7 +54,7 @@
             >
                 <v-card>
                     <TabelaReadequacoes
-                    :dados="getReadequacoesAnalise"
+                    :dadosReadequacao="getReadequacoesAnalise"
                     :componentes="acoesAnalise"
 		    :dadosProjeto="dadosProjeto"
                       >
@@ -67,7 +67,7 @@
             >
                 <v-card>
                     <TabelaReadequacoes
-                    :dados="getReadequacoesFinalizadas"
+                    :dadosReadequacao="getReadequacoesFinalizadas"
                     :componentes="acoesFinalizadas"
 		    :dadosProjeto="dadosProjeto"
                       >
