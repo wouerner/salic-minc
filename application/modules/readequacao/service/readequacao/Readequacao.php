@@ -46,10 +46,16 @@ class Readequacao implements IServicoRestZend
         switch ($stEstagioAtual) {
             case 'proponente':
                 $where['siEncaminhamento = ?'] = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE;
+                $where['stEstado = ?'] = \Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_EM_ANDAMENTO;
                 break;
-            case 'análise':
+            case 'analise':
                 $where['siEncaminhamento != ?'] = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE;
+                $where['stEstado = ?'] = \Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_EM_ANDAMENTO;
                 break;
+            case 'finalizadas':
+                $where['stEstado = ?'] = \Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_FINALIZADO;
+                break;
+                
             default:
                 break;
         }

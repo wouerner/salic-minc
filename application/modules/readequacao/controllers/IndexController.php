@@ -40,10 +40,10 @@ class Readequacao_IndexController extends MinC_Controller_Rest_Abstract
         }
         
         $idTipoReadequacao = $this->getRequest()->getParam('idTipoReadequacao');
-        $stEstagioAtual = $this->getRequest()->getParam('stEstagioAtual');
+        $stStatusAtual = $this->getRequest()->getParam('stStatusAtual');
         
         $readequacaoService = new ReadequacaoService($this->getRequest(), $this->getResponse());
-        $data = $readequacaoService->buscarReadequacoes($idPronac, $idTipoReadequacao, $stEstagioAtual);
+        $data = $readequacaoService->buscarReadequacoes($idPronac, $idTipoReadequacao, $stStatusAtual);
         
         $this->renderJsonResponse($data, $code);
     }
