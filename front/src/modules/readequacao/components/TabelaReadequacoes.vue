@@ -21,15 +21,15 @@
                     align-end
                 >
                     <template
-                        v-for="(component, index) in componentes.acoes"
+                        v-for="(componente, index) in componentes.acoes"
                         d-inline-block>
                         <component
                             :key="index"
                             :obj="props.item"
-                            :is="component"
+                            :is="componente"
                             :idReadequacao="props.item.idReadequacao"
-                            :usuario="componentes.usuario"
-                        />
+                            :idTipoReadequacao="props.item.idTipoReadequacao"
+                          />
                     </template>
                 </v-layout>
                 </td>

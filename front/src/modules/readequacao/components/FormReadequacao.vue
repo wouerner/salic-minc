@@ -7,7 +7,7 @@
                 :style="''"
                 :value="dadosTipoReadequacao.data"
                 required="required"
-            />
+            ></EditorTexto>
         </v-card>
     </v-flex>
 </v-layout>    
@@ -17,13 +17,12 @@
 import EditorTexto from '../../avaliacaoResultados/components/components/EditorTexto';
 
 export default {
-    name: 'ExcluirButton',
+    name: 'FormReadequacao',
     components: {
         EditorTexto,
     },
     props: {
-        idReadequacao: { type: String, default: '' },
-        usuario: { type: String, default: '' },
+        idReadequacao: { type: Number, default: 0 },
     },
     data() {
         return {

@@ -42,10 +42,15 @@
                 </v-card-text>
                 
                 <v-card-text>
-                    <component
-                        :is="templateEdicao"
-                        :idReadequacao="props.idReadequacao"
-                    />
+                    <template
+                        v-for="(componente, index) in templateEdicao"
+                        d-inline-block>
+                        <component
+                            :key="index"
+                            :is="componente"
+                            :idReadequacao="idReadequacao"
+                          />
+                    </template>
                 </v-card-text>
 
                 <v-card-actions>
@@ -79,12 +84,13 @@ import FormReadequacao from './FormReadequacao';
 import TemplatePlanilha from './TemplatePlanilha';
 
 export default {
-    name: 'ExcluirButton',
+    name: 'EditarReadequacaoButton',
     components: {
+	FormReadequacao,
     },
     props: {
-        idReadequacao: { type: String, default: '' },
-        idTipoReadequacao: { type: String, default: '' },
+        idReadequacao: { type: Number, default: 0 },
+        idTipoReadequacao: { type: Number, default: 0 },
     },
     data() {
         return {
@@ -93,12 +99,12 @@ export default {
                 1: TemplatePlanilha,
                 2: TemplatePlanilha,
             },
-            templateEdicao: { type: Object, default: FormReadequacao }
+            templateEdicao: [FormReadequacao]
         };
     },
     created() {
         if (this.tiposReadequacoes.hasOwnProperty(this.idTipoReadequacao)) {
-            this.templateEdicao = this.tiposReadequacoes[this.idTipoReadequacao];
+            this.templateEdicao = [ this.tiposReadequacoes[this.idTipoReadequacao] ];
         }
     },
     computed: {

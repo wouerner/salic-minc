@@ -55,8 +55,9 @@
 export default {
     name: 'ExcluirButton',
     props: {
-        idReadequacao: { type: String, default: '' },
-        usuario: { type: String, default: '' },
+	obj: { type: Object, default: () => {} },
+        idReadequacao: { type: Number, default: 0 },
+	idTipoReadequacao: { type: Number, default: 0 },
     },
     data() {
         return {

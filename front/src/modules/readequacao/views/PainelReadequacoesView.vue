@@ -14,11 +14,8 @@
             dark
             icons-and-text
         >
-            <v-tabs-slider color="yellow"></v-tabs-slider><<<<<<< f/readequacao-migracao-front/diversas
-78
- 
-
-
+          <v-tabs-slider color="yellow"></v-tabs-slider>
+	  
             <v-tab href="#tab-1">
             Edição
             <v-icon>edit</v-icon>
@@ -52,7 +49,8 @@
                 <v-card>
                     <TabelaReadequacoes
                     :dados="getReadequacoesAnalise"
-                    >
+                    :componentes="acoesProponente"
+                      >
                     </TabelaReadequacoes>
                 </v-card>
 
@@ -63,7 +61,8 @@
                 <v-card>
                     <TabelaReadequacoes
                     :dados="getReadequacoesFinalizadas"
-                    >
+                    :componentes="acoesProponente"
+                      >
                     </TabelaReadequacoes>
                 </v-card>
             </v-tab-item>
