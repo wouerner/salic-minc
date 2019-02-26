@@ -4,6 +4,38 @@ HOST: http://localhost:4000
 
 # Group Readequacao
 
+## Readequacao - Visualizar lista de readequações [/readequacao?idPronac=202779&idTipoReadequacao=22&stStatusAtual=proponente]
+
+### Filtro por três parâmetros [GET]
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+        
+            {
+                "items": [
+                    {
+                        "idPronac": 217336,
+                        "idReadequacao": 217336,
+                        "idTipoReadequacao": 6,
+                        "dsTipoReadequacao": "Impacto ambiental",
+                        "dtSolicitacao": "2019-01-22",
+                        "idSolicitante": 267,
+                        "dsSolicitacao": "blabalbalbalablabalb",
+                        "dsJustificativa": "É necessário",
+                        "idDocumento": 19440,
+                        "idAvaliador": 335,
+                        "dsAvaliacao": "queuqeuqueuq",
+                        "stAtendimento": "N",
+                        "siEncaminhamento": 15,
+                        "idNrReuniao": 45654,
+                        "stEstado": 1,
+                        "dtEnvio": "2019-01-23",
+                        "stStatusAtual": "proponente"
+                    }
+                ]
+            }
+
 ## Readequacao - Visualizar lista de readequações [/readequacao?idPronac={idPronac}]
 
 + Parameters
@@ -21,7 +53,7 @@ HOST: http://localhost:4000
                         "idPronac": 217336,
                         "idReadequacao": 217336,
                         "idTipoReadequacao": 6,
-                        "dsTipoReadequacao": "Razão Social",
+                        "dsTipoReadequacao": "Impacto ambiental",
                         "dtSolicitacao": "2019-01-22",
                         "idSolicitante": 267,
                         "dsSolicitacao": "blabalbalbalablabalb",
@@ -39,8 +71,8 @@ HOST: http://localhost:4000
                     {
                         "idPronac": 217336,
                         "idReadequacao": 217336,
-                        "idTipoReadequacao": 6,
-                        "dsTipoReadequacao": "Razão Social",
+                        "idTipoReadequacao": 12,
+                        "dsTipoReadequacao": "Nome do Projeto",
                         "dtSolicitacao": "2019-01-22",
                         "idSolicitante": 267,
                         "dsSolicitacao": "blabalbalbalablabalb",

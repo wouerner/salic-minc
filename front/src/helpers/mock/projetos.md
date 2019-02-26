@@ -4,7 +4,7 @@ HOST: http://localhost:4000
 
 # Group Projeto
 
-## Projeto - Visualizar projeto [/projeto/projeto/get?idPronac={idPronac}]
+## Projeto - Visualizar projeto [/projeto/dados-projeto/get?idPronac={idPronac}]
 
 + Parameters
     + idPronac: 14100 (number, required)
