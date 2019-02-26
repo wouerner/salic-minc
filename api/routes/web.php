@@ -57,8 +57,15 @@ $router->group(
             ['uses' => 'AssinaturasController@get']
         );
 
-        
+        $router->get(
+            'AvaliacaoComprovante',
+            ['uses' => 'AvaliacaoComprovanteController@get']
+        );
 
+        $router->get(
+            'Dashboard',
+            ['uses' => 'DashboardController@get']
+        );
 
     }
 
