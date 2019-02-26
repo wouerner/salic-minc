@@ -3,13 +3,19 @@
         row
         wrap>
         <v-flex xs4>
-            <v-select
-                v-if="$route.path == '/painel/aba-em-analise'"
-                :items="diligencias"
-                label="filtrar por estado da diligencia"
-                @change="filtroDiligencia"
-            />
-        </v-flex>
+            <br/>
+            <v-switch
+                v-model="filtro"
+                input-value="true"
+                label="Todos / Analisar"
+                value="Diligenciado">
+                <!--<v-select-->
+                    <!--v-if="$route.path == '/painel/aba-em-analise'"-->
+                    <!--:items="diligencias"-->
+                    <!--label="filtrar por estado da diligencia"-->
+                    <!--@change="filtroDiligencia"-->
+                <!--/>-->
+        </v-switch></v-flex>
         <v-flex xs8>
             <v-card-title>
                 <v-spacer/>
@@ -124,7 +130,7 @@ export default {
             },
             selected: [],
             search: '',
-            filtro: '',
+            filtro: 'Diligenciado',
             diligencias: [
                 'Todos projetos',
                 'A Diligenciar',
@@ -161,7 +167,7 @@ export default {
             if (filtro === 'Todos projetos' || this.filtro === '') {
                 return true;
             }
-            return projeto === filtro;
+            return projeto !== filtro;
         },
         filtroDiligencia(val) {
             this.filtro = val;
