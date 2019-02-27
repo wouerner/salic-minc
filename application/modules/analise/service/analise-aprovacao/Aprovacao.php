@@ -35,7 +35,9 @@ class Aprovacao implements \MinC\Servico\IServicoRestZend
         $pronac = $rsProjeto->AnoProjeto.$rsProjeto->Sequencial;
 
         $tblAprovacao = new \Aprovacao();
-        $rsAprovacao = $tblAprovacao->buscaCompleta(array('a.AnoProjeto + a.Sequencial = ?'=>$pronac), array('a.idAprovacao ASC'));
+
+        $rsAprovacao = $tblAprovacao->buscaCompleta(
+            ['a.AnoProjeto + a.Sequencial = ?'=> $pronac], ['a.TipoAprovacao ASC']);
 
         $Aprovacao = $this->montaArrayAprovacao($rsAprovacao);
         $resultArray['Aprovacao'] = $Aprovacao;
@@ -58,7 +60,8 @@ class Aprovacao implements \MinC\Servico\IServicoRestZend
                 'DtFimCaptacao' => $aprovacao['DtFimCaptacao'],
                 'Mecanismo' => $aprovacao['Mecanismo'],
                 'ResumoAprovacao' => $aprovacao['ResumoAprovacao'],
-                'AprovadoReal' => $aprovacao['AprovadoReal']
+                'AprovadoReal' => $aprovacao['AprovadoReal'],
+                'CodTipoAprovacao' => $aprovacao['CodTipoAprovacao']
             ];
         }
 
