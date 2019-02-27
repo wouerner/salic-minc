@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import * as types from './types';
 
 export const state = {
@@ -27,10 +28,11 @@ export const mutations = {
         state.readequacao = readequacao;
     },
     [types.GET_CAMPO_ATUAL](state, campoAtual) {
-	    state.campoAtual = campoAtual;
+	state.campoAtual = campoAtual;
     },
     [types.SET_CAMPO_ATUAL](state, campoAtual) {
-	    state.campoAtual[campoAtual.idTipoReadequacao] = campoAtual;
+        const chave = 'key_' + campoAtual.idTipoReadequacao;
+        Vue.set(state.campoAtual, chave, campoAtual);
     },
     [types.UPDATE_READEQUACAO](state, readequacao) {
         state.readequacao = readequacao;
