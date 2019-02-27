@@ -26,12 +26,12 @@
         <v-expansion-panel-content>
           <div slot="header">Edição</div>
           <v-card
-	    v-if="campoAtual"
+	    v-if="getTemplateParaTipo()"
 	    >
             <component
               :is="getTemplateParaTipo()"
               :dadosReadequacao="dadosReadequacao"
-              :campoEdicao="dadosReadequacao.dsSolicitacao"
+              :campo="getDadosCampo()"
               />
           </v-card>
         </v-expansion-panel-content>
@@ -130,11 +130,21 @@ export default {
         }),
         prepararAdicionarDocumento() {},
         getTemplateParaTipo() {
+            let templateName = false;
             let chave = 'key_' + this.dadosReadequacao.idTipoReadequacao;
-            let tpCampo = this.campoAtual[chave].tpCampo;
-            let templateName = this.tiposReadequacoes[tpCampo];
+            if (this.campoAtual.hasOwnProperty(chave)) {
+                let tpCampo = this.campoAtual[chave].tpCampo;
+                templateName = this.tiposReadequacoes[tpCampo];
+            }
             return templateName;
         },
+        getDadosCampo() {
+            let chave = 'key_' + this.dadosReadequacao.idTipoReadequacao;
+
+            let valor = this.dadosReadequacao.dsSolicitacao;
+            let titulo = this.campoAtual[chave].descricao;
+            return { valor, titulo };
+        }
     }
 };
 </script>

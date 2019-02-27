@@ -2,20 +2,19 @@
 <v-container fluid>
   <v-layout row wrap>
     <v-flex xs10 md5>
-      <v-card>
+      <v-card height="336px">
 	<v-card-title class="grey lighten-2">Versão original</v-card-title>
 	<v-divider/>
 	<v-card-text>
-	  {{ campoEdicao }}
+	  {{ campo.valor }}
 	</v-card-text>
       </v-card>
     </v-flex>
     <v-flex xs10 md5 offset-md1>
-      <v-card>
+      <v-card height="336px">
 	<v-card-title class="grey lighten-2">Versão readequada</v-card-title>
 	<EditorTexto
           :style="''"
-          :value="campoEdicao"
 	  @editor-texto-input="salvar"
           ></EditorTexto>
       </v-card>
@@ -37,7 +36,7 @@ export default {
 	};
     },
     props: {
-	campoEdicao: { String: "" },
+        campo: { Object: () => {} },
 	dadosReadequacao: { Object: () => {} },
     },
     computed: {
