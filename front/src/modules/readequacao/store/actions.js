@@ -95,3 +95,11 @@ export const obterDisponivelEdicaoItemSaldoAplicacao = ({ commit }, params) => {
             commit(types.OBTER_DISPONIVEL_EDICAO_ITEM_SALDO_APLICACAO, data);
         });
 };
+
+export const obterCampoAtual = ({ commit }, params) => {
+    readequacaoHelperAPI.obterCampoAtual(params)
+	.then((response) => {
+	    const data = response.data;
+	    commit(types.GET_CAMPO_ATUAL, data);
+	});
+};

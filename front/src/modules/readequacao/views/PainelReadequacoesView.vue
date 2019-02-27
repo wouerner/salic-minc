@@ -12,8 +12,11 @@
 	  {{ dadosProjeto.Pronac }} - {{ dadosProjeto.NomeProjeto }}
 	</h3>
       </v-subheader>
-      
-      <v-tabs
+
+      <div v-if="loading">
+	<Carregando :text="'Carregando readequações...'"/>
+      </div>
+      <v-tabs v-else-if="getReadequacoesProponente"
             color="#0a420e"
             centered
             dark
@@ -86,10 +89,12 @@ import { mapActions, mapGetters } from 'vuex';
 import TabelaReadequacoes from '../components/TabelaReadequacoes';
 import ExcluirButton from '../components/ExcluirButton';
 import EditarReadequacaoButton from '../components/EditarReadequacaoButton';
+import Carregando from '@/components/CarregandoVuetify';
 
-    export default {
+export default {
     name: 'PainelReadequacoesView',
     components: {
+	Carregando,
         TabelaReadequacoes,
         ExcluirButton,
         EditarReadequacaoButton,
@@ -111,6 +116,7 @@ import EditarReadequacaoButton from '../components/EditarReadequacaoButton';
 	acoesFinalizadas: {
 	    acoes: [],
 	},
+	loading: true,
     }
     },
     computed: {
@@ -121,6 +127,13 @@ import EditarReadequacaoButton from '../components/EditarReadequacaoButton';
             getReadequacoesFinalizadas: 'readequacao/getReadequacoesFinalizadas',
             dadosProjeto: 'projeto/projeto',
         }),
+    },
+    watch: {
+	getReadequacoesProponente(value) {
+            if (Object.keys(value).length > 0) {
+                this.loading = false;
+	    }
+	},
     },
     created() {
         if (typeof this.$route.params.idPronac !== 'undefined') {

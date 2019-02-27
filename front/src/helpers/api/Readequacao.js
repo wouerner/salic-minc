@@ -57,7 +57,7 @@ export const obterDisponivelEdicaoItemSaldoAplicacao = (idPronac) => {
 
 export const adicionarDocumento = (params) => {
     const path = `/readequacao/dados-readequacao`;
-    return api.postRequest(path, parseQueryParams(params));
+    return api.postRequest(path + parseQueryParams(params));
 };
 
 export const excluirDocumento = (idDocumento) => {
@@ -67,5 +67,10 @@ export const excluirDocumento = (idDocumento) => {
 
 export const obterTiposReadequacao = (params) => {
     const path = `/readequacao/tipos-disponiveis`;
-    return api.getRequest(path, paramsQueryParams(params));
+    return api.getRequest(path + paramsQueryParams(params));
+};
+
+export const obterCampoAtual = (params) => {
+    const path = `/readequacao/campo-atual`;
+    return api.getRequest(path + parseQueryParams(params));
 };

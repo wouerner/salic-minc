@@ -7,6 +7,7 @@ export const state = {
     readequacao: {},
     saldoAplicacao: {},
     saldoAplicacaoDisponivelEdicaoItem: {},
+    campoAtual: {},
 };
 
 export const mutations = {
@@ -24,6 +25,9 @@ export const mutations = {
     },
     [types.GET_READEQUACAO](state, readequacao) {
         state.readequacao = readequacao;
+    },
+    [types.GET_CAMPO_ATUAL](state, campoAtual) {
+	state.campoAtual = campoAtual;
     },
     [types.UPDATE_READEQUACAO](state, readequacao) {
         state.readequacao = readequacao;

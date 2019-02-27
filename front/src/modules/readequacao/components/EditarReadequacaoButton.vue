@@ -1,5 +1,5 @@
 <template>
-    <v-layout>
+  <v-layout>
         <v-btn
             dark
             icon
@@ -19,8 +19,12 @@
             fullscreen 
             hide-overlay 
             transition="dialog-bottom-transition"
-        >
-            <v-card>
+          >
+	  <div v-if="loading">
+	    <Carregando :text="'Montando edição de readequação...'"/>
+	  </div>
+	  
+          <v-card v-else-if="campoAtual">
                 <v-toolbar
                     dark
                     color="primary">
@@ -43,7 +47,7 @@
 		  <v-expansion-panel-content
 		    >
 		    <div slot="header">Edição</div>
-		    <v-card>
+		    <v-card>{{ templateEdicao }}
 		      <template
                           v-for="(componente, index) in templateEdicao"
                           d-inline-block>
@@ -100,19 +104,24 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-    </v-layout>
+  </v-layout>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import FormReadequacao from './FormReadequacao';
 import TemplateTextarea from './TemplateTextarea';
+import TemplateInput from './TemplateInput';
 import TemplatePlanilha from './TemplatePlanilha';
+import Carregando from '@/components/CarregandoVuetify';
 
 export default {
     name: 'EditarReadequacaoButton',
     components: {
+	Carregando,
 	FormReadequacao,
 	TemplateTextarea,
+	TemplateInput,
 	TemplatePlanilha,
     },
     props: {
@@ -128,16 +137,36 @@ export default {
 		"date": "TemplateDate",
 		"planilha": "TemplatePlanilha",
             },
-	    templateEdicao: [ TemplateTextarea ],
-	    panel: [false, true]
+	    templateEdicao: [],
+	    panel: [true, true],
+	    loading: true,
         };
     },
     created() {
-	// tipo específico dessa readequacao (idTip
+	const idPronac = this.dadosReadequacao.idPronac;
+	const idTipoReadequacao = this.dadosReadequacao.idTipoReadequacao;
+	
+	this.obterCampoAtual({ idPronac, idTipoReadequacao });
+    },
+    watch: {
+	campoAtual(value) {
+            if (Object.keys(value).length > 0) {
+                this.loading = false;
+		this.templateEdicao = [this.tiposReadequacoes[value.tpCampo]];
+		// 
+		console.log(this.dadosReadequacao.idTipoReadequacao);
+	    }
+	},
     },
     computed: {
+	...mapGetters({
+	    campoAtual: 'readequacao/getCampoAtual',
+	}),
     },
     methods: {
+        ...mapActions({
+            obterCampoAtual: 'readequacao/obterCampoAtual',
+	}),
 	prepararAdicionarDocumento() {
 	},
     },
