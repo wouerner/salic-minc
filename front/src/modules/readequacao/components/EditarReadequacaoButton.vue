@@ -73,6 +73,7 @@ import { mapActions, mapGetters } from "vuex";
 import FormReadequacao from "./FormReadequacao";
 import TemplateTextarea from "./TemplateTextarea";
 import TemplateInput from "./TemplateInput";
+import TemplateDate from "./TemplateDate";
 import TemplatePlanilha from "./TemplatePlanilha";
 import Carregando from "@/components/CarregandoVuetify";
 
@@ -83,6 +84,7 @@ export default {
         FormReadequacao,
         TemplateTextarea,
         TemplateInput,
+        TemplateDate,
         TemplatePlanilha
     },
     props: {

@@ -124,6 +124,25 @@ HOST: http://localhost:4000
                         "stEstado": 1,
                         "dtEnvio": "2019-01-23",
                        "stStatusAtual": "proponente"
+                   },
+                   {
+                        "idPronac": 217336,
+                        "idReadequacao": 217336,
+                        "idTipoReadequacao": 13,
+                        "dsTipoReadequacao": "Período de Execução",
+                        "dtSolicitacao": "2019-01-22",
+                        "idSolicitante": 267,
+                        "dsSolicitacao": "2019-02-28 00:00:00",
+                        "dsJustificativa": "Adicionamos 'áudio' porque é preciso",
+                        "idDocumento": 19440,
+                        "idAvaliador": 335,
+                        "dsAvaliacao": "Ok, de acordo. Aprovado",
+                        "stAtendimento": "N",
+                        "siEncaminhamento": 15,
+                        "idNrReuniao": 45654,
+                        "stEstado": 1,
+                        "dtEnvio": "2019-01-23",
+                       "stStatusAtual": "proponente"
                    }
                 ]
             }
@@ -315,6 +334,11 @@ HOST: http://localhost:4000
                     "tpCampo": "planilha",
                     "descricao": "Planilha orçamentária"
                 },
+                {
+                    "idTipoReadequacao": 13,
+                    "tpCampo": "date",
+                    "descricao": "Período de Execução"
+                }
             ]
 
 
@@ -393,6 +417,25 @@ HOST: http://localhost:4000
                 "descricao": "Impacto ambiental",
                 "tpCampo": "textarea",
                 "dsCampo": "A independência de adubação e correção anual do solo dá-se principalmente pelo manejo de podas e com a cobertura de solo, que além de produzir uma terra de qualidade química, física e biologicamente falando, retém água, matéria orgânica, acaba com problemas de erosão e promove a infiltração de água (poupança de água) e a recarga dos lençóis freáticos. <br/> A biodiversidade promove o equilíbrio biológico e elimina a necessidade de aplicação de defensivos químicos (agrotóxicos). <br/>As condições climáticas do local de plantio (microclima) favorecem a saúde das plantas, não as expondo a estresses por excesso de insolação, ventos e variações bruscas de temperatura. E ainda a evapotranspiração das plantas promove a chuva.<br/><br/>Aqui está nossa vocação como um país florestal. Nação da abundância de água e biodiversidade. A oportunidade de geração de renda e valor para todo o mundo."
+            }
+
+## Readequacao - Buscar campos por tipo readequação [/readequacao/campo-atual?idPronac=217336&idTipoReadequacao=13]
+
+### Buscar campos por tipo readequação - período de execução [GET]
+
++ Parameters
+    + idPronac: 217336 (number, required)
+    + idTipoReadequacao: 10 (number, required)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "idTipoReadequacao": "13",
+                "descricao": "Período de Execução",
+                "tpCampo": "date",
+                "dsCampo": "2019-02-28 00:00:00"
             }
 
 ## Readequação - Documento [/readequacao/{idReadequacao}/documento]
