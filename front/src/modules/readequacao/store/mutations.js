@@ -27,7 +27,10 @@ export const mutations = {
         state.readequacao = readequacao;
     },
     [types.GET_CAMPO_ATUAL](state, campoAtual) {
-	state.campoAtual = campoAtual;
+	    state.campoAtual = campoAtual;
+    },
+    [types.SET_CAMPO_ATUAL](state, campoAtual) {
+	    state.campoAtual[campoAtual.idTipoReadequacao] = campoAtual;
     },
     [types.UPDATE_READEQUACAO](state, readequacao) {
         state.readequacao = readequacao;

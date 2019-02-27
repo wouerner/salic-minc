@@ -296,16 +296,24 @@ HOST: http://localhost:4000
 
             [
                 {
-                    "idTipoReadequacao": 3,
-                    "descricao": "Alteração de Razão Social"
+                    "idTipoReadequacao": 10,
+                    "tpCampo": "input",
+                    "descricao": "Alteração de Proponente"
                 },
                 {
-                    "idTipoReadequacao": 4,
-                    "descricao": "Agência Bancária"
+                    "idTipoReadequacao": 6,
+                    "tpCampo": "textarea",
+                    "descricao": "Impacto Ambiental"
                 },
                 {
-                    "idTipoReadequacao": 5,
-                    "descricao": "Sinópse da Obra"
+                    "idTipoReadequacao": 12,
+                    "tpCampo": "input",
+                    "descricao": "Nome do Projeto"
+                },
+                {
+                    "idTipoReadequacao": 2,
+                    "tpCampo": "planilha",
+                    "descricao": "Planilha orçamentária"
                 },
             ]
 
@@ -323,6 +331,7 @@ HOST: http://localhost:4000
     + Body
 
             {
+                "idTipoReadequacao": "12",
                 "descricao": "Nome do Projeto",
                 "tpCampo": "input",
                 "dsCampo": "19o. Gramado Cine Video"
@@ -341,6 +350,7 @@ HOST: http://localhost:4000
     + Body
 
             {
+                "idTipoReadequacao": "2",
                 "descricao": "Planilha Orçamentária",
                 "tpCampo": "planilha",
                 "dsCampo": ""
@@ -359,6 +369,7 @@ HOST: http://localhost:4000
     + Body
 
             {
+                "idTipoReadequacao": "10",
                 "descricao": "Alteração de Proponente",
                 "tpCampo": "input",
                 "dsCampo": "22344355678"
@@ -378,6 +389,7 @@ HOST: http://localhost:4000
     + Body
 
             {
+                "idTipoReadequacao": "6",
                 "descricao": "Impacto ambiental",
                 "tpCampo": "textarea",
                 "dsCampo": "A independência de adubação e correção anual do solo dá-se principalmente pelo manejo de podas e com a cobertura de solo, que além de produzir uma terra de qualidade química, física e biologicamente falando, retém água, matéria orgânica, acaba com problemas de erosão e promove a infiltração de água (poupança de água) e a recarga dos lençóis freáticos. <br/> A biodiversidade promove o equilíbrio biológico e elimina a necessidade de aplicação de defensivos químicos (agrotóxicos). <br/>As condições climáticas do local de plantio (microclima) favorecem a saúde das plantas, não as expondo a estresses por excesso de insolação, ventos e variações bruscas de temperatura. E ainda a evapotranspiração das plantas promove a chuva.<br/><br/>Aqui está nossa vocação como um país florestal. Nação da abundância de água e biodiversidade. A oportunidade de geração de renda e valor para todo o mundo."
