@@ -83,13 +83,43 @@ $router->group(
             'diligencia',
             ['uses' => 'DiligenciaController@index']
         );
+        $router->get(
+            'emissao-parecer/{idpronac}',
+            ['uses' => 'EmissaoParecerRestController@get']
+        );
+        $router->get(
+            'emissao-parecer',
+            ['uses' => 'EmissaoParecerRestController@index']
+        );
+        $router->get(
+            'estado/{idpronac}',
+            ['uses' => 'EstadoController@get']
+        );
+        $router->get(
+            'estado',
+            ['uses' => 'EstadoController@index']
+        );
+        $router->get(
+            'fluxo-projeto/{idpronac}',
+            ['uses' => 'FluxoProjetoController@get']
+        );
+        $router->get(
+            'fluxo-projeto',
+            ['uses' => 'FluxoProjetoController@index']
+        );
+        $router->get(
+            'fluxos',
+            ['uses' => 'FluxosController@index']
+        );
 
 
 
 
 
 
-                //Post
+
+
+        //Post
 
         $router->post(
             'assinaturas',
@@ -107,6 +137,20 @@ $router->group(
             'diligencia',
             ['uses' => 'DiligenciaController@post']
         );
+        $router->post(
+            'emissao-parecer',
+            ['uses' => 'EmissaoParecerRestController@post']
+        );
+        $router->post(
+            'estado',
+            ['uses' => 'EstadoController@post']
+        );
+        $router->post(
+            'fluxo-projeto',
+            ['uses' => 'FluxoProjetoController@post']
+        );
+
+
 
 
 

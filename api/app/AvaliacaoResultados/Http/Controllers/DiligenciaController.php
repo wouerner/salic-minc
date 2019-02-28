@@ -22,7 +22,6 @@ class DiligenciaController extends Controller
     }
     public function index(Request $request) {
 
-
         return response()->json([' teste Diligencia INDEX '], 200);
     }
 

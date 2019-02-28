@@ -4,7 +4,7 @@ namespace App\AvaliacaoResultados\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class EmissaoParecerRestController extends Controller
+class FluxoProjetoController extends Controller
 {
     public function __construct()
     {
@@ -12,17 +12,17 @@ class EmissaoParecerRestController extends Controller
 
     public function get(Request $request) {
 
-        return response()->json(['teste Emissao Parecer GET'], 200);
+        return response()->json(['teste Fluxo Projeto GET'], 200);
     }
 
     public function post(Request $request){
 
-        return response ()->json(['teste Emissao Parecer Post'] ,200);
+        return response ()->json(['teste Fluxo Projeto Post'] ,200);
 
     }
     public function index(Request $request) {
 
-        return response()->json([' teste Emissao Parecer INDEX '], 200);
+        return response()->json([' teste Fluxo Projeto INDEX '], 200);
     }
 
 
