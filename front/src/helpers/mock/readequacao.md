@@ -132,8 +132,8 @@ HOST: http://localhost:4000
                         "dsTipoReadequacao": "Período de Execução",
                         "dtSolicitacao": "2019-01-22",
                         "idSolicitante": 267,
-                        "dsSolicitacao": "2019-02-28 00:00:00",
-                        "dsJustificativa": "Adicionamos 'áudio' porque é preciso",
+                        "dsSolicitacao": "2019-06-01 00:00:00",
+                        "dsJustificativa": "Ampliando período de execução para dar tempo.",
                         "idDocumento": 19440,
                         "idAvaliador": 335,
                         "dsAvaliacao": "Ok, de acordo. Aprovado",
@@ -435,7 +435,7 @@ HOST: http://localhost:4000
                 "idTipoReadequacao": "13",
                 "descricao": "Período de Execução",
                 "tpCampo": "date",
-                "dsCampo": "2019-02-28 00:00:00"
+                "dsCampo": "2019-06-01 00:00:00"
             }
 
 ## Readequação - Documento [/readequacao/{idReadequacao}/documento]
