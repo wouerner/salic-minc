@@ -11,12 +11,6 @@
                 color="success"
                 label="Todos / Analisar"
                 value="Diligenciado"/>
-                <!--<v-select-->
-                <!--v-if="$route.path == '/painel/aba-em-analise'"-->
-                <!--:items="diligencias"-->
-                <!--label="filtrar por estado da diligencia"-->
-                <!--@change="filtroDiligencia"-->
-                <!--/>-->
         </v-flex>
         <v-flex xs8>
             <v-card-title>
