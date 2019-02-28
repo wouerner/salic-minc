@@ -307,39 +307,31 @@ HOST: http://localhost:4000
 
 + Request
     + Attributes
-        + idPronac: 141001 
+        + idPronac: 141001
 
 + Response 200 (application/json; charset=utf-8)
 
     + Body
 
-            [
-                {
-                    "idTipoReadequacao": 10,
-                    "tpCampo": "input",
-                    "descricao": "Alteração de Proponente"
-                },
-                {
-                    "idTipoReadequacao": 6,
-                    "tpCampo": "textarea",
-                    "descricao": "Impacto Ambiental"
-                },
-                {
-                    "idTipoReadequacao": 12,
-                    "tpCampo": "input",
-                    "descricao": "Nome do Projeto"
-                },
-                {
-                    "idTipoReadequacao": 2,
-                    "tpCampo": "planilha",
-                    "descricao": "Planilha orçamentária"
-                },
-                {
-                    "idTipoReadequacao": 13,
-                    "tpCampo": "date",
-                    "descricao": "Período de Execução"
-                }
-            ]
+            {
+                "items": [
+                    {
+                        "idTipoReadequacao": 3,
+                        "tpCampo": "input",
+                        "descricao": "Razão Social"
+                    },
+                    {
+                        "idTipoReadequacao": 7,
+                        "tpCampo": "textarea",
+                        "descricao": "Especificação Técnica"
+                    },
+                    {
+                        "idTipoReadequacao": 16,
+                        "tpCampo": "textarea",
+                        "descricao": "Objetivos"
+                    }
+                ]
+            }
 
 
 ## Readequacao - Buscar campos por tipo readequação [/readequacao/campo-atual?idPronac=217336&idTipoReadequacao=12]

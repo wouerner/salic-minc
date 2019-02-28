@@ -15,7 +15,7 @@
     <v-card v-else-if="campoAtual">
 		<v-toolbar dark color="primary">
 			<v-btn icon dark @click="dialog = false">
-			<v-icon>close</v-icon>
+                <v-icon>close</v-icon>
 			</v-btn>
 			<v-toolbar-title>Readequação - {{ dadosReadequacao.dsTipoReadequacao }}</v-toolbar-title>
 			<v-spacer/>

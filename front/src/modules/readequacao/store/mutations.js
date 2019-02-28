@@ -9,6 +9,7 @@ export const state = {
     saldoAplicacao: {},
     saldoAplicacaoDisponivelEdicaoItem: {},
     campoAtual: {},
+    tiposDisponiveis: [],
 };
 
 export const mutations = {
@@ -28,7 +29,7 @@ export const mutations = {
         state.readequacao = readequacao;
     },
     [types.GET_CAMPO_ATUAL](state, campoAtual) {
-	state.campoAtual = campoAtual;
+        state.campoAtual = campoAtual;
     },
     [types.SET_CAMPO_ATUAL](state, campoAtual) {
         const chave = 'key_' + campoAtual.idTipoReadequacao;
@@ -59,4 +60,11 @@ export const mutations = {
     [types.OBTER_DISPONIVEL_EDICAO_ITEM_SALDO_APLICACAO](state, disponivel) {
         state.readequacao.saldoAplicacaoDisponivelEdicaoItem = disponivel;
     },
+    [types.SET_TIPOS_DISPONIVEIS](state, tiposDisponiveis) {
+        state.tiposDisponiveis = tiposDisponiveis;
+    },
+    [types.GET_TIPOS_DISPONIVEIS](state, tiposDisponiveis) {
+        state.tiposDisponiveis = tiposDisponiveis;
+    },
+    
 };

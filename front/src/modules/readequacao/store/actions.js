@@ -103,3 +103,11 @@ export const obterCampoAtual = ({ commit }, params) => {
             commit(types.SET_CAMPO_ATUAL, data);
         });
 };
+
+export const obterTiposDisponiveis = ({ commit }, params) => {
+    readequacaoHelperAPI.obterTiposDisponiveis(params)
+        .then((response) => {
+            const data = response.data.items;
+            commit(types.SET_TIPOS_DISPONIVEIS, data);
+        });
+};

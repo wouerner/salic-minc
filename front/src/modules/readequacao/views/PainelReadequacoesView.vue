@@ -57,6 +57,10 @@
             </v-card>
           </v-tab-item>
         </v-tabs>
+        <CriarReadequacao
+        :idPronac="dadosProjeto.idPronac"
+        >
+        </CriarReadequacao>
       </v-flex>
     </v-layout>
   </v-container>
@@ -68,6 +72,7 @@ import TabelaReadequacoes from "../components/TabelaReadequacoes";
 import ExcluirButton from "../components/ExcluirButton";
 import EditarReadequacaoButton from "../components/EditarReadequacaoButton";
 import Carregando from "@/components/CarregandoVuetify";
+import CriarReadequacao from '../components/CriarReadequacao';
 
 export default {
   name: "PainelReadequacoesView",
@@ -75,7 +80,8 @@ export default {
     Carregando,
     TabelaReadequacoes,
     ExcluirButton,
-    EditarReadequacaoButton
+    EditarReadequacaoButton,
+    CriarReadequacao
   },
   data() {
     return {

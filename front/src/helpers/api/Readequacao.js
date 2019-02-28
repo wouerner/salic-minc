@@ -74,3 +74,8 @@ export const obterCampoAtual = (params) => {
     const path = `/readequacao/campo-atual`;
     return api.getRequest(path + parseQueryParams(params));
 };
+
+export const obterTiposDisponiveis = (params) => {
+    const path = `/readequacao/tipos-disponiveis`;
+    return api.getRequest(path + parseQueryParams(params));
+};
