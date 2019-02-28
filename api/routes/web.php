@@ -65,9 +65,31 @@ $router->group(
         $router->get(
             'dashboard',
             ['uses' => 'DashboardController@index']
-
+        );
+        $router->get(
+            'detalhamento-itens/{idpronac}',
+            ['uses' => 'DetalhamentoItensRestController@get']
+        );
+        $router->get(
+            'detalhamento-itens',
+            ['uses' => 'DetalhamentoItensRestController@index']
 
         );
+        $router->get(
+            'diligencia/{idpronac}',
+            ['uses' => 'DiligenciaController@get']
+        );
+        $router->get(
+            'diligencia',
+            ['uses' => 'DiligenciaController@index']
+        );
+
+
+
+
+
+
+                //Post
 
         $router->post(
             'assinaturas',
@@ -77,12 +99,22 @@ $router->group(
             'avaliacao-comprovante',
             ['uses'=> 'AvaliacaoComprovanteController@post']
         );
+        $router->post(
+            'detalhamento-itens',
+            ['uses' => 'DetalhamentoItensRestController@post']
+        );
+        $router->post(
+            'diligencia',
+            ['uses' => 'DiligenciaController@post']
+        );
+
+
+
+
+
+
+
+
     }
-
-
-
-
-
-
 );
 

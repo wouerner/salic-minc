@@ -4,7 +4,7 @@ namespace App\AvaliacaoResultados\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class DiligenciaController extends Controller
+class EmissaoParecerRestController extends Controller
 {
     public function __construct()
     {
@@ -12,18 +12,18 @@ class DiligenciaController extends Controller
 
     public function get(Request $request) {
 
-        return response()->json(['teste Diligencia GET'], 200);
+        return response()->json(['teste Emissao Parecer GET'], 200);
     }
 
     public function post(Request $request){
 
-        return response ()->json(['teste Diligencia Post'] ,200);
+        return response ()->json(['teste Emissao Parecer Post'] ,200);
 
     }
     public function index(Request $request) {
 
 
-        return response()->json([' teste Diligencia INDEX '], 200);
+        return response()->json([' teste Emissao Parecer INDEX '], 200);
     }
 
 
