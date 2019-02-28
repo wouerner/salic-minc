@@ -58,16 +58,31 @@ $router->group(
         );
 
         $router->get(
-            'AvaliacaoComprovante',
+            'avaliacao-comprovante',
             ['uses' => 'AvaliacaoComprovanteController@get']
         );
 
         $router->get(
-            'Dashboard',
-            ['uses' => 'DashboardController@get']
+            'dashboard',
+            ['uses' => 'DashboardController@index']
+
+
         );
 
+        $router->post(
+            'assinaturas',
+            ['uses'=> 'AssinaturasController@post']
+        );
+        $router->post(
+            'avaliacao-comprovante',
+            ['uses'=> 'AvaliacaoComprovanteController@post']
+        );
     }
+
+
+
+
+
 
 );
 

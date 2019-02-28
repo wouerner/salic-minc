@@ -15,4 +15,11 @@ class AssinaturasController extends Controller
 
         return response()->json(['teste'], 200);
     }
+
+    public function post(Request $request){
+
+        return response ()->json(['testePost'] ,200);
+
+
+    }
 }
