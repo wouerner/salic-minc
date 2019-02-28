@@ -13,57 +13,68 @@
     </div>
     
     <v-card v-else-if="campoAtual">
-      <v-toolbar dark color="primary">
-        <v-btn icon dark @click="dialog = false">
-          <v-icon>close</v-icon>
-        </v-btn>
-        <v-toolbar-title>Readequação - {{ dadosReadequacao.dsTipoReadequacao }}</v-toolbar-title>
-        <v-spacer/>
-        <v-toolbar-title>{{ dadosProjeto.Pronac }} - {{ dadosProjeto.NomeProjeto }}</v-toolbar-title>
-      </v-toolbar>
+		<v-toolbar dark color="primary">
+			<v-btn icon dark @click="dialog = false">
+			<v-icon>close</v-icon>
+			</v-btn>
+			<v-toolbar-title>Readequação - {{ dadosReadequacao.dsTipoReadequacao }}</v-toolbar-title>
+			<v-spacer/>
+			<v-toolbar-title>{{ dadosProjeto.Pronac }} - {{ dadosProjeto.NomeProjeto }}</v-toolbar-title>
+		</v-toolbar>
       
-      <v-expansion-panel v-model="panel" expand>
-        <v-expansion-panel-content>
-          <div slot="header">Edição</div>
-          <v-card
-	    v-if="getTemplateParaTipo()"
-	    >
-            <component
-              :is="getTemplateParaTipo()"
-              :dadosReadequacao="dadosReadequacao"
-              :campo="getDadosCampo()"
-              />
-          </v-card>
-        </v-expansion-panel-content>
-	
-        <v-expansion-panel-content>
-          <div slot="header">Justificativa da readequação</div>
-          <v-card>
-            <v-card-text>
-              <FormReadequacao :dadosReadequacao="dadosReadequacao"></FormReadequacao>
-            </v-card-text>
-          </v-card>
-	  
-          <v-btn
-            label="Anexar arquivo"
-            :value="dadosReadequacao.idDocumento"
-            @change="prepararAdicionarDocumento"
-            >Anexar documento</v-btn>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-      
-      <v-card-actions>
-        <v-spacer/>
-	
-        <v-btn color="green darken-1" @click="dialog = false" dark>Salvar
-          <v-icon right dark>done</v-icon>
-        </v-btn>
-	
-        <v-btn color="green darken-1" @click="dialog = false" dark>Finalizar
-          <v-icon right dark>done_all</v-icon>
-        </v-btn>
-      </v-card-actions>
+		<v-layout row wrap>   
+			<v-flex xs10 offset-xs1>
+				<v-expansion-panel v-model="panel" expand>
+					<v-expansion-panel-content 
+					readonly 
+					hide-actions
+					>
+					<div class="title" slot="header">Edição</div>
+					<v-card
+					v-if="getTemplateParaTipo()"
+					>
+						<component
+						:is="getTemplateParaTipo()"
+						:dadosReadequacao="dadosReadequacao"
+						:campo="getDadosCampo()"
+						/>
+					</v-card>
+					</v-expansion-panel-content>
+					
+					<v-expansion-panel-content
+					readonly 
+					hide-actions
+					>
+					<div class="title" slot="header">Justificativa da readequação</div>
+					<v-card>
+						<FormReadequacao :dadosReadequacao="dadosReadequacao"></FormReadequacao>
+					</v-card>
+				
+					<v-btn
+						label="Anexar arquivo"
+						:value="dadosReadequacao.idDocumento"
+						@change="prepararAdicionarDocumento"
+						>Anexar documento</v-btn>
+					</v-expansion-panel-content>
+				</v-expansion-panel>
+			</v-flex>
+		</v-layout>
     </v-card>
+      
+	<v-footer class="pa-4" fixed>
+		<v-layout row wrap>   
+			<v-flex xs3 offset-xs9>
+				<v-btn color="green darken-1" @click="dialog = false" dark>Salvar
+					<v-icon right dark>done</v-icon>
+				</v-btn>
+
+				<v-btn color="green darken-1" @click="dialog = false" dark>Finalizar
+					<v-icon right dark>done_all</v-icon>
+				</v-btn>
+			</v-flex>
+		</v-layout>
+	</v-footer>
+	
   </v-dialog>
 </v-layout>
 </template>

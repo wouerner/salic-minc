@@ -1,7 +1,7 @@
 <template>
+<v-container fluid>
 <v-layout row wrap>   
-    <v-flex xs10 offset-xs1>
-        <h6 class="subheading font-weight-medium">Justificativa da Readequação</h6>
+    <v-flex xs12>
         <v-card>
             <EditorTexto
                 :style="''"
@@ -11,6 +11,7 @@
         </v-card>
     </v-flex>
 </v-layout>    
+</v-container>
 </template>
 
 <script>

@@ -10,9 +10,9 @@
 	</v-card-text>
       </v-card>
     </v-flex>
-    <v-flex xs10 md5 offset-md1>
+    <v-flex xs10 md6 offset-md1>
       <v-card height="336px">
-	<v-card-title class="grey lighten-2">Versão readequada</v-card-title>
+	<v-card-title class="green lighten-2">Versão readequada</v-card-title>
 	<EditorTexto
           :style="''"
 	  @editor-texto-input="salvar"

@@ -10,7 +10,7 @@
 	</v-card-text>
       </v-card>
     </v-flex>
-    <v-flex xs10 md5 offset-md1>
+    <v-flex xs10 md5 offset-md2>
       <v-card height="130px">
 	<v-card-title class="green lighten-2">Versão readequada</v-card-title>
         <v-card-actions>
