@@ -30,6 +30,11 @@ export const dadosReadequacao = (params) => {
     return api.getRequest(path);
 };
 
+export const inserirReadequacao = (params) => {
+    const path = `/readequacao`;
+    return api.postRequest(path, buildData(params));
+};
+
 export const buscaReadequacaoPronacTipo = (params) => {
     const path = `/readequacao`;
     return api.getRequest(path + parseQueryParams(params));

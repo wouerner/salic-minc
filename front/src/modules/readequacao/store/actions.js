@@ -111,3 +111,12 @@ export const obterTiposDisponiveis = ({ commit }, params) => {
             commit(types.SET_TIPOS_DISPONIVEIS, data);
         });
 };
+
+export const inserirReadequacao = ({ commit }, params) => {
+    readequacaoHelperAPI.inserirReadequacao(params)
+        .then((response) => {
+            const data = response.data;
+            commit(types.SET_READEQUACAO, data);
+            commit(types.SET_READEQUACOES_PROPONENTE, data);
+        });
+};

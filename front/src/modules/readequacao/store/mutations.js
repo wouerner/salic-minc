@@ -66,5 +66,7 @@ export const mutations = {
     [types.GET_TIPOS_DISPONIVEIS](state, tiposDisponiveis) {
         state.tiposDisponiveis = tiposDisponiveis;
     },
-    
+    [types.SET_READEQUACOES_PROPONENTE](state, novaReadequacao) {
+        state.readequacoesProponente.items.push(novaReadequacao);
+    },
 };

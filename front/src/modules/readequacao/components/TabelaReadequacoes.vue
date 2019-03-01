@@ -54,7 +54,8 @@ export default {
     props: {
         dadosReadequacao: { type: Object, default: () => {} },
         componentes: { type: Object, default: () => {} },
-	dadosProjeto: { type: Object, default: () => {} },
+	    dadosProjeto: { type: Object, default: () => {} },
+        editarItem: { },
     },
     data() {
         return {
@@ -96,6 +97,12 @@ export default {
             ],
 
         };
+    },
+    watch: {
+        editarItem: (val) => {
+            // quando receber dados (inserção), ativar a janela de edição desse item
+            console.log(val);
+        },
     },
     computed: {
         ...mapGetters({

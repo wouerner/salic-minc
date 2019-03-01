@@ -183,6 +183,7 @@ HOST: http://localhost:4000
                     "idPronac": 217336,
                     "idReadequacao": 217336,
                     "idTipoReadequacao": 6,
+                    "dsTipoReadequacao": "Impacto ambiental",
                     "dtSolicitacao": "2019-01-22",
                     "idSolicitante": 267,
                     "dsSolicitacao": "blabalbalbalablabalb",

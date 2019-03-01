@@ -124,12 +124,12 @@ export default {
     },
     watch: {
         campoAtual: {
-	    handler(valor) {
-		if (Object.keys(valor).length > 0) {
+	        handler(valor) {
+		        if (Object.keys(valor).length > 0) {
                     this.loading = false;
-		}
-	    },
-	    deep: true,
+		        }
+	        },
+	        deep: true,
         },
     },
     computed: {
