@@ -7,17 +7,19 @@
             <v-expansion-panel popout>
                 <v-expansion-panel-content
                     v-for="(dadoAgrupado, titulo) in gruposAprovacao"
-                    :key="dadoAgrupado[0].idAprovacao"
+                    :key="dadoAgrupado[0].CodTipoAprovacao"
                     class="elevation-1"
                 >
                     <v-layout
                         slot="header"
                         class="primary--text">
                         <v-icon class="mr-3 primary--text">
-                            subject
+                            {{ dadoAgrupado[0].CodTipoAprovacao | filtrarIcone }}
                         </v-icon>
-                        <span v-html="titulo"/>
-                        <span> ({{ dadoAgrupado.length }})</span>
+                        <span
+                            class="mr-1"
+                            v-html="titulo"/>
+                        <span>({{ dadoAgrupado.length }})</span>
                     </v-layout>
 
                     <v-data-table
@@ -37,6 +39,15 @@
                             <td class="text-xs-right">
                                 {{ props.item.PortariaAprovacao }}
                             </td>
+
+
+                            <td class="text-xs-right">
+                                {{ props.item.DtPortariaAprovacao | formatarData }}
+                            </td>
+                            <td class="text-xs-right">
+                                {{ props.item.DtPublicacaoAprovacao | formatarData }}
+                            </td>
+
                             <td class="text-xs-center pl-5">
                                 <v-tooltip bottom>
                                     <v-btn
@@ -61,7 +72,9 @@
                     </v-data-table>
                 </v-expansion-panel-content>
             </v-expansion-panel>
-            <v-dialog v-model="dialog">
+            <v-dialog
+                v-model="dialog"
+                @keydown.esc="dialog = false">
                 <v-card>
                     <v-card-text class="pl-5">
                         <v-container
@@ -195,6 +208,31 @@ export default {
     components: {
         Carregando,
     },
+    filters: {
+        filtrarIcone(tipo) {
+            let icone = '';
+            switch (tipo) {
+            case '1':
+                icone = 'home';
+                break;
+            case '2':
+                icone = 'trending_up';
+                break;
+            case '3':
+                icone = 'date_range';
+                break;
+            case '4':
+                icone = 'trending_down';
+                break;
+            case '8':
+                icone = 'update';
+                break;
+            default:
+                icone = '';
+            }
+            return icone;
+        },
+    },
     mixins: [utils],
     data() {
         return {
@@ -217,6 +255,16 @@ export default {
                     text: 'PORTARIA',
                     align: 'right',
                     value: 'PortariaAprovacao',
+                },
+                {
+                    text: 'DT. PORTARIA',
+                    align: 'right',
+                    value: 'DtPortariaAprovacao',
+                },
+                {
+                    text: 'DT. PUBLICAÇÃO',
+                    align: 'right',
+                    value: 'DtPublicacaoAprovacao',
                 },
                 {
                     text: 'VISUALIZAR',
@@ -263,7 +311,7 @@ export default {
                 const { TipoAprovacao } = aprovacao;
 
                 if (gruposAprovacao[TipoAprovacao] == null
-                    || gruposAprovacao[TipoAprovacao].length < 1) {
+                        || gruposAprovacao[TipoAprovacao].length < 1) {
                     gruposAprovacao[TipoAprovacao] = [];
                 }
                 gruposAprovacao[TipoAprovacao].push(

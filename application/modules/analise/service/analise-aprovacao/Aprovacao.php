@@ -37,7 +37,9 @@ class Aprovacao implements \MinC\Servico\IServicoRestZend
         $tblAprovacao = new \Aprovacao();
 
         $rsAprovacao = $tblAprovacao->buscaCompleta(
-            ['a.AnoProjeto + a.Sequencial = ?'=> $pronac], ['a.TipoAprovacao ASC']);
+            ['a.AnoProjeto + a.Sequencial = ?'=> $pronac],
+            ['a.TipoAprovacao ASC', 'a.DtAprovacao DESC']
+        );
 
         $Aprovacao = $this->montaArrayAprovacao($rsAprovacao);
         $resultArray['Aprovacao'] = $Aprovacao;
