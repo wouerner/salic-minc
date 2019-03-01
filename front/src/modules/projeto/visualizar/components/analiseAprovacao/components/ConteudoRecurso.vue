@@ -137,7 +137,7 @@
                                                     </v-flex>
                                                     <v-flex>
                                                         <b>Inciso</b>
-                                                        <p>Inciso {{ dadosprodutos.IncisoArtigo3 }}</p>
+                                                        <p>{{ dadosprodutos.IncisoArtigo3 | filtrarIncisos }}</p>
                                                     </v-flex>
                                                     <v-flex>
                                                         <b>Alinea Artigo 3</b>
@@ -146,7 +146,7 @@
                                                     <v-flex>
                                                         <b>Artigo Enquadramento</b>
                                                         <p>
-                                                            {{ (dadosprodutos.Artigo18 === 1) ? 'Artigo18' : 'Artigo 26'
+                                                            {{ (dadosprodutos.Artigo18 === 1) ? 'Artigo 18' : 'Artigo 26'
                                                             }}
                                                         </p>
                                                     </v-flex>
@@ -295,7 +295,7 @@
                     </v-layout>
                     <!--resumo do parecer-->
                     <v-layout
-                        v-if="recurso.dadosRecurso.siRecurso.trim() === '9'"
+                        v-if="recurso.dadosRecurso.siRecurso === '9 '"
                         justify-space-around
                         row
                         wrap>
@@ -317,6 +317,32 @@ import { utils } from '@/mixins/utils';
 
 export default {
     name: 'ConteudoRecurso',
+    filters: {
+        filtrarIncisos(tipo) {
+            let inciso = '';
+            switch (tipo) {
+            case 1:
+                inciso = 'Inciso I';
+                break;
+            case 2:
+                inciso = 'Inciso II';
+                break;
+            case 3:
+                inciso = 'Inciso III';
+                break;
+            case 4:
+                inciso = 'Inciso IV';
+                break;
+            case 5:
+                inciso = 'Inciso V';
+                break;
+            default:
+                inciso = '';
+            }
+            return inciso;
+        },
+    },
+
     mixins: [utils],
     props: {
         recurso: {
