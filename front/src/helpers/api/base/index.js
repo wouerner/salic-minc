@@ -20,7 +20,9 @@ if (process.env.NODE_ENV !== 'production') {
         baseURL: API_ENDPOINT,
     });
 } else {
-    instance = axios.create({});
+    instance = axios.create({
+        baseURL: '',
+    });
 }
 
 export const getRequest = (path, queryParams = '') => instance.get(`${path}${queryParams}`);
@@ -31,4 +33,4 @@ export const putRequest = (path, bodyFormData, id) => instance.post(`${path}/${i
 
 export const deleteRequest = (path, id) => instance.delete(`${path}/${id}`);
 
-export const HTTP = () => axios.create({});
+export const HTTP = config => axios.create(config);
