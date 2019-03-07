@@ -76,6 +76,7 @@ export default {
             const idReadequacao = this.dadosReadequacao.idReadequacao;
             this.excluirReadequacao({ idReadequacao });
             this.dialog = false;
+            this.$emit('excluir-readequacao', { idReadequacao });
         }
     },
 };

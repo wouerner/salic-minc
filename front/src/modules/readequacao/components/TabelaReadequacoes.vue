@@ -30,6 +30,7 @@
                             :dadosReadequacao="props.item"
                             :dadosProjeto="dadosProjeto"
                             :bindClick="bindClick"
+                            v-on:excluir-readequacao="excluirReadequacao(props.item.idReadequacao)"
                           />
                     </template>
                 </v-layout>
@@ -123,6 +124,9 @@ export default {
     methods: {
         ...mapActions({
         }),
+        excluirReadequacao(idReadequacao) {
+            this.$emit('excluir-readequacao', { idReadequacao });
+        }
     },
 };
 </script>

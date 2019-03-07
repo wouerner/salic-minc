@@ -35,6 +35,7 @@
                                 :componentes="acoesProponente"
                                 :dadosProjeto="dadosProjeto"
                                 :editarItem="editarItem"
+                                v-on:excluir-readequacao="excluirReadequacao"
                             ></TabelaReadequacoes>
                         </v-card>
                     </v-tab-item>
@@ -148,7 +149,10 @@
              if (idPronac != '') {
                  this.obterListaDeReadequacoes({ idPronac, status });
              }
-         }
+         },
+         excluirReadequacao(idReadequacao) {
+             this.obterListaDeReadequacoes('proponente');
+         },
      }
  };
 </script>
