@@ -45,6 +45,11 @@ export const updateReadequacao = (params) => {
     return api.putRequest(path, buildData(params), params.idReadequacao);
 };
 
+export const excluirReadequacao = (params) => {
+    const path = `/readequacao/dados-readequacao`;
+    return api.deleteRequest(path, params.idReadequacao);
+};
+
 export const updateReadequacaoSaldoAplicacao = (params) => {
     const path = `/readequacao/saldo-aplicacao/salvar-readequacao`;
     return api.putRequest(path, buildData(params), params.idReadequacao);

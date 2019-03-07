@@ -119,7 +119,6 @@
          },
          getReadequacao(value) {
              this.editarItem = this.getReadequacao;
-
          },
      },
      created() {

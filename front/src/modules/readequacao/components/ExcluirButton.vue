@@ -41,7 +41,7 @@
                     <v-btn
                         color="green darken-1"
                         flat="flat"
-                        @click="dialog = false"
+                        @click="excluir()"
                     >
                         OK
                     </v-btn>
@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
     name: 'ExcluirButton',
     props: {
@@ -67,6 +69,14 @@ export default {
     computed: {
     },
     methods: {
+        ...mapActions({
+            excluirReadequacao: "readequacao/excluirReadequacao",
+        }),        
+        excluir() {
+            const idReadequacao = this.dadosReadequacao.idReadequacao;
+            this.excluirReadequacao({ idReadequacao });
+            this.dialog = false;
+        }
     },
 };
 </script>
