@@ -124,6 +124,27 @@ $router->group(
             'laudo',
             ['uses' => 'LaudoController@index']
         );
+        $router->get(
+            'planilha-aprovada/{idpronac}',
+            ['uses' => 'PlanilhaAprovadaController@get']
+        );
+        $router->get(
+            'projeto-assinatura/{idpronac}',
+            ['uses' => 'ProjetoAssinaturaController@get']
+        );
+        $router->get(
+            'projeto-assinatura',
+            ['uses' => 'ProjetoAssinaturaController@index']
+        );
+        $router->get(
+            'projeto-inicio/{idpronac}',
+            ['uses' => 'ProjetoInicioController@get']
+        );
+        $router->get(
+            'projeto-inicio',
+            ['uses' => 'ProjetoInicioController@index']
+        );
+
 
 
 
@@ -167,6 +188,10 @@ $router->group(
         $router->post(
             'laudo',
             ['uses' => 'LaudoController@post']
+        );
+        $router->post(
+            'projeto-assinatura',
+            ['uses' => 'ProjetoAssinaturaController@post']
         );
 
 
