@@ -30,6 +30,15 @@
                         </v-select>
                     </v-card-text>
                     <v-card-actions>
+
+                        <v-btn
+                            color="red darken-1"
+                            flat="flat"
+                            @click="dialog = false"
+                          >
+                          Cancelar
+                        </v-btn>
+                      
                         <v-spacer/>
                         <v-btn
                             :disabled="this.idTipoReadequacao == ''"
