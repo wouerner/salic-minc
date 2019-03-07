@@ -100,7 +100,8 @@ export default {
     },
     props: {
         dadosReadequacao: { type: Object, default: () => {} },
-        dadosProjeto: { type: Object, default: () => {} }
+        dadosProjeto: { type: Object, default: () => {} },
+        bindClick: { type: Number, default: 0 },
     },
     data() {
         return {
@@ -130,6 +131,14 @@ export default {
 		        }
 	        },
 	        deep: true,
+        },
+        dadosReadequacao: {
+            handler(valor) {
+                if (this.bindClick == valor.idReadequacao) {
+                    this.dialog = true;
+                }
+            },
+            deep: true,
         },
     },
     computed: {

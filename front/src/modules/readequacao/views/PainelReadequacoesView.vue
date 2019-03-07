@@ -136,7 +136,6 @@
      methods: {
          ...mapActions({
              obterListaDeReadequacoes: "readequacao/obterListaDeReadequacoes",
-             inserirReadequacao: "readequacao/inserirReadequacao",
              buscaProjeto: "projeto/buscaProjeto",
          }),
          obterReadequacoesPorStatus(status) {
@@ -148,7 +147,6 @@
          criarReadequacao(idTipoReadequacao) {
              const idPronac = this.dadosProjeto.idPronac;
              if (idPronac != '') {
-                 this.inserirReadequacao({ idPronac, idTipoReadequacao });
                  this.obterListaDeReadequacoes({ idPronac, status });
              }
          }

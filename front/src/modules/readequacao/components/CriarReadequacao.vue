@@ -67,9 +67,12 @@ export default {
     methods: {
         ...mapActions({
             obterTiposDisponiveis: "readequacao/obterTiposDisponiveis",
+            inserirReadequacao: "readequacao/inserirReadequacao",
         }),
         criarReadequacao() {
-            let idTipoReadequacao = this.idTipoReadequacao;
+            const idPronac = this.idPronac;
+            const idTipoReadequacao = this.idTipoReadequacao;
+            this.inserirReadequacao({ idPronac, idTipoReadequacao });
             this.dialog = false;
             this.$emit('criar-readequacao', { idTipoReadequacao });
         },

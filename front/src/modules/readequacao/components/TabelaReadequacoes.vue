@@ -29,6 +29,7 @@
                             :is="componente"
                             :dadosReadequacao="props.item"
                             :dadosProjeto="dadosProjeto"
+                            :bindClick="bindClick"
                           />
                     </template>
                 </v-layout>
@@ -95,13 +96,24 @@ export default {
                     value: '',
                 },
             ],
-
+            bindClick: 0,
         };
     },
     watch: {
-        editarItem: (val) => {
-            // quando receber dados (inserção), ativar a janela de edição desse item
-            console.log(val);
+        dadosReadequacao: {
+            handler(value) {
+                if (typeof this.editarItem !== 'undefined') {
+                    if (this.editarItem.hasOwnProperty('idReadequacao')) {
+                        const indexItemInserido = this.dadosReadequacao.items.indexOf(this.editarItem);
+                        const idReadequacaoInserido = this.dadosReadequacao.items[indexItemInserido].idReadequacao;
+                        
+                        if (indexItemInserido > -1) {
+                            this.bindClick = idReadequacaoInserido;
+                        }
+                    }
+                }
+            },
+            deep: true,
         },
     },
     computed: {
