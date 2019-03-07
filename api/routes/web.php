@@ -144,6 +144,18 @@ $router->group(
             'projeto-inicio',
             ['uses' => 'ProjetoInicioController@index']
         );
+        $router->get(
+            'projetos-avaliacao-tecnica',
+            ['uses' => 'ProjetosAvaliacaoTecnicaController@index']
+        );
+        $router->get(
+            'tecnicos/{idpronac}',
+            ['uses' => 'TecnicosController@get']
+        );
+        $router->get(
+            'tecnicos',
+            ['uses' => 'TecnicosController@index']
+        );
 
 
 
