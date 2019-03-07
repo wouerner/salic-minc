@@ -111,6 +111,21 @@ $router->group(
             'fluxos',
             ['uses' => 'FluxosController@index']
         );
+        $router->get(
+            'index',
+            ['uses' => 'IndexController@index']
+        );
+        $router->get(
+            'laudo/{idpronac}',
+            ['uses' => 'LaudoController@get']
+        );
+
+        $router->get(
+            'laudo',
+            ['uses' => 'LaudoController@index']
+        );
+
+
 
 
 
@@ -149,6 +164,11 @@ $router->group(
             'fluxo-projeto',
             ['uses' => 'FluxoProjetoController@post']
         );
+        $router->post(
+            'laudo',
+            ['uses' => 'LaudoController@post']
+        );
+
 
 
 
