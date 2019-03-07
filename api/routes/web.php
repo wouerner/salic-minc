@@ -156,18 +156,17 @@ $router->group(
             'tecnicos',
             ['uses' => 'TecnicosController@index']
         );
+        $router->get(
+            'tipo-avaliacao/{idpronac}',
+            ['uses' => 'TipoAvaliacaoRestController@get']
+        );
+        $router->get(
+            'tipo-avaliacao',
+            ['uses' => 'TipoAvaliacaoRestController@index']
+        );
 
 
-
-
-
-
-
-
-
-
-
-        //Post
+        
 
         $router->post(
             'assinaturas',
@@ -205,6 +204,11 @@ $router->group(
             'projeto-assinatura',
             ['uses' => 'ProjetoAssinaturaController@post']
         );
+        $router->post(
+            'tipo-avaliacao',
+            ['uses' => 'TipoAvaliacaoRestController@post']
+        );
+
 
 
 
