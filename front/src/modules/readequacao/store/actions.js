@@ -23,7 +23,7 @@ export const buscaReadequacao = ({ commit }, params) => {
     readequacaoHelperAPI.buscaReadequacao(params)
         .then((response) => {
             const data = response.data;
-            const readequacao = data.data.items;
+            const readequacao = data.items;
             commit(types.SET_READEQUACAO, readequacao);
         });
 };
@@ -33,10 +33,10 @@ export const buscaReadequacaoPronacTipo = ({ commit }, params) => {
         .then((response) => {
             const data = response.data;
             let readequacao = {};
-            if (data.data.items > 1) {
-                readequacao = data.data.items;
+            if (data.items.length > 1) {
+                readequacao = data.items;
             } else {
-                readequacao = data.data.items[0];
+                readequacao = data.items[0];
             }
             commit(types.SET_READEQUACAO, readequacao);
         });
@@ -67,8 +67,7 @@ export const excluirReadequacao = ({ commit }, params) => {
 export const updateReadequacao = ({ commit }, params) => {
     readequacaoHelperAPI.updateReadequacao(params)
         .then((response) => {
-              const data = response.data;
-              const readequacao = data.data.items;
+              const readequacao = response.data.items;
               commit(types.UPDATE_READEQUACAO, readequacao);
         });
 };
@@ -80,8 +79,7 @@ export const updateReadequacaoDsSolicitacao = ( { commit }, params) => {
 export const updateReadequacaoSaldoAplicacao = ({ commit }, params) => {
     readequacaoHelperAPI.updateReadequacaoSaldoAplicacao(params)
         .then((response) => {
-            const data = response.data;
-            const readequacao = data.data;
+            const readequacao = response.data;
             commit(types.UPDATE_READEQUACAO_SALDO_APLICACAO, readequacao);
         });
 };
@@ -95,5 +93,30 @@ export const obterDisponivelEdicaoItemSaldoAplicacao = ({ commit }, params) => {
         .then((response) => {
             const data = response.data.disponivelParaEdicao;
             commit(types.OBTER_DISPONIVEL_EDICAO_ITEM_SALDO_APLICACAO, data);
+        });
+};
+
+export const obterCampoAtual = ({ commit }, params) => {
+    readequacaoHelperAPI.obterCampoAtual(params)
+        .then((response) => {
+            const data = response.data;
+            commit(types.SET_CAMPO_ATUAL, data);
+        });
+};
+
+export const obterTiposDisponiveis = ({ commit }, params) => {
+    readequacaoHelperAPI.obterTiposDisponiveis(params)
+        .then((response) => {
+            const data = response.data.items;
+            commit(types.SET_TIPOS_DISPONIVEIS, data);
+        });
+};
+
+export const inserirReadequacao = ({ commit }, params) => {
+    readequacaoHelperAPI.inserirReadequacao(params)
+        .then((response) => {
+            const data = response.data;
+            commit(types.SET_READEQUACAO, data);
+            commit(types.SET_READEQUACOES_PROPONENTE, data);
         });
 };

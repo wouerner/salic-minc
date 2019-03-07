@@ -1,11 +1,15 @@
+import Vue from 'vue';
 import * as types from './types';
 
 export const state = {
     readequacoesProponente: {},
     readequacoesAnalise: {},
     readequacoesFinalizadas: {},
+    readequacao: {},
     saldoAplicacao: {},
     saldoAplicacaoDisponivelEdicaoItem: {},
+    campoAtual: {},
+    tiposDisponiveis: [],
 };
 
 export const mutations = {
@@ -20,6 +24,16 @@ export const mutations = {
     },
     [types.SET_READEQUACAO](state, readequacao) {
         state.readequacao = readequacao;
+    },
+    [types.GET_READEQUACAO](state, readequacao) {
+        state.readequacao = readequacao;
+    },
+    [types.GET_CAMPO_ATUAL](state, campoAtual) {
+        state.campoAtual = campoAtual;
+    },
+    [types.SET_CAMPO_ATUAL](state, campoAtual) {
+        const chave = 'key_' + campoAtual.idTipoReadequacao;
+        Vue.set(state.campoAtual, chave, campoAtual);
     },
     [types.UPDATE_READEQUACAO](state, readequacao) {
         state.readequacao = readequacao;
@@ -45,5 +59,14 @@ export const mutations = {
     },
     [types.OBTER_DISPONIVEL_EDICAO_ITEM_SALDO_APLICACAO](state, disponivel) {
         state.readequacao.saldoAplicacaoDisponivelEdicaoItem = disponivel;
+    },
+    [types.SET_TIPOS_DISPONIVEIS](state, tiposDisponiveis) {
+        state.tiposDisponiveis = tiposDisponiveis;
+    },
+    [types.GET_TIPOS_DISPONIVEIS](state, tiposDisponiveis) {
+        state.tiposDisponiveis = tiposDisponiveis;
+    },
+    [types.SET_READEQUACOES_PROPONENTE](state, novaReadequacao) {
+        state.readequacoesProponente.items.push(novaReadequacao);
     },
 };

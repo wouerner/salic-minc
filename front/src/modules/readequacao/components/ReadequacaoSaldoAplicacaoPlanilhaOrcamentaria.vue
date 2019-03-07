@@ -209,6 +209,7 @@
         methods: {
             obterUnidades() {
                 const self = this;
+		/*
                 $3.ajax({
                     type: 'GET',
                     url: '/readequacao/saldo-aplicacao/carregar-unidades',
@@ -220,13 +221,16 @@
                         self.unidades = response.unidades;
                     },
                 );
+*/
             },
             iniciarCollapsible() {
+		/*
                 $3('.planilha-orcamentaria .collapsible').each(
                     (key, element) => {
                         $3(element).collapsible();
                     },
                 );
+*/
             },
             converterStringParaClasseCss(text) {
                 return text.toString().toLowerCase().trim()
@@ -271,7 +275,7 @@
             editarItem(item) {
                 this.idPlanilhaAprovacaoEdicao = item.idPlanilhaAprovacao;
                 this.itemEdicao = item;
-                $3('#modalEditar').modal('open');
+                //$3('#modalEditar').modal('open');
             },
             podeEditarItem(item) {
                 if (this.perfil === this.perfilProponente &&

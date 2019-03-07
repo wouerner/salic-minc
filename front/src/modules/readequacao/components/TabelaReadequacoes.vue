@@ -2,10 +2,10 @@
     <div>
         <v-data-table
             :headers="head"
-            :items="dados.items"
+            :items="dadosReadequacao.items"
             :pagination.sync="pagination"
             hide-actions
-        >         
+        >
             <template
                 slot="items"
                 slot-scope="props">
@@ -14,22 +14,24 @@
                 <td class="text-xs-center">{{ props.item.dtSolicitacao }}</td>
                 <td class="text-xs-center">{{ props.item.idDocumento }}</td>
                 <td class="text-xs-center">{{ props.item.dsJustificativa }}</td>
-                <td class="text-xs-center">
+                <td class="text-xs-center" v-if="componentes.acoes">
                 <v-layout 
                     row 
                     justify-center
                     align-end
                 >
                     <template
-                        v-for="(component, index) in componentes.acoes"
+                        v-for="(componente, index) in componentes.acoes"
                         d-inline-block>
                         <component
                             :key="index"
                             :obj="props.item"
-                            :is="component"
-                            :idReadequacao="props.item.idReadequacao"
-                            :usuario="componentes.usuario"
-                        />
+                            :is="componente"
+                            :dadosReadequacao="props.item"
+                            :dadosProjeto="dadosProjeto"
+                            :bindClick="bindClick"
+                            v-on:excluir-readequacao="excluirReadequacao(props.item.idReadequacao)"
+                          />
                     </template>
                 </v-layout>
                 </td>
@@ -52,8 +54,10 @@ import { mapActions, mapGetters } from 'vuex';
 export default {
     name: 'TabelaReadequacoes',
     props: {
-        dados: { type: Object, default: () => {} },
+        dadosReadequacao: { type: Object, default: () => {} },
         componentes: { type: Object, default: () => {} },
+	    dadosProjeto: { type: Object, default: () => {} },
+        editarItem: { },
     },
     data() {
         return {
@@ -93,8 +97,25 @@ export default {
                     value: '',
                 },
             ],
-
+            bindClick: 0,
         };
+    },
+    watch: {
+        dadosReadequacao: {
+            handler(value) {
+                if (typeof this.editarItem !== 'undefined') {
+                    if (this.editarItem.hasOwnProperty('idReadequacao')) {
+                        const indexItemInserido = this.dadosReadequacao.items.indexOf(this.editarItem);
+                        const idReadequacaoInserido = this.dadosReadequacao.items[indexItemInserido].idReadequacao;
+                        
+                        if (indexItemInserido > -1) {
+                            this.bindClick = idReadequacaoInserido;
+                        }
+                    }
+                }
+            },
+            deep: true,
+        },
     },
     computed: {
         ...mapGetters({
@@ -103,6 +124,9 @@ export default {
     methods: {
         ...mapActions({
         }),
+        excluirReadequacao(idReadequacao) {
+            this.$emit('excluir-readequacao', { idReadequacao });
+        }
     },
 };
 </script>

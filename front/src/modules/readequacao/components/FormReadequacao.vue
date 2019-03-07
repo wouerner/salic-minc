@@ -1,29 +1,29 @@
 <template>
-<v-layout row wrap>
-    <v-flex xs10 offset-xs1>
-        <h6 class="subheading font-weight-medium">Plano de Distribuição</h6>
+<v-container fluid>
+<v-layout row wrap>   
+    <v-flex xs12>
         <v-card>
             <EditorTexto
                 :style="''"
-                :value="dadosTipoReadequacao.data"
+                :value="dadosReadequacao.dsJustificativa"
                 required="required"
-            />
+            ></EditorTexto>
         </v-card>
     </v-flex>
 </v-layout>    
+</v-container>
 </template>
 
 <script>
 import EditorTexto from '../../avaliacaoResultados/components/components/EditorTexto';
 
 export default {
-    name: 'ExcluirButton',
+    name: 'FormReadequacao',
     components: {
         EditorTexto,
     },
     props: {
-        idReadequacao: { type: String, default: '' },
-        usuario: { type: String, default: '' },
+	dadosReadequacao: { type: Object, default: () => {} },
     },
     data() {
         return {

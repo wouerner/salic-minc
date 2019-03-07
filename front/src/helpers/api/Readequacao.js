@@ -30,14 +30,24 @@ export const dadosReadequacao = (params) => {
     return api.getRequest(path);
 };
 
+export const inserirReadequacao = (params) => {
+    const path = `/readequacao`;
+    return api.postRequest(path, buildData(params));
+};
+
 export const buscaReadequacaoPronacTipo = (params) => {
-    const path = `/readequacao/dados-readequacao`;
+    const path = `/readequacao`;
     return api.getRequest(path + parseQueryParams(params));
 };
 
 export const updateReadequacao = (params) => {
     const path = `/readequacao/dados-readequacao/`;
     return api.putRequest(path, buildData(params), params.idReadequacao);
+};
+
+export const excluirReadequacao = (params) => {
+    const path = `/readequacao/dados-readequacao`;
+    return api.deleteRequest(path, params.idReadequacao);
 };
 
 export const updateReadequacaoSaldoAplicacao = (params) => {
@@ -51,16 +61,31 @@ export const excluirReadequacaoSaldoAplicacao = (params) => {
 };
 
 export const obterDisponivelEdicaoItemSaldoAplicacao = (idPronac) => {
-    const path = `/readequacao/saldo-aplicacao/disponivel-edicao-item/idPronac/${idPronac}`;
+    const path = `/readequacao/saldo-disponivel-edicao-item/${idPronac}`;
     return api.getRequest(path);
 };
 
 export const adicionarDocumento = (params) => {
     const path = `/readequacao/dados-readequacao`;
-    return api.postRequest(path, parseQueryParams(params));
+    return api.postRequest(path + parseQueryParams(params));
 };
 
 export const excluirDocumento = (idDocumento) => {
     const path = `/readequacao/${idReadequacao}/documento/${idDocumento}`;
     return api.deleteRequest(path);
+};
+
+export const obterTiposReadequacao = (params) => {
+    const path = `/readequacao/tipos-disponiveis`;
+    return api.getRequest(path + paramsQueryParams(params));
+};
+
+export const obterCampoAtual = (params) => {
+    const path = `/readequacao/campo-atual`;
+    return api.getRequest(path + parseQueryParams(params));
+};
+
+export const obterTiposDisponiveis = (params) => {
+    const path = `/readequacao/tipos-disponiveis`;
+    return api.getRequest(path + parseQueryParams(params));
 };

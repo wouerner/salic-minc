@@ -4,12 +4,9 @@ HOST: http://localhost:4000
 
 # Group Readequacao
 
-## Readequacao - Visualizar lista de readequações [/readequacao?idPronac={idPronac}]
+## Readequacao - Visualizar lista de readequações [/readequacao?idPronac=202779&idTipoReadequacao=22&stStatusAtual=proponente]
 
-+ Parameters
-    + idPronac: 14100 (number, required)
-
-### Visualizar lista de readequações [GET]
+### Filtro por três parâmetros [GET]
 
 + Response 200 (application/json; charset=utf-8)
 
@@ -19,9 +16,9 @@ HOST: http://localhost:4000
                 "items": [
                     {
                         "idPronac": 217336,
-                        "idReadequacao": 217336,
+                        "idReadequacao": 15123,
                         "idTipoReadequacao": 6,
-                        "dsTipoReadequacao": "Razão Social",
+                        "dsTipoReadequacao": "Impacto ambiental",
                         "dtSolicitacao": "2019-01-22",
                         "idSolicitante": 267,
                         "dsSolicitacao": "blabalbalbalablabalb",
@@ -35,26 +32,118 @@ HOST: http://localhost:4000
                         "stEstado": 1,
                         "dtEnvio": "2019-01-23",
                         "stStatusAtual": "proponente"
-                   },
-                    {
+                    }
+                ]
+            }
+
+## Readequacao - Visualizar lista de readequações [/readequacao?idPronac={idPronac}]
+
++ Parameters
+    + idPronac: 14100 (number, required)
+
+### Visualizar lista de readequações [GET]
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+        
+            {
+                "items": [
+                   {
                         "idPronac": 217336,
-                        "idReadequacao": 217336,
-                        "idTipoReadequacao": 6,
-                        "dsTipoReadequacao": "Razão Social",
+                        "idReadequacao": 15123,
+                        "idTipoReadequacao": 2,
+                        "dsTipoReadequacao": "Planilha orçamentária",
                         "dtSolicitacao": "2019-01-22",
                         "idSolicitante": 267,
-                        "dsSolicitacao": "blabalbalbalablabalb",
-                        "dsJustificativa": "É nescessário",
+                        "dsSolicitacao": "Solicito alteração na planilha.",
+                        "dsJustificativa": "É necessário",
                         "idDocumento": 19440,
                         "idAvaliador": 335,
-                        "dsAvaliacao": "queuqeuqueuq",
+                        "dsAvaliacao": "Avalio que está bom.",
+                        "stAtendimento": "N",
+                        "siEncaminhamento": 15,
+                        "idNrReuniao": 45654,
+                        "stEstado": 1,
+                        "dtEnvio": "2019-01-23",
+                        "stStatusAtual": "proponente"
+                    },
+                    {
+                        "idPronac": 217336,
+                        "idReadequacao": 15124,
+                        "idTipoReadequacao": 6,
+                        "dsTipoReadequacao": "Impacto ambiental",
+                        "dtSolicitacao": "2019-01-22",
+                        "idSolicitante": 267,
+                        "dsSolicitacao": "Descrição completa do impacto ambiental...",
+                        "dsJustificativa": "É necessário alterar a parte que diz sobre o consumo de água elevado.",
+                        "idDocumento": 19440,
+                        "idAvaliador": 335,
+                        "dsAvaliacao": "Avaliação positiva, de acordo.",
                         "stAtendimento": "N",
                         "siEncaminhamento": 15,
                         "idNrReuniao": 45654,
                         "stEstado": 1,
                         "dtEnvio": "2019-01-23",
                        "stStatusAtual": "proponente"
-                    }
+                    },
+                    {
+                        "idPronac": 217336,
+                        "idReadequacao": 15125,
+                        "idTipoReadequacao": 10,
+                        "dsTipoReadequacao": "Alteração de Proponente",
+                        "dtSolicitacao": "2019-01-22",
+                        "idSolicitante": 267,
+                        "dsSolicitacao": "Fulano de Tal",
+                        "dsJustificativa": "Ciclano não está mais no projeto, adicionando Fulano de Tal",
+                        "idDocumento": 19440,
+                        "idAvaliador": 335,
+                        "dsAvaliacao": "Avaliação positiva, de acordo.",
+                        "stAtendimento": "N",
+                        "siEncaminhamento": 15,
+                        "idNrReuniao": 45654,
+                        "stEstado": 1,
+                        "dtEnvio": "2019-01-23",
+                        "stStatusAtual": "proponente"
+                   },
+                   {
+                        "idPronac": 217336,
+                        "idReadequacao": 15126,
+                        "idTipoReadequacao": 12,
+                        "dsTipoReadequacao": "Nome do Projeto",
+                        "dtSolicitacao": "2019-01-22",
+                        "idSolicitante": 267,
+                        "dsSolicitacao": "19 Gramado Cine Áudio Video",
+                        "dsJustificativa": "Adicionamos 'áudio' porque é preciso",
+                        "idDocumento": 19440,
+                        "idAvaliador": 335,
+                        "dsAvaliacao": "Ok, de acordo. Aprovado",
+                        "stAtendimento": "N",
+                        "siEncaminhamento": 15,
+                        "idNrReuniao": 45654,
+                        "stEstado": 1,
+                        "dtEnvio": "2019-01-23",
+                       "stStatusAtual": "proponente"
+                   },
+                   {
+                        "idPronac": 217336,
+                        "idReadequacao": 15127,
+                        "idTipoReadequacao": 13,
+                        "dsTipoReadequacao": "Período de Execução",
+                        "dtSolicitacao": "2019-01-22",
+                        "idSolicitante": 267,
+                        "dsSolicitacao": "2019-06-01 00:00:00",
+                        "dsJustificativa": "Ampliando período de execução para dar tempo.",
+                        "idDocumento": 19440,
+                        "idAvaliador": 335,
+                        "dsAvaliacao": "Ok, de acordo. Aprovado",
+                        "stAtendimento": "N",
+                        "siEncaminhamento": 15,
+                        "idNrReuniao": 45654,
+                        "stEstado": 1,
+                        "dtEnvio": "2019-01-23",
+                       "stStatusAtual": "proponente"
+                   }
                 ]
             }
 
@@ -92,8 +181,9 @@ HOST: http://localhost:4000
 
             {
                     "idPronac": 217336,
-                    "idReadequacao": 217336,
+                    "idReadequacao": 15128,
                     "idTipoReadequacao": 6,
+                    "dsTipoReadequacao": "Impacto ambiental",
                     "dtSolicitacao": "2019-01-22",
                     "idSolicitante": 267,
                     "dsSolicitacao": "blabalbalbalablabalb",
@@ -123,7 +213,7 @@ HOST: http://localhost:4000
         
             {
                 "idPronac": 217336,
-                "idReadequacao": 217336,
+                "idReadequacao": 15129,
                 "idTipoReadequacao": 6,
                 "dtSolicitacao": "2019-01-22",
                 "idSolicitante": 267,
@@ -179,7 +269,7 @@ HOST: http://localhost:4000
         
             {
                 "idPronac": 217336,
-                "idReadequacao": 217336,
+                "idReadequacao": 15128,
                 "idTipoReadequacao": 6,
                 "dtSolicitacao": "2019-01-22",
                 "idSolicitante": 267,
@@ -218,75 +308,127 @@ HOST: http://localhost:4000
 
 + Request
     + Attributes
-        + idPronac: 141001 
-
-+ Response 200 (application/json; charset=utf-8)
-
-    + Body
-
-            [
-                {
-                    "idTipoReadequacao": 3,
-                    "tpCampo": "input",
-                    "descricao": "Alteração de Razão Social"
-                },
-                {
-                    "idTipoReadequacao": 4,
-                    "tpCampo": "input"
-                    "descricao": "Agência Bancária"
-                },
-                {
-                    "idTipoReadequacao": 5,
-                    "tpCampo": "textarea",
-                    "descricao": "Sinópse da Obra"
-                },
-                {
-                    "idTipoReadequacao": 6,
-                    "tpCampo": "textarea",
-                    "descricao": "Impacto Ambiental"
-                },
-                {
-                    "idTipoReadequacao": 13,
-                    "tpCampo": "data",
-                    "descricao": "Período de Execução"
-                },
-                {
-                    "idTipoReadequacao": 1,
-                    "tpCampo": "",
-                    "descricao": "Remanejamento até 50 %"
-                },
-                {
-                    "idTipoReadequacao": 2,
-                    "tpCampo": "",
-                    "descricao": "Planilha Orçamentária"
-                },
-                {
-                    "idTipoReadequacao": 22,
-                    "tpCampo": "",
-                    "descricao": "Saldo de Aplicação"
-                },
-                {
-                    "idTipoReadequacao": 23,
-                    "tpCampo": "",
-                    "descricao": "Transferência de recursos entre projetos"
-                }
-            ]
-
-## Readequacao - Buscar campos por tipo readequação [/readequacao/campo-atual-projeto?idPronac={idPronac}&idTipoReadequacao={idTipoReadequacao}]
-
-### Buscar campos por tipo readequação [GET]
-
-+ Parameters
-    + idPronac: 217336 (number, required)
-    + idTipoReadequacao: 5 (number, required)
+        + idPronac: 141001
 
 + Response 200 (application/json; charset=utf-8)
 
     + Body
 
             {
-                "tpoCampo": "date",
-                "dscCampo": "2018-12-25"
+                "items": [
+                    {
+                        "idTipoReadequacao": 3,
+                        "tpCampo": "input",
+                        "descricao": "Razão Social"
+                    },
+                    {
+                        "idTipoReadequacao": 7,
+                        "tpCampo": "textarea",
+                        "descricao": "Especificação Técnica"
+                    },
+                    {
+                        "idTipoReadequacao": 16,
+                        "tpCampo": "textarea",
+                        "descricao": "Objetivos"
+                    }
+                ]
+            }
+
+
+## Readequacao - Buscar campos por tipo readequação [/readequacao/campo-atual?idPronac=217336&idTipoReadequacao=12]
+
+### Buscar campos por tipo readequação - nome do projeto [GET]
+
++ Parameters
+    + idPronac: 217336 (number, required)
+    + idTipoReadequacao: 12 (number, required)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "idTipoReadequacao": "12",
+                "descricao": "Nome do Projeto",
+                "tpCampo": "input",
+                "dsCampo": "19o. Gramado Cine Video"
+            }
+    
+## Readequacao - Buscar campos por tipo readequação [/readequacao/campo-atual?idPronac=217336&idTipoReadequacao=2]
+
+### Buscar campos por tipo readequação - planilha orçamentária [GET]
+
++ Parameters
+    + idPronac: 217336 (number, required)
+    + idTipoReadequacao: 2 (number, required)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "idTipoReadequacao": "2",
+                "descricao": "Planilha Orçamentária",
+                "tpCampo": "planilha",
+                "dsCampo": ""
+            }
+
+## Readequacao - Buscar campos por tipo readequação [/readequacao/campo-atual?idPronac=217336&idTipoReadequacao=10]
+
+### Buscar campos por tipo readequação - alteração de proponente[GET]
+
++ Parameters
+    + idPronac: 217336 (number, required)
+    + idTipoReadequacao: 10 (number, required)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "idTipoReadequacao": "10",
+                "descricao": "Alteração de Proponente",
+                "tpCampo": "input",
+                "dsCampo": "22344355678"
+            }
+
+
+## Readequacao - Buscar campos por tipo readequação [/readequacao/campo-atual?idPronac=217336&idTipoReadequacao=6]
+
+### Buscar campos por tipo readequação - impacto ambiental [GET]
+
++ Parameters
+    + idPronac: 217336 (number, required)
+    + idTipoReadequacao: 6 (number, required)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "idTipoReadequacao": "6",
+                "descricao": "Impacto ambiental",
+                "tpCampo": "textarea",
+                "dsCampo": "A independência de adubação e correção anual do solo dá-se principalmente pelo manejo de podas e com a cobertura de solo, que além de produzir uma terra de qualidade química, física e biologicamente falando, retém água, matéria orgânica, acaba com problemas de erosão e promove a infiltração de água (poupança de água) e a recarga dos lençóis freáticos. <br/> A biodiversidade promove o equilíbrio biológico e elimina a necessidade de aplicação de defensivos químicos (agrotóxicos). <br/>As condições climáticas do local de plantio (microclima) favorecem a saúde das plantas, não as expondo a estresses por excesso de insolação, ventos e variações bruscas de temperatura. E ainda a evapotranspiração das plantas promove a chuva.<br/><br/>Aqui está nossa vocação como um país florestal. Nação da abundância de água e biodiversidade. A oportunidade de geração de renda e valor para todo o mundo."
+            }
+
+## Readequacao - Buscar campos por tipo readequação [/readequacao/campo-atual?idPronac=217336&idTipoReadequacao=13]
+
+### Buscar campos por tipo readequação - período de execução [GET]
+
++ Parameters
+    + idPronac: 217336 (number, required)
+    + idTipoReadequacao: 10 (number, required)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "idTipoReadequacao": "13",
+                "descricao": "Período de Execução",
+                "tpCampo": "date",
+                "dsCampo": "2019-06-01 00:00:00"
             }
 
 ## Readequação - Documento [/readequacao/{idReadequacao}/documento]
@@ -302,4 +444,19 @@ HOST: http://localhost:4000
       
             {
                 "mensagem": "Arquivo removido com sucesso!"
+            }
+
+## Readequação - Saldo: disponível para edição de item [/readequacao/saldo-disponivel-edicao-item/{idPronac}]
+
+### Verifica se está disponível para editar item [GET]
+
++ Parameters
+    + idPronac: 217336 (number, required)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+      
+            {
+                "disponivelEdicaoItem": "true"
             }

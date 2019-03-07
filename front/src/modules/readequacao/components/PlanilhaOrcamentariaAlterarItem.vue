@@ -187,6 +187,7 @@
         methods: {
             obterDadosItem() {
                 const self = this;
+		/*
                 $3.ajax({
                     type: 'POST',
                     url: '/readequacao/saldo-aplicacao/obter-item-solicitacao',
@@ -202,6 +203,7 @@
                         self.valoresDoItem = response.valoresDoItem;
                     },
                 );
+*/
             },
             alterarItem() {
                 if (this.dadosPlanilhaEditavel.Quantidade === '') {
@@ -230,6 +232,7 @@
                     return;
                 }
                 const self = this;
+		/*
                 $3.ajax({
                     type: 'POST',
                     url: '/readequacao/readequacoes/salvar-avaliacao-do-item',
@@ -250,7 +253,7 @@
                         self.$emit('atualizarSaldoEntrePlanilhas');
                         self.$emit('fecharAlterar');
                     },
-                );
+                );*/
             },
             cancelar() {
                 this.resetData();
