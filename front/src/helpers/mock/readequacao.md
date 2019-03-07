@@ -318,17 +318,14 @@ HOST: http://localhost:4000
                 "items": [
                     {
                         "idTipoReadequacao": 3,
-                        "tpCampo": "input",
                         "descricao": "Razão Social"
                     },
                     {
                         "idTipoReadequacao": 7,
-                        "tpCampo": "textarea",
                         "descricao": "Especificação Técnica"
                     },
                     {
                         "idTipoReadequacao": 16,
-                        "tpCampo": "textarea",
                         "descricao": "Objetivos"
                     }
                 ]

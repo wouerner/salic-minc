@@ -81,6 +81,23 @@ class Readequacao implements IServicoRestZend
     {
         return [];
     }
+
+    public function buscarTiposDisponiveis($idPronac)
+    {
+        $tbTipoReadequacao = new \Readequacao_Model_DbTable_TbTipoReadequacao();
+        $tiposDisponiveis = $tbTipoReadequacao->buscarTiposReadequacoesPermitidos($idPronac, 1)->toArray();
+
+        $resultArray = [];
+        foreach ($tiposDisponiveis as $item) {
+            $itemOk = [];
+            $itemOk['idTipoReadequacao'] = $item['idTipoReadequacao'];
+            $itemOk['descricao'] = $item['dsReadequacao'];
+            $resultArray[] = $itemOk;
+        }
+        $resultArray = \TratarArray::utf8EncodeArray($resultArray);
+        
+        return $resultArray;
+    }
     
     public function salvar()
     {
