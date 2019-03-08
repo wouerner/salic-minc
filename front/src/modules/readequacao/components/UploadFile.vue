@@ -1,18 +1,20 @@
 <template>
 <v-container fluid>
 <v-layout row wrap>   
-    <v-flex xs4 offset>
+    <v-flex xs3>
         <v-card
         elevation=10
         >
             <file-pond
                 name="upload"
                 ref="pond"
-                label-idle="<span class='subheading'></span>"
-                accepted-file-types="formatosAceitos"
+                label-idle="<span class='subheading'>CARREGAR ARQUIVO</span>"
+                accepted-file-types="application/pdf"
                 labelInvalidField="Tipo de arquivo inválido. Somente é permitido arquivo PDF"
                 :files="arquivo"
                 allowImagePreview="false"
+                @removefile="arquivoAnexado"
+                @addfile="arquivoAnexado"
             />
         </v-card>    
     </v-flex>
@@ -35,7 +37,7 @@ export default {
         FilePond
     },
     props: {
-        formatosAceitos: '',
+        formatosAceitos: "'application/pdf'",
         label: 'CARREGAR ARQUIVO'
     },
     data() {
@@ -46,6 +48,10 @@ export default {
     computed: {
     },
     methods: {
+        arquivoAnexado() {
+            let payload = this.$refs.pond.getFiles()[0];
+            this.$emit('arquivo-anexado', payload);
+        }
     },
 };
 </script>

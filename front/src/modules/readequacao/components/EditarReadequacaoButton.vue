@@ -50,15 +50,8 @@
 						<FormReadequacao :dadosReadequacao="dadosReadequacao"></FormReadequacao>
 					</v-card>
 				
-					<!-- <v-btn
-						label="Anexar arquivo"
-						:value="dadosReadequacao.idDocumento"
-						@change="prepararAdicionarDocumento"
-						>Anexar documento
-                    </v-btn> -->
-
                     <UploadFile
-                    :formatosAceitos="'application/pdf'"
+                    @arquivo-anexado="obterArquivoAnexado($event)"
                     ></UploadFile>
 
 					</v-expansion-panel-content>
@@ -174,6 +167,12 @@ export default {
             let valor = this.dadosReadequacao.dsSolicitacao;
             let titulo = this.campoAtual[chave].descricao;
             return { valor, titulo };
+        },
+        obterArquivoAnexado(arquivo) {
+            console.log('Arquivo alterado!');
+            //POST ou PUT da Readequação
+            // Observar caso arquivo seja undefined, para atualizar            
+            console.log(arquivo);
         }
     }
 };
