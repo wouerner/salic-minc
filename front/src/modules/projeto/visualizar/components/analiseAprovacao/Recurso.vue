@@ -13,17 +13,18 @@
                     class="elevation-1">
                     <v-layout
                         slot="header"
-                        class="green--text">
-                        <v-icon class="mr-3 green--text">perm_media</v-icon>
+                        class="primary--text">
+                        <v-icon class="mr-3 primary--text">assignment</v-icon>
                         <span v-html="recurso.dadosRecurso.tpRecursoDesc"/>
+                        <span v-html="recurso.dadosRecurso.siFaseProjeto"/>
                     </v-layout>
                     <desistencia-recursal
                         v-if="recurso.desistenciaRecurso === true"
                         :dados-recurso="recurso.dadosRecurso"/>
-                    <conteudo-recurso
+                    <component
                         v-else
-                        :recurso="recurso"
-                    />
+                        :is="`conteudo-recurso-fase-${recurso.dadosRecurso.siFaseProjeto}`"
+                        :recurso="recurso"/>
                 </v-expansion-panel-content>
             </v-expansion-panel>
         </div>
@@ -50,12 +51,14 @@ import { mapActions, mapGetters } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
 import { utils } from '@/mixins/utils';
 import DesistenciaRecursal from './components/DesistenciaRecursal';
-import ConteudoRecurso from './components/ConteudoRecurso';
+import ConteudoRecursoFase1 from './components/ConteudoRecursoFase1';
+import ConteudoRecursoFase2 from './components/ConteudoRecursoFase2';
 
 export default {
     name: 'Recurso',
     components: {
-        ConteudoRecurso,
+        ConteudoRecursoFase1,
+        ConteudoRecursoFase2,
         DesistenciaRecursal,
         Carregando,
     },

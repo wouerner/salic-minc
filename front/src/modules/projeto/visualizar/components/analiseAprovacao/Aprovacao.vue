@@ -195,6 +195,23 @@
                 </v-card>
             </v-dialog>
         </div>
+        <div v-else>
+            <v-container
+                grid-list-md
+                text-xs-center>
+                <v-layout
+                    row
+                    wrap>
+                    <v-flex>
+                        <v-card>
+                            <v-card-text class="px-0">
+                                Nenhuma Aprovação encontrada
+                            </v-card-text>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </div>
     </div>
 </template>
 <script>
@@ -287,7 +304,7 @@ export default {
         },
         dados() {
             this.loading = false;
-            this.gruposAprovacao = this.obterGrupoReadequacoes();
+            this.gruposAprovacao = this.obterGrupoAprovacoes();
         },
     },
     mounted() {
@@ -303,7 +320,7 @@ export default {
             this.itemEmVisualizacao = Object.assign({}, item);
             this.dialog = true;
         },
-        obterGrupoReadequacoes() {
+        obterGrupoAprovacoes() {
             const gruposAprovacao = {};
             const { Aprovacao } = this.dados;
 

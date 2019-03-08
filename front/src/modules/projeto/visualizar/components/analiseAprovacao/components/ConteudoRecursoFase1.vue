@@ -18,7 +18,7 @@
                         <v-divider class="pb-2"/>
                     </v-flex>
                     <v-flex>
-                        <b>Recurso</b><br>
+                        <b>Recurso fase 1</b><br>
                         <span v-html="recurso.dadosRecurso.dsSolicitacaoRecurso"/>
                     </v-flex>
                     <v-flex>
@@ -316,7 +316,7 @@
 import { utils } from '@/mixins/utils';
 
 export default {
-    name: 'ConteudoRecurso',
+    name: 'ConteudoRecursoFase1',
     filters: {
         filtrarIncisos(tipo) {
             let inciso = '';

@@ -33,7 +33,7 @@ class Recurso implements \MinC\Servico\IServicoRestZend
             $Projetos = new \Projetos();
 
             $tbRecurso = new \tbRecurso();
-            $recursos = $tbRecurso->buscarDadosRecursos(['IdPRONAC = ?'=> $idPronac, 'siFaseProjeto = ?' => 2])->toArray();
+            $recursos = $tbRecurso->buscarDadosRecursos(['IdPRONAC = ?'=> $idPronac])->toArray();
 
             $data=[];
             if (count($recursos) > 0) {
