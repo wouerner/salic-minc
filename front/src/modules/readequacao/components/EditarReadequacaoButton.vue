@@ -13,7 +13,7 @@
     </div>
     
     <v-card v-else-if="campoAtual">
-		<v-toolbar dark color="primary">
+		<v-toolbar dark color="primary" fixed>
 			<v-btn icon dark @click="dialog = false">
                 <v-icon>close</v-icon>
 			</v-btn>
@@ -50,11 +50,17 @@
 						<FormReadequacao :dadosReadequacao="dadosReadequacao"></FormReadequacao>
 					</v-card>
 				
-					<v-btn
+					<!-- <v-btn
 						label="Anexar arquivo"
 						:value="dadosReadequacao.idDocumento"
 						@change="prepararAdicionarDocumento"
-						>Anexar documento</v-btn>
+						>Anexar documento
+                    </v-btn> -->
+
+                    <UploadFile
+                    :formatosAceitos="'application/pdf'"
+                    ></UploadFile>
+
 					</v-expansion-panel-content>
 				</v-expansion-panel>
 			</v-flex>
@@ -81,12 +87,13 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import Carregando from "@/components/CarregandoVuetify";
 import FormReadequacao from "./FormReadequacao";
 import TemplateTextarea from "./TemplateTextarea";
 import TemplateInput from "./TemplateInput";
 import TemplateDate from "./TemplateDate";
 import TemplatePlanilha from "./TemplatePlanilha";
-import Carregando from "@/components/CarregandoVuetify";
+import UploadFile from "./UploadFile"
 
 export default {
     name: "EditarReadequacaoButton",
@@ -96,7 +103,8 @@ export default {
         TemplateTextarea,
         TemplateInput,
         TemplateDate,
-        TemplatePlanilha
+        TemplatePlanilha,
+        UploadFile
     },
     props: {
         dadosReadequacao: { type: Object, default: () => {} },
