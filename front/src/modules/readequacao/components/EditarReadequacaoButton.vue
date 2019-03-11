@@ -49,31 +49,32 @@
 					<v-card>
 						<FormReadequacao :dadosReadequacao="dadosReadequacao"></FormReadequacao>
 					</v-card>
-				
-                    <UploadFile
+
+                    <UploadFile class="mb-4"
                     @arquivo-anexado="obterArquivoAnexado($event)"
                     :formatosAceitos="formatosAceitos"
                     ></UploadFile>
 
 					</v-expansion-panel-content>
 				</v-expansion-panel>
+
+                <v-footer id="footer" class="pa-4 elevation-12" fixed>
+                    <v-layout row wrap>   
+                        <v-flex xs3 offset-xs9>
+                            <v-btn color="green darken-1" @click="dialog = false" dark>Salvar
+                                <v-icon right dark>done</v-icon>
+                            </v-btn>
+
+                            <v-btn color="green darken-1" @click="dialog = false" dark>Finalizar
+                                <v-icon right dark>done_all</v-icon>
+                            </v-btn>
+                        </v-flex>
+                    </v-layout>
+                </v-footer>
 			</v-flex>
 		</v-layout>
     </v-card>
       
-	<v-footer id="footer" class="pa-4" fixed>
-		<v-layout row wrap>   
-			<v-flex xs3 offset-xs9>
-				<v-btn color="green darken-1" @click="dialog = false" dark>Salvar
-					<v-icon right dark>done</v-icon>
-				</v-btn>
-
-				<v-btn color="green darken-1" @click="dialog = false" dark>Finalizar
-					<v-icon right dark>done_all</v-icon>
-				</v-btn>
-			</v-flex>
-		</v-layout>
-	</v-footer>
 	
   </v-dialog>
 </v-layout>

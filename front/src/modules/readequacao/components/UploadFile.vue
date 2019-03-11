@@ -3,7 +3,7 @@
 <v-layout row wrap>   
     <v-flex xs3>
         <v-card
-        elevation=10
+        elevation=4
         >
             <file-pond
                 name="upload"
@@ -11,6 +11,7 @@
                 label-idle="<span class='subheading'>CARREGAR ARQUIVO</span>"
                 labelFileTypeNotAllowed="Tipo de arquivo inválido."
                 fileValidateTypeLabelExpectedTypes="Somente {allTypes} serão aceitos."
+                labelButtonRemoveItem="Excluir"
                 :accepted-file-types="formatosAceitos"
                 :files="arquivo"
                 allowImagePreview="false"
