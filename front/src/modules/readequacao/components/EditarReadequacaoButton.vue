@@ -52,6 +52,7 @@
 				
                     <UploadFile
                     @arquivo-anexado="obterArquivoAnexado($event)"
+                    :formatosAceitos="formatosAceitos"
                     ></UploadFile>
 
 					</v-expansion-panel-content>
@@ -60,7 +61,7 @@
 		</v-layout>
     </v-card>
       
-	<v-footer class="pa-4" fixed>
+	<v-footer id="footer" class="pa-4" fixed>
 		<v-layout row wrap>   
 			<v-flex xs3 offset-xs9>
 				<v-btn color="green darken-1" @click="dialog = false" dark>Salvar
@@ -114,6 +115,7 @@ export default {
                 planilha: "TemplatePlanilha"
             },
             templateEdicao: [],
+            formatosAceitos: 'application/pdf',
             panel: [true, true],
             loading: true
         };
@@ -177,3 +179,9 @@ export default {
     }
 };
 </script>
+<style>
+
+    #footer {
+        z-index: 5;
+    }
+</style>

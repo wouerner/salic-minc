@@ -9,8 +9,9 @@
                 name="upload"
                 ref="pond"
                 label-idle="<span class='subheading'>CARREGAR ARQUIVO</span>"
-                accepted-file-types="application/pdf"
-                labelInvalidField="Tipo de arquivo inválido. Somente é permitido arquivo PDF"
+                labelFileTypeNotAllowed="Tipo de arquivo inválido."
+                fileValidateTypeLabelExpectedTypes="Somente {allTypes} serão aceitos."
+                :accepted-file-types="formatosAceitos"
                 :files="arquivo"
                 allowImagePreview="false"
                 @removefile="arquivoAnexado"
@@ -37,12 +38,11 @@ export default {
         FilePond
     },
     props: {
-        formatosAceitos: "'application/pdf'",
-        label: 'CARREGAR ARQUIVO'
+        formatosAceitos: { type: String, default: 'application/pdf' },
     },
     data() {
         return {
-            arquivo: []
+            arquivo: [],
         };
     },
     computed: {
