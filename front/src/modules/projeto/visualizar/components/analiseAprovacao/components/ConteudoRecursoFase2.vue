@@ -251,6 +251,20 @@
                             </v-expansion-panel-content>
                         </v-expansion-panel>
                     </v-layout>
+                    <v-layout
+                        justify-space-around
+                        row
+                        wrap>
+                        <v-flex
+                            lg12
+                            dark>
+                            <b><h4>PLANILHA</h4></b>
+                            <v-divider class="pb-2"/>
+                        </v-flex>
+                        <v-flex lg12>
+                            <planilha-proposta-autorizada/>
+                        </v-flex>
+                    </v-layout>
                     <!--Enquadramento -->
                     <v-layout
                         justify-space-around
@@ -314,9 +328,11 @@
 
 <script>
 import { utils } from '@/mixins/utils';
+import PlanilhaPropostaAutorizada from '../../incentivo/planilha/PlanilhaPropostaAutorizada';
 
 export default {
     name: 'ConteudoRecursoFase2',
+    components: { PlanilhaPropostaAutorizada },
     filters: {
         filtrarIncisos(tipo) {
             let inciso = '';

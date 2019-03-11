@@ -3,30 +3,48 @@
         <div v-if="loading">
             <Carregando :text="'Recursos'"/>
         </div>
-        <div v-else-if="dados.length > 0">
-            <v-expansion-panel
-                popout
-                focusable>
-                <v-expansion-panel-content
-                    v-for="(recurso, index) in dados"
-                    :key="index"
-                    class="elevation-1">
+        <div v-else-if="Object.keys(fasesRecurso).length > 0">
+            <template>
+                <div
+                    v-for="(recurso, index) in fasesRecurso"
+                    :key="index">
                     <v-layout
-                        slot="header"
-                        class="primary--text">
-                        <v-icon class="mr-3 primary--text">assignment</v-icon>
-                        <span v-html="recurso.dadosRecurso.tpRecursoDesc"/>
-                        <span v-html="recurso.dadosRecurso.siFaseProjeto"/>
+                        class="ml-4"
+                        justify-space-around
+                        row
+                        wrap>
+                        <v-flex
+                            lg12
+                            dark>
+                            <b><h4>FASE {{ index | labelFase }}</h4></b>
+                            <v-divider class="pb-2"/>
+                        </v-flex>
                     </v-layout>
-                    <desistencia-recursal
-                        v-if="recurso.desistenciaRecurso === true"
-                        :dados-recurso="recurso.dadosRecurso"/>
-                    <component
-                        v-else
-                        :is="`conteudo-recurso-fase-${recurso.dadosRecurso.siFaseProjeto}`"
-                        :recurso="recurso"/>
-                </v-expansion-panel-content>
-            </v-expansion-panel>
+                    <v-expansion-panel
+                        class="mb-4"
+                        popout
+                        focusable>
+                        <v-expansion-panel-content
+                            v-for="(item, index) in recurso"
+                            :key="index"
+                            class="elevation-1">
+                            <v-layout
+                                slot="header"
+                                class="primary--text">
+                                <v-icon class="mr-3 primary--text">assignment</v-icon>
+                                <span v-html="item.dadosRecurso.tpRecursoDesc"/>
+                            </v-layout>
+                            <desistencia-recursal
+                                v-if="item.desistenciaRecurso === true"
+                                :dados-recurso="item.dadosRecurso"/>
+                            <component
+                                v-else
+                                :is="`conteudo-recurso-fase-${item.dadosRecurso.siFaseProjeto}`"
+                                :recurso="item"/>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
+                </div>
+            </template>
         </div>
         <div v-else>
             <v-container
@@ -62,9 +80,29 @@ export default {
         DesistenciaRecursal,
         Carregando,
     },
+    filters: {
+        labelFase(fase) {
+            let label = '';
+            switch (fase) {
+            case '1':
+                label = '1 - Admissão da Proposta';
+                break;
+            case '2':
+                label = '2 - Aprovação / Homologação da Execução';
+                break;
+            case '3':
+                label = '3 - Avaliação de Resultados';
+                break;
+            default:
+                label = '';
+            }
+            return label;
+        },
+    },
     mixins: [utils],
     data() {
         return {
+            fasesRecurso: {},
             loading: true,
         };
     },
@@ -80,6 +118,7 @@ export default {
         },
         dados() {
             this.loading = false;
+            this.fasesRecurso = this.obterFasesRecursos();
         },
     },
     mounted() {
@@ -91,6 +130,23 @@ export default {
         ...mapActions({
             buscarRecurso: 'analise/buscarRecurso',
         }),
+        obterFasesRecursos() {
+            const Recursos = this.dados;
+            const tiposRecurso = {};
+
+            Object.keys(Recursos).forEach((indice) => {
+                const recurso = Recursos[indice];
+                const { dadosRecurso } = Recursos[indice];
+                const { siFaseProjeto } = dadosRecurso;
+
+                if (tiposRecurso[`${siFaseProjeto}`] == null) {
+                    tiposRecurso[`${siFaseProjeto}`] = [];
+                }
+                tiposRecurso[`${siFaseProjeto}`].push(recurso);
+            });
+
+            return tiposRecurso;
+        },
     },
 };
 </script>
