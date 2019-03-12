@@ -7,7 +7,13 @@
     </v-tooltip>
   </v-btn>
   
-  <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+  <v-dialog
+    v-model="dialog"
+    fullscreen
+    hide-overlay
+    transition="dialog-bottom-transition"
+    @keydown.esc="dialog = false"
+    >
     <div v-if="loading">
       <Carregando :text="'Montando edição de readequação...'"/>
     </div>

@@ -272,7 +272,7 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
             $this->_schema
         );
         
-        $select->where('tbReadequacao.stEstado = ?', 0);
+        $select->where('tbReadequacao.stEstado = ?', self::ST_ESTADO_EM_ANDAMENTO);
         $select->where('tbReadequacao.siEncaminhamento IN (?)', [
             Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_DEVOLVIDA_AO_MINC,
             Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_DEVOLVIDA_COORDENADOR_TECNICO,
@@ -1931,5 +1931,32 @@ select grupo from sac..tbAtoAdministrativo where idAtoAdministrativo = (
         ]);
 
         return $this->_db->fetchAll($query);
+    }
+
+
+    public function buscarReadequacoes($where)
+    {
+        $this->auth = Zend_Auth::getInstance();
+        $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        
+        $query = $this->select();
+        $query->setIntegrityCheck(false);
+        $query->from([
+            'tbReadequacao' => $this->_name
+        ]);
+
+        $query->joinInner(
+            array('tbTipoReadequacao' => 'tbTipoReadequacao'),
+            'tbTipoReadequacao.idTipoReadequacao = tbReadequacao.idTipoReadequacao',
+            ['dsReadequacao AS dsTipoReadequacao'],
+            $this->_schema
+        );
+        
+        foreach ($where as $coluna => $valor) {
+            $query->where($coluna, $valor);
+        }
+        $result = $this->fetchAll($query);
+        
+        return $result;
     }
 }

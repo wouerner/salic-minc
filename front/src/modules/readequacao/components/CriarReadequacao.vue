@@ -1,6 +1,13 @@
 <template>
-    <v-layout row wrap> 
-        <v-flex xs1 offset-xs11>
+    <v-layout
+      row
+      wrap
+      >
+        <v-flex
+          xs1
+          offset
+          -xs11
+          >
             <v-btn
                 color="green darken-1"
                 @click="dialog = true"
@@ -10,24 +17,28 @@
             </v-btn>  
         </v-flex>
         
-        <v-flex xs4 offset-xs4>
+        <v-flex
+          xs4
+          offset-xs4
+          >
             <v-dialog 
                 v-model="dialog"
                 transition="dialog-bottom-transition"
                 width="450"
             >
-                <v-card v-if="getTiposDisponiveis" class="pa-3">
+                <v-card v-if="getTiposDisponiveis"
+                        class="pa-3"
+                        >
                     <v-card-title class="headline green darken-4 white--text">Nova Readequação</v-card-title>
                     <v-card-text>
                         <v-select
                             v-model="idTipoReadequacao"
                             :items="getTiposDisponiveis"
-                            item-text=descricao
-                            item-value=idTipoReadequacao
+                            item-text="descricao"
+                            item-value="idTipoReadequacao"
                             label="Escolha o tipo de readequação"
                             solo
-                        >
-                        </v-select>
+                        />
                     </v-card-text>
                     <v-card-actions>
 
@@ -38,15 +49,14 @@
                           >
                           Cancelar
                         </v-btn>
-                      
                         <v-spacer/>
                         <v-btn
                             :disabled="this.idTipoReadequacao == ''"
                             color="green darken-1"
-                            @click="criarReadequacao"
                             dark
+                            @click="criarReadequacao"
                         >CRIAR
-                        </v-btn> 
+                        </v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
@@ -55,12 +65,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
-    name: "CriarReadequacao",
+    name: 'CriarReadequacao',
     props: {
-        idPronac: ''
+        idPronac: { type: String, default: () => '' }
     },
     data() {
         return {
@@ -70,27 +80,27 @@ export default {
     },
     computed: {
         ...mapGetters({
-            getTiposDisponiveis: "readequacao/getTiposDisponiveis",
+            getTiposDisponiveis: 'readequacao/getTiposDisponiveis',
         })
+    },
+    watch: {
+        idPronac() {
+            let idPronac = this.idPronac;
+            this.obterTiposDisponiveis({ idPronac });
+        }
     },
     methods: {
         ...mapActions({
-            obterTiposDisponiveis: "readequacao/obterTiposDisponiveis",
-            inserirReadequacao: "readequacao/inserirReadequacao",
+            obterTiposDisponiveis: 'readequacao/obterTiposDisponiveis',
+            inserirReadequacao: 'readequacao/inserirReadequacao',
         }),
         criarReadequacao() {
-            const idPronac = this.idPronac;
-            const idTipoReadequacao = this.idTipoReadequacao;
+            let idPronac = this.idPronac;
+            let idTipoReadequacao = this.idTipoReadequacao;
             this.inserirReadequacao({ idPronac, idTipoReadequacao });
             this.dialog = false;
             this.$emit('criar-readequacao', { idTipoReadequacao });
         },
     },
-    watch: {
-        idPronac() {
-            const idPronac = this.idPronac;
-            this.obterTiposDisponiveis({ idPronac });
-        }
-    }
 }
 </script>

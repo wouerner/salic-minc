@@ -4,8 +4,8 @@ import * as types from './types';
 export const obterListaDeReadequacoes = ({ commit }, params) => {
     readequacaoHelperAPI.getReadequacoes(params)
         .then((response) => {
-            const data = response.data;
-            switch(params.status){
+            const data = response.data.data;
+            switch(params.stStatusAtual){
                 case 'proponente':
                     commit(types.GET_READEQUACOES_PROPONENTE, data);
                     break;
@@ -23,7 +23,7 @@ export const buscaReadequacao = ({ commit }, params) => {
     readequacaoHelperAPI.buscaReadequacao(params)
         .then((response) => {
             const data = response.data;
-            const readequacao = data.items;
+            const readequacao = data.data.items;
             commit(types.SET_READEQUACAO, readequacao);
         });
 };
@@ -34,9 +34,9 @@ export const buscaReadequacaoPronacTipo = ({ commit }, params) => {
             const data = response.data;
             let readequacao = {};
             if (data.items.length > 1) {
-                readequacao = data.items;
+                readequacao = data.data.items;
             } else {
-                readequacao = data.items[0];
+                readequacao = data.data.items[0];
             }
             commit(types.SET_READEQUACAO, readequacao);
         });
@@ -67,7 +67,7 @@ export const excluirReadequacao = ({ commit }, params) => {
 export const updateReadequacao = ({ commit }, params) => {
     readequacaoHelperAPI.updateReadequacao(params)
         .then((response) => {
-              const readequacao = response.data.items;
+              const readequacao = response.data;
               commit(types.UPDATE_READEQUACAO, readequacao);
         });
 };
@@ -99,7 +99,7 @@ export const obterDisponivelEdicaoItemSaldoAplicacao = ({ commit }, params) => {
 export const obterCampoAtual = ({ commit }, params) => {
     readequacaoHelperAPI.obterCampoAtual(params)
         .then((response) => {
-            const data = response.data;
+            const data = response.data.data.items[0];
             commit(types.SET_CAMPO_ATUAL, data);
         });
 };
@@ -107,7 +107,7 @@ export const obterCampoAtual = ({ commit }, params) => {
 export const obterTiposDisponiveis = ({ commit }, params) => {
     readequacaoHelperAPI.obterTiposDisponiveis(params)
         .then((response) => {
-            const data = response.data.items;
+            const data = response.data.data.items;
             commit(types.SET_TIPOS_DISPONIVEIS, data);
         });
 };

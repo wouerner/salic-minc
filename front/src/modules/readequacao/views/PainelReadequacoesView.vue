@@ -69,15 +69,15 @@
     </v-container>
 </template>
 <script>
- import { mapActions, mapGetters } from "vuex";
- import TabelaReadequacoes from "../components/TabelaReadequacoes";
- import ExcluirButton from "../components/ExcluirButton";
- import EditarReadequacaoButton from "../components/EditarReadequacaoButton";
- import Carregando from "@/components/CarregandoVuetify";
+ import { mapActions, mapGetters } from 'vuex';
+ import TabelaReadequacoes from '../components/TabelaReadequacoes';
+ import ExcluirButton from '../components/ExcluirButton';
+ import EditarReadequacaoButton from '../components/EditarReadequacaoButton';
+ import Carregando from '@/components/CarregandoVuetify';
  import CriarReadequacao from '../components/CriarReadequacao';
 
  export default {
-     name: "PainelReadequacoesView",
+     name: 'PainelReadequacoesView',
      components: {
          Carregando,
          TabelaReadequacoes,
@@ -104,12 +104,12 @@
      },
      computed: {
          ...mapGetters({
-             getUsuario: "autenticacao/getUsuario",
-             getReadequacoesProponente: "readequacao/getReadequacoesProponente",
-             getReadequacoesAnalise: "readequacao/getReadequacoesAnalise",
-             getReadequacoesFinalizadas: "readequacao/getReadequacoesFinalizadas",
-             getReadequacao: "readequacao/getReadequacao",
-             dadosProjeto: "projeto/projeto"
+             getUsuario: 'autenticacao/getUsuario',
+             getReadequacoesProponente: 'readequacao/getReadequacoesProponente',
+             getReadequacoesAnalise: 'readequacao/getReadequacoesAnalise',
+             getReadequacoesFinalizadas: 'readequacao/getReadequacoesFinalizadas',
+             getReadequacao: 'readequacao/getReadequacao',
+             dadosProjeto: 'projeto/projeto'
          })
      },
      watch: {
@@ -129,8 +129,8 @@
                  this.buscaProjeto(this.idPronac);
              }
          }
-         this.listaStatus.forEach(status => {
-             this.obterReadequacoesPorStatus(status);
+         this.listaStatus.forEach(stStatusAtual => {
+             this.obterReadequacoesPorStatus(stStatusAtual);
          });
      },
      methods: {
@@ -138,20 +138,22 @@
              obterListaDeReadequacoes: "readequacao/obterListaDeReadequacoes",
              buscaProjeto: "projeto/buscaProjeto",
          }),
-         obterReadequacoesPorStatus(status) {
-             if (this.listaStatus.includes(status)) {
+         obterReadequacoesPorStatus(stStatusAtual) {
+             if (this.listaStatus.includes(stStatusAtual)) {
                  const idPronac = this.$route.params.idPronac;
-                 this.obterListaDeReadequacoes({ idPronac, status });
+                 this.obterListaDeReadequacoes({ idPronac, stStatusAtual });
              }
          },
          criarReadequacao(idTipoReadequacao) {
              const idPronac = this.dadosProjeto.idPronac;
-             if (idPronac != '') {
-                 this.obterListaDeReadequacoes({ idPronac, status });
+             const stStatusAtual = 'proponente';
+             if (idPronac !== '') {
+                 this.obterListaDeReadequacoes({ idPronac, stStatusAtual });
              }
          },
          excluirReadequacao(idReadequacao) {
-             this.obterListaDeReadequacoes('proponente');
+             const stStatusAtual = 'proponente';
+             this.obterListaDeReadequacoes({ stStatusAtual });
          },
      }
  };

@@ -13,27 +13,106 @@ HOST: http://localhost:4000
     + Body
         
             {
-                "items": [
-                    {
-                        "idPronac": 217336,
-                        "idReadequacao": 15123,
-                        "idTipoReadequacao": 6,
-                        "dsTipoReadequacao": "Impacto ambiental",
-                        "dtSolicitacao": "2019-01-22",
-                        "idSolicitante": 267,
-                        "dsSolicitacao": "blabalbalbalablabalb",
-                        "dsJustificativa": "É necessário",
-                        "idDocumento": 19440,
-                        "idAvaliador": 335,
-                        "dsAvaliacao": "queuqeuqueuq",
-                        "stAtendimento": "N",
-                        "siEncaminhamento": 15,
-                        "idNrReuniao": 45654,
-                        "stEstado": 1,
-                        "dtEnvio": "2019-01-23",
-                        "stStatusAtual": "proponente"
-                    }
-                ]
+                "data": {
+                    "code": 200,
+                    "items": [
+                        {
+                            "idPronac": 217336,
+                            "idReadequacao": 15123,
+                            "idTipoReadequacao": 2,
+                            "dsTipoReadequacao": "Planilha orçamentária",
+                            "dtSolicitacao": "2019-01-22",
+                            "idSolicitante": 267,
+                            "dsSolicitacao": "Solicito alteração na planilha.",
+                            "dsJustificativa": "É necessário",
+                            "idDocumento": 19440,
+                            "idAvaliador": 335,
+                            "dsAvaliacao": "Avalio que está bom.",
+                            "stAtendimento": "N",
+                            "siEncaminhamento": 15,
+                            "idNrReuniao": 45654,
+                            "stEstado": 1,
+                            "dtEnvio": "2019-01-23",
+                            "stStatusAtual": "proponente"
+                        },
+                        {
+                            "idPronac": 217336,
+                            "idReadequacao": 15124,
+                            "idTipoReadequacao": 6,
+                            "dsTipoReadequacao": "Impacto ambiental",
+                            "dtSolicitacao": "2019-01-22",
+                            "idSolicitante": 267,
+                            "dsSolicitacao": "Descrição completa do impacto ambiental...",
+                            "dsJustificativa": "É necessário alterar a parte que diz sobre o consumo de água elevado.",
+                            "idDocumento": 19440,
+                            "idAvaliador": 335,
+                            "dsAvaliacao": "Avaliação positiva, de acordo.",
+                            "stAtendimento": "N",
+                            "siEncaminhamento": 15,
+                            "idNrReuniao": 45654,
+                            "stEstado": 1,
+                            "dtEnvio": "2019-01-23",
+                            "stStatusAtual": "proponente"
+                        },
+                        {
+                            "idPronac": 217336,
+                            "idReadequacao": 15125,
+                            "idTipoReadequacao": 10,
+                            "dsTipoReadequacao": "Alteração de Proponente",
+                            "dtSolicitacao": "2019-01-22",
+                            "idSolicitante": 267,
+                            "dsSolicitacao": "Fulano de Tal",
+                            "dsJustificativa": "Ciclano não está mais no projeto, adicionando Fulano de Tal",
+                            "idDocumento": 19440,
+                            "idAvaliador": 335,
+                            "dsAvaliacao": "Avaliação positiva, de acordo.",
+                            "stAtendimento": "N",
+                            "siEncaminhamento": 15,
+                            "idNrReuniao": 45654,
+                            "stEstado": 1,
+                            "dtEnvio": "2019-01-23",
+                            "stStatusAtual": "proponente"
+                        },
+                        {
+                            "idPronac": 217336,
+                            "idReadequacao": 15126,
+                            "idTipoReadequacao": 12,
+                            "dsTipoReadequacao": "Nome do Projeto",
+                            "dtSolicitacao": "2019-01-22",
+                            "idSolicitante": 267,
+                            "dsSolicitacao": "19 Gramado Cine Áudio Video",
+                            "dsJustificativa": "Adicionamos 'áudio' porque é preciso",
+                            "idDocumento": 19440,
+                            "idAvaliador": 335,
+                            "dsAvaliacao": "Ok, de acordo. Aprovado",
+                            "stAtendimento": "N",
+                            "siEncaminhamento": 15,
+                            "idNrReuniao": 45654,
+                            "stEstado": 1,
+                            "dtEnvio": "2019-01-23",
+                            "stStatusAtual": "proponente"
+                        },
+                        {
+                            "idPronac": 217336,
+                            "idReadequacao": 15127,
+                            "idTipoReadequacao": 13,
+                            "dsTipoReadequacao": "Período de Execução",
+                            "dtSolicitacao": "2019-01-22",
+                            "idSolicitante": 267,
+                            "dsSolicitacao": "2019-06-01 00:00:00",
+                            "dsJustificativa": "Ampliando período de execução para dar tempo.",
+                            "idDocumento": 19440,
+                            "idAvaliador": 335,
+                            "dsAvaliacao": "Ok, de acordo. Aprovado",
+                            "stAtendimento": "N",
+                            "siEncaminhamento": 15,
+                            "idNrReuniao": 45654,
+                            "stEstado": 1,
+                            "dtEnvio": "2019-01-23",
+                            "stStatusAtual": "proponente"
+                        }
+                    ]
+                }
             }
 
 ## Readequacao - Visualizar lista de readequações [/readequacao?idPronac={idPronac}]
@@ -48,103 +127,106 @@ HOST: http://localhost:4000
     + Body
         
             {
-                "items": [
-                   {
-                        "idPronac": 217336,
-                        "idReadequacao": 15123,
-                        "idTipoReadequacao": 2,
-                        "dsTipoReadequacao": "Planilha orçamentária",
-                        "dtSolicitacao": "2019-01-22",
-                        "idSolicitante": 267,
-                        "dsSolicitacao": "Solicito alteração na planilha.",
-                        "dsJustificativa": "É necessário",
-                        "idDocumento": 19440,
-                        "idAvaliador": 335,
-                        "dsAvaliacao": "Avalio que está bom.",
-                        "stAtendimento": "N",
-                        "siEncaminhamento": 15,
-                        "idNrReuniao": 45654,
-                        "stEstado": 1,
-                        "dtEnvio": "2019-01-23",
-                        "stStatusAtual": "proponente"
-                    },
-                    {
-                        "idPronac": 217336,
-                        "idReadequacao": 15124,
-                        "idTipoReadequacao": 6,
-                        "dsTipoReadequacao": "Impacto ambiental",
-                        "dtSolicitacao": "2019-01-22",
-                        "idSolicitante": 267,
-                        "dsSolicitacao": "Descrição completa do impacto ambiental...",
-                        "dsJustificativa": "É necessário alterar a parte que diz sobre o consumo de água elevado.",
-                        "idDocumento": 19440,
-                        "idAvaliador": 335,
-                        "dsAvaliacao": "Avaliação positiva, de acordo.",
-                        "stAtendimento": "N",
-                        "siEncaminhamento": 15,
-                        "idNrReuniao": 45654,
-                        "stEstado": 1,
-                        "dtEnvio": "2019-01-23",
-                       "stStatusAtual": "proponente"
-                    },
-                    {
-                        "idPronac": 217336,
-                        "idReadequacao": 15125,
-                        "idTipoReadequacao": 10,
-                        "dsTipoReadequacao": "Alteração de Proponente",
-                        "dtSolicitacao": "2019-01-22",
-                        "idSolicitante": 267,
-                        "dsSolicitacao": "Fulano de Tal",
-                        "dsJustificativa": "Ciclano não está mais no projeto, adicionando Fulano de Tal",
-                        "idDocumento": 19440,
-                        "idAvaliador": 335,
-                        "dsAvaliacao": "Avaliação positiva, de acordo.",
-                        "stAtendimento": "N",
-                        "siEncaminhamento": 15,
-                        "idNrReuniao": 45654,
-                        "stEstado": 1,
-                        "dtEnvio": "2019-01-23",
-                        "stStatusAtual": "proponente"
-                   },
-                   {
-                        "idPronac": 217336,
-                        "idReadequacao": 15126,
-                        "idTipoReadequacao": 12,
-                        "dsTipoReadequacao": "Nome do Projeto",
-                        "dtSolicitacao": "2019-01-22",
-                        "idSolicitante": 267,
-                        "dsSolicitacao": "19 Gramado Cine Áudio Video",
-                        "dsJustificativa": "Adicionamos 'áudio' porque é preciso",
-                        "idDocumento": 19440,
-                        "idAvaliador": 335,
-                        "dsAvaliacao": "Ok, de acordo. Aprovado",
-                        "stAtendimento": "N",
-                        "siEncaminhamento": 15,
-                        "idNrReuniao": 45654,
-                        "stEstado": 1,
-                        "dtEnvio": "2019-01-23",
-                       "stStatusAtual": "proponente"
-                   },
-                   {
-                        "idPronac": 217336,
-                        "idReadequacao": 15127,
-                        "idTipoReadequacao": 13,
-                        "dsTipoReadequacao": "Período de Execução",
-                        "dtSolicitacao": "2019-01-22",
-                        "idSolicitante": 267,
-                        "dsSolicitacao": "2019-06-01 00:00:00",
-                        "dsJustificativa": "Ampliando período de execução para dar tempo.",
-                        "idDocumento": 19440,
-                        "idAvaliador": 335,
-                        "dsAvaliacao": "Ok, de acordo. Aprovado",
-                        "stAtendimento": "N",
-                        "siEncaminhamento": 15,
-                        "idNrReuniao": 45654,
-                        "stEstado": 1,
-                        "dtEnvio": "2019-01-23",
-                       "stStatusAtual": "proponente"
-                   }
-                ]
+                "data": {
+                    "code": 200,
+                    "items": [
+                        {
+                            "idPronac": 217336,
+                            "idReadequacao": 15123,
+                            "idTipoReadequacao": 2,
+                            "dsTipoReadequacao": "Planilha orçamentária",
+                            "dtSolicitacao": "2019-01-22",
+                            "idSolicitante": 267,
+                            "dsSolicitacao": "Solicito alteração na planilha.",
+                            "dsJustificativa": "É necessário",
+                            "idDocumento": 19440,
+                            "idAvaliador": 335,
+                            "dsAvaliacao": "Avalio que está bom.",
+                            "stAtendimento": "N",
+                            "siEncaminhamento": 15,
+                            "idNrReuniao": 45654,
+                            "stEstado": 1,
+                            "dtEnvio": "2019-01-23",
+                            "stStatusAtual": "proponente"
+                        },
+                        {
+                            "idPronac": 217336,
+                            "idReadequacao": 15124,
+                            "idTipoReadequacao": 6,
+                            "dsTipoReadequacao": "Impacto ambiental",
+                            "dtSolicitacao": "2019-01-22",
+                            "idSolicitante": 267,
+                            "dsSolicitacao": "Descrição completa do impacto ambiental...",
+                            "dsJustificativa": "É necessário alterar a parte que diz sobre o consumo de água elevado.",
+                            "idDocumento": 19440,
+                            "idAvaliador": 335,
+                            "dsAvaliacao": "Avaliação positiva, de acordo.",
+                            "stAtendimento": "N",
+                            "siEncaminhamento": 15,
+                            "idNrReuniao": 45654,
+                            "stEstado": 1,
+                            "dtEnvio": "2019-01-23",
+                            "stStatusAtual": "proponente"
+                        },
+                        {
+                            "idPronac": 217336,
+                            "idReadequacao": 15125,
+                            "idTipoReadequacao": 10,
+                            "dsTipoReadequacao": "Alteração de Proponente",
+                            "dtSolicitacao": "2019-01-22",
+                            "idSolicitante": 267,
+                            "dsSolicitacao": "Fulano de Tal",
+                            "dsJustificativa": "Ciclano não está mais no projeto, adicionando Fulano de Tal",
+                            "idDocumento": 19440,
+                            "idAvaliador": 335,
+                            "dsAvaliacao": "Avaliação positiva, de acordo.",
+                            "stAtendimento": "N",
+                            "siEncaminhamento": 15,
+                            "idNrReuniao": 45654,
+                            "stEstado": 1,
+                            "dtEnvio": "2019-01-23",
+                            "stStatusAtual": "proponente"
+                        },
+                        {
+                            "idPronac": 217336,
+                            "idReadequacao": 15126,
+                            "idTipoReadequacao": 12,
+                            "dsTipoReadequacao": "Nome do Projeto",
+                            "dtSolicitacao": "2019-01-22",
+                            "idSolicitante": 267,
+                            "dsSolicitacao": "19 Gramado Cine Áudio Video",
+                            "dsJustificativa": "Adicionamos 'áudio' porque é preciso",
+                            "idDocumento": 19440,
+                            "idAvaliador": 335,
+                            "dsAvaliacao": "Ok, de acordo. Aprovado",
+                            "stAtendimento": "N",
+                            "siEncaminhamento": 15,
+                            "idNrReuniao": 45654,
+                            "stEstado": 1,
+                            "dtEnvio": "2019-01-23",
+                            "stStatusAtual": "proponente"
+                        },
+                        {
+                            "idPronac": 217336,
+                            "idReadequacao": 15127,
+                            "idTipoReadequacao": 13,
+                            "dsTipoReadequacao": "Período de Execução",
+                            "dtSolicitacao": "2019-01-22",
+                            "idSolicitante": 267,
+                            "dsSolicitacao": "2019-06-01 00:00:00",
+                            "dsJustificativa": "Ampliando período de execução para dar tempo.",
+                            "idDocumento": 19440,
+                            "idAvaliador": 335,
+                            "dsAvaliacao": "Ok, de acordo. Aprovado",
+                            "stAtendimento": "N",
+                            "siEncaminhamento": 15,
+                            "idNrReuniao": 45654,
+                            "stEstado": 1,
+                            "dtEnvio": "2019-01-23",
+                            "stStatusAtual": "proponente"
+                        }
+                    ]
+                }
             }
 
 ### Criar nova readequação [POST]
@@ -315,23 +397,23 @@ HOST: http://localhost:4000
     + Body
 
             {
-                "items": [
-                    {
-                        "idTipoReadequacao": 3,
-                        "tpCampo": "input",
-                        "descricao": "Razão Social"
-                    },
-                    {
-                        "idTipoReadequacao": 7,
-                        "tpCampo": "textarea",
-                        "descricao": "Especificação Técnica"
-                    },
-                    {
-                        "idTipoReadequacao": 16,
-                        "tpCampo": "textarea",
-                        "descricao": "Objetivos"
-                    }
-                ]
+                "data": {
+                    "code": 200,
+                    "items": [
+                        {
+                            "idTipoReadequacao": 3,
+                            "descricao": "Razão Social"
+                        },
+                        {
+                            "idTipoReadequacao": 7,
+                            "descricao": "Especificação Técnica"
+                        },
+                        {
+                            "idTipoReadequacao": 16,
+                            "descricao": "Objetivos"
+                        }
+                    ]
+                }
             }
 
 
@@ -348,10 +430,17 @@ HOST: http://localhost:4000
     + Body
 
             {
-                "idTipoReadequacao": "12",
-                "descricao": "Nome do Projeto",
-                "tpCampo": "input",
-                "dsCampo": "19o. Gramado Cine Video"
+                "data": {
+                    "code": 200,
+                    "items": [
+                        {
+                            "idTipoReadequacao": "12",
+                            "descricao": "Nome do Projeto",
+                            "tpCampo": "input",
+                            "dsCampo": "19o. Gramado Cine Video"
+                        }
+                    ]
+                }
             }
     
 ## Readequacao - Buscar campos por tipo readequação [/readequacao/campo-atual?idPronac=217336&idTipoReadequacao=2]
@@ -367,10 +456,17 @@ HOST: http://localhost:4000
     + Body
 
             {
-                "idTipoReadequacao": "2",
-                "descricao": "Planilha Orçamentária",
-                "tpCampo": "planilha",
-                "dsCampo": ""
+                "data": {
+                    "code": 200,
+                    "items": [
+                        {
+                            "idTipoReadequacao": "2",
+                            "descricao": "Planilha Orçamentária",
+                            "tpCampo": "planilha",
+                            "dsCampo": ""
+                        }
+                    ]
+                }
             }
 
 ## Readequacao - Buscar campos por tipo readequação [/readequacao/campo-atual?idPronac=217336&idTipoReadequacao=10]
@@ -386,10 +482,17 @@ HOST: http://localhost:4000
     + Body
 
             {
-                "idTipoReadequacao": "10",
-                "descricao": "Alteração de Proponente",
-                "tpCampo": "input",
-                "dsCampo": "22344355678"
+                "data": {
+                    "code": 200,
+                    "items": [
+                        {
+                            "idTipoReadequacao": "10",
+                            "descricao": "Alteração de Proponente",
+                            "tpCampo": "input",
+                            "dsCampo": "22344355678"
+                        }
+                    ]
+                }
             }
 
 
@@ -406,10 +509,17 @@ HOST: http://localhost:4000
     + Body
 
             {
-                "idTipoReadequacao": "6",
-                "descricao": "Impacto ambiental",
-                "tpCampo": "textarea",
-                "dsCampo": "A independência de adubação e correção anual do solo dá-se principalmente pelo manejo de podas e com a cobertura de solo, que além de produzir uma terra de qualidade química, física e biologicamente falando, retém água, matéria orgânica, acaba com problemas de erosão e promove a infiltração de água (poupança de água) e a recarga dos lençóis freáticos. <br/> A biodiversidade promove o equilíbrio biológico e elimina a necessidade de aplicação de defensivos químicos (agrotóxicos). <br/>As condições climáticas do local de plantio (microclima) favorecem a saúde das plantas, não as expondo a estresses por excesso de insolação, ventos e variações bruscas de temperatura. E ainda a evapotranspiração das plantas promove a chuva.<br/><br/>Aqui está nossa vocação como um país florestal. Nação da abundância de água e biodiversidade. A oportunidade de geração de renda e valor para todo o mundo."
+                "data": {
+                    "code": 200,
+                    "items": [
+                        {
+                            "idTipoReadequacao": "6",
+                            "descricao": "Impacto ambiental",
+                            "tpCampo": "textarea",
+                            "dsCampo": "A independência de adubação e correção anual do solo dá-se principalmente pelo manejo de podas e com a cobertura de solo, que além de produzir uma terra de qualidade química, física e biologicamente falando, retém água, matéria orgânica, acaba com problemas de erosão e promove a infiltração de água (poupança de água) e a recarga dos lençóis freáticos. <br/> A biodiversidade promove o equilíbrio biológico e elimina a necessidade de aplicação de defensivos químicos (agrotóxicos). <br/>As condições climáticas do local de plantio (microclima) favorecem a saúde das plantas, não as expondo a estresses por excesso de insolação, ventos e variações bruscas de temperatura. E ainda a evapotranspiração das plantas promove a chuva.<br/><br/>Aqui está nossa vocação como um país florestal. Nação da abundância de água e biodiversidade. A oportunidade de geração de renda e valor para todo o mundo."
+                        }
+                    ]
+                }
             }
 
 ## Readequacao - Buscar campos por tipo readequação [/readequacao/campo-atual?idPronac=217336&idTipoReadequacao=13]
@@ -424,11 +534,19 @@ HOST: http://localhost:4000
 
     + Body
 
+
             {
-                "idTipoReadequacao": "13",
-                "descricao": "Período de Execução",
-                "tpCampo": "date",
-                "dsCampo": "2019-06-01 00:00:00"
+                "data": {
+                    "code": 200,
+                    "items": [
+                        {
+                            "idTipoReadequacao": "13",
+                            "descricao": "Período de Execução",
+                            "tpCampo": "date",
+                            "dsCampo": "2019-06-01 00:00:00"
+                        }
+                    ]
+                }
             }
 
 ## Readequação - Documento [/readequacao/{idReadequacao}/documento]
