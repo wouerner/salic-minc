@@ -43,6 +43,7 @@
 						:is="getTemplateParaTipo()"
 						:dadosReadequacao="dadosReadequacao"
 						:campo="getDadosCampo()"
+                        @dados-update="atualizaDados($event)"
 						/>
 					</v-card>
 					</v-expansion-panel-content>
@@ -57,7 +58,7 @@
 					</v-card>
 
                     <UploadFile class="mb-4"
-                    @arquivo-anexado="obterArquivoAnexado($event)"
+                    @arquivo-anexado="arquivoAnexado($event)"
                     :formatosAceitos="formatosAceitos"
                     ></UploadFile>
 
@@ -67,7 +68,11 @@
                 <v-footer id="footer" class="pa-4 elevation-12" fixed>
                     <v-layout row wrap>   
                         <v-flex xs3 offset-xs9>
-                            <v-btn color="green darken-1" @click="dialog = false" dark>Salvar
+                            <v-btn
+                                color="green darken-1"
+                                dark
+                                @click="salvarReadequacao()"
+                                >Salvar
                                 <v-icon right dark>done</v-icon>
                             </v-btn>
 
@@ -87,14 +92,14 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import Carregando from "@/components/CarregandoVuetify";
-import FormReadequacao from "./FormReadequacao";
-import TemplateTextarea from "./TemplateTextarea";
-import TemplateInput from "./TemplateInput";
-import TemplateDate from "./TemplateDate";
-import TemplatePlanilha from "./TemplatePlanilha";
-import UploadFile from "./UploadFile"
+import { mapActions, mapGetters } from 'vuex';
+import Carregando from '@/components/CarregandoVuetify';
+import FormReadequacao from './FormReadequacao';
+import TemplateTextarea from './TemplateTextarea';
+import TemplateInput from './TemplateInput';
+import TemplateDate from './TemplateDate';
+import TemplatePlanilha from './TemplatePlanilha';
+import UploadFile from './UploadFile'
 
 export default {
     name: "EditarReadequacaoButton",
@@ -124,7 +129,16 @@ export default {
             templateEdicao: [],
             formatosAceitos: 'application/pdf',
             panel: [true, true],
-            loading: true
+            loading: true,
+            readequacaoEditada: {
+                idReadequacao: 0,
+                "dsSolicitacao": "",
+                "dsJustificativa": "",
+                "dtSolicitacao": "",
+                "documento": {},
+                "idDocumento": 0,
+                "dsAvaliacao": "",
+            },
         };
     },
     created() {
@@ -132,6 +146,7 @@ export default {
         const idTipoReadequacao = this.dadosReadequacao.idTipoReadequacao;
         
         this.obterCampoAtual({ idPronac, idTipoReadequacao });
+        this.atualizarReadequacaoEditada();
     },
     watch: {
         campoAtual: {
@@ -158,7 +173,8 @@ export default {
     },
     methods: {
         ...mapActions({
-            obterCampoAtual: "readequacao/obterCampoAtual"
+            obterCampoAtual: 'readequacao/obterCampoAtual',
+            updateReadequacao: 'readequacao/updateReadequacao',
         }),
         prepararAdicionarDocumento() {},
         getTemplateParaTipo() {
@@ -177,13 +193,28 @@ export default {
             let titulo = this.campoAtual[chave].descricao;
             return { valor, titulo };
         },
-        obterArquivoAnexado(arquivo) {
+        arquivoAnexado(arquivo) {
+            this.readequacaoEditada.documento = arquivo;
             console.log('Arquivo alterado!');
             //POST ou PUT da Readequação
             // Observar caso arquivo seja undefined, para atualizar            
-            console.log(arquivo);
-        }
-    }
+        },
+        atualizarReadequacaoEditada() {
+            this.readequacaoEditada.idReadequacao = this.dadosReadequacao.idReadequacao;
+            this.readequacaoEditada.dsSolicitacao = this.dadosReadequacao.dsSolicitacao;
+            this.readequacaoEditada.dsJustificativa = this.dadosReadequacao.dsJustificativa;
+            this.readequacaoEditada.dsAvaliacao = this.dadosReadequacao.dsAvaliacao;
+            this.readequacaoEditada.idDocumento = this.dadosReadequacao.idDocumento;
+        },
+        atualizaDados(data){
+            console.log('Data: ' + data);
+            this.readequacaoEditada.dtSolicitacao = data;
+        },
+        salvarReadequacao() {
+            console.log(this.readequacaoEditada);
+            this.updateReadequacao(this.readequacaoEditada);
+        },
+    },
 };
 </script>
 <style>

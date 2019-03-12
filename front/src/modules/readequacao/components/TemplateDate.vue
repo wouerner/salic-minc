@@ -78,7 +78,12 @@ export default {
     },
     computed: {
         computedDateFormatted() {
-            return this.formatDate(this.date);
+            dataFormatada = this.formatDate(this.date);
+            
+            this.$emit('dados-update', dataFormatada);
+
+            return dataFormatada;
+            
         },
     },
     created() {

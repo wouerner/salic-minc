@@ -285,7 +285,7 @@ HOST: http://localhost:4000
 ## Readequacao - Dados readequação [/readequacao/dados-readequacao/{idReadequacao}]
 
 + Parameters
-    + idReadequacao: 141000 (number, required)
+    + idReadequacao: 15125 (number, required)
 
 ### Visualizar dados readequação [GET]
 
@@ -295,7 +295,7 @@ HOST: http://localhost:4000
         
             {
                 "idPronac": 217336,
-                "idReadequacao": 15129,
+                "idReadequacao": 15125,
                 "idTipoReadequacao": 6,
                 "dtSolicitacao": "2019-01-22",
                 "idSolicitante": 267,
@@ -313,10 +313,14 @@ HOST: http://localhost:4000
             }
 
 
-### Atualizar dados readequação [PUT]
+### Atualizar dados readequação [POST]
 
 + Request (multipart/form-data; boundary=BOUNDARY)
 
+        --BOUNDARY
+        Content-Disposition: form-data; name="idReadequacao"
+
+        15125
         --BOUNDARY
         Content-Disposition: form-data; name="dsSolicitacao"
         

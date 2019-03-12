@@ -25,9 +25,9 @@
 </template>
 
 <script>
-import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
-import vueFilePond from "vue-filepond";
-import "filepond/dist/filepond.min.css";
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import vueFilePond from 'vue-filepond';
+import 'filepond/dist/filepond.min.css';
 
 const FilePond = vueFilePond(
   FilePondPluginFileValidateType,
@@ -50,8 +50,12 @@ export default {
     },
     methods: {
         arquivoAnexado() {
-            let payload = this.$refs.pond.getFiles()[0];
-            this.$emit('arquivo-anexado', payload);
+            if(this.$refs.pond.getFiles()[0]) {
+                let payload = this.$refs.pond.getFiles()[0].file;
+                this.$emit('arquivo-anexado', payload);
+            } else {
+                this.$emit('arquivo-anexado', undefined);
+            }
         }
     },
 };
