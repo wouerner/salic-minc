@@ -129,8 +129,8 @@
                  this.buscaProjeto(this.idPronac);
              }
          }
-         this.listaStatus.forEach(status => {
-             this.obterReadequacoesPorStatus(status);
+         this.listaStatus.forEach(stStatusAtual => {
+             this.obterReadequacoesPorStatus(stStatusAtual);
          });
      },
      methods: {
@@ -138,20 +138,22 @@
              obterListaDeReadequacoes: "readequacao/obterListaDeReadequacoes",
              buscaProjeto: "projeto/buscaProjeto",
          }),
-         obterReadequacoesPorStatus(status) {
-             if (this.listaStatus.includes(status)) {
+         obterReadequacoesPorStatus(stStatusAtual) {
+             if (this.listaStatus.includes(stStatusAtual)) {
                  const idPronac = this.$route.params.idPronac;
-                 this.obterListaDeReadequacoes({ idPronac, status });
+                 this.obterListaDeReadequacoes({ idPronac, stStatusAtual });
              }
          },
          criarReadequacao(idTipoReadequacao) {
              const idPronac = this.dadosProjeto.idPronac;
+             const stStatusAtual = 'proponente';
              if (idPronac != '') {
-                 this.obterListaDeReadequacoes({ idPronac, status });
+                 this.obterListaDeReadequacoes({ idPronac, stStatusAtual });
              }
          },
          excluirReadequacao(idReadequacao) {
-             this.obterListaDeReadequacoes('proponente');
+             const stStatusAtual = 'proponente';
+             this.obterListaDeReadequacoes({ stStatusAtual });
          },
      }
  };

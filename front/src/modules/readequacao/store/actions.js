@@ -5,7 +5,7 @@ export const obterListaDeReadequacoes = ({ commit }, params) => {
     readequacaoHelperAPI.getReadequacoes(params)
         .then((response) => {
             const data = response.data.data;
-            switch(params.status){
+            switch(params.stStatusAtual){
                 case 'proponente':
                     commit(types.GET_READEQUACOES_PROPONENTE, data);
                     break;
@@ -99,7 +99,7 @@ export const obterDisponivelEdicaoItemSaldoAplicacao = ({ commit }, params) => {
 export const obterCampoAtual = ({ commit }, params) => {
     readequacaoHelperAPI.obterCampoAtual(params)
         .then((response) => {
-            const data = response.data;
+            const data = response.data.data.items[0];
             commit(types.SET_CAMPO_ATUAL, data);
         });
 };
