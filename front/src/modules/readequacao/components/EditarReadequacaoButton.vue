@@ -19,7 +19,7 @@
     </div>
     
     <v-card v-else-if="campoAtual">
-		<v-toolbar dark color="primary">
+		<v-toolbar dark color="primary" fixed>
 			<v-btn icon dark @click="dialog = false">
                 <v-icon>close</v-icon>
 			</v-btn>
@@ -55,31 +55,32 @@
 					<v-card>
 						<FormReadequacao :dadosReadequacao="dadosReadequacao"></FormReadequacao>
 					</v-card>
-				
-					<v-btn
-						label="Anexar arquivo"
-						:value="dadosReadequacao.idDocumento"
-						@change="prepararAdicionarDocumento"
-						>Anexar documento</v-btn>
+
+                    <UploadFile class="mb-4"
+                    @arquivo-anexado="obterArquivoAnexado($event)"
+                    :formatosAceitos="formatosAceitos"
+                    ></UploadFile>
+
 					</v-expansion-panel-content>
 				</v-expansion-panel>
+
+                <v-footer id="footer" class="pa-4 elevation-12" fixed>
+                    <v-layout row wrap>   
+                        <v-flex xs3 offset-xs9>
+                            <v-btn color="green darken-1" @click="dialog = false" dark>Salvar
+                                <v-icon right dark>done</v-icon>
+                            </v-btn>
+
+                            <v-btn color="green darken-1" @click="dialog = false" dark>Finalizar
+                                <v-icon right dark>done_all</v-icon>
+                            </v-btn>
+                        </v-flex>
+                    </v-layout>
+                </v-footer>
 			</v-flex>
 		</v-layout>
     </v-card>
       
-	<v-footer class="pa-4" fixed>
-		<v-layout row wrap>   
-			<v-flex xs3 offset-xs9>
-				<v-btn color="green darken-1" @click="dialog = false" dark>Salvar
-					<v-icon right dark>done</v-icon>
-				</v-btn>
-
-				<v-btn color="green darken-1" @click="dialog = false" dark>Finalizar
-					<v-icon right dark>done_all</v-icon>
-				</v-btn>
-			</v-flex>
-		</v-layout>
-	</v-footer>
 	
   </v-dialog>
 </v-layout>
@@ -87,12 +88,13 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import Carregando from "@/components/CarregandoVuetify";
 import FormReadequacao from "./FormReadequacao";
 import TemplateTextarea from "./TemplateTextarea";
 import TemplateInput from "./TemplateInput";
 import TemplateDate from "./TemplateDate";
 import TemplatePlanilha from "./TemplatePlanilha";
-import Carregando from "@/components/CarregandoVuetify";
+import UploadFile from "./UploadFile"
 
 export default {
     name: "EditarReadequacaoButton",
@@ -102,7 +104,8 @@ export default {
         TemplateTextarea,
         TemplateInput,
         TemplateDate,
-        TemplatePlanilha
+        TemplatePlanilha,
+        UploadFile
     },
     props: {
         dadosReadequacao: { type: Object, default: () => {} },
@@ -119,6 +122,7 @@ export default {
                 planilha: "TemplatePlanilha"
             },
             templateEdicao: [],
+            formatosAceitos: 'application/pdf',
             panel: [true, true],
             loading: true
         };
@@ -172,7 +176,19 @@ export default {
             let valor = this.dadosReadequacao.dsSolicitacao;
             let titulo = this.campoAtual[chave].descricao;
             return { valor, titulo };
+        },
+        obterArquivoAnexado(arquivo) {
+            console.log('Arquivo alterado!');
+            //POST ou PUT da Readequação
+            // Observar caso arquivo seja undefined, para atualizar            
+            console.log(arquivo);
         }
     }
 };
 </script>
+<style>
+
+    #footer {
+        z-index: 5;
+    }
+</style>
