@@ -37,13 +37,12 @@ export default {
     },
     props: {
         campo: { Object: () => {} },
-	dadosReadequacao: { Object: () => {} },
+        dadosReadequacao: { Object: () => {} },
     },
     computed: {
     },
     methods: {
 	salvar(e) {
-	    console.log(e);
 	},
 	validar(e) {
 	    
