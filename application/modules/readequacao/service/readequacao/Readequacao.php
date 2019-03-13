@@ -119,7 +119,7 @@ class Readequacao implements IServicoRestZend
         switch($idTipoReadequacao) {
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL:
                 $descricao = 'Remanejamento 50%';
-                $tpCampo = 'remanejamento-50';
+                $tpCampo = 'remanejamento_50';
                 break;
 
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA:
@@ -237,12 +237,12 @@ class Readequacao implements IServicoRestZend
 
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_LOCAL_REALIZACAO:
                 $descricao = 'Local de realização';
-                $tpCampo = 'local-realizacao';
+                $tpCampo = 'local_realizacao';
                 break;
 
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ALTERACAO_PROPONENTE:
                 $Projetos = new \Projetos();
-                $dadosProjeto = $Projetos->buscar(
+                $dadosProjeto = $Projetos_>buscar(
                     ['IdPRONAC = ?' => $idPronac]
                 )->current();
                 
@@ -256,7 +256,7 @@ class Readequacao implements IServicoRestZend
                 
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO:
                 $descricao = 'Plano de distribuição';
-                $tpCampo = 'plano-distribuicao';
+                $tpCampo = 'plano_distribuicao';
                 break;
 
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_NOME_PROJETO:
@@ -290,7 +290,7 @@ class Readequacao implements IServicoRestZend
 
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DIVULGACAO:
                 $descricao = 'Plano de divulgação';
-                $tpCampo = 'plano-divulgacao';
+                $tpCampo = 'plano_divulgacao';
                 break;
                 
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_RESUMO_PROJETO:
@@ -428,12 +428,12 @@ class Readequacao implements IServicoRestZend
 
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO:
                 $descricao = 'Saldo de aplicação';
-                $tpCampo = 'saldo-aplicacao';
+                $tpCampo = 'saldo_aplicacao';
                 break;
                 
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS:
                 $descricao = 'Transferência de recursos';
-                $tpCampo = 'transferencia-recursos';
+                $tpCampo = 'transferencia_recursos';
                 break;
                 
         }

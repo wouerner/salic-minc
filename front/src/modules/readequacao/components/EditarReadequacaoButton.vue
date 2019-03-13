@@ -6,13 +6,22 @@
             flat
             small
             color="green"
-            @click.stop="dialog = true"
+            @click.stop="abrirEdicao()"
         >
             <v-tooltip bottom>
                 <v-icon slot="activator">edit</v-icon>
                 <span>Editar Readequação</span>
             </v-tooltip>
         </v-btn>
+        <template
+            v-if="!getTemplateParaTipo"
+        >
+            <TemplateRedirect
+                :dados-readequacao="dadosReadequacao"
+                :campo="campoAtual"
+                :redirecionar="redirecionar"
+            />
+        </template>
         <v-dialog
             v-model="dialog"
             fullscreen
@@ -61,12 +70,12 @@
                                     class="title"
                                 >Edição</div>
                                 <v-card
-                                    v-if="getTemplateParaTipo()"
-                                >
+                                    v-if="getTemplateParaTipo"
+                                >a
                                     <component
-                                        :is="getTemplateParaTipo()"
+                                        :is="getTemplateParaTipo"
                                         :dados-readequacao="dadosReadequacao"
-                                        :campo="getDadosCampo()"
+                                        :campo="getDadosCampo"
                                         @dados-update="atualizaDados($event)"
                                     />
                                 </v-card>
@@ -140,7 +149,7 @@ import FormReadequacao from './FormReadequacao';
 import TemplateTextarea from './TemplateTextarea';
 import TemplateInput from './TemplateInput';
 import TemplateDate from './TemplateDate';
-import TemplatePlanilha from './TemplatePlanilha';
+import TemplateRedirect from './TemplateRedirect';
 import UploadFile from './UploadFile';
 
 export default {
@@ -151,7 +160,7 @@ export default {
         TemplateTextarea,
         TemplateInput,
         TemplateDate,
-        TemplatePlanilha,
+        TemplateRedirect,
         UploadFile,
     },
     props: {
@@ -166,14 +175,6 @@ export default {
                 textarea: 'TemplateTextarea',
                 input: 'TemplateInput',
                 date: 'TemplateDate',
-                planilha: 'TemplatePlanilha',
-            },
-            tiposReadequacoesRedirect: {
-                local_realizacao: 'readequacao/local-realizacao/index/?idPronac={idPronac}',
-                planilha_orcamentaria: 'readequacao/readequacoes/planilha-orcamentaria/?idPronac={idPronac}',
-                saldo_aplicacao: '#/readequacao/saldo-aplicacao/:idPronac',
-                plano_distribuicao: 'readequacao/plano-distribuicao/index/?idPronac={idPronac}',
-                remanejamento_50: 'readequacao/remanejamento-menor/index/?idPronac={idPronac}',
             },
             templateEdicao: [],
             formatosAceitos: 'application/pdf',
@@ -188,12 +189,31 @@ export default {
                 idDocumento: 0,
                 dsAvaliacao: '',
             },
+            redirecionar: false,
         };
     },
     computed: {
         ...mapGetters({
             campoAtual: 'readequacao/getCampoAtual',
         }),
+        getTemplateParaTipo() {
+            let templateName = false;
+            const chave = `key_${this.dadosReadequacao.idTipoReadequacao}`;
+            if (Object.prototype.hasOwnProperty.call(this.campoAtual, chave)) {
+                templateName = this.tiposComponentesReadequacao[this.campoAtual[chave].tpCampo];
+            }
+            return templateName;
+        },
+        getDadosCampo() {
+            const chave = `key_${this.dadosReadequacao.idTipoReadequacao}`;
+            if (Object.prototype.hasOwnProperty.call(this.campoAtual, chave)) {
+                return {
+                    valor: this.dadosReadequacao.dsSolicitacao,
+                    titulo: this.campoAtual[chave].descricao,
+                    tpCampo: this.campoAtual[chave].tpCampo,
+                };
+            }
+        },
     },
     watch: {
         campoAtual: {
@@ -225,26 +245,18 @@ export default {
             obterCampoAtual: 'readequacao/obterCampoAtual',
             updateReadequacao: 'readequacao/updateReadequacao',
         }),
-        prepararAdicionarDocumento() {},
-        getTemplateParaTipo() {
-            let templateName = false;
-            const chave = `key_${this.dadosReadequacao.idTipoReadequacao}`;
-            if (Object.prototype.hasOwnProperty.call(this.campoAtual, chave)) {
-                templateName = this.tiposReadequacao[this.campoAtual[chave].tpCampo];
-            }
-            return templateName;
-        },
-        getDadosCampo() {
-            const chave = `key_${this.dadosReadequacao.idTipoReadequacao}`;
-            const valor = this.dadosReadequacao.dsSolicitacao;
-            const titulo = this.campoAtual[chave].descricao;
-            return { valor, titulo };
-        },
         arquivoAnexado(arquivo) {
             this.readequacaoEditada.documento = arquivo;
             console.log('Arquivo alterado!');
             // POST ou PUT da Readequação
             // Observar caso arquivo seja undefined, para atualizar
+        },
+        abrirEdicao() {
+            if (typeof this.getTemplateParaTipo === 'undefined') {
+                this.redirecionar = true;
+            } else {
+                this.dialog = true;
+            }
         },
         atualizarReadequacaoEditada() {
             this.readequacaoEditada.idReadequacao = this.dadosReadequacao.idReadequacao;
@@ -266,7 +278,7 @@ export default {
 </script>
 <style>
 
-    #footer {
-        z-index: 5;
-    }
+#footer {
+    z-index: 5;
+}
 </style>
