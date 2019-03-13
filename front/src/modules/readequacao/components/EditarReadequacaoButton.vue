@@ -44,6 +44,7 @@
                         :dadosReadequacao="dadosReadequacao"
                         :campo="getDadosCampo()"
                         @data-update="atualizarData($event)"
+                        @dados-update="atualizarDadosPorTipoReadequacao"
                         />
                     </v-card>
                     </v-expansion-panel-content>
@@ -138,6 +139,7 @@ export default {
                 "documento": {},
                 "idDocumento": 0,
                 "dsAvaliacao": "",
+                "nomeProponente": "",
             },
         };
     },
@@ -213,6 +215,10 @@ export default {
         atualizarData(data){
             this.readequacaoEditada.dtSolicitacao = data;
         },
+        atualizarDadosPorTipoReadequacao(dados) {
+            let param = dados.nomeAtributo;
+            this.readequacaoEditada[param] = dados.valor;
+        }
 
     },
 };

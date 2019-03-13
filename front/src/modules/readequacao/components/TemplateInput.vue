@@ -16,7 +16,9 @@
         <v-card-actions>
 	  <v-text-field
             v-bind:label="campo.titulo"
+            v-model="campo.valor"
             :value="campo.valor"
+            @input="updateCampo"
             ></v-text-field>
         </v-card-actions>
       </v-card>
@@ -28,7 +30,13 @@
 export default {
     name: 'TemplateInput',
     props: {
-	campo: { Object: () => {} },
+	    campo: { Object: () => {} },
+    },
+    methods: {
+        updateCampo() {
+            let valor = this.campo.valor;
+            this.$emit('dados-update', { valor: valor, nomeAtributo: 'nomeProponente' });
+        },
     },
 }
 </script>
