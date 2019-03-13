@@ -6,7 +6,7 @@
       <span>Editar Readequação</span>
     </v-tooltip>
   </v-btn>
-  
+
   <v-dialog
     v-model="dialog"
     fullscreen
@@ -17,56 +17,56 @@
     <div v-if="loading">
       <Carregando :text="'Montando edição de readequação...'"/>
     </div>
-    
+
     <v-card v-else-if="campoAtual">
-		<v-toolbar dark color="primary" fixed>
-			<v-btn icon dark @click="dialog = false">
+        <v-toolbar dark color="primary" fixed>
+            <v-btn icon dark @click="dialog = false">
                 <v-icon>close</v-icon>
-			</v-btn>
-			<v-toolbar-title>Readequação - {{ dadosReadequacao.dsTipoReadequacao }}</v-toolbar-title>
-			<v-spacer/>
-			<v-toolbar-title>{{ dadosProjeto.Pronac }} - {{ dadosProjeto.NomeProjeto }}</v-toolbar-title>
-		</v-toolbar>
-      
-		<v-layout row wrap>   
-			<v-flex xs10 offset-xs1>
-				<v-expansion-panel v-model="panel" expand>
-					<v-expansion-panel-content 
-					readonly 
-					hide-actions
-					>
-					<div class="title" slot="header">Edição</div>
-					<v-card
-					v-if="getTemplateParaTipo()"
-					>
-						<component
-						:is="getTemplateParaTipo()"
-						:dadosReadequacao="dadosReadequacao"
-						:campo="getDadosCampo()"
-                        @dados-update="atualizaDados($event)"
-						/>
-					</v-card>
-					</v-expansion-panel-content>
-					
-					<v-expansion-panel-content
-					readonly 
-					hide-actions
-					>
-					<div class="title" slot="header">Justificativa da readequação</div>
-					<v-card>
-						<FormReadequacao :dadosReadequacao="dadosReadequacao"></FormReadequacao>
-					</v-card>
+            </v-btn>
+            <v-toolbar-title>Readequação - {{ dadosReadequacao.dsTipoReadequacao }}</v-toolbar-title>
+            <v-spacer/>
+            <v-toolbar-title>{{ dadosProjeto.Pronac }} - {{ dadosProjeto.NomeProjeto }}</v-toolbar-title>
+        </v-toolbar>
+
+        <v-layout row wrap>
+            <v-flex xs10 offset-xs1>
+                <v-expansion-panel v-model="panel" expand>
+                    <v-expansion-panel-content
+                    readonly
+                    hide-actions
+                    >
+                    <div class="title" slot="header">Edição</div>
+                    <v-card
+                    v-if="getTemplateParaTipo()"
+                    >
+                        <component
+                        :is="getTemplateParaTipo()"
+                        :dadosReadequacao="dadosReadequacao"
+                        :campo="getDadosCampo()"
+                        @data-update="atualizarData($event)"
+                        />
+                    </v-card>
+                    </v-expansion-panel-content>
+
+                    <v-expansion-panel-content
+                    readonly
+                    hide-actions
+                    >
+                    <div class="title" slot="header">Justificativa da readequação</div>
+                    <v-card>
+                        <FormReadequacao :dadosReadequacao="dadosReadequacao"></FormReadequacao>
+                    </v-card>
 
                     <UploadFile class="mb-4"
-                    @arquivo-anexado="arquivoAnexado($event)"
+                    @arquivo-anexado="atualizarArquivo($event)"
                     :formatosAceitos="formatosAceitos"
                     ></UploadFile>
 
-					</v-expansion-panel-content>
-				</v-expansion-panel>
+                    </v-expansion-panel-content>
+                </v-expansion-panel>
 
                 <v-footer id="footer" class="pa-4 elevation-12" fixed>
-                    <v-layout row wrap>   
+                    <v-layout row wrap>
                         <v-flex xs3 offset-xs9>
                             <v-btn
                                 color="green darken-1"
@@ -82,11 +82,11 @@
                         </v-flex>
                     </v-layout>
                 </v-footer>
-			</v-flex>
-		</v-layout>
+            </v-flex>
+        </v-layout>
     </v-card>
-      
-	
+
+
   </v-dialog>
 </v-layout>
 </template>
@@ -144,18 +144,18 @@ export default {
     created() {
         const idPronac = this.dadosReadequacao.idPronac;
         const idTipoReadequacao = this.dadosReadequacao.idTipoReadequacao;
-        
+
         this.obterCampoAtual({ idPronac, idTipoReadequacao });
         this.atualizarReadequacaoEditada();
     },
     watch: {
         campoAtual: {
-	        handler(valor) {
-		        if (Object.keys(valor).length > 0) {
+            handler(valor) {
+                if (Object.keys(valor).length > 0) {
                     this.loading = false;
-		        }
-	        },
-	        deep: true,
+                }
+            },
+            deep: true,
         },
         dadosReadequacao: {
             handler(valor) {
@@ -193,11 +193,9 @@ export default {
             let titulo = this.campoAtual[chave].descricao;
             return { valor, titulo };
         },
-        arquivoAnexado(arquivo) {
-            this.readequacaoEditada.documento = arquivo;
-            console.log('Arquivo alterado!');
-            //POST ou PUT da Readequação
-            // Observar caso arquivo seja undefined, para atualizar            
+        salvarReadequacao() {
+            console.log(this.readequacaoEditada);
+            this.updateReadequacao(this.readequacaoEditada);
         },
         atualizarReadequacaoEditada() {
             this.readequacaoEditada.idReadequacao = this.dadosReadequacao.idReadequacao;
@@ -206,14 +204,16 @@ export default {
             this.readequacaoEditada.dsAvaliacao = this.dadosReadequacao.dsAvaliacao;
             this.readequacaoEditada.idDocumento = this.dadosReadequacao.idDocumento;
         },
-        atualizaDados(data){
-            console.log('Data: ' + data);
+        atualizarArquivo(arquivo) {
+            console.log('Arquivo alterado!');
+            this.readequacaoEditada.documento = arquivo;
+            //POST ou PUT da Readequação
+            // Observar caso arquivo seja undefined, para atualizar
+        },
+        atualizarData(data){
             this.readequacaoEditada.dtSolicitacao = data;
         },
-        salvarReadequacao() {
-            console.log(this.readequacaoEditada);
-            this.updateReadequacao(this.readequacaoEditada);
-        },
+
     },
 };
 </script>
