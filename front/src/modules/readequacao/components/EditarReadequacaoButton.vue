@@ -43,8 +43,7 @@
                         :is="getTemplateParaTipo()"
                         :dadosReadequacao="dadosReadequacao"
                         :campo="getDadosCampo()"
-                        @data-update="atualizarData($event)"
-                        @dados-update="atualizarDadosPorTipoReadequacao"
+                        @dados-update="atualizarSolicitacao($event)"
                         />
                     </v-card>
                     </v-expansion-panel-content>
@@ -212,12 +211,8 @@ export default {
             //POST ou PUT da Readequação
             // Observar caso arquivo seja undefined, para atualizar
         },
-        atualizarData(data){
-            this.readequacaoEditada.dtSolicitacao = data;
-        },
-        atualizarDadosPorTipoReadequacao(dados) {
-            let param = dados.nomeAtributo;
-            this.readequacaoEditada[param] = dados.valor;
+        atualizarSolicitacao(valor) {
+            this.readequacaoEditada.dsSolicitacao = valor;
         }
 
     },

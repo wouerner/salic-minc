@@ -72,7 +72,7 @@ export default {
     },
     watch: {
         date(val) {
-            this.$emit('data-update', this.date);
+            this.$emit('dados-update', this.date);
             this.dateFormatted = this.formatDate(this.date);
         },
     },

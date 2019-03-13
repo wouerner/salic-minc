@@ -30,12 +30,13 @@
 export default {
     name: 'TemplateInput',
     props: {
-	    campo: { Object: () => {} },
+        campo: { Object: () => {} },
+        nomeAtributo: { type: String, default: '' }
     },
     methods: {
         updateCampo() {
             let valor = this.campo.valor;
-            this.$emit('dados-update', { valor: valor, nomeAtributo: 'nomeProponente' });
+            this.$emit('dados-update', valor );
         },
     },
 }
