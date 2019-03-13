@@ -13,7 +13,13 @@
                 <div v-if="loading">
                     <Carregando :text="'Carregando readequações...'"/>
                 </div>
-                <v-tabs v-else-if="getReadequacoesProponente" color="#0a420e" centered dark icons-and-text>
+                <v-tabs
+                    v-else-if="getReadequacoesProponente"
+                    color="#0a420e"
+                    centered
+                    dark
+                    icons-and-text
+                >
                     <v-tabs-slider color="yellow"></v-tabs-slider>
 
                     <v-tab href="#tab-1">Edição
@@ -69,92 +75,95 @@
     </v-container>
 </template>
 <script>
- import { mapActions, mapGetters } from 'vuex';
- import TabelaReadequacoes from '../components/TabelaReadequacoes';
- import ExcluirButton from '../components/ExcluirButton';
- import EditarReadequacaoButton from '../components/EditarReadequacaoButton';
- import Carregando from '@/components/CarregandoVuetify';
- import CriarReadequacao from '../components/CriarReadequacao';
+import { mapActions, mapGetters } from 'vuex';
+import TabelaReadequacoes from '../components/TabelaReadequacoes';
+import ExcluirButton from '../components/ExcluirButton';
+import EditarReadequacaoButton from '../components/EditarReadequacaoButton';
+import Carregando from '@/components/CarregandoVuetify';
+import CriarReadequacao from '../components/CriarReadequacao';
 
- export default {
-     name: 'PainelReadequacoesView',
-     components: {
-         Carregando,
-         TabelaReadequacoes,
-         ExcluirButton,
-         EditarReadequacaoButton,
-         CriarReadequacao
-     },
-     data() {
-         return {
-             listaStatus: ["proponente", "analise", "finalizadas"],
-             acoesProponente: {
-                 usuario: "",
-                 acoes: [ExcluirButton, EditarReadequacaoButton]
-             },
-             acoesAnalise: {
-                 acoes: []
-             },
-             acoesFinalizadas: {
-                 acoes: []
-             },
-             editarItem: {},
-             loading: true
-         };
-     },
-     computed: {
-         ...mapGetters({
-             getUsuario: 'autenticacao/getUsuario',
-             getReadequacoesProponente: 'readequacao/getReadequacoesProponente',
-             getReadequacoesAnalise: 'readequacao/getReadequacoesAnalise',
-             getReadequacoesFinalizadas: 'readequacao/getReadequacoesFinalizadas',
-             getReadequacao: 'readequacao/getReadequacao',
-             dadosProjeto: 'projeto/projeto'
-         })
-     },
-     watch: {
-         getReadequacoesProponente(value) {
-             if (Object.keys(value).length > 0) {
-                 this.loading = false;
-             }
-         },
-         getReadequacao(value) {
-             this.editarItem = this.getReadequacao;
-         },
-     },
-     created() {
-         if (typeof this.$route.params.idPronac !== "undefined") {
-             this.idPronac = this.$route.params.idPronac;
-             if (Object.keys(this.dadosProjeto).length === 0) {
-                 this.buscaProjeto(this.idPronac);
-             }
-         }
-         this.listaStatus.forEach(stStatusAtual => {
-             this.obterReadequacoesPorStatus(stStatusAtual);
-         });
-     },
-     methods: {
-         ...mapActions({
-             obterListaDeReadequacoes: "readequacao/obterListaDeReadequacoes",
-             buscaProjeto: "projeto/buscaProjeto",
-         }),
-         obterReadequacoesPorStatus(stStatusAtual) {
-             if (this.listaStatus.includes(stStatusAtual)) {
-                 const idPronac = this.$route.params.idPronac;
-                 this.obterListaDeReadequacoes({ idPronac, stStatusAtual });
-             }
-         },
-         criarReadequacao(idTipoReadequacao) {
-             const idPronac = this.dadosProjeto.idPronac;
-             const stStatusAtual = 'proponente';
-             if (idPronac !== '') {
-                 this.obterListaDeReadequacoes({ idPronac, stStatusAtual });
-             }
-         },
-         excluirReadequacao(idReadequacao) {
-             const stStatusAtual = 'proponente';
-             this.obterListaDeReadequacoes({ stStatusAtual });
-         },
-     }
- };
+export default {
+    name: 'PainelReadequacoesView',
+    components: {
+        Carregando,
+        TabelaReadequacoes,
+        ExcluirButton,
+        EditarReadequacaoButton,
+        CriarReadequacao,
+    },
+    data() {
+        return {
+            listaStatus: ['proponente', 'analise', 'finalizadas'],
+            acoesProponente: {
+                usuario: '',
+                acoes: [ExcluirButton, EditarReadequacaoButton]
+            },
+            acoesAnalise: {
+                acoes: []
+            },
+            acoesFinalizadas: {
+                acoes: []
+            },
+            editarItem: {},
+            loading: true
+        };
+    },
+    computed: {
+        ...mapGetters({
+            getUsuario: 'autenticacao/getUsuario',
+            getReadequacoesProponente: 'readequacao/getReadequacoesProponente',
+            getReadequacoesAnalise: 'readequacao/getReadequacoesAnalise',
+            getReadequacoesFinalizadas: 'readequacao/getReadequacoesFinalizadas',
+            getReadequacao: 'readequacao/getReadequacao',
+            dadosProjeto: 'projeto/projeto'
+        }),
+    },
+    watch: {
+        getReadequacoesProponente(value) {
+            if (Object.keys(value).length > 0) {
+                this.loading = false;
+            }
+        },
+        getReadequacao(value) {
+            this.editarItem = this.getReadequacao;
+        },
+    },
+    created() {
+        if (typeof this.$route.params.idPronac !== 'undefined') {
+            this.idPronac = this.$route.params.idPronac;
+            if (Object.keys(this.dadosProjeto).length === 0) {
+                this.buscaProjeto(this.idPronac);
+            }
+        }
+        this.listaStatus.forEach(stStatusAtual => {
+            this.obterReadequacoesPorStatus(stStatusAtual);
+        });
+    },
+    methods: {
+        ...mapActions({
+            obterListaDeReadequacoes: 'readequacao/obterListaDeReadequacoes',
+            buscaProjeto: 'projeto/buscaProjeto',
+        }),
+        obterReadequacoesPorStatus(stStatusAtual) {
+            if (this.listaStatus.includes(stStatusAtual)) {
+                this.obterListaDeReadequacoes({
+                    idPronac: this.$route.params.idPronac,
+                    stStatusAtual: stStatusAtual
+                });
+            }
+        },
+        criarReadequacao(idTipoReadequacao) {
+            const idPronac = this.dadosProjeto.idPronac;
+            if (idPronac !== '') {
+                this.obterListaDeReadequacoes({
+                    idPronac: idPronac,
+                    stStatusAtual: 'proponente'
+                });
+            }
+        },
+        excluirReadequacao(idReadequacao) {
+            this.obterListaDeReadequacoes({ stStatusAtual: 'proponente' });
+        },
+    },
+};
 </script>
