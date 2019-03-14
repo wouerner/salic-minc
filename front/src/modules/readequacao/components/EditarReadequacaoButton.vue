@@ -71,7 +71,7 @@
                                 >Edição</div>
                                 <v-card
                                     v-if="getTemplateParaTipo"
-                                >a
+                                >
                                     <component
                                         :is="getTemplateParaTipo"
                                         :dados-readequacao="dadosReadequacao"
