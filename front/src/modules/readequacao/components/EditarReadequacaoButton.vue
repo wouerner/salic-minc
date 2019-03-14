@@ -76,7 +76,7 @@
                                         :is="getTemplateParaTipo"
                                         :dados-readequacao="dadosReadequacao"
                                         :campo="getDadosCampo"
-                                        @dados-update="atualizaDados($event)"
+                                        @dados-update="atualizarSolicitacao($event)"
                                     />
                                 </v-card>
                             </v-expansion-panel-content>
@@ -95,7 +95,7 @@
                                 <UploadFile
                                     :formatos-aceitos="formatosAceitos"
                                     class="mb-4"
-                                    @arquivo-anexado="arquivoAnexado($event)"
+                                    @arquivo-anexado="atualizarArquivo($event)"
                                 />
                             </v-expansion-panel-content>
                         </v-expansion-panel>
@@ -213,6 +213,7 @@ export default {
                     tpCampo: this.campoAtual[chave].tpCampo,
                 };
             }
+            return {};
         },
     },
     watch: {
@@ -245,18 +246,16 @@ export default {
             obterCampoAtual: 'readequacao/obterCampoAtual',
             updateReadequacao: 'readequacao/updateReadequacao',
         }),
-        arquivoAnexado(arquivo) {
-            this.readequacaoEditada.documento = arquivo;
-            console.log('Arquivo alterado!');
-            // POST ou PUT da Readequação
-            // Observar caso arquivo seja undefined, para atualizar
-        },
         abrirEdicao() {
             if (typeof this.getTemplateParaTipo === 'undefined') {
                 this.redirecionar = true;
             } else {
                 this.dialog = true;
             }
+        },
+        salvarReadequacao() {
+            console.log(this.readequacaoEditada);
+            this.updateReadequacao(this.readequacaoEditada);
         },
         atualizarReadequacaoEditada() {
             this.readequacaoEditada.idReadequacao = this.dadosReadequacao.idReadequacao;
@@ -265,20 +264,21 @@ export default {
             this.readequacaoEditada.dsAvaliacao = this.dadosReadequacao.dsAvaliacao;
             this.readequacaoEditada.idDocumento = this.dadosReadequacao.idDocumento;
         },
-        atualizaDados(data) {
-            console.log('Data: ' + data);
-            this.readequacaoEditada.dtSolicitacao = data;
+        atualizarArquivo(arquivo) {
+            console.log(`Arquivo alterado! ${arquivo}`);
+            this.readequacaoEditada.documento = arquivo;
+            // POST ou PUT da Readequação
+            // Observar caso arquivo seja undefined, para atualizar
         },
-        salvarReadequacao() {
-            console.log(this.readequacaoEditada);
-            this.updateReadequacao(this.readequacaoEditada);
+        atualizarSolicitacao(valor) {
+            this.readequacaoEditada.dsSolicitacao = valor;
         },
     },
 };
 </script>
 <style>
 
-#footer {
-    z-index: 5;
-}
+ #footer {
+     z-index: 5;
+ }
 </style>

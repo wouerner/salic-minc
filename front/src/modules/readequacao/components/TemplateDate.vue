@@ -43,7 +43,6 @@
                                 hint="Formato DD/MM/YYYY"
                                 persistent-hint
                                 prepend-icon="event"
-                                @blur="date = parseDate(dateFormatted)"
                                 ></v-text-field>
                             <v-date-picker
                                 v-model="date"
@@ -73,17 +72,14 @@ export default {
     },
     watch: {
         date(val) {
+            this.$emit('dados-update', this.date);
             this.dateFormatted = this.formatDate(this.date);
         },
     },
     computed: {
         computedDateFormatted() {
             dataFormatada = this.formatDate(this.date);
-            
-            this.$emit('dados-update', dataFormatada);
-
             return dataFormatada;
-            
         },
     },
     created() {
