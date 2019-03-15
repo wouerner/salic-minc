@@ -18,7 +18,6 @@
                         <v-divider class="pb-2"/>
                     </v-flex>
                     <v-flex>
-                        <b>Recurso fase 2</b><br>
                         <span v-html="recurso.dadosRecurso.dsSolicitacaoRecurso"/>
                     </v-flex>
                     <v-flex>
@@ -252,6 +251,8 @@
                         </v-expansion-panel>
                     </v-layout>
                     <v-layout
+                        v-if="recurso.dadosRecurso.tpSolicitacao === 'EO' ||
+                        recurso.dadosRecurso.tpSolicitacao === 'OR'"
                         justify-space-around
                         row
                         wrap>
@@ -328,7 +329,7 @@
 
 <script>
 import { utils } from '@/mixins/utils';
-import PlanilhaPropostaAutorizada from '../../incentivo/planilha/PlanilhaPropostaAutorizada';
+import PlanilhaPropostaAutorizada from '../../incentivo/planilha/PlanilhaHomologada';
 
 export default {
     name: 'ConteudoRecursoFase2',
@@ -358,13 +359,18 @@ export default {
             return inciso;
         },
     },
-
     mixins: [utils],
     props: {
         recurso: {
             type: Object,
             default: () => {
             },
+        },
+    },
+    computed: {
+        isParecerFavoravel() {
+            return !!this.recurso.produtosRecurso
+                && this.recurso.produtosRecurso.every(item => item.stPrincipal === 1 && item.ParecerFavoravel === 1);
         },
     },
 };
