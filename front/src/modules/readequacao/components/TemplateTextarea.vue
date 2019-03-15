@@ -10,7 +10,9 @@
                 <v-card height="336px">
                     <v-card-title class="grey lighten-2 title">Versão original</v-card-title>
                     <v-divider/>
-                    <v-card-text>{{ campo.valor }}</v-card-text>
+                    <v-card-text>
+                        <span v-html="campo.valor"></span>
+                    </v-card-text>
                 </v-card>
             </v-flex>
             <v-flex
@@ -22,6 +24,7 @@
                     <v-card-title class="green lighten-2 title">Versão readequada</v-card-title>
                     <EditorTexto
                         :style="''"
+                        :value="campo.valor"
                         @editor-texto-input="salvarInput($event)"
                     />
                 </v-card>

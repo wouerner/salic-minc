@@ -11,7 +11,7 @@ HOST: http://localhost:4000
 + Response 200 (application/json; charset=utf-8)
 
     + Body
-        
+
             {
                 "data": {
                     "code": 200,
@@ -130,7 +130,7 @@ HOST: http://localhost:4000
 + Response 200 (application/json; charset=utf-8)
 
     + Body
-        
+
             {
                 "data": {
                     "code": 200,
@@ -162,7 +162,7 @@ HOST: http://localhost:4000
                             "dsTipoReadequacao": "Impacto ambiental",
                             "dtSolicitacao": "2019-01-22",
                             "idSolicitante": 267,
-                            "dsSolicitacao": "Descrição completa do impacto ambiental...",
+                            "dsSolicitacao": "<p><b>Descrição completa do impacto ambiental...</b></p>",
                             "dsJustificativa": "É necessário alterar a parte que diz sobre o consumo de água elevado.",
                             "idDocumento": 19440,
                             "idAvaliador": 335,
@@ -245,25 +245,25 @@ HOST: http://localhost:4000
 
         --BOUNDARY
         Content-Disposition: form-data; name="idPronac"
-        
+
         215221
         --BOUNDARY
         Content-Disposition: form-data; name="idTipoReadequacao"
-        
+
         5
         --BOUNDARY
         Content-Disposition: form-data; name="dsSolicitacao"
-        
+
         Porque sim, eu quero!
         --BOUNDARY
         Content-Disposition: form-data; name="dsJustificativa"
-        
+
         Porque é necessário.
         --BOUNDARY
         Content-Disposition: form-data; name="documento"; filename="file.pdf"
         Content-Type: application/pdf
         Content-Transfer-Encoding: base64
-        
+
         [BINARY CODE]
         --BOUNDARY
 
@@ -303,7 +303,7 @@ HOST: http://localhost:4000
 + Response 200 (application/json; charset=utf-8)
 
     + Body
-        
+
             {
                 "idPronac": 217336,
                 "idReadequacao": 15125,
@@ -335,28 +335,28 @@ HOST: http://localhost:4000
         15125
         --BOUNDARY
         Content-Disposition: form-data; name="dsSolicitacao"
-        
+
         Porque sim, eu quero!
         --BOUNDARY
         Content-Disposition: form-data; name="dsJustificativa"
-        
+
         Porque é necessário.
         --BOUNDARY
         Content-Disposition: form-data; name="idAvaliador"
-        
+
         236
         --BOUNDARY
         Content-Disposition: form-data; name="dsAvaliacao"
-        
+
         --BOUNDARY
         Content-Disposition: form-data; name="stAcao"
-        
+
         Aprovado!
         --BOUNDARY
         Content-Disposition: form-data; name="documento"; filename="file.pdf"
         Content-Type: application/pdf
         Content-Transfer-Encoding: base64
-        
+
         [BINARY CODE]
         --BOUNDARY
 
@@ -364,7 +364,7 @@ HOST: http://localhost:4000
 + Response 200 (application/json; charset=utf-8)
 
     + Body
-        
+
             {
                 "idPronac": 217336,
                 "idReadequacao": 15128,
@@ -388,7 +388,7 @@ HOST: http://localhost:4000
 ### Excluir readequação [DELETE]
 
 + Parameters
-    + idReadequacao (string, required) - ID da Readequação  
+    + idReadequacao (string, required) - ID da Readequação
 
 + Response 200 (application/json; charset=utf-8)
 
@@ -459,7 +459,7 @@ HOST: http://localhost:4000
                     ]
                 }
             }
-    
+
 ## Readequacao - Buscar campos por tipo readequação [/readequacao/campo-atual?idPronac=217336&idTipoReadequacao=2]
 
 ### Buscar campos por tipo readequação - planilha orçamentária [GET]
@@ -574,9 +574,9 @@ HOST: http://localhost:4000
 ### Remover documento de uma readequação [DELETE]
 
 + Response 200 (application/json; charset=utf-8)
-  
+
     + Body
-      
+
             {
                 "mensagem": "Arquivo removido com sucesso!"
             }
@@ -591,7 +591,7 @@ HOST: http://localhost:4000
 + Response 200 (application/json; charset=utf-8)
 
     + Body
-      
+
             {
                 "disponivelEdicaoItem": "true"
             }
