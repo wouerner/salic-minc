@@ -42,7 +42,7 @@ export const buscaReadequacaoPronacTipo = (params) => {
 
 export const updateReadequacao = (params) => {
     const path = `/readequacao/dados-readequacao`;
-    return api.putRequest(path, buildData(params), params.idReadequacao);
+    return api.postRequest(path, buildData(params), params.idReadequacao);
 };
 
 export const excluirReadequacao = (params) => {

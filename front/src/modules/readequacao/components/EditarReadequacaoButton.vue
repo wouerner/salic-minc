@@ -76,7 +76,7 @@
                                         :is="getTemplateParaTipo"
                                         :dados-readequacao="dadosReadequacao"
                                         :campo="getDadosCampo"
-                                        @dados-update="atualizarSolicitacao($event)"
+                                        @dados-update="atualizarCampo('dsSolicitacao', $event)"
                                     />
                                 </v-card>
                             </v-expansion-panel-content>
@@ -91,7 +91,7 @@
                                 <v-card>
                                     <FormReadequacao
                                         :dados-readequacao="dadosReadequacao"
-                                        @justificativa-update="atualizarJustificativa($event)"
+                                        @dados-update="atualizarCampo('dsJustificativa', $event)"
                                     />
                                 </v-card>
                                 <UploadFile
@@ -188,7 +188,7 @@ export default {
                 dsJustificativa: '',
                 dtSolicitacao: '',
                 documento: {},
-                idDocumento: 0,
+                idDocumento: '',
                 dsAvaliacao: '',
             },
             redirecionar: false,
@@ -241,7 +241,7 @@ export default {
             idPronac: this.dadosReadequacao.idPronac,
             idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
         });
-        this.atualizarReadequacaoEditada();
+        this.inicializarReadequacaoEditada();
     },
     methods: {
         ...mapActions({
@@ -256,15 +256,18 @@ export default {
             }
         },
         salvarReadequacao() {
-            console.log(this.readequacaoEditada);
             this.updateReadequacao(this.readequacaoEditada);
         },
-        atualizarReadequacaoEditada() {
-            this.readequacaoEditada.idReadequacao = this.dadosReadequacao.idReadequacao;
-            this.readequacaoEditada.dsSolicitacao = this.dadosReadequacao.dsSolicitacao;
-            this.readequacaoEditada.dsJustificativa = this.dadosReadequacao.dsJustificativa;
-            this.readequacaoEditada.dsAvaliacao = this.dadosReadequacao.dsAvaliacao;
-            this.readequacaoEditada.idDocumento = this.dadosReadequacao.idDocumento;
+        inicializarReadequacaoEditada() {
+            this.readequacaoEditada = {
+                idPronac: this.dadosReadequacao.idPronac,
+                idReadequacao: this.dadosReadequacao.idReadequacao,
+                idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
+                dsAvaliacao: this.dadosReadequacao.dsAvaliacao,
+                idDocumento: this.dadosReadequacao.idDocumento || '',
+                dsSolicitacao: this.dadosReadequacao.dsSolicitacao,
+                dsJustificativa: this.dadosReadequacao.dsJustificativa,
+            }
         },
         atualizarArquivo(arquivo) {
             console.log(`Arquivo alterado! ${arquivo}`);
@@ -272,11 +275,11 @@ export default {
             // POST ou PUT da Readequação
             // Observar caso arquivo seja undefined, para atualizar
         },
-        atualizarSolicitacao(valor) {
-            this.readequacaoEditada.dsSolicitacao = valor;
-        },
-        atualizarJustificativa(texto) {
-            this.readequacaoEditada.dsJustificativa = texto;
+        atualizarCampo(campo, valor) {
+            let campos = ['dsSolicitacao', 'dsJustificativa'];
+            if (campos.includes(campo)) {
+                this.readequacaoEditada[campo] = valor;
+            }
         },
     },
 };

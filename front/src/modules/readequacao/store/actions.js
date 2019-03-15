@@ -68,8 +68,7 @@ export const excluirReadequacao = ({ commit }, params) => {
 export const updateReadequacao = ({ commit }, params) => {
     readequacaoHelperAPI.updateReadequacao(params)
         .then((response) => {
-            const { readequacao } = response.data;
-            commit(types.UPDATE_READEQUACAO, readequacao);
+            commit(types.UPDATE_READEQUACAO, response.data.data.items);
         });
 };
 

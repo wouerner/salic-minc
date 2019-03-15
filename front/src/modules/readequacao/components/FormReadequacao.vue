@@ -38,7 +38,7 @@ export default {
     },
     methods: {
         atualizarForm(texto) {
-            this.$emit('justificativa-update', texto);
+            this.$emit('dados-update', texto);
         },
     },
 };

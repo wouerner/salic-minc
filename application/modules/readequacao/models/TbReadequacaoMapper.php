@@ -43,13 +43,21 @@ class Readequacao_Model_TbReadequacaoMapper extends MinC_Db_Mapper
             if (isset($arrData['idTipoReadequacao'])) {
                 $objReadequacao->setIdTipoReadequacao($arrData['idTipoReadequacao']);
             }
-
+            
             if (isset($arrData['dsJustificativa'])) {
-                $objReadequacao->setDsJustificativa($arrData['dsJustificativa']);
+                $dsJustificativa = $arrData['dsJustificativa'];
+                if (mb_detect_encoding($dsJustificativa == 'UTF-8')) {
+                    $dsJustificativa = utf8_decode($dsJustificativa);
+                }
+                $objReadequacao->setDsJustificativa($dsJustificativa);
             }
 
             if (isset($arrData['dsSolicitacao'])) {
-                $objReadequacao->setDsSolicitacao($arrData['dsSolicitacao']);
+                $dsSolicitacao = $arrData['dsSolicitacao'];
+                if (mb_detect_encoding($dsSolicitacao == 'UTF-8')) {
+                    $dsSolicitacao = utf8_decode($dsSolicitacao);
+                }
+                $objReadequacao->setDsSolicitacao($dsSolicitacao);
             }
 
             if ($arrData['idDocumento']) {

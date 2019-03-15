@@ -453,18 +453,12 @@ class Readequacao implements IServicoRestZend
     {
         $parametros = $this->request->getParams();
         
-        $dados = [];
-        $dados['idReadequacao'] = $parametros['idReadequacao'];
-        $dados['idPronac'] = $parametros['idPronac'];
-        $dados['dsJustificativa'] = $parametros['dsJustificativa'];
-        $dados['dsSolicitacao'] = $parametros['dsSolicitacao'];
-        $dados['dtSolicitacao'] = $parametros['dtSolicitacao'];
-        $dados['stAtendimento'] = $parametros['stAtendimento'];
-        $dados['idDocumento'] = $parametros['idDocumento'];
-
         $mapper = new \Readequacao_Model_TbReadequacaoMapper();
-        $idReadequacao = $mapper->salvarSolicitacaoReadequacao($dados);
-        
-        return $this->buscar($idReadequacao);
+        $idReadequacao = $mapper->salvarSolicitacaoReadequacao($parametros);
+
+        $result = $this->buscar($idReadequacao);
+        $result = \TratarArray::utf8EncodeArray($result);
+
+        return $result;
     }
 }
