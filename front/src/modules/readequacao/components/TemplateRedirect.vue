@@ -26,15 +26,13 @@ export default {
             const chave = `key_${this.dadosReadequacao.idTipoReadequacao}`;
             if (Object.prototype.hasOwnProperty.call(this.campo, chave)) {
                 if (typeof this.campo[chave].tpCampo !== 'undefined') {
-                    const { tpCampo } = this.campo[chave].tpCampo;
-                    this.urlRedirect = this.tiposReadequacoesRedirect[tpCampo];
+                    this.urlRedirect = this.tiposReadequacoesRedirect[this.campo[chave].tpCampo];
                 }
             }
         },
         redirecionar() {
             if (this.redirecionar) {
-                const { idPronac } = this.dadosReadequacao.idPronac;
-                const routePath = this.urlRedirect + String(idPronac);
+                const routePath = this.urlRedirect + String(this.dadosReadequacao.idPronac);
                 if (routePath.match(/#/)) {
                     this.$router.push({ path: routePath });
                 } else {
