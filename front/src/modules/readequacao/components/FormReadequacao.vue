@@ -1,16 +1,17 @@
 <template>
 <v-container fluid>
-<v-layout row wrap>   
+<v-layout row wrap>
     <v-flex xs12>
         <v-card>
             <EditorTexto
                 :style="''"
                 :value="dadosReadequacao.dsJustificativa"
                 required="required"
+                @editor-texto-input="atualizarForm($event)"
             ></EditorTexto>
         </v-card>
     </v-flex>
-</v-layout>    
+</v-layout>
 </v-container>
 </template>
 
@@ -36,6 +37,9 @@ export default {
     computed: {
     },
     methods: {
+        atualizarForm(texto) {
+            this.$emit('justificativa-update', texto);
+        },
     },
 };
 </script>

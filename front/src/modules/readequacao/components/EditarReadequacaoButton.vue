@@ -90,7 +90,9 @@
                                 >Justificativa da readequação</div>
                                 <v-card>
                                     <FormReadequacao
-                                        :dados-readequacao="dadosReadequacao"/>
+                                        :dados-readequacao="dadosReadequacao"
+                                        @justificativa-update="atualizarJustificativa($event)"
+                                    />
                                 </v-card>
                                 <UploadFile
                                     :formatos-aceitos="formatosAceitos"
@@ -272,6 +274,9 @@ export default {
         },
         atualizarSolicitacao(valor) {
             this.readequacaoEditada.dsSolicitacao = valor;
+        },
+        atualizarJustificativa(texto) {
+            this.readequacaoEditada.dsJustificativa = texto;
         },
     },
 };
