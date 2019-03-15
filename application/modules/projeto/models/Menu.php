@@ -407,8 +407,8 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             $menu['analiseaprovacao']['submenu'][] = [
                 'label' => 'Recursos',
                 'title' => 'Ir para Recursos',
-                'link' => '/default/consultardadosprojeto/recurso/?idPronac=' . $idPronacHash,
-                'ajax' => true,
+                'link' => "/projeto/#/{$idPronacHash}/recurso",
+                'ajax' => false,
                 'grupo' => []
             ];
 

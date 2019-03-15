@@ -367,11 +367,5 @@ export default {
             },
         },
     },
-    computed: {
-        isParecerFavoravel() {
-            return !!this.recurso.produtosRecurso
-                && this.recurso.produtosRecurso.every(item => item.stPrincipal === 1 && item.ParecerFavoravel === 1);
-        },
-    },
 };
 </script>
