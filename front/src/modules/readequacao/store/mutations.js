@@ -32,7 +32,7 @@ export const mutations = {
         state.campoAtual = campoAtual;
     },
     [types.SET_CAMPO_ATUAL](state, campoAtual) {
-        const chave = 'key_' + campoAtual.idTipoReadequacao;
+        const chave = `key_${campoAtual.idTipoReadequacao}`;
         Vue.set(state.campoAtual, chave, campoAtual);
     },
     [types.UPDATE_READEQUACAO](state, readequacao) {
@@ -42,10 +42,8 @@ export const mutations = {
         state.readequacao = {};
     },
     [types.ADICIONAR_DOCUMENTO](state, data) {
-        const idDocumento = data.idDocumento;
-        const nomeArquivo = data.nomeArquivo;
-        state.readequacao.idDocumento = idDocumento;
-        state.readequacao.nomeArquivo = nomeArquivo;
+        state.readequacao.idDocumento = data.idDocumento;
+        state.readequacao.nomeArquivo = data.nomeArquivo;
     },
     [types.EXCLUIR_DOCUMENTO](state) {
         state.readequacao.idDocumento = '';
@@ -53,7 +51,7 @@ export const mutations = {
     },
     [types.UPDATE_READEQUACAO_DS_SOLICITACAO](state, dsSolicitacao) {
         state.readequacao.items.dsSolicitacao = dsSolicitacao;
-    },    
+    },
     [types.UPDATE_READEQUACAO_SALDO_APLICACAO_DS_SOLICITACAO](state, dsSolicitacao) {
         state.readequacao.saldoAplicacaoDsSolicitacao = dsSolicitacao;
     },

@@ -20,56 +20,51 @@
                     dark
                     icons-and-text
                 >
-                    <v-tabs-slider color="yellow"></v-tabs-slider>
-
+                    <v-tabs-slider color="yellow"/>
                     <v-tab href="#tab-1">Edição
                         <v-icon>edit</v-icon>
                     </v-tab>
-
                     <v-tab href="#tab-2">Em Análise
                         <v-icon>gavel</v-icon>
                     </v-tab>
-                
                     <v-tab href="#tab-3">Finalizadas
                         <v-icon>check</v-icon>
                     </v-tab>
-
                     <v-tab-item :value="'tab-1'">
                         <v-card>
                             <TabelaReadequacoes
-                                :dadosReadequacao="getReadequacoesProponente"
+                                :dados-readequacao="getReadequacoesProponente"
                                 :componentes="acoesProponente"
-                                :dadosProjeto="dadosProjeto"
-                                :editarItem="editarItem"
-                                v-on:excluir-readequacao="excluirReadequacao"
-                            ></TabelaReadequacoes>
+                                :dados-projeto="dadosProjeto"
+                                :editar-item="editarItem"
+                                @v-on:excluir-readequacao="excluirReadequacao"
+                            />
                         </v-card>
                     </v-tab-item>
 
                     <v-tab-item :value="'tab-2'">
                         <v-card>
                             <TabelaReadequacoes
-                                :dadosReadequacao="getReadequacoesAnalise"
+                                :dados-readequacao="getReadequacoesAnalise"
                                 :componentes="acoesAnalise"
-                                :dadosProjeto="dadosProjeto"
-                            ></TabelaReadequacoes>
+                                :dados-projeto="dadosProjeto"
+                            />
                         </v-card>
                     </v-tab-item>
                     <v-tab-item :value="'tab-3'">
                         <v-card>
                             <TabelaReadequacoes
-                                :dadosReadequacao="getReadequacoesFinalizadas"
+                                :dados-readequacao="getReadequacoesFinalizadas"
                                 :componentes="acoesFinalizadas"
-                                :dadosProjeto="dadosProjeto"
-                            ></TabelaReadequacoes>
+                                :dados-projeto="dadosProjeto"
+                            />
                         </v-card>
                     </v-tab-item>
                 </v-tabs>
                 <CriarReadequacao
-                    :idPronac="dadosProjeto.idPronac"
-                    v-on:criar-readequacao="criarReadequacao"
-                >
-                </CriarReadequacao>
+                    :id-pronac="dadosProjeto.idPronac"
+                    @v-on:criar-readequacao="criarReadequacao"
+                />
             </v-flex>
         </v-layout>
     </v-container>
@@ -98,16 +93,16 @@ export default {
             listaStatus: ['proponente', 'analise', 'finalizadas'],
             acoesProponente: {
                 usuario: '',
-                acoes: [ExcluirButton, EditarReadequacaoButton, VisualizarReadequacaoButton]
+                acoes: [ExcluirButton, EditarReadequacaoButton, VisualizarReadequacaoButton],
             },
             acoesAnalise: {
-                acoes: [VisualizarReadequacaoButton]
+                acoes: [VisualizarReadequacaoButton],
             },
             acoesFinalizadas: {
-                acoes: [VisualizarReadequacaoButton]
+                acoes: [VisualizarReadequacaoButton],
             },
             editarItem: {},
-            loading: true
+            loading: true,
         };
     },
     computed: {
@@ -117,7 +112,7 @@ export default {
             getReadequacoesAnalise: 'readequacao/getReadequacoesAnalise',
             getReadequacoesFinalizadas: 'readequacao/getReadequacoesFinalizadas',
             getReadequacao: 'readequacao/getReadequacao',
-            dadosProjeto: 'projeto/projeto'
+            dadosProjeto: 'projeto/projeto',
         }),
     },
     watch: {
@@ -126,7 +121,7 @@ export default {
                 this.loading = false;
             }
         },
-        getReadequacao(value) {
+        getReadequacao() {
             this.editarItem = this.getReadequacao;
         },
     },
@@ -137,7 +132,7 @@ export default {
                 this.buscaProjeto(this.idPronac);
             }
         }
-        this.listaStatus.forEach(stStatusAtual => {
+        this.listaStatus.forEach((stStatusAtual) => {
             this.obterReadequacoesPorStatus(stStatusAtual);
         });
     },
@@ -150,20 +145,20 @@ export default {
             if (this.listaStatus.includes(stStatusAtual)) {
                 this.obterListaDeReadequacoes({
                     idPronac: this.$route.params.idPronac,
-                    stStatusAtual: stStatusAtual
+                    stStatusAtual,
                 });
             }
         },
-        criarReadequacao(idTipoReadequacao) {
-            const idPronac = this.dadosProjeto.idPronac;
+        criarReadequacao() {
+            const { idPronac } = this.dadosProjeto.idPronac;
             if (idPronac !== '') {
                 this.obterListaDeReadequacoes({
-                    idPronac: idPronac,
-                    stStatusAtual: 'proponente'
+                    idPronac: this.dadosProjeto.idPronac,
+                    stStatusAtual: 'proponente',
                 });
             }
         },
-        excluirReadequacao(idReadequacao) {
+        excluirReadequacao() {
             this.obterListaDeReadequacoes({ stStatusAtual: 'proponente' });
         },
     },

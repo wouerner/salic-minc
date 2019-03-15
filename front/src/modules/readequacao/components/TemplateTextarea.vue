@@ -1,7 +1,12 @@
 <template>
     <v-container fluid>
-        <v-layout row wrap>
-            <v-flex xs10 md5>
+        <v-layout
+            row
+            wrap
+        >
+            <v-flex
+                xs10
+                md5>
                 <v-card height="336px">
                     <v-card-title class="grey lighten-2 title">Versão original</v-card-title>
                     <v-divider/>
@@ -18,7 +23,7 @@
                     <EditorTexto
                         :style="''"
                         @editor-texto-input="salvarInput($event)"
-                    ></EditorTexto>
+                    />
                 </v-card>
             </v-flex>
         </v-layout>
@@ -32,12 +37,12 @@ export default {
     components: {
         EditorTexto,
     },
+    props: {
+        campo: { type: Object, default: () => {} },
+        dadosReadequacao: { type: Object, default: () => {} },
+    },
     data() {
         return {};
-    },
-    props: {
-        campo: { Object: () => {} },
-        dadosReadequacao: { Object: () => {} },
     },
     computed: {},
     methods: {

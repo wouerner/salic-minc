@@ -479,7 +479,7 @@ HOST: http://localhost:4000
                         {
                             "idTipoReadequacao": "2",
                             "descricao": "Planilha Orçamentária",
-                            "tpCampo": "planilha",
+                            "tpCampo": "planilha_orcamentaria",
                             "dsCampo": ""
                         }
                     ]
