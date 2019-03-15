@@ -5,7 +5,7 @@ export const obterListaDeReadequacoes = ({ commit }, params) => {
     readequacaoHelperAPI.getReadequacoes(params)
         .then((response) => {
             const { data } = response.data;
-            switch (data.stStatusAtual) {
+            switch (params.stStatusAtual) {
             case 'proponente':
                 commit(types.GET_READEQUACOES_PROPONENTE, data);
                 break;
@@ -16,7 +16,6 @@ export const obterListaDeReadequacoes = ({ commit }, params) => {
                 commit(types.GET_READEQUACOES_FINALIZADAS, data);
                 break;
             default:
-                commit(types.GET_READEQUACOES_PROPONENTE, data);
                 break;
             }
         });
