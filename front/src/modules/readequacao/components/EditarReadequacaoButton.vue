@@ -139,6 +139,20 @@
                         </v-footer>
                     </v-flex>
                 </v-layout>
+                <v-snackbar
+                    v-model="mensagem.ativa"
+                    :top="'top'"
+                    :color="mensagem.cor"
+                    :timeout="mensagem.timeout"
+                ><span>{{ mensagem.conteudo }}</span>
+                    <v-btn
+                        dark
+                        flat
+                        @click="mensagem.ativa = false"
+                        >
+                        Fechar
+                    </v-btn>
+                </v-snackbar>
             </v-card>
         </v-dialog>
     </v-layout>
@@ -192,6 +206,12 @@ export default {
                 dsAvaliacao: '',
             },
             redirecionar: false,
+            mensagem: {
+                ativa: false,
+                timeout: 5000,
+                conteudo: '',
+                cor: '',
+            }
         };
     },
     computed: {
@@ -256,7 +276,15 @@ export default {
             }
         },
         salvarReadequacao() {
-            this.updateReadequacao(this.readequacaoEditada);
+            this.updateReadequacao(this.readequacaoEditada).then((response) => {
+                this.mensagem.conteudo = 'Readequação salva com sucesso!';
+                this.mensagem.ativa = true;
+                this.mensagem.cor = 'green darken-1';
+            }), function(error) {
+                this.mensagem.conteudo = 'Erro ao gravar a readequação!';
+                this.mensagem.ativa = true;
+                this.mensagem.cor = 'deep-orange';
+            };
         },
         inicializarReadequacaoEditada() {
             this.readequacaoEditada = {
@@ -267,7 +295,7 @@ export default {
                 idDocumento: this.dadosReadequacao.idDocumento || '',
                 dsSolicitacao: this.dadosReadequacao.dsSolicitacao,
                 dsJustificativa: this.dadosReadequacao.dsJustificativa,
-            }
+            };
         },
         atualizarArquivo(arquivo) {
             console.log(`Arquivo alterado! ${arquivo}`);
@@ -286,7 +314,7 @@ export default {
 </script>
 <style>
 
- #footer {
-     z-index: 5;
- }
+#footer {
+    z-index: 5;
+}
 </style>

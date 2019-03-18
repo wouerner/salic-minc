@@ -41,7 +41,6 @@
                         />
                     </v-card-text>
                     <v-card-actions>
-
                         <v-btn
                             color="red darken-1"
                             flat="flat"

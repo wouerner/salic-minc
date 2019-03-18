@@ -150,8 +150,7 @@ export default {
             }
         },
         criarReadequacao() {
-            const { idPronac } = this.dadosProjeto.idPronac;
-            if (idPronac !== '') {
+            if (this.dadosProjeto.idPronac !== '') {
                 this.obterListaDeReadequacoes({
                     idPronac: this.dadosProjeto.idPronac,
                     stStatusAtual: 'proponente',

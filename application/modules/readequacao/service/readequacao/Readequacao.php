@@ -36,11 +36,11 @@ class Readequacao implements IServicoRestZend
     {
         $modelTbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
         $where = [
-            'idPronac = ?' => $idPronac
+            'tbReadequacao.idPronac = ?' => $idPronac
         ];
 
         if ($idTipoReadequacao != '') {
-            $where['idTipoReadequacao = ?'] = $idTipoReadequacao;
+            $where['tbReadequacao.idTipoReadequacao = ?'] = $idTipoReadequacao;
         }
         
         switch ($stStatusAtual) {
