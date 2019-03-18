@@ -3,6 +3,7 @@
 namespace Application\Modules\Readequacao\Service\Readequacao;
 
 use MinC\Servico\IServicoRestZend;
+use Application\Modules\Documento\Service\Documento\Documento as DocumentoService;
 
 class Readequacao implements IServicoRestZend
 {
@@ -452,6 +453,11 @@ class Readequacao implements IServicoRestZend
     public function salvar()
     {
         $parametros = $this->request->getParams();
+        
+        if (!empty($_FILES['documento'])) {
+            $documento = new DocumentoService($this->request, $this->response);
+            $parametros['idDocumento'] = $documento->inserir($_FILES);
+        }
         
         $mapper = new \Readequacao_Model_TbReadequacaoMapper();
         $idReadequacao = $mapper->salvarSolicitacaoReadequacao($parametros);
