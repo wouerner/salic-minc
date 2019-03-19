@@ -141,7 +141,7 @@
                 </v-layout>
                 <v-snackbar
                     v-model="mensagem.ativa"
-                    :top="'top'"
+                    bottom
                     :color="mensagem.cor"
                     :timeout="mensagem.timeout"
                 ><span>{{ mensagem.conteudo }}</span>
@@ -208,7 +208,7 @@ export default {
             redirecionar: false,
             mensagem: {
                 ativa: false,
-                timeout: 5000,
+                timeout: 2300,
                 conteudo: '',
                 cor: '',
             }
@@ -251,6 +251,14 @@ export default {
             handler(valor) {
                 if (this.bindClick === valor.idReadequacao) {
                     this.dialog = true;
+                }
+            },
+            deep: true,
+        },
+        mensagem: {
+            handler(mensagem) {
+                if (mensagem.ativa === false) {
+                    this.dialog = false;
                 }
             },
             deep: true,
