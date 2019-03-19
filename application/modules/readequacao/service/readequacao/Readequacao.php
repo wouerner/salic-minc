@@ -454,8 +454,25 @@ class Readequacao implements IServicoRestZend
         $parametros = $this->request->getParams();
 
         if (!empty($_FILES['documento'])) {
-            $documento = new DocumentoService($this->request, $this->response);
-            $parametros['idDocumento'] = $documento->inserir($_FILES);
+            $documento = new DocumentoService(
+                $this->request,
+                $this->response
+            );
+            try {
+                $metadata = [
+                    'idTipoDocumento' => Docụmento_Model_DbTable_tbTipoDocumento::TIPO_DOCUMENTO_READEQUACAO,
+                    'dsDocumento' => 'Solicitação de Readequação',
+                    'nmTitulo' => 'Readequação'
+                ];
+                
+                $parametros['idDocumento'] = $documento->inserir(
+                    $_FILES,
+                    $metadata,
+                    'pdf'
+                );
+            } catch(Exception $e) {
+                return $e;
+            }
         }
 
         $mapper = new \Readequacao_Model_TbReadequacaoMapper();
