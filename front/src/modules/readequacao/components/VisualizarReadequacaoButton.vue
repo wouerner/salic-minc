@@ -61,7 +61,7 @@
                                         Solicitação
                                     </v-card-title>
                                     <v-card-text>
-                                        <span>{{ dadosReadequacao.dsSolicitacao }}</span>
+                                        <span v-html="dadosReadequacao.dsSolicitacao"></span>
                                     </v-card-text>
                                 </v-card>
                                 <v-card>
@@ -69,7 +69,7 @@
                                         Justificativa
                                     </v-card-title>
                                     <v-card-text>
-                                        <span>{{ dadosReadequacao.dsJustificativa }}</span>
+                                        <span v-html="dadosReadequacao.dsJustificativa"></span>
                                     </v-card-text>
                                 </v-card>
                                 <v-card>
