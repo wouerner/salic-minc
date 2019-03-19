@@ -13,10 +13,9 @@
                 <td class="text-xs-left">{{ props.item.dsTipoReadequacao }}</td>
                 <td class="text-xs-center">{{ props.item.dtSolicitacao }}</td>
                 <td class="text-xs-center">{{ props.item.idDocumento }}</td>
-                <td class="text-xs-center">{{ props.item.dsJustificativa }}</td>
                 <td class="text-xs-center" v-if="componentes.acoes">
-                <v-layout 
-                    row 
+                <v-layout
+                    row
                     justify-center
                     align-end
                 >
@@ -87,11 +86,6 @@ export default {
                     value: 'idDocumento',
                 },
                 {
-                    text: 'Justificativa',
-                    align: 'center',
-                    value: 'dsJustificativa',
-                },
-                {
                     text: 'Ações',
                     align: 'center',
                     value: '',
@@ -107,7 +101,7 @@ export default {
                     if (this.editarItem.hasOwnProperty('idReadequacao')) {
                         const indexItemInserido = this.dadosReadequacao.items.indexOf(this.editarItem);
                         const idReadequacaoInserido = this.dadosReadequacao.items[indexItemInserido].idReadequacao;
-                        
+
                         if (indexItemInserido > -1) {
                             this.bindClick = idReadequacaoInserido;
                         }
