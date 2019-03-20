@@ -7,7 +7,7 @@
             <v-flex
                 xs10
                 md5>
-                <v-card height="336px">
+                <v-card min-height="336px">
                     <v-card-title class="grey lighten-2 title">Versão original</v-card-title>
                     <v-divider/>
                     <v-card-text>
@@ -20,7 +20,7 @@
                 md6
                 offset-md1
             >
-                <v-card height="336px">
+                <v-card min-height="336px">
                     <v-card-title class="green lighten-2 title">Versão readequada</v-card-title>
                     <EditorTexto
                         :style="''"

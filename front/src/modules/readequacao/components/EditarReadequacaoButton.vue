@@ -60,6 +60,7 @@
                         <v-expansion-panel
                             v-model="panel"
                             expand
+                            popout
                         >
                             <v-expansion-panel-content
                                 readonly
@@ -84,11 +85,13 @@
                                 readonly
                                 hide-actions
                             >
-                                <div
-                                    slot="header"
-                                    class="title"
-                                >Justificativa da readequação</div>
+
                                 <v-card>
+                                    <v-card-title
+                                    class="green lighten-2 title"
+                                    >
+                                        Justificativa da readequação
+                                    </v-card-title>
                                     <FormReadequacao
                                         :dados-readequacao="dadosReadequacao"
                                         @dados-update="atualizarCampo('dsJustificativa', $event)"
