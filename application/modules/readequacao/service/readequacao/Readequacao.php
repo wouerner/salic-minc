@@ -43,7 +43,7 @@ class Readequacao implements IServicoRestZend
         if ($idTipoReadequacao != '') {
             $where['tbReadequacao.idTipoReadequacao = ?'] = $idTipoReadequacao;
         }
-        
+
         switch ($stStatusAtual) {
             case 'proponente':
                 $where['tbReadequacao.siEncaminhamento IN (?)'] = [
@@ -62,14 +62,13 @@ class Readequacao implements IServicoRestZend
             case 'finalizadas':
                 $where['tbReadequacao.stEstado = ?'] = \Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_FINALIZADO;
                 break;
-                
+
             default:
                 break;
         }
-        
+
         $result = $modelTbReadequacao->buscarReadequacoes($where)->toArray();
-        $result = \TratarArray::utf8EncodeArray($result);
-        
+
         $resultArray = [];
         if (!empty($result)) {
             foreach($result as $item) {
@@ -87,9 +86,9 @@ class Readequacao implements IServicoRestZend
             'idPronac' => $idPronac,
             'idTipoReadequacao' => $idTipoReadequacao,
         ];
-        
+
         return $modelTbReadequacao->findBy($where);
-    }    
+    }
 
     public function buscarReadequacaoDocumento($idReadequacao, $idDocumento)
     {
@@ -109,14 +108,14 @@ class Readequacao implements IServicoRestZend
             $resultArray[] = $itemOk;
         }
         $resultArray = \TratarArray::utf8EncodeArray($resultArray);
-        
+
         return $resultArray;
     }
 
-    public function buscarCampoAtual($idPronac, $idTipoReadequacao)   
+    public function buscarCampoAtual($idPronac, $idTipoReadequacao)
     {
         $valorPreCarregado = null;
-        
+
         switch($idTipoReadequacao) {
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL:
                 $descricao = 'Remanejamento 50%';
@@ -127,24 +126,24 @@ class Readequacao implements IServicoRestZend
                 $descricao = 'Planilha orçamentária';
                 $tpCampo = 'planilha';
                 break;
-            
+
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_RAZAO_SOCIAL:
                 $Projetos = new \Projetos();
                 $dadosProjeto = $Projetos->buscarDadosUC75($idPronac)->current();
-                
+
                 if ($dadosProjeto) {
                     $valorPreCarregado = $dadosProjeto->Proponente;
                 }
                 $descricao = 'Razão social';
                 $tpCampo = 'input';
                 break;
-                
+
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_AGENCIA_BANCARIA:
                 $Projetos = new \Projetos();
                 $dadosProjeto = $Projetos->buscar(
                     ['IdPRONAC = ?' => $idPronac]
                 )->current();
-                
+
                 if ($dadosProjeto) {
                     $ContaBancaria = new \ContaBancaria();
                     $dadosBancarios = $ContaBancaria->contaPorProjeto($idPronac);
@@ -155,19 +154,19 @@ class Readequacao implements IServicoRestZend
                 $descricao = 'Agência bancária';
                 $tpCampo = 'input';
                 break;
-                
+
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SINOPSE_OBRA:
                 $Projetos = new \Projetos();
                 $dadosProjeto = $Projetos->buscar(
                     ['IdPRONAC = ?' => $idPronac]
                 )->current();
-                
+
                 if ($dadosProjeto) {
                     $PreProjeto = new \Proposta_Model_DbTable_PreProjeto();
                     $dadosPreProjeto = $PreProjeto->buscar(
                         ['idPreProjeto = ?' => $dadosProjeto->idProjeto]
                     )->current();
-                    
+
                     if ($dadosPreProjeto) {
                         $valorPreCarregado = $dadosPreProjeto->Sinopse;
                     }
@@ -175,19 +174,19 @@ class Readequacao implements IServicoRestZend
                 $descricao = 'Sinopse';
                 $tpCampo = 'textarea';
                 break;
-                
+
         case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_IMPACTO_AMBIENTAL:
                 $Projetos = new \Projetos();
                 $dadosProjeto = $Projetos->buscar(
                     ['IdPRONAC = ?' => $idPronac]
                 )->current();
-                
+
                 if ($dadosProjeto) {
                     $PreProjeto = new \Proposta_Model_DbTable_PreProjeto();
                     $dadosPreProjeto = $PreProjeto->buscar(
                         ['idPreProjeto = ?' => $dadosProjeto->idProjeto]
                     )->current();
-                    
+
                     if ($dadosPreProjeto) {
                         $valorPreCarregado = $dadosPreProjeto->ImpactoAmbiental;
                     }
@@ -201,13 +200,13 @@ class Readequacao implements IServicoRestZend
                 $dadosProjeto = $Projetos->buscar(
                     ['IdPRONAC = ?' => $idPronac]
                 )->current();
-                
+
                 if ($dadosProjeto) {
                     $PreProjeto = new \Proposta_Model_DbTable_PreProjeto();
                     $dadosPreProjeto = $PreProjeto->buscar(
                         ['idPreProjeto = ?' => $dadosProjeto->idProjeto]
                     )->current();
-                    
+
                     if ($dadosPreProjeto) {
                         $valorPreCarregado = $dadosPreProjeto->EspecificacaoTecnica;
                     }
@@ -221,13 +220,13 @@ class Readequacao implements IServicoRestZend
                 $dadosProjeto = $Projetos->buscar(
                     ['IdPRONAC = ?' => $idPronac]
                 )->current();
-                
+
                 if ($dadosProjeto) {
                     $PreProjeto = new \Proposta_Model_DbTable_PreProjeto();
                     $dadosPreProjeto = $PreProjeto->buscar(
                         ['idPreProjeto = ?' => $dadosProjeto->idProjeto]
                     )->current();
-                    
+
                     if ($dadosPreProjeto) {
                         $valorPreCarregado = $dadosPreProjeto->EstrategiadeExecucao;
                     }
@@ -246,15 +245,15 @@ class Readequacao implements IServicoRestZend
                 $dadosProjeto = $Projetos_>buscar(
                     ['IdPRONAC = ?' => $idPronac]
                 )->current();
-                
+
                 if ($dadosProjeto) {
                     $valorPreCarregado = $dadosProjeto->CgcCpf;
                 }
                 $descricao = 'Alteração do proponente';
                 $tpCampo = 'input';
-                
+
                 break;
-                
+
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO:
                 $descricao = 'Plano de distribuição';
                 $tpCampo = 'plano_distribuicao';
@@ -265,13 +264,13 @@ class Readequacao implements IServicoRestZend
                 $dadosProjeto = $Projetos->buscar(
                     ['IdPRONAC = ?' => $idPronac]
                 )->current();
-                
+
                 if ($dadosProjeto) {
                     $valorPreCarregado = $dadosProjeto->NomeProjeto;
                 }
                 $descricao = 'Nome do projeto';
                 $tpCampo = 'input';
-                
+
                 break;
 
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PERIODO_EXECUCAO:
@@ -279,9 +278,9 @@ class Readequacao implements IServicoRestZend
                 $dadosProjeto = $Projetos->buscar(
                     ['IdPRONAC = ?' => $idPronac]
                 )->current();
-                
+
                 $DtFimExecucao = \Data::tratarDataZend($dadosProjeto->DtFimExecucao, 'brasileira');
-                
+
                 if ($dadosProjeto) {
                     $valorPreCarregado = $DtFimExecucao;
                 }
@@ -293,13 +292,13 @@ class Readequacao implements IServicoRestZend
                 $descricao = 'Plano de divulgação';
                 $tpCampo = 'plano_divulgacao';
                 break;
-                
+
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_RESUMO_PROJETO:
                 $Projetos = new \Projetos();
                 $dadosProjeto = $Projetos->buscar(
                     ['IdPRONAC = ?' => $idPronac]
                 )->current();
-                
+
                 if ($dadosProjeto) {
                     $valorPreCarregado = $dadosProjeto->ResumoProjeto;
                 }
@@ -312,13 +311,13 @@ class Readequacao implements IServicoRestZend
                 $dadosProjeto = $Projetos->buscar(
                     ['IdPRONAC = ?' => $idPronac]
                 )->current();
-                
+
                 if ($dadosProjeto) {
                     $PreProjeto = new \Proposta_Model_DbTable_PreProjeto();
                     $dadosPreProjeto = $PreProjeto->buscar(
                         ['idPreProjeto = ?' => $dadosProjeto->idProjeto]
                     )->current();
-                    
+
                     if ($dadosPreProjeto) {
                         $valorPreCarregado = $dadosPreProjeto->Objetivos;
                     }
@@ -326,19 +325,19 @@ class Readequacao implements IServicoRestZend
                 $descricao = 'Objetivos';
                 $tpCampo = 'textarea';
                 break;
-                
+
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_JUSTIFICATIVA:
                 $Projetos = new \Projetos();
                 $dadosProjeto = $Projetos->buscar(
                     ['IdPRONAC = ?' => $idPronac]
                 )->current();
-                
+
                 if ($dadosProjeto) {
                     $PreProjeto = new \Proposta_Model_DbTable_PreProjeto();
                     $dadosPreProjeto = $PreProjeto->buscar(
                         ['idPreProjeto = ?' => $dadosProjeto->idProjeto]
                     )->current();
-                    
+
                     if ($dadosPreProjeto) {
                         $valorPreCarregado = $dadosPreProjeto->Justificativa;
                     }
@@ -358,7 +357,7 @@ class Readequacao implements IServicoRestZend
                     $dadosPreProjeto = $PreProjeto->buscar(
                         ['idPreProjeto = ?' => $dadosProjeto->idProjeto]
                     )->current();
-                    
+
                     if ($dadosPreProjeto) {
                         $valorPreCarregado = $dadosPreProjeto->Acessibilidade;
                     }
@@ -378,7 +377,7 @@ class Readequacao implements IServicoRestZend
                     $dadosPreProjeto = $PreProjeto->buscar(
                         ['idPreProjeto = ?' => $dadosProjeto->idProjeto]
                     )->current();
-                    
+
                     if ($dadosPreProjeto) {
                         $valorPreCarregado = $dadosPreProjeto->DemocratizacaoDeAcesso;
                     }
@@ -398,7 +397,7 @@ class Readequacao implements IServicoRestZend
                     $dadosPreProjeto = $PreProjeto->buscar(
                         ['idPreProjeto = ?' => $dadosProjeto->idProjeto]
                     )->current();
-                    
+
                     if ($dadosPreProjeto) {
                         $valorPreCarregado = $dadosPreProjeto->EtapaDeTrabalho;
                     }
@@ -418,7 +417,7 @@ class Readequacao implements IServicoRestZend
                     $dadosPreProjeto = $PreProjeto->buscar(
                         ['idPreProjeto = ?' => $dadosProjeto->idProjeto]
                     )->current();
-                    
+
                     if ($dadosPreProjeto) {
                         $valorPreCarregado = $dadosPreProjeto->FichaTecnica;
                     }
@@ -431,14 +430,14 @@ class Readequacao implements IServicoRestZend
                 $descricao = 'Saldo de aplicação';
                 $tpCampo = 'saldo_aplicacao';
                 break;
-                
+
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS:
                 $descricao = 'Transferência de recursos';
                 $tpCampo = 'transferencia_recursos';
                 break;
-                
+
         }
-        
+
         $resultArray = [];
         $resultArray[] = [
             'idTipoReadequacao' => $idTipoReadequacao,
@@ -446,19 +445,36 @@ class Readequacao implements IServicoRestZend
             'tpCampo' => $tpCampo,
             'dsCampo' => utf8_encode($valorPreCarregado)
         ];
-        
+
         return $resultArray;
     }
-    
+
     public function salvar()
     {
         $parametros = $this->request->getParams();
-        
+
         if (!empty($_FILES['documento'])) {
-            $documento = new DocumentoService($this->request, $this->response);
-            $parametros['idDocumento'] = $documento->inserir($_FILES);
+            $documento = new DocumentoService(
+                $this->request,
+                $this->response
+            );
+            try {
+                $metadata = [
+                    'idTipoDocumento' => Docụmento_Model_DbTable_tbTipoDocumento::TIPO_DOCUMENTO_READEQUACAO,
+                    'dsDocumento' => 'Solicitação de Readequação',
+                    'nmTitulo' => 'Readequação'
+                ];
+                
+                $parametros['idDocumento'] = $documento->inserir(
+                    $_FILES,
+                    $metadata,
+                    'pdf'
+                );
+            } catch(Exception $e) {
+                return $e;
+            }
         }
-        
+
         $mapper = new \Readequacao_Model_TbReadequacaoMapper();
         $idReadequacao = $mapper->salvarSolicitacaoReadequacao($parametros);
 

@@ -16,21 +16,29 @@ class Documento implements IServicoRestZend
      */
     private $response;
 
-    private $acceptedTypes;
+    private $fileTypes;
+
+    private $defaultMaxFileSize = 5242880; // 5MB
+
+    private $metadata = [
+        'idTipoDocumento' => null,
+        'dsDocumento' => '',
+        'dtEmissaoDocumento' => null,
+        'dtValidadeDocumento' => null,
+        'idTipoEventoOrigem' => null,
+        'nmTitulo' => ''
+    ];
 
     function __construct($request, $response)
     {
         $this->request = $request;
         $this->response = $response;
+        $this->setFileTypes();
     }
 
-    public function inserir(
-        array $params,
-        array $acceptedTypes
-    ) {
-        $this->acceptedTypes = $acceptedTypes;
-
-        $this->acceptedTypes = [
+    public function setFileTypes(array $fileTypes = [])
+    {
+        $this->fileTypes = [
             'pdf' => [
                 'pdf' => 'application/pdf',
             ],
@@ -40,52 +48,89 @@ class Documento implements IServicoRestZend
                 'png' =>  'image/png',
             ],
         ];
-        
+    }
+
+    public function setMetadata($metadata = [])
+    {
+        if (!empty($metadata)) {
+            foreach($metadata as $key => $value) {
+                if (in_array($key, array_keys($this->metadata))) {
+                    $this->metadata[$key] = $value;
+                }
+            }
+        }
+    }
+    
+    public function formatBytes($bytes, $precision = 2)
+    { 
+        $units = ['B', 'KB', 'MB', 'GB', 'TB']; 
+
+        $bytes = max($bytes, 0); 
+        $pow = floor(($bytes ? log($bytes) : 0) / log(1024)); 
+        $pow = min($pow, count($units) - 1); 
+
+        return round($bytes, $precision) . ' ' . $units[$pow]; 
+    }
+    
+    public function inserir(
+        array $params,
+        string $fileType,
+        array $metadata = [],
+        integer $maxFileSize = 0
+    ) {
+        if (!in_array($fileType, $this->fileTypes)) {
+            $errorMessage = "Tipo de arquivo {$fileType} não suportado!";
+            throw new Exception($errorMessage);
+        }
+
+        $this->setMetadata($metadata);
         $tbArquivoDAO = new \tbArquivo();
         $tbArquivoImagemDAO = new \tbArquivoImagem();
         $tbDocumentoDAO = new \tbDocumento();
         
         list($arquivoNome, $arquivoTemp, $arquivoTipo, $arquivoErro, $arquivoTamanho) = $params;
+
+        if (!in_array($arquivoTipo, array_keys($this->fileTypes))) {
+            $errorMessage = "Tipo de arquivo {$fileType} não permitido! Envie somente arquivos do tipo '$fileType'.";
+            throw new Exception($errorMessage);
+        }
         
         $idDocumento = null;
         if (!empty($arquivoTemp)) {
             $arquivoExtensao = \Upload::getExtensao($arquivoNome);
             $arquivoBinario = \Upload::setBinario($arquivoTemp);
             $arquivoHash = \Upload::setHash($arquivoTemp);
-            
-            if ($arquivoExtensao != 'pdf' && $arquivoExtensao != 'PDF') {
-                throw new Exception('A extens&atilde;o do arquivo &eacute; inv&aacute;lida, envie somente arquivos <strong>.pdf</strong>!');
-            } elseif ($arquivoTamanho > 5242880) { // tamanho máximo do arquivo: 5MB
-                throw new Exception('O arquivo n&atilde;o pode ser maior do que <strong>5MB</strong>!');
-            }
 
+            $maxFileSize = ($maxSize > 0) : $maxSize ? $this->defaultMaxFileSize.
+            if ($arquivoTamanho > $maxFileSize) {
+                throw new \Exception("O arquivo não pode ser maior do que " . $this->formatBytes($maxFileSize) . "!");
+            }
+            
             $dadosArquivo = [
                 'nmArquivo' => $arquivoNome,
                 'sgExtensao' => $arquivoExtensao,
                 'dsTipoPadronizado' => $arquivoTipo,
                 'nrTamanho' => $arquivoTamanho,
-                'dtEnvio' => new Zend_Db_Expr('GETDATE()'),
+                'dtEnvio' => new \Zend_Db_Expr('GETDATE()'),
                 'dsHash' => $arquivoHash,
                 'stAtivo' => 'A'
             ];
             $idArquivo = $tbArquivoDAO->inserir($dadosArquivo);
 
-            // ==================== Insere na Tabela tbArquivoImagem ===============================
             $dadosBinario = [
                 'idArquivo' => $idArquivo,
-                'biArquivo' => new Zend_Db_Expr("CONVERT(varbinary(MAX), {$arquivoBinario})")
+                'biArquivo' => new \Zend_Db_Expr("CONVERT(varbinary(MAX), {$arquivoBinario})")
             ];
             $idArquivo = $tbArquivoImagemDAO->inserir($dadosBinario);
 
-            // TODO especifico / abstrair
             $dados = [
-                'idTipoDocumento' => 38,
+                'idTipoDocumento' => $this->metadata['idTipoDocumento'],
                 'idArquivo' => $idArquivo,
-                'dsDocumento' => 'Solicitação de Readequação',
-                'dtEmissaoDocumento' => null,
-                'dtValidadeDocumento' => null,
-                'idTipoEventoOrigem' => null,
-                'nmTitulo' => 'Readequacao'
+                'dsDocumento' => $this->metadata['dsDocumento'],
+                'dtEmissaoDocumento' => $this->metadata['dtEmissaoDocumento'],
+                'dtValidadeDocumento' => $this->metadata['dtValidadeDocumento'],
+                'idTipoEventoOrigem' => $this->metadata['idTipoEventoOrigem'],
+                'nmTitulo' => $this->metadata['nmTitulo'],
             ];
 
             $documento = $tbDocumentoDAO->inserir($dados);
