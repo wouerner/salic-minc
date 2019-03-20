@@ -58,6 +58,8 @@
     </v-container>
 </template>
 <script>
+import moment from 'moment';
+
 export default {
     name: 'TemplateDate',
     props: {
@@ -87,14 +89,20 @@ export default {
     },
     methods: {
         formatDate(date) {
-            if (!date) return null
-            let [year, month, day] = date.split('-');
-            return `${day}/${month}/${year}`;
+            if (!date) return null;
+
+            if(date.includes('-')){
+                let [year, month, day] = date.split('-');
+                return `${day}/${month}/${year}`;
+            }
+            else {
+                return this.parseDate(date);
+            }
         },
         parseDate(date) {
             if (!date) return null;
-            let [month, day, year] = date.split('/')
-            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+            let [day, month, year] = date.split('/');
+            return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`
         },
     },
 };
