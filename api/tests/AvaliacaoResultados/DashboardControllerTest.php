@@ -3,7 +3,7 @@
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
-class ProjetosSimilaresTest extends TestCase
+class DashboardControllerTest extends TestCase
 {
     /**
      * A basic test example.
@@ -14,9 +14,10 @@ class ProjetosSimilaresTest extends TestCase
     {
         $this->json(
             'GET',
-            '/avaliacao-resultados/projetos-similares/134261'
+            '/avaliacao-resultados/dashboard'
         )->seeJson([
-            'idpronac' => 134261,
+            'teste Dashboard'
         ]);
     }
 }
+

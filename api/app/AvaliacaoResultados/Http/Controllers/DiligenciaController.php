@@ -17,12 +17,12 @@ class DiligenciaController extends Controller
 
     public function post(Request $request){
 
-        return response ()->json(['teste Diligencia Post'] ,200);
+        return response ()->json(['teste Diligencia POST'] ,200);
 
     }
     public function index(Request $request) {
 
-        return response()->json([' teste Diligencia INDEX '], 200);
+        return response()->json(['teste Diligencia INDEX'], 200);
     }
 
 

@@ -17,9 +17,10 @@ class AvaliacaoComprovanteController extends Controller
     }
 
 
+
     public function post(Request $request){
 
-        return response ()->json(['teste Post Avaliaçao Comprovante '] ,200);
+        return response ()->json(['teste Post Avaliaçao Comprovante'] ,200);
 
 
     }

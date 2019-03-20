@@ -13,7 +13,7 @@ class DetalhamentoItensRestController extends Controller
     public function get(Request $request) {
 
 
-        return response()->json(['teste detalhamento GET '], 200);
+        return response()->json(['teste detalhamento GET'], 200);
     }
 
     public function post(Request $request){
@@ -24,6 +24,6 @@ class DetalhamentoItensRestController extends Controller
     public function index(Request $request) {
 
 
-        return response()->json([' teste detalhamento INDEX '], 200);
+        return response()->json(['teste detalhamento INDEX'], 200);
     }
 }
