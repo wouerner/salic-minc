@@ -72,6 +72,9 @@ class Readequacao implements IServicoRestZend
         $resultArray = [];
         if (!empty($result)) {
             foreach($result as $item) {
+                $item['dsTipoReadequacao'] = utf8_encode($item['dsTipoReadequacao']);
+                $item['dsSolicitacao'] = utf8_encode($item['dsSolicitacao']);
+                $item['dsJustificativa'] = utf8_encode($item['dsJustificativa']);
                 $item['stStatusAtual'] = $stStatusAtual;
                 $resultArray[] = $item;
             }
@@ -464,7 +467,7 @@ class Readequacao implements IServicoRestZend
                     'dsDocumento' => 'Solicitação de Readequação',
                     'nmTitulo' => 'Readequação'
                 ];
-                
+
                 $parametros['idDocumento'] = $documento->inserir(
                     $_FILES,
                     $metadata,

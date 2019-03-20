@@ -39,7 +39,7 @@ class Readequacao_DadosReadequacaoController extends MinC_Controller_Rest_Abstra
         $readequacaoService = new ReadequacaoService($this->getRequest(), $this->getResponse());
         $data = $readequacaoService->buscar($idReadequacao);
 
-        $this->renderJsonResponse($data, $code);
+        $this->renderJsonResponse(\TratarArray::utf8EncodeArray($data), $code);
     }
 
     public function indexAction(){
