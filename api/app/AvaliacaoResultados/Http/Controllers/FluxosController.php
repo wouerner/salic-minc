@@ -13,7 +13,7 @@ class FluxosController extends Controller
 
     public function index(Request $request) {
 
-        return response()->json([' teste Fluxos  INDEX '], 200);
+        return response()->json(['teste Fluxos  INDEX'], 200);
     }
 
 

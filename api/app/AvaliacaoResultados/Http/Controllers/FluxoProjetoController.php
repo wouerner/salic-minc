@@ -12,7 +12,7 @@ class FluxoProjetoController extends Controller
 
     public function get(Request $request) {
 
-        return response()->json(['teste Fluxo Projeto GET'], 200);
+        return response()->json(['teste Fluxo Projeto Get'], 200);
     }
 
     public function post(Request $request){
@@ -22,7 +22,7 @@ class FluxoProjetoController extends Controller
     }
     public function index(Request $request) {
 
-        return response()->json([' teste Fluxo Projeto INDEX '], 200);
+        return response()->json(['teste Fluxo Projeto INDEX'], 200);
     }
 
 

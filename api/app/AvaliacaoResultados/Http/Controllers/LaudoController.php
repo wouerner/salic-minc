@@ -12,7 +12,7 @@ class LaudoController extends Controller
 
     public function get(Request $request) {
 
-        return response()->json(['teste Laudo GET'], 200);
+        return response()->json(['teste Laudo Get'], 200);
     }
 
     public function post(Request $request){
@@ -22,7 +22,7 @@ class LaudoController extends Controller
     }
     public function index(Request $request) {
 
-        return response()->json([' teste Laudo INDEX '], 200);
+        return response()->json(['teste Laudo INDEX'], 200);
     }
 
 

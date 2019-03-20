@@ -17,7 +17,7 @@ class ProjetoInicioController extends Controller
 
     public function index(Request $request) {
 
-        return response()->json([' teste Projeto Inicio INDEX '], 200);
+        return response()->json(['teste Projeto Inicio INDEX'], 200);
     }
 
 

@@ -22,7 +22,7 @@ class ProjetoAssinaturaController extends Controller
     }
     public function index(Request $request) {
 
-        return response()->json([' teste Projeto Assinatura INDEX '], 200);
+        return response()->json(['teste Projeto Assinatura INDEX'], 200);
     }
 
 

@@ -12,7 +12,7 @@ class IndexController extends Controller
 
     public function index(Request $request) {
 
-        return response()->json([' teste IndexController INDEX '], 200);
+        return response()->json(['teste IndexController INDEX'], 200);
     }
 
 

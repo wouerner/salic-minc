@@ -12,7 +12,7 @@ class EstadoController extends Controller
 
     public function get(Request $request) {
 
-        return response()->json(['teste Estado GET'], 200);
+        return response()->json(['teste Estado Get'], 200);
     }
 
     public function post(Request $request){
@@ -22,7 +22,7 @@ class EstadoController extends Controller
     }
     public function index(Request $request) {
 
-        return response()->json([' teste Estado INDEX '], 200);
+        return response()->json(['teste Estado INDEX'], 200);
     }
 
 
