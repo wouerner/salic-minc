@@ -9,7 +9,7 @@
                 md5
             >
                 <v-card height="130px">
-                    <v-card-title class="grey lighten-2">Versão original</v-card-title>
+                    <v-card-title class="grey lighten-2 title">Versão original</v-card-title>
                     <v-divider/>
                     <v-card-text>
                         {{ campo.valor }}
@@ -22,7 +22,7 @@
                 offset-md2
             >
                 <v-card height="130px">
-                    <v-card-title class="green lighten-2">Versão readequada</v-card-title>
+                    <v-card-title class="green lighten-2 title">Versão readequada</v-card-title>
                     <v-card-actions>
                         <v-text-field
                             v-bind:label="campo.titulo"

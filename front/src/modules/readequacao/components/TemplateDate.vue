@@ -3,7 +3,7 @@
         <v-layout row wrap>
             <v-flex xs10 md5>
                 <v-card height="140px">
-                    <v-card-title class="grey lighten-2">Versão original</v-card-title>
+                    <v-card-title class="grey lighten-2 title">Versão original</v-card-title>
                     <v-divider/>
                     <v-card-text>
                         {{ campo.valor }}
@@ -19,7 +19,7 @@
                   height="140px"
                   >
                     <v-card-title
-                        class="green lighten-2"
+                        class="green lighten-2 title"
                         >
                         Versão readequada
                     </v-card-title>

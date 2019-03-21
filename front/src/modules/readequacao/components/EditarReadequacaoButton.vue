@@ -125,39 +125,34 @@
                         </v-expansion-panel>
                         <v-footer
                             id="footer"
-                            class="pa-4 elevation-12"
+                            class="pb-4 pt-4 elevation-18"
                             fixed
                         >
-                            <v-layout
-                                row
-                                wrap
-                            >
-                                <v-flex
-                                    xs3
-                                    offset-xs9
-                                >
-                                    <v-btn
-                                        color="green darken-1"
-                                        dark
-                                        @click="salvarReadequacao()"
-                                    >Salvar
-                                        <v-icon
-                                            right
+                                <v-flex xs11>
+                                    <v-layout row wrap justify-end>
+                                        <v-btn
+                                            color="green darken-1"
                                             dark
-                                        >done</v-icon>
-                                    </v-btn>
-                                    <v-btn
-                                        color="green darken-1"
-                                        dark
-                                        @click="dialog = false"
-                                    >Finalizar
-                                        <v-icon
-                                            right
+                                            @click="salvarReadequacao()"
+                                        >Salvar
+                                            <v-icon
+                                                right
+                                                dark
+                                            >done</v-icon>
+                                        </v-btn>
+                                        <v-btn
+                                            color="green darken-1"
+                                            class="mr-2"
                                             dark
-                                        >done_all</v-icon>
-                                    </v-btn>
+                                            @click="dialog = false"
+                                        >Finalizar
+                                            <v-icon
+                                                right
+                                                dark
+                                            >done_all</v-icon>
+                                        </v-btn>
+                                    </v-layout>
                                 </v-flex>
-                            </v-layout>
                         </v-footer>
                     </v-flex>
                 </v-layout>

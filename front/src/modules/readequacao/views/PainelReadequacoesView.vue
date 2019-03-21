@@ -61,12 +61,12 @@
                         </v-card>
                     </v-tab-item>
                 </v-tabs>
-                <CriarReadequacao
-                    :id-pronac="dadosProjeto.idPronac"
-                    @v-on:criar-readequacao="criarReadequacao"
-                />
             </v-flex>
         </v-layout>
+        <CriarReadequacao
+            :id-pronac="dadosProjeto.idPronac"
+            @v-on:criar-readequacao="criarReadequacao"
+        />
     </v-container>
 </template>
 <script>
