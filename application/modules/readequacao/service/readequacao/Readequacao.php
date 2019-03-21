@@ -3,7 +3,7 @@
 namespace Application\Modules\Readequacao\Service\Readequacao;
 
 use MinC\Servico\IServicoRestZend;
-use Application\Modules\Documento\Service\Documento\Documento as DocumentoService;
+use \Application\Modules\Documento\Service\Documento\Documento as DocumentoService;
 
 class Readequacao implements IServicoRestZend
 {
@@ -455,29 +455,44 @@ class Readequacao implements IServicoRestZend
     public function salvar()
     {
         $parametros = $this->request->getParams();
-
+        
+        $idReadequacao = $parametros['idReadequacao'];
+        $readequacaoModel = new \Readequacao_Model_DbTable_TbReadequacao();
+        $readequacao = $readequacaoModel->buscarReadequacao($idReadequacao)->current()->toArray();
+        
+        $documento = new DocumentoService(
+            $this->request,
+            $this->response
+        );
+        
+        if (($readequacao['idDocumento'] != '' && isset($_FILES['documento']))
+            || $readequacao['idDocumento'] != '' && $parametros['idDocumento'] == '' && !isset($_FILES['documento'])
+        ) {
+            $excluir = $documento->excluir($readequacao['idDocumento']);
+            if (!$excluir) {
+                $errorMessage = "Não foi possível remover o idDocumento {$readequacao['idDocumento']}!";
+                print $errorMessage;die;
+                throw new \Exception($errorMessage);
+            }
+        }
         if (!empty($_FILES['documento'])) {
-            $documento = new DocumentoService(
-                $this->request,
-                $this->response
-            );
             try {
                 $metadata = [
-                    'idTipoDocumento' => Docụmento_Model_DbTable_tbTipoDocumento::TIPO_DOCUMENTO_READEQUACAO,
-                    'dsDocumento' => 'Solicitação de Readequação',
-                    'nmTitulo' => 'Readequação'
+                    'idTipoDocumento' => \Documento_Model_DbTable_tbTipoDocumento::TIPO_DOCUMENTO_READEQUACAO,
+                    'dsDocumento' => 'Solicita&ccedil;&atilde;o de Readequa&ccedil;&atilde;o',
+                    'nmTitulo' => 'Readequa&ccedil;&atilde;o'
                 ];
-
+                
                 $parametros['idDocumento'] = $documento->inserir(
-                    $_FILES,
-                    $metadata,
-                    'pdf'
+                    $_FILES['documento'],
+                    'pdf',
+                    $metadata
                 );
             } catch(Exception $e) {
                 return $e;
             }
         }
-
+        
         $mapper = new \Readequacao_Model_TbReadequacaoMapper();
         $idReadequacao = $mapper->salvarSolicitacaoReadequacao($parametros);
 

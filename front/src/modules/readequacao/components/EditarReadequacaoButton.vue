@@ -88,7 +88,7 @@
 
                                 <v-card>
                                     <v-card-title
-                                    class="green lighten-2 title"
+                                        class="green lighten-2 title"
                                     >
                                         Justificativa da readequação
                                     </v-card-title>
@@ -96,12 +96,31 @@
                                         :dados-readequacao="dadosReadequacao"
                                         @dados-update="atualizarCampo('dsJustificativa', $event)"
                                     />
+                                    <v-card-text>
+                                        <UploadFile
+                                            :formatos-aceitos="formatosAceitos"
+                                            @arquivo-anexado="atualizarArquivo($event)"
+                                            @arquivo-removido="removerArquivo($event)"
+                                        />                                      
+                                    </v-card-text>
+                                    <v-card-actions v-if="possuiDocumentoAnexado">
+                                        <v-btn
+                                            color="white"
+                                            @click="abrirArquivo()">
+                                                <v-icon large>assignment</v-icon>
+                                            </a>
+                                        </v-btn>
+                                        <v-btn
+                                            color="white"
+                                            class="ml-5"
+                                            @click="removerArquivo()"
+                                        >
+                                            <v-icon
+                                                color="red"
+                                            >delete</v-icon>
+                                        </v-btn>
+                                    </v-card-actions>
                                 </v-card>
-                                <UploadFile
-                                    :formatos-aceitos="formatosAceitos"
-                                    class="mb-4"
-                                    @arquivo-anexado="atualizarArquivo($event)"
-                                />
                             </v-expansion-panel-content>
                         </v-expansion-panel>
                         <v-footer
@@ -240,6 +259,14 @@ export default {
             }
             return {};
         },
+        possuiDocumentoAnexado() {
+            if (this.dadosReadequacao.idDocumento
+                && this.dadosReadequacao.idDocumento !== ''
+               ) {
+                return true;
+            }
+            return false;
+        },
     },
     watch: {
         campoAtual: {
@@ -309,10 +336,19 @@ export default {
             };
         },
         atualizarArquivo(arquivo) {
-            console.log(`Arquivo alterado! ${arquivo}`);
             this.readequacaoEditada.documento = arquivo;
-            // POST ou PUT da Readequação
-            // Observar caso arquivo seja undefined, para atualizar
+            this.updateReadequacao(this.readequacaoEditada).then((response) => {
+            });
+        },
+        removerArquivo() {
+            this.readequacaoEditada.documento = '';
+            this.readequacaoEditada.idDocumento = '';
+            this.updateReadequacao(this.readequacaoEditada).then((response) => {
+            });
+        },
+        abrirArquivo() {
+            const urlArquivo = `/readequacao/readequacoes/abrir-documento-readequacao?id=${this.dadosReadequacao.idDocumento}`;
+            window.location.href = urlArquivo;
         },
         atualizarCampo(campo, valor) {
             let campos = ['dsSolicitacao', 'dsJustificativa'];

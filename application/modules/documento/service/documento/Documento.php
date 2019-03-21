@@ -75,24 +75,30 @@ class Documento implements IServicoRestZend
     public function inserir(
         array $params,
         string $fileType,
-        array $metadata = [],
-        integer $maxFileSize = 0
+        array $metadata = null,
+        integer $maxFileSize = null
     ) {
-        if (!in_array($fileType, $this->fileTypes)) {
+         if (!in_array($fileType, array_keys($this->fileTypes))) {
             $errorMessage = "Tipo de arquivo {$fileType} não suportado!";
-            throw new Exception($errorMessage);
+            throw new \Exception($errorMessage);
         }
 
         $this->setMetadata($metadata);
-        $tbArquivoDAO = new \tbArquivo();
-        $tbArquivoImagemDAO = new \tbArquivoImagem();
-        $tbDocumentoDAO = new \tbDocumento();
+        $tbArquivo = new \tbArquivo();
+        $tbArquivoImagem = new \tbArquivoImagem();
+        $tbDocumento = new \tbDocumento();
         
-        list($arquivoNome, $arquivoTemp, $arquivoTipo, $arquivoErro, $arquivoTamanho) = $params;
-
-        if (!in_array($arquivoTipo, array_keys($this->fileTypes))) {
+        $arquivoNome = $params['name'];
+        $arquivoTipo = $params['type'];
+        $arquivoTemp = $params['tmp_name'];
+        $arquivoErro = $params['error'];
+        $arquivoTamanho = $params['size'];
+        
+        $arquivoFormato = preg_split('/\//', $arquivoTipo)[1];
+        
+        if (!array_search($arquivoTipo, $this->fileTypes[$arquivoFormato])) {
             $errorMessage = "Tipo de arquivo {$fileType} não permitido! Envie somente arquivos do tipo '$fileType'.";
-            throw new Exception($errorMessage);
+            throw new \Exception($errorMessage);
         }
         
         $idDocumento = null;
@@ -100,8 +106,8 @@ class Documento implements IServicoRestZend
             $arquivoExtensao = \Upload::getExtensao($arquivoNome);
             $arquivoBinario = \Upload::setBinario($arquivoTemp);
             $arquivoHash = \Upload::setHash($arquivoTemp);
-
-            $maxFileSize = ($maxSize > 0) : $maxSize ? $this->defaultMaxFileSize.
+            
+            $maxFileSize = ($maxSize > 0) ? $maxSize : $this->defaultMaxFileSize;
             if ($arquivoTamanho > $maxFileSize) {
                 throw new \Exception("O arquivo não pode ser maior do que " . $this->formatBytes($maxFileSize) . "!");
             }
@@ -115,13 +121,13 @@ class Documento implements IServicoRestZend
                 'dsHash' => $arquivoHash,
                 'stAtivo' => 'A'
             ];
-            $idArquivo = $tbArquivoDAO->inserir($dadosArquivo);
+            $idArquivo = $tbArquivo->inserir($dadosArquivo);
 
             $dadosBinario = [
                 'idArquivo' => $idArquivo,
                 'biArquivo' => new \Zend_Db_Expr("CONVERT(varbinary(MAX), {$arquivoBinario})")
             ];
-            $idArquivo = $tbArquivoImagemDAO->inserir($dadosBinario);
+            $idArquivo = $tbArquivoImagem->inserir($dadosBinario);
 
             $dados = [
                 'idTipoDocumento' => $this->metadata['idTipoDocumento'],
@@ -132,10 +138,16 @@ class Documento implements IServicoRestZend
                 'idTipoEventoOrigem' => $this->metadata['idTipoEventoOrigem'],
                 'nmTitulo' => $this->metadata['nmTitulo'],
             ];
-
-            $documento = $tbDocumentoDAO->inserir($dados);
-
+            
+            $documento = $tbDocumento->inserir($dados);
+            
             return $documento['idDocumento'];
         }
+    }
+    
+    public function excluir($idDocumento)
+    {
+        $tbDocumento = new \tbDocumento();
+        return $tbDocumento->excluirDocumento($idDocumento);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use Application\Modules\Readequacao\Service\Readequacao\Readequacao as ReadequacaoService;
+use Application\Modules\Documento\Service\Documento\Documento as DocumentoService;
 
 class Readequacao_DadosReadequacaoController extends MinC_Controller_Rest_Abstract
 {
@@ -65,6 +66,7 @@ class Readequacao_DadosReadequacaoController extends MinC_Controller_Rest_Abstra
 
     public function postAction(){
         $readequacaoService = new ReadequacaoService($this->getRequest(), $this->getResponse());
+        
         $resposta = $readequacaoService->salvar();
 
         $this->renderJsonResponse($resposta, 200);

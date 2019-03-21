@@ -20,6 +20,8 @@
             "Application\\Modules\\Assinatura\\Service\\": "./application/modules/assinatura/service/",
             "Application\\Modules\\Assinatura\\Service\\Assinatura\\": "./application/modules/assinatura/service/assinatura/",
             "Application\\Modules\\Assinatura\\Service\\Assinatura\\Acao\\": "./application/modules/assinatura/service/assinatura/acao/",
+            "Application\\Modules\\Documento\\": "./application/modules/documento/",
+            "Application\\Modules\\Documento\\Service\\": "./application/modules/documento/service/",
             "Application\\Modules\\Documento\\Service\\Documento\\": "./application/modules/documento/service/documento/",
             "Application\\Modules\\Readequacao\\": "./application/modules/readequacao/",
             "Application\\Modules\\Readequacao\\Service\\": "./application/modules/readequacao/service/",
