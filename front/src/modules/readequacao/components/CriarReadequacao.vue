@@ -1,30 +1,29 @@
 <template>
     <v-layout
-      row
-      wrap
-      >
-        <v-flex
-          xs1
-          offset
-          -xs11
-          >
-            <v-btn
-                color="green darken-1"
-                @click="dialog = true"
-                dark
-            >CRIAR
-                <v-icon right dark>add</v-icon>
-            </v-btn>  
-        </v-flex>
-        
+        justify-end
+        row
+        wrap
+    >
+        <v-btn
+        absolute
+        dark
+        color="green darken-1"
+        class="mt-2 mb-5"
+        @click="dialog = true"
+        v-on="on"
+        >
+            CRIAR
+            <v-icon right dark>add</v-icon>
+        </v-btn>
         <v-flex
           xs4
           offset-xs4
           >
-            <v-dialog 
+            <v-dialog
                 v-model="dialog"
                 transition="dialog-bottom-transition"
                 width="450"
+                @keydown.esc="dialog = false"
             >
                 <v-card v-if="getTiposDisponiveis"
                         class="pa-3"
