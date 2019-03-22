@@ -30,28 +30,28 @@ import "filepond/dist/filepond.min.css";
 const FilePond = vueFilePond(FilePondPluginFileValidateType);
 
 export default {
-  name: "UploadFile",
-  components: {
-    FilePond
-  },
-  props: {
-    formatosAceitos: { type: String, default: "application/pdf" }
-  },
-  data() {
-    return {
-      arquivo: []
-    };
-  },
-  computed: {},
-  methods: {
-    arquivoAnexado() {
-      if (this.$refs.pond.getFiles()[0]) {
-        let payload = this.$refs.pond.getFiles()[0].file;
-        this.$emit("arquivo-anexado", payload);
-      } else {
-        this.$emit("arquivo-anexado", undefined);
-      }
+    name: "UploadFile",
+    components: {
+        FilePond,
+    },
+    props: {
+        formatosAceitos: { type: String, default: "application/pdf" },
+    },
+    data() {
+        return {
+            arquivo: [],
+        };
+    },
+    computed: {},
+    methods: {
+        arquivoAnexado() {
+            if (this.$refs.pond.getFiles()[0]) {
+                let payload = this.$refs.pond.getFiles()[0].file;
+                this.$emit("arquivo-anexado", payload);
+            } else {
+                this.$emit("arquivo-removido", undefined);
+            }
+        },
     }
-  }
 };
 </script>
