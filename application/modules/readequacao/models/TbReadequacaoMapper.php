@@ -60,7 +60,10 @@ class Readequacao_Model_TbReadequacaoMapper extends MinC_Db_Mapper
                 $objReadequacao->setDsSolicitacao($dsSolicitacao);
             }
 
-            if ($arrData['idDocumento']) {
+            if (array_key_exists('idDocumento', $arrData)) {
+                if ($arrData['idDocumento'] == null) {
+                    $arrData['idDocumento'] = new Zend_Db_Expr('NULL');
+                }
                 $objReadequacao->setIdDocumento($arrData['idDocumento']);
             }
             

@@ -30,7 +30,8 @@
                             :dadosProjeto="dadosProjeto"
                             :bindClick="bindClick"
                             v-on:excluir-readequacao="excluirReadequacao(props.item.idReadequacao)"
-                          />
+                            v-on:atualizar-readequacao="atualizarReadequacao(props.item.idReadequacao)"
+                        />
                     </template>
                 </v-layout>
                 </td>
@@ -48,7 +49,6 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
 
 export default {
     name: 'TabelaReadequacoes',
@@ -73,7 +73,7 @@ export default {
                 {
                     text: 'Tipo de Readequação',
                     value: 'dsTipoReadequacao',
-
+                    
                 },
                 {
                     text: 'Data da Solicitação',
@@ -99,28 +99,31 @@ export default {
             handler(value) {
                 if (typeof this.editarItem !== 'undefined') {
                     if (this.editarItem.hasOwnProperty('idReadequacao')) {
-                        const indexItemInserido = this.dadosReadequacao.items.indexOf(this.editarItem);
-                        const idReadequacaoInserido = this.dadosReadequacao.items[indexItemInserido].idReadequacao;
-
-                        if (indexItemInserido > -1) {
-                            this.bindClick = idReadequacaoInserido;
-                        }
+                        //console.log(this.editarItem);
+                        // somente no caso de inserção. Update dá problema
+                        
+                        //const indexItemInserido = this.dadosReadequacao.items.indexOf(this.editarItem);
+                        //console.log(this.dadosReadequacao);
+                        //console.log(indexItemInserido);
+                        //const idReadequacaoInserido = this.dadosReadequacao.items[indexItemInserido].idReadequacao;
+                        
+  //                      if (indexItemInserido > -1) {
+//                            this.bindClick = idReadequacaoInserido;
+                        //}
                     }
                 }
             },
             deep: true,
         },
     },
-    computed: {
-        ...mapGetters({
-        }),
-    },
+    computed: {},
     methods: {
-        ...mapActions({
-        }),
         excluirReadequacao(idReadequacao) {
             this.$emit('excluir-readequacao', { idReadequacao });
-        }
+        },
+        atualizarReadequacao(idReadequacao) {
+            this.$emit('atualizar-readequacao', { idReadequacao });
+        },
     },
 };
 </script>

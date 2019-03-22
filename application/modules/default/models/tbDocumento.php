@@ -109,7 +109,7 @@ class tbDocumento extends MinC_Db_Table_Abstract
                 $tbArquivo = new tbArquivo();
                 $tbArquivo->excluir("idArquivo = {$dadosArquivo->idArquivo} ");
                 
-                $tbDocumentoSac = new tbDocumentoSAC();
+                $tbDocumentoSAC = new tbDocumentoSAC();
                 $tbDocumentoSAC->excluir("idDocumento =  {$idDocumento} ");
                 
                 return true;

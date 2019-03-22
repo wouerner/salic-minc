@@ -37,7 +37,8 @@
                                 :componentes="acoesProponente"
                                 :dados-projeto="dadosProjeto"
                                 :editar-item="editarItem"
-                                @v-on:excluir-readequacao="excluirReadequacao"
+                                v-on:excluir-readequacao="excluirReadequacao"
+                                v-on:atualizar-readequacao="atualizarReadequacao"
                             />
                         </v-card>
                     </v-tab-item>
@@ -158,7 +159,17 @@ export default {
             }
         },
         excluirReadequacao() {
-            this.obterListaDeReadequacoes({ stStatusAtual: 'proponente' });
+            this.obterListaDeReadequacoes({
+                idPronac: this.$route.params.idPronac,
+                stStatusAtual: 'proponente',
+            });
+        },
+        atualizarReadequacao() {
+            this.editarItem = {};
+            this.obterListaDeReadequacoes({
+                idPronac: this.$route.params.idPronac,
+                stStatusAtual: 'proponente',
+            });
         },
     },
 };

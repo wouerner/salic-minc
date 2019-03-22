@@ -10,7 +10,6 @@
         color="green darken-1"
         class="mt-2 mb-5"
         @click="dialog = true"
-        v-on="on"
         >
             CRIAR
             <v-icon right dark>add</v-icon>

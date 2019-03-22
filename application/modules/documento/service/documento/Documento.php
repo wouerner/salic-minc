@@ -82,7 +82,7 @@ class Documento implements IServicoRestZend
             $errorMessage = "Tipo de arquivo {$fileType} não suportado!";
             throw new \Exception($errorMessage);
         }
-
+         
         $this->setMetadata($metadata);
         $tbArquivo = new \tbArquivo();
         $tbArquivoImagem = new \tbArquivoImagem();
@@ -109,7 +109,8 @@ class Documento implements IServicoRestZend
             
             $maxFileSize = ($maxSize > 0) ? $maxSize : $this->defaultMaxFileSize;
             if ($arquivoTamanho > $maxFileSize) {
-                throw new \Exception("O arquivo não pode ser maior do que " . $this->formatBytes($maxFileSize) . "!");
+                $errorMessage = "O arquivo não pode ser maior do que " . $this->formatBytes($maxFileSize) . "!";
+                throw new \Exception($errorMessage);
             }
             
             $dadosArquivo = [

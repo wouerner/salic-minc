@@ -86,7 +86,9 @@
                                 hide-actions
                             >
 
-                                <v-card>
+                                <v-card
+                                    class="mb-5"
+                                >
                                     <v-card-title
                                         class="green lighten-2 title"
                                     >
@@ -107,7 +109,7 @@
                                         <v-btn
                                             color="white"
                                             @click="abrirArquivo()">
-                                                <v-icon large>assignment</v-icon>
+                                                <v-icon large>attach_file</v-icon>
                                             </a>
                                         </v-btn>
                                         <v-btn
@@ -313,6 +315,7 @@ export default {
                 this.mensagem.conteudo = 'Readequação salva com sucesso!';
                 this.mensagem.ativa = true;
                 this.mensagem.cor = 'green darken-1';
+                this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
             }), function(error) {
                 this.mensagem.conteudo = 'Erro ao gravar a readequação!';
                 this.mensagem.ativa = true;
@@ -333,12 +336,14 @@ export default {
         atualizarArquivo(arquivo) {
             this.readequacaoEditada.documento = arquivo;
             this.updateReadequacao(this.readequacaoEditada).then((response) => {
+                this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
             });
         },
         removerArquivo() {
             this.readequacaoEditada.documento = '';
             this.readequacaoEditada.idDocumento = '';
             this.updateReadequacao(this.readequacaoEditada).then((response) => {
+                this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
             });
         },
         abrirArquivo() {

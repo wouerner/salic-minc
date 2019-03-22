@@ -471,9 +471,9 @@ class Readequacao implements IServicoRestZend
             $excluir = $documento->excluir($readequacao['idDocumento']);
             if (!$excluir) {
                 $errorMessage = "Não foi possível remover o idDocumento {$readequacao['idDocumento']}!";
-                print $errorMessage;die;
                 throw new \Exception($errorMessage);
             }
+            $parametros['idDocumento'] = null;
         }
         if (!empty($_FILES['documento'])) {
             try {
