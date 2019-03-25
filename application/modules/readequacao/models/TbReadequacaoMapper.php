@@ -35,30 +35,33 @@ class Readequacao_Model_TbReadequacaoMapper extends MinC_Db_Mapper
             if (isset($arrData['idPronac'])) {
                 $objReadequacao->setIdPronac($arrData['idPronac']);
             }
-            
+
             if (isset($arrData['stAtendimento'])) {
                 $objReadequacao->setStAtendimento($arrData['stAtendimento']);
             }
-            
+
             if (isset($arrData['idTipoReadequacao'])) {
                 $objReadequacao->setIdTipoReadequacao($arrData['idTipoReadequacao']);
             }
-            
-            if (isset($arrData['dsJustificativa'])) {
-                $dsJustificativa = $arrData['dsJustificativa'];
-                if (mb_detect_encoding($dsJustificativa == 'UTF-8')) {
-                    $dsJustificativa = utf8_decode($dsJustificativa);
-                }
-                $objReadequacao->setDsJustificativa($dsJustificativa);
+            if (!isset($arrData['dsJustificativa'])) {
+                $arrData['dsJustificativa'] = '';
             }
 
-            if (isset($arrData['dsSolicitacao'])) {
-                $dsSolicitacao = $arrData['dsSolicitacao'];
-                if (mb_detect_encoding($dsSolicitacao == 'UTF-8')) {
-                    $dsSolicitacao = utf8_decode($dsSolicitacao);
-                }
-                $objReadequacao->setDsSolicitacao($dsSolicitacao);
+            $dsJustificativa = $arrData['dsJustificativa'];
+            if (mb_detect_encoding($dsJustificativa == 'UTF-8')) {
+                $dsJustificativa = utf8_decode($dsJustificativa);
             }
+            $objReadequacao->setDsJustificativa($dsJustificativa);
+
+            if (!isset($arrData['dsSolicitacao'])) {
+                $arrData['dsSolicitacao'] = '';
+            }
+
+            $dsSolicitacao = $arrData['dsSolicitacao'];
+            if (mb_detect_encoding($dsSolicitacao == 'UTF-8')) {
+                $dsSolicitacao = utf8_decode($dsSolicitacao);
+            }
+            $objReadequacao->setDsSolicitacao($dsSolicitacao);
 
             if (array_key_exists('idDocumento', $arrData)) {
                 if ($arrData['idDocumento'] == null) {
@@ -66,7 +69,7 @@ class Readequacao_Model_TbReadequacaoMapper extends MinC_Db_Mapper
                 }
                 $objReadequacao->setIdDocumento($arrData['idDocumento']);
             }
-            
+
             $id = $this->save($objReadequacao);
             if ($this->getMessage()) {
                 throw new Exception($this->getMessage());

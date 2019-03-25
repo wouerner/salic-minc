@@ -31,7 +31,7 @@ export const dadosReadequacao = (params) => {
 };
 
 export const inserirReadequacao = (params) => {
-    const path = `/readequacao`;
+    const path = `/readequacao/dados-readequacao`;
     return api.postRequest(path, buildData(params));
 };
 
