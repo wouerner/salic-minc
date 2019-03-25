@@ -25,7 +25,7 @@
                     <v-card-title class="green lighten-2 title">Versão readequada</v-card-title>
                     <v-card-actions>
                         <v-text-field
-                            v-bind:label="campo.titulo"
+                            :label="campo.titulo"
                             v-model="campo.valor"
                             :value="campo.valor"
                             @input="updateCampo"
@@ -40,14 +40,13 @@
 export default {
     name: 'TemplateInput',
     props: {
-        campo: { type: Object, default:() => {} },
-        nomeAtributo: { type: String, default:() => '' },
+        campo: { type: Object, default: () => {} },
+        nomeAtributo: { type: String, default: () => '' },
     },
     methods: {
         updateCampo() {
-            const valor = this.campo.valor;
-            this.$emit('dados-update', valor);
+            this.$emit('dados-update', this.campo.valor);
         },
     },
-}
+};
 </script>

@@ -13,27 +13,30 @@
                 <td class="text-xs-left">{{ props.item.dsTipoReadequacao }}</td>
                 <td class="text-xs-center">{{ props.item.dtSolicitacao }}</td>
                 <td class="text-xs-center">{{ props.item.idDocumento }}</td>
-                <td class="text-xs-center" v-if="componentes.acoes">
-                <v-layout
-                    row
-                    justify-center
-                    align-end
+                <td
+                    v-if="componentes.acoes"
+                    class="text-xs-center"
                 >
-                    <template
-                        v-for="(componente, index) in componentes.acoes"
-                        d-inline-block>
-                        <component
-                            :key="index"
-                            :obj="props.item"
-                            :is="componente"
-                            :dadosReadequacao="props.item"
-                            :dadosProjeto="dadosProjeto"
-                            :bindClick="bindClick"
-                            v-on:excluir-readequacao="excluirReadequacao(props.item.idReadequacao)"
-                            v-on:atualizar-readequacao="atualizarReadequacao(props.item.idReadequacao)"
-                        />
-                    </template>
-                </v-layout>
+                    <v-layout
+                        row
+                        justify-center
+                        align-end
+                    >
+                        <template
+                            v-for="(componente, index) in componentes.acoes"
+                            d-inline-block>
+                            <component
+                                :key="index"
+                                :obj="props.item"
+                                :is="componente"
+                                :dados-readequacao="props.item"
+                                :dados-projeto="dadosProjeto"
+                                :bind-click="bindClick"
+                                @on:excluir-readequacao="excluirReadequacao(props.item.idReadequacao)"
+                                @on:atualizar-readequacao="atualizarReadequacao(props.item.idReadequacao)"
+                            />
+                        </template>
+                    </v-layout>
                 </td>
             </template>
             <template slot="no-data">
@@ -55,8 +58,8 @@ export default {
     props: {
         dadosReadequacao: { type: Object, default: () => {} },
         componentes: { type: Object, default: () => {} },
-	    dadosProjeto: { type: Object, default: () => {} },
-        editarItem: { },
+        dadosProjeto: { type: Object, default: () => {} },
+        editarItem: { type: Object, default: () => {} },
     },
     data() {
         return {
@@ -73,7 +76,6 @@ export default {
                 {
                     text: 'Tipo de Readequação',
                     value: 'dsTipoReadequacao',
-                    
                 },
                 {
                     text: 'Data da Solicitação',
@@ -94,29 +96,27 @@ export default {
             bindClick: 0,
         };
     },
+    computed: {},
     watch: {
         dadosReadequacao: {
-            handler(value) {
+            handler() {
                 if (typeof this.editarItem !== 'undefined') {
-                    if (this.editarItem.hasOwnProperty('idReadequacao')) {
-                        //console.log(this.editarItem);
-                        // somente no caso de inserção. Update dá problema
-                        
-                        //const indexItemInserido = this.dadosReadequacao.items.indexOf(this.editarItem);
-                        //console.log(this.dadosReadequacao);
-                        //console.log(indexItemInserido);
-                        //const idReadequacaoInserido = this.dadosReadequacao.items[indexItemInserido].idReadequacao;
-                        
-  //                      if (indexItemInserido > -1) {
-//                            this.bindClick = idReadequacaoInserido;
-                        //}
-                    }
+                    // if (this.editarItem.hasOwnProperty('idReadequacao')) {
+                    // console.log(this.editarItem);
+                    // somente no caso de inserção. Update dá problema
+                    // const indexItemInserido = this.dadosReadequacao.items.indexOf(this.editarItem);
+                    // console.log(this.dadosReadequacao);
+                    // console.log(indexItemInserido);
+                    // const idReadequacaoInserido = this.dadosReadequacao.items[indexItemInserido].idReadequacao;
+                    // if (indexItemInserido > -1) {
+                    // this.bindClick = idReadequacaoInserido;
+                    // }
+                    // }
                 }
             },
             deep: true,
         },
     },
-    computed: {},
     methods: {
         excluirReadequacao(idReadequacao) {
             this.$emit('excluir-readequacao', { idReadequacao });

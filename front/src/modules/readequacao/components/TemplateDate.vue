@@ -1,7 +1,13 @@
 <template>
     <v-container fluid>
-        <v-layout row wrap>
-            <v-flex xs10 md5>
+        <v-layout
+            row
+            wrap
+        >
+            <v-flex
+                xs10
+                md5
+            >
                 <v-card height="140px">
                     <v-card-title class="grey lighten-2 title">Versão original</v-card-title>
                     <v-divider/>
@@ -14,13 +20,13 @@
                 xs10
                 md5
                 offset-md2
-                >
+            >
                 <v-card
-                  height="140px"
-                  >
+                    height="140px"
+                >
                     <v-card-title
                         class="green lighten-2 title"
-                        >
+                    >
                         Versão readequada
                     </v-card-title>
                     <v-card-actions>
@@ -35,7 +41,7 @@
                             full-width
                             max-width="290px"
                             min-width="290px"
-                            >
+                        >
                             <v-text-field
                                 slot="activator"
                                 v-model="dateFormatted"
@@ -43,13 +49,12 @@
                                 hint="Formato DD/MM/YYYY"
                                 persistent-hint
                                 prepend-icon="event"
-                                ></v-text-field>
+                            />
                             <v-date-picker
                                 v-model="date"
                                 no-title
                                 @input="menu = false"
-                                >
-                            </v-date-picker>
+                            />
                         </v-menu>
                     </v-card-actions>
                 </v-card>
@@ -58,12 +63,11 @@
     </v-container>
 </template>
 <script>
-import moment from 'moment';
 
 export default {
     name: 'TemplateDate',
     props: {
-        campo: { type: Object, default: () => {} }
+        campo: { type: Object, default: () => {} },
     },
     data() {
         return {
@@ -72,16 +76,15 @@ export default {
             menu: false,
         };
     },
-    watch: {
-        date(val) {
-            this.$emit('dados-update', this.date);
-            this.dateFormatted = this.formatDate(this.date);
-        },
-    },
     computed: {
         computedDateFormatted() {
-            dataFormatada = this.formatDate(this.date);
-            return dataFormatada;
+            return this.formatDate(this.date);
+        },
+    },
+    watch: {
+        date() {
+            this.$emit('dados-update', this.date);
+            this.dateFormatted = this.formatDate(this.date);
         },
     },
     created() {
@@ -89,20 +92,21 @@ export default {
     },
     methods: {
         formatDate(date) {
-            if (!date) return null;
-
-            if(date.includes('-')){
-                let [year, month, day] = date.split('-');
+            if (!date) {
+                return null;
+            }
+            if (date.includes('-')) {
+                const [year, month, day] = date.split('-');
                 return `${day}/${month}/${year}`;
             }
-            else {
-                return this.parseDate(date);
-            }
+            return this.parseDate(date);
         },
         parseDate(date) {
-            if (!date) return null;
-            let [day, month, year] = date.split('/');
-            return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`
+            if (!date) {
+                return null;
+            }
+            const [day, month, year] = date.split('/');
+            return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
         },
     },
 };

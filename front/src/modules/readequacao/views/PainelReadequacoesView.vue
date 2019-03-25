@@ -37,8 +37,8 @@
                                 :componentes="acoesProponente"
                                 :dados-projeto="dadosProjeto"
                                 :editar-item="editarItem"
-                                v-on:excluir-readequacao="excluirReadequacao"
-                                v-on:atualizar-readequacao="atualizarReadequacao"
+                                @on:excluir-readequacao="excluirReadequacao"
+                                @on:atualizar-readequacao="atualizarReadequacao"
                             />
                         </v-card>
                     </v-tab-item>
@@ -66,7 +66,7 @@
         </v-layout>
         <CriarReadequacao
             :id-pronac="dadosProjeto.idPronac"
-            @v-on:criar-readequacao="criarReadequacao"
+            @on:criar-readequacao="criarReadequacao"
         />
     </v-container>
 </template>
