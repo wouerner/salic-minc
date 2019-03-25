@@ -11,7 +11,7 @@
                     <v-card-title class="grey lighten-2 title">Versão original</v-card-title>
                     <v-divider/>
                     <v-card-text>
-                        <span v-html="campo.valor"></span>
+                        <span v-html="campo.valor"/>
                     </v-card-text>
                 </v-card>
             </v-flex>

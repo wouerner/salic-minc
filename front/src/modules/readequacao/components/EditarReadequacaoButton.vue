@@ -27,6 +27,7 @@
             fullscreen
             hide-overlay
             transition="dialog-bottom-transition"
+            :persistent="mensagem.ativa"
             @keydown.esc="dialog = false"
         >
             <div v-if="loading">
@@ -227,7 +228,7 @@ export default {
             redirecionar: false,
             mensagem: {
                 ativa: false,
-                timeout: 2300,
+                timeout: 0,
                 conteudo: '',
                 cor: '',
             }
@@ -315,6 +316,7 @@ export default {
                 this.mensagem.conteudo = 'Readequação salva com sucesso!';
                 this.mensagem.ativa = true;
                 this.mensagem.cor = 'green darken-1';
+                this.timeout = 2300;
                 this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
             }), function(error) {
                 this.mensagem.conteudo = 'Erro ao gravar a readequação!';
@@ -336,6 +338,9 @@ export default {
         atualizarArquivo(arquivo) {
             this.readequacaoEditada.documento = arquivo;
             this.updateReadequacao(this.readequacaoEditada).then((response) => {
+                this.mensagem.conteudo = 'Arquivo enviado!';
+                this.mensagem.ativa = true;
+                this.mensagem.cor = 'green darken-1';
                 this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
             });
         },
@@ -343,6 +348,9 @@ export default {
             this.readequacaoEditada.documento = '';
             this.readequacaoEditada.idDocumento = '';
             this.updateReadequacao(this.readequacaoEditada).then((response) => {
+                this.mensagem.conteudo = 'Arquivo removido!';
+                this.mensagem.ativa = true;
+                this.mensagem.cor = 'green darken-1';
                 this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
             });
         },
