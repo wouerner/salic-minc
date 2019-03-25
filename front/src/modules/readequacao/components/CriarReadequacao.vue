@@ -94,9 +94,10 @@ export default {
         criarReadequacao() {
             let idPronac = this.idPronac;
             let idTipoReadequacao = this.idTipoReadequacao;
-            this.inserirReadequacao({ idPronac, idTipoReadequacao });
-            this.dialog = false;
-            this.$emit('criar-readequacao', { idTipoReadequacao });
+            this.inserirReadequacao({ idPronac, idTipoReadequacao }).then((response) => {
+                this.dialog = false;
+                this.$emit('criar-readequacao', response.items.idReadequacao );
+            });
         },
     },
 }

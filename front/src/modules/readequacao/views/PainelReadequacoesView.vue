@@ -36,7 +36,7 @@
                                 :dados-readequacao="getReadequacoesProponente"
                                 :componentes="acoesProponente"
                                 :dados-projeto="dadosProjeto"
-                                :editar-item="editarItem"
+                                :item-em-edicao="itemEmEdicao"
                                 @on:excluir-readequacao="excluirReadequacao"
                                 @on:atualizar-readequacao="atualizarReadequacao"
                             />
@@ -66,7 +66,7 @@
         </v-layout>
         <CriarReadequacao
             :id-pronac="dadosProjeto.idPronac"
-            @on:criar-readequacao="criarReadequacao"
+            @on:criar-readequacao="criarReadequacao($event)"
         />
     </v-container>
 </template>
@@ -102,7 +102,7 @@ export default {
             acoesFinalizadas: {
                 acoes: [VisualizarReadequacaoButton],
             },
-            editarItem: {},
+            itemEmEdicao: 0,
             loading: true,
         };
     },
@@ -121,9 +121,6 @@ export default {
             if (Object.keys(value).length > 0) {
                 this.loading = false;
             }
-        },
-        getReadequacao() {
-            this.editarItem = this.getReadequacao;
         },
     },
     created() {
@@ -150,11 +147,14 @@ export default {
                 });
             }
         },
-        criarReadequacao() {
+        criarReadequacao(idReadequacao) {
             if (this.dadosProjeto.idPronac !== '') {
                 this.obterListaDeReadequacoes({
                     idPronac: this.dadosProjeto.idPronac,
                     stStatusAtual: 'proponente',
+                }).then(() => {
+                    console.log(idReadequacao);
+                    this.itemEmEdicao = idReadequacao;
                 });
             }
         },
@@ -165,7 +165,7 @@ export default {
             });
         },
         atualizarReadequacao() {
-            this.editarItem = {};
+            this.itemEmEdicao = {};
             this.obterListaDeReadequacoes({
                 idPronac: this.$route.params.idPronac,
                 stStatusAtual: 'proponente',

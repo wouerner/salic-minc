@@ -59,7 +59,7 @@ export default {
         dadosReadequacao: { type: Object, default: () => {} },
         componentes: { type: Object, default: () => {} },
         dadosProjeto: { type: Object, default: () => {} },
-        editarItem: { type: Object, default: () => {} },
+        itemEmEdicao: { type: Number, default: 0 },
     },
     data() {
         return {
@@ -100,11 +100,12 @@ export default {
     watch: {
         dadosReadequacao: {
             handler() {
-                if (typeof this.editarItem !== 'undefined') {
-                    // if (this.editarItem.hasOwnProperty('idReadequacao')) {
-                    // console.log(this.editarItem);
+                if (this.itemEmEdicao > 0) {
+                    console.log(this.itemEmEdicao);
+                    // if (this.itemEmEdicao.hasOwnProperty('idReadequacao')) {
+                    // console.log(this.itemEmEdicao);
                     // somente no caso de inserção. Update dá problema
-                    // const indexItemInserido = this.dadosReadequacao.items.indexOf(this.editarItem);
+                    // const indexItemInserido = this.dadosReadequacao.items.indexOf(this.itemEmEdicao');
                     // console.log(this.dadosReadequacao);
                     // console.log(indexItemInserido);
                     // const idReadequacaoInserido = this.dadosReadequacao.items[indexItemInserido].idReadequacao;

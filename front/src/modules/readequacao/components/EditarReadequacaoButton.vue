@@ -104,7 +104,7 @@
                                             :formatos-aceitos="formatosAceitos"
                                             @arquivo-anexado="atualizarArquivo($event)"
                                             @arquivo-removido="removerArquivo($event)"
-                                        />                                      
+                                        />
                                     </v-card-text>
                                     <v-card-actions v-if="possuiDocumentoAnexado">
                                         <v-btn
@@ -370,6 +370,6 @@ export default {
 <style>
 
 #footer {
-    z-index: 5;
+    z-index: 10;
 }
 </style>
