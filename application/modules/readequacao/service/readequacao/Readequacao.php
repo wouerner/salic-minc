@@ -503,4 +503,17 @@ class Readequacao implements IServicoRestZend
 
         return $result;
     }
+
+    public function remover()
+    {
+        $parametros = $this->request->getParams();
+        if (isset($parametros['id'])){
+            $idReadequacao = $parametros['id'];
+            $readequacaoModel = new \Readequacao_Model_DbTable_TbReadequacao();
+            $excluir = $readequacaoModel->delete(
+                ['idReadequacao = ?' => $idReadequacao]
+            );
+            return $excluir;
+        }
+    }
 }

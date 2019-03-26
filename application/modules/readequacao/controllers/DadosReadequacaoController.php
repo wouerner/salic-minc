@@ -74,6 +74,11 @@ class Readequacao_DadosReadequacaoController extends MinC_Controller_Rest_Abstra
 
     public function putAction(){}
 
-    public function deleteAction(){}
-
+    public function deleteAction(){
+        $readequacaoService = new ReadequacaoService($this->getRequest(), $this->getResponse());
+        
+        $resposta = $readequacaoService->remover();
+        
+        $this->renderJsonResponse($resposta, 204);
+    }
 }

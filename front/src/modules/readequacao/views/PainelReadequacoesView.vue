@@ -37,8 +37,8 @@
                                 :componentes="acoesProponente"
                                 :dados-projeto="dadosProjeto"
                                 :item-em-edicao="itemEmEdicao"
-                                @on:excluir-readequacao="excluirReadequacao"
-                                @on:atualizar-readequacao="atualizarReadequacao"
+                                @excluir-readequacao="excluirReadequacao"
+                                @atualizar-readequacao="atualizarReadequacao"
                             />
                         </v-card>
                     </v-tab-item>

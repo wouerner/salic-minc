@@ -32,7 +32,7 @@
                                 :dados-readequacao="props.item"
                                 :dados-projeto="dadosProjeto"
                                 :bind-click="bindClick"
-                                @on:excluir-readequacao="excluirReadequacao(props.item.idReadequacao)"
+                                @excluir-readequacao="excluirReadequacao"
                                 @on:atualizar-readequacao="atualizarReadequacao(props.item.idReadequacao)"
                             />
                         </template>
@@ -98,29 +98,13 @@ export default {
     },
     computed: {},
     watch: {
-        dadosReadequacao: {
-            handler() {
-                if (this.itemEmEdicao > 0) {
-                    console.log(this.itemEmEdicao);
-                    // if (this.itemEmEdicao.hasOwnProperty('idReadequacao')) {
-                    // console.log(this.itemEmEdicao);
-                    // somente no caso de inserção. Update dá problema
-                    // const indexItemInserido = this.dadosReadequacao.items.indexOf(this.itemEmEdicao');
-                    // console.log(this.dadosReadequacao);
-                    // console.log(indexItemInserido);
-                    // const idReadequacaoInserido = this.dadosReadequacao.items[indexItemInserido].idReadequacao;
-                    // if (indexItemInserido > -1) {
-                    // this.bindClick = idReadequacaoInserido;
-                    // }
-                    // }
-                }
-            },
-            deep: true,
+        itemEmEdicao() {
+            this.bindClick = this.itemEmEdicao;
         },
     },
     methods: {
-        excluirReadequacao(idReadequacao) {
-            this.$emit('excluir-readequacao', { idReadequacao });
+        excluirReadequacao() {
+            this.$emit('excluir-readequacao');
         },
         atualizarReadequacao(idReadequacao) {
             this.$emit('atualizar-readequacao', { idReadequacao });
