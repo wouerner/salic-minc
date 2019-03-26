@@ -33,7 +33,7 @@
                                 :dados-projeto="dadosProjeto"
                                 :bind-click="bindClick"
                                 @excluir-readequacao="excluirReadequacao"
-                                @on:atualizar-readequacao="atualizarReadequacao(props.item.idReadequacao)"
+                                @atualizar-readequacao="atualizarReadequacao(props.item.idReadequacao)"
                             />
                         </template>
                     </v-layout>
