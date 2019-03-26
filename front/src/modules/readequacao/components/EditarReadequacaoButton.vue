@@ -228,7 +228,7 @@ export default {
             redirecionar: false,
             mensagem: {
                 ativa: false,
-                timeout: 0,
+                timeout: 2300,
                 conteudo: '',
                 cor: '',
             }
@@ -250,7 +250,7 @@ export default {
             const chave = `key_${this.dadosReadequacao.idTipoReadequacao}`;
             if (Object.prototype.hasOwnProperty.call(this.campoAtual, chave)) {
                 return {
-                    valor: this.dadosReadequacao.dsSolicitacao,
+                    valor: this.campoAtual[chave].dsCampo,
                     titulo: this.campoAtual[chave].descricao,
                     tpCampo: this.campoAtual[chave].tpCampo,
                 };
@@ -275,13 +275,10 @@ export default {
             },
             deep: true,
         },
-        dadosReadequacao: {
-            handler(valor) {
-                if (this.bindClick === valor.idReadequacao) {
-                    this.dialog = true;
-                }
-            },
-            deep: true,
+        bindClick() {
+            if (this.bindClick === this.dadosReadequacao.idReadequacao) {
+                this.dialog = true;
+            }
         },
         mensagem: {
             handler(mensagem) {
@@ -291,19 +288,33 @@ export default {
             },
             deep: true,
         },
+        dadosReadequacao: {
+            handler(value) {
+                if (this.value.idPronac && this.value.idTipoReadequacoa) {
+                    this.obterDadosIniciais();
+                }
+            },
+        },
     },
     created() {
-        this.obterCampoAtual({
-            idPronac: this.dadosReadequacao.idPronac,
-            idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
-        });
-        this.inicializarReadequacaoEditada();
+        this.obterDadosIniciais();
     },
     methods: {
         ...mapActions({
             obterCampoAtual: 'readequacao/obterCampoAtual',
             updateReadequacao: 'readequacao/updateReadequacao',
         }),
+        obterDadosIniciais() {
+            if (
+                this.dadosReadequacao.idPronac && this.dadosReadequacao.idTipoReadequacao
+            ) {
+                this.obterCampoAtual({
+                    idPronac: this.dadosReadequacao.idPronac,
+                    idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
+                });
+                this.inicializarReadequacaoEditada();
+            }
+        },
         abrirEdicao() {
             if (typeof this.getTemplateParaTipo === 'undefined') {
                 this.redirecionar = true;
@@ -314,9 +325,9 @@ export default {
         salvarReadequacao() {
             this.updateReadequacao(this.readequacaoEditada).then((response) => {
                 this.mensagem.conteudo = 'Readequação salva com sucesso!';
+                this.timeout = 2300;
                 this.mensagem.ativa = true;
                 this.mensagem.cor = 'green darken-1';
-                this.timeout = 2300;
                 this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
             }), function(error) {
                 this.mensagem.conteudo = 'Erro ao gravar a readequação!';

@@ -1,8 +1,8 @@
 import * as readequacaoHelperAPI from '@/helpers/api/Readequacao';
 import * as types from './types';
 
-export const obterListaDeReadequacoes = ({ commit }, params) => {
-    readequacaoHelperAPI.getReadequacoes(params)
+export const obterListaDeReadequacoes = async ({ commit }, params) => {
+    const resultado = await readequacaoHelperAPI.getReadequacoes(params)
         .then((response) => {
             const { data } = response.data;
             switch (params.stStatusAtual) {
@@ -18,7 +18,9 @@ export const obterListaDeReadequacoes = ({ commit }, params) => {
             default:
                 break;
             }
+            return data;
         });
+    return resultado;
 };
 
 export const buscaReadequacao = ({ commit }, params) => {

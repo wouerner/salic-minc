@@ -64,9 +64,23 @@
                 </v-tabs>
             </v-flex>
         </v-layout>
+        <v-snackbar
+            v-model="mensagem.ativa"
+            bottom
+            :color="mensagem.cor"
+            :timeout="mensagem.timeout"
+        ><span>{{ mensagem.conteudo }}</span>
+            <v-btn
+                dark
+                flat
+                @click="mensagem.ativa = false"
+            >
+                Fechar
+            </v-btn>
+        </v-snackbar>
         <CriarReadequacao
             :id-pronac="dadosProjeto.idPronac"
-            @on:criar-readequacao="criarReadequacao($event)"
+            @criar-readequacao="criarReadequacao($event)"
         />
     </v-container>
 </template>
@@ -104,6 +118,12 @@ export default {
             },
             itemEmEdicao: 0,
             loading: true,
+            mensagem: {
+                ativa: false,
+                timeout: 2300,
+                conteudo: '',
+                cor: '',
+            }
         };
     },
     computed: {
@@ -148,24 +168,25 @@ export default {
             }
         },
         criarReadequacao(idReadequacao) {
-            if (this.dadosProjeto.idPronac !== '') {
-                this.obterListaDeReadequacoes({
-                    idPronac: this.dadosProjeto.idPronac,
-                    stStatusAtual: 'proponente',
-                }).then(() => {
-                    console.log(idReadequacao);
-                    this.itemEmEdicao = idReadequacao;
-                });
-            }
+            this.obterListaDeReadequacoes({
+                idPronac: this.dadosProjeto.idPronac,
+                stStatusAtual: 'proponente',
+            }).then((response) => {
+                this.itemEmEdicao = idReadequacao;
+            });
         },
         excluirReadequacao() {
+            this.mensagem.conteudo = 'Readequação excluída!';
+            this.mensagem.ativa = true;
+            this.mensagem.cor = 'green lighteen-1';
+            this.timeout = 1300;
             this.obterListaDeReadequacoes({
                 idPronac: this.$route.params.idPronac,
                 stStatusAtual: 'proponente',
             });
         },
         atualizarReadequacao() {
-            this.itemEmEdicao = {};
+            this.itemEmEdicao = 0;
             this.obterListaDeReadequacoes({
                 idPronac: this.$route.params.idPronac,
                 stStatusAtual: 'proponente',

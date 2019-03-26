@@ -65,6 +65,8 @@ export default {
         return {
             pagination: {
                 rowsPerPage: 10,
+                descending: true,
+                sortBy: 'dtSolicitacao',
             },
             head: [
                 {
