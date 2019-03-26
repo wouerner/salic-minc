@@ -13,7 +13,12 @@
                 <td>{{ props.index+1 }}</td>
                 <td class="text-xs-left">{{ props.item.dsTipoReadequacao }}</td>
                 <td class="text-xs-center">{{ props.item.dtSolicitacao }}</td>
-                <td class="text-xs-center">{{ props.item.idDocumento }}</td>
+                <td class="text-xs-center">
+                    <v-btn v-if="props.item.idDocumento" flat icon>
+                        <v-icon>insert_drive_file</v-icon>
+                        {{ props.item.idDocumento }}
+                    </v-btn>
+                </td>
                 <td
                     v-if="componentes.acoes"
                     class="text-xs-center"
@@ -23,20 +28,23 @@
                         justify-center
                         align-end
                     >
-                        <template
-                            v-for="(componente, index) in componentes.acoes"
-                            d-inline-block>
-                            <component
-                                :key="index"
-                                :obj="props.item"
-                                :is="componente"
-                                :dados-readequacao="props.item"
-                                :dados-projeto="dadosProjeto"
-                                :bind-click="bindClick"
-                                @excluir-readequacao="excluirReadequacao"
-                                @on:atualizar-readequacao="atualizarReadequacao(props.item.idReadequacao)"
-                            />
-                        </template>
+                        <v-layout align-center justify-center fill-height>
+                            <template
+                                v-for="(componente, index) in componentes.acoes"
+                            >
+                                <component
+                                    class="pa-0 ma-0 align-center justify-center fill-height"
+                                    :key="index"
+                                    :obj="props.item"
+                                    :is="componente"
+                                    :dados-readequacao="props.item"
+                                    :dados-projeto="dadosProjeto"
+                                    :bind-click="bindClick"
+                                    @excluir-readequacao="excluirReadequacao"
+                                    @on:atualizar-readequacao="atualizarReadequacao(props.item.idReadequacao)"
+                                />
+                            </template>
+                        </v-layout>
                     </v-layout>
                 </td>
             </template>
