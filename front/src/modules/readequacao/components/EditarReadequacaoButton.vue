@@ -100,29 +100,46 @@
                                         @dados-update="atualizarCampo('dsJustificativa', $event)"
                                     />
                                     <v-card-text>
-                                        <UploadFile
-                                            :formatos-aceitos="formatosAceitos"
-                                            @arquivo-anexado="atualizarArquivo($event)"
-                                            @arquivo-removido="removerArquivo($event)"
-                                        />
+                                        <v-layout row>
+                                            <v-flex xs3>
+                                                <UploadFile
+                                                class="mt-1"
+                                                :formatos-aceitos="formatosAceitos"
+                                                @arquivo-anexado="atualizarArquivo($event)"
+                                                @arquivo-removido="removerArquivo($event)"
+                                                />
+                                            </v-flex>
+                                        <!-- </v-layout> -->
+                                        <!-- <v-layout row align-end class="mt-0"> -->
+                                            <v-flex xs1>
+                                                <template v-if="possuiDocumentoAnexado">
+                                                    <v-btn
+                                                        flat
+                                                        icon
+                                                        small
+                                                        class="green darken-1"
+                                                        color="white"
+                                                        @click="abrirArquivo()"
+                                                    >
+                                                        <v-icon small>attach_file</v-icon>
+                                                    </v-btn>
+                                                    <v-spacer></v-spacer>
+                                                    <v-btn
+                                                        flat
+                                                        icon
+                                                        small
+                                                        class="red"
+                                                        color="white"
+                                                        @click="removerArquivo()"
+                                                    >
+                                                        <v-icon small>
+                                                            delete
+                                                        </v-icon>
+                                                    </v-btn>
+                                                </template>
+                                            </v-flex>
+                                        </v-layout>
                                     </v-card-text>
-                                    <v-card-actions v-if="possuiDocumentoAnexado">
-                                        <v-btn
-                                            color="white"
-                                            @click="abrirArquivo()">
-                                                <v-icon large>attach_file</v-icon>
-                                            </a>
-                                        </v-btn>
-                                        <v-btn
-                                            color="white"
-                                            class="ml-5"
-                                            @click="removerArquivo()"
-                                        >
-                                            <v-icon
-                                                color="red"
-                                            >delete</v-icon>
-                                        </v-btn>
-                                    </v-card-actions>
                                 </v-card>
                             </v-expansion-panel-content>
                         </v-expansion-panel>

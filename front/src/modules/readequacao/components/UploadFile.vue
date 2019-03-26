@@ -1,29 +1,20 @@
 <template>
-    <v-container fluid>
-        <v-layout
-            row
-            wrap
-        >
-            <v-flex xs3>
-                <v-card elevation="4">
-                    <file-pond
-                        ref="pond"
-                        :accepted-file-types="formatosAceitos"
-                        :files="arquivo"
-                        name="upload"
-                        label-idle="<span class='subheading'>CARREGAR ARQUIVO</span>"
-                        label-file-type-not-allowed="Tipo de arquivo inválido."
-                        file-validate-type-label-expected-types="Somente {allTypes} serão aceitos."
-                        label-button-remove-item="Excluir"
-                        label-button-process-item="Upload"
-                        allow-image-preview="false"
-                        @removefile="arquivoAnexado"
-                        @addfile="arquivoAnexado"
-                    />
-                </v-card>
-            </v-flex>
-        </v-layout>
-    </v-container>
+    <v-card elevation="4">
+        <file-pond
+            ref="pond"
+            name="upload"
+            label-idle="<span class='subheading'>CARREGAR ARQUIVO</span>"
+            label-file-type-not-allowed="Tipo de arquivo inválido."
+            file-validate-type-label-expected-types="Somente {allTypes} serão aceitos."
+            label-button-remove-item="Excluir"
+            label-button-process-item="Upload"
+            allow-image-preview="false"
+            :accepted-file-types="formatosAceitos"
+            :files="arquivo"
+            @removefile="arquivoAnexado"
+            @addfile="arquivoAnexado"
+        />
+    </v-card>
 </template>
 
 <script>
