@@ -290,7 +290,7 @@ export default {
         },
         dadosReadequacao: {
             handler(value) {
-                if (this.value.idPronac && this.value.idTipoReadequacoa) {
+                if (value.idPronac && value.idTipoReadequacoa) {
                     this.obterDadosIniciais();
                 }
             },
