@@ -4,7 +4,8 @@
             :headers="head"
             :items="dadosReadequacao.items"
             :pagination.sync="pagination"
-            hide-actions
+            item-key="item.index"
+            rows-per-page-text="Items por Página"
         >
             <template
                 slot="items"
