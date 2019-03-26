@@ -121,5 +121,5 @@ export const inserirReadequacao = async ({ commit }, params) => {
             commit(types.SET_READEQUACOES_PROPONENTE, data);
             return data;
         });
-        return resultado;
+    return resultado;
 };

@@ -5,56 +5,60 @@
         wrap
     >
         <v-btn
-        absolute
-        dark
-        color="green darken-1"
-        class="mt-2 mb-5"
-        @click="dialog = true"
+            absolute
+            dark
+            color="green darken-1"
+            class="mt-2 mb-5"
+            @click="dialog = true"
         >
             CRIAR
-            <v-icon right dark>add</v-icon>
+            <v-icon
+                right
+                dark
+            >add</v-icon>
         </v-btn>
         <v-flex
-          xs4
-          offset-xs4
-          >
+            xs4
+            offset-xs4
+        >
             <v-dialog
                 v-model="dialog"
                 transition="dialog-bottom-transition"
                 width="450"
                 @keydown.esc="dialog = false"
             >
-                <v-card v-if="getTiposDisponiveis"
-                        class="pa-3"
-                        >
-                    <v-card-title class="headline green darken-4 white--text">Nova Readequação</v-card-title>
-                    <v-card-text>
-                        <v-select
-                            v-model="idTipoReadequacao"
-                            :items="getTiposDisponiveis"
-                            item-text="descricao"
-                            item-value="idTipoReadequacao"
-                            label="Escolha o tipo de readequação"
-                            solo
-                        />
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-btn
-                            color="red darken-1"
-                            flat="flat"
-                            @click="dialog = false"
-                          >
+              <v-card
+                  v-if="getTiposDisponiveis"
+                  class="pa-3"
+              >
+                  <v-card-title class="headline green darken-4 white--text">Nova Readequação</v-card-title>
+                  <v-card-text>
+                      <v-select
+                          v-model="idTipoReadequacao"
+                          :items="getTiposDisponiveis"
+                          item-text="descricao"
+                          item-value="idTipoReadequacao"
+                          label="Escolha o tipo de readequação"
+                          solo
+                      />
+                  </v-card-text>
+                  <v-card-actions>
+                      <v-btn
+                          color="red darken-1"
+                          flat="flat"
+                          @click="dialog = false"
+                      >
                           Cancelar
-                        </v-btn>
-                        <v-spacer/>
-                        <v-btn
-                            :disabled="this.idTipoReadequacao == ''"
-                            color="green darken-1"
-                            dark
-                            @click="criarReadequacao"
-                        >CRIAR
-                        </v-btn>
-                    </v-card-actions>
+                      </v-btn>
+                      <v-spacer/>
+                      <v-btn
+                          :disabled="this.idTipoReadequacao == ''"
+                          color="green darken-1"
+                          dark
+                          @click="criarReadequacao"
+                      >CRIAR
+                      </v-btn>
+                  </v-card-actions>
                 </v-card>
             </v-dialog>
         </v-flex>
@@ -82,9 +86,8 @@ export default {
     },
     watch: {
         idPronac() {
-            let idPronac = this.idPronac;
-            this.obterTiposDisponiveis({ idPronac });
-        }
+            this.obterTiposDisponiveis({ idPronac: this.idPronac });
+        },
     },
     methods: {
         ...mapActions({
@@ -94,11 +97,14 @@ export default {
         criarReadequacao() {
             let idPronac = this.idPronac;
             let idTipoReadequacao = this.idTipoReadequacao;
-            this.inserirReadequacao({ idPronac, idTipoReadequacao }).then((response) => {
+            this.inserirReadequacao({
+                idPronac: this.idPronac,
+                idTipoReadequacao: this.idTipoReadequacao,
+            }).then((response) => {
                 this.dialog = false;
                 this.$emit('criar-readequacao', response.items.idReadequacao );
             });
         },
     },
-}
+};
 </script>

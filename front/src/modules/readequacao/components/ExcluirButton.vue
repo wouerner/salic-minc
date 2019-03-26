@@ -54,14 +54,14 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
     name: 'ExcluirButton',
     props: {
-	obj: { type: Object, default: () => {} },
-	dadosProjeto: { type: Object, default: () => {} },
-	dadosReadequacao: { type: Object, default: () => {} },
+	    obj: { type: Object, default: () => {} },
+	    dadosProjeto: { type: Object, default: () => {} },
+	    dadosReadequacao: { type: Object, default: () => {} },
     },
     data() {
         return {
@@ -73,12 +73,11 @@ export default {
     methods: {
         ...mapActions({
             excluirReadequacao: 'readequacao/excluirReadequacao',
-        }),        
+        }),
         excluir() {
-            const idReadequacao = this.dadosReadequacao.idReadequacao;
-            this.excluirReadequacao({ idReadequacao });
+            this.excluirReadequacao({ idReadequacao: this.dadosReadequacao.idReadequacao });
             this.dialog = false;
-            this.$emit('excluir-readequacao', { idReadequacao });
+            this.$emit('excluir-readequacao', { idReadequacao: this.dadosReadequacao.idReadequacao });
         },
     },
 };

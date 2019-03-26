@@ -171,7 +171,7 @@ export default {
             this.obterListaDeReadequacoes({
                 idPronac: this.dadosProjeto.idPronac,
                 stStatusAtual: 'proponente',
-            }).then((response) => {
+            }).then(() => {
                 this.itemEmEdicao = idReadequacao;
             });
         },

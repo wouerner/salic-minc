@@ -25,7 +25,7 @@
                     <EditorTexto
                         :style="''"
                         :value="campo.valor"
-                        @editor-texto-input="salvarInput($event)"
+                        @editor-texto-input="salvarInput = $event"
                     />
                 </v-card>
             </v-flex>
