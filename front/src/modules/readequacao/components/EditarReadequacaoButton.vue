@@ -78,7 +78,7 @@
                                         :is="getTemplateParaTipo"
                                         :dados-readequacao="dadosReadequacao"
                                         :campo="getDadosCampo"
-                                        @dados-update="atualizarCampo('dsSolicitacao', $event)"
+                                        @dados-update="atualizarCampo($event, 'dsSolicitacao')"
                                     />
                                 </v-card>
                             </v-expansion-panel-content>
@@ -97,7 +97,7 @@
                                     </v-card-title>
                                     <FormReadequacao
                                         :dados-readequacao="dadosReadequacao"
-                                        @dados-update="atualizarCampo('dsJustificativa', $event)"
+                                        @dados-update="atualizarCampo($event, 'dsJustificativa')"
                                     />
                                     <v-card-text>
                                         <UploadFile
@@ -290,10 +290,11 @@ export default {
         },
         dadosReadequacao: {
             handler(value) {
-                if (this.value.idPronac && this.value.idTipoReadequacoa) {
+                if (value.idPronac && value.idTipoReadequacao) {
                     this.obterDadosIniciais();
                 }
             },
+            deep: true,
         },
     },
     created() {
@@ -369,7 +370,7 @@ export default {
             const urlArquivo = `/readequacao/readequacoes/abrir-documento-readequacao?id=${this.dadosReadequacao.idDocumento}`;
             window.location.href = urlArquivo;
         },
-        atualizarCampo(campo, valor) {
+        atualizarCampo(valor, campo) {
             let campos = ['dsSolicitacao', 'dsJustificativa'];
             if (campos.includes(campo)) {
                 this.readequacaoEditada[campo] = valor;
