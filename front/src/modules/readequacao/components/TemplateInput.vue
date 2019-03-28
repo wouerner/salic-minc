@@ -26,8 +26,7 @@
                     <v-card-actions>
                         <v-text-field
                             :label="campo.titulo"
-                            v-model="campo.valor"
-                            :value="campo.valor"
+                            :value="campoTexto"
                             @input="updateCampo"
                         />
                     </v-card-actions>
@@ -41,11 +40,21 @@ export default {
     name: 'TemplateInput',
     props: {
         campo: { type: Object, default: () => {} },
+        dadosReadequacao: { type: Object, default: () => {} },
         nomeAtributo: { type: String, default: () => '' },
     },
+    computed: {
+        campoTexto() {
+            if (this.dadosReadequacao.dsSolicitacao === ' '
+                || this.dadosReadequacao.dsSolicitacao === '') {
+                return this.campo.valor;
+            }
+            return this.dadosReadequacao.dsSolicitacao;
+        },
+    },
     methods: {
-        updateCampo() {
-            this.$emit('dados-update', this.campo.valor);
+        updateCampo(e) {
+            this.$emit('dados-update', e);
         },
     },
 };

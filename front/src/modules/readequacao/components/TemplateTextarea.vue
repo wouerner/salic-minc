@@ -24,8 +24,8 @@
                     <v-card-title class="green lighten-2 title">Versão readequada</v-card-title>
                     <EditorTexto
                         :style="''"
-                        :value="campo.valor"
-                        @editor-texto-input="salvarInput = $event"
+                        :value="campoTexto"
+                        @editor-texto-input="salvarInput($event)"
                     />
                 </v-card>
             </v-flex>
@@ -47,7 +47,15 @@ export default {
     data() {
         return {};
     },
-    computed: {},
+    computed: {
+        campoTexto() {
+            if (this.dadosReadequacao.dsSolicitacao === ' '
+                || this.dadosReadequacao.dsSolicitacao === '') {
+                return this.campo.valor;
+            }
+            return this.dadosReadequacao.dsSolicitacao;
+        },
+    },
     methods: {
         salvarInput(e) {
             this.$emit('dados-update', e);
