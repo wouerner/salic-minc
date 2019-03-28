@@ -53,6 +53,7 @@
                             <v-date-picker
                                 v-model="date"
                                 no-title
+                                locale="pt-br"
                                 @input="menu = false"
                             />
                         </v-menu>
@@ -68,6 +69,7 @@ export default {
     name: 'TemplateDate',
     props: {
         campo: { type: Object, default: () => {} },
+        dadosReadequacao: { type: Object, default: () => {} },
     },
     data() {
         return {
@@ -76,21 +78,28 @@ export default {
             menu: false,
         };
     },
-    computed: {
-        computedDateFormatted() {
-            return this.formatDate(this.date);
-        },
-    },
     watch: {
         date() {
             this.$emit('dados-update', this.date);
             this.dateFormatted = this.formatDate(this.date);
         },
-    },
-    created() {
-        this.date = this.campo.valor.substr(0, 10);
+        campo() {
+            if (this.campo.valor !== '') {
+                let date;
+                if (this.dadosReadequacao.dsSolicitacao === ' '
+                    || this.dadosReadequacao.dsSolicitacao === '') {
+                    date = this.campo.valor;
+                }
+                date = this.dadosReadequacao.dsSolicitacao;
+                this.date = this.prepareDate(date);
+            }
+        },
     },
     methods: {
+        prepareDate(date) {
+            const [day, month, year] = date.substr(0, 10).split('-');
+            return `${day}-${month}-${year}`;
+        },
         formatDate(date) {
             if (!date) {
                 return null;
