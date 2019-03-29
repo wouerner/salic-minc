@@ -30,10 +30,7 @@
             :persistent="mensagem.ativa"
             @keydown.esc="dialog = false"
         >
-            <div v-if="loading">
-                <Carregando :text="'Montando edição de readequação...'"/>
-            </div>
-            <v-card v-else-if="campoAtual">
+            <v-card>
                 <v-toolbar
                     dark
                     color="primary"
@@ -55,6 +52,17 @@
                     wrap
                 >
                     <v-flex
+                        v-if="loading"
+                        xs10
+                        offset-xs1
+                    >
+                        <Carregando
+                            class="mt-5"
+                            :text="'Montando edição de readequação...'"
+                        />
+                    </v-flex>
+                    <v-flex
+                        v-else
                         xs10
                         offset-xs1
                     >
@@ -196,6 +204,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import { mapActions, mapGetters } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
 import FormReadequacao from './FormReadequacao';
@@ -232,7 +241,6 @@ export default {
             templateEdicao: [],
             formatosAceitos: 'application/pdf',
             panel: [true, true],
-            loading: true,
             readequacaoEditada: {
                 idReadequacao: 0,
                 dsSolicitacao: '',
@@ -282,16 +290,11 @@ export default {
             }
             return false;
         },
+        loading() {
+            return _.isEmpty(this.getDadosCampo);
+        },
     },
     watch: {
-        campoAtual: {
-            handler(valor) {
-                if (Object.keys(valor).length > 0) {
-                    this.loading = false;
-                }
-            },
-            deep: true,
-        },
         bindClick() {
             if (this.bindClick === this.dadosReadequacao.idReadequacao) {
                 this.dialog = true;
