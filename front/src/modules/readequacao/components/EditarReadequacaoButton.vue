@@ -320,6 +320,11 @@ export default {
             },
             deep: true,
         },
+        dialog() {
+            if (!this.dialog) {
+                this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
+            }
+        },
     },
     created() {
         this.obterDadosIniciais();
@@ -355,7 +360,6 @@ export default {
                 this.timeout = 2300;
                 this.mensagem.ativa = true;
                 this.mensagem.cor = 'green darken-1';
-                this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
             });
         },
         inicializarReadequacaoEditada() {
@@ -385,7 +389,6 @@ export default {
                 this.mensagem.conteudo = 'Arquivo enviado!';
                 this.mensagem.ativa = true;
                 this.mensagem.cor = 'green darken-1';
-                this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
             });
         },
         removerArquivo() {
@@ -395,7 +398,6 @@ export default {
                 this.mensagem.conteudo = 'Arquivo removido!';
                 this.mensagem.ativa = true;
                 this.mensagem.cor = 'green darken-1';
-                this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
             });
         },
         abrirArquivo() {

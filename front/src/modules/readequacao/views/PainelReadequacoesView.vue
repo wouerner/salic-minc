@@ -9,7 +9,6 @@
                         class="grey--text text--darken-4"
                     >{{ dadosProjeto.Pronac }} - {{ dadosProjeto.NomeProjeto }}</h3>
                 </v-subheader>
-
                 <div v-if="loading">
                     <Carregando :text="'Carregando readequações...'"/>
                 </div>
@@ -42,7 +41,6 @@
                                 />
                             </v-card>
                         </v-tab-item>
-
                         <v-tab-item :value="'tab-2'">
                             <v-card>
                                 <TabelaReadequacoes

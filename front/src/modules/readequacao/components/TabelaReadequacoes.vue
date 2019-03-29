@@ -49,7 +49,7 @@
                                     :bind-click="bindClick"
                                     class="pa-0 ma-0 align-center justify-center fill-height"
                                     @excluir-readequacao="excluirReadequacao"
-                                    @on:atualizar-readequacao="atualizarReadequacao(props.item.idReadequacao)"
+                                    @atualizar-readequacao="atualizarReadequacao(props.item.idReadequacao)"
                                 />
                             </template>
                         </v-layout>
