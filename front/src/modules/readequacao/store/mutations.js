@@ -41,6 +41,9 @@ export const mutations = {
     [types.EXCLUIR_READEQUACAO](state) {
         state.readequacao = {};
     },
+    [types.GET_DOCUMENTO](state, documento) {
+        state.readequacao.documento = documento;
+    },
     [types.ADICIONAR_DOCUMENTO](state, data) {
         state.readequacao.idDocumento = data.idDocumento;
         state.readequacao.nomeArquivo = data.nomeArquivo;

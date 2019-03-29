@@ -45,6 +45,15 @@ export const buscaReadequacaoPronacTipo = ({ commit }, params) => {
         });
 };
 
+export const obterDocumento = ({ commit }, idDocumento) => {
+    readequacaoHelperAPI.obterDocumentoReadequacao(idDocumento)
+        .then((response) => {
+            const documento  = response;
+            console.log(documento);
+            commit(types.GET_DOCUMENTO, documento);
+        });
+};
+
 export const adicionarDocumento = ({ commit }, params) => {
     readequacaoHelperAPI.adicionarDocumento(params)
         .then((response) => {

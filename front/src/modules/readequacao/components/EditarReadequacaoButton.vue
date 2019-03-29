@@ -104,6 +104,7 @@
                                             <v-flex xs3>
                                                 <UploadFile
                                                 class="mt-1"
+                                                :arquivo-inicial="this.getDocumentoReadequacao"
                                                 :formatos-aceitos="formatosAceitos"
                                                 @arquivo-anexado="atualizarArquivo($event)"
                                                 @arquivo-removido="removerArquivo($event)"
@@ -254,6 +255,7 @@ export default {
     computed: {
         ...mapGetters({
             campoAtual: 'readequacao/getCampoAtual',
+            getDocumentoReadequacao: 'readequacao/getDocumentoReadequacao',
         }),
         getTemplateParaTipo() {
             let templateName = false;
@@ -321,6 +323,7 @@ export default {
         ...mapActions({
             obterCampoAtual: 'readequacao/obterCampoAtual',
             updateReadequacao: 'readequacao/updateReadequacao',
+            obterDocumento: 'readequacao/obterDocumento',
         }),
         obterDadosIniciais() {
             if (
@@ -331,6 +334,7 @@ export default {
                     idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
                 });
                 this.inicializarReadequacaoEditada();
+                this.obterArquivoReadequacao(this.readequacaoEditada.idDocumento);
             }
         },
         abrirEdicao() {
@@ -363,6 +367,16 @@ export default {
                 dsSolicitacao: this.dadosReadequacao.dsSolicitacao,
                 dsJustificativa: this.dadosReadequacao.dsJustificativa,
             };
+        },
+        obterArquivoReadequacao(id) {
+            if(id) {
+                this.obterDocumento(id);
+                let documento = this.getDocumentoReadequacao;
+                return documento;
+            }
+            else {
+                return false;
+            }
         },
         atualizarArquivo(arquivo) {
             this.readequacaoEditada.documento = arquivo;
