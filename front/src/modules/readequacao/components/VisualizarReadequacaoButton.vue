@@ -100,7 +100,7 @@
                                 </v-list-tile-avatar>
                                 <v-list-tile-content>
                                     <v-list-tile-title>Data da Solicitação</v-list-tile-title>
-                                    <v-list-tile-sub-title>{{ dadosReadequacao.dtSolicitacao }}</v-list-tile-sub-title>
+                                    <v-list-tile-sub-title>{{ dadosReadequacao.dtSolicitacao | formatarData }}</v-list-tile-sub-title>
                                 </v-list-tile-content>
                             </v-list-tile>
                             <v-list-tile
@@ -171,7 +171,7 @@
                                 </v-list-tile-avatar>
                                 <v-list-tile-content>
                                     <v-list-tile-title>Data da Avaliação</v-list-tile-title>
-                                    <v-list-tile-sub-title>{{ dadosReadequacao.dtAvaliador }}</v-list-tile-sub-title>
+                                    <v-list-tile-sub-title>{{ dadosReadequacao.dtAvaliador | formatarData }}</v-list-tile-sub-title>
                                 </v-list-tile-content>
                             </v-list-tile>
                         </v-list>
@@ -184,12 +184,14 @@
 <script>
 import { mapActions } from 'vuex';
 import VisualizarCampoDetalhado from './VisualizarCampoDetalhado';
+import { utils } from '@/mixins/utils';
 
 export default {
     name: 'VisualizarReadequacaoButton',
     components: {
         VisualizarCampoDetalhado,
     },
+    mixins: [utils],
     props: {
         obj: { type: Object, default: () => {} },
         dadosProjeto: { type: Object, default: () => {} },

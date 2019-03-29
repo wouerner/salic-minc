@@ -88,6 +88,11 @@ export default {
             this.obterTiposDisponiveis({ idPronac: this.idPronac });
         },
     },
+    created() {
+        if (this.idPronac) {
+            this.obterTiposDisponiveis({ idPronac: this.idPronac });
+        }
+    },
     methods: {
         ...mapActions({
             obterTiposDisponiveis: 'readequacao/obterTiposDisponiveis',
