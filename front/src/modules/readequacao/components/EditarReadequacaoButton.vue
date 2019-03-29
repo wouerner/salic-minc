@@ -50,6 +50,7 @@
                 <v-layout
                     row
                     wrap
+                    class="mt-5"
                 >
                     <v-flex
                         v-if="loading"
@@ -75,10 +76,6 @@
                                 readonly
                                 hide-actions
                             >
-                                <div
-                                    slot="header"
-                                    class="title"
-                                >Edição</div>
                                 <v-card
                                     v-if="getTemplateParaTipo"
                                 >
@@ -260,6 +257,7 @@ export default {
                 conteudo: '',
                 cor: '',
             },
+            loading: true,
         };
     },
     computed: {
@@ -294,11 +292,13 @@ export default {
             }
             return false;
         },
-        loading() {
-            return _.isEmpty(this.getDadosCampo);
-        },
     },
     watch: {
+        getDadosCampo() {
+            if (!_.isEmpty(this.getDadosCampo)) {
+                this.loading = false;
+            }
+        },
         bindClick() {
             if (this.bindClick === this.dadosReadequacao.idReadequacao) {
                 this.dialog = true;
