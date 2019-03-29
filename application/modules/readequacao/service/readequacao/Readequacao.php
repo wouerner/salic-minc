@@ -245,7 +245,7 @@ class Readequacao implements IServicoRestZend
 
             case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ALTERACAO_PROPONENTE:
                 $Projetos = new \Projetos();
-                $dadosProjeto = $Projetos_>buscar(
+                $dadosProjeto = $Projetos->buscar(
                     ['IdPRONAC = ?' => $idPronac]
                 )->current();
 
@@ -439,6 +439,9 @@ class Readequacao implements IServicoRestZend
                 $tpCampo = 'transferencia_recursos';
                 break;
 
+            default:
+                $descricao = 'Tipo não encontrado';
+                $tpCampo = 'N/A';
         }
 
         $resultArray = [];
