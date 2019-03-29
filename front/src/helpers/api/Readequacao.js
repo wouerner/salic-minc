@@ -14,13 +14,13 @@ const parseQueryParams = (params) => {
     let queryParams = '';
     Object.keys(params).forEach((key) => {
         queryParams += (queryParams === '') ? '?' : '&';
-        queryParams += key + '=' + params[key];
+        queryParams += `key = ${params[key]}`;
     });
     return queryParams;
 };
 
 export const getReadequacoes = (params) => {
-    const path = `/readequacao`;
+    const path = '/readequacao';
     return api.getRequest(path + parseQueryParams(params));
 };
 
@@ -31,32 +31,32 @@ export const dadosReadequacao = (params) => {
 };
 
 export const inserirReadequacao = (params) => {
-    const path = `/readequacao/dados-readequacao`;
+    const path = '/readequacao/dados-readequacao';
     return api.postRequest(path, buildData(params));
 };
 
 export const buscaReadequacaoPronacTipo = (params) => {
-    const path = `/readequacao`;
+    const path = '/readequacao';
     return api.getRequest(path + parseQueryParams(params));
 };
 
 export const updateReadequacao = (params) => {
-    const path = `/readequacao/dados-readequacao`;
+    const path = '/readequacao/dados-readequacao';
     return api.postRequest(path, buildData(params), params.idReadequacao);
 };
 
 export const excluirReadequacao = (params) => {
-    const path = `/readequacao/dados-readequacao`;
+    const path = '/readequacao/dados-readequacao';
     return api.deleteRequest(path, params.idReadequacao);
 };
 
 export const updateReadequacaoSaldoAplicacao = (params) => {
-    const path = `/readequacao/saldo-aplicacao/salvar-readequacao`;
+    const path = '/readequacao/saldo-aplicacao/salvar-readequacao';
     return api.putRequest(path, buildData(params), params.idReadequacao);
 };
 
 export const excluirReadequacaoSaldoAplicacao = (params) => {
-    const path = `/readequacao/saldo-aplicacao/excluir-readequacao`;
+    const path = '/readequacao/saldo-aplicacao/excluir-readequacao';
     return api.postRequest(path, buildData(params));
 };
 
@@ -66,26 +66,26 @@ export const obterDisponivelEdicaoItemSaldoAplicacao = (idPronac) => {
 };
 
 export const adicionarDocumento = (params) => {
-    const path = `/readequacao/dados-readequacao`;
+    const path = '/readequacao/dados-readequacao';
     return api.postRequest(path + parseQueryParams(params));
 };
 
-export const excluirDocumento = (idDocumento) => {
-    const path = `/readequacao/${idReadequacao}/documento/${idDocumento}`;
+export const excluirDocumento = (params) => {
+    const path = `/readequacao/${params.idReadequacao}/documento/${params.idDocumento}`;
     return api.deleteRequest(path);
 };
 
 export const obterTiposReadequacao = (params) => {
-    const path = `/readequacao/tipos-disponiveis`;
-    return api.getRequest(path + paramsQueryParams(params));
+    const path = '/readequacao/tipos-disponiveis';
+    return api.getRequest(path + parseQueryParams(params));
 };
 
 export const obterCampoAtual = (params) => {
-    const path = `/readequacao/campo-atual`;
+    const path = '/readequacao/campo-atual';
     return api.getRequest(path + parseQueryParams(params));
 };
 
 export const obterTiposDisponiveis = (params) => {
-    const path = `/readequacao/tipos-disponiveis`;
+    const path = '/readequacao/tipos-disponiveis';
     return api.getRequest(path + parseQueryParams(params));
 };

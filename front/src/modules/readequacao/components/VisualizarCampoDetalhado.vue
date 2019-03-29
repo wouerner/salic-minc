@@ -7,20 +7,19 @@
     >
         <v-card>
             <v-card-title
-            class="headline green lighten-2 white--text"
-            primary-title
+                class="headline green lighten-2 white--text"
+                primary-title
             >
-                <v-btn fab small>
+                <v-btn
+                    fab
+                    small
+                >
                     <v-icon class="green--text">assignment</v-icon>
                 </v-btn>
                 {{ dados.titulo }}
             </v-card-title>
-
-            <v-card-text v-html="dados.descricao">
-            </v-card-text>
-
-            <v-divider></v-divider>
-
+            <v-card-text v-html="dados.descricao"/>
+            <v-divider/>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
@@ -38,13 +37,13 @@
 export default {
     name: 'VisualizarCampoDetalhado',
     props: {
-        dialog: false,
-        dados: {}
+        dialog: { type: Boolean, default: false },
+        dados: { type: Object, default: () => {} },        
     },
     methods: {
         fecharVisualizacao() {
             this.$emit('fechar-visualizacao');
-        }
+        },
     },
-}
+};
 </script>

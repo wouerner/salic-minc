@@ -70,10 +70,10 @@
             </v-flex>
         </v-layout>
         <v-snackbar
-            v-model="mensagem.ativa"
-            bottom
             :color="mensagem.cor"
             :timeout="mensagem.timeout"
+            v-model="mensagem.ativa"
+            bottom
         ><span>{{ mensagem.conteudo }}</span>
             <v-btn
                 dark
@@ -124,7 +124,7 @@ export default {
                 timeout: 2300,
                 conteudo: '',
                 cor: '',
-            }
+            },
         };
     },
     computed: {

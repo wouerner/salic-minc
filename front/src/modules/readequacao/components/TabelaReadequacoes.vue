@@ -14,7 +14,11 @@
                 <td class="text-xs-left">{{ props.item.dsTipoReadequacao }}</td>
                 <td class="text-xs-center">{{ props.item.dtSolicitacao }}</td>
                 <td class="text-xs-center">
-                    <v-btn v-if="props.item.idDocumento" flat icon>
+                    <v-btn
+                        v-if="props.item.idDocumento"
+                        flat
+                        icon
+                    >
                         <v-icon>insert_drive_file</v-icon>
                         {{ props.item.idDocumento }}
                     </v-btn>
@@ -28,18 +32,22 @@
                         justify-center
                         align-end
                     >
-                        <v-layout align-center justify-center fill-height>
+                        <v-layout
+                            align-center
+                            justify-center
+                            fill-height
+                        >
                             <template
                                 v-for="(componente, index) in componentes.acoes"
                             >
                                 <component
-                                    class="pa-0 ma-0 align-center justify-center fill-height"
                                     :key="index"
                                     :obj="props.item"
                                     :is="componente"
                                     :dados-readequacao="props.item"
                                     :dados-projeto="dadosProjeto"
                                     :bind-click="bindClick"
+                                    class="pa-0 ma-0 align-center justify-center fill-height"
                                     @excluir-readequacao="excluirReadequacao"
                                     @on:atualizar-readequacao="atualizarReadequacao(props.item.idReadequacao)"
                                 />
