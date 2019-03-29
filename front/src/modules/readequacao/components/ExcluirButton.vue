@@ -59,9 +59,9 @@ import { mapActions } from 'vuex';
 export default {
     name: 'ExcluirButton',
     props: {
-	    obj: { type: Object, default: () => {} },
-	    dadosProjeto: { type: Object, default: () => {} },
-	    dadosReadequacao: { type: Object, default: () => {} },
+        obj: { type: Object, default: () => {} },
+        dadosProjeto: { type: Object, default: () => {} },
+        dadosReadequacao: { type: Object, default: () => {} },
     },
     data() {
         return {

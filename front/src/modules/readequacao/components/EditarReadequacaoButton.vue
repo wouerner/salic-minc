@@ -23,17 +23,14 @@
             />
         </template>
         <v-dialog
+            :persistent="mensagem.ativa"
             v-model="dialog"
             fullscreen
             hide-overlay
             transition="dialog-bottom-transition"
-            :persistent="mensagem.ativa"
             @keydown.esc="dialog = false"
         >
-            <div v-if="loading">
-                <Carregando :text="'Montando edição de readequação...'"/>
-            </div>
-            <v-card v-else-if="campoAtual">
+            <v-card>
                 <v-toolbar
                     dark
                     color="primary"
@@ -55,6 +52,17 @@
                     wrap
                 >
                     <v-flex
+                        v-if="loading"
+                        xs10
+                        offset-xs1
+                    >
+                        <Carregando
+                            :text="'Montando edição de readequação...'"
+                            class="mt-5"
+                        />
+                    </v-flex>
+                    <v-flex
+                        v-else
                         xs10
                         offset-xs1
                     >
@@ -103,15 +111,13 @@
                                         <v-layout row>
                                             <v-flex xs3>
                                                 <UploadFile
-                                                class="mt-1"
                                                 :arquivo-inicial="this.getDocumentoReadequacao"
                                                 :formatos-aceitos="formatosAceitos"
+                                                class="mt-1"
                                                 @arquivo-anexado="atualizarArquivo($event)"
                                                 @arquivo-removido="removerArquivo($event)"
                                                 />
                                             </v-flex>
-                                        <!-- </v-layout> -->
-                                        <!-- <v-layout row align-end class="mt-0"> -->
                                             <v-flex xs1>
                                                 <template v-if="possuiDocumentoAnexado">
                                                     <v-btn
@@ -124,7 +130,7 @@
                                                     >
                                                         <v-icon small>attach_file</v-icon>
                                                     </v-btn>
-                                                    <v-spacer></v-spacer>
+                                                    <v-spacer/>
                                                     <v-btn
                                                         flat
                                                         icon
@@ -149,45 +155,49 @@
                             class="pb-4 pt-4 elevation-18"
                             fixed
                         >
-                                <v-flex xs11>
-                                    <v-layout row wrap justify-end>
-                                        <v-btn
-                                            color="green darken-1"
+                            <v-flex xs11>
+                                <v-layout
+                                    row
+                                    wrap
+                                    justify-end
+                                >
+                                    <v-btn
+                                        color="green darken-1"
+                                        dark
+                                        @click="salvarReadequacao()"
+                                    >Salvar
+                                        <v-icon
+                                            right
                                             dark
-                                            @click="salvarReadequacao()"
-                                        >Salvar
-                                            <v-icon
-                                                right
-                                                dark
-                                            >done</v-icon>
-                                        </v-btn>
-                                        <v-btn
-                                            color="green darken-1"
-                                            class="mr-2"
+                                        >done</v-icon>
+                                    </v-btn>
+                                    <v-btn
+                                        color="green darken-1"
+                                        class="mr-2"
+                                        dark
+                                        @click="dialog = false"
+                                    >Finalizar
+                                        <v-icon
+                                            right
                                             dark
-                                            @click="dialog = false"
-                                        >Finalizar
-                                            <v-icon
-                                                right
-                                                dark
-                                            >done_all</v-icon>
-                                        </v-btn>
-                                    </v-layout>
-                                </v-flex>
+                                        >done_all</v-icon>
+                                    </v-btn>
+                                </v-layout>
+                            </v-flex>
                         </v-footer>
                     </v-flex>
                 </v-layout>
                 <v-snackbar
-                    v-model="mensagem.ativa"
-                    bottom
                     :color="mensagem.cor"
                     :timeout="mensagem.timeout"
+                    v-model="mensagem.ativa"
+                    bottom
                 ><span>{{ mensagem.conteudo }}</span>
                     <v-btn
                         dark
                         flat
                         @click="mensagem.ativa = false"
-                        >
+                    >
                         Fechar
                     </v-btn>
                 </v-snackbar>
@@ -197,6 +207,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import { mapActions, mapGetters } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
 import FormReadequacao from './FormReadequacao';
@@ -233,7 +244,6 @@ export default {
             templateEdicao: [],
             formatosAceitos: 'application/pdf',
             panel: [true, true],
-            loading: true,
             readequacaoEditada: {
                 idReadequacao: 0,
                 dsSolicitacao: '',
@@ -249,7 +259,7 @@ export default {
                 timeout: 2300,
                 conteudo: '',
                 cor: '',
-            }
+            },
         };
     },
     computed: {
@@ -279,21 +289,16 @@ export default {
         possuiDocumentoAnexado() {
             if (this.dadosReadequacao.idDocumento
                 && this.dadosReadequacao.idDocumento !== ''
-               ) {
+            ) {
                 return true;
             }
             return false;
         },
+        loading() {
+            return _.isEmpty(this.getDadosCampo);
+        },
     },
     watch: {
-        campoAtual: {
-            handler(valor) {
-                if (Object.keys(valor).length > 0) {
-                    this.loading = false;
-                }
-            },
-            deep: true,
-        },
         bindClick() {
             if (this.bindClick === this.dadosReadequacao.idReadequacao) {
                 this.dialog = true;
@@ -334,7 +339,7 @@ export default {
                     idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
                 });
                 this.inicializarReadequacaoEditada();
-                this.obterArquivoReadequacao(this.readequacaoEditada.idDocumento);
+                // this.obterArquivoReadequacao(this.readequacaoEditada.idDocumento);
             }
         },
         abrirEdicao() {
@@ -345,17 +350,13 @@ export default {
             }
         },
         salvarReadequacao() {
-            this.updateReadequacao(this.readequacaoEditada).then((response) => {
+            this.updateReadequacao(this.readequacaoEditada).then(() => {
                 this.mensagem.conteudo = 'Readequação salva com sucesso!';
                 this.timeout = 2300;
                 this.mensagem.ativa = true;
                 this.mensagem.cor = 'green darken-1';
                 this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
-            }), function(error) {
-                this.mensagem.conteudo = 'Erro ao gravar a readequação!';
-                this.mensagem.ativa = true;
-                this.mensagem.cor = 'deep-orange';
-            };
+            });
         },
         inicializarReadequacaoEditada() {
             this.readequacaoEditada = {
@@ -380,7 +381,7 @@ export default {
         },
         atualizarArquivo(arquivo) {
             this.readequacaoEditada.documento = arquivo;
-            this.updateReadequacao(this.readequacaoEditada).then((response) => {
+            this.updateReadequacao(this.readequacaoEditada).then(() => {
                 this.mensagem.conteudo = 'Arquivo enviado!';
                 this.mensagem.ativa = true;
                 this.mensagem.cor = 'green darken-1';
@@ -390,7 +391,7 @@ export default {
         removerArquivo() {
             this.readequacaoEditada.documento = '';
             this.readequacaoEditada.idDocumento = '';
-            this.updateReadequacao(this.readequacaoEditada).then((response) => {
+            this.updateReadequacao(this.readequacaoEditada).then(() => {
                 this.mensagem.conteudo = 'Arquivo removido!';
                 this.mensagem.ativa = true;
                 this.mensagem.cor = 'green darken-1';
@@ -402,7 +403,7 @@ export default {
             window.location.href = urlArquivo;
         },
         atualizarCampo(valor, campo) {
-            let campos = ['dsSolicitacao', 'dsJustificativa'];
+            const campos = ['dsSolicitacao', 'dsJustificativa'];
             if (campos.includes(campo)) {
                 this.readequacaoEditada[campo] = valor;
             }

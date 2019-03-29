@@ -13,62 +13,67 @@
                 <div v-if="loading">
                     <Carregando :text="'Carregando readequações...'"/>
                 </div>
-                <v-tabs
-                    v-else-if="getReadequacoesProponente"
-                    color="#0a420e"
-                    centered
-                    dark
-                    icons-and-text
-                >
-                    <v-tabs-slider color="yellow"/>
-                    <v-tab href="#tab-1">Edição
-                        <v-icon>edit</v-icon>
-                    </v-tab>
-                    <v-tab href="#tab-2">Em Análise
-                        <v-icon>gavel</v-icon>
-                    </v-tab>
-                    <v-tab href="#tab-3">Finalizadas
-                        <v-icon>check</v-icon>
-                    </v-tab>
-                    <v-tab-item :value="'tab-1'">
-                        <v-card>
-                            <TabelaReadequacoes
-                                :dados-readequacao="getReadequacoesProponente"
-                                :componentes="acoesProponente"
-                                :dados-projeto="dadosProjeto"
-                                :item-em-edicao="itemEmEdicao"
-                                @excluir-readequacao="excluirReadequacao"
-                                @atualizar-readequacao="atualizarReadequacao"
-                            />
-                        </v-card>
-                    </v-tab-item>
+                <div v-else-if="getReadequacoesProponente">
+                    <v-tabs
+                        color="#0a420e"
+                        centered
+                        dark
+                        icons-and-text
+                    >
+                        <v-tabs-slider color="yellow"/>
+                        <v-tab href="#tab-1">Edição
+                            <v-icon>edit</v-icon>
+                        </v-tab>
+                        <v-tab href="#tab-2">Em Análise
+                            <v-icon>gavel</v-icon>
+                        </v-tab>
+                        <v-tab href="#tab-3">Finalizadas
+                            <v-icon>check</v-icon>
+                        </v-tab>
+                        <v-tab-item :value="'tab-1'">
+                            <v-card>
+                                <TabelaReadequacoes
+                                    :dados-readequacao="getReadequacoesProponente"
+                                    :componentes="acoesProponente"
+                                    :dados-projeto="dadosProjeto"
+                                    :item-em-edicao="itemEmEdicao"
+                                    @excluir-readequacao="excluirReadequacao"
+                                    @atualizar-readequacao="atualizarReadequacao"
+                                />
+                            </v-card>
+                        </v-tab-item>
 
-                    <v-tab-item :value="'tab-2'">
-                        <v-card>
-                            <TabelaReadequacoes
-                                :dados-readequacao="getReadequacoesAnalise"
-                                :componentes="acoesAnalise"
-                                :dados-projeto="dadosProjeto"
-                            />
-                        </v-card>
-                    </v-tab-item>
-                    <v-tab-item :value="'tab-3'">
-                        <v-card>
-                            <TabelaReadequacoes
-                                :dados-readequacao="getReadequacoesFinalizadas"
-                                :componentes="acoesFinalizadas"
-                                :dados-projeto="dadosProjeto"
-                            />
-                        </v-card>
-                    </v-tab-item>
-                </v-tabs>
+                        <v-tab-item :value="'tab-2'">
+                            <v-card>
+                                <TabelaReadequacoes
+                                    :dados-readequacao="getReadequacoesAnalise"
+                                    :componentes="acoesAnalise"
+                                    :dados-projeto="dadosProjeto"
+                                />
+                            </v-card>
+                        </v-tab-item>
+                        <v-tab-item :value="'tab-3'">
+                            <v-card>
+                                <TabelaReadequacoes
+                                    :dados-readequacao="getReadequacoesFinalizadas"
+                                    :componentes="acoesFinalizadas"
+                                    :dados-projeto="dadosProjeto"
+                                />
+                            </v-card>
+                        </v-tab-item>
+                    </v-tabs>
+                    <CriarReadequacao
+                        :id-pronac="dadosProjeto.idPronac"
+                        @criar-readequacao="criarReadequacao($event)"
+                    />
+                </div>
             </v-flex>
         </v-layout>
         <v-snackbar
-            v-model="mensagem.ativa"
-            bottom
             :color="mensagem.cor"
             :timeout="mensagem.timeout"
+            v-model="mensagem.ativa"
+            bottom
         ><span>{{ mensagem.conteudo }}</span>
             <v-btn
                 dark
@@ -78,10 +83,6 @@
                 Fechar
             </v-btn>
         </v-snackbar>
-        <CriarReadequacao
-            :id-pronac="dadosProjeto.idPronac"
-            @criar-readequacao="criarReadequacao($event)"
-        />
     </v-container>
 </template>
 <script>
@@ -123,7 +124,7 @@ export default {
                 timeout: 2300,
                 conteudo: '',
                 cor: '',
-            }
+            },
         };
     },
     computed: {
