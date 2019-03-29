@@ -139,8 +139,10 @@ export default {
     },
     watch: {
         getReadequacoesProponente(value) {
-            if (Object.keys(value).length > 0) {
-                this.loading = false;
+            if (typeof value === 'object') {
+                if (Object.keys(value).length > 0) {
+                    this.loading = false;
+                }
             }
         },
     },

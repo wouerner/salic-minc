@@ -14,7 +14,7 @@ const parseQueryParams = (params) => {
     let queryParams = '';
     Object.keys(params).forEach((key) => {
         queryParams += (queryParams === '') ? '?' : '&';
-        queryParams += `key = ${params[key]}`;
+        queryParams += `${key}=${params[key]}`;
     });
     return queryParams;
 };
