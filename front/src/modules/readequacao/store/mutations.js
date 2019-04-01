@@ -68,6 +68,6 @@ export const mutations = {
         state.tiposDisponiveis = tiposDisponiveis;
     },
     [types.SET_READEQUACOES_PROPONENTE](state, novaReadequacao) {
-        state.readequacoesProponente.items.push(novaReadequacao);
+        state.readequacoesProponente.items.unshift(novaReadequacao);
     },
 };
