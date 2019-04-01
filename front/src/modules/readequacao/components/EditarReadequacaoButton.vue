@@ -287,7 +287,7 @@ export default {
         possuiDocumentoAnexado() {
             if (this.dadosReadequacao.idDocumento
                 && this.dadosReadequacao.idDocumento !== ''
-            ) {
+               ) {
                 return true;
             }
             return false;
