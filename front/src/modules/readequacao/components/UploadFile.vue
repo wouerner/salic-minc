@@ -12,8 +12,8 @@
             :accepted-file-types="formatosAceitos"
             :files="arquivo"
             :server="server"
-            @removefile="arquivoAnexado"
-            @addfile="arquivoAnexado"
+            @removefile="arquivoAnexado()"
+            @processfile="arquivoAnexado()"
         />
     </v-card>
 </template>
@@ -82,12 +82,12 @@ export default {
     computed: {},
     methods: {
         arquivoAnexado() {
-            // if (this.$refs.pond.getFiles()[0]) {
-            //     const payload = this.$refs.pond.getFiles()[0].file;
-            //     this.$emit('arquivo-anexado', payload);
-            // } else {
-            //     this.$emit('arquivo-removido', undefined);
-            // }
+            if (this.$refs.pond.getFiles()[0]) {
+                const payload = this.$refs.pond.getFiles()[0].file;
+                this.$emit('arquivo-anexado', payload);
+            } else {
+                this.$emit('arquivo-removido', undefined);
+            }
         },
     },
     created() {
