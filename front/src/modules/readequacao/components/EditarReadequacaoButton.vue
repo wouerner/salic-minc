@@ -84,6 +84,7 @@
                                         :dados-readequacao="dadosReadequacao"
                                         :campo="getDadosCampo"
                                         @dados-update="atualizarCampo($event, 'dsSolicitacao')"
+                                        @editor-texto-counter="validarFormulario($event, 'dsSolicitacao')"
                                     />
                                 </v-card>
                             </v-expansion-panel-content>
@@ -103,6 +104,7 @@
                                     <FormReadequacao
                                         :dados-readequacao="dadosReadequacao"
                                         @dados-update="atualizarCampo($event, 'dsJustificativa')"
+                                        @editor-texto-counter="validarFormulario($event, 'dsJustificativa')"
                                     />
                                     <v-card-text>
                                         <v-layout row>
@@ -169,6 +171,7 @@
                                         >done</v-icon>
                                     </v-btn>
                                     <v-btn
+                                        :disabled="!validacao"
                                         color="green darken-1"
                                         class="mr-2"
                                         dark
@@ -259,6 +262,10 @@ export default {
                 finaliza: false,
             },
             recarregarReadequacoes: false,
+            minChar: 3,
+            validacao: false,
+            validacaoOk: false,
+            campos: ['dsSolicitacao', 'dsJustificativa'],
             loading: true,
         };
     },
@@ -331,6 +338,22 @@ export default {
                 this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
             }
         },
+        /*readequacaoEditada: {
+            handler() {
+                console.log(this.minChar);
+                console.log(this.readequacaoEditada.dsSolicitacao.trim().length);
+                console.log(this.readequacaoEditada.dsJustificativa.trim().length);
+                
+                if (this.readequacaoEditada.dsSolicitacao.trim().length > this.minChar
+                    && this.validacaoJustificativa === true
+                   ) {
+                    console.log(this.validacaoOk);
+                    this.validacaoOk = true;
+                }
+                this.validacaoOk = false;
+            },
+            deep: true,
+        },*/
     },
     created() {
         this.obterDadosIniciais();
@@ -417,10 +440,21 @@ export default {
             window.location.href = urlArquivo;
         },
         atualizarCampo(valor, campo) {
-            const campos = ['dsSolicitacao', 'dsJustificativa'];
-            if (campos.includes(campo)) {
+            if (this.campos.includes(campo)) {
                 this.readequacaoEditada[campo] = valor;
             }
+        },
+        validarFormulario(valor, campo) {
+            let that = this;
+            this.validacao = true;
+            this.campos.forEach(function(c) {
+                //console.log('campo ' + campo + ' :' + valor);
+                if (valor < that.minChar) {
+                    that.validacao = false;
+                }
+            });
+            
+            
         },
     },
 };

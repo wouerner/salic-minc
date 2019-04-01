@@ -26,6 +26,7 @@
                         :style="''"
                         :value="campoTexto"
                         @editor-texto-input="salvarInput($event)"
+                        @editor-texto-counter="atualizarContador($event)"
                     />
                 </v-card>
             </v-flex>
@@ -59,6 +60,9 @@ export default {
     methods: {
         salvarInput(e) {
             this.$emit('dados-update', e);
+        },
+        atualizarContador(valor) {
+            this.$emit('editor-texto-counter', valor);
         },
     },
 };
