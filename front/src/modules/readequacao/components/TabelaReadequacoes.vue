@@ -20,7 +20,6 @@
                         icon
                     >
                         <v-icon>insert_drive_file</v-icon>
-                        {{ props.item.idDocumento }}
                     </v-btn>
                 </td>
                 <td

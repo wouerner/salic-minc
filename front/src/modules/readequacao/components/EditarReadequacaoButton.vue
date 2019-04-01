@@ -256,7 +256,9 @@ export default {
                 timeout: 2300,
                 conteudo: '',
                 cor: '',
+                finaliza: false,
             },
+            recarregarReadequacoes: false,
             loading: true,
         };
     },
@@ -306,7 +308,9 @@ export default {
         },
         mensagem: {
             handler(mensagem) {
-                if (mensagem.ativa === false) {
+                if (mensagem.ativa === false
+                    && mensagem.finaliza === true
+                   ) {
                     this.dialog = false;
                 }
             },
@@ -321,7 +325,9 @@ export default {
             deep: true,
         },
         dialog() {
-            if (!this.dialog) {
+            if (this.dialog === false
+                && this.recarregarReadequacoes === true
+               ) {
                 this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
             }
         },
@@ -357,9 +363,11 @@ export default {
         salvarReadequacao() {
             this.updateReadequacao(this.readequacaoEditada).then(() => {
                 this.mensagem.conteudo = 'Readequação salva com sucesso!';
-                this.timeout = 2300;
+                this.mensagem.timeout = 2300;
                 this.mensagem.ativa = true;
+                this.mensagem.finaliza = true;
                 this.mensagem.cor = 'green darken-1';
+                this.recarregarReadequacoes = true;
             });
         },
         inicializarReadequacaoEditada() {
@@ -388,7 +396,9 @@ export default {
             this.updateReadequacao(this.readequacaoEditada).then(() => {
                 this.mensagem.conteudo = 'Arquivo enviado!';
                 this.mensagem.ativa = true;
+                this.mensagem.finaliza = false;
                 this.mensagem.cor = 'green darken-1';
+                this.recarregarReadequacoes = true;
             });
         },
         removerArquivo() {
@@ -397,7 +407,9 @@ export default {
             this.updateReadequacao(this.readequacaoEditada).then(() => {
                 this.mensagem.conteudo = 'Arquivo removido!';
                 this.mensagem.ativa = true;
+                this.mensagem.finaliza = false;
                 this.mensagem.cor = 'green darken-1';
+                this.recarregarReadequacoes = true;
             });
         },
         abrirArquivo() {
