@@ -131,6 +131,7 @@
                         </v-list>
                     </v-flex>
                     <v-flex
+                        v-if="existeAvaliacao"
                         xs5
                         offset-xs1
                     >
@@ -159,7 +160,10 @@
                             </v-list-tile>
                         </v-list>
                     </v-flex>
-                    <v-flex xs5>
+                    <v-flex
+                        v-if="existeAvaliacao"
+                        xs5
+                    >
                         <v-list
                             two-line
                             subheader
@@ -182,9 +186,9 @@
     </v-layout>
 </template>
 <script>
-import { mapActions } from 'vuex';
-import VisualizarCampoDetalhado from './VisualizarCampoDetalhado';
+import _ from 'lodash';
 import { utils } from '@/mixins/utils';
+import VisualizarCampoDetalhado from './VisualizarCampoDetalhado';
 
 export default {
     name: 'VisualizarReadequacaoButton',
@@ -196,6 +200,7 @@ export default {
         obj: { type: Object, default: () => {} },
         dadosProjeto: { type: Object, default: () => {} },
         dadosReadequacao: { type: Object, default: () => {} },
+        perfil: { type: String, default: '' },
     },
     data() {
         return {
@@ -203,12 +208,23 @@ export default {
             panel: [true, true],
             visualizarSolicitacao: false,
             visualizarJustificativa: false,
-
         };
     },
-    computed: {},
+    computed: {
+        existeAvaliacao() {
+            if (this.dadosReadequacao
+                && this.perfil !== 'proponente'
+               ) {
+                if (!_.isNull(this.dadosReadequacao.dsAvaliacao)
+                    && !_.isNull(this.dadosReadequacao.dtAvaliador)
+                ) {
+                    return true;
+                }
+            }
+            return false;
+        },
+    },
     methods: {
-        ...mapActions({}),
     },
 };
 </script>

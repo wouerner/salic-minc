@@ -47,6 +47,7 @@
                                     :dados-readequacao="getReadequacoesAnalise"
                                     :componentes="acoesAnalise"
                                     :dados-projeto="dadosProjeto"
+                                    :perfil="perfil"
                                 />
                             </v-card>
                         </v-tab-item>
@@ -123,6 +124,7 @@ export default {
                 conteudo: '',
                 cor: '',
             },
+            perfil: 'proponente',
         };
     },
     computed: {
