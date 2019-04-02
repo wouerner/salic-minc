@@ -79,7 +79,7 @@ export default {
         dadosProjeto: { type: Object, default: () => {} },
         itemEmEdicao: { type: Number, default: 0 },
         perfisAceitos: { type: Array, default: () => [] },
-        perfil: { type: String, default: '' },
+        perfil: { type: Number, default: 0 },
     },
     data() {
         return {

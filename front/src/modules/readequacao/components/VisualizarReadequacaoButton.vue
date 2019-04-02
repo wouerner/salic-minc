@@ -188,6 +188,7 @@
 <script>
 import _ from 'lodash';
 import { utils } from '@/mixins/utils';
+import Const from '../const';
 import VisualizarCampoDetalhado from './VisualizarCampoDetalhado';
 
 export default {
@@ -201,7 +202,7 @@ export default {
         dadosProjeto: { type: Object, default: () => {} },
         dadosReadequacao: { type: Object, default: () => {} },
         perfisAceitos: { type: Array, default: () => [] },
-        perfil: { type: String, default: '' },
+        perfil: { type: Number, default: 0 },
     },
     data() {
         return {

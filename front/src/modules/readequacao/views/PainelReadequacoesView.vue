@@ -48,7 +48,7 @@
                                     :componentes="acoesAnalise"
                                     :dados-projeto="dadosProjeto"
                                     :perfisAceitos="getPerfis('analise')"
-                                    :perfil="perfil"
+                                    :perfil="getUsuario.grupo_ativo"
                                 />
                             </v-card>
                         </v-tab-item>
@@ -87,6 +87,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import Const from '../const';
 import TabelaReadequacoes from '../components/TabelaReadequacoes';
 import ExcluirButton from '../components/ExcluirButton';
 import EditarReadequacaoButton from '../components/EditarReadequacaoButton';
@@ -126,9 +127,15 @@ export default {
                 cor: '',
             },
             perfisAceitos: {
-                'analise': ['tecnico', 'coordenador'],
+                'analise':
+                [
+                    Const.PERFIL_TECNICO_ACOMPANHAMENTO,
+                    Const.PERFIL_COORDENADOR_ACOMPANHAMENTO,
+                    Const.PERFIL_COORDENADOR_GERAL_ACOMPANHAMENTO,
+                    Const.PERFIL_DIRETOR,
+                    Const.PERFIL_SECRETARIO,
+                ],
             },
-            perfil: 'proponente',
         };
     },
     computed: {
