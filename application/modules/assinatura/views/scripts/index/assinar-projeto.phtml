@@ -128,9 +128,13 @@
             <?php echo $this->templateAutenticacao ?>
             <div class="margin-bottom30">&nbsp;</div>
             <div class="row center-align">
-                <a class="btn waves-effect waves-dark" id="botaoanterior"
-                   href="#"
-                   onclick="return botaoanterior">Voltaaaaaaaaaaaaaaaaaaaaaar</a>
+                <a class="btn waves-effect waves-dark"
+                   href="<?php
+                   if (strpos($this->redirectRest, '#') !== false) {
+                       echo "/{$this->redirectRest}";
+                   } else {
+                       echo "/{$this->moduleOrigin}/{$this->controllerOrigin}/gerenciar-assinaturas";
+                   }?>">Voltar</a>
                 <button type="submit"
                         class="btn waves-effect waves-dark">Assinar</button>
             </div>
@@ -138,6 +142,3 @@
     </div>
     <br clear="all"/>
 </main>
-<script>
-    window.onload = document.getElementById('botaoanterior').href = window.location.href.split('&origin=')[1]);
-</script>

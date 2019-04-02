@@ -125,7 +125,7 @@ export default {
             pagination: {
                 rowsPerPage: 10,
             },
-            retornoUrl: '&origin=avaliacao-resultados/#/painel/assinar',
+            retornoUrl: `&origin=${encodeURIComponent('avaliacao-resultados/#/painel/assinar')}`,
             selected: [],
             search: '',
             filtro: 'Diligenciado',

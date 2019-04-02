@@ -79,7 +79,7 @@
                     <v-btn
                         id="assinarLaudo"
                         :href="'/assinatura/index/assinar-projeto?IdPRONAC='
-                        +props.item.IdPronac+'&idTipoDoAtoAdministrativo=623'+retornoUrl"
+                        +props.item.IdPronac+'&idTipoDoAtoAdministrativo=623'+retornoUrl.toString()"
                         flat
                         icon
                         color="teal darken-1">
@@ -153,7 +153,7 @@ export default {
             pagination: {
                 rowsPerPage: 10,
             },
-            retornoUrl: '&origin=avaliacao-resultados/#/laudo',
+            retornoUrl: `&origin=${encodeURIComponent('avaliacao-resultados/#/laudo')}`,
             searchLength: 0,
             search: '',
             dialog: false,
