@@ -338,6 +338,25 @@ export default {
                 this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
             }
         },
+<<<<<<< Updated upstream
+=======
+        /*readequacaoEditada: {
+            handler() {
+                console.log(this.minChar);
+                console.log(this.readequacaoEditada.dsSolicitacao.trim().length);
+                console.log(this.readequacaoEditada.dsJustificativa.trim().length);
+
+                if (this.readequacaoEditada.dsSolicitacao.trim().length > this.minChar
+                    && this.validacaoJustificativa === true
+                   ) {
+                    console.log(this.validacaoOk);
+                    this.validacaoOk = true;
+                }
+                this.validacaoOk = false;
+            },
+            deep: true,
+        },*/
+>>>>>>> Stashed changes
     },
     created() {
         this.obterDadosIniciais();
@@ -357,7 +376,6 @@ export default {
                     idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
                 });
                 this.inicializarReadequacaoEditada();
-                // this.obterArquivoReadequacao(this.readequacaoEditada.idDocumento);
             }
         },
         abrirEdicao() {
@@ -387,16 +405,19 @@ export default {
                 idDocumento: this.dadosReadequacao.idDocumento || '',
                 dsSolicitacao: this.dadosReadequacao.dsSolicitacao,
                 dsJustificativa: this.dadosReadequacao.dsJustificativa,
+                documento: {},
             };
+            this.obterArquivoReadequacao(this.readequacaoEditada.idDocumento);
         },
         obterArquivoReadequacao(id) {
             if(id) {
                 this.obterDocumento(id);
-                let documento = this.getDocumentoReadequacao;
-                return documento;
+                if(typeof this.dadosReadequacao.documento !== 'undefined'){
+                    return this.dadosReadequacao.documento;
+                }
             }
             else {
-                return false;
+                return {};
             }
         },
         atualizarArquivo(arquivo) {

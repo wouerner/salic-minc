@@ -144,7 +144,6 @@ export default {
             getReadequacoesProponente: 'readequacao/getReadequacoesProponente',
             getReadequacoesAnalise: 'readequacao/getReadequacoesAnalise',
             getReadequacoesFinalizadas: 'readequacao/getReadequacoesFinalizadas',
-            getReadequacao: 'readequacao/getReadequacao',
             dadosProjeto: 'projeto/projeto',
         }),
     },
