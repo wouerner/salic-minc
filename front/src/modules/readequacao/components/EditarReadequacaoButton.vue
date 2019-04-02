@@ -84,7 +84,7 @@
                                         :dados-readequacao="dadosReadequacao"
                                         :campo="getDadosCampo"
                                         @dados-update="atualizarCampo($event, 'dsSolicitacao')"
-                                        @editor-texto-counter="validarFormulario($event, 'dsSolicitacao')"
+                                        @editor-texto-counter="validarFormulario()"
                                     />
                                 </v-card>
                             </v-expansion-panel-content>
@@ -104,7 +104,7 @@
                                     <FormReadequacao
                                         :dados-readequacao="dadosReadequacao"
                                         @dados-update="atualizarCampo($event, 'dsJustificativa')"
-                                        @editor-texto-counter="validarFormulario($event, 'dsJustificativa')"
+                                        @editor-texto-counter="validarFormulario()"
                                     />
                                     <v-card-text>
                                         <v-layout row>
@@ -338,22 +338,6 @@ export default {
                 this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
             }
         },
-        /*readequacaoEditada: {
-            handler() {
-                console.log(this.minChar);
-                console.log(this.readequacaoEditada.dsSolicitacao.trim().length);
-                console.log(this.readequacaoEditada.dsJustificativa.trim().length);
-                
-                if (this.readequacaoEditada.dsSolicitacao.trim().length > this.minChar
-                    && this.validacaoJustificativa === true
-                   ) {
-                    console.log(this.validacaoOk);
-                    this.validacaoOk = true;
-                }
-                this.validacaoOk = false;
-            },
-            deep: true,
-        },*/
     },
     created() {
         this.obterDadosIniciais();
@@ -382,6 +366,7 @@ export default {
             } else {
                 this.dialog = true;
             }
+            this.validarFormulario();
         },
         salvarReadequacao() {
             this.updateReadequacao(this.readequacaoEditada).then(() => {
@@ -443,12 +428,13 @@ export default {
             if (this.campos.includes(campo)) {
                 this.readequacaoEditada[campo] = valor;
             }
+            this.validarFormulario();
         },
-        validarFormulario(valor, campo) {
+        validarFormulario() {
             let that = this;
             this.validacao = true;
-            this.campos.forEach(function(c) {
-                //console.log('campo ' + campo + ' :' + valor);
+            this.campos.forEach(function(campo) {
+                let valor = that.readequacaoEditada[campo];
                 if (valor < that.minChar) {
                     that.validacao = false;
                 }
