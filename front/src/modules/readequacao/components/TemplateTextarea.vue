@@ -11,7 +11,7 @@
                     <v-card-title class="grey lighten-2 title">Versão original</v-card-title>
                     <v-divider/>
                     <v-card-text>
-                        <span v-html="campo.valor"/>
+                        <span v-html="tratarCampoVazio(campo.valor)"/>
                     </v-card-text>
                 </v-card>
             </v-flex>
@@ -63,6 +63,13 @@ export default {
         },
         atualizarContador(valor) {
             this.$emit('editor-texto-counter', valor);
+        },
+        tratarCampoVazio(value) {
+            if (value.trim() === '') {
+                const msgVazio = '<em>Campo vazio</em>';
+                return msgVazio;
+            }
+            return value;
         },
     },
 };
