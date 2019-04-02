@@ -200,6 +200,7 @@ export default {
         obj: { type: Object, default: () => {} },
         dadosProjeto: { type: Object, default: () => {} },
         dadosReadequacao: { type: Object, default: () => {} },
+        perfisAceitos: { type: Array, default: () => [] },
         perfil: { type: String, default: '' },
     },
     data() {
@@ -213,7 +214,7 @@ export default {
     computed: {
         existeAvaliacao() {
             if (this.dadosReadequacao
-                && this.perfil !== 'proponente'
+                && this.perfilAceito()
                ) {
                 if (!_.isNull(this.dadosReadequacao.dsAvaliacao)
                     && !_.isNull(this.dadosReadequacao.dtAvaliador)
@@ -225,6 +226,15 @@ export default {
         },
     },
     methods: {
+        perfilAceito() {
+            if (!_.isEmpty(this.perfisAceitos)) {
+                if (this.perfisAceitos.includes(this.perfil)) {
+                    return true;
+                }
+                return false;
+            }
+            return true;
+        },
     },
 };
 </script>

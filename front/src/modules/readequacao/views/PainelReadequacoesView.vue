@@ -47,6 +47,7 @@
                                     :dados-readequacao="getReadequacoesAnalise"
                                     :componentes="acoesAnalise"
                                     :dados-projeto="dadosProjeto"
+                                    :perfisAceitos="getPerfis('analise')"
                                     :perfil="perfil"
                                 />
                             </v-card>
@@ -124,6 +125,9 @@ export default {
                 conteudo: '',
                 cor: '',
             },
+            perfisAceitos: {
+                'analise': ['tecnico', 'coordenador'],
+            },
             perfil: 'proponente',
         };
     },
@@ -194,6 +198,9 @@ export default {
                 idPronac: this.$route.params.idPronac,
                 stStatusAtual: 'proponente',
             });
+        },
+        getPerfis(tipo) {
+            return this.perfisAceitos[tipo];
         },
     },
 };

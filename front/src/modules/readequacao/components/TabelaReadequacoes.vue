@@ -46,6 +46,7 @@
                                     :dados-readequacao="props.item"
                                     :dados-projeto="dadosProjeto"
                                     :bind-click="bindClick"
+                                    :perfisAceitos="perfisAceitos"
                                     :perfil="perfil"
                                     class="pa-0 ma-0 align-center justify-center fill-height"
                                     @excluir-readequacao="excluirReadequacao"
@@ -77,6 +78,7 @@ export default {
         componentes: { type: Object, default: () => {} },
         dadosProjeto: { type: Object, default: () => {} },
         itemEmEdicao: { type: Number, default: 0 },
+        perfisAceitos: { type: Array, default: () => [] },
         perfil: { type: String, default: '' },
     },
     data() {
