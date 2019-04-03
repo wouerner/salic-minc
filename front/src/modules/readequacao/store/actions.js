@@ -132,3 +132,12 @@ export const inserirReadequacao = async ({ commit }, params) => {
         });
     return resultado;
 };
+
+export const finalizarReadequacao = async ({ dispatch }, params) => {
+    const resultado = await readequacaoHelperAPI.finalizarReadequacao(params)
+          .then((response) => {
+              dispatch('obterListaDeReadequacoes', { stStatusAtual: 'proponente' });
+              dispatch('obterListaDeReadequacoes', { stStatusAtual: 'analise' });
+          });
+    return resultado;
+};

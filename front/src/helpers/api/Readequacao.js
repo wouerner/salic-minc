@@ -94,3 +94,8 @@ export const obterTiposDisponiveis = (params) => {
     const path = '/readequacao/tipos-disponiveis';
     return api.getRequest(path + parseQueryParams(params));
 };
+
+export const finalizarReadequacao = (params) => {
+    const path = '/readequacao/finalizar';
+    return api.postRequest(path + parseQueryParams(params));
+};

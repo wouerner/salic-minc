@@ -175,7 +175,7 @@
                                         color="green darken-1"
                                         class="mr-2"
                                         dark
-                                        @click="dialog = false"
+                                        @click="finalizar()"
                                     >Finalizar
                                         <v-icon
                                             right
@@ -347,6 +347,7 @@ export default {
             obterCampoAtual: 'readequacao/obterCampoAtual',
             updateReadequacao: 'readequacao/updateReadequacao',
             obterDocumento: 'readequacao/obterDocumento',
+            finalizarReadequacao: 'readequacao/finalizarReadequacao',
         }),
         obterDadosIniciais() {
             if (
@@ -438,6 +439,12 @@ export default {
                 if (valor < that.minChar) {
                     that.validacao = false;
                 }
+            });
+        },
+        finalizar() {
+            this.finalizarReadequacao({ idReadequacao: this.dadosReadequacao.idReadequacao }).then(() => {
+                this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
+                this.dialog = false;
             });
         },
     },
