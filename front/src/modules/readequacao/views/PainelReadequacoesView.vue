@@ -104,6 +104,7 @@ export default {
         ExcluirButton,
         EditarReadequacaoButton,
         VisualizarReadequacaoButton,
+        FinalizarButton,
         CriarReadequacao,
     },
     data() {

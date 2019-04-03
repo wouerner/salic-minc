@@ -74,7 +74,7 @@
 import { mapActions } from 'vuex';
 
 export default {
-    name: 'ExcluirButton',
+    name: 'FinalizarButton',
     props: {
         disabled: { type: Boolean, default: false },
         dadosProjeto: { type: Object, default: () => {} },
@@ -87,9 +87,6 @@ export default {
         };
     },
     computed: {
-    },
-    created: {
-        
     },
     methods: {
         ...mapActions({
