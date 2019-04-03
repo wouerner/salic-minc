@@ -356,8 +356,9 @@ export default {
                 this.obterCampoAtual({
                     idPronac: this.dadosReadequacao.idPronac,
                     idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
+                }).then(() => {
+                    this.inicializarReadequacaoEditada();
                 });
-                this.inicializarReadequacaoEditada();
             }
         },
         abrirEdicao() {
@@ -434,14 +435,11 @@ export default {
             this.validarFormulario();
         },
         validarFormulario() {
-            let that = this;
             this.validacao = true;
-            this.campos.forEach(function(campo) {
-                let valor = that.readequacaoEditada[campo];
-                if (valor < that.minChar) {
-                    that.validacao = false;
-                }
-            });
+            if (this.readequacaoEditada.dsJustificativa.trim().length < this.minChar
+                || this.readequacaoEditada.dsSolicitacao.trim().length < this.minChar) {
+                this.validacao = false;
+            }
         },
         readequacaoFinalizada() {
             this.dialog = false;

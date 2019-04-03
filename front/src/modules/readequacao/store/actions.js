@@ -112,12 +112,13 @@ export const obterDisponivelEdicaoItemSaldoAplicacao = ({ commit }, params) => {
         });
 };
 
-export const obterCampoAtual = ({ commit }, params) => {
-    readequacaoHelperAPI.obterCampoAtual(params)
-        .then((response) => {
-            const { data } = response.data;
+export const obterCampoAtual = async ({ commit }, params) => {
+    const resultado = await readequacaoHelperAPI.obterCampoAtual(params)
+          .then((response) => {
+              const { data } = response.data;
             commit(types.SET_CAMPO_ATUAL, data.items[0]);
-        });
+          });
+    return resultado;
 };
 
 export const obterTiposDisponiveis = ({ commit }, params) => {
