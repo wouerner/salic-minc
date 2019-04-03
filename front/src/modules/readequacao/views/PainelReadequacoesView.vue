@@ -90,6 +90,7 @@ import { mapActions, mapGetters } from 'vuex';
 import Const from '../const';
 import TabelaReadequacoes from '../components/TabelaReadequacoes';
 import ExcluirButton from '../components/ExcluirButton';
+import FinalizarButton from '../components/FinalizarButton';
 import EditarReadequacaoButton from '../components/EditarReadequacaoButton';
 import VisualizarReadequacaoButton from '../components/VisualizarReadequacaoButton';
 import Carregando from '@/components/CarregandoVuetify';
@@ -110,7 +111,7 @@ export default {
             listaStatus: ['proponente', 'analise', 'finalizadas'],
             acoesProponente: {
                 usuario: '',
-                acoes: [ExcluirButton, EditarReadequacaoButton, VisualizarReadequacaoButton],
+                acoes: [ExcluirButton, EditarReadequacaoButton, VisualizarReadequacaoButton, FinalizarButton],
             },
             acoesAnalise: {
                 acoes: [VisualizarReadequacaoButton],
@@ -127,6 +128,10 @@ export default {
                 cor: '',
             },
             perfisAceitos: {
+                'proponente':
+                [
+                    Const.PERFIL_PROPONENTE,
+                ],
                 'analise':
                 [
                     Const.PERFIL_TECNICO_ACOMPANHAMENTO,

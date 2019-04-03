@@ -610,3 +610,18 @@ HOST: http://localhost:4000
             {
                 "disponivelEdicaoItem": "true"
             }
+
+## Readequação - Finaliza readequação [/readequacao/finalizar?idReadequacao={idReadequacao}]
+
+### Finaliza readequação e envia para análise [POST]
+
++ Parameters
+    + idReadequacao: 15213 (number, required)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "mensagem": "Readequação enviada para análise."
+            }

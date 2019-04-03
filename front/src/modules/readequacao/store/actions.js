@@ -73,10 +73,11 @@ export const excluirDocumento = ({ commit }, params) => {
         });
 };
 
-export const excluirReadequacao = ({ commit }, params) => {
+export const excluirReadequacao = ({ commit, dispatch }, params) => {
     readequacaoHelperAPI.excluirReadequacao(params)
         .then(() => {
             commit(types.EXCLUIR_READEQUACAO);
+            dispatch('obterListaDeReadequacoes', { stStatusAtual: 'proponente' });
         });
 };
 
@@ -140,8 +141,20 @@ export const inserirReadequacao = async ({ commit }, params) => {
 export const finalizarReadequacao = async ({ dispatch }, params) => {
     const resultado = await readequacaoHelperAPI.finalizarReadequacao(params)
           .then((response) => {
-              dispatch('obterListaDeReadequacoes', { stStatusAtual: 'proponente' });
-              dispatch('obterListaDeReadequacoes', { stStatusAtual: 'analise' });
+              dispatch(
+                  'obterListaDeReadequacoes',
+                  {
+                      idPronac: params.idPronac,
+                      stStatusAtual: 'proponente'
+                  }
+              );
+              dispatch(
+                  'obterListaDeReadequacoes',
+                  {
+                      idPronac: params.idPronac,
+                      stStatusAtual: 'analise'
+                  }
+              );
           });
     return resultado;
 };

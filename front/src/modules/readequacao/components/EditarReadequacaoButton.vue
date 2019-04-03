@@ -170,18 +170,16 @@
                                             dark
                                         >done</v-icon>
                                     </v-btn>
-                                    <v-btn
+                                    <FinalizarButton
                                         :disabled="!validacao"
+                                        :dados-readequacao="dadosReadequacao"
+                                        :dados-projeto="dadosProjeto"
+                                        :tela-edicao="true"
                                         color="green darken-1"
                                         class="mr-2"
                                         dark
-                                        @click="finalizar()"
-                                    >Finalizar
-                                        <v-icon
-                                            right
-                                            dark
-                                        >done_all</v-icon>
-                                    </v-btn>
+                                        @readequacao-finalizada="readequacaoFinalizada()"
+                                    />
                                 </v-layout>
                             </v-flex>
                         </v-footer>
@@ -214,13 +212,15 @@ import FormReadequacao from './FormReadequacao';
 import TemplateTextarea from './TemplateTextarea';
 import TemplateInput from './TemplateInput';
 import TemplateDate from './TemplateDate';
-import TemplateRedirect from './TemplateRedirect';
+import TemplateRedirect from './TemplateRedirect'
+import FinalizarButton from '../components/FinalizarButton';
 import UploadFile from './UploadFile';
 
 export default {
     name: 'EditarReadequacaoButton',
     components: {
         Carregando,
+        FinalizarButton,
         FormReadequacao,
         TemplateTextarea,
         TemplateInput,
@@ -443,11 +443,8 @@ export default {
                 }
             });
         },
-        finalizar() {
-            this.finalizarReadequacao({ idReadequacao: this.dadosReadequacao.idReadequacao }).then(() => {
-                this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
-                this.dialog = false;
-            });
+        readequacaoFinalizada() {
+            this.dialog = false;
         },
     },
 };
