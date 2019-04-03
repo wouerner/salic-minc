@@ -1959,4 +1959,65 @@ select grupo from sac..tbAtoAdministrativo where idAtoAdministrativo = (
         
         return $result;
     }
+
+    public function finalizarSolicitacao($idReadequacao)
+    {
+        $readequacao = $this->buscar(['idReadequacao = ?' => $idReadequacao])->current();
+        
+        if ($readequacao->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_LOCAL_REALIZACAO) {
+            $tbAbrangencia = new \Readequacao_Model_DbTable_TbAbrangencia();
+
+            $dados = [];
+            $dados['idReadequacao'] = $idReadequacao;
+            
+            $where = [];
+            $where['idPronac = ?'] = $readequacao->idPronac;
+            $where['stAtivo = ?'] = $readequacao->stAtivo;
+            $where['idReadequacao IS NULL'] = '';
+            
+            $tbAbrangencia->update($dados, $where);
+            
+        } elseif ($readequacao->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
+            $tbPlanoDistribuicao = new \Readequacao_Model_DbTable_TbPlanoDistribuicao();
+
+            $dados = [];
+            $dados['idReadequacao'] = $idReadequacao;
+            
+            $where = [];
+            $where['idPronac = ?'] = $readequacao->idPronac;
+            $where['stAtivo = ?'] = $readequacao->stAtivo;
+            $where['idReadequacao IS NULL'] = '';
+
+            $tbPlanoDistribuicao->update($dados, $where);
+            
+        } elseif ($r->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DIVULGACAO) {
+            $tbPlanoDivulgacao = new \tbPlanoDivulgacao();
+
+            $dados = [];
+            $dados['idReadequacao'] = $idReadequacao;
+            
+            $where = [];
+            $where['idPronac = ?'] = $readequacao->idPronac;
+            $where['stAtivo = ?'] = $readequacao->stAtivo;
+            $where['idReadequacao IS NULL'] = '';
+            
+            $tbPlanoDivulgacao->update($dados, $where);
+        }
+        
+        $dadosSolicitacao = [];
+        $dados['siEncaminhamento'] = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_ENVIADO_MINC;
+        $dados['dtEnvio'] = new \Zend_Db_Expr('GETDATE()');
+        
+        $where = [];
+        $where['siEncaminhamento = ?'] = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE;
+        $where['stEstado = ?'] = Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_EM_ANDAMENTO;
+        $where['idReadequacao = ?'] = $idReadequacao;
+        
+        $finalizar = $this->update(
+            $dados,
+            $where
+        );
+
+        return $finalizar;
+    }
 }

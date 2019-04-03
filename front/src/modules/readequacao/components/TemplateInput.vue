@@ -45,10 +45,6 @@ export default {
     },
     computed: {
         campoTexto() {
-            if (this.dadosReadequacao.dsSolicitacao === ' '
-                || this.dadosReadequacao.dsSolicitacao === '') {
-                return this.campo.valor;
-            }
             return this.dadosReadequacao.dsSolicitacao;
         },
     },

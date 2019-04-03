@@ -170,18 +170,16 @@
                                             dark
                                         >done</v-icon>
                                     </v-btn>
-                                    <v-btn
+                                    <FinalizarButton
                                         :disabled="!validacao"
+                                        :dados-readequacao="dadosReadequacao"
+                                        :dados-projeto="dadosProjeto"
+                                        :tela-edicao="true"
                                         color="green darken-1"
                                         class="mr-2"
                                         dark
-                                        @click="finalizar()"
-                                    >Finalizar
-                                        <v-icon
-                                            right
-                                            dark
-                                        >done_all</v-icon>
-                                    </v-btn>
+                                        @readequacao-finalizada="readequacaoFinalizada()"
+                                    />
                                 </v-layout>
                             </v-flex>
                         </v-footer>
@@ -214,13 +212,15 @@ import FormReadequacao from './FormReadequacao';
 import TemplateTextarea from './TemplateTextarea';
 import TemplateInput from './TemplateInput';
 import TemplateDate from './TemplateDate';
-import TemplateRedirect from './TemplateRedirect';
+import TemplateRedirect from './TemplateRedirect'
+import FinalizarButton from '../components/FinalizarButton';
 import UploadFile from './UploadFile';
 
 export default {
     name: 'EditarReadequacaoButton',
     components: {
         Carregando,
+        FinalizarButton,
         FormReadequacao,
         TemplateTextarea,
         TemplateInput,
@@ -338,25 +338,6 @@ export default {
                 this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
             }
         },
-<<<<<<< Updated upstream
-=======
-        /*readequacaoEditada: {
-            handler() {
-                console.log(this.minChar);
-                console.log(this.readequacaoEditada.dsSolicitacao.trim().length);
-                console.log(this.readequacaoEditada.dsJustificativa.trim().length);
-
-                if (this.readequacaoEditada.dsSolicitacao.trim().length > this.minChar
-                    && this.validacaoJustificativa === true
-                   ) {
-                    console.log(this.validacaoOk);
-                    this.validacaoOk = true;
-                }
-                this.validacaoOk = false;
-            },
-            deep: true,
-        },*/
->>>>>>> Stashed changes
     },
     created() {
         this.obterDadosIniciais();
@@ -375,8 +356,9 @@ export default {
                 this.obterCampoAtual({
                     idPronac: this.dadosReadequacao.idPronac,
                     idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
+                }).then(() => {
+                    this.inicializarReadequacaoEditada();
                 });
-                this.inicializarReadequacaoEditada();
             }
         },
         abrirEdicao() {
@@ -453,20 +435,14 @@ export default {
             this.validarFormulario();
         },
         validarFormulario() {
-            let that = this;
             this.validacao = true;
-            this.campos.forEach(function(campo) {
-                let valor = that.readequacaoEditada[campo];
-                if (valor < that.minChar) {
-                    that.validacao = false;
-                }
-            });
+            if (this.readequacaoEditada.dsJustificativa.trim().length < this.minChar
+                || this.readequacaoEditada.dsSolicitacao.trim().length < this.minChar) {
+                this.validacao = false;
+            }
         },
-        finalizar() {
-            this.finalizarReadequacao({ idReadequacao: this.dadosReadequacao.idReadequacao }).then(() => {
-                this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
-                this.dialog = false;
-            });
+        readequacaoFinalizada() {
+            this.dialog = false;
         },
     },
 };

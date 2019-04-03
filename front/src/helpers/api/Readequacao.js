@@ -101,5 +101,5 @@ export const obterTiposDisponiveis = (params) => {
 
 export const finalizarReadequacao = (params) => {
     const path = '/readequacao/finalizar';
-    return api.postRequest(path + parseQueryParams(params));
+    return api.postRequest(path, buildData(params));
 };

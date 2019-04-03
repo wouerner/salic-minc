@@ -73,10 +73,11 @@ export const excluirDocumento = ({ commit }, params) => {
         });
 };
 
-export const excluirReadequacao = ({ commit }, params) => {
+export const excluirReadequacao = ({ commit, dispatch }, params) => {
     readequacaoHelperAPI.excluirReadequacao(params)
         .then(() => {
             commit(types.EXCLUIR_READEQUACAO);
+            dispatch('obterListaDeReadequacoes', { stStatusAtual: 'proponente' });
         });
 };
 
@@ -111,12 +112,13 @@ export const obterDisponivelEdicaoItemSaldoAplicacao = ({ commit }, params) => {
         });
 };
 
-export const obterCampoAtual = ({ commit }, params) => {
-    readequacaoHelperAPI.obterCampoAtual(params)
-        .then((response) => {
-            const { data } = response.data;
+export const obterCampoAtual = async ({ commit }, params) => {
+    const resultado = await readequacaoHelperAPI.obterCampoAtual(params)
+          .then((response) => {
+              const { data } = response.data;
             commit(types.SET_CAMPO_ATUAL, data.items[0]);
-        });
+          });
+    return resultado;
 };
 
 export const obterTiposDisponiveis = ({ commit }, params) => {
@@ -140,8 +142,20 @@ export const inserirReadequacao = async ({ commit }, params) => {
 export const finalizarReadequacao = async ({ dispatch }, params) => {
     const resultado = await readequacaoHelperAPI.finalizarReadequacao(params)
           .then((response) => {
-              dispatch('obterListaDeReadequacoes', { stStatusAtual: 'proponente' });
-              dispatch('obterListaDeReadequacoes', { stStatusAtual: 'analise' });
+              dispatch(
+                  'obterListaDeReadequacoes',
+                  {
+                      idPronac: params.idPronac,
+                      stStatusAtual: 'proponente'
+                  }
+              );
+              dispatch(
+                  'obterListaDeReadequacoes',
+                  {
+                      idPronac: params.idPronac,
+                      stStatusAtual: 'analise'
+                  }
+              );
           });
     return resultado;
 };
