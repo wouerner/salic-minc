@@ -358,7 +358,6 @@ export default {
                     idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
                 });
                 this.inicializarReadequacaoEditada();
-                // this.obterArquivoReadequacao(this.readequacaoEditada.idDocumento);
             }
         },
         abrirEdicao() {
@@ -388,16 +387,19 @@ export default {
                 idDocumento: this.dadosReadequacao.idDocumento || '',
                 dsSolicitacao: this.dadosReadequacao.dsSolicitacao,
                 dsJustificativa: this.dadosReadequacao.dsJustificativa,
+                documento: {},
             };
+            this.obterArquivoReadequacao(this.readequacaoEditada.idDocumento);
         },
         obterArquivoReadequacao(id) {
             if(id) {
                 this.obterDocumento(id);
-                let documento = this.getDocumentoReadequacao;
-                return documento;
+                if(typeof this.dadosReadequacao.documento !== 'undefined'){
+                    return this.dadosReadequacao.documento;
+                }
             }
             else {
-                return false;
+                return {};
             }
         },
         atualizarArquivo(arquivo) {

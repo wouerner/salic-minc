@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import * as types from './types';
+import { type } from 'os';
 
 export const state = {
     readequacoesProponente: {},
@@ -41,8 +42,27 @@ export const mutations = {
     [types.EXCLUIR_READEQUACAO](state) {
         state.readequacao = {};
     },
-    [types.GET_DOCUMENTO](state, documento) {
-        state.readequacao.documento = documento;
+    [types.GET_DOCUMENTO](state, data) {
+        state.readequacoesProponente.items.forEach(readequacao => {
+            readequacao.documento = {};
+            if(readequacao.idDocumento === data.idDocumento) {
+                readequacao.documento = data.documento;
+            }
+        });
+
+        state.readequacoesAnalise.items.forEach(readequacao => {
+            readequacao.documento = {};
+            if(readequacao.idDocumento === data.idDocumento) {
+                readequacao.documento = data.documento;
+            }
+        });
+
+        state.readequacoesFinalizadas.items.forEach(readequacao => {
+            readequacao.documento = {};
+            if(readequacao.idDocumento === data.idDocumento) {
+                readequacao.documento = data.documento;
+            }
+        });
     },
     [types.ADICIONAR_DOCUMENTO](state, data) {
         state.readequacao.idDocumento = data.idDocumento;
