@@ -439,7 +439,8 @@ Vue.component('sl-comprovante-nacional-form',
                         processData: false,
                         contentType: false,
                     })
-                        .done(function (data) {
+                    .done(function (data) {
+                        if (data.success == true) {
                             Materialize.toast('Salvo com sucesso!', 4000, 'green');
                             $3('#modal1')
                                 .modal('close');
@@ -524,7 +525,11 @@ Vue.component('sl-comprovante-nacional-form',
 
                                 vue.$root.$emit('atualizado-comprovante-nacional', vue.comprovante);
                             }
-                        });
+                        } else {
+                            Materialize.toast('Erro ao tentar salvar!', 4000, 'red');
+
+                        }
+                    });
                 }
             },
             validar: function () {
