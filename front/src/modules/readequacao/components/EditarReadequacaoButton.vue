@@ -110,7 +110,7 @@
                                         <v-layout row>
                                             <v-flex xs3>
                                                 <UploadFile
-                                                    :arquivo-inicial="getDocumentoReadequacao"
+                                                    :arquivo-inicial="dadosReadequacao.documento"
                                                     :formatos-aceitos="formatosAceitos"
                                                     class="mt-1"
                                                     @arquivo-anexado="atualizarArquivo($event)"
@@ -388,10 +388,10 @@ export default {
                 idDocumento: this.dadosReadequacao.idDocumento || '',
                 dsSolicitacao: this.dadosReadequacao.dsSolicitacao,
                 dsJustificativa: this.dadosReadequacao.dsJustificativa,
-                documento: {},
             };
-            this.obterArquivoReadequacao(this.readequacaoEditada.idDocumento);
+            this.inicializarArquivoReadequacao(this.dadosReadequacao.idDocumento);
         },
+<<<<<<< HEAD
         obterArquivoReadequacao(id) {
             if (id) {
                 this.obterDocumento(id).then(() => {
@@ -402,6 +402,11 @@ export default {
             }
             else {
                 return {};
+=======
+        inicializarArquivoReadequacao(id) {
+            if(id) {
+                this.obterDocumento(id);
+>>>>>>> d2d098d2f8364e2dfa99da6c976c097f16832c79
             }
         },
         atualizarArquivo(arquivo) {
