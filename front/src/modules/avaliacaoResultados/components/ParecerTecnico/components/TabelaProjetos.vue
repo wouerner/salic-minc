@@ -74,6 +74,7 @@
                                 :proximo="componentes.proximo"
                                 :id-tipo-do-ato-administrativo="componentes.idTipoDoAtoAdministrativo"
                                 :usuario="componentes.usuario"
+                                :laudo="false"
                                 :tecnico="{
                                     idAgente: props.item.idAgente,
                                     nome: props.item.usu_nome
