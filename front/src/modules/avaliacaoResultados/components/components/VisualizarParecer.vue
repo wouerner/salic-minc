@@ -185,7 +185,7 @@ export default {
         statusButton(obj, laudo) {
             let status = {};
 
-            console.info(laudo && obj.siManifestacao === null);
+            console.info(obj);
 
             if (laudo && obj.siManifestacao === null) {
                 status = {
