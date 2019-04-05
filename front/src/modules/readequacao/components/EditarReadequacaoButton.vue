@@ -392,16 +392,15 @@ export default {
             this.obterArquivoReadequacao(this.dadosReadequacao.idDocumento);
         },
         obterArquivoReadequacao(id) {
+            let response = {};
             if (id) {
                 this.obterDocumento(id).then(() => {
-                    if (typeof this.dadosReadequacao.documento !== 'undefined'){
-                        return this.dadosReadequacao.documento;
+                    if (typeof this.dadosReadequacao.documento !== 'undefined') {
+                        response = this.dadosReadequacao.documento;
                     }
                 });
             }
-            else {
-                return {};
-            }
+            return response;
         },
         atualizarArquivo(arquivo) {
             this.readequacaoEditada.documento = arquivo;

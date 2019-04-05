@@ -78,7 +78,12 @@
                             <v-expansion-panel-content>
                                 <v-card>
                                     <v-card-title>
-                                        <v-btn fab depressed small class="green lighten-1">
+                                        <v-btn
+                                            fab
+                                            depressed
+                                            small
+                                            class="green lighten-1"
+                                        >
                                             <v-icon color="white">mode_comment</v-icon>
                                         </v-btn>
                                         Solicitação
@@ -102,7 +107,12 @@
                             <v-expansion-panel-content>
                                 <v-card>
                                     <v-card-title>
-                                        <v-btn fab depressed small class="green lighten-1">
+                                        <v-btn
+                                            fab
+                                            depressed
+                                            small
+                                            class="green lighten-1"
+                                        >
                                             <v-icon color="white">assignment</v-icon>
                                         </v-btn>
                                         Justificativa
@@ -123,10 +133,6 @@
                             </v-expansion-panel-content>
 
                         </v-expansion-panel>
-
-
-
-
                         <!-- <v-list>
                             <v-list-tile
                                 avatar

@@ -2,6 +2,9 @@
     <v-card elevation="4">
         <file-pond
             ref="pond"
+            :server="server"
+            :files="arquivo"
+            :accepted-file-types="formatosAceitos"
             name="upload"
             label-idle="<span class='subheading'>CARREGAR ARQUIVO</span>"
             label-file-type-not-allowed="Tipo de arquivo inválido."
@@ -9,9 +12,6 @@
             label-button-remove-item="Excluir"
             label-button-process-item="Upload"
             allow-image-preview="false"
-            :accepted-file-types="formatosAceitos"
-            :files="arquivo"
-            :server="server"
             @removefile="arquivoAnexado()"
             @processfile="arquivoAnexado()"
         />
@@ -33,13 +33,13 @@ export default {
     },
     props: {
         formatosAceitos: { type: String, default: 'application/pdf' },
-        arquivoInicial: {},
+        arquivoInicial: { type: Object, default() {} },
     },
     data() {
         return {
             arquivo: [],
             server: {
-                process:(fieldName, file, metadata, load, error, progress, abort) => {
+                process: (fieldName, file, metadata, load, error, progress, abort) => {
                     const request = new XMLHttpRequest();
                     request.open('POST', '/');
                     request.abort();
@@ -51,7 +51,7 @@ export default {
                         abort: () => {
                             // Let FilePond know the request has been cancelled
                             abort();
-                        }
+                        },
                     };
                 },
                 load: null,
@@ -61,6 +61,8 @@ export default {
         };
     },
     computed: {},
+    created() {
+    },
     methods: {
         arquivoAnexado() {
             if (this.$refs.pond.getFiles()[0]) {
@@ -71,7 +73,5 @@ export default {
             }
         },
     },
-    created() {
-    }
 };
 </script>
