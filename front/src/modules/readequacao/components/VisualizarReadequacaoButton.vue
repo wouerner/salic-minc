@@ -59,7 +59,7 @@
                                 </v-list-tile-avatar>
                                 <v-list-tile-content>
                                     <v-list-tile-title>Nome do Solicitante</v-list-tile-title>
-                                    <v-list-tile-sub-title>Beltrano Ciclano - {{ dadosReadequacao.idSolicitante }} </v-list-tile-sub-title>
+                                    <v-list-tile-sub-title>{{ dadosReadequacao.dsNomeSolicitante }}</v-list-tile-sub-title>
                                 </v-list-tile-content>
                                 <v-list-tile-avatar>
                                     <v-icon class="green lighten-1 white--text">date_range</v-icon>
