@@ -3,7 +3,7 @@
         <div v-if="loading">
             <Carregando :text="'Laudo final'"/>
         </div>
-        <div v-else>
+        <div v-else-if="parecerObjeto">
             <v-container
                 grid-list-md
                 text-xs-left>
@@ -21,17 +21,18 @@
                     <v-flex lg12>
                         <b>Manifestação</b>
                         <p>
-                            {{ dados.dsManifestacaoObjeto }}
+                            {{ parecerObjeto.dsManifestacaoObjeto }}
                         </p>
                     </v-flex>
                     <v-flex>
                         <b>Parecer</b>
-                        <p v-html="dados.dsParecerDeCumprimentoDoObjeto"/>
+                        <p v-html="parecerObjeto.dsParecerDeCumprimentoDoObjeto"/>
                     </v-flex>
                     <v-flex/>
                 </v-layout>
 
                 <v-layout
+                    v-if="parecerTecnico && Object.keys(parecerTecnico).length > 0"
                     justify-space-around
                     row
                     wrap>
@@ -58,6 +59,7 @@
                 </v-layout>
 
                 <v-layout
+                    v-if="Object.keys(parecerLaudoFinal).length > 0"
                     justify-space-around
                     row
                     wrap>
@@ -73,15 +75,30 @@
                         lg12>
                         <b>Manifestação</b>
                         <p>
-                            {{ laudoFinal.siManifestacao | tipolaudoFinal }}
+                            {{ parecerLaudoFinal.items.siManifestacao | tipolaudoFinal }}
                         </p>
                     </v-flex>
                     <v-flex
                         lg12>
                         <b>Parecer</b>
-                        <p v-html="laudoFinal.dsLaudoFinal"/>
+                        <p v-html="parecerLaudoFinal.items.dsLaudoFinal"/>
                     </v-flex>
                     <v-flex/>
+                </v-layout>
+            </v-container>
+        </div>
+        <div v-else>
+            <v-container
+                grid-list-md
+                text-xs-center>
+                <v-layout
+                    row
+                    wrap>
+                    <v-flex>
+                        <v-card>
+                            <v-card-text class="px-0">Nenhum Laudo Final encontrado</v-card-text>
+                        </v-card>
+                    </v-flex>
                 </v-layout>
             </v-container>
         </div>
@@ -130,7 +147,7 @@ export default {
     computed: {
         ...mapGetters({
             dadosProjeto: 'projeto/projeto',
-            dados: 'avaliacaoResultados/objetoParecer',
+            parecerObjeto: 'avaliacaoResultados/objetoParecer',
             parecerTecnico: 'avaliacaoResultados/parecer',
             parecerLaudoFinal: 'avaliacaoResultados/getParecerLaudoFinal',
         }),
@@ -142,8 +159,9 @@ export default {
         dadosProjeto(value) {
             this.loading = true;
             this.requestEmissaoParecer(value.idPronac);
+            this.getLaudoFinal(value.idPronac);
         },
-        dados() {
+        parecerObjeto() {
             this.loading = false;
         },
     },
