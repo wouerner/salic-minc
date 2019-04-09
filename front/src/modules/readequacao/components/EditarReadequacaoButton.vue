@@ -16,7 +16,7 @@
         <template
             v-if="!getTemplateParaTipo"
         >
-            <TemplateRedirect
+            <template-redirect
                 :dados-readequacao="dadosReadequacao"
                 :campo="campoAtual"
                 :redirecionar="redirecionar"
@@ -83,8 +83,9 @@
                                         :is="getTemplateParaTipo"
                                         :dados-readequacao="dadosReadequacao"
                                         :campo="getDadosCampo"
+                                        :min-char="minChar.solicitacao"
                                         @dados-update="atualizarCampo($event, 'dsSolicitacao')"
-                                        @editor-texto-counter="validarFormulario()"
+                                        @editor-texto-counter="atualizarContador($event, 'solicitacao')"
                                     />
                                 </v-card>
                             </v-expansion-panel-content>
@@ -101,15 +102,16 @@
                                     >
                                         Justificativa da readequação
                                     </v-card-title>
-                                    <FormReadequacao
+                                    <form-readequacao
                                         :dados-readequacao="dadosReadequacao"
+                                        :min-char="minChar.justificativa"
                                         @dados-update="atualizarCampo($event, 'dsJustificativa')"
-                                        @editor-texto-counter="validarFormulario()"
+                                        @editor-texto-counter="atualizarContador($event, 'justificativa')"
                                     />
                                     <v-card-text>
                                         <v-layout row>
                                             <v-flex xs3>
-                                                <UploadFile
+                                                <upload-file
                                                     :arquivo-inicial="dadosReadequacao.documento"
                                                     :formatos-aceitos="formatosAceitos"
                                                     class="mt-1"
@@ -159,6 +161,7 @@
                                     row
                                     wrap
                                     justify-end
+                                    text-xs-right
                                 >
                                     <v-btn
                                         color="green darken-1"
@@ -170,13 +173,21 @@
                                             dark
                                         >done</v-icon>
                                     </v-btn>
-                                    <FinalizarButton
+                                    <v-btn
+                                        color="red lighten-2"
+                                        dark
+                                        @click="dialog = false"
+                                    >Cancelar
+                                        <v-icon
+                                            right
+                                            dark
+                                        >cancel</v-icon>
+                                    </v-btn>
+                                    <finalizar-button
                                         :disabled="!validacao"
                                         :dados-readequacao="dadosReadequacao"
                                         :dados-projeto="dadosProjeto"
                                         :tela-edicao="true"
-                                        color="green darken-1"
-                                        class="mr-2"
                                         dark
                                         @readequacao-finalizada="readequacaoFinalizada()"
                                     />
@@ -262,10 +273,20 @@ export default {
                 finaliza: false,
             },
             recarregarReadequacoes: false,
-            minChar: 3,
+            minChar: {
+                solicitacao: 3,
+                justificativa: 10,
+            },
             validacao: false,
             validacaoOk: false,
-            campos: ['dsSolicitacao', 'dsJustificativa'],
+            contador: {
+                solicitacao: 0,
+                justificativa: 0,
+            },
+            campos: [
+                'dsSolicitacao',
+                'dsJustificativa',
+            ],
             loading: true,
         };
     },
@@ -430,15 +451,28 @@ export default {
         atualizarCampo(valor, campo) {
             if (this.campos.includes(campo)) {
                 this.readequacaoEditada[campo] = valor;
+                this.validarFormulario();
             }
+        },
+        atualizarContador(valor, campo) {
+            this.contador[campo] = valor;
             this.validarFormulario();
         },
         validarFormulario() {
-            this.validacao = true;
-            if (this.readequacaoEditada.dsJustificativa.trim().length < this.minChar
-                || this.readequacaoEditada.dsSolicitacao.trim().length < this.minChar) {
-                this.validacao = false;
+            let valido = ['solicitacao', 'justificatica'];
+            valido.solicitacao = false;
+            valido.justificativa = false;
+            if (typeof this.readequacaoEditada.dsJustificativa === 'string') {
+                if (this.contador.justificativa >= this.minChar.justificativa) {
+                    valido.justificativa = true;
+                }
             }
+            if (typeof this.readequacaoEditada.dsSolicitacao === 'string') {
+                if (this.contador.solicitacao >= this.minChar.solicitacao) {
+                    valido.solicitacao = true;
+                }
+            }
+            this.validacao = (valido.solicitacao && valido.justificativa);
         },
         readequacaoFinalizada() {
             this.dialog = false;
