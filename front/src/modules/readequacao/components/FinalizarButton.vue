@@ -1,21 +1,19 @@
 <template>
     <v-layout>
-        <div v-if="telaEdicao">
-            <v-btn
-                :disabled="disabled"
-                absolute
+        <v-btn
+            v-if="telaEdicao"
+            :disabled="disabled"
+            dark
+            color="blue darken-1"
+            class="m-2"
+            @click="dialog = true"
+        >
+            Finalizar Readequação
+            <v-icon
+                right
                 dark
-                color="green darken-1"
-                class="mt-2 mb-5"
-                @click="dialog = true"
-            >
-                Finalizar Readequação
-                <v-icon
-                    right
-                    dark
-                >send</v-icon>
-            </v-btn>
-        </div>
+            >send</v-icon>
+        </v-btn>
         <v-btn
             v-else
             dark
