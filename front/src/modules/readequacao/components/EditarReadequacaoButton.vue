@@ -84,6 +84,7 @@
                                         :dados-readequacao="dadosReadequacao"
                                         :campo="getDadosCampo"
                                         :min-char="minChar.solicitacao"
+                                        :rules="rules.solicitacao"
                                         @dados-update="atualizarCampo($event, 'dsSolicitacao')"
                                         @editor-texto-counter="atualizarContador($event, 'solicitacao')"
                                     />
@@ -278,10 +279,19 @@ export default {
                 justificativa: 10,
             },
             validacao: false,
-            validacaoOk: false,
             contador: {
                 solicitacao: 0,
                 justificativa: 0,
+            },
+            rules: {
+                solicitacao: [
+                    v => !!v || 'Campo obrigatório.',
+                    v => (v && v.length >= this.minChar.solicitacao) || `Deve ter no mínimo ${this.minChar.solicitacao} caracteres.`,
+                ],
+                justificativa: [
+                    v => !!v || 'Preencha a justificativa.',
+                    v => (v && v.length >= this.minChar.justificativa) || `Justificativa ter no mínimo ${this.minChar.justificativa} caracteres.`,
+                ],
             },
             campos: [
                 'dsSolicitacao',
