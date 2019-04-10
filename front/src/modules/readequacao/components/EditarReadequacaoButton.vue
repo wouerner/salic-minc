@@ -279,10 +279,15 @@ export default {
                 justificativa: 10,
             },
             validacao: false,
+<<<<<<< HEAD
+=======
+            validacaoOk: false,
+>>>>>>> 8a26bc30268c7888d97fcfa2cde742e0a8b46dc6
             contador: {
                 solicitacao: 0,
                 justificativa: 0,
             },
+<<<<<<< HEAD
             rules: {
                 solicitacao: [
                     v => !!v || 'Campo obrigatório.',
@@ -293,6 +298,8 @@ export default {
                     v => (v && v.length >= this.minChar.justificativa) || `Justificativa ter no mínimo ${this.minChar.justificativa} caracteres.`,
                 ],
             },
+=======
+>>>>>>> 8a26bc30268c7888d97fcfa2cde742e0a8b46dc6
             campos: [
                 'dsSolicitacao',
                 'dsJustificativa',

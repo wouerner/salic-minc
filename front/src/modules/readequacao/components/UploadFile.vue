@@ -23,7 +23,6 @@ import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import vueFilePond from 'vue-filepond';
 import 'filepond/dist/filepond.min.css';
 
-
 const FilePond = vueFilePond(FilePondPluginFileValidateType);
 
 export default {
@@ -33,7 +32,7 @@ export default {
     },
     props: {
         formatosAceitos: { type: String, default: 'application/pdf' },
-        arquivoInicial: { type: Object, default() {} },
+        arquivoInicial: { type: Blob, default() {} },
     },
     data() {
         return {
@@ -43,10 +42,8 @@ export default {
                     const request = new XMLHttpRequest();
                     request.open('POST', '/');
                     request.abort();
-
                     progress(true, 0, 1024);
                     load(file);
-
                     return {
                         abort: () => {
                             // Let FilePond know the request has been cancelled
