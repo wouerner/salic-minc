@@ -168,7 +168,7 @@ class Recurso_Model_TbRecursoMapper extends MinC_Db_Mapper
             return false;
         }
 
-        return $dadosRecurso['prazoRecurso'] = Recurso_Model_TbRecurso::PRAZO_RECURSAL -  Data::obterDiferencaEmDias($recurso['dtAvaliacao']);;
+        return $dadosRecurso['prazoRecurso'] = Recurso_Model_TbRecurso::PRAZO_RECURSAL -  Data::obterDiferencaEmDias($recurso['dtAvaliacao']);
     }
 
     public function obterTipoRecurso($recurso)
