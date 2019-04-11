@@ -57,7 +57,7 @@
                         xs10
                         offset-xs1
                     >
-                        <Carregando
+                        <carregando
                             :text="'Montando edição de readequação...'"
                             class="mt-5"
                         />
@@ -115,6 +115,7 @@
                                                 <upload-file
                                                     :arquivo-inicial="dadosReadequacao.documento"
                                                     :formatos-aceitos="formatosAceitos"
+                                                    :id-documento="dadosReadequacao.idDocumento"
                                                     class="mt-1"
                                                     @arquivo-anexado="atualizarArquivo($event)"
                                                     @arquivo-removido="removerArquivo($event)"
@@ -130,7 +131,7 @@
                                                         color="white"
                                                         @click="abrirArquivo()"
                                                     >
-                                                        <v-icon small>attach_file</v-icon>
+                                                        <v-icon small>visibility</v-icon>
                                                     </v-btn>
                                                     <v-spacer/>
                                                     <v-btn
@@ -217,7 +218,7 @@
 </template>
 
 <script>
-import _ from 'lodash';
+
 import { mapActions, mapGetters } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
 import FormReadequacao from './FormReadequacao';
@@ -279,15 +280,10 @@ export default {
                 justificativa: 10,
             },
             validacao: false,
-<<<<<<< HEAD
-=======
-            validacaoOk: false,
->>>>>>> 8a26bc30268c7888d97fcfa2cde742e0a8b46dc6
             contador: {
                 solicitacao: 0,
                 justificativa: 0,
             },
-<<<<<<< HEAD
             rules: {
                 solicitacao: [
                     v => !!v || 'Campo obrigatório.',
@@ -298,8 +294,6 @@ export default {
                     v => (v && v.length >= this.minChar.justificativa) || `Justificativa ter no mínimo ${this.minChar.justificativa} caracteres.`,
                 ],
             },
-=======
->>>>>>> 8a26bc30268c7888d97fcfa2cde742e0a8b46dc6
             campos: [
                 'dsSolicitacao',
                 'dsJustificativa',
@@ -375,6 +369,9 @@ export default {
                 && this.recarregarReadequacoes === true) {
                 this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
             }
+            if (this.dialog === true) {
+                this.obterArquivoReadequacao(this.dadosReadequacao.idDocumento);
+            }
         },
     },
     created() {
@@ -427,7 +424,6 @@ export default {
                 dsSolicitacao: this.dadosReadequacao.dsSolicitacao,
                 dsJustificativa: this.dadosReadequacao.dsJustificativa,
             };
-            this.obterArquivoReadequacao(this.dadosReadequacao.idDocumento);
         },
         obterArquivoReadequacao(id) {
             let response = {};

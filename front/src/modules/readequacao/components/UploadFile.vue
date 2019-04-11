@@ -1,6 +1,12 @@
 <template>
-    <v-card elevation="4">
-        <file-pond
+    <div v-if="loading">
+        <carregando/>
+    </div>
+    <v-card
+        v-else
+        elevation="4"
+      >
+      <file-pond
             ref="pond"
             :server="server"
             :files="arquivo"
@@ -19,20 +25,40 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import vueFilePond from 'vue-filepond';
 import 'filepond/dist/filepond.min.css';
+import { mapActions, mapGetters } from 'vuex';
+import Carregando from '@/components/CarregandoVuetify';
 
 const FilePond = vueFilePond(FilePondPluginFileValidateType);
 
 export default {
     name: 'UploadFile',
     components: {
+        Carregando,
         FilePond,
     },
     props: {
-        formatosAceitos: { type: String, default: 'application/pdf' },
-        arquivoInicial: { type: Blob, default() {} },
+        formatosAceitos: {
+            type: String,
+            default: 'application/pdf',
+        },
+        arquivoInicial: {
+            type: [
+                Blob,
+                Object,
+            ],
+            default() {},
+        },
+        idDocumento: {
+            type: [
+                Number,
+                String,
+            ],
+            default: 0,
+        },
     },
     data() {
         return {
@@ -55,12 +81,35 @@ export default {
                 revert: null,
                 fetch: null,
             },
+            loading: true,
         };
     },
-    computed: {},
+    computed: {
+        ...mapGetters({
+            getDocumentoReadequacao: 'readequacao/getDocumentoReadequacao',
+        }),
+    },
+    watch: {
+        arquivoInicial() {
+            if (!_.isNull(this.arquivoInicial)) {
+                if (this.$refs.pond.getFiles().length < 1) {
+                    //console.log(typeof this.arquivoInicial);
+                    this.loading = false;
+                    this.arquivo = [this.arquivoInicial];
+                }
+            }
+        },
+    },
     created() {
+        if (!this.idDocumento
+            || this.idDocumento === 0) {
+            this.loading = false;
+        }
     },
     methods: {
+        ...mapActions({
+            obterDocumento: 'readequacao/obterDocumento',
+        }),
         arquivoAnexado() {
             if (this.$refs.pond.getFiles()[0]) {
                 const payload = this.$refs.pond.getFiles()[0].file;
