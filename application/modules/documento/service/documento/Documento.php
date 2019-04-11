@@ -168,6 +168,7 @@ class Documento implements IServicoRestZend
                 throw new Exception("O documento n&atilde;o existe!");
             } else {
                 $resultado = current($resultado);
+                $data['idDocumento'] = utf8_encode($idDocumento);
                 $data['filename'] = utf8_encode($resultado->nmArquivo);
                 $data['type'] = utf8_encode($resultado->dsTipoPadronizado);
                 $data['content'] = base64_encode($resultado->biArquivo);

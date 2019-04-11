@@ -1,18 +1,13 @@
 <template>
-    <div v-if="loading">
-        <carregando/>
-    </div>
     <v-card
-        v-else
         elevation="4"
-      >
-      <file-pond
+    >
+        <file-pond
             ref="pond"
             :server="server"
-            :files="arquivo"
             :accepted-file-types="formatosAceitos"
             name="upload"
-            label-idle="<span class='subheading'>CARREGAR ARQUIVO</span>"
+            :label-idle="textoBotao"
             label-file-type-not-allowed="Tipo de arquivo inválido."
             file-validate-type-label-expected-types="Somente {allTypes} serão aceitos."
             label-button-remove-item="Excluir"
@@ -45,13 +40,6 @@ export default {
             type: String,
             default: 'application/pdf',
         },
-        arquivoInicial: {
-            type: [
-                Blob,
-                Object,
-            ],
-            default() {},
-        },
         idDocumento: {
             type: [
                 Number,
@@ -62,7 +50,6 @@ export default {
     },
     data() {
         return {
-            arquivo: [],
             server: {
                 process: (fieldName, file, metadata, load, error, progress, abort) => {
                     const request = new XMLHttpRequest();
@@ -81,41 +68,21 @@ export default {
                 revert: null,
                 fetch: null,
             },
-            loading: true,
         };
     },
     computed: {
-        ...mapGetters({
-            getDocumentoReadequacao: 'readequacao/getDocumentoReadequacao',
-        }),
-    },
-    watch: {
-        arquivoInicial() {
-            if (!_.isNull(this.arquivoInicial)) {
-                if (this.$refs.pond.getFiles().length < 1) {
-                    //console.log(typeof this.arquivoInicial);
-                    this.loading = false;
-                    this.arquivo = [this.arquivoInicial];
-                }
-            }
+        textoBotao() {
+            let texto = (_.isNull(this.idDocumento)) ? 'CARREGAR ARQUIVO' : 'ALTERAR ARQUIVO';
+            return `<span class='subheading'>${texto}</span>`;
         },
     },
-    created() {
-        if (!this.idDocumento
-            || this.idDocumento === 0) {
-            this.loading = false;
-        }
-    },
     methods: {
-        ...mapActions({
-            obterDocumento: 'readequacao/obterDocumento',
-        }),
         arquivoAnexado() {
             if (this.$refs.pond.getFiles()[0]) {
                 const payload = this.$refs.pond.getFiles()[0].file;
                 this.$emit('arquivo-anexado', payload);
             } else {
-                this.$emit('arquivo-removido', undefined);
+                this.$emit('arquivo-removido');
             }
         },
     },

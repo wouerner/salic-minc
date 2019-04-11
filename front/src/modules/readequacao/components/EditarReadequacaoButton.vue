@@ -113,12 +113,11 @@
                                         <v-layout row>
                                             <v-flex xs3>
                                                 <upload-file
-                                                    :arquivo-inicial="dadosReadequacao.documento"
                                                     :formatos-aceitos="formatosAceitos"
                                                     :id-documento="dadosReadequacao.idDocumento"
                                                     class="mt-1"
                                                     @arquivo-anexado="atualizarArquivo($event)"
-                                                    @arquivo-removido="removerArquivo($event)"
+                                                    @arquivo-removido="removerArquivo()"
                                                 />
                                             </v-flex>
                                             <v-flex xs1>
@@ -299,12 +298,12 @@ export default {
                 'dsJustificativa',
             ],
             loading: true,
+            arquivo: {},
         };
     },
     computed: {
         ...mapGetters({
             campoAtual: 'readequacao/getCampoAtual',
-            getDocumentoReadequacao: 'readequacao/getDocumentoReadequacao',
         }),
         getTemplateParaTipo() {
             let templateName = false;
@@ -369,9 +368,6 @@ export default {
                 && this.recarregarReadequacoes === true) {
                 this.$emit('atualizar-readequacao', { idReadequacao: this.readequacaoEditada.idReadequacao });
             }
-            if (this.dialog === true) {
-                this.obterArquivoReadequacao(this.dadosReadequacao.idDocumento);
-            }
         },
     },
     created() {
@@ -381,7 +377,6 @@ export default {
         ...mapActions({
             obterCampoAtual: 'readequacao/obterCampoAtual',
             updateReadequacao: 'readequacao/updateReadequacao',
-            obterDocumento: 'readequacao/obterDocumento',
             finalizarReadequacao: 'readequacao/finalizarReadequacao',
         }),
         obterDadosIniciais() {
@@ -424,17 +419,6 @@ export default {
                 dsSolicitacao: this.dadosReadequacao.dsSolicitacao,
                 dsJustificativa: this.dadosReadequacao.dsJustificativa,
             };
-        },
-        obterArquivoReadequacao(id) {
-            let response = {};
-            if (id) {
-                this.obterDocumento(id).then(() => {
-                    if (typeof this.dadosReadequacao.documento !== 'undefined') {
-                        response = this.dadosReadequacao.documento;
-                    }
-                });
-            }
-            return response;
         },
         atualizarArquivo(arquivo) {
             this.readequacaoEditada.documento = arquivo;

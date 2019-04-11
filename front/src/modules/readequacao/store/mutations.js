@@ -48,14 +48,12 @@ export const mutations = {
                 readequacao.documento = data.documento;
             }
         });
-
         state.readequacoesAnalise.items.forEach((readequacao) => {
             readequacao.documento = {};
             if (readequacao.idDocumento === data.idDocumento) {
                 readequacao.documento = data.documento;
             }
         });
-
         state.readequacoesFinalizadas.items.forEach((readequacao) => {
             readequacao.documento = {};
             if (readequacao.idDocumento === data.idDocumento) {
