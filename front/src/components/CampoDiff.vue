@@ -5,10 +5,22 @@
             sm12
             xs12
         >
-            <v-card>
+            <v-card
+                flat
+            >
                 <v-card-title
                     class="subheading"
-                >Versão original</v-card-title>
+                >
+                    <v-btn
+                        fab
+                        depressed
+                        small
+                        class="green lighten-1"
+                    >
+                        <v-icon color="white">menu</v-icon>
+                    </v-btn>
+                    Versão original
+                </v-card-title>
                 <v-card-text
                     v-html="textDiff.before"
                 />
@@ -20,10 +32,22 @@
             sm12
             xs12
         >
-            <v-card>
+            <v-card
+                flat
+            >
                 <v-card-title
                     class="subheading"
-                >Versão alterada</v-card-title>
+                >
+                    <v-btn
+                        fab
+                        depressed
+                        small
+                        class="green lighten-1"
+                    >
+                        <v-icon color="white">playlist_add</v-icon>
+                    </v-btn>
+                    Versão alterada
+                </v-card-title>
                 <v-card-text
                     v-html="textDiff.after"
                 />
