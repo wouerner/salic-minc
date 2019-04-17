@@ -89,6 +89,9 @@ export const excluirReadequacao = ({ commit, dispatch }, params) => {
                 idPronac: params.idPronac,
                 stStatusAtual: 'proponente',
             });
+            dispatch('obterTiposDisponiveis', {
+                idPronac: params.idPronac
+            });
         });
 };
 
@@ -152,6 +155,9 @@ export const inserirReadequacao = async ({ commit, dispatch }, params) => {
             dispatch('obterListaDeReadequacoes', {
                 idPronac: params.idPronac,
                 stStatusAtual: 'proponente',
+            });
+            dispatch('obterTiposDisponiveis', {
+                idPronac: params.idPronac
             });
             return data;
         });

@@ -31,7 +31,7 @@
                         </v-tab>
                         <v-tab-item :value="'tab-1'">
                             <v-card>
-                                <TabelaReadequacoes
+                                <tabela-readequacoes
                                     :dados-readequacao="getReadequacoesProponente"
                                     :componentes="acoesProponente"
                                     :dados-projeto="dadosProjeto"
@@ -46,7 +46,7 @@
                         </v-tab-item>
                         <v-tab-item :value="'tab-2'">
                             <v-card>
-                                <TabelaReadequacoes
+                                <tabela-readequacoes
                                     :dados-readequacao="getReadequacoesAnalise"
                                     :componentes="acoesAnalise"
                                     :dados-projeto="dadosProjeto"
@@ -57,7 +57,7 @@
                         </v-tab-item>
                         <v-tab-item :value="'tab-3'">
                             <v-card>
-                                <TabelaReadequacoes
+                                <tabela-readequacoes
                                     :dados-readequacao="getReadequacoesFinalizadas"
                                     :componentes="acoesFinalizadas"
                                     :dados-projeto="dadosProjeto"
@@ -65,7 +65,7 @@
                             </v-card>
                         </v-tab-item>
                     </v-tabs>
-                    <CriarReadequacao
+                    <criar-readequacao
                         :id-pronac="dadosProjeto.idPronac"
                         @criar-readequacao="criarReadequacao($event)"
                     />
