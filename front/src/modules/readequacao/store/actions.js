@@ -95,14 +95,10 @@ export const excluirReadequacao = ({ commit, dispatch }, params) => {
         });
 };
 
-export const updateReadequacao = ({ commit, dispatch }, params) => {
+export const updateReadequacao = ({ commit }, params) => {
     readequacaoHelperAPI.updateReadequacao(params)
         .then((response) => {
             commit(types.UPDATE_READEQUACAO, response.data.data.items);
-            dispatch('obterListaDeReadequacoes', {
-                idPronac: params.idPronac,
-                stStatusAtual: 'proponente',
-            });
         });
 };
 

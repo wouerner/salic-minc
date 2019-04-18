@@ -202,6 +202,10 @@ export default {
         },
         atualizarReadequacao() {
             this.itemEmEdicao = 0;
+            this.obterListaDeReadequacoes({
+                idPronac: this.$route.params.idPronac,
+                stStatusAtual: 'proponente',
+            });
         },
         getPerfis(tipo) {
             return this.perfisAceitos[tipo];
