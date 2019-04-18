@@ -108,6 +108,7 @@ export default {
                     date = this.campo.valor.trim();
                 }
                 this.date = this.parseDate(date);
+                this.updateCampo(this.date);
             }
         },
     },
@@ -137,7 +138,6 @@ export default {
             return date;
         },
         updateCampo(e) {
-            console.log(`updateei ${this.date}`);
             this.$emit('dados-update', e);
             this.atualizarContador(e.length);
         },

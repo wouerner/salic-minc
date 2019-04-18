@@ -155,6 +155,10 @@ export const inserirReadequacao = async ({ commit, dispatch }, params) => {
             dispatch('obterTiposDisponiveis', {
                 idPronac: params.idPronac,
             });
+            dispatch('obterCampoAtual', {
+                idPronac: params.idPronac,
+                idTipoReadequacao: params.idTipoReadequacao,
+            });
             return data;
         });
     return resultado;
