@@ -21,6 +21,7 @@ class ErrorController extends Zend_Controller_Action
         $auth->usu_seguranca = '********';
         $auth->usu_controle = '********';
         $auth->usu_validacao = '********';
+        $auth->Senha =  '********';
 
         $this->ravenClient->user_context(array(
             'auth' => $auth
