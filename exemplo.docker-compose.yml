@@ -81,10 +81,14 @@ services:
   #   volumes:
   #     - ./data:/data
   #
+  # nfe-visual:
+  #   image: culturagovbr/nfe-visual
+  #   container_name: nfe-visual
+  #   ports:
+  #     - "8082:80"
   ################################################
   #  Serviço da nota fiscal eletronica
   ################################################
-
 #    networks:
 #      static-network:
 #        ipv4_address: 172.20.0.3
