@@ -1093,4 +1093,16 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         $this->view->idUsuario = $this->idUsuario;
         $this->view->idAgente = $this->idAgente;
     }
+
+    public function obterTipologiasAjaxAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        $intId = $this->getRequest()->getParam('id', null);
+        $tableVerificacao = new Proposta_Model_DbTable_Verificacao();
+
+        $arrUsuarios = $tableVerificacao->fetchAll(array('idTipo = ?' => $intId));
+
+        $this->_helper->json($arrUsuarios);
+    }
 }
