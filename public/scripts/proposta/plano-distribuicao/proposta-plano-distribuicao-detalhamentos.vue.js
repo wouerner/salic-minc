@@ -188,6 +188,7 @@ Vue.component('proposta-plano-distribuicao-detalhamentos', {
                 >
             </proposta-plano-distribuicao-lista-detalhamentos>
             <proposta-plano-distribuicao-formulario-detalhamento
+                v-model="exibirFormulario"
                 :disabled="disabled"
                 :idplanodistribuicao="idplanodistribuicao"
                 :idpreprojeto="idpreprojeto"
@@ -202,7 +203,8 @@ Vue.component('proposta-plano-distribuicao-detalhamentos', {
     data: function () {
         return {
             detalhamentos: [],
-            detalhamento: {}
+            detalhamento: {},
+            exibirFormulario: false,
         }
     },
     mixins: [funcoes],
@@ -239,7 +241,8 @@ Vue.component('proposta-plano-distribuicao-detalhamentos', {
             }
         },
         editarDetalhamento(detalhamento, index) {
-            this.detalhamento = detalhamento;
+            this.exibirFormulario = true;
+            this.detalhamento = Object.assign({}, detalhamento);
         },
         salvarDetalhamento(detalhamento) {
 
@@ -250,9 +253,13 @@ Vue.component('proposta-plano-distribuicao-detalhamentos', {
                 data: detalhamento
             }).done(function (response) {
                 if (response.success == 'true') {
-                    let index = vue.$data.detalhamentos.map(item => item.idDetalhaPlanoDistribuicao).indexOf(response.data.idDetalhaPlanoDistribuicao);
-                    Vue.delete(vue.detalhamentos, index);
-                    vue.$data.detalhamentos.push(response.data);
+                    let index = vue.$data.detalhamentos.findIndex(item => item.idDetalhaPlanoDistribuicao == response.data.idDetalhaPlanoDistribuicao);
+
+                    if (index >= 0) {
+                        Object.assign(vue.$data.detalhamentos[index], detalhamento);
+                    } else {
+                        vue.$data.detalhamentos.push(response.data);
+                    }
                     vue.mensagemSucesso(response.msg);
                     detalhamentoEventBus.$emit('callBackSalvarDetalhamento', true);
                 }
@@ -276,6 +283,7 @@ Vue.component('proposta-plano-distribuicao-detalhamentos', {
     }
 });
 
+const VALOR_MEDIO_MAXIMO = 225;
 Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
     template: `
         <div class="row center-align">
@@ -329,7 +337,7 @@ Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
                                 :class="_uid + '_teste'"
                                 data-tooltip="Editar detalhamento"
                                 v-bind:disabled="!disabled"
-                                    @click.prevent="editar(detalhamento, index)">
+                                    @click="editar(detalhamento, index)">
                                 <i class="material-icons">edit</i>
                             </a>
                         </td>
@@ -366,34 +374,36 @@ Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
                         <td class="center-align"><b>{{ qtDistribuicaoGratuitaTotal }}</b>
                         </td>
                         <td class="right-align"><b>{{ receitaPrevistaTotal }}</b></td>
-                        <td></td>
+                        <td colspan="2"></td>
                     </tr>
                 </tfoot>
             </table>
             
-            <table style="max-width: 300px" v-if="detalhamentos && detalhamentos.length > 0">
+            <table style="margin-top: 20px; max-width: 300px" v-if="detalhamentos && detalhamentos.length > 0">
                 <tr>
                     <th>
                         <b>Valor m&eacute;dio </b>
                     </th>
-                    <td class="center-align red" v-if="((valorMedioProponente.value() > 225) && (this.canalaberto == 0))"> 
-                        {{valorMedioProponenteFormatado}}
+                    <td class="center-align red darken-3 white-text" v-if="((valorMedioProponente.value() > valorMedioMaximo) && (this.canalaberto == 0))"> 
+                        <b>R$ {{valorMedioProponenteFormatado}}</b>
                     </td>
-                    <td class="center-align " v-else>{{valorMedioProponenteFormatado}}</td>
+                    <td class="center-align " v-else>R$ {{valorMedioProponenteFormatado}}</td>
                 </tr>
             </table>
         </div>
     `,
     data: function () {
-        return {}
+        return {
+            valorMedioMaximo: VALOR_MEDIO_MAXIMO,
+        }
     },
     mixins: [funcoes],
     watch: {
         detalhamentos: function () {
-            if ((numeral(this.valorMedioProponente).value() > 225
+            if ((numeral(this.valorMedioProponente).value() > this.valorMedioMaximo
                 && (this.canalaberto == 0))) {
-                this.mensagemAlerta("O valor medio:" + this.valorMedioProponenteFormatado + ", n\xE3o pode ultrapassar: 225,00");
-                this.$data.detalhamentos.splice(-1, 1)
+                this.mensagemAlerta("O valor m&eacute;dio: R$ " + this.valorMedioProponenteFormatado + ", n\xE3o pode ultrapassar: R$ " + this.formatarValor(this.valorMedioMaximo));
+                // this.$data.detalhamentos.splice(-1, 1)
             }
         }
     },
@@ -481,7 +491,7 @@ Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
             }, 600);
 
             this.$emit('eventoEditarDetalhamento', detalhamento, index);
-        }
+        },
     }
 });
 
@@ -884,7 +894,8 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
         'idmunicipioibge',
         'iduf',
         'disabled',
-        'editarDetalhamento'
+        'editarDetalhamento',
+        'value',
     ],
     created: function() {
         let vue = this;
@@ -1009,7 +1020,15 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
                     vue.distribuicaoGratuita = SIM;
                 }
             }
-        }
+        },
+        value(val) {
+            console.log('mostrarr', val);
+            this.visualizarFormulario = val;
+        },
+        visualizarFormulario(val) {
+            console.log('input', val);
+            this.$emit('input', val);
+        },
     },
     computed: {
         atualizarCalculosDistribuicao: function () {
