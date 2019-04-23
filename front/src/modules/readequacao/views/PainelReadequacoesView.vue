@@ -17,7 +17,7 @@
                     >{{ dadosProjeto.Pronac }} - {{ dadosProjeto.NomeProjeto }}</h3>
                 </v-subheader>
                 <div v-if="loading">
-                    <carregando :text="'Carregando readequações...'"/>
+                    <carregando :text="'Carregando painel de readequações...'"/>
                 </div>
                 <div v-else-if="getReadequacoesProponente">
                     <v-tabs
