@@ -61,7 +61,7 @@
                             two-line
                             subheader
                         >
-                            <v-subheader inset>Dados da Solicitação</v-subheader>
+                            <v-subheader inset>Dados da Solicitação - {{ dadosReadequacao.idReadequacao }}</v-subheader>
                             <v-list-tile avatar>
                                 <v-list-tile-avatar>
                                     <v-icon class="green lighten-1 white--text">person</v-icon>
