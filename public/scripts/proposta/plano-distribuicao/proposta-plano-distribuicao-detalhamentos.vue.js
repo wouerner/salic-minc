@@ -504,9 +504,11 @@ const TIPO_LOCAL_FECHADO = 'f';
 const TIPO_ESPACO_PUBLICO = 's';
 const TIPO_ESPACO_PRIVADO = 'n';
 
-const DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO = 0.3;
+const DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO = 0.4;
 const PRECO_POPULAR_PERCENTUAL_PADRAO = 0.2;
-const PROPONENTE_PERCENTUAL_PADRAO = 0.5;
+const PROPONENTE_PERCENTUAL_PADRAO = 0.3;
+
+const VALOR_MAXIMO_PRECO_POPULAR = 50.00;
 
 Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
     template: `
@@ -885,6 +887,7 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
             "labelInteira": 'Inteira',
             "inputUnitarioPopularIntegral": 0,
             "inputUnitarioProponenteIntegral": 0,
+            valorMaximoPrecoPopular: VALOR_MAXIMO_PRECO_POPULAR,
         }
     },
     mixins: [funcoes],
@@ -946,9 +949,9 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
             this.distribuicao.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
         },
         "distribuicao.vlUnitarioPopularIntegral": function () {
-            if (this.distribuicao.vlUnitarioPopularIntegral > 75.00) {
-                this.mensagemAlerta('O pre\xE7o unit\xE1rio do pre\xE7o popular n\xE3o pode ser maior que R$ 75,00');
-                this.inputUnitarioPopularIntegral = this.formatarValor(75.00);
+            if (this.distribuicao.vlUnitarioPopularIntegral > this.valorMaximoPrecoPopular) {
+                this.mensagemAlerta('O pre\xE7o unit\xE1rio do pre\xE7o popular n\xE3o pode ser maior que R$ ' + this.formatarValor(this.valorMaximoPrecoPopular));
+                this.inputUnitarioPopularIntegral = this.formatarValor(this.valorMaximoPrecoPopular);
             }
         },
         percentualProponente: function () {
@@ -1022,11 +1025,9 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
             }
         },
         value(val) {
-            console.log('mostrarr', val);
             this.visualizarFormulario = val;
         },
         visualizarFormulario(val) {
-            console.log('input', val);
             this.$emit('input', val);
         },
     },
@@ -1059,8 +1060,7 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
                 return 1;
             }
             return DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO +
-                (this.percentualMaximoPrecoPopular - this.percentualPrecoPopular)
-                ;
+                (this.percentualMaximoPrecoPopular - this.percentualPrecoPopular);
         },
         percentualMaximoPrecoPopular: function () {
             return PRECO_POPULAR_PERCENTUAL_PADRAO + (PROPONENTE_PERCENTUAL_PADRAO - this.percentualProponente);
@@ -1164,6 +1164,12 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
                     this.mensagemAlerta("Pre\xE7o unit\xE1rio no Pre\xE7o Popular \xE9 obrigat\xF3rio!");
                     return;
                 }
+            }
+
+            if (this.percentualPrecoPopular > this.percentualMaximoPrecoPopular) {
+                this.mensagemAlerta("Percentual do Pre\u00E7o Popular (" + this.percentualPrecoPopular * 100 +
+                    "%) n\u00E3o pode ser maior que " + this.percentualMaximoPrecoPopular * 100 + "%");
+                return;
             }
 
             if (this.distribuicao.qtGratuitaPopulacao < this.qtGratuitaPopulacaoMinimo) {
