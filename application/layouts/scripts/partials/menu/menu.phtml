@@ -88,21 +88,25 @@ $arrMenuProponente['usuario']['menu'][] = array('label' => 'Alterar Dados', 'tit
     'grupo' => array()
 );
 
-$arrMenuProponente['nfe'] = [
-    'id' => 'nfe',
-    'label' => 'Notas Fiscais',
-    'title' => 'Ir para Notas Fiscais',
-    'menu' => [],
-    'grupo' => []
-];
+$jwt = new Zend_Session_Namespace('jwt');
+if ($jwt->token) {
 
-$arrMenuProponente['nfe']['menu'][] =
-    [
-        'label' => 'Vizualizar Notas',
-        'title' => 'Vizualizar Notas',
-        'url' => Zend_Registry::get("config")->toArray()['url']['hostnfe'],
+    $arrMenuProponente['nfe'] = [
+        'id' => 'nfe',
+        'label' => 'Notas Fiscais',
+        'title' => 'Ir para Notas Fiscais',
+        'menu' => [],
         'grupo' => []
     ];
+
+    $arrMenuProponente['nfe']['menu'][] =
+        [
+            'label' => 'Vizualizar Notas',
+            'title' => 'Vizualizar Notas',
+            'url' => Zend_Registry::get("config")->toArray()['url']['hostnfe']. '?token=' . $jwt->token,
+            'grupo' => []
+        ];
+}
 // ========== FIM MENU PROTOCOLO ==========
 
 // ========== INICIO MENU MANUAIS ==========
