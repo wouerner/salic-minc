@@ -140,35 +140,50 @@ if (isset($this->proposta['idpreprojeto'])) {
                                         <td colspan="5">
                                             <p>
                                                 <input
-                                                    name="tpProposta"
+                                                    name="tpTipicidade"
                                                     type="radio"
-                                                    id="test1"
-                                                    checked
-                                                    value="31"
-                                                    select-data-ajax-render
-                                                    data-ajax-render="/proposta/manterpropostaincentivofiscal/obter-tipologias-ajax"
-                                                    data-ajax-target="select[name=tpTipologia]"
+                                                    id="singulares"
+                                                    <?= empty($this->proposta['tptipicidade'])
+                                                    || $this->proposta['tptipicidade'] == "713" ? 'checked=checked' : ''; ?>
+                                                    value="713"
+                                                    data-ajax-param-id="31"
                                                 />
-                                                <label for="test1">Singulares, at&eacute; R$ 1.000.000,00 (Art 4&ordm;, Al&iacute;nea D)</label>
+                                                <label for="singulares">Singulares, at&eacute; R$ 1.000.000,00 (Art 4&ordm;, Al&iacute;nea D)</label>
                                             </p>
                                             <p>
-                                                <input name="tpProposta" type="radio" id="test2" value="30"/>
-                                                <label for="test2">Espec&iacute;ficos, at&eacute; R$ 6.000.000,00 (Art 4&ordm;, &sect; 3&ordm;)</label>
+                                                <input
+                                                    name="tpTipicidade"
+                                                    type="radio"
+                                                    id="especificos"
+                                                    <?= $this->proposta['tptipicidade'] == "714" ? 'checked=checked' : ''; ?>
+                                                    value="714"
+                                                    data-ajax-param-id="30"
+                                                />
+                                                <label for="especificos">Espec&iacute;ficos, at&eacute; R$ 6.000.000,00 (Art 4&ordm;, &sect; 3&ordm;)</label>
                                             </p>
                                             <p>
-                                                <input class="with-gap" name="tpProposta" type="radio" id="test3"  value="29"/>
-                                                <label for="test3">Especiais, sem limite (Art 4&ordm;, &sect; 2&ordm;)</label>
+                                                <input
+                                                    name="tpTipicidade"
+                                                    type="radio"
+                                                    id="especiais"
+                                                    <?= $this->proposta['tptipicidade'] == "715" ? 'checked' : ''; ?>
+                                                    value="715"
+                                                    data-ajax-param-id="29"
+                                                />
+                                                <label for="especiais">Especiais, sem limite (Art 4&ordm;, &sect; 2&ordm;)</label>
                                             </p>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="5">
                                         <label>Tipologia *</label>
-                                        <select class="browser-default" name="tpTipologia">
-                                            <option value="" disabled selected>Choose your option</option>
-                                            <option value="1">Option 1</option>
-                                            <option value="2">Option 2</option>
-                                            <option value="3">Option 3</option>
+                                        <select
+                                            id="tpTipologia"
+                                            class="browser-default"
+                                            name="tpTipologia"
+                                            data-ajax-target-selected="<?= $this->proposta['tptipologia']; ?>"
+                                        >
+                                            <option value="" disabled selected>Selecione a tipicidade...</option>
                                         </select>
                                         </td>
                                     </tr>
@@ -748,19 +763,28 @@ if (isset($this->proposta['idpreprojeto'])) {
         // id dos campos que utilizarï¿½o o calendï¿½rio
         $("#dtInicioDeExecucao, #dtFinalDeExecucao, #dtAtoTombamento").datepicker($.datepicker.regional['pt-BR']);
 
-        function layout_fluido() {
-            var janela = $(window).width();
 
-//            $("#navglobal").css("width", "100%");
-//            $("#conteudo").css("width", "100%");
-//            $("#titulo").css("width", "100%");
-//            $("#rodapeConteudo").css("width", "100%");
-//            $("#rodape").css("width", "100%");
-            $("div#rodapeConteudo").attr("id", "rodapeConteudo_com_menu");
-        }
-
-        layout_fluido();
     });
+    $3(document).ready(function () {
+        $3("input[type=radio][name=tpTipicidade]:checked").each(function() {
+            carregarComboTipologia($3(this).attr('data-ajax-param-id'));
+        });
+
+        $3('body').on('click', 'input[name=tpTipicidade]', function () {
+            carregarComboTipologia($3(this).attr('data-ajax-param-id'));
+        });
+    });
+
+    const carregarComboTipologia = function(id) {
+        $3.ajaxSelectRender({
+            strUrl: '/proposta/manterpropostaincentivofiscal/obter-tipologias-ajax',
+            objTarget: $3('#tpTipologia'),
+            objData: {
+                id: id
+            },
+            strSelected: $3('#tpTipologia').attr('data-ajax-target-selected'),
+        });
+    };
 
 
 </script>
