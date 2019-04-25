@@ -380,8 +380,12 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
     {
         $this->validarEdicaoProposta();
 
-        $dbTableVerificacao = new Proposta_Model_DbTable_Verificacao();
-        $this->view->tipicidades = $dbTableVerificacao->buscarTipicidades();
+        $tbProjetoFase = new Projeto_Model_DbTable_TbProjetoFase();
+        if (empty($this->idPreProjeto)
+            || $tbProjetoFase->isNormativo2019ByIdPreProjeto($this->idPreProjeto)) {
+            $dbTableVerificacao = new Proposta_Model_DbTable_Verificacao();
+            $this->view->tipicidades = $dbTableVerificacao->buscarTipicidades();
+        }
 
         if (empty($this->_proposta["idpreprojeto"])) {
             $post = Zend_Registry::get('post');
@@ -501,7 +505,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
             $idPronac = $projeto['idpronac'];
 
             if ($arrResultado->Observacao === true) {
-                    $this->view->acao = $this->_urlPadrao . "/proposta/manterpropostaincentivofiscal/encaminharprojetoaominc";
+                $this->view->acao = $this->_urlPadrao . "/proposta/manterpropostaincentivofiscal/encaminharprojetoaominc";
             }
 
             $this->view->resultado = $arrResultado;
@@ -771,7 +775,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         }
 
         //VERIFICA SE DATA INICIO E MAIOR QUE 90 DIAS DA DATA ATUAL
-        if (!empty($get->dtInicio) && strlen($get->dtInicio) == 10 && !$this->view->isEditarProjeto ) {
+        if (!empty($get->dtInicio) && strlen($get->dtInicio) == 10 && !$this->view->isEditarProjeto) {
             $dtTemp = explode("/", $get->dtInicio);
             $dtInicio = $dtTemp[2] . $dtTemp[1] . $dtTemp[0];
 
@@ -889,7 +893,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
             'recordsTotal' => $recordsTotal ? $recordsTotal : 0,
             'draw' => $draw,
             'recordsFiltered' => $recordsFiltered ? $recordsFiltered : 0,
-            'teste' =>[$this->idAgente, $this->idResponsavel, $idAgente, array(), $order, $start, $length, $search]
+            'teste' => [$this->idAgente, $this->idResponsavel, $idAgente, array(), $order, $start, $length, $search]
         ));
     }
 
@@ -1113,9 +1117,9 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
             'idVerificacao',
             'Descricao',
             [
-            'idTipo' => $intId,
-            'stEstado' => 1,
-        ]);
+                'idTipo' => $intId,
+                'stEstado' => 1,
+            ]);
 
         $this->_helper->json(TratarArray::utf8EncodeArray($tipologias));
     }
