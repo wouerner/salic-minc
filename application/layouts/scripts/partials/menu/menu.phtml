@@ -103,7 +103,7 @@ if ($jwt->token) {
         [
             'label' => 'Vizualizar Notas',
             'title' => 'Vizualizar Notas',
-            'url' => Zend_Registry::get("config")->toArray()['url']['hostnfe']. '?token=' . $jwt->token,
+            'url' => Zend_Registry::get("config")->toArray()['url']['hostnfe']. '/nfe/' . $jwt->token,
             'grupo' => []
         ];
 }
