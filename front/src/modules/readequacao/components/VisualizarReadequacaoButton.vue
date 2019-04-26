@@ -170,26 +170,13 @@
                                 <div
                                     v-else
                                 >
-                                    <h2
-                                        class="headline"
+                                    <div
+                                        class="subheading pb-2"
                                         v-html="dadosReadequacao.dsTipoReadequacao"
                                     />
-                                    <span v-html="mensagemPadraoOutrasSolicitacoes"/>
-                                    <v-btn
-                                        class="blue darken-1 text-xs-center white--text"
-                                        color="white"
-                                        @click="visualizacaoExterna()"
-                                    >
-                                        Visualizar
-                                        <v-icon
-                                            class="ml-2"
-                                        >visibility</v-icon>
-                                    </v-btn>
-                                    <template-redirect
-                                        :dados-readequacao="dadosReadequacao"
-                                        :campo="campoAtual"
-                                        :redirecionar="redirecionar"
-                                    />
+                                    <span
+                                        class="font-italic"
+                                        v-html="mensagemPadraoOutrasSolicitacoes"/>
                                 </div>
                             </v-card-text>
                         </v-card>
@@ -276,7 +263,6 @@ import _ from 'lodash';
 import { mapGetters, mapActions } from 'vuex';
 import { utils } from '@/mixins/utils';
 import Const from '../const';
-import TemplateRedirect from './TemplateRedirect';
 import VisualizarCampoDetalhado from './VisualizarCampoDetalhado';
 import Carregando from '@/components/CarregandoVuetify';
 import CampoDiff from '@/components/CampoDiff';
@@ -289,7 +275,6 @@ export default {
         VisualizarCampoDetalhado,
         CampoDiff,
         Carregando,
-        TemplateRedirect,
     },
     mixins: [
         utils,
@@ -322,7 +307,6 @@ export default {
         return {
             dialog: false,
             loading: true,
-            redirecionar: false,
             panel: [true, true],
             visualizarAvaliacao: false,
             visualizarJustificativa: false,
@@ -334,7 +318,7 @@ export default {
                 Const.TIPO_READEQUACAO_SALDO_APLICACAO,
                 Const.TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS,
             ],
-            mensagemPadraoOutrasSolicitacoes: '',
+            mensagemPadraoOutrasSolicitacoes: 'Sem visualização detalhada para esse tipo de readequação.',
         };
     },
     computed: {
@@ -407,9 +391,6 @@ export default {
                 return Const.SI_ENCAMINHAMENTO[siEncaminhamento];
             }
             return false;
-        },
-        visualizacaoExterna() {
-            this.redirecionar = true;
         },
     },
 };

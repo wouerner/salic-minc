@@ -26,6 +26,7 @@ export default {
                 saldo_aplicacao: '#/readequacao/saldo-aplicacao/',
                 plano_distribuicao: '/readequacao/plano-distribuicao/index/?idPronac=',
                 remanejamento_50: '/readequacao/remanejamento-menor/index/?idPronac=',
+                transferencia_recursos: '/readequacao/transferencia-recursos/index/?idPronac=',
             },
         };
     },
