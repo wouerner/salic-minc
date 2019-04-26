@@ -61,7 +61,10 @@
                             two-line
                             subheader
                         >
-                            <v-subheader inset>Dados da Solicitação - {{ dadosReadequacao.idReadequacao }}</v-subheader>
+                            <v-subheader
+                                inset
+                                class="title"
+                            >Dados da Solicitação - {{ dadosReadequacao.idReadequacao }}</v-subheader>
                             <v-list-tile avatar>
                                 <v-list-tile-avatar>
                                     <v-icon class="green lighten-1 white--text">person</v-icon>
@@ -167,8 +170,26 @@
                                 <div
                                     v-else
                                 >
-                                    <h4 v-html="dadosReadequacao.dsTipoReadequacao"/>
+                                    <h2
+                                        class="headline"
+                                        v-html="dadosReadequacao.dsTipoReadequacao"
+                                    />
                                     <span v-html="mensagemPadraoOutrasSolicitacoes"/>
+                                    <v-btn
+                                        class="blue darken-1 text-xs-center white--text"
+                                        color="white"
+                                        @click="visualizacaoExterna()"
+                                    >
+                                        Visualizar
+                                        <v-icon
+                                            class="ml-2"
+                                        >visibility</v-icon>
+                                    </v-btn>
+                                    <template-redirect
+                                        :dados-readequacao="dadosReadequacao"
+                                        :campo="campoAtual"
+                                        :redirecionar="redirecionar"
+                                    />
                                 </div>
                             </v-card-text>
                         </v-card>
@@ -255,6 +276,7 @@ import _ from 'lodash';
 import { mapGetters, mapActions } from 'vuex';
 import { utils } from '@/mixins/utils';
 import Const from '../const';
+import TemplateRedirect from './TemplateRedirect';
 import VisualizarCampoDetalhado from './VisualizarCampoDetalhado';
 import Carregando from '@/components/CarregandoVuetify';
 import CampoDiff from '@/components/CampoDiff';
@@ -267,6 +289,7 @@ export default {
         VisualizarCampoDetalhado,
         CampoDiff,
         Carregando,
+        TemplateRedirect,
     },
     mixins: [
         utils,
@@ -299,6 +322,7 @@ export default {
         return {
             dialog: false,
             loading: true,
+            redirecionar: false,
             panel: [true, true],
             visualizarAvaliacao: false,
             visualizarJustificativa: false,
@@ -310,7 +334,7 @@ export default {
                 Const.TIPO_READEQUACAO_SALDO_APLICACAO,
                 Const.TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS,
             ],
-            mensagemPadraoOutrasSolicitacoes: 'Visualização indisponível para esse tipo de readequação.',
+            mensagemPadraoOutrasSolicitacoes: '',
         };
     },
     computed: {
@@ -383,6 +407,9 @@ export default {
                 return Const.SI_ENCAMINHAMENTO[siEncaminhamento];
             }
             return false;
+        },
+        visualizacaoExterna() {
+            this.redirecionar = true;
         },
     },
 };

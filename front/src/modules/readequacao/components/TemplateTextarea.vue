@@ -97,7 +97,11 @@ export default {
     },
     methods: {
         atualizarForm() {
-            this.$emit('dados-update', this.dadosReadequacaoEmEdicao.dsSolicitacao);
+            this.updateCampo(this.dadosReadequacaoEmEdicao.dsSolicitacao);
+        },
+        updateCampo(e) {
+            this.$emit('dados-update', e);
+            this.atualizarContador(e.length);
         },
         atualizarContador(valor) {
             this.$emit('editor-texto-counter', valor);
