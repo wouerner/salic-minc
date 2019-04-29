@@ -1,7 +1,5 @@
 <template>
-    <v-container
-        grid
-    >
+    <v-container>
         <v-layout
             row
             wrap
@@ -23,9 +21,20 @@
                 class="text-xs-left"
             >
                 <strong v-html="texto"/>
-                <a
+                <v-btn
                     v-if="urlRetorno"
-                    href="urlRetorno"> {{ msgUrlRetorno }}</a>
+                    outline
+                    color="error"
+                    :href="urlRetorno"
+                    v-html="msgUrlRetorno"
+                />
+                <v-btn
+                    v-if="rotaRetorno"
+                    outline
+                    color="error"
+                    :to="rotaRetorno"
+                    v-html="msgUrlRetorno"
+                />
             </v-flex>
         </v-layout>
     </v-container>
@@ -45,6 +54,10 @@ export default {
         },
         msgUrlRetorno: {
             type: String,
+            default: 'Voltar',
+        },
+        rotaRetorno: {
+            type: [String, Object],
             default: '',
         },
     },
