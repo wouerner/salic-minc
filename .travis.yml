@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+- '9.0.0'
+branches:
+    only:
+    - dev
+cache:
+    directories:
+    - node_modules
+script:
+- npm run lint

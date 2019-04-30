@@ -130,7 +130,6 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
         $PercentualCaptado = ($PercentualCaptado->dado) ? $PercentualCaptado->dado : 0;
         $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
 
-        # Verificar se ha diligancia para responder
         $vDiligencia = $db->select()
            ->from(
                'tbDiligencia',
@@ -233,10 +232,7 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
             } else {
                 $Readequacao_50 = 1;
                 $ReadequacaoPlanilha = 1;
-                $ReadequacaoTransferenciaRecursos = 1;
-                if ($PercentualCaptado >= 100) {
-                    $ReadequacaoSaldoAplicacao = 1;
-                }
+                $ReadequacaoSaldoAplicacao = 1;
             }
 
             $tbCumprimentoObjeto = new ComprovacaoObjeto_Model_DbTable_TbCumprimentoObjeto();

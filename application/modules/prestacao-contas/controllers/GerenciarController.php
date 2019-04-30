@@ -485,6 +485,7 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
         $this->view->idPlanilhaItens = $this->getRequest()->getParam('idPlanilhaItens');
         $this->view->idComprovantePagamento = $this->getRequest()->getParam('idComprovantePagamento');
         $this->view->uf = $this->getRequest()->getParam('uf');
+        $this->view->idUf = $this->getRequest()->getParam('idUf');
         $this->view->cdproduto = $this->getRequest()->getParam('produto');
         $this->view->cdcidade = $this->getRequest()->getParam('cidade');
         $this->view->cdetapa = $this->getRequest()->getParam('etapa');
@@ -523,15 +524,15 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
     public function cadastrarAction()
     {
         $comprovante = new PrestacaoContas_Model_ComprovantePagamento();
-        $comprovante->preencher($this->getRequest()->getPost()['comprovante']);
 
         $data = [];
         try {
+            $comprovante->preencher($this->getRequest()->getPost()['comprovante']);
             $id = $comprovante->cadastrar();
             $data = ['success' => true, 'idComprovantePagamento' => $id];
         } catch (Exception $e) {
             $this->view->message = $e->getMessage();
-            echo $e->getMessage();die;
+            $data = ['success' => false, 'message' => $e->getMessage()];
         }
         $this->_helper->json($data);
     }
