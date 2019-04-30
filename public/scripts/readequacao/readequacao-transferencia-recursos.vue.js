@@ -89,10 +89,10 @@ Vue.component('readequacao-transferencia-recursos', {
 							</div>
 							
  							<div class="input-field col s3">
-								<input-money
+                              <input-money
 									ref="projetoRecebedorValorRecebido"
 									v-on:ev="projetoRecebedor.vlRecebido = $event"
-									v-bind:value="projetoRecebedor.valorComprovar"
+									v-bind:value="valorRecebidoFormatado"
 									:disabled="!disponivelAdicionarRecebedor">
 								</input-money>
 								<label for="valor_recebido">Valor recebido</label>
@@ -244,6 +244,72 @@ Vue.component('readequacao-transferencia-recursos', {
             componente: 'readequacao-transferencia-recursos-tipo-transferencia'
         }
     },
+    watch: {
+        readequacao: function () {
+            if (this.readequacao.idReadequacao != null) {
+                $3('#modalExcluir').modal();
+                $3('#modalExcluir').css('height', '20%');
+                this.obterProjetosRecebedores();
+            }
+        },
+    },
+    computed: {
+        totalRecebido: function () {
+            self = this;
+
+            return this.projetosRecebedores.reduce(function (total, projeto) {
+                var resultado = parseFloat(total) + parseFloat(projeto.vlRecebido);
+                return resultado.toFixed(2);
+            }, 0);
+        },
+        saldoDisponivel: function () {
+            var saldo = parseFloat(this.projetoTransferidor.valorComprovar) - parseFloat(this.totalRecebido);
+            return saldo;
+        },
+        disponivelEditarProjetosRecebedores: function () {
+            if (typeof this.readequacao.idReadequacao == 'undefined') {
+                return false;
+            } else {
+                if (this.readequacao.idReadequacao == null || this.readequacao.idReadequacao == '') {
+                    return false;
+                }
+            }
+            return true;
+        },
+        disponivelAdicionarRecebedor: function () {
+            if (this.totalRecebido == this.projetoTransferidor.saldoDisponivel) {
+                return false;
+            } else {
+                return true;
+            }
+        },
+        disponivelAdicionarRecebedores: function () {
+            if (this.areasEspeciais()) {
+                return true;
+            } else {
+                if ((this.readequacao.idReadequacao == null
+                    || this.readequacao.idReadequacao == 'undefined')
+                ) {
+                    return false;
+                } else if (this.projetosRecebedores.length == 0) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        },
+        exibeProjetosRecebedores: function () {
+            if (this.projetosRecebedores.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        valorRecebidoFormatado() {
+            console.log(this.projetoRecebedor.valorComprovar);
+            return this.projetoRecebedor.valorComprovar;
+        },
+    },
     created: function () {
         this.projetoRecebedor = this.defaultProjetoRecebedor();
         this.obterDadosReadequacao();
@@ -294,7 +360,7 @@ Vue.component('readequacao-transferencia-recursos', {
                 this.$refs.projetoRecebedorValorRecebido.$refs.input.focus();
                 return;
             }
-
+            
             var vlRecebido = parseFloat(this.projetoRecebedor.vlRecebido.replace(",", "."));
             vlRecebido = vlRecebido.toFixed(2);
             this.projetoRecebedor.vlRecebido = vlRecebido.replace(".", ",");
@@ -551,66 +617,4 @@ Vue.component('readequacao-transferencia-recursos', {
         },
 
     },
-    watch: {
-        readequacao: function () {
-            if (this.readequacao.idReadequacao != null) {
-                $3('#modalExcluir').modal();
-                $3('#modalExcluir').css('height', '20%');
-                this.obterProjetosRecebedores();
-            }
-        },
-    },
-    computed: {
-        totalRecebido: function () {
-            self = this;
-
-            return this.projetosRecebedores.reduce(function (total, projeto) {
-                var resultado = parseFloat(total) + parseFloat(projeto.vlRecebido);
-                return resultado.toFixed(2);
-            }, 0);
-        },
-        saldoDisponivel: function () {
-            var saldo = parseFloat(this.projetoTransferidor.valorComprovar) - parseFloat(this.totalRecebido);
-            return saldo;
-        },
-        disponivelEditarProjetosRecebedores: function () {
-            if (typeof this.readequacao.idReadequacao == 'undefined') {
-                return false;
-            } else {
-                if (this.readequacao.idReadequacao == null || this.readequacao.idReadequacao == '') {
-                    return false;
-                }
-            }
-            return true;
-        },
-        disponivelAdicionarRecebedor: function () {
-            if (this.totalRecebido == this.projetoTransferidor.saldoDisponivel) {
-                return false;
-            } else {
-                return true;
-            }
-        },
-        disponivelAdicionarRecebedores: function () {
-            if (this.areasEspeciais()) {
-                return true;
-            } else {
-                if ((this.readequacao.idReadequacao == null
-                    || this.readequacao.idReadequacao == 'undefined')
-                ) {
-                    return false;
-                } else if (this.projetosRecebedores.length == 0) {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-        },
-        exibeProjetosRecebedores: function () {
-            if (this.projetosRecebedores.length > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
 })
