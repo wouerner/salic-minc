@@ -39,7 +39,7 @@
                         width="10%"
                         class="center-align"
                     >
-                        A&ccedil;&otildees
+                        A&ccedil;&otilde;es
                     </th>
                 </tr>
                 <tr>
@@ -91,8 +91,8 @@
                     </td>
                     <!-- Distribuicao Gratuita-->
                     <td class="center-align">
-                        {{ parseInt(detalhamento.qtGratuitaDivulgacao) +
-                        parseInt(detalhamento.qtGratuitaPatrocinador) + parseInt(detalhamento.qtGratuitaPopulacao) }}
+                        {{ parseInt(detalhamento.qtGratuitaDivulgacao, 10) +
+                        parseInt(detalhamento.qtGratuitaPatrocinador, 10) + parseInt(detalhamento.qtGratuitaPopulacao, 10) }}
                     </td>
                     <td class="right-align">
                         {{ formatarValor(detalhamento.vlReceitaPrevista) }}
@@ -199,7 +199,9 @@
 
 <script>
 import { utils } from '@/mixins/utils';
+import { mapGetters } from 'vuex';
 import numeral from 'numeral';
+
 numeral.locale('pt-br');
 numeral.defaultFormat('0,0.00');
 
@@ -223,26 +225,29 @@ export default {
         };
     },
     computed: {
+        // ...mapGetters({
+        //     detalhamentos: 'proposta/obterPlanoDistribuicaoDetalhamentos',
+        // }),
         qtExemplaresTotal() {
-            return this.detalhamentos.reduce((total, value) => total + parseInt(value.qtExemplares), 0);
+            return this.detalhamentos.reduce((total, value) => total + parseInt(value.qtExemplares, 10), 0);
         },
         qtDistribuicaoGratuitaTotal() {
             return this.detalhamentos.reduce((total, value) => total + (
-                parseInt(value.qtGratuitaDivulgacao)
-                    + parseInt(value.qtGratuitaPatrocinador)
-                    + parseInt(value.qtGratuitaPopulacao)), 0);
+                parseInt(value.qtGratuitaDivulgacao, 10)
+                    + parseInt(value.qtGratuitaPatrocinador, 10)
+                    + parseInt(value.qtGratuitaPopulacao, 10)), 0);
         },
         qtPopularIntegralTotal() {
-            return this.detalhamentos.reduce((total, value) => total + parseInt(value.qtPopularIntegral), 0);
+            return this.detalhamentos.reduce((total, value) => total + parseInt(value.qtPopularIntegral, 10), 0);
         },
         qtPopularParcialTotal() {
-            return this.detalhamentos.reduce((total, value) => total + parseInt(value.qtPopularParcial), 0);
+            return this.detalhamentos.reduce((total, value) => total + parseInt(value.qtPopularParcial, 10), 0);
         },
         qtProponenteIntegralTotal() {
-            return this.detalhamentos.reduce((total, value) => total + parseInt(value.qtProponenteIntegral), 0);
+            return this.detalhamentos.reduce((total, value) => total + parseInt(value.qtProponenteIntegral, 10), 0);
         },
         qtProponenteParcialTotal() {
-            return this.detalhamentos.reduce((total, value) => total + parseInt(value.qtProponenteParcial), 0);
+            return this.detalhamentos.reduce((total, value) => total + parseInt(value.qtProponenteParcial, 10), 0);
         },
         receitaPrevistaTotal() {
             const soma = numeral();
@@ -264,7 +269,10 @@ export default {
                 qtProponenteParcial.add(parseFloat(this.detalhamentos[i].qtProponenteParcial));
             }
 
-            const media = numeral(parseFloat(vlReceitaProponenteIntegral.value() + vlReceitaProponenteParcial.value()) / (qtProponenteIntegral.value() + qtProponenteParcial.value()));
+            const media = numeral(parseFloat(vlReceitaProponenteIntegral.value()
+                + vlReceitaProponenteParcial.value())
+                / (qtProponenteIntegral.value() + qtProponenteParcial.value())
+            );
 
             return media;
         },
@@ -274,9 +282,11 @@ export default {
     },
     watch: {
         detalhamentos() {
+            console.log('alterou detalhamentos');
             if ((numeral(this.valorMedioProponente).value() > this.valorMedioMaximo
-                && (this.canalaberto == 0))) {
-                this.mensagemAlerta(`O valor m&eacute;dio: R$ ${this.valorMedioProponenteFormatado}, n\xE3o pode ultrapassar: R$ ${this.formatarValor(this.valorMedioMaximo)}`);
+                && (this.canalaberto === 0))) {
+                this.mensagemAlerta(`O valor m&eacute;dio: R$ ${this.valorMedioProponenteFormatado},
+                 n\xE3o pode ultrapassar: R$ ${this.formatarValor(this.valorMedioMaximo)}`);
                 // this.$data.detalhamentos.splice(-1, 1)
             }
         },
@@ -286,10 +296,13 @@ export default {
             this.$emit('eventoRemoverDetalhamento', detalhamento, index);
         },
         editar(detalhamento, index) {
-            // const elm = $3(`div[formIdMunicipio='${detalhamento.idMunicipio}']`);
-            // $3('html, body').animate({
-            //     scrollTop: $3(elm).offset().top + 30,
-            // }, 600);
+            // eslint-disable-next-line
+            const elm = $3(`div[formIdMunicipio='${detalhamento.idMunicipio}']`);
+            // eslint-disable-next-line
+            $3('html, body').animate({
+                // eslint-disable-next-line
+                scrollTop: $3(elm).offset().top + 30,
+            }, 600);
 
             this.$emit('eventoEditarDetalhamento', detalhamento, index);
         },

@@ -3,7 +3,7 @@
         <div
             ref="containerForm"
             :id="_uid + '_form_detalhamento'"
-            :formIdMunicipio="idmunicipioibge"
+            :formIdMunicipio="idMunicipioIbge"
             class="row center-align"
         >
             <button
@@ -404,6 +404,8 @@
 
 <script>
 
+import { mapActions, mapGetters } from 'vuex';
+
 import { utils } from '@/mixins/utils';
 import numeral from 'numeral';
 
@@ -466,10 +468,10 @@ export default {
     components: { SalicSelectPercent, SalicInputMoney },
     mixins: [utils],
     props: [
-        'idpreprojeto',
-        'idplanodistribuicao',
-        'idmunicipioibge',
-        'iduf',
+        'idPreProjeto',
+        'idPlanoDistribuicao',
+        'idMunicipioIbge',
+        'idUf',
         'disabled',
         'editarDetalhamento',
         'value',
@@ -479,9 +481,9 @@ export default {
         return {
             distribuicao: {
                 idDetalhaPlanoDistribuicao: null,
-                idPlanoDistribuicao: this.idplanodistribuicao,
-                idUF: this.iduf,
-                idMunicipio: this.idmunicipioibge,
+                idPlanoDistribuicao: this.idPlanoDistribuicao,
+                idUF: this.idUf,
+                idMunicipio: this.idMunicipioIbge,
                 dsProduto: '',
                 qtExemplares: 0,
                 qtGratuitaDivulgacao: 0,
@@ -541,10 +543,10 @@ export default {
             soma.add(this.distribuicao.qtGratuitaDivulgacao);
             soma.add(this.distribuicao.qtGratuitaPatrocinador);
 
-            return parseInt(parseInt(this.distribuicao.qtExemplares) - numeral(soma).value());
+            return parseInt(parseInt(this.distribuicao.qtExemplares, 10) - numeral(soma).value(), 10);
         },
         percentualGratuito() {
-            if (this.distribuicaoGratuita == SIM) {
+            if (this.distribuicaoGratuita === SIM) {
                 return 1;
             }
             return DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO
@@ -554,16 +556,16 @@ export default {
             return PRECO_POPULAR_PERCENTUAL_PADRAO + (PROPONENTE_PERCENTUAL_PADRAO - this.percentualProponente);
         },
         qtPrecoPopularValorIntegralLimite() {
-            const percentualPopularIntegral = this.distribuicao.tpVenda == TIPO_EXEMPLAR ? 1 : 0.5;
-            return parseInt((this.distribuicao.qtExemplares * this.percentualPrecoPopular) * percentualPopularIntegral);
+            const percentualPopularIntegral = this.distribuicao.tpVenda === TIPO_EXEMPLAR ? 1 : 0.5;
+            return parseInt((this.distribuicao.qtExemplares * this.percentualPrecoPopular) * percentualPopularIntegral, 10);
         },
         qtPrecoPopularValorParcialLimite() {
-            const percentualPopularParcial = this.distribuicao.tpVenda == TIPO_EXEMPLAR ? 0 : 0.5;
-            return parseInt((this.distribuicao.qtExemplares * this.percentualPrecoPopular) * percentualPopularParcial);
+            const percentualPopularParcial = this.distribuicao.tpVenda === TIPO_EXEMPLAR ? 0 : 0.5;
+            return parseInt((this.distribuicao.qtExemplares * this.percentualPrecoPopular) * percentualPopularParcial, 10);
         },
         vlReceitaPopularIntegral() {
             return numeral(
-                parseInt(this.distribuicao.qtPopularIntegral)
+                parseInt(this.distribuicao.qtPopularIntegral, 10)
                     * this.converterParaMoedaAmericana(this.inputUnitarioPopularIntegral),
             ).format();
         },
@@ -574,7 +576,7 @@ export default {
         },
         vlReceitaProponenteIntegral() {
             return numeral(
-                this.converterParaMoedaAmericana(this.inputUnitarioProponenteIntegral) * parseInt(this.distribuicao.qtProponenteIntegral),
+                this.converterParaMoedaAmericana(this.inputUnitarioProponenteIntegral) * parseInt(this.distribuicao.qtProponenteIntegral, 10),
             ).format();
         },
         vlReceitaProponenteParcial() {
@@ -601,7 +603,7 @@ export default {
             }
         },
         'distribuicao.qtGratuitaDivulgacao': function (val) {
-            const limiteQuantidadeDivulgacao = parseInt(this.distribuicao.qtExemplares * this.percentualGratuitoDivulgacao);
+            const limiteQuantidadeDivulgacao = parseInt(this.distribuicao.qtExemplares * this.percentualGratuitoDivulgacao, 10);
 
             if (val > limiteQuantidadeDivulgacao) {
                 this.mensagemAlerta(`A quantidade n\xE3o pode passar de ${limiteQuantidadeDivulgacao}`);
@@ -616,7 +618,7 @@ export default {
             this.distribuicao.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
         },
         'distribuicao.qtGratuitaPatrocinador': function (val) {
-            const limitePatrocinador = parseInt(this.distribuicao.qtExemplares * this.percentualGratuitoPatrocinador);
+            const limitePatrocinador = parseInt(this.distribuicao.qtExemplares * this.percentualGratuitoPatrocinador, 10);
 
             if (val > limitePatrocinador) {
                 this.mensagemAlerta(`A quantidade n\xE3o pode passar de ${limitePatrocinador}`);
@@ -632,7 +634,8 @@ export default {
         },
         'distribuicao.vlUnitarioPopularIntegral': function () {
             if (this.distribuicao.vlUnitarioPopularIntegral > this.valorMaximoPrecoPopular) {
-                this.mensagemAlerta(`O pre\xE7o unit\xE1rio do pre\xE7o popular n\xE3o pode ser maior que R$ ${this.formatarValor(this.valorMaximoPrecoPopular)}`);
+                this.mensagemAlerta(`O pre\xE7o unit\xE1rio do pre\xE7o popular n\xE3o pode
+                ser maior que R$ ${this.formatarValor(this.valorMaximoPrecoPopular)}`);
                 this.inputUnitarioPopularIntegral = this.formatarValor(this.valorMaximoPrecoPopular);
             }
         },
@@ -654,7 +657,7 @@ export default {
             this.distribuicao.vlReceitaPopularIntegral = 0;
             this.distribuicao.vlReceitaPopularParcial = 0;
 
-            if (this.distribuicaoGratuita == NAO) {
+            if (this.distribuicaoGratuita === NAO) {
                 this.distribuicao.qtProponenteIntegral = this.obterQuantidadePorPercentual(this.percentualProponente);
                 this.distribuicao.qtProponenteParcial = this.obterQuantidadePorPercentual(this.percentualProponente);
                 this.distribuicao.qtPopularIntegral = this.obterQuantidadePorPercentual(this.percentualPrecoPopular);
@@ -670,7 +673,7 @@ export default {
                 this.distribuicao.vlUnitarioPopularIntegral = 0;
             }
 
-            if (this.distribuicao.tpVenda == TIPO_EXEMPLAR) {
+            if (this.distribuicao.tpVenda === TIPO_EXEMPLAR) {
                 this.distribuicao.qtPopularParcial = 0;
                 this.distribuicao.qtProponenteParcial = 0;
                 this.distribuicao.vlReceitaProponenteParcial = 0;
@@ -679,8 +682,8 @@ export default {
             }
 
             this.distribuicao.vlReceitaPrevista = this.converterParaMoedaAmericana(this.vlReceitaPrevista);
-            this.distribuicao.qtGratuitaDivulgacao = parseInt(this.distribuicao.qtExemplares * this.percentualGratuitoDivulgacao);
-            this.distribuicao.qtGratuitaPatrocinador = parseInt(this.distribuicao.qtExemplares * this.percentualGratuitoPatrocinador);
+            this.distribuicao.qtGratuitaDivulgacao = parseInt(this.distribuicao.qtExemplares * this.percentualGratuitoDivulgacao, 10);
+            this.distribuicao.qtGratuitaPatrocinador = parseInt(this.distribuicao.qtExemplares * this.percentualGratuitoPatrocinador, 10);
             this.distribuicao.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
         },
         editarDetalhamento(object) {
@@ -690,13 +693,15 @@ export default {
                 vue.visualizarFormulario = true;
 
                 // definir o percentual do proponente
-                const percentualProponente = (parseInt(object.qtProponenteIntegral) + parseInt(object.qtProponenteParcial)) / parseInt(object.qtExemplares);
-                console.log('percentual proponente', percentualProponente);
+                const percentualProponente = (parseInt(object.qtProponenteIntegral, 10)
+                    + parseInt(object.qtProponenteParcial, 10)) / parseInt(object.qtExemplares, 10);
                 vue.percentualProponente = Number((percentualProponente).toFixed(2));
 
-                // definir o percentual do preco popular, é atualizado no proximo clico
+                // definir o percentual do preco popular, é atualizado no proximo ciclo
                 this.$nextTick(() => {
-                    const percentualPrecoPopular = (parseInt(object.qtPopularIntegral) + parseInt(object.qtPopularParcial)) / parseInt(object.qtExemplares);
+                    const percentualPrecoPopular = (parseInt(object.qtPopularIntegral, 10)
+                        + parseInt(object.qtPopularParcial, 10))
+                        / parseInt(object.qtExemplares, 10);
                     vue.percentualPrecoPopular = Number((percentualPrecoPopular).toFixed(2));
                 });
 
@@ -705,7 +710,7 @@ export default {
                 vue.inputUnitarioPopularIntegral = vue.formatarValor(object.vlUnitarioPopularIntegral);
                 vue.inputUnitarioProponenteIntegral = vue.formatarValor(object.vlUnitarioProponenteIntegral);
 
-                if (object.vlUnitarioPopularIntegral == 0 && object.vlUnitarioProponenteIntegral == 0) {
+                if (object.vlUnitarioPopularIntegral === 0 && object.vlUnitarioProponenteIntegral === 0) {
                     vue.distribuicaoGratuita = SIM;
                 }
             }
@@ -729,26 +734,28 @@ export default {
         this.$refs.add.disabled = !this.disabled;
     },
     methods: {
+        ...mapActions({
+            salvarDetalhamento: 'proposta/salvarPlanoDistribuicaoDetalhamento',
+        }),
         definirVariaveisInstrucaoNormativa() {
             this.percentualProponentePadrao = PROPONENTE_PERCENTUAL_PADRAO;
             this.percentualProponente = PROPONENTE_PERCENTUAL_PADRAO;
         },
         obterQuantidadePorPercentual(percentualDistribuicao) {
-            const divisao = this.distribuicao.tpVenda == TIPO_EXEMPLAR ? 1 : 0.5;
-            return parseInt((this.distribuicao.qtExemplares * percentualDistribuicao) * divisao);
+            const divisao = this.distribuicao.tpVenda === TIPO_EXEMPLAR ? 1 : 0.5;
+            return parseInt((this.distribuicao.qtExemplares * percentualDistribuicao) * divisao, 10);
         },
         mostrarFormulario(id) {
+            this.limparFormulario();
             this.visualizarFormulario = true;
             this.icon = this.visualizarFormulario ? 'visibility_off' : 'add';
-
-            if (this.visualizarFormulario == true) {
-                // const elm = $3(`#${id}`);
-                // $3('html, body').animate({
-                //     scrollTop: $3(elm).offset().top + 30,
-                // }, 600);
-            } else {
-                this.limparFormulario();
-            }
+            // eslint-disable-next-line
+            const elm = $3(`#${id}`);
+            // eslint-disable-next-line
+            $3('html, body').animate({
+                // eslint-disable-next-line
+                scrollTop: $3(elm).offset().top + 30,
+            }, 600);
         },
         limparFormulario() {
             Object.assign(this.$data, this.$options.data.apply(this));
@@ -789,9 +796,45 @@ export default {
                 this.$refs.populacao.focus();
                 return;
             }
-
-            this.$emit('eventoSalvarDetalhamento', this.distribuicao);
+            this.salvarDetalhamento(
+                {
+                    idPreProjeto: this.idPreProjeto,
+                    ...this.distribuicao,
+                },
+            ).then((response) => {
+                if (response.success === 'true') {
+                    this.mensagemSucesso(response.msg);
+                }
+            }).catch((e) => {
+                console.log('mensagem erro', e);
+                this.mensagemErro(e.responseJSON.msg);
+            });
         },
+    },
+    salvarDetalhamento(detalhamento) {
+        const vue = this;
+        // eslint-disable-next-line
+        $3.ajax({
+            type: 'POST',
+            url: `/proposta/plano-distribuicao/detalhar-salvar/idPreProjeto/${this.idPreProjeto}`,
+            data: detalhamento,
+        }).done((response) => {
+            if (response.success === 'true') {
+                const index = vue.$data
+                    .detalhamentos
+                    .findIndex(item => parseInt(item.idDetalhaPlanoDistribuicao, 10) === parseInt(response.data.idDetalhaPlanoDistribuicao, 10));
+
+                if (index >= 0) {
+                    Object.assign(vue.$data.detalhamentos[index], detalhamento);
+                } else {
+                    vue.$data.detalhamentos.push(response.data);
+                }
+                vue.mensagemSucesso(response.msg);
+                detalhamentoEventBus.$emit('callBackSalvarDetalhamento', true);
+            }
+        }).fail((response) => {
+            vue.mensagemErro(response.responseJSON.msg);
+        });
     },
 };
 </script>

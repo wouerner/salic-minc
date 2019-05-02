@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div class="col s12" id="container-vue">
+        <div id="container-vue" class="col s12">
 
             <?php $totalExemplares = 0;
             $totalReceita = 0; ?>
@@ -61,13 +61,22 @@
 
             <div class="row">
                 <div class="col s12">
-                    <ul class="collapsible" data-collapsible="accordion">
-                        <?php foreach ($this->abrangencias as $abrangencia): ?>
+
+                    <proposta-plano-distribuicao-detalhamentos
+                        disabled="<?= $this->isEditavel; ?>"
+                        idplanodistribuicao="<?= $planoDistribuicao->idPlanoDistribuicao; ?>"
+                        idpreprojeto="<?= $this->idPreProjeto; ?>"
+                        canalaberto="<?= $planoDistribuicao->canalAberto; ?>"
+                        id-normativo="<?= $this->idNormativo; ?>"
+                    ></proposta-plano-distribuicao-detalhamentos>
+
+                    <ul class="collapsibles" data-collapsible="accordion">
+                        <?php if(false) foreach ($this->abrangencias as $abrangencia): ?>
                             <li>
-                                <div class="collapsible-header"><i class="material-icons">place</i>
+                                <div class="collapsible-headers"><i class="material-icons">place</i>
                                     <?= isset($abrangencia['uf']) ? $abrangencia['uf'] : 'Exterior' ?> <?= isset($abrangencia['cidade']) ? ' - ' . $abrangencia['cidade'] : '' ?>
                                 </div>
-                                <div class="collapsible-body">
+                                <div class="collapsible-bodys">
                                     <proposta-plano-distribuicao-detalhamentos
                                         disabled="<?= $this->isEditavel; ?>"
                                         idplanodistribuicao="<?= $planoDistribuicao->idPlanoDistribuicao; ?>"

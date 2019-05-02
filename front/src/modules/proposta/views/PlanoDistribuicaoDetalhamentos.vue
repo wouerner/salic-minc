@@ -1,35 +1,48 @@
 <template>
     <div class="plano-distribuicao-detalhanentos">
-        <detalhamento-listagem
-            :disabled="disabled"
-            :idplanodistribuicao="idplanodistribuicao"
-            :idpreprojeto="idpreprojeto"
-            :iduf="iduf"
-            :idmunicipioibge="idmunicipioibge"
-            :detalhamentos="detalhamentos"
-            :canalaberto="canalaberto"
-            @eventoRemoverDetalhamento="removerDetalhamento"
-            @eventoEditarDetalhamento="editarDetalhamento"
-        />
-        <detalhamento-formulario
-            v-model="exibirFormulario"
-            :disabled="disabled"
-            :idplanodistribuicao="idplanodistribuicao"
-            :idpreprojeto="idpreprojeto"
-            :iduf="iduf"
-            :idmunicipioibge="idmunicipioibge"
-            :editar-detalhamento="detalhamento"
-            :id-normativo="idNormativo"
-            @eventoSalvarDetalhamento="salvarDetalhamento"
-        />
+        <ul
+            class="collapsible"
+            data-collapsible="expandable">
+            <li
+                v-for="( local, index ) in locais"
+                :key="index">
+                <div class="collapsible-header"><i class="material-icons">place</i>
+                    {{ local.uf ? local.uf : 'Exterior' }}
+                    {{ local.cidade ? ` -  ${local.cidade}` : '' }}
+                </div>
+                <div class="collapsible-body">
+                    <detalhamento-listagem
+                        :disabled="disabled"
+                        :idplanodistribuicao="idplanodistribuicao"
+                        :idpreprojeto="idpreprojeto"
+                        :iduf="local.idUF"
+                        :idmunicipioibge="local.idMunicipioIBGE"
+                        :detalhamentos="obterDetalhamentosPorLocalizacao(local)"
+                        :canalaberto="canalaberto"
+                        @eventoRemoverDetalhamento="removerDetalhamento"
+                        @eventoEditarDetalhamento="editarDetalhamento"
+                    />
+                    <detalhamento-formulario
+                        v-model="exibirFormulario"
+                        :disabled="disabled"
+                        :id-plano-distribuicao="idplanodistribuicao"
+                        :id-pre-projeto="idpreprojeto"
+                        :id-uf="local.idUF"
+                        :id-municipio-ibge="local.idMunicipioIBGE"
+                        :editar-detalhamento="detalhamento"
+                        :id-normativo="idNormativo"
+                    />
+                </div>
+            </li>
+        </ul>
     </div>
 </template>
 
 <script>
 import { utils } from '@/mixins/utils';
-import axios from 'axios';
 
 import Vue from 'vue';
+import { mapActions, mapGetters } from 'vuex';
 
 import DetalhamentoFormulario from '../components/PlanoDistribuicaoDetalhamentos/DetalhamentoFormulario';
 import DetalhamentoListagem from '../components/PlanoDistribuicaoDetalhamentos/DetalhamentoListagem';
@@ -54,15 +67,34 @@ export default {
     ],
     data() {
         return {
-            detalhamentos: [],
+            // detalhamentos: [],
             detalhamento: {},
             exibirFormulario: false,
         };
     },
+    computed: {
+        ...mapGetters({
+            locais: 'proposta/obterLocaisRealizacao',
+            detalhamentos: 'proposta/obterPlanoDistribuicaoDetalhamentos',
+        }),
+    },
+    watch: {
+        locais() {
+            this.$nextTick(() => {
+                this.iniciarCollapsible();
+            });
+        },
+    },
     mounted() {
         this.obterDetalhamentos();
+        this.buscarLocaisRealizacao(this.idpreprojeto);
+        // this.iniciarCollapsible();
     },
     methods: {
+        ...mapActions({
+            buscarLocaisRealizacao: 'proposta/buscarLocaisRealizacao',
+            buscarDetalhamentos: 'proposta/buscarPlanoDistribuicaoDetalhamentos',
+        }),
         removerDetalhamento(detalhamento, index) {
             // const vue = this;
             // if (confirm('Tem certeza que deseja deletar o item?')) {
@@ -83,46 +115,41 @@ export default {
             // }
         },
         editarDetalhamento(detalhamento, index) {
-            // this.exibirFormulario = true;
-            // this.detalhamento = Object.assign({}, detalhamento);
+            this.exibirFormulario = true;
+            this.detalhamento = Object.assign({}, detalhamento);
         },
-        salvarDetalhamento(detalhamento) {
-            // const vue = this;
-            // $3.ajax({
-            //     type: 'POST',
-            //     url: `/proposta/plano-distribuicao/detalhar-salvar/idPreProjeto/${this.idpreprojeto}`,
-            //     data: detalhamento,
-            // }).done((response) => {
-            //     if (response.success == 'true') {
-            //         const index = vue.$data.detalhamentos.findIndex(item => item.idDetalhaPlanoDistribuicao == response.data.idDetalhaPlanoDistribuicao);
-            //
-            //         if (index >= 0) {
-            //             Object.assign(vue.$data.detalhamentos[index], detalhamento);
-            //         } else {
-            //             vue.$data.detalhamentos.push(response.data);
-            //         }
-            //         vue.mensagemSucesso(response.msg);
-            //         detalhamentoEventBus.$emit('callBackSalvarDetalhamento', true);
-            //     }
-            // }).fail((response) => {
-            //     vue.mensagemErro(response.responseJSON.msg);
-            // });
+        obterDetalhamentosPorLocalizacao(local) {
+            return this.detalhamentos.filter(item => parseInt(item.idUF, 10) === parseInt(local.idUF, 10)
+                && parseInt(item.idMunicipio, 10) === parseInt(local.idMunicipioIBGE, 10));
         },
         obterDetalhamentos() {
-            const vue = this;
-            const url = `/proposta/plano-distribuicao/obter-detalhamentos/idPreProjeto/${this.idpreprojeto}`;
-            const params = `?idPlanoDistribuicao=${this.idplanodistribuicao}&idMunicipio=${this.idmunicipioibge}&idUF=${this.iduf}`;
+            const params = {
+                idPlanoDistribuicao: this.idplanodistribuicao,
+                idPreProjeto: this.idpreprojeto,
+            };
 
-            axios.get(url + params).then((response) => {
-                this.detalhamentos = response.data.data;
-            }).catch(() => {
-                vue.mensagemErro('Erro ao buscar detalhamento');
+            this.buscarDetalhamentos(params)
+                .catch(() => {
+                    this.mensagemErro('Erro ao buscar detalhamento');
+                });
+        },
+        iniciarCollapsible() {
+            const self = this;
+            // eslint-disable-next-line
+            $3(".collapsible").each(function () {
+                // eslint-disable-next-line
+                $3(this).collapsible({
+                    accordion: true,
+                    onOpen(el) {
+                        el.find('.material-icons:first').html('remove');
+                    },
+                    onClose(el) {
+                        el.find('.material-icons:first').html('place');
+                        self.exibirFormulario = false;
+                    },
+                });
             });
         },
     },
 };
 </script>
-
-<style scoped>
-
-</style>

@@ -259,7 +259,7 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
                 throw new Exception("Produto &eacute; obrigat&oacute;rio");
             }
 
-            if (empty($dados['idDetalhaPlanoDistribuicao'])) {
+            if (empty((int) $dados['idDetalhaPlanoDistribuicao'])) {
                 unset($dados['idDetalhaPlanoDistribuicao']);
             }
 
@@ -269,7 +269,6 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
 
             $tbDetalhamentoMapper = new Proposta_Model_TbDetalhaPlanoDistribuicaoMapper();
             $id = $tbDetalhamentoMapper->salvar($mdlDetalhaPlanoDistribuicao, $this->idPreProjeto);
-
             if (!empty($id)) {
                 $dados['idDetalhaPlanoDistribuicao'] = $id;
             }
