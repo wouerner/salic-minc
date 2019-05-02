@@ -51,7 +51,7 @@ Vue.component('readequacao-transferencia-recursos', {
 					:disabled="disabled"
 					:id-tipo-readequacao="idTipoReadequacao"
 					:componente-ds-solicitacao='componente'
-					:objReadequacao="readequacao"
+					:obj-readequacao="readequacao"
 					v-on:eventoAtualizarReadequacao="atualizarReadequacao"
 					v-on:eventoSalvarReadequacao="salvarReadequacao"
 					>
@@ -245,10 +245,9 @@ Vue.component('readequacao-transferencia-recursos', {
                 idPronac: null,
                 idReadequacao: null,
                 justificativa: '',
-                arquivo: null,
                 idTipoReadequacao: null,
                 dsSolicitacao: '',
-                dArquivo: null,
+                idDocumento: null,
                 nomeArquivo: null
             },
             projetoRecebedor: {},
@@ -535,14 +534,13 @@ Vue.component('readequacao-transferencia-recursos', {
                 self.projetosRecebedores = [];
                 self.projetoRecebedor = self.defaultProjetoRecebedor();
                 self.readequacao = {
-                    'idPronac': null,
-                    'idReadequacao': null,
-                    'justificativa': '',
-                    'arquivo': null,
-                    'idTipoReadequacao': null,
-                    'dsSolicitacao': '',
-                    'idArquivo': null,
-                    'nomeArquivo': null
+                    idPronac: null,
+                    idReadequacao: null,
+                    justificativa: '',
+                    idTipoReadequacao: null,
+                    dsSolicitacao: '',
+                    idDocumento: null,
+                    nomeArquivo: null
                 };
                 $3('.collapsible').collapsible('open', 0);
                 $3('.collapsible').collapsible('close', 1);
