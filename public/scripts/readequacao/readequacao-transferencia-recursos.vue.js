@@ -106,8 +106,10 @@ Vue.component('readequacao-transferencia-recursos', {
 							
 						</div>
 						
-						<div v-else-if="!disponivelAdicionarRecebedor">
-							<label>Sem projetos recebedores dispon&iacute;veis!</label>
+						<div v-else-if="!disponivelAdicionarRecebedor"
+                            class="center-align"
+                        >
+							<label class="card-panel red white-text">Sem saldo dispon&iacute;vel!</label>
 						</div>
 				
 					</form>

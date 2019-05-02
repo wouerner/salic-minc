@@ -36,7 +36,17 @@ Vue.component('formatar-moeda', {
     },
     methods: {
         formatValue: function () {
-            let num = Number(this.$refs.input.value);
+            let num = this.$refs.input.value;
+            if (num.indexOf('.') > -1) {
+                num = num.replace(/\./, '');
+            }
+            if (num.indexOf(',') > -1) {
+                num = num.replace(/\,/, '.');
+                num = parseFloat(num);
+            }
+            if (typeof num !== 'number') {
+                num = Number(num);
+            }
             if (_.isNaN(num)
                 || num === 0) {
                 this.$refs.input.value = 0;
@@ -51,7 +61,7 @@ Vue.component('formatar-moeda', {
                 },
             );
             num = num.toLowerCase().split('brl')[1];
-            this.$refs.input.value = num;
+            this.$refs.input.value = num.trim();
         },
         updateMoney: function (value) {
             this.val = value;
