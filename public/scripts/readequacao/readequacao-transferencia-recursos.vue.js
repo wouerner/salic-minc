@@ -89,12 +89,12 @@ Vue.component('readequacao-transferencia-recursos', {
 							</div>
 							
  							<div class="input-field col s3">
-                              <input-money
+                                <formatar-moeda
 									ref="projetoRecebedorValorRecebido"
 									v-on:ev="projetoRecebedor.vlRecebido = $event"
 									v-bind:value="valorRecebidoFormatado"
-									:disabled="!disponivelAdicionarRecebedor">
-								</input-money>
+									:disabled="!disponivelAdicionarRecebedor"
+                                />
 								<label for="valor_recebido">Valor recebido</label>
 							</div>		
 							<div class="center-align padding20 col s3">
@@ -306,7 +306,6 @@ Vue.component('readequacao-transferencia-recursos', {
             }
         },
         valorRecebidoFormatado() {
-            console.log(this.projetoRecebedor.valorComprovar);
             return this.projetoRecebedor.valorComprovar;
         },
     },
