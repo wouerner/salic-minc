@@ -47,4 +47,10 @@ export const mutations = {
             state.planoDistribuicaoDetalhamentos.push(data);
         }
     },
+    [types.EXCLUIR_PLANO_DISTRIBUICAO_DETALHAMENTO](state, data) {
+        const index = state.planoDistribuicaoDetalhamentos.findIndex(
+            item => parseInt(item.idDetalhaPlanoDistribuicao, 10) === parseInt(data.idDetalhaPlanoDistribuicao, 10),
+        );
+        state.planoDistribuicaoDetalhamentos.splice(index, 1);
+    },
 };

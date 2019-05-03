@@ -32,7 +32,17 @@ export const salvarPlanoDistribuicaoDetalhamento = async ({ commit }, params) =>
     .then((response) => {
         const { data } = response;
         commit(types.UPDATE_PLANO_DISTRIBUICAO_DETALHAMENTO, data.data);
-        console.log('data.', data.data);
+        return response.data;
+    }).catch((e) => {
+        console.log('error.', e);
+        throw new TypeError(e.response.data, 'salvarPlanoDetalhamento', 10);
+    });
+
+export const excluirPlanoDistribuicaoDetalhamento = async ({ commit }, params) => propostaHelperAPI
+    .excluirPlanoDistribuicaoDetalhamento(params)
+    .then((response) => {
+        const { data } = response;
+        commit(types.REMOVE_PLANO_DISTRIBUICAO_DETALHAMENTO, params);
         return response.data;
     }).catch((e) => {
         console.log('error.', e);

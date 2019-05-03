@@ -13,8 +13,8 @@
                 <div class="collapsible-body">
                     <detalhamento-listagem
                         :disabled="disabled"
-                        :idplanodistribuicao="idplanodistribuicao"
-                        :idpreprojeto="idpreprojeto"
+                        :idplanodistribuicao="idPlanoDistribuicao"
+                        :idpreprojeto="idPreProjeto"
                         :iduf="local.idUF"
                         :idmunicipioibge="local.idMunicipioIBGE"
                         :detalhamentos="obterDetalhamentosPorLocalizacao(local)"
@@ -25,12 +25,13 @@
                     <detalhamento-formulario
                         v-model="exibirFormulario"
                         :disabled="disabled"
-                        :id-plano-distribuicao="idplanodistribuicao"
-                        :id-pre-projeto="idpreprojeto"
+                        :id-plano-distribuicao="idPlanoDistribuicao"
+                        :id-pre-projeto="idPreProjeto"
                         :id-uf="local.idUF"
                         :id-municipio-ibge="local.idMunicipioIBGE"
                         :editar-detalhamento="detalhamento"
                         :id-normativo="idNormativo"
+                        @eventoSalvarDetalhamento="salvarPlanoDetalhamento"
                     />
                 </div>
             </li>
@@ -57,8 +58,8 @@ export default {
     },
     mixins: [utils],
     props: [
-        'idpreprojeto',
-        'idplanodistribuicao',
+        'idPreProjeto',
+        'idPlanoDistribuicao',
         'idmunicipioibge',
         'iduf',
         'disabled',
@@ -87,22 +88,35 @@ export default {
     },
     mounted() {
         this.obterDetalhamentos();
-        this.buscarLocaisRealizacao(this.idpreprojeto);
+        this.buscarLocaisRealizacao(this.idPreProjeto);
         // this.iniciarCollapsible();
     },
     methods: {
         ...mapActions({
             buscarLocaisRealizacao: 'proposta/buscarLocaisRealizacao',
             buscarDetalhamentos: 'proposta/buscarPlanoDistribuicaoDetalhamentos',
+            salvarDetalhamento: 'proposta/salvarPlanoDistribuicaoDetalhamento',
+            excluirDetalhamento: 'proposta/excluirPlanoDistribuicaoDetalhamento',
         }),
-        removerDetalhamento(detalhamento, index) {
-            // const vue = this;
-            // if (confirm('Tem certeza que deseja deletar o item?')) {
+        removerDetalhamento(detalhamento) {
+            if (confirm('Tem certeza que deseja deletar o item?')) {
+                this.excluirDetalhamento(
+                    {
+                        idDetalhaPlanoDistribuicao: detalhamento.idDetalhaPlanoDistribuicao,
+                        idPlanoDistribuicao: this.idPlanoDistribuicao,
+                    },
+                ).then((response) => {
+                    if (response.success === 'true') {
+                        this.mensagemSucesso(response.msg);
+                    }
+                }).catch((e) => {
+                    this.mensagemErro(e.responseJSON.msg);
+                });
             //     axios.post(
-            //         `/proposta/plano-distribuicao/detalhar-excluir/idPreProjeto/${vue.idpreprojeto}`,
+            //         `/proposta/plano-distribuicao/detalhar-excluir/idPreProjeto/${vue.idPreProjeto}`,
             //         {
             //             idDetalhaPlanoDistribuicao: detalhamento.idDetalhaPlanoDistribuicao,
-            //             idPlanoDistribuicao: vue.idplanodistribuicao,
+            //             idPlanoDistribuicao: vue.idPlanoDistribuicao,
             //         },
             //     ).then((response) => {
             //         if (response.data.success === 'true') {
@@ -112,9 +126,9 @@ export default {
             //     }).catch((response) => {
             //         vue.mensagemErro(response.responseJSON.msg);
             //     });
-            // }
+            }
         },
-        editarDetalhamento(detalhamento, index) {
+        editarDetalhamento(detalhamento) {
             this.exibirFormulario = true;
             this.detalhamento = Object.assign({}, detalhamento);
         },
@@ -124,8 +138,8 @@ export default {
         },
         obterDetalhamentos() {
             const params = {
-                idPlanoDistribuicao: this.idplanodistribuicao,
-                idPreProjeto: this.idpreprojeto,
+                idPlanoDistribuicao: this.idPlanoDistribuicao,
+                idPreProjeto: this.idPreProjeto,
             };
 
             this.buscarDetalhamentos(params)
@@ -148,6 +162,21 @@ export default {
                         self.exibirFormulario = false;
                     },
                 });
+            });
+        },
+        salvarPlanoDetalhamento(detalhamento) {
+            this.salvarDetalhamento(
+                {
+                    idPreProjeto: this.idPreProjeto,
+                    ...detalhamento,
+                },
+            ).then((response) => {
+                if (response.success === 'true') {
+                    this.mensagemSucesso(response.msg);
+                }
+            }).catch((e) => {
+                console.log('mensagem erro', e);
+                this.mensagemErro(e.responseJSON.msg);
             });
         },
     },

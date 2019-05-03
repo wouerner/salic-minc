@@ -725,7 +725,7 @@ export default {
     created() {
         const vue = this;
         detalhamentoEventBus.$on('callBackSalvarDetalhamento', (response) => {
-            if (response == true) {
+            if (response === true) {
                 vue.limparFormulario();
             }
         });
@@ -734,13 +734,6 @@ export default {
         this.$refs.add.disabled = !this.disabled;
     },
     methods: {
-        ...mapActions({
-            salvarDetalhamento: 'proposta/salvarPlanoDistribuicaoDetalhamento',
-        }),
-        definirVariaveisInstrucaoNormativa() {
-            this.percentualProponentePadrao = PROPONENTE_PERCENTUAL_PADRAO;
-            this.percentualProponente = PROPONENTE_PERCENTUAL_PADRAO;
-        },
         obterQuantidadePorPercentual(percentualDistribuicao) {
             const divisao = this.distribuicao.tpVenda === TIPO_EXEMPLAR ? 1 : 0.5;
             return parseInt((this.distribuicao.qtExemplares * percentualDistribuicao) * divisao, 10);
@@ -796,49 +789,9 @@ export default {
                 this.$refs.populacao.focus();
                 return;
             }
-            this.salvarDetalhamento(
-                {
-                    idPreProjeto: this.idPreProjeto,
-                    ...this.distribuicao,
-                },
-            ).then((response) => {
-                if (response.success === 'true') {
-                    this.mensagemSucesso(response.msg);
-                }
-            }).catch((e) => {
-                console.log('mensagem erro', e);
-                this.mensagemErro(e.responseJSON.msg);
-            });
-        },
-    },
-    salvarDetalhamento(detalhamento) {
-        const vue = this;
-        // eslint-disable-next-line
-        $3.ajax({
-            type: 'POST',
-            url: `/proposta/plano-distribuicao/detalhar-salvar/idPreProjeto/${this.idPreProjeto}`,
-            data: detalhamento,
-        }).done((response) => {
-            if (response.success === 'true') {
-                const index = vue.$data
-                    .detalhamentos
-                    .findIndex(item => parseInt(item.idDetalhaPlanoDistribuicao, 10) === parseInt(response.data.idDetalhaPlanoDistribuicao, 10));
 
-                if (index >= 0) {
-                    Object.assign(vue.$data.detalhamentos[index], detalhamento);
-                } else {
-                    vue.$data.detalhamentos.push(response.data);
-                }
-                vue.mensagemSucesso(response.msg);
-                detalhamentoEventBus.$emit('callBackSalvarDetalhamento', true);
-            }
-        }).fail((response) => {
-            vue.mensagemErro(response.responseJSON.msg);
-        });
+            this.$emit('eventoSalvarDetalhamento', this.distribuicao);
+        },
     },
 };
 </script>
-
-<style scoped>
-
-</style>

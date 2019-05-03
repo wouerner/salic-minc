@@ -304,12 +304,8 @@ export default {
                 scrollTop: $3(elm).offset().top + 30,
             }, 600);
 
-            this.$emit('eventoEditarDetalhamento', detalhamento, index);
+            this.$emit('eventoEditarDetalhamento', detalhamento);
         },
     },
 };
 </script>
-
-<style scoped>
-
-</style>

@@ -31,6 +31,11 @@ export const salvarPlanoDistribuicaoDetalhamento = params => api.postRequest(
     buildData(params),
 );
 
+export const excluirPlanoDistribuicaoDetalhamento = params => api.postRequest(
+    `/proposta/plano-distribuicao/detalhar-salvar/idPreProjeto/${params.idPreProjeto}`,
+    buildData(params),
+);
+
 export const buscaFontesDeRecursos = (idPreProjeto) => {
     const path = `/proposta/visualizar/obter-fonte-de-recurso/idPreProjeto/${idPreProjeto}`;
     return api.getRequest(path);
