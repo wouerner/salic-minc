@@ -58,7 +58,7 @@ Vue.component('readequacao-formulario', {
           <div class="right-align padding20 col s12">
             <button
               v-on:click="salvarReadequacao"
-              class="waves-effect waves-light btn btn-primary">
+              class="waves-effect waves-light btn btn-primary green">
               <i class="material-icons right">save</i>Salvar
             </button>
           </div>

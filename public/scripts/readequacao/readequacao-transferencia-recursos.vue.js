@@ -136,12 +136,12 @@ Vue.component('readequacao-transferencia-recursos', {
       <div class="right-align padding20 col s12">
 		<a
           v-show="readequacao.idReadequacao"
-          class="waves-light waves-effect btn red modal-trigger"
+          class="waves-light waves-effect btn red lighten-1 modal-trigger"
           href="#modalExcluir">Excluir</a>
 		<a
           :disabled="!disponivelFinalizar()"
           v-show="readequacao.idReadequacao"
-          class="waves-light waves-effect btn green modal-trigger"
+          class="waves-light waves-effect btn blue lighten-1 modal-trigger"
           href="#modalFinalizar">Finalizar</a>
 	  </div>
     </div>
@@ -281,6 +281,7 @@ Vue.component('readequacao-transferencia-recursos', {
             ],
             componente: 'readequacao-transferencia-recursos-tipo-transferencia',
             loading: true,
+            novaReadequacao: false,
         };
     },
     watch: {
@@ -561,7 +562,12 @@ Vue.component('readequacao-transferencia-recursos', {
                 }
             }).done((response) => {
                 if (_.isObject(response.readequacao)) {
-                    self.readequacao = response.readequacao;
+                    if (_.isEmpty(response.readequacao)) {
+                        this.novaReadequacao = true;
+                        this.loading = false;
+                    } else {
+                        self.readequacao = response.readequacao;
+                    }
                 }
             });
         },
