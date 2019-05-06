@@ -41,8 +41,7 @@ export const salvarPlanoDistribuicaoDetalhamento = async ({ commit }, params) =>
 export const excluirPlanoDistribuicaoDetalhamento = async ({ commit }, params) => propostaHelperAPI
     .excluirPlanoDistribuicaoDetalhamento(params)
     .then((response) => {
-        const { data } = response;
-        commit(types.REMOVE_PLANO_DISTRIBUICAO_DETALHAMENTO, params);
+        commit(types.EXCLUIR_PLANO_DISTRIBUICAO_DETALHAMENTO, params);
         return response.data;
     }).catch((e) => {
         console.log('error.', e);

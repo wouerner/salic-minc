@@ -181,7 +181,7 @@
                     <b>Valor m&eacute;dio </b>
                 </th>
                 <td
-                    v-if="((valorMedioProponente.value() > valorMedioMaximo) && (this.canalaberto == 0))"
+                    v-if="((valorMedioProponente.value() > valorMedioMaximo) && (this.canalAberto == 0))"
                     class="center-align red darken-3 white-text"
                 >
                     <b>R$ {{ valorMedioProponenteFormatado }}</b>
@@ -216,7 +216,7 @@ export default {
         'idmunicipioibge',
         'iduf',
         'disabled',
-        'canalaberto',
+        'canalAberto',
         'detalhamentos',
     ],
     data() {
@@ -284,7 +284,7 @@ export default {
         detalhamentos() {
             console.log('alterou detalhamentos');
             if ((numeral(this.valorMedioProponente).value() > this.valorMedioMaximo
-                && (this.canalaberto === 0))) {
+                && (this.canalAberto === 0))) {
                 this.mensagemAlerta(`O valor m&eacute;dio: R$ ${this.valorMedioProponenteFormatado},
                  n\xE3o pode ultrapassar: R$ ${this.formatarValor(this.valorMedioMaximo)}`);
                 // this.$data.detalhamentos.splice(-1, 1)

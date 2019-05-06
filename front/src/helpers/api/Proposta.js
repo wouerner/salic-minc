@@ -32,7 +32,7 @@ export const salvarPlanoDistribuicaoDetalhamento = params => api.postRequest(
 );
 
 export const excluirPlanoDistribuicaoDetalhamento = params => api.postRequest(
-    `/proposta/plano-distribuicao/detalhar-salvar/idPreProjeto/${params.idPreProjeto}`,
+    `/proposta/plano-distribuicao/detalhar-excluir/idPreProjeto/${params.idPreProjeto}`,
     buildData(params),
 );
 

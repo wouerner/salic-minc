@@ -18,7 +18,7 @@
                         :iduf="local.idUF"
                         :idmunicipioibge="local.idMunicipioIBGE"
                         :detalhamentos="obterDetalhamentosPorLocalizacao(local)"
-                        :canalaberto="canalaberto"
+                        :canal-aberto="canalAberto"
                         @eventoRemoverDetalhamento="removerDetalhamento"
                         @eventoEditarDetalhamento="editarDetalhamento"
                     />
@@ -42,13 +42,11 @@
 <script>
 import { utils } from '@/mixins/utils';
 
-import Vue from 'vue';
+import axios from 'axios';
 import { mapActions, mapGetters } from 'vuex';
 
 import DetalhamentoFormulario from '../components/PlanoDistribuicaoDetalhamentos/DetalhamentoFormulario';
 import DetalhamentoListagem from '../components/PlanoDistribuicaoDetalhamentos/DetalhamentoListagem';
-
-const detalhamentoEventBus = new Vue();
 
 export default {
     name: 'PlanoDistribuicaoDetalhamentos',
@@ -60,10 +58,8 @@ export default {
     props: [
         'idPreProjeto',
         'idPlanoDistribuicao',
-        'idmunicipioibge',
-        'iduf',
         'disabled',
-        'canalaberto',
+        'canalAberto',
         'idNormativo',
     ],
     data() {
@@ -89,7 +85,7 @@ export default {
     mounted() {
         this.obterDetalhamentos();
         this.buscarLocaisRealizacao(this.idPreProjeto);
-        // this.iniciarCollapsible();
+        this.iniciarObservadorAjaxJquery();
     },
     methods: {
         ...mapActions({
@@ -99,11 +95,13 @@ export default {
             excluirDetalhamento: 'proposta/excluirPlanoDistribuicaoDetalhamento',
         }),
         removerDetalhamento(detalhamento) {
+            // eslint-disable-next-line
             if (confirm('Tem certeza que deseja deletar o item?')) {
                 this.excluirDetalhamento(
                     {
+                        idPreProjeto: this.idPreProjeto,
                         idDetalhaPlanoDistribuicao: detalhamento.idDetalhaPlanoDistribuicao,
-                        idPlanoDistribuicao: this.idPlanoDistribuicao,
+                        idPlanoDistribuicao: detalhamento.idPlanoDistribuicao,
                     },
                 ).then((response) => {
                     if (response.success === 'true') {
@@ -112,20 +110,6 @@ export default {
                 }).catch((e) => {
                     this.mensagemErro(e.responseJSON.msg);
                 });
-            //     axios.post(
-            //         `/proposta/plano-distribuicao/detalhar-excluir/idPreProjeto/${vue.idPreProjeto}`,
-            //         {
-            //             idDetalhaPlanoDistribuicao: detalhamento.idDetalhaPlanoDistribuicao,
-            //             idPlanoDistribuicao: vue.idPlanoDistribuicao,
-            //         },
-            //     ).then((response) => {
-            //         if (response.data.success === 'true') {
-            //             vue.delete(vue.detalhamentos, index);
-            //             vue.mensagemSucesso(response.msg);
-            //         }
-            //     }).catch((response) => {
-            //         vue.mensagemErro(response.responseJSON.msg);
-            //     });
             }
         },
         editarDetalhamento(detalhamento) {
@@ -163,6 +147,35 @@ export default {
                     },
                 });
             });
+        },
+        iniciarObservadorAjaxJquery() {
+
+            axios.interceptors.request.use((config) => {
+                $3('#container-loading').fadeIn();
+                return config;
+            }, (error) => {
+                $3('#container-loading').fadeOut();
+                return Promise.reject(error);
+            });
+
+            // axios.interceptors.response.use((response) => {
+            //     // trigger 'loading=false' event here
+            //     return response;
+            // }, (error) => {
+            //     // trigger 'loading=false' event here
+            //     return Promise.reject(error);
+            // });
+
+            // eslint-disable-next-line
+            // $3(document).ajaxStart(function () {
+            //     // eslint-disable-next-line
+            //     $3('#container-loading').fadeIn();
+            // });
+            // // eslint-disable-next-line
+            // $3(document).ajaxComplete(function () {
+            //     // eslint-disable-next-line
+            //     $3('#container-loading').fadeOut();
+            // });
         },
         salvarPlanoDetalhamento(detalhamento) {
             this.salvarDetalhamento(

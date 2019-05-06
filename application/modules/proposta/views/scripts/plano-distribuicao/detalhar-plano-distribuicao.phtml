@@ -64,32 +64,11 @@
 
                     <proposta-plano-distribuicao-detalhamentos
                         disabled="<?= $this->isEditavel; ?>"
-                        idplanodistribuicao="<?= $planoDistribuicao->idPlanoDistribuicao; ?>"
-                        idpreprojeto="<?= $this->idPreProjeto; ?>"
-                        canalaberto="<?= $planoDistribuicao->canalAberto; ?>"
+                        id-plano-distribuicao="<?= $planoDistribuicao->idPlanoDistribuicao; ?>"
+                        id-pre-projeto="<?= $this->idPreProjeto; ?>"
+                        canal-aberto="<?= $planoDistribuicao->canalAberto; ?>"
                         id-normativo="<?= $this->idNormativo; ?>"
                     ></proposta-plano-distribuicao-detalhamentos>
-
-                    <ul class="collapsibles" data-collapsible="accordion">
-                        <?php if(false) foreach ($this->abrangencias as $abrangencia): ?>
-                            <li>
-                                <div class="collapsible-headers"><i class="material-icons">place</i>
-                                    <?= isset($abrangencia['uf']) ? $abrangencia['uf'] : 'Exterior' ?> <?= isset($abrangencia['cidade']) ? ' - ' . $abrangencia['cidade'] : '' ?>
-                                </div>
-                                <div class="collapsible-bodys">
-                                    <proposta-plano-distribuicao-detalhamentos
-                                        disabled="<?= $this->isEditavel; ?>"
-                                        idplanodistribuicao="<?= $planoDistribuicao->idPlanoDistribuicao; ?>"
-                                        idpreprojeto="<?= $this->idPreProjeto; ?>"
-                                        iduf="<?= $abrangencia['idUF']; ?>"
-                                        idmunicipioibge="<?= $abrangencia['idMunicipioIBGE']; ?>"
-                                        canalaberto="<?= $planoDistribuicao->canalAberto; ?>"
-                                        id-normativo="<?= $this->idNormativo; ?>"
-                                    ></proposta-plano-distribuicao-detalhamentos>
-                                </div>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
                 </div>
                 <?php endforeach ?>
             </div>
@@ -117,11 +96,6 @@
     });
 
 </script>
-<?php //$versao = $this->gitTag(); ?>
-<!--<script src="/public/scripts/plugins/numeral.min.js?v=--><?//= $versao; ?><!--" type="text/javascript"></script>-->
-<!--<script src="/public/js/vue.js?v=--><?//= $versao; ?><!--"></script>-->
-<!--<script type="text/javascript"-->
-<!--        src="/public/scripts/proposta/plano-distribuicao/proposta-plano-distribuicao-detalhamentos.vue.js?v=--><?//= $versao; ?><!--"></script>-->
 <style>
     .input-field,
     .input-field label,
