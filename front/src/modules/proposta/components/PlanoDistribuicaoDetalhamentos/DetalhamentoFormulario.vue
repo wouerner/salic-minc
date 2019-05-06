@@ -2,14 +2,14 @@
     <div class="detalhamento-distribuicao-dos-produtos">
         <div
             ref="containerForm"
-            :id="_uid + '_form_detalhamento'"
+            :id="`${_uid}-form-detalhamento`"
             :formIdMunicipio="idMunicipioIbge"
             class="row center-align"
         >
             <button
                 ref="mostrarForm"
                 class="btn waves-effect waves-light"
-                @click="mostrarFormulario(_uid + '_form_detalhamento')"
+                @click="mostrarFormulario(`${_uid}-form-detalhamento`)"
             >
                 Novo detalhamento
                 <i class="material-icons right">{{ icon }}</i>
@@ -30,89 +30,88 @@
                             <span>
                                 <b>Tipo de venda</b><br>
                                 <input
-                                    :id="_uid + 'tipoVendaIngresso'"
+                                    :id="`${_uid}-tipo-venda-ingresso`"
                                     v-model="distribuicao.tpVenda"
                                     name="tipoVenda"
                                     type="radio"
                                     value="i"
                                 >
-                                <label :for=" _uid + 'tipoVendaIngresso'">Ingresso</label>
+                                <label :for="`${_uid}-tipo-venda-ingresso`">Ingresso</label>
                                 <input
-                                    :id="_uid + 'tipoVendaExemplar'"
+                                    :id="`${_uid}-tipo-venda-exemplar`"
                                     v-model="distribuicao.tpVenda"
                                     name="tipoVenda"
                                     type="radio"
                                     value="e"
                                 >
-                                <label :for=" _uid + 'tipoVendaExemplar'">Exemplar</label>
+                                <label :for="`${_uid}-tipo-venda-exemplar`">Exemplar</label>
                             </span>
                         </div>
                         <div class="col s12 m6 l6">
                             <span>
                                 <b>Distribui&ccedil;&atilde;o ser&aacute; totalmente gratuita?</b><br>
                                 <input
-                                    :id="_uid + '1'"
+                                    :id="`${_uid}-distribuicao-sim`"
                                     v-model="distribuicaoGratuita"
                                     name="group1"
                                     type="radio"
                                     value="s"
                                 >
-                                <label :for="_uid + '1'">Sim</label>
+                                <label :for="`${_uid}-distribuicao-sim`">Sim</label>
                                 <input
-                                    :id="_uid + '2'"
+                                    :id="`${_uid}-distribuicao-nao`"
                                     v-model="distribuicaoGratuita"
                                     name="group1"
                                     type="radio"
                                     value="n"
                                 >
-                                <label :for="_uid + '2'">N&atilde;o</label>
+                                <label :for="`${_uid}-distribuicao-nao`">N&atilde;o</label>
                             </span>
                         </div>
                     </div>
 
                     <div
-                        v-if="distribuicao.tpVenda == 'i'"
+                        v-if="distribuicao.tpVenda === 'i'"
                         class="row"
                     >
                         <div class="col col s12 m6 l6">
                             <span>
                                 <b>Tipo do local de apresenta&ccedil;&atilde;o</b><br>
                                 <input
-                                    :id="_uid + 'tipoAberto'"
+                                    :id="`${_uid}-tipo-aberto`"
                                     v-model="distribuicao.tpLocal"
                                     name="tipoLocalRealizacao"
                                     type="radio"
                                     value="a"
                                 >
-                                <label :for=" _uid + 'tipoAberto'">Aberto</label>
+                                <label :for="`${_uid}-tipo-aberto`">Aberto</label>
                                 <input
-                                    :id=" _uid + 'tipoFechado'"
+                                    :id="`${_uid}-tipo-fechado`"
                                     v-model="distribuicao.tpLocal"
                                     name="tipoLocalRealizacao"
                                     type="radio"
                                     value="f"
                                 >
-                                <label :for=" _uid + 'tipoFechado'">Fechado</label>
+                                <label :for="`${_uid}-tipo-fechado`">Fechado</label>
                             </span>
                         </div>
                         <div class="col col s12 m6 l6">
                             <span>
                                 <b>Espa&ccedil;o p&uacute;blico</b><br>
                                 <input
-                                    :id="_uid + 'espacoPublicoSim'"
+                                    :id="`${_uid}-espaco-publico-sim`"
                                     v-model="distribuicao.tpEspaco"
                                     type="radio"
                                     value="s"
                                 >
-                                <label :for="_uid + 'espacoPublicoSim'">Sim</label>
+                                <label :for="`${_uid}-espaco-publico-sim`">Sim</label>
                                 <input
-                                    id="espacoPublicoNao"
-                                    :id=" _uid + 'espacoPublicoNao'"
+                                    :id="`${_uid}-espaco-publico-nao`"
                                     v-model="distribuicao.tpEspaco"
                                     type="radio"
                                     value="n"
                                 >
-                                <label :for="_uid + 'espacoPublicoNao'">N&atilde;o</label>
+                                <label :for="`${_uid}-espaco-publico-nao`">N&atilde;o</label>
                             </span>
                         </div>
                     </div>
@@ -121,28 +120,28 @@
                         <div class="input-field col s12 m6 l6">
                             <input
                                 ref="dsProduto"
-                                :id="_uid + 'dsProduto'"
+                                :id="`${_uid}-ds-produto`"
                                 v-model="distribuicao.dsProduto"
                                 type="text"
                                 class="validate"
                                 placeholder="Ex: Arquibancada"
                             >
                             <label
-                                :for="_uid + 'dsProduto'"
+                                :for="`${_uid}-ds-produto`"
                                 class="active"
                             >Categoria</label>
                         </div>
                         <div class="input-field col s12 m6 l6">
                             <input
                                 ref="qtExemplares"
-                                :id="_uid + 'qtExemplares'"
+                                :id="`${_uid}-qt-exemplares`"
                                 v-model.number.lazy="distribuicao.qtExemplares"
                                 type="number"
                                 class="validate"
                                 placeholder="0"
                             >
                             <label
-                                :for="_uid + 'qtExemplares'"
+                                :for="`${_uid}-qt-exemplares`"
                                 class="active"
                             >Quantidade</label>
                         </div>
@@ -154,7 +153,7 @@
                     >
                         <legend>
                             <strong>Proponente </strong>(at&eacute; {{ percentualProponentePadrao * 100 }}%)
-                            <salic-select-percent
+                            <s-select-percent
                                 :disabled="distribuicaoGratuita =='s' ? true: false"
                                 :maximo-combo="(percentualProponentePadrao * 100)"
                                 :selected="(percentualProponente * 100)"
@@ -163,31 +162,33 @@
                         </legend>
                         <div class="row">
                             <div class="input-field col s12 m6 l2">
-                                <salic-input-money
+                                <s-input-money
+                                    :id="`${_uid}-vl-unitario-proponente-integral`"
                                     :disabled="distribuicaoGratuita =='s'? true: false"
                                     :value="inputUnitarioProponenteIntegral"
                                     @ev="inputUnitarioProponenteIntegral = $event"
                                 />
                                 <label
-                                    :for="_uid + 'vlUnitarioProponenteIntegral'"
+                                    :for="`${_uid}-vl-unitario-proponente-integral`"
                                     class="active"
                                 >Pre&ccedil;o Unit&aacute;rio R$</label>
                             </div>
                             <div class="input-field col s12 m6 l2">
                                 <input
                                     ref="qtProponenteIntegral"
+                                    :id="`${_uid}-qt-proponente-integral`"
                                     v-model.number="distribuicao.qtProponenteIntegral"
                                     type="text"
                                     class="disabled right-align"
                                     disabled
                                 >
                                 <label
-                                    :for="_uid + 'qtProponenteIntegral'"
+                                    :for="`${_uid}-qt-proponente-integral`"
                                     class="active"
                                 >Quantidade {{ labelInteira }}</label>
                             </div>
                             <div
-                                v-if="distribuicao.tpVenda == 'i'"
+                                v-if="distribuicao.tpVenda === 'i'"
                                 class="input-field col s12 m6 l2"
                             >
                                 <input
@@ -203,7 +204,7 @@
                             </div>
                             <div class="input-field col s12 m6 l3">
                                 <input
-                                    v-model="this.vlReceitaProponenteIntegral"
+                                    v-model="vlReceitaProponenteIntegral"
                                     type="text"
                                     class="disabled right-align"
                                     disabled
@@ -214,11 +215,11 @@
                                 >Valor {{ labelInteira }} R$</label>
                             </div>
                             <div
-                                v-if="distribuicao.tpVenda == 'i'"
+                                v-if="distribuicao.tpVenda === 'i'"
                                 class="input-field col s12 m6 l3"
                             >
                                 <input
-                                    v-model.number="this.vlReceitaProponenteParcial"
+                                    v-model.number="vlReceitaProponenteParcial"
                                     type="text"
                                     class="disabled right-align"
                                     disabled
@@ -236,7 +237,7 @@
                     >
                         <legend>
                             <strong>Pre&ccedil;o Popular</strong> (Padr&atilde;o: {{ percentualPrecoPopularPadrao * 100 }}%)
-                            <salic-select-percent
+                            <s-select-percent
                                 :disabled="distribuicaoGratuita =='s'? true: false"
                                 :maximo-combo="(percentualMaximoPrecoPopular * 100)"
                                 :selected="(percentualPrecoPopular * 100)"
@@ -245,7 +246,7 @@
                         </legend>
                         <div class="row">
                             <div class="input-field col s12 m6 l2">
-                                <salic-input-money
+                                <s-input-money
                                     :disabled="distribuicaoGratuita=='s' ? true: false"
                                     :value="inputUnitarioPopularIntegral"
                                     @ev="inputUnitarioPopularIntegral = $event"
@@ -273,7 +274,7 @@
                                 </label>
                             </div>
                             <div
-                                v-if="distribuicao.tpVenda == 'i'"
+                                v-if="distribuicao.tpVenda === 'i'"
                                 class="input-field col s12 m6 l2"
                             >
                                 <input
@@ -292,7 +293,7 @@
                             </div>
                             <div class="input-field col s12 m6 l3">
                                 <input
-                                    v-model.number="this.vlReceitaPopularIntegral"
+                                    v-model.number="vlReceitaPopularIntegral"
                                     type="text"
                                     class="disabled right-align"
                                     disabled
@@ -305,11 +306,11 @@
                                 </label>
                             </div>
                             <div
-                                v-if="distribuicao.tpVenda == 'i'"
+                                v-if="distribuicao.tpVenda === 'i'"
                                 class="input-field col s12 m6 l3"
                             >
                                 <input
-                                    v-model.number="this.vlReceitaPopularParcial"
+                                    v-model.number="vlReceitaPopularParcial"
                                     type="text"
                                     class="disabled right-align"
                                     disabled
@@ -321,7 +322,8 @@
                             </div>
                             <div class="col s12 m12 l12">
                                 <div class="small">
-                                    <i class="material-icons tiny left">info_outline</i> Valor de refer&ecirc;ncia do Vale Cultura: R$ {{ formatarValor(this.valorMaximoPrecoPopular) }}
+                                    <i class="material-icons tiny left">info_outline</i>
+                                    Valor de refer&ecirc;ncia do Vale Cultura: R$ {{ formatarValor(valorMaximoPrecoPopular) }}
                                 </div>
                             </div>
                         </div>
@@ -330,8 +332,8 @@
                         <legend>
                             <strong>Distribui&ccedil;&atilde;o Gratuita</strong> (m&iacute;nimo {{ percentualGratuitoPadrao * 100
                             }}%)
-                            <span v-if="percentualGratuitoPadrao !== this.percentualGratuito">
-                                <b>Atual {{ parseInt(this.percentualGratuito * 100) }}%</b>
+                            <span v-if="percentualGratuitoPadrao !== percentualGratuito">
+                                <b>Atual {{ parseInt(percentualGratuito * 100) }}%</b>
                             </span>
                         </legend>
                         <div class="row">
@@ -403,15 +405,12 @@
 </template>
 
 <script>
-
-import { mapActions, mapGetters } from 'vuex';
-
 import { utils } from '@/mixins/utils';
 import numeral from 'numeral';
 
 import Vue from 'vue';
-import SalicSelectPercent from '@/components/SalicSelectPercent';
-import SalicInputMoney from '@/components/SalicInputMoney';
+import SSelectPercent from '@/components/SalicSelectPercent';
+import SInputMoney from '@/components/SalicInputMoney';
 
 numeral.locale('pt-br');
 numeral.defaultFormat('0,0.00');
@@ -465,18 +464,46 @@ const valoresNormativo2017 = {
 
 export default {
     name: 'FormularioDetalhamento',
-    components: { SalicSelectPercent, SalicInputMoney },
+    components: { SSelectPercent, SInputMoney },
     mixins: [utils],
-    props: [
-        'idPreProjeto',
-        'idPlanoDistribuicao',
-        'idMunicipioIbge',
-        'idUf',
-        'disabled',
-        'editarDetalhamento',
-        'value',
-        'idNormativo',
-    ],
+    props: {
+        value: {
+            type: Boolean,
+            default: false,
+        },
+        idPreProjeto: {
+            type: [String, Number],
+            required: true,
+        },
+        idPlanoDistribuicao: {
+            type: [String, Number],
+            required: true,
+        },
+        idMunicipioIbge: {
+            type: [Number],
+            required: true,
+        },
+        idUf: {
+            type: [Number],
+            required: true,
+        },
+        disabled: {
+            type: [String, Number],
+            default: '1',
+        },
+        canalAberto: {
+            type: [String, Number],
+            default: 0,
+        },
+        idNormativo: {
+            type: [String, Number],
+            default: '',
+        },
+        editarDetalhamento: {
+            type: Object,
+            default: () => {},
+        },
+    },
     data() {
         return {
             distribuicao: {
@@ -688,10 +715,9 @@ export default {
         },
         editarDetalhamento(object) {
             const vue = this;
+            this.limparFormulario();
             if (object.idDetalhaPlanoDistribuicao != null) {
-                vue.limparFormulario();
                 vue.visualizarFormulario = true;
-
                 // definir o percentual do proponente
                 const percentualProponente = (parseInt(object.qtProponenteIntegral, 10)
                     + parseInt(object.qtProponenteParcial, 10)) / parseInt(object.qtExemplares, 10);
@@ -722,14 +748,6 @@ export default {
             this.$emit('input', val);
         },
     },
-    created() {
-        const vue = this;
-        detalhamentoEventBus.$on('callBackSalvarDetalhamento', (response) => {
-            if (response === true) {
-                vue.limparFormulario();
-            }
-        });
-    },
     mounted() {
         this.$refs.add.disabled = !this.disabled;
     },
@@ -753,26 +771,26 @@ export default {
         limparFormulario() {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
-        salvar(event) {
-            if (this.distribuicao.dsProduto == '' && this.distribuicao.tpVenda == 'i') {
+        salvar() {
+            if (this.distribuicao.dsProduto === '' && this.distribuicao.tpVenda === 'i') {
                 this.mensagemAlerta('\xC9 obrigat\xF3rio informar a categoria');
                 this.$refs.dsProduto.focus();
                 return;
             }
 
-            if (this.distribuicao.qtExemplares == 0) {
+            if (this.distribuicao.qtExemplares === 0) {
                 this.mensagemAlerta('Quantidade \xE9 obrigat\xF3rio!');
                 this.$refs.qtExemplares.focus();
                 return;
             }
 
-            if (this.distribuicaoGratuita == NAO) {
-                if (this.distribuicao.vlUnitarioProponenteIntegral == 0 && this.percentualProponente > 0) {
+            if (this.distribuicaoGratuita === NAO) {
+                if (this.distribuicao.vlUnitarioProponenteIntegral === 0 && this.percentualProponente > 0) {
                     this.mensagemAlerta('Pre\xE7o unit\xE1rio no Proponente \xE9 obrigat\xF3rio!');
                     return;
                 }
 
-                if (this.distribuicao.vlUnitarioPopularIntegral == 0 && this.percentualPrecoPopular > 0) {
+                if (this.distribuicao.vlUnitarioPopularIntegral === 0 && this.percentualPrecoPopular > 0) {
                     this.mensagemAlerta('Pre\xE7o unit\xE1rio no Pre\xE7o Popular \xE9 obrigat\xF3rio!');
                     return;
                 }

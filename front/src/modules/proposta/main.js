@@ -7,6 +7,8 @@ import Proposta from './visualizar/Proposta';
 import PropostaDiff from './visualizar/PropostaDiff';
 import PropostaProponente from './visualizar/PropostaProponente';
 import PropostaPlanoDistribuicaoDetalhamentos from './views/PlanoDistribuicaoDetalhamentos';
+import SCarregando from '@/components/Carregando';
+
 import { store } from './config';
 
 Vue.config.productionTip = false;

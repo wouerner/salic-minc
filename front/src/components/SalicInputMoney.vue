@@ -3,6 +3,7 @@
         ref="input"
         :disabled="false"
         :value="value"
+        v-bind="$attrs"
         type="text"
         class="validate right-align"
         @input="updateMoney($event.target.value)"

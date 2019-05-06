@@ -1,6 +1,7 @@
 <template>
     <div class="plano-distribuicao-detalhanentos">
         <ul
+            v-if="!loadingLocais"
             class="collapsible"
             data-collapsible="expandable">
             <li
@@ -12,6 +13,7 @@
                 </div>
                 <div class="collapsible-body">
                     <detalhamento-listagem
+                        v-if="!loadingDetalhamentos"
                         :disabled="disabled"
                         :idplanodistribuicao="idPlanoDistribuicao"
                         :idpreprojeto="idPreProjeto"
@@ -22,6 +24,9 @@
                         @eventoRemoverDetalhamento="removerDetalhamento"
                         @eventoEditarDetalhamento="editarDetalhamento"
                     />
+                    <s-carregando
+                        v-else
+                        text="Carregando detalhamentos"/>
                     <detalhamento-formulario
                         v-model="exibirFormulario"
                         :disabled="disabled"
@@ -36,37 +41,58 @@
                 </div>
             </li>
         </ul>
+        <s-carregando
+            v-else
+            text="Carregando locais cadastrados..."/>
     </div>
 </template>
 
 <script>
 import { utils } from '@/mixins/utils';
+import MxUtilsProposta from '../mixins/utilsProposta';
 
-import axios from 'axios';
 import { mapActions, mapGetters } from 'vuex';
 
 import DetalhamentoFormulario from '../components/PlanoDistribuicaoDetalhamentos/DetalhamentoFormulario';
 import DetalhamentoListagem from '../components/PlanoDistribuicaoDetalhamentos/DetalhamentoListagem';
+import SCarregando from '@/components/Carregando';
 
 export default {
     name: 'PlanoDistribuicaoDetalhamentos',
     components: {
+        SCarregando,
         DetalhamentoFormulario,
         DetalhamentoListagem,
     },
-    mixins: [utils],
-    props: [
-        'idPreProjeto',
-        'idPlanoDistribuicao',
-        'disabled',
-        'canalAberto',
-        'idNormativo',
-    ],
+    mixins: [utils, MxUtilsProposta],
+    props: {
+        idPreProjeto: {
+            type: [String, Number],
+            required: true,
+        },
+        idPlanoDistribuicao: {
+            type: [String, Number],
+            required: true,
+        },
+        disabled: {
+            type: [String, Number],
+            default: 1,
+        },
+        canalAberto: {
+            type: [String, Number],
+            default: 0,
+        },
+        idNormativo: {
+            type: [String, Number],
+            default: '',
+        },
+    },
     data() {
         return {
-            // detalhamentos: [],
             detalhamento: {},
             exibirFormulario: false,
+            loadingLocais: true,
+            loadingDetalhamentos: true,
         };
     },
     computed: {
@@ -77,15 +103,18 @@ export default {
     },
     watch: {
         locais() {
+            this.loadingLocais = false;
             this.$nextTick(() => {
                 this.iniciarCollapsible();
             });
+        },
+        detalhamentos() {
+            this.loadingDetalhamentos = false;
         },
     },
     mounted() {
         this.obterDetalhamentos();
         this.buscarLocaisRealizacao(this.idPreProjeto);
-        this.iniciarObservadorAjaxJquery();
     },
     methods: {
         ...mapActions({
@@ -148,36 +177,8 @@ export default {
                 });
             });
         },
-        iniciarObservadorAjaxJquery() {
-
-            axios.interceptors.request.use((config) => {
-                $3('#container-loading').fadeIn();
-                return config;
-            }, (error) => {
-                $3('#container-loading').fadeOut();
-                return Promise.reject(error);
-            });
-
-            // axios.interceptors.response.use((response) => {
-            //     // trigger 'loading=false' event here
-            //     return response;
-            // }, (error) => {
-            //     // trigger 'loading=false' event here
-            //     return Promise.reject(error);
-            // });
-
-            // eslint-disable-next-line
-            // $3(document).ajaxStart(function () {
-            //     // eslint-disable-next-line
-            //     $3('#container-loading').fadeIn();
-            // });
-            // // eslint-disable-next-line
-            // $3(document).ajaxComplete(function () {
-            //     // eslint-disable-next-line
-            //     $3('#container-loading').fadeOut();
-            // });
-        },
         salvarPlanoDetalhamento(detalhamento) {
+            this.mostrarModalCarregando();
             this.salvarDetalhamento(
                 {
                     idPreProjeto: this.idPreProjeto,
@@ -188,8 +189,9 @@ export default {
                     this.mensagemSucesso(response.msg);
                 }
             }).catch((e) => {
-                console.log('mensagem erro', e);
                 this.mensagemErro(e.responseJSON.msg);
+            }).finally(() => {
+                this.ocultarModalCarregando();
             });
         },
     },
