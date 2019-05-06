@@ -3500,6 +3500,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
             $this->_helper->json(
                 [
+                    'readequacao' => [],
                     'msg' => 'N&atilde;o foi poss&iacute;vel obter a readequa&ccedil;&atilde;o. Erro: ' . $objException->getMessage()
                 ]
             );
