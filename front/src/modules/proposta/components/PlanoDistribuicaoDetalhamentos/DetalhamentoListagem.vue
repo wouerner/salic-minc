@@ -3,26 +3,30 @@
         <table class="bordered">
             <thead v-if="detalhamentos && detalhamentos.length > 0">
                 <tr>
-                    <th rowspan="2">
+                    <th
+                        rowspan="2"
+                        class="left-align">
                         Categoria
                     </th>
-                    <th rowspan="2">
+                    <th
+                        rowspan="2"
+                        class="center-align">
                         Quantidade
                     </th>
                     <th
-                        class="proponente"
+                        class="proponente center-align"
                         colspan="3"
                     >
                         Proponente
                     </th>
                     <th
-                        class="popular"
+                        class="popular center-align"
                         colspan="3"
                     >
                         Pre&ccedil;o Popular
                     </th>
                     <th
-                        class="gratuito"
+                        class="gratuito center-align"
                         rowspan="2"
                     >
                         Distribui&ccedil;&atilde;o <br>Gratuita
@@ -31,18 +35,18 @@
                         rowspan="2"
                         class="center-align"
                     >
-                        Receita <br> Prevista
+                        Receita <br>Prevista
                     </th>
                     <th
+                        v-if="!disabled"
                         rowspan="2"
-                        colspan="2"
-                        width="10%"
+                        width="120"
                         class="center-align"
                     >
                         A&ccedil;&otilde;es
                     </th>
                 </tr>
-                <tr>
+                <tr style="background-color: #f2f2f2">
                     <th class="proponente">
                         Qtd. Inteira
                     </th>
@@ -64,58 +68,55 @@
                 </tr>
             </thead>
             <tbody v-if="detalhamentos && detalhamentos.length > 0">
-                <tr v-for="( detalhamento, index ) in detalhamentos">
+                <tr
+                    v-for="( detalhamento, index ) in detalhamentos"
+                    :key="index">
                     <td>{{ detalhamento.dsProduto }}</td>
-                    <td class="center-align">
+                    <td class="right-align">
                         {{ detalhamento.qtExemplares }}
                     </td>
                     <!--Preço Proponente -->
-                    <td class="center-align">
+                    <td class="right-align">
                         {{ detalhamento.qtProponenteIntegral }}
                     </td>
-                    <td class="center-align">
+                    <td class="right-align">
                         {{ detalhamento.qtProponenteParcial }}
                     </td>
                     <td class="right-align">
-                        {{ formatarValor(detalhamento.vlUnitarioProponenteIntegral) }}
+                        {{ detalhamento.vlUnitarioProponenteIntegral | filtroFormatarParaReal }}
                     </td>
                     <!--Preço Popular -->
-                    <td class="center-align">
+                    <td class="right-align">
                         {{ detalhamento.qtPopularIntegral }}
                     </td>
-                    <td class="center-align">
+                    <td class="right-align">
                         {{ detalhamento.qtPopularParcial }}
                     </td>
                     <td class="right-align">
-                        {{ formatarValor(detalhamento.vlUnitarioPopularIntegral) }}
+                        {{ detalhamento.vlUnitarioPopularIntegral | filtroFormatarParaReal }}
                     </td>
                     <!-- Distribuicao Gratuita-->
-                    <td class="center-align">
+                    <td class="right-align">
                         {{ parseInt(detalhamento.qtGratuitaDivulgacao, 10) +
                         parseInt(detalhamento.qtGratuitaPatrocinador, 10) + parseInt(detalhamento.qtGratuitaPopulacao, 10) }}
                     </td>
                     <td class="right-align">
-                        {{ formatarValor(detalhamento.vlReceitaPrevista) }}
+                        {{ detalhamento.vlReceitaPrevista | filtroFormatarParaReal }}
                     </td>
-                    <td>
+                    <td v-if="!disabled">
                         <a
-                            :class="_uid + '_teste'"
-                            :disabled="!disabled"
                             href="javascript:void(0)"
                             class="btn small waves-effect waves-light tooltipped btn-primary btn-editar"
                             data-tooltip="Editar detalhamento"
-                            @click="editar(detalhamento, index)"
+                            @click="editar(detalhamento)"
                         >
                             <i class="material-icons">edit</i>
                         </a>
-                    </td>
-                    <td>
                         <a
-                            :disabled="!disabled"
                             href="javascript:void(0)"
                             class="btn small waves-effect waves-light tooltipped btn-danger btn-excluir-item"
                             data-tooltip="Excluir detalhamento"
-                            @click.prevent="excluir(detalhamento, index)"
+                            @click.prevent="excluir(detalhamento)"
                         >
                             <i class="material-icons">delete</i>
                         </a>
@@ -125,7 +126,7 @@
             <tbody v-else>
                 <tr>
                     <td
-                        colspan="12"
+                        :colspan="disabled ? 10 : 11"
                         class="center-align"
                     >
                         Nenhum detalhamento cadastrado
@@ -138,68 +139,60 @@
             >
                 <tr>
                     <td><b>Totais</b></td>
-                    <td class="center-align">
+                    <td class="right-align">
                         <b>{{ qtExemplaresTotal }}</b>
                     </td>
                     <!--Fim: Preço Popular -->
-                    <td class="center-align">
+                    <td class="right-align">
                         <b>{{ qtProponenteIntegralTotal }}</b>
                     </td>
-                    <td class="center-align">
+                    <td class="right-align">
                         <b>{{ qtProponenteParcialTotal }}</b>
                     </td>
                     <td class="right-align">
                         -
                     </td>
                     <!--Preço Popular -->
-                    <td class="center-align">
+                    <td class="right-align">
                         <b>{{ qtPopularIntegralTotal }}</b>
                     </td>
-                    <td class="center-align">
+                    <td class="right-align">
                         <b>{{ qtPopularParcialTotal }}</b>
                     </td>
                     <td class="right-align">
                         -
                     </td>
-                    <td class="center-align">
+                    <td class="right-align">
                         <b>{{ qtDistribuicaoGratuitaTotal }}</b>
                     </td>
                     <td class="right-align">
                         <b>{{ receitaPrevistaTotal }}</b>
                     </td>
-                    <td colspan="2" />
+                    <td v-if="!disabled"/>
                 </tr>
             </tfoot>
         </table>
 
-        <table
+        <div
             v-if="detalhamentos && detalhamentos.length > 0"
-            style="margin-top: 20px; max-width: 300px"
+            style="margin-top: 20px"
+            class="row"
         >
-            <tr>
-                <th>
-                    <b>Valor m&eacute;dio </b>
-                </th>
-                <td
-                    v-if="((valorMedioProponente.value() > valorMedioMaximo) && (this.canalAberto == 0))"
-                    class="center-align red darken-3 white-text"
-                >
-                    <b>R$ {{ valorMedioProponenteFormatado }}</b>
-                </td>
-                <td
-                    v-else
-                    class="center-align "
-                >
-                    R$ {{ valorMedioProponenteFormatado }}
-                </td>
-            </tr>
-        </table>
+            <div class="col s2 left-align">
+                <b>Valor m&eacute;dio</b><br>
+                <span :class="{ 'red-text text-darken-3' : isUltrapassouValorMedio}">R$ {{ valorMedioProponenteFormatado }}</span>
+            </div>
+            <div
+                v-if="isUltrapassouValorMedio"
+                class="col s10 red darken-3 white-text left-align">
+                <p>O preço médio do ingresso ou produto é limitado a R$ <b>{{ valorMedioMaximo | filtroFormatarParaReal }}</b></p>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import { utils } from '@/mixins/utils';
-import { mapGetters } from 'vuex';
 import numeral from 'numeral';
 
 numeral.locale('pt-br');
@@ -208,26 +201,28 @@ numeral.defaultFormat('0,0.00');
 const VALOR_MEDIO_MAXIMO = 225;
 
 export default {
-    name: 'DetalhamentoListagemVue',
+    name: 'PlanoDistribuicaoDetalhamentoListagem',
     mixins: [utils],
-    props: [
-        'idpreprojeto',
-        'idplanodistribuicao',
-        'idmunicipioibge',
-        'iduf',
-        'disabled',
-        'canalAberto',
-        'detalhamentos',
-    ],
+    props: {
+        disabled: {
+            type: [String, Number],
+            default: '',
+        },
+        canalAberto: {
+            type: [String, Number],
+            default: 0,
+        },
+        detalhamentos: {
+            type: Array,
+            default: () => [],
+        },
+    },
     data() {
         return {
             valorMedioMaximo: VALOR_MEDIO_MAXIMO,
         };
     },
     computed: {
-        // ...mapGetters({
-        //     detalhamentos: 'proposta/obterPlanoDistribuicaoDetalhamentos',
-        // }),
         qtExemplaresTotal() {
             return this.detalhamentos.reduce((total, value) => total + parseInt(value.qtExemplares, 10), 0);
         },
@@ -262,40 +257,30 @@ export default {
             const qtProponenteIntegral = numeral();
             const qtProponenteParcial = numeral();
 
-            for (let i = 0; i < this.detalhamentos.length; i++) {
+            for (let i = 0; i < this.detalhamentos.length; i += 1) {
                 vlReceitaProponenteIntegral.add(this.detalhamentos[i].vlReceitaProponenteIntegral);
                 vlReceitaProponenteParcial.add(parseFloat(this.detalhamentos[i].vlReceitaProponenteParcial));
                 qtProponenteIntegral.add(parseFloat(this.detalhamentos[i].qtProponenteIntegral));
                 qtProponenteParcial.add(parseFloat(this.detalhamentos[i].qtProponenteParcial));
             }
 
-            const media = numeral(parseFloat(vlReceitaProponenteIntegral.value()
+            return numeral(parseFloat(vlReceitaProponenteIntegral.value()
                 + vlReceitaProponenteParcial.value())
-                / (qtProponenteIntegral.value() + qtProponenteParcial.value())
-            );
-
-            return media;
+                / (qtProponenteIntegral.value() + qtProponenteParcial.value()));
+        },
+        isUltrapassouValorMedio() {
+            return (numeral(this.valorMedioProponente).value() > this.valorMedioMaximo
+                && (parseInt(this.canalAberto, 10) === 0));
         },
         valorMedioProponenteFormatado() {
             return this.valorMedioProponente.format();
         },
     },
-    watch: {
-        detalhamentos() {
-            console.log('alterou detalhamentos');
-            if ((numeral(this.valorMedioProponente).value() > this.valorMedioMaximo
-                && (this.canalAberto === 0))) {
-                this.mensagemAlerta(`O valor m&eacute;dio: R$ ${this.valorMedioProponenteFormatado},
-                 n\xE3o pode ultrapassar: R$ ${this.formatarValor(this.valorMedioMaximo)}`);
-                // this.$data.detalhamentos.splice(-1, 1)
-            }
-        },
-    },
     methods: {
-        excluir(detalhamento, index) {
-            this.$emit('eventoRemoverDetalhamento', detalhamento, index);
+        excluir(detalhamento) {
+            this.$emit('eventoRemoverDetalhamento', detalhamento);
         },
-        editar(detalhamento, index) {
+        editar(detalhamento) {
             // eslint-disable-next-line
             const elm = $3(`div[formIdMunicipio='${detalhamento.idMunicipio}']`);
             // eslint-disable-next-line

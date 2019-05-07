@@ -2,13 +2,11 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 // Vue.config.productionTip = false
 
-import  Vue from 'vue';
+import Vue from 'vue';
 import Proposta from './visualizar/Proposta';
 import PropostaDiff from './visualizar/PropostaDiff';
 import PropostaProponente from './visualizar/PropostaProponente';
 import PropostaPlanoDistribuicaoDetalhamentos from './views/PlanoDistribuicaoDetalhamentos';
-import SCarregando from '@/components/Carregando';
-
 import { store } from './config';
 
 Vue.config.productionTip = false;

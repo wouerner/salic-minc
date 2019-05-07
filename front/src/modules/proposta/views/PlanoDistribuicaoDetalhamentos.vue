@@ -15,10 +15,6 @@
                     <detalhamento-listagem
                         v-if="!loadingDetalhamentos"
                         :disabled="disabled"
-                        :idplanodistribuicao="idPlanoDistribuicao"
-                        :idpreprojeto="idPreProjeto"
-                        :iduf="local.idUF"
-                        :idmunicipioibge="local.idMunicipioIBGE"
                         :detalhamentos="obterDetalhamentosPorLocalizacao(local)"
                         :canal-aberto="canalAberto"
                         @eventoRemoverDetalhamento="removerDetalhamento"
@@ -28,6 +24,8 @@
                         v-else
                         text="Carregando detalhamentos"/>
                     <detalhamento-formulario
+                        v-if="!disabled"
+                        ref="detalhamentoFormulario"
                         v-model="exibirFormulario"
                         :disabled="disabled"
                         :id-plano-distribuicao="idPlanoDistribuicao"
@@ -178,6 +176,7 @@ export default {
             });
         },
         salvarPlanoDetalhamento(detalhamento) {
+            this.desabilitarBotaoSalvar(true);
             this.mostrarModalCarregando();
             this.salvarDetalhamento(
                 {
@@ -187,12 +186,18 @@ export default {
             ).then((response) => {
                 if (response.success === 'true') {
                     this.mensagemSucesso(response.msg);
+                    this.detalhamento = {};
                 }
             }).catch((e) => {
                 this.mensagemErro(e.responseJSON.msg);
             }).finally(() => {
+                this.desabilitarBotaoSalvar(false);
                 this.ocultarModalCarregando();
             });
+        },
+        desabilitarBotaoSalvar(val) {
+            // eslint-disable-next-line
+            this.$refs.detalhamentoFormulario.forEach((item) => { item.$refs.btnSalvar.disabled = val; });
         },
     },
 };

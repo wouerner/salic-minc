@@ -152,19 +152,19 @@
                         class="proponente-s"
                     >
                         <legend>
-                            <strong>Proponente </strong>(at&eacute; {{ percentualProponentePadrao * 100 }}%)
+                            <strong>Proponente </strong>(at&eacute; {{ valores.percentualProponentePadrao * 100 }}%)
                             <s-select-percent
-                                :disabled="distribuicaoGratuita =='s' ? true: false"
-                                :maximo-combo="(percentualProponentePadrao * 100)"
-                                :selected="(percentualProponente * 100)"
-                                @evento="percentualProponente = $event/100"
+                                :disabled="distribuicaoGratuita ==='s'"
+                                :maximo-combo="(valores.percentualProponentePadrao * 100)"
+                                :selected="(valores.percentualProponente * 100)"
+                                @evento="valores.percentualProponente = $event/100"
                             />
                         </legend>
                         <div class="row">
                             <div class="input-field col s12 m6 l2">
                                 <s-input-money
                                     :id="`${_uid}-vl-unitario-proponente-integral`"
-                                    :disabled="distribuicaoGratuita =='s'? true: false"
+                                    :disabled="distribuicaoGratuita ==='s'"
                                     :value="inputUnitarioProponenteIntegral"
                                     @ev="inputUnitarioProponenteIntegral = $event"
                                 />
@@ -232,27 +232,27 @@
                         </div>
                     </fieldset>
                     <fieldset
-                        v-show="distribuicaoGratuita =='s' ? false : true"
+                        v-show="distribuicaoGratuita === 's' ? false : true"
                         class="preco-popular"
                     >
                         <legend>
-                            <strong>Pre&ccedil;o Popular</strong> (Padr&atilde;o: {{ percentualPrecoPopularPadrao * 100 }}%)
+                            <strong>Pre&ccedil;o Popular</strong> (Padr&atilde;o: {{ valores.percentualPrecoPopularPadrao * 100 }}%)
                             <s-select-percent
-                                :disabled="distribuicaoGratuita =='s'? true: false"
+                                :disabled="distribuicaoGratuita === 's'"
                                 :maximo-combo="(percentualMaximoPrecoPopular * 100)"
-                                :selected="(percentualPrecoPopular * 100)"
-                                @evento="percentualPrecoPopular = $event/100"
+                                :selected="(valores.percentualPrecoPopular * 100)"
+                                @evento="valores.percentualPrecoPopular = $event/100"
                             />
                         </legend>
                         <div class="row">
                             <div class="input-field col s12 m6 l2">
                                 <s-input-money
-                                    :disabled="distribuicaoGratuita=='s' ? true: false"
+                                    :disabled="distribuicaoGratuita === 's'"
                                     :value="inputUnitarioPopularIntegral"
                                     @ev="inputUnitarioPopularIntegral = $event"
                                 />
                                 <label
-                                    :disabled="distribuicaoGratuita=='s' ? true: false"
+                                    :disabled="distribuicaoGratuita === 's'"
                                     :for="_uid + 'vlUnitarioPopularIntegral'"
                                     class="active"
                                 >Pre&ccedil;o Unit&aacute;rio R$
@@ -323,16 +323,16 @@
                             <div class="col s12 m12 l12">
                                 <div class="small">
                                     <i class="material-icons tiny left">info_outline</i>
-                                    Valor de refer&ecirc;ncia do Vale Cultura: R$ {{ formatarValor(valorMaximoPrecoPopular) }}
+                                    Valor de refer&ecirc;ncia do Vale Cultura: R$ {{ formatarValor(valores.valorMaximoPrecoPopular) }}
                                 </div>
                             </div>
                         </div>
                     </fieldset>
                     <fieldset class="distribuicao-gratuita">
                         <legend>
-                            <strong>Distribui&ccedil;&atilde;o Gratuita</strong> (m&iacute;nimo {{ percentualGratuitoPadrao * 100
+                            <strong>Distribui&ccedil;&atilde;o Gratuita</strong> (m&iacute;nimo {{ valores.percentualGratuitoPadrao * 100
                             }}%)
-                            <span v-if="percentualGratuitoPadrao !== percentualGratuito">
+                            <span v-if="valores.percentualGratuitoPadrao !== percentualGratuito">
                                 <b>Atual {{ parseInt(percentualGratuito * 100) }}%</b>
                             </span>
                         </legend>
@@ -348,7 +348,8 @@
                                     :for="_uid + 'qtGratuitaDivulgacao'"
                                     class="active"
                                 >
-                                    Divulga&ccedil;&atilde;o (At&eacute; {{ parseInt(distribuicao.qtExemplares * percentualGratuitoDivulgacao) }})
+                                    Divulga&ccedil;&atilde;o (At&eacute;
+                                    {{ parseInt(distribuicao.qtExemplares * valores.percentualGratuitoDivulgacao) }})
                                 </label>
                             </div>
                             <div class="input-field col s12 m6 l3">
@@ -362,7 +363,7 @@
                                     :for="_uid + 'qtGratuitaPatrocinador'"
                                     class="active"
                                 >
-                                    Patrocinador (At&eacute; {{ parseInt(distribuicao.qtExemplares * percentualGratuitoPatrocinador) }})
+                                    Patrocinador (At&eacute; {{ parseInt(distribuicao.qtExemplares * valores.percentualGratuitoPatrocinador) }})
                                 </label>
                             </div>
                             <div class="input-field col s12 m6 l3">
@@ -387,10 +388,12 @@
                             <p><strong>Receita Prevista: </strong> R$ {{ vlReceitaPrevista }}</p>
                         </div>
                     </div>
-                    <div class="row salvar center-align">
+                    <div
+                        v-if="!disabled"
+                        class="row salvar center-align">
                         <br>
                         <button
-                            ref="add"
+                            ref="btnSalvar"
                             class="btn waves-effect waves-light"
                             @click.prevent="salvar"
                         >
@@ -408,39 +411,30 @@
 import { utils } from '@/mixins/utils';
 import numeral from 'numeral';
 
-import Vue from 'vue';
 import SSelectPercent from '@/components/SalicSelectPercent';
 import SInputMoney from '@/components/SalicInputMoney';
 
 numeral.locale('pt-br');
 numeral.defaultFormat('0,0.00');
 
-const detalhamentoEventBus = new Vue();
-
 const TIPO_EXEMPLAR = 'e';
 const TIPO_INGRESSO = 'i';
 const NAO = 'n';
 const SIM = 's';
 const TIPO_LOCAL_ABERTO = 'a';
-const TIPO_LOCAL_FECHADO = 'f';
-const TIPO_ESPACO_PUBLICO = 's';
+// const TIPO_LOCAL_FECHADO = 'f';
+// const TIPO_ESPACO_PUBLICO = 's';
 const TIPO_ESPACO_PRIVADO = 'n';
-
-const PROPONENTE_PERCENTUAL_PADRAO = 0.5;
-const PRECO_POPULAR_PERCENTUAL_PADRAO = 0.1;
-const DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO = 0.4;
-
-const PROPONENTE_PERCENTUAL_PADRAO_2017 = 0.5;
-const PRECO_POPULAR_PERCENTUAL_PADRAO_2017 = 0.2;
-const DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO_2017 = 0.3;
 
 const DISTRIBUICAO_GRATUITA_PERCENTUAL_PATROCINADOR = 0.1;
 const DISTRIBUICAO_GRATUITA_PERCENTUAL_DIVULGACAO = 0.1;
 
+const PROPONENTE_PERCENTUAL_PADRAO = 0.5;
+const PRECO_POPULAR_PERCENTUAL_PADRAO = 0.1;
+const DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO = 0.4;
 const VALOR_MAXIMO_PRECO_POPULAR = 50.00;
-const VALOR_MAXIMO_PRECO_POPULAR_2017 = 75.00;
 
-const percentuaisPadroes = {
+const valoresPadroes = {
     percentualGratuitoPadrao: DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO,
     percentualGratuitoDivulgacao: DISTRIBUICAO_GRATUITA_PERCENTUAL_DIVULGACAO,
     percentualGratuitoPatrocinador: DISTRIBUICAO_GRATUITA_PERCENTUAL_PATROCINADOR,
@@ -450,6 +444,11 @@ const percentuaisPadroes = {
     percentualProponente: PROPONENTE_PERCENTUAL_PADRAO,
     valorMaximoPrecoPopular: VALOR_MAXIMO_PRECO_POPULAR,
 };
+
+const PROPONENTE_PERCENTUAL_PADRAO_2017 = 0.5;
+const PRECO_POPULAR_PERCENTUAL_PADRAO_2017 = 0.2;
+const DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO_2017 = 0.3;
+const VALOR_MAXIMO_PRECO_POPULAR_2017 = 75.00;
 
 const valoresNormativo2017 = {
     percentualGratuitoPadrao: DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO_2017,
@@ -463,7 +462,7 @@ const valoresNormativo2017 = {
 };
 
 export default {
-    name: 'FormularioDetalhamento',
+    name: 'PlanoDistribuicaoDetalhamentoFormulario',
     components: { SSelectPercent, SInputMoney },
     mixins: [utils],
     props: {
@@ -538,14 +537,24 @@ export default {
             labelInteira: 'Inteira',
             inputUnitarioPopularIntegral: 0,
             inputUnitarioProponenteIntegral: 0,
-            percentualGratuitoPadrao: DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO,
-            percentualGratuitoDivulgacao: DISTRIBUICAO_GRATUITA_PERCENTUAL_DIVULGACAO,
-            percentualGratuitoPatrocinador: DISTRIBUICAO_GRATUITA_PERCENTUAL_PATROCINADOR,
-            percentualPrecoPopularPadrao: PRECO_POPULAR_PERCENTUAL_PADRAO,
-            percentualPrecoPopular: PRECO_POPULAR_PERCENTUAL_PADRAO,
-            percentualProponentePadrao: PROPONENTE_PERCENTUAL_PADRAO,
-            percentualProponente: PROPONENTE_PERCENTUAL_PADRAO,
-            valorMaximoPrecoPopular: VALOR_MAXIMO_PRECO_POPULAR,
+            valores: {
+                percentualGratuitoPadrao: DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO,
+                percentualGratuitoDivulgacao: DISTRIBUICAO_GRATUITA_PERCENTUAL_DIVULGACAO,
+                percentualGratuitoPatrocinador: DISTRIBUICAO_GRATUITA_PERCENTUAL_PATROCINADOR,
+                percentualPrecoPopularPadrao: PRECO_POPULAR_PERCENTUAL_PADRAO,
+                percentualPrecoPopular: PRECO_POPULAR_PERCENTUAL_PADRAO,
+                percentualProponentePadrao: PROPONENTE_PERCENTUAL_PADRAO,
+                percentualProponente: PROPONENTE_PERCENTUAL_PADRAO,
+                valorMaximoPrecoPopular: VALOR_MAXIMO_PRECO_POPULAR,
+            },
+            // percentualGratuitoPadrao: DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO,
+            // percentualGratuitoDivulgacao: DISTRIBUICAO_GRATUITA_PERCENTUAL_DIVULGACAO,
+            // percentualGratuitoPatrocinador: DISTRIBUICAO_GRATUITA_PERCENTUAL_PATROCINADOR,
+            // percentualPrecoPopularPadrao: PRECO_POPULAR_PERCENTUAL_PADRAO,
+            // percentualPrecoPopular: PRECO_POPULAR_PERCENTUAL_PADRAO,
+            // percentualProponentePadrao: PROPONENTE_PERCENTUAL_PADRAO,
+            // percentualProponente: PROPONENTE_PERCENTUAL_PADRAO,
+            // valorMaximoPrecoPopular: VALOR_MAXIMO_PRECO_POPULAR,
         };
     },
     computed: {
@@ -556,7 +565,7 @@ export default {
                 this.distribuicao.tpVenda,
                 this.inputUnitarioProponenteIntegral,
                 this.inputUnitarioPopularIntegral,
-                this.percentualPrecoPopular,
+                this.valores.percentualPrecoPopular,
                 this.distribuicao,
             ].join();
         },
@@ -576,19 +585,19 @@ export default {
             if (this.distribuicaoGratuita === SIM) {
                 return 1;
             }
-            return DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO
-                    + (this.percentualMaximoPrecoPopular - this.percentualPrecoPopular);
+            return this.valores.percentualGratuitoPadrao
+                    + (this.percentualMaximoPrecoPopular - this.valores.percentualPrecoPopular);
         },
         percentualMaximoPrecoPopular() {
-            return PRECO_POPULAR_PERCENTUAL_PADRAO + (PROPONENTE_PERCENTUAL_PADRAO - this.percentualProponente);
+            return this.valores.percentualPrecoPopularPadrao + (this.valores.percentualProponentePadrao - this.valores.percentualProponente);
         },
         qtPrecoPopularValorIntegralLimite() {
             const percentualPopularIntegral = this.distribuicao.tpVenda === TIPO_EXEMPLAR ? 1 : 0.5;
-            return parseInt((this.distribuicao.qtExemplares * this.percentualPrecoPopular) * percentualPopularIntegral, 10);
+            return parseInt((this.distribuicao.qtExemplares * this.valores.percentualPrecoPopular) * percentualPopularIntegral, 10);
         },
         qtPrecoPopularValorParcialLimite() {
             const percentualPopularParcial = this.distribuicao.tpVenda === TIPO_EXEMPLAR ? 0 : 0.5;
-            return parseInt((this.distribuicao.qtExemplares * this.percentualPrecoPopular) * percentualPopularParcial, 10);
+            return parseInt((this.distribuicao.qtExemplares * this.valores.percentualPrecoPopular) * percentualPopularParcial, 10);
         },
         vlReceitaPopularIntegral() {
             return numeral(
@@ -630,7 +639,7 @@ export default {
             }
         },
         'distribuicao.qtGratuitaDivulgacao': function (val) {
-            const limiteQuantidadeDivulgacao = parseInt(this.distribuicao.qtExemplares * this.percentualGratuitoDivulgacao, 10);
+            const limiteQuantidadeDivulgacao = parseInt(this.distribuicao.qtExemplares * this.valores.percentualGratuitoDivulgacao, 10);
 
             if (val > limiteQuantidadeDivulgacao) {
                 this.mensagemAlerta(`A quantidade n\xE3o pode passar de ${limiteQuantidadeDivulgacao}`);
@@ -645,7 +654,7 @@ export default {
             this.distribuicao.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
         },
         'distribuicao.qtGratuitaPatrocinador': function (val) {
-            const limitePatrocinador = parseInt(this.distribuicao.qtExemplares * this.percentualGratuitoPatrocinador, 10);
+            const limitePatrocinador = parseInt(this.distribuicao.qtExemplares * this.valores.percentualGratuitoPatrocinador, 10);
 
             if (val > limitePatrocinador) {
                 this.mensagemAlerta(`A quantidade n\xE3o pode passar de ${limitePatrocinador}`);
@@ -660,18 +669,18 @@ export default {
             this.distribuicao.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
         },
         'distribuicao.vlUnitarioPopularIntegral': function () {
-            if (this.distribuicao.vlUnitarioPopularIntegral > this.valorMaximoPrecoPopular) {
+            if (this.distribuicao.vlUnitarioPopularIntegral > this.valores.valorMaximoPrecoPopular) {
                 this.mensagemAlerta(`O pre\xE7o unit\xE1rio do pre\xE7o popular n\xE3o pode
-                ser maior que R$ ${this.formatarValor(this.valorMaximoPrecoPopular)}`);
-                this.inputUnitarioPopularIntegral = this.formatarValor(this.valorMaximoPrecoPopular);
+                ser maior que R$ ${this.formatarValor(this.valores.valorMaximoPrecoPopular)}`);
+                this.inputUnitarioPopularIntegral = this.formatarValor(this.valores.valorMaximoPrecoPopular);
             }
         },
-        percentualProponente(val) {
-            if (val > this.percentualProponentePadrao) {
-                this.mensagemAlerta(`Percentual do Proponente n\u00E3o pode ser maior que ${this.percentualProponentePadrao * 100}%`);
+        'valores.percentualProponente': function (val) {
+            if (val > this.valores.percentualProponentePadrao) {
+                this.mensagemAlerta(`Percentual do Proponente n\u00E3o pode ser maior que ${this.valores.percentualProponentePadrao * 100}%`);
             }
 
-            this.percentualPrecoPopular = this.percentualMaximoPrecoPopular;
+            this.valores.percentualPrecoPopular = this.percentualMaximoPrecoPopular;
         },
         atualizarCalculosDistribuicao() {
             this.labelInteira = 'Inteira';
@@ -685,10 +694,10 @@ export default {
             this.distribuicao.vlReceitaPopularParcial = 0;
 
             if (this.distribuicaoGratuita === NAO) {
-                this.distribuicao.qtProponenteIntegral = this.obterQuantidadePorPercentual(this.percentualProponente);
-                this.distribuicao.qtProponenteParcial = this.obterQuantidadePorPercentual(this.percentualProponente);
-                this.distribuicao.qtPopularIntegral = this.obterQuantidadePorPercentual(this.percentualPrecoPopular);
-                this.distribuicao.qtPopularParcial = this.obterQuantidadePorPercentual(this.percentualPrecoPopular);
+                this.distribuicao.qtProponenteIntegral = this.obterQuantidadePorPercentual(this.valores.percentualProponente);
+                this.distribuicao.qtProponenteParcial = this.obterQuantidadePorPercentual(this.valores.percentualProponente);
+                this.distribuicao.qtPopularIntegral = this.obterQuantidadePorPercentual(this.valores.percentualPrecoPopular);
+                this.distribuicao.qtPopularParcial = this.obterQuantidadePorPercentual(this.valores.percentualPrecoPopular);
                 this.distribuicao.vlReceitaProponenteIntegral = this.converterParaMoedaAmericana(this.vlReceitaProponenteIntegral);
                 this.distribuicao.vlReceitaProponenteParcial = this.converterParaMoedaAmericana(this.vlReceitaProponenteParcial);
                 this.distribuicao.vlReceitaPopularIntegral = this.converterParaMoedaAmericana(this.vlReceitaPopularIntegral);
@@ -709,35 +718,35 @@ export default {
             }
 
             this.distribuicao.vlReceitaPrevista = this.converterParaMoedaAmericana(this.vlReceitaPrevista);
-            this.distribuicao.qtGratuitaDivulgacao = parseInt(this.distribuicao.qtExemplares * this.percentualGratuitoDivulgacao, 10);
-            this.distribuicao.qtGratuitaPatrocinador = parseInt(this.distribuicao.qtExemplares * this.percentualGratuitoPatrocinador, 10);
+            this.distribuicao.qtGratuitaDivulgacao = parseInt(this.distribuicao.qtExemplares * this.valores.percentualGratuitoDivulgacao, 10);
+            this.distribuicao.qtGratuitaPatrocinador = parseInt(this.distribuicao.qtExemplares * this.valores.percentualGratuitoPatrocinador, 10);
             this.distribuicao.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
         },
         editarDetalhamento(object) {
-            const vue = this;
+            const self = this;
             this.limparFormulario();
             if (object.idDetalhaPlanoDistribuicao != null) {
-                vue.visualizarFormulario = true;
+                self.visualizarFormulario = true;
                 // definir o percentual do proponente
                 const percentualProponente = (parseInt(object.qtProponenteIntegral, 10)
                     + parseInt(object.qtProponenteParcial, 10)) / parseInt(object.qtExemplares, 10);
-                vue.percentualProponente = Number((percentualProponente).toFixed(2));
+                self.percentualProponente = Number((percentualProponente).toFixed(2));
 
-                // definir o percentual do preco popular, é atualizado no proximo ciclo
+                // definir o percentual do preco popular
                 this.$nextTick(() => {
                     const percentualPrecoPopular = (parseInt(object.qtPopularIntegral, 10)
                         + parseInt(object.qtPopularParcial, 10))
                         / parseInt(object.qtExemplares, 10);
-                    vue.percentualPrecoPopular = Number((percentualPrecoPopular).toFixed(2));
+                    self.valores.percentualPrecoPopular = Number((percentualPrecoPopular).toFixed(2));
                 });
 
-                Object.assign(vue.distribuicao, object);
+                Object.assign(self.distribuicao, object);
 
-                vue.inputUnitarioPopularIntegral = vue.formatarValor(object.vlUnitarioPopularIntegral);
-                vue.inputUnitarioProponenteIntegral = vue.formatarValor(object.vlUnitarioProponenteIntegral);
+                self.inputUnitarioPopularIntegral = self.formatarValor(object.vlUnitarioPopularIntegral);
+                self.inputUnitarioProponenteIntegral = self.formatarValor(object.vlUnitarioProponenteIntegral);
 
                 if (object.vlUnitarioPopularIntegral === 0 && object.vlUnitarioProponenteIntegral === 0) {
-                    vue.distribuicaoGratuita = SIM;
+                    self.distribuicaoGratuita = SIM;
                 }
             }
         },
@@ -749,7 +758,10 @@ export default {
         },
     },
     mounted() {
-        this.$refs.add.disabled = !this.disabled;
+        this.$nextTick(() => {
+            this.valores = Object.assign({}, valoresNormativo2017);
+        });
+        // }
     },
     methods: {
         obterQuantidadePorPercentual(percentualDistribuicao) {
@@ -785,19 +797,19 @@ export default {
             }
 
             if (this.distribuicaoGratuita === NAO) {
-                if (this.distribuicao.vlUnitarioProponenteIntegral === 0 && this.percentualProponente > 0) {
+                if (this.distribuicao.vlUnitarioProponenteIntegral === 0 && this.valores.percentualProponente > 0) {
                     this.mensagemAlerta('Pre\xE7o unit\xE1rio no Proponente \xE9 obrigat\xF3rio!');
                     return;
                 }
 
-                if (this.distribuicao.vlUnitarioPopularIntegral === 0 && this.percentualPrecoPopular > 0) {
+                if (this.distribuicao.vlUnitarioPopularIntegral === 0 && this.valores.percentualPrecoPopular > 0) {
                     this.mensagemAlerta('Pre\xE7o unit\xE1rio no Pre\xE7o Popular \xE9 obrigat\xF3rio!');
                     return;
                 }
             }
 
-            if (this.percentualProponente > this.percentualProponentePadrao) {
-                this.mensagemAlerta(`Percentual do Proponente n\u00E3o pode ser maior que ${this.percentualProponentePadrao * 100}%`);
+            if (this.valores.percentualProponente > this.valores.percentualProponentePadrao) {
+                this.mensagemAlerta(`Percentual do Proponente n\u00E3o pode ser maior que ${this.valores.percentualProponentePadrao * 100}%`);
                 return;
             }
 
