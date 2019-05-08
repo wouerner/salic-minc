@@ -112,6 +112,7 @@
                                     class="mt-1"
                                     @arquivo-anexado="atualizarArquivo($event)"
                                     @arquivo-removido="removerArquivo()"
+                                    @arquivo-tipo-invalido="arquivoTipoInvalido($event)"
                                 />
                             </v-card-actions>
                         </v-card>
@@ -244,7 +245,7 @@ export default {
                 date: 'TemplateDate',
             },
             templateEdicao: [],
-            formatosAceitos: 'application/pdf',
+            formatosAceitos: ['application/pdf'],
             panel: [true, true],
             readequacaoEditada: {
                 idReadequacao: 0,
@@ -434,6 +435,14 @@ export default {
                 this.mensagem.cor = 'green darken-1';
                 this.recarregarReadequacoes = true;
             });
+        },
+        arquivoTipoInvalido(payload) {
+            const tiposValidos = payload.formatosAceitos.join(', ');
+            this.mensagem.conteudo = `Tipo fornecido (${payload.formatoEnviado}) não é aceito. Tipos aceitos: ${tiposValidos}`;
+            this.mensagem.timeout = 5000;
+            this.mensagem.ativa = true;
+            this.mensagem.finaliza = false;
+            this.mensagem.cor = 'red lighten-1';
         },
         atualizarCampo(valor, campo) {
             if (this.campos.includes(campo)) {

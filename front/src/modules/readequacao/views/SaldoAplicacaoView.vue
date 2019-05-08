@@ -69,7 +69,15 @@
                                         :min-char="minChar.justificativa"
                                         @dados-update="atualizarCampo($event, 'dsJustificativa')"
                                         @editor-texto-counter="atualizarContador($event, 'justificativa')"
-                                    />                          
+                                    />
+                                    <upload-file
+                                        :formatos-aceitos="formatosAceitos"
+                                        :id-documento="dadosReadequacao.idDocumento"
+                                        class="mt-1"
+                                        @arquivo-anexado="atualizarArquivo($event)"
+                                        @arquivo-removido="removerArquivo()"
+                                        @arquivo-tipo-invalido="arquivoTipoInvalido($event)"
+                                    />
 	                            </v-card>
 	                        </v-expansion-panel-content>
 	                        <v-expansion-panel-content
@@ -87,7 +95,7 @@
 	                    </v-expansion-panel>    
 	                </v-flex>
                     <v-footer
-                        v-if="false"
+                        v-if="true"
                         id="footer"
                         class="pb-4 pt-4 elevation-18"
                         fixed
@@ -131,7 +139,7 @@
             </v-flex>
         </v-layout>
         <mensagem
-            :mensagem="mensagemObj"
+            :mensagem="mensagem"
         />        
         <div v-show="exibirBotaoIniciar">
             <v-btn
@@ -326,6 +334,13 @@
 import { mapActions, mapGetters } from 'vuex';
 import { utils } from '@/mixins/utils';
 import Const from '../const';
+import Mensagem from '../components/Mensagem';
+import FinalizarButton from '../components/FinalizarButton';
+import validarFormulario from '../mixins/validarFormulario';
+import verificarPerfil from '../mixins/verificarPerfil';
+import Carregando from '@/components/CarregandoVuetify';
+import UploadFile from './../components/UploadFile';
+/* velho abaixo */
 import ReadequacaoSaldoAplicacaoSaldo from '../components/ReadequacaoSaldoAplicacaoSaldo';
 import ReadequacaoSaldoAplicacaoResumo from '../components/ReadequacaoSaldoAplicacaoResumo';
 // import ReadequacaoFormulario from '../components/ReadequacaoFormulario';
@@ -334,11 +349,6 @@ import ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria from '../components/Readequ
 import PlanilhaOrcamentariaAlterarItem from '../components/PlanilhaOrcamentariaAlterarItem';
 import PlanilhaOrcamentariaIncluirItem from '../components/PlanilhaOrcamentariaIncluirItem';
 import PlanilhaOrcamentaria from '../components/PlanilhaOrcamentaria';
-import Mensagem from '../components/Mensagem';
-import FinalizarButton from '../components/FinalizarButton';
-import validarFormulario from '../mixins/validarFormulario';
-import verificarPerfil from '../mixins/verificarPerfil';
-import Carregando from '@/components/CarregandoVuetify';
 
 export default {
     name: 'SaldoAplicacaoView',
@@ -353,6 +363,7 @@ export default {
         Mensagem,
         FinalizarButton,
         Carregando,
+        UploadFile,
     },
     mixins: [
         utils,
@@ -370,7 +381,7 @@ export default {
                 idDocumento: '',
                 dsAvaliacao: '',
             },
-            mensagemObj: {
+            mensagem: {
                 ativa: false,
                 timeout: 2300,
                 conteudo: '',
@@ -404,6 +415,7 @@ export default {
             loading: true,
             exibirBotaoIniciar: false,
             permissao: true,
+            formatosAceitos: ['application/pdf'],
             /* velho em diante
             disabled: false,
             idPronac: '',
@@ -514,7 +526,6 @@ export default {
             if (typeof value === 'object') {
                 if (Object.keys(value).length > 0) {
                     this.loaded.usuario = true;
-                    console.log('this.loaded.usuario = true;');
                 }
             }
         },
@@ -526,7 +537,6 @@ export default {
                         return;
                     }
                     this.loaded.projeto = true;
-                    console.log('this.loaded.projeto = true;');
                 }
             }
         },
@@ -534,7 +544,7 @@ export default {
             handler(value) {
                 if (value.idPronac && value.idTipoReadequacao) {
                     this.loaded.readequacao = true;
-                    console.log('this.loaded.readequacao = true;');
+                    this.inicializarReadequacaoEditada();
                     /* velho em diante 
                     this.obterDisponivelEdicaoReadequacaoPlanilha(this.dadosProjeto.idPronac);
                     this.carregarValorEntrePlanilhas();
@@ -546,10 +556,10 @@ export default {
                 }
             }
         },
-        mensagemObj: {
-            handler(mensagemObj) {
-                if (mensagemObj.ativa === false
-                    && mensagemObj.finaliza === true) {
+        mensagem: {
+            handler(mensagem) {
+                if (mensagem.ativa === false
+                    && mensagem.finaliza === true) {
                     this.dialog = false;
                 }
             },
@@ -604,13 +614,41 @@ export default {
         },
         salvarReadequacao() {
             this.updateReadequacao(this.readequacaoEditada).then(() => {
-                this.mensagemObj.conteudo = 'Readequação salva com sucesso!';
-                this.mensagemObj.timeout = 2300;
-                this.mensagemObj.ativa = true;
-                this.mensagemObj.finaliza = true;
-                this.mensagemObj.cor = 'green darken-1';
+                this.mensagem.conteudo = 'Readequação salva com sucesso!';
+                this.mensagem.timeout = 2300;
+                this.mensagem.ativa = true;
+                this.mensagem.cor = 'green darken-1';
                 this.recarregarReadequacoes = true;
             });
+        },
+        atualizarArquivo(arquivo) {
+            this.readequacaoEditada.documento = arquivo;
+            this.updateReadequacao(this.readequacaoEditada).then(() => {
+                this.mensagem.conteudo = 'Arquivo enviado!';
+                this.mensagem.ativa = true;
+                this.mensagem.finaliza = false;
+                this.mensagem.cor = 'green darken-1';
+                this.recarregarReadequacoes = true;
+            });
+        },
+        removerArquivo() {
+            this.readequacaoEditada.documento = '';
+            this.readequacaoEditada.idDocumento = '';
+            this.updateReadequacao(this.readequacaoEditada).then(() => {
+                this.mensagem.conteudo = 'Arquivo removido!';
+                this.mensagem.ativa = true;
+                this.mensagem.finaliza = false;
+                this.mensagem.cor = 'green darken-1';
+                this.recarregarReadequacoes = true;
+            });
+        },
+        arquivoTipoInvalido(payload) {
+            const tiposValidos = payload.formatosAceitos.join(', ');
+            this.mensagem.conteudo = `Tipo fornecido (${payload.formatoEnviado}) não é aceito. Tipos aceitos: ${tiposValidos}`;
+            this.mensagem.timeout = 5000;
+            this.mensagem.ativa = true;
+            this.mensagem.finaliza = false;
+            this.mensagem.cor = 'red lighten-1';
         },
         atualizarCampo(valor, campo) {
             this.readequacaoEditada[campo] = valor;

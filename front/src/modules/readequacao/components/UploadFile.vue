@@ -59,8 +59,8 @@ export default {
     mixins: [abrirArquivo],
     props: {
         formatosAceitos: {
-            type: String,
-            default: 'application/pdf',
+            type: Array,
+            default: ['application/pdf'],
         },
         idDocumento: {
             type: [
@@ -72,24 +72,6 @@ export default {
     },
     data() {
         return {
-            server: {
-                process: (fieldName, file, metadata, load, error, progress, abort) => {
-                    const request = new XMLHttpRequest();
-                    request.open('POST', '/');
-                    request.abort();
-                    progress(true, 0, 1024);
-                    load(file);
-                    return {
-                        abort: () => {
-                            // Let FilePond know the request has been cancelled
-                            abort();
-                        },
-                    };
-                },
-                load: null,
-                revert: null,
-                fetch: null,
-            },
             file: '',
         };
     },
@@ -109,14 +91,31 @@ export default {
         openFileDialog() {
             document.getElementById('file-upload').click();
         },
+        checkFormat(file) {
+            if (!this.formatosAceitos.find(
+                (i) => i === file.type)
+               ) {
+                const payload = {
+                    mensagem: 'Tipo não aceito',
+                    formatoEnviado: file.type,
+                    formatosAceitos: this.formatosAceitos,
+                };
+                this.$emit('arquivo-tipo-invalido', payload);
+                return false;
+            }
+            return true;
+
+        },
         handleFileUpload() {
             const file = this.$refs.file.files[0];
-            this.file = file;
-            if (this.$refs.file.files[0]) {
-                const payload = this.$refs.file.files[0];
-                this.$emit('arquivo-anexado', payload);
-            } else {
-                this.$emit('arquivo-removido');
+            if(this.checkFormat(file)) {
+                this.file = file;
+                if (this.$refs.file.files[0]) {
+                    const payload = this.$refs.file.files[0];
+                    this.$emit('arquivo-anexado', payload);
+                } else {
+                    this.$emit('arquivo-removido');
+                }
             }
         },
         removerArquivo() {
