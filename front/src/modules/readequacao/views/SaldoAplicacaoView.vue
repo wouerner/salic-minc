@@ -58,7 +58,9 @@
                                         class="headline"
                                     >Dados da readequação</h3>
                                 </div>
-	                            <v-card>
+	                            <v-card
+                                    class="mb-5"
+                                >
                                     <v-card-title
                                         class="green lighten-2 title"
                                     >
@@ -70,15 +72,39 @@
                                         @dados-update="atualizarCampo($event, 'dsJustificativa')"
                                         @editor-texto-counter="atualizarContador($event, 'justificativa')"
                                     />
-                                    <upload-file
-                                        :formatos-aceitos="formatosAceitos"
-                                        :id-documento="dadosReadequacao.idDocumento"
-                                        class="mt-1"
-                                        @arquivo-anexado="atualizarArquivo($event)"
-                                        @arquivo-removido="removerArquivo()"
-                                        @arquivo-tipo-invalido="arquivoTipoInvalido($event)"
-                                    />
+                                </v-card>
+                                <v-card
+                                    class="mb-5"
+                                >
+                                    <v-card-title
+                                        class="green lighten-2 title"
+                                    >
+                                        Arquivo anexo
+                                    </v-card-title>
+                                    <v-card-actions>
+                                        <upload-file
+                                            :formatos-aceitos="formatosAceitos"
+                                            :id-documento="dadosReadequacao.idDocumento"
+                                            class="mt-1"
+                                            @arquivo-anexado="atualizarArquivo($event)"
+                                            @arquivo-removido="removerArquivo()"
+                                            @arquivo-tipo-invalido="arquivoTipoInvalido($event)"
+                                        />
+                                    </v-card-actions>
 	                            </v-card>
+	                            <v-card
+                                    class="mb-5"
+                                >
+                                    <v-card-title
+                                        class="green lighten-2 title"
+                                    >
+                                        Valor disponível
+                                    </v-card-title>
+                                    <valor-disponivel
+                                        :valor="dadosReadequacao.dsSolicitacao"
+                                        @dados-update="atualizarCampo($event, 'dsSolicitacao')"
+                                    />
+                                </v-card>
 	                        </v-expansion-panel-content>
 	                        <v-expansion-panel-content
 	                            :key="2"
@@ -158,21 +184,6 @@
          v-if="!disabled"
          v-show="exibirPaineis"
          >
-         <li id="collapsible">
-         <div class="collapsible-header active"><i class="material-icons">assignment</i>Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</div>
-         <div class="collapsible-body">
-         <readequacao-formulario
-         ref="formulario"
-         :id-pronac="idPronac"
-         :disabled="disabled"
-         :id-tipo-readequacao="idTipoReadequacao"
-         :componente-ds-solicitacao='componenteFormulario'
-         :objReadequacao="dadosReadequacao"
-7         v-on:eventoAtualizarReadequacao="atualizarReadequacao"
-         >
-         </readequacao-formulario>
-         </div>
-         </li>
          <li>
          <div class="collapsible-header">
          <i class="material-icons">list</i>
@@ -339,12 +350,12 @@ import FinalizarButton from '../components/FinalizarButton';
 import validarFormulario from '../mixins/validarFormulario';
 import verificarPerfil from '../mixins/verificarPerfil';
 import Carregando from '@/components/CarregandoVuetify';
+import FormReadequacao from '../components/FormReadequacao';
 import UploadFile from './../components/UploadFile';
+import ValorDisponivel from '../components/ValorDisponivel';
 /* velho abaixo */
-import ReadequacaoSaldoAplicacaoSaldo from '../components/ReadequacaoSaldoAplicacaoSaldo';
 import ReadequacaoSaldoAplicacaoResumo from '../components/ReadequacaoSaldoAplicacaoResumo';
 // import ReadequacaoFormulario from '../components/ReadequacaoFormulario';
-import FormReadequacao from '../components/FormReadequacao';
 import ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria from '../components/ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria';
 import PlanilhaOrcamentariaAlterarItem from '../components/PlanilhaOrcamentariaAlterarItem';
 import PlanilhaOrcamentariaIncluirItem from '../components/PlanilhaOrcamentariaIncluirItem';
@@ -353,17 +364,17 @@ import PlanilhaOrcamentaria from '../components/PlanilhaOrcamentaria';
 export default {
     name: 'SaldoAplicacaoView',
     components: {
-        ReadequacaoSaldoAplicacaoResumo,
-        ReadequacaoSaldoAplicacaoSaldo,
-        FormReadequacao,
-        PlanilhaOrcamentariaAlterarItem,
-        PlanilhaOrcamentariaIncluirItem,
-        ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria,
-        PlanilhaOrcamentaria,
         Mensagem,
         FinalizarButton,
         Carregando,
         UploadFile,
+        ValorDisponivel,
+        FormReadequacao,
+        ReadequacaoSaldoAplicacaoResumo,
+        PlanilhaOrcamentariaAlterarItem,
+        PlanilhaOrcamentariaIncluirItem,
+        ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria,
+        PlanilhaOrcamentaria,
     },
     mixins: [
         utils,
@@ -429,7 +440,6 @@ export default {
             mostrarMensagemFinal: false,
             valorEntrePlanilhas: [],
             tipoPlanilha: 7,
-            componenteFormulario: 'ReadequacaoSaldoAplicacaoSaldo',
             componentePlanilha: 'ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria',
             disponivelParaAdicaoItensReadequacaoPlanilha: false,
             readequacaoAlterada: false, */
