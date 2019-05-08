@@ -422,8 +422,6 @@ const TIPO_INGRESSO = 'i';
 const NAO = 'n';
 const SIM = 's';
 const TIPO_LOCAL_ABERTO = 'a';
-// const TIPO_LOCAL_FECHADO = 'f';
-// const TIPO_ESPACO_PUBLICO = 's';
 const TIPO_ESPACO_PRIVADO = 'n';
 
 const DISTRIBUICAO_GRATUITA_PERCENTUAL_PATROCINADOR = 0.1;
@@ -460,6 +458,8 @@ const valoresNormativo2017 = {
     percentualProponente: PROPONENTE_PERCENTUAL_PADRAO_2017,
     valorMaximoPrecoPopular: VALOR_MAXIMO_PRECO_POPULAR_2017,
 };
+
+const INSTRUCAO_NORMATIVA_2019 = 10;
 
 export default {
     name: 'PlanoDistribuicaoDetalhamentoFormulario',
@@ -537,24 +537,7 @@ export default {
             labelInteira: 'Inteira',
             inputUnitarioPopularIntegral: 0,
             inputUnitarioProponenteIntegral: 0,
-            valores: {
-                percentualGratuitoPadrao: DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO,
-                percentualGratuitoDivulgacao: DISTRIBUICAO_GRATUITA_PERCENTUAL_DIVULGACAO,
-                percentualGratuitoPatrocinador: DISTRIBUICAO_GRATUITA_PERCENTUAL_PATROCINADOR,
-                percentualPrecoPopularPadrao: PRECO_POPULAR_PERCENTUAL_PADRAO,
-                percentualPrecoPopular: PRECO_POPULAR_PERCENTUAL_PADRAO,
-                percentualProponentePadrao: PROPONENTE_PERCENTUAL_PADRAO,
-                percentualProponente: PROPONENTE_PERCENTUAL_PADRAO,
-                valorMaximoPrecoPopular: VALOR_MAXIMO_PRECO_POPULAR,
-            },
-            // percentualGratuitoPadrao: DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO,
-            // percentualGratuitoDivulgacao: DISTRIBUICAO_GRATUITA_PERCENTUAL_DIVULGACAO,
-            // percentualGratuitoPatrocinador: DISTRIBUICAO_GRATUITA_PERCENTUAL_PATROCINADOR,
-            // percentualPrecoPopularPadrao: PRECO_POPULAR_PERCENTUAL_PADRAO,
-            // percentualPrecoPopular: PRECO_POPULAR_PERCENTUAL_PADRAO,
-            // percentualProponentePadrao: PROPONENTE_PERCENTUAL_PADRAO,
-            // percentualProponente: PROPONENTE_PERCENTUAL_PADRAO,
-            // valorMaximoPrecoPopular: VALOR_MAXIMO_PRECO_POPULAR,
+            valores: valoresPadroes,
         };
     },
     computed: {
@@ -758,10 +741,9 @@ export default {
         },
     },
     mounted() {
-        this.$nextTick(() => {
-            this.valores = Object.assign({}, valoresNormativo2017);
-        });
-        // }
+        if (parseInt(this.idNormativo, 10) < INSTRUCAO_NORMATIVA_2019) {
+            Object.assign(this.$data.valores, valoresNormativo2017);
+        }
     },
     methods: {
         obterQuantidadePorPercentual(percentualDistribuicao) {

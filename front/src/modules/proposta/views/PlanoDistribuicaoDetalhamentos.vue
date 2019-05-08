@@ -1,5 +1,5 @@
 <template>
-    <div class="plano-distribuicao-detalhanentos">
+    <div class="plano-distribuicao-detalhamentos">
         <ul
             v-if="!loadingLocais"
             class="collapsible"
@@ -11,7 +11,9 @@
                     {{ local.uf ? local.uf : 'Exterior' }}
                     {{ local.cidade ? ` -  ${local.cidade}` : '' }}
                 </div>
-                <div class="collapsible-body">
+                <div
+                    class="collapsible-body"
+                    style="background-color: #fff">
                     <detalhamento-listagem
                         v-if="!loadingDetalhamentos"
                         :disabled="disabled"
@@ -46,11 +48,9 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import { utils } from '@/mixins/utils';
 import MxUtilsProposta from '../mixins/utilsProposta';
-
-import { mapActions, mapGetters } from 'vuex';
-
 import DetalhamentoFormulario from '../components/PlanoDistribuicaoDetalhamentos/DetalhamentoFormulario';
 import DetalhamentoListagem from '../components/PlanoDistribuicaoDetalhamentos/DetalhamentoListagem';
 import SCarregando from '@/components/Carregando';
@@ -124,6 +124,7 @@ export default {
         removerDetalhamento(detalhamento) {
             // eslint-disable-next-line
             if (confirm('Tem certeza que deseja deletar o item?')) {
+                this.mostrarModalCarregando();
                 this.excluirDetalhamento(
                     {
                         idPreProjeto: this.idPreProjeto,
@@ -136,6 +137,8 @@ export default {
                     }
                 }).catch((e) => {
                     this.mensagemErro(e.responseJSON.msg);
+                }).finally(() => {
+                    this.ocultarModalCarregando();
                 });
             }
         },

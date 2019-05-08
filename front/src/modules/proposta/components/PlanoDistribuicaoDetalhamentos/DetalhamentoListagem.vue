@@ -47,19 +47,19 @@
                     </th>
                 </tr>
                 <tr style="background-color: #f2f2f2">
-                    <th class="proponente">
+                    <th class="proponente center-align">
                         Qtd. Inteira
                     </th>
-                    <th class="proponente">
+                    <th class="proponente center-align">
                         Qtd. Meia
                     </th>
-                    <th class="proponente">
+                    <th class="proponente center-align">
                         Pre&ccedil;o <br> Unitario
                     </th>
-                    <th class="popular">
+                    <th class="popular center-align">
                         Qtd. Inteira
                     </th>
-                    <th class="popular">
+                    <th class="popular center-align">
                         Qtd. Meia
                     </th>
                     <th class="popular">
@@ -67,36 +67,37 @@
                     </th>
                 </tr>
             </thead>
-            <tbody v-if="detalhamentos && detalhamentos.length > 0">
+            <tbody
+                v-if="detalhamentos && detalhamentos.length > 0">
                 <tr
                     v-for="( detalhamento, index ) in detalhamentos"
                     :key="index">
                     <td>{{ detalhamento.dsProduto }}</td>
-                    <td class="right-align">
+                    <td class="center-align">
                         {{ detalhamento.qtExemplares }}
                     </td>
                     <!--Preço Proponente -->
-                    <td class="right-align">
+                    <td class="center-align">
                         {{ detalhamento.qtProponenteIntegral }}
                     </td>
-                    <td class="right-align">
+                    <td class="center-align">
                         {{ detalhamento.qtProponenteParcial }}
                     </td>
                     <td class="right-align">
                         {{ detalhamento.vlUnitarioProponenteIntegral | filtroFormatarParaReal }}
                     </td>
                     <!--Preço Popular -->
-                    <td class="right-align">
+                    <td class="center-align">
                         {{ detalhamento.qtPopularIntegral }}
                     </td>
-                    <td class="right-align">
+                    <td class="center-align">
                         {{ detalhamento.qtPopularParcial }}
                     </td>
                     <td class="right-align">
                         {{ detalhamento.vlUnitarioPopularIntegral | filtroFormatarParaReal }}
                     </td>
                     <!-- Distribuicao Gratuita-->
-                    <td class="right-align">
+                    <td class="center-align">
                         {{ parseInt(detalhamento.qtGratuitaDivulgacao, 10) +
                         parseInt(detalhamento.qtGratuitaPatrocinador, 10) + parseInt(detalhamento.qtGratuitaPopulacao, 10) }}
                     </td>
@@ -133,44 +134,10 @@
                     </td>
                 </tr>
             </tbody>
-            <tfoot
-                v-if="detalhamentos && detalhamentos.length > 0"
-                style="opacity: 0.5"
-            >
-                <tr>
-                    <td><b>Totais</b></td>
-                    <td class="right-align">
-                        <b>{{ qtExemplaresTotal }}</b>
-                    </td>
-                    <!--Fim: Preço Popular -->
-                    <td class="right-align">
-                        <b>{{ qtProponenteIntegralTotal }}</b>
-                    </td>
-                    <td class="right-align">
-                        <b>{{ qtProponenteParcialTotal }}</b>
-                    </td>
-                    <td class="right-align">
-                        -
-                    </td>
-                    <!--Preço Popular -->
-                    <td class="right-align">
-                        <b>{{ qtPopularIntegralTotal }}</b>
-                    </td>
-                    <td class="right-align">
-                        <b>{{ qtPopularParcialTotal }}</b>
-                    </td>
-                    <td class="right-align">
-                        -
-                    </td>
-                    <td class="right-align">
-                        <b>{{ qtDistribuicaoGratuitaTotal }}</b>
-                    </td>
-                    <td class="right-align">
-                        <b>{{ receitaPrevistaTotal }}</b>
-                    </td>
-                    <td v-if="!disabled"/>
-                </tr>
-            </tfoot>
+            <detalhamento-listagem-consolidacao
+                :detalhamentos="detalhamentos"
+                :disabled="disabled"
+            />
         </table>
 
         <div
@@ -194,6 +161,7 @@
 <script>
 import { utils } from '@/mixins/utils';
 import numeral from 'numeral';
+import DetalhamentoListagemConsolidacao from './DetalhamentoListagemConsolidacao';
 
 numeral.locale('pt-br');
 numeral.defaultFormat('0,0.00');
@@ -201,7 +169,8 @@ numeral.defaultFormat('0,0.00');
 const VALOR_MEDIO_MAXIMO = 225;
 
 export default {
-    name: 'PlanoDistribuicaoDetalhamentoListagem',
+    name: 'DetalhamentoListagem',
+    components: { DetalhamentoListagemConsolidacao },
     mixins: [utils],
     props: {
         disabled: {
@@ -223,34 +192,6 @@ export default {
         };
     },
     computed: {
-        qtExemplaresTotal() {
-            return this.detalhamentos.reduce((total, value) => total + parseInt(value.qtExemplares, 10), 0);
-        },
-        qtDistribuicaoGratuitaTotal() {
-            return this.detalhamentos.reduce((total, value) => total + (
-                parseInt(value.qtGratuitaDivulgacao, 10)
-                    + parseInt(value.qtGratuitaPatrocinador, 10)
-                    + parseInt(value.qtGratuitaPopulacao, 10)), 0);
-        },
-        qtPopularIntegralTotal() {
-            return this.detalhamentos.reduce((total, value) => total + parseInt(value.qtPopularIntegral, 10), 0);
-        },
-        qtPopularParcialTotal() {
-            return this.detalhamentos.reduce((total, value) => total + parseInt(value.qtPopularParcial, 10), 0);
-        },
-        qtProponenteIntegralTotal() {
-            return this.detalhamentos.reduce((total, value) => total + parseInt(value.qtProponenteIntegral, 10), 0);
-        },
-        qtProponenteParcialTotal() {
-            return this.detalhamentos.reduce((total, value) => total + parseInt(value.qtProponenteParcial, 10), 0);
-        },
-        receitaPrevistaTotal() {
-            const soma = numeral();
-
-            soma.add(this.detalhamentos.reduce((total, value) => total + parseFloat(value.vlReceitaPrevista), 0));
-
-            return soma.format();
-        },
         valorMedioProponente() {
             const vlReceitaProponenteIntegral = numeral();
             const vlReceitaProponenteParcial = numeral();
