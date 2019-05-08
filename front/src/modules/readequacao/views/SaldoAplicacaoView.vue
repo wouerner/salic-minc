@@ -5,7 +5,6 @@
             column
         >
             <v-flex
-                offset-xs1
             >
                 <v-btn
                     class="green--text text--darken-4"
@@ -25,7 +24,7 @@
             <v-flex
                 v-if="loading"
                 xs9
-                offset-xs2
+                offset-xs1
             >
                 <carregando :text="'Carregando readequação de saldo de aplicação...'"/>
             </v-flex>
@@ -526,7 +525,6 @@ export default {
                         this.permissao = false;
                         return;
                     }
-                    
                     this.loaded.projeto = true;
                     console.log('this.loaded.projeto = true;');
                 }

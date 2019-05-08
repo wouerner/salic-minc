@@ -29,9 +29,9 @@ export const buscaReadequacaoPronacTipo = ({ commit }, params) => {
             const { data } = response.data;
             let readequacao = {};
             if (data.items.length > 1) {
-                readequacao = { items: data.data.items };
+                readequacao = { items: data.items };
             } else {
-                readequacao = { items: data.data.items[0] };
+                readequacao = data.items[0];
             }
             commit(types.SET_READEQUACAO, readequacao);
         });
