@@ -116,6 +116,11 @@
                                 </div>
 	                            <v-card>
 	                                edição da planilha
+                                    <saldo-aplicacao-resumo
+                                        :saldo-declarado="dadosReadequacao.dsSolicitacao"
+                                        :saldo-disponivel="saldoDisponivel"
+                                        :saldo-utilizado="saldoUtilizado"
+                                    />
 	                            </v-card>
 	                        </v-expansion-panel-content>
 	                    </v-expansion-panel>    
@@ -353,6 +358,7 @@ import Carregando from '@/components/CarregandoVuetify';
 import FormReadequacao from '../components/FormReadequacao';
 import UploadFile from './../components/UploadFile';
 import ValorDisponivel from '../components/ValorDisponivel';
+import SaldoAplicacaoResumo from '../components/SaldoAplicacaoResumo';
 /* velho abaixo */
 import ReadequacaoSaldoAplicacaoResumo from '../components/ReadequacaoSaldoAplicacaoResumo';
 // import ReadequacaoFormulario from '../components/ReadequacaoFormulario';
@@ -370,6 +376,7 @@ export default {
         UploadFile,
         ValorDisponivel,
         FormReadequacao,
+        SaldoAplicacaoResumo,
         ReadequacaoSaldoAplicacaoResumo,
         PlanilhaOrcamentariaAlterarItem,
         PlanilhaOrcamentariaIncluirItem,
@@ -456,6 +463,12 @@ export default {
         },
         perfil() {
             return this.getUsuario.grupo_ativo;
+        },
+        saldoDisponivel() {
+            return this.dadosReadequacao.dsSolicitacao;
+        },
+        saldoUtilizado() {
+            return this.dadosReadequacao.dsSolicitacao;
         },
         /* velho em diante 
         vlDiferencaEntrePlanilhas() {
