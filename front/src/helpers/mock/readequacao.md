@@ -651,3 +651,18 @@ HOST: http://localhost:4000
             {
                 "mensagem": "Readequação enviada para análise."
             }
+
+## Readequação - solicitar uso do saldo [/readequacao/solicitar-saldo/{idPronac}
+
+### Solicita uso do saldo [GET]
+
++ Parameters
+    + idPronac: 217336 (number, required)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "mensagem": "Solicitação de uso de saldo criada."
+            }

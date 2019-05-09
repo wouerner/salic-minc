@@ -654,4 +654,61 @@ class Readequacao implements IServicoRestZend
         }
         return $permissao;
     }
+
+    public function solicitarSaldo($idPronac) {
+        $data = [];
+        
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
+        }
+        
+        $tbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
+        $readequacao = $tbReadequacao->obterDadosReadequacao(
+            \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO,
+            $idPronac
+        );
+        
+        if (empty($readequacao)) {
+            $idReadequacao = $tbReadequacao->criarReadequacaoPlanilha(
+                $idPronac,
+                \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO
+            );
+            
+            $readequacao = $tbReadequacao->obterDadosReadequacao(
+                \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO,
+                $idPronac,
+                $idReadequacao
+            );
+            
+            $tbPlanilhaAprovacao = new \tbPlanilhaAprovacao();
+            $verificarPlanilhaReadequadaAtual = $tbPlanilhaAprovacao->buscarPlanilhaReadequadaEmEdicao($idPronac, $idReadequacao);
+            
+            if (count($verificarPlanilhaReadequadaAtual) == 0) {
+                $planilhaAtiva = $tbPlanilhaAprovacao->buscarPlanilhaAtiva($idPronac);
+                $criarPlanilha = $tbPlanilhaAprovacao->copiarPlanilhas($idPronac, $idReadequacao);
+                
+                if ($criarPlanilha) {
+                    $data = [
+                        'msg' => utf8_decode('Solicitação de uso de saldo de aplicação criada.'),
+                        'success' => 'true',
+                        'readequacao' => $readequacao
+                    ];
+                } else {
+                    $data = [
+                        'msg' => utf8_decode('Houve um erro ao criar a solicitação de uso de saldo de aplicação.'),
+                        'success' => 'false',
+                        'readequacao' => []
+                    ];
+                }
+            }
+        } else {
+            $data = [
+                'msg' => utf8_decode('Já existe uma solicitação de uso de saldo de aplicação.'),
+                'success' => 'true',
+                'readequacao' => $readequacao
+            ];
+        }
+        return $data;
+    }
 }
+    
