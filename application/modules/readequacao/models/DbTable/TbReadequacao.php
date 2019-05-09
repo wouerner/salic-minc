@@ -1683,7 +1683,7 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
     )
     {
         $auth = \Zend_Auth::getInstance();
-        $tblAgente = new Agente_Model_DbTable_Agentes();
+        $tblAgente = new \Agente_Model_DbTable_Agentes();
         $rsAgente = $tblAgente->buscar(array('CNPJCPF=?'=>$auth->getIdentity()->Cpf))->current();
 
         $dados = array();

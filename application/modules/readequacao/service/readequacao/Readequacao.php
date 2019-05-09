@@ -524,6 +524,36 @@ class Readequacao implements IServicoRestZend
         if (isset($parametros['id'])){
             $idReadequacao = $parametros['id'];
             $readequacaoModel = new \Readequacao_Model_DbTable_TbReadequacao();
+            $readequacao = $readequacaoModel->obterDadosReadequacao(
+                \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO,
+                '',
+                $idReadequacao
+            );
+            
+            if (!empty($readequacao['idDocumento'])) {
+                $tbDocumento = new \tbDocumento();
+                $tbDocumento->excluirDocumento($readequacao['idDocumento']);
+            }
+            
+            switch($readequacao['idTipoReadequacao']) {
+            case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL:
+                    $this->removerRemanejamentoParcial($readequacao);
+                    break;
+                case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA:
+                    $this->removerPlanilhaOrcamentaria($readequacao);
+                    break;
+                case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO:
+                    $this->removerPlanoDistribuicao($readequacao);
+                    break;
+                case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO:
+                    $this->removerSaldoAplicacao($readequacao);
+                    break;
+                case \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS:
+                    $this->removerTransferenciaRecursos($readequacao);
+                    break;
+                default:
+                    break;
+            }
             $excluir = $readequacaoModel->delete(
                 ['idReadequacao = ?' => $idReadequacao]
             );
@@ -531,6 +561,32 @@ class Readequacao implements IServicoRestZend
         }
     }
 
+    public function removerRemanejamentoParcial($readequacao) {
+        
+    }
+    
+    public function removerPlanilhaOrcamentaria($readequacao) {
+        
+    }
+
+    public function removerPlanoDistribuicao($readequacao) {
+        $tbReadequacaoMapper = new \Readequacao_Model_TbPlanoDistribuicaoMapper();
+        $tbReadequacaoMapper->excluirReadequacaoPlanoDistribuicaoAtiva($readequacao['idPronac']);
+    }
+    
+    public function removerSaldoAplicacao($readequacao) {
+        $tbPlanilhaAprovacao = new \tbPlanilhaAprovacao();
+        $tbPlanilhaAprovacao->delete([
+            'IdPRONAC = ?' => $readequacao['idPronac'],
+            'tpPlanilha = ?' => 'SR',
+            'idReadequacao = ?' => $readequacao['idReadequacao']
+        ]);
+    }
+    
+    public function removerTransferenciaRecursos($readequacaoModel) {
+        
+    }    
+    
     public function finalizar()
     {
         $parametros = $this->request->getParams();
