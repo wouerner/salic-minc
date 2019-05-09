@@ -58,7 +58,7 @@
                     >
                         <div v-show="novaReadequacao">
                             <v-btn
-                                @click="solicitarUsoSaldo()"
+                                @click="acionarSolicitarUsoSaldo()"
                                 dark
                                 class="blue"
                             >
@@ -623,6 +623,7 @@ export default {
             obterReadequacao: 'readequacao/obterReadequacao',
             updateReadequacao: 'readequacao/updateReadequacao',
             finalizarReadequacao: 'readequacao/finalizarReadequacao',
+            solicitarUsoSaldo: 'readequacao/solicitarUsoSaldo',
         }),
         obterDadosIniciais() {
             this.buscarProjetoCompleto(this.idPronac);
@@ -704,8 +705,10 @@ export default {
         excluirReadequacao() {
             this.novaReadequacao = true;
         },
-        solicitarUsoSaldo() {
-
+        acionarSolicitarUsoSaldo() {
+            this.solicitarUsoSaldo({
+                idPronac: this.idPronac,
+            });
         },
         /* velho em diante */
         // solicitarUsoSaldo() {

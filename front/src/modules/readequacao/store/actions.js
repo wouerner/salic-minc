@@ -101,22 +101,6 @@ export const updateReadequacao = ({ commit }, params) => {
         });
 };
 
-export const updateReadequacaoDsSolicitacao = ({ commit }, params) => {
-    commit(types.UPDATE_READEQUACAO_DS_SOLICITACAO, params);
-};
-
-export const updateReadequacaoSaldoAplicacao = ({ commit }, params) => {
-    readequacaoHelperAPI.updateReadequacaoSaldoAplicacao(params)
-        .then((response) => {
-            const { readequacao } = response.data;
-            commit(types.UPDATE_READEQUACAO_SALDO_APLICACAO, readequacao);
-        });
-};
-
-export const updateReadequacaoSaldoAplicacaoDsSolicitacao = ({ commit }, dsSolicitacao) => {
-    commit(types.UPDATE_READEQUACAO_SALDO_APLICACAO_DS_SOLICITACAO, dsSolicitacao);
-};
-
 export const obterDisponivelEdicaoItemSaldoAplicacao = ({ commit }, params) => {
     readequacaoHelperAPI.obterDisponivelEdicaoItemSaldoAplicacao(params)
         .then((response) => {
@@ -176,4 +160,12 @@ export const finalizarReadequacao = async ({ dispatch }, params) => {
             });
         });
     return resultado;
+};
+
+export const solicitarUsoSaldo = ({ commit }, params) => {
+    readequacaoHelperAPI.solicitarUsoSaldo(params)
+        .then((response) => {
+            console.log(response);
+            commit(types.SET_READEQUACAO, response.data.data.items);
+        });
 };
