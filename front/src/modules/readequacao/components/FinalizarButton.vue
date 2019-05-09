@@ -7,7 +7,6 @@
             :disabled="disabled"
             dark
             color="blue darken-1"
-            class="m-2"
             @click="dialog = true"
         >
             Finalizar Readequação

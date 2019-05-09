@@ -51,7 +51,26 @@
                     row
                     pb-2
                 >
-                    <v-flex xs12>
+                    <v-flex
+                        v-if="novaReadequacao"
+                        offset-xs5
+                        class="mt-4"
+                    >
+                        <div v-show="novaReadequacao">
+                            <v-btn
+                                @click="solicitarUsoSaldo()"
+                                dark
+                                class="blue"
+                            >
+                                <v-icon>border_color</v-icon>
+                                Solicitar uso do saldo de aplicação
+                            </v-btn>
+                        </div>
+                    </v-flex>
+                    <v-flex
+                        v-if="!novaReadequacao"
+                        xs12
+                    >
                         <v-expansion-panel
                             popout
                         >
@@ -131,7 +150,7 @@
                         </v-expansion-panel>
                     </v-flex>
                     <v-footer
-                        v-if="true"
+                        v-if="!novaReadequacao"
                         id="footer"
                         class="pb-4 pt-4 elevation-18"
                         fixed
@@ -153,15 +172,14 @@
                                         dark
                                     >done</v-icon>
                                 </v-btn>
-                                <v-btn
-                                    color="red lighten-2"
-                                    dark
-                                >Cancelar
-                                    <v-icon
-                                        right
-                                        dark
-                                    >cancel</v-icon>
-                                </v-btn>
+                                <excluir-button
+                                    :dados-readequacao="dadosReadequacao"
+                                    :dados-projeto="dadosProjeto"
+                                    :perfis-aceitos="getPerfis('proponente')"
+                                    :perfil="perfil"
+                                    :tela-edicao="true"
+                                    @excluir-readequacao="excluirReadequacao"
+                                />
                                 <finalizar-button
                                     :dados-readequacao="dadosReadequacao"
                                     :dados-projeto="dadosProjeto"
@@ -177,14 +195,6 @@
         <mensagem
             :mensagem="mensagem"
         />
-        <div v-show="exibirBotaoIniciar">
-            <v-btn
-                @click="solicitarUsoSaldo()"
-            >
-                <v-icon>border_color</v-icon>
-                Solicitar uso do saldo de aplicação
-            </v-btn>
-        </div>
     </v-container>
     <!--
          <div class="readequacao-saldo-aplicacao container-fluid">
@@ -356,6 +366,7 @@ import FormReadequacao from '../components/FormReadequacao';
 import UploadFile from './../components/UploadFile';
 import ValorDisponivel from '../components/ValorDisponivel';
 import SaldoAplicacaoResumo from '../components/SaldoAplicacaoResumo';
+import ExcluirButton from '../components/ExcluirButton';
 /* velho abaixo */
 /* import ReadequacaoSaldoAplicacaoResumo from '../components/ReadequacaoSaldoAplicacaoResumo';
 // import ReadequacaoFormulario from '../components/ReadequacaoFormulario';
@@ -374,6 +385,7 @@ export default {
         ValorDisponivel,
         FormReadequacao,
         SaldoAplicacaoResumo,
+        ExcluirButton,
 /*        ReadequacaoSaldoAplicacaoResumo,
         PlanilhaOrcamentariaAlterarItem,
         PlanilhaOrcamentariaIncluirItem,
@@ -428,9 +440,9 @@ export default {
                 usuario: false,
             },
             loading: true,
-            exibirBotaoIniciar: false,
             permissao: true,
             formatosAceitos: ['application/pdf'],
+            novaReadequacao: true,
             /* velho em diante
             disabled: false,
             idPronac: '',
@@ -438,7 +450,6 @@ export default {
             nomeProjeto: '',
             idTipoReadequacao: 22,
             siEncaminhamento: 12,
-            exibirBotaoIniciar: false,
             exibirPaineis: false,
             solicitacaoIniciada: false,
             mostrarMensagemFinal: false,
@@ -562,17 +573,18 @@ export default {
         },
         dadosReadequacao: {
             handler(value) {
-                if (value.idPronac && value.idTipoReadequacao) {
-                    this.loaded.readequacao = true;
-                    this.inicializarReadequacaoEditada();
-                    /* velho em diante 
+                this.loaded.readequacao = true;
+                if (typeof value !== 'undefined') {
+                    if (value.idPronac && value.idTipoReadequacao) {
+                        this.novaReadequacao = false;
+                        this.inicializarReadequacaoEditada();
+                        /* velho em diante 
                     this.obterDisponivelEdicaoReadequacaoPlanilha(this.dadosProjeto.idPronac);
                     this.carregarValorEntrePlanilhas();
                     this.solicitacaoIniciada = true;
                     this.exibirPaineis = true;
 */
-                } else {
-                    this.exibirBotaoIniciar = true;
+                    }
                 }
             }
         },
@@ -607,7 +619,6 @@ export default {
         ...mapActions({
             buscarProjetoCompleto: 'projeto/buscarProjetoCompleto',
             buscaReadequacaoPronacTipo: 'readequacao/buscaReadequacaoPronacTipo',
-            excluirReadequacao: 'readequacao/excluirReadequacao',
             obterDisponivelEdicaoReadequacaoPlanilha: 'readequacao/obterDisponivelEdicaoItemSaldoAplicacao',
             obterReadequacao: 'readequacao/obterReadequacao',
             updateReadequacao: 'readequacao/updateReadequacao',
@@ -684,13 +695,22 @@ export default {
                 this.minChar,
             );
         },
+        getPerfis(tipo) {
+            return this.perfisAceitos[tipo];
+        },
         voltar() {
             this.$router.back();
         },
-        /* velho em diante */
+        excluirReadequacao() {
+            this.novaReadequacao = true;
+        },
         solicitarUsoSaldo() {
-            const self = this;
+
+        },
+        /* velho em diante */
+        // solicitarUsoSaldo() {
             /*
+            const self = this;
                 $3.ajax({
                 url: '/readequacao/saldo-aplicacao/solicitar-uso-saldo',
                 type: 'POST',
@@ -709,8 +729,8 @@ export default {
                 self.carregarValorEntrePlanilhas();
                 },
                 );
-              */
         },
+              */
         atualizarReadequacao(readequacao) {
             this.readequacaoAlterada = true;
             this.readequacao = readequacao;
@@ -727,34 +747,6 @@ export default {
                 },
                 }).done((response) => {
                 self.valorEntrePlanilhas = response.valorEntrePlanilhas;
-                });
-            */
-        },
-        prepararExcluirReadequacao() {
-            this.excluirReadequacao({
-                idPronac: this.idPronac,
-                idReadequacao: this.dadosReadequacao.idReadequacao,
-            });
-            /*
-                $3('#modalExcluir .modal-content h4').html('');
-                $3('#modalExcluir .modal-footer').html('<h5>Removendo os dados, aguarde...</h5>');
-                let self = this;
-                $3.ajax({
-                type: "GET",
-                url: "/readequacao/saldo-aplicacao/excluir-readequacao",
-                data: {
-                idPronac: self.idPronac,
-                idReadequacao: self.dadosReadequacao.idReadequacao
-                }
-                }).done(function (response) {
-                // TODO: alterar o store
-                self.restaurarFormulario();
-                self.mensagemSucesso(response.msg);
-                self.solicitacaoIniciada = false;
-                self.exibirBotaoIniciar = true;
-                self.exibirPaineis = false;
-                }).fail(function (response) {
-                self.mensagemErro(response.responseJSON.msg)
                 });
             */
         },

@@ -1,21 +1,35 @@
 <template>
-    <v-layout
+    <div
         v-if="perfilAceito"
     >
         <v-btn
+            v-if="telaEdicao"
+            :disabled="disabled"
             dark
-            icon
-            flat
-            small
             color="red darken-3"
-            @click.stop="dialog = true"
+            @click="dialog = true"
         >
-            <v-tooltip bottom>
-                <v-icon slot="activator">close</v-icon>
-                <span>Excluir Readequação</span>
-            </v-tooltip>
+            Excluir
+            <v-icon
+                right
+                dark
+            >send</v-icon>
         </v-btn>
-
+        <div v-else>
+            <v-btn
+                dark
+                icon
+                flat
+                small
+                color="red darken-3"
+                @click.stop="dialog = true"
+            >
+                <v-tooltip bottom>
+                    <v-icon slot="activator">close</v-icon>
+                    <span>Excluir Readequação</span>
+                </v-tooltip>
+            </v-btn>
+        </div>
         <v-dialog
             v-model="dialog"
             max-width="350"
@@ -52,7 +66,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-    </v-layout>
+    </div>
 </template>
 
 <script>
@@ -67,9 +81,9 @@ export default {
         verificarPerfil,
     ],
     props: {
-        obj: {
-            type: Object,
-            default: () => {},
+        disabled: {
+            type: Boolean,
+            default: false,
         },
         dadosProjeto: {
             type: Object,
@@ -78,6 +92,10 @@ export default {
         dadosReadequacao: {
             type: Object,
             default: () => {},
+        },
+        telaEdicao: {
+            type: Boolean,
+            default: false,
         },
         perfisAceitos: {
             type: Array,
