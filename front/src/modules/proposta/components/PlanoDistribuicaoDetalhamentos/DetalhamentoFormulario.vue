@@ -731,6 +731,11 @@ export default {
                 if (object.vlUnitarioPopularIntegral === 0 && object.vlUnitarioProponenteIntegral === 0) {
                     self.distribuicaoGratuita = SIM;
                 }
+
+                this.$nextTick(() => {
+                    this.distribuicao.qtGratuitaDivulgacao = object.qtGratuitaDivulgacao;
+                    this.distribuicao.qtGratuitaPatrocinador = object.qtGratuitaPatrocinador;
+                });
             }
         },
         value(val) {
