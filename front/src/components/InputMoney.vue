@@ -1,21 +1,23 @@
 <template>
     <input
-      type="text"
-      class="validate right-align"
-      ref="input"
-      v-bind:disabled="false"
-      v-bind:value="value"
-      v-on:input="updateMoney($event.target.value)"
-      v-on:blur="formatValue"
-      />
+        ref="input"
+        :disabled="false"
+        :value="value"
+        type="text"
+        class="validate right-align"
+        @input="updateMoney($event.target.value)"
+        @blur="formatValue"
+    >
 </template>
 <script>
 import { utils } from '@/mixins/utils';
 
 export default {
     name: 'InputMoney',
+    mixins: [utils],
     props: {
         value: {
+            type: [Number, String],
             default: 0,
         },
         disabled: {
@@ -23,11 +25,18 @@ export default {
             default: false,
         },
     },
-    mixins: [utils],
     data() {
         return {
             val: 0,
         };
+    },
+    watch: {
+        disabled() {
+            this.$refs.input.disabled = this.disabled;
+            if (this.disabled) {
+                this.val = 0;
+            }
+        },
     },
     mounted() {
         this.$refs.input.disabled = this.disabled;
@@ -43,23 +52,16 @@ export default {
             );
         },
         formatFloat(value) {
+            let newValue = value;
             if (value.search(',') > 0) {
-                value = value.replace('.', '');
-                value = value.replace(',', '.');
+                newValue = newValue.replace('.', '');
+                newValue = newValue.replace(',', '.');
             }
-            return value;
+            return newValue;
         },
         updateMoney(value) {
             this.val = value;
             this.$emit('ev', this.val);
-        },
-    },
-    watch: {
-        disabled() {
-            this.$refs.input.disabled = this.disabled;
-            if (this.disabled) {
-                this.val = 0;
-            }
         },
     },
 };

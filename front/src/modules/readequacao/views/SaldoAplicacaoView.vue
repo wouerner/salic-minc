@@ -33,32 +33,37 @@
                     color="#0A420E"
                     dark
                 >
-                    <v-btn icon
-	                       color="#0A420E"
-	                       href="javascript:voltar()"
-	                >
-	                    <v-icon color="white">arrow_back</v-icon>
+                    <v-btn
+                        icon
+                        color="#0A420E"
+                        href="voltar()"
+                    >
+                        <v-icon color="white">arrow_back</v-icon>
                     </v-btn>
                     <v-toolbar-title>Readequação - Saldo de Aplicação</v-toolbar-title>
-                    <v-spacer></v-spacer>
+                    <v-spacer/>
                     <v-toolbar-title>
                         {{ dadosProjeto.Pronac }} - {{ dadosProjeto.NomeProjeto }}
                     </v-toolbar-title>
                 </v-toolbar>
-                <v-layout column row pb-2>
+                <v-layout
+                    column
+                    row
+                    pb-2
+                >
                     <v-flex xs12>
-	                    <v-expansion-panel
+                        <v-expansion-panel
                             popout
                         >
-	                        <v-expansion-panel-content
-	                            :key="1"
-	                        >
-	                            <div slot="header">
+                            <v-expansion-panel-content
+                                :key="1"
+                            >
+                                <div slot="header">
                                     <h3
                                         class="headline"
                                     >Dados da readequação</h3>
                                 </div>
-	                            <v-card
+                                <v-card
                                     class="mb-5"
                                 >
                                     <v-card-title
@@ -91,8 +96,8 @@
                                             @arquivo-tipo-invalido="arquivoTipoInvalido($event)"
                                         />
                                     </v-card-actions>
-	                            </v-card>
-	                            <v-card
+                                </v-card>
+                                <v-card
                                     class="mb-5"
                                 >
                                     <v-card-title
@@ -105,26 +110,26 @@
                                         @dados-update="atualizarCampo($event, 'dsSolicitacao')"
                                     />
                                 </v-card>
-	                        </v-expansion-panel-content>
-	                        <v-expansion-panel-content
-	                            :key="2"
-	                        >
-	                            <div slot="header">
+                            </v-expansion-panel-content>
+                            <v-expansion-panel-content
+                                :key="2"
+                            >
+                                <div slot="header">
                                     <h3
                                         class="headline"
                                     >Edição da Planilha</h3>
                                 </div>
-	                            <v-card>
-	                                edição da planilha
+                                <v-card>
+                                    edição da planilha
                                     <saldo-aplicacao-resumo
                                         :saldo-declarado="dadosReadequacao.dsSolicitacao"
                                         :saldo-disponivel="saldoDisponivel"
                                         :saldo-utilizado="saldoUtilizado"
                                     />
-	                            </v-card>
-	                        </v-expansion-panel-content>
-	                    </v-expansion-panel>    
-	                </v-flex>
+                                </v-card>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
+                    </v-flex>
                     <v-footer
                         v-if="true"
                         id="footer"
@@ -165,13 +170,13 @@
                                 />
                             </v-layout>
                         </v-flex>
-                    </v-footer>            
+                    </v-footer>
                 </v-layout>
             </v-flex>
         </v-layout>
         <mensagem
             :mensagem="mensagem"
-        />        
+        />
         <div v-show="exibirBotaoIniciar">
             <v-btn
                 @click="solicitarUsoSaldo()"
@@ -213,7 +218,6 @@
          </readequacao-saldo-aplicacao-resumo>
          </div>
          </div>
-         
          <div class="card">
          <div class="card-content">
          <planilha-orcamentaria
@@ -230,7 +234,6 @@
          </planilha-orcamentaria>
          </div>
          </div>
-         
          <div class="card">
          <div class="card-content">
          <readequacao-saldo-aplicacao-resumo
@@ -248,7 +251,6 @@
          </readequacao-saldo-aplicacao-resumo>
          </div>
          </div>
-         
          </div>
          <div class="collapsible-body card" v-else>
          <span>Preencha o valor do saldo dispon&iacute;vel para poder iniciar as altera&ccedil;&atilde;oes na planilha or&ccedil;ament&aacute;ria.</span>
@@ -279,7 +281,6 @@
          </div>
          </div>
          </div>
-         
          <div class="card" v-if="mostrarBotoes">
          <div class="card-content">
          <div class="row">
@@ -297,7 +298,6 @@
          </div>
          </div>
          </div>
-         
          <div id="modalExcluir" class="modal">
          <div class="modal-content center-align">
          <h4>Tem certeza que deseja excluir a redequa&ccedil;&atilde;o?</h4>
@@ -325,7 +325,6 @@
          </a>                                                                                                
          </div>
          </div>                                                
-         
          <div v-if="mostrarMensagemFinal" class="card">
          <div class="card-content">
          <div class="row">
@@ -340,10 +339,8 @@
          </div>
          </div>
          </div>
-
          </div>
     -->
-    
 </template>
 <script>
 
@@ -360,13 +357,13 @@ import UploadFile from './../components/UploadFile';
 import ValorDisponivel from '../components/ValorDisponivel';
 import SaldoAplicacaoResumo from '../components/SaldoAplicacaoResumo';
 /* velho abaixo */
-import ReadequacaoSaldoAplicacaoResumo from '../components/ReadequacaoSaldoAplicacaoResumo';
+/* import ReadequacaoSaldoAplicacaoResumo from '../components/ReadequacaoSaldoAplicacaoResumo';
 // import ReadequacaoFormulario from '../components/ReadequacaoFormulario';
 import ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria from '../components/ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria';
 import PlanilhaOrcamentariaAlterarItem from '../components/PlanilhaOrcamentariaAlterarItem';
 import PlanilhaOrcamentariaIncluirItem from '../components/PlanilhaOrcamentariaIncluirItem';
 import PlanilhaOrcamentaria from '../components/PlanilhaOrcamentaria';
-
+*/
 export default {
     name: 'SaldoAplicacaoView',
     components: {
@@ -377,11 +374,11 @@ export default {
         ValorDisponivel,
         FormReadequacao,
         SaldoAplicacaoResumo,
-        ReadequacaoSaldoAplicacaoResumo,
+/*        ReadequacaoSaldoAplicacaoResumo,
         PlanilhaOrcamentariaAlterarItem,
         PlanilhaOrcamentariaIncluirItem,
         ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria,
-        PlanilhaOrcamentaria,
+        PlanilhaOrcamentaria,*/
     },
     mixins: [
         utils,
@@ -687,10 +684,13 @@ export default {
                 this.minChar,
             );
         },
+        voltar() {
+            this.$router.back();
+        },
         /* velho em diante */
         solicitarUsoSaldo() {
             const self = this;
-	         /*
+            /*
                 $3.ajax({
                 url: '/readequacao/saldo-aplicacao/solicitar-uso-saldo',
                 type: 'POST',
@@ -717,7 +717,7 @@ export default {
         },
         carregarValorEntrePlanilhas() {
             const self = this;
-	        /*
+            /*
                 $3.ajax({
                 type: 'GET',
                 url: '/readequacao/saldo-aplicacao/carregar-valor-entre-planilhas',
@@ -728,7 +728,7 @@ export default {
                 }).done((response) => {
                 self.valorEntrePlanilhas = response.valorEntrePlanilhas;
                 });
-              */
+            */
         },
         prepararExcluirReadequacao() {
             this.excluirReadequacao({
@@ -756,7 +756,7 @@ export default {
                 }).fail(function (response) {
                 self.mensagemErro(response.responseJSON.msg)
                 });
-              */
+            */
         },
         restaurarFormulario() {
             this.readequacao = {

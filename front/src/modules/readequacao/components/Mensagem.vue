@@ -15,7 +15,7 @@
     </v-snackbar>
 </template>
 <script>
-  
+
 export default {
     name: 'Mensagem',
     props: {
@@ -24,5 +24,5 @@ export default {
             default: () => {},
         },
     },
-}
+};
 </script>

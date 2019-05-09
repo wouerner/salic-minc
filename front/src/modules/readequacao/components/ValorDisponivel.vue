@@ -7,12 +7,11 @@
         >
             <span class="headline">R$</span>
             <input-money
+                ref="readequacaoSaldo"
                 :value="valorLocal"
                 class="title"
-	            ref="readequacaoSaldo"
                 @ev="atualizarForm($event)"
-	        />
-            </input-money>
+            />
             <span
                 class="font-italic grey--text text--darken-2"
             >
@@ -51,7 +50,7 @@ export default {
     methods: {
         atualizarForm(value) {
             this.$emit('dados-update', value);
-        },        
+        },
     },
 };
 </script>

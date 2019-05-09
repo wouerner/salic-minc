@@ -60,7 +60,7 @@ export default {
     props: {
         formatosAceitos: {
             type: Array,
-            default: ['application/pdf'],
+            default: () => ['application/pdf'],
         },
         idDocumento: {
             type: [
@@ -92,9 +92,7 @@ export default {
             document.getElementById('file-upload').click();
         },
         checkFormat(file) {
-            if (!this.formatosAceitos.find(
-                (i) => i === file.type)
-               ) {
+            if (!this.formatosAceitos.find(i => i === file.type)) {
                 const payload = {
                     mensagem: 'Tipo não aceito',
                     formatoEnviado: file.type,
@@ -104,11 +102,10 @@ export default {
                 return false;
             }
             return true;
-
         },
         handleFileUpload() {
             const file = this.$refs.file.files[0];
-            if(this.checkFormat(file)) {
+            if (this.checkFormat(file)) {
                 this.file = file;
                 if (this.$refs.file.files[0]) {
                     const payload = this.$refs.file.files[0];
