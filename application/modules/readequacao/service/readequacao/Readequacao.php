@@ -627,7 +627,7 @@ class Readequacao implements IServicoRestZend
         return $data;
     }
 
-    public function verificarPermissaoNoProjeto() {
+    public function verificarPermissaoNoProjeto($idPronac = '') {
         $parametros = $this->request->getParams();
 
         $permissao = false;
@@ -638,7 +638,9 @@ class Readequacao implements IServicoRestZend
             $idUsuarioLogado = $arrAuth['idusuario'];
             $fnVerificarPermissao = new \Autenticacao_Model_FnVerificarPermissao();
 
-            $idPronac = $parametros['idpronac'] ? $parametros['idpronac'] : $parametros['idPronac'];
+            if ($idPronac == '') {
+                $idPronac = $parametros['idpronac'] ? $parametros['idpronac'] : $parametros['idPronac'];
+            }
             if ($idPronac == '') {
                 $idReadequacao = $parametros['id'];
                 $dados = $this->buscarIdPronac($idReadequacao);
