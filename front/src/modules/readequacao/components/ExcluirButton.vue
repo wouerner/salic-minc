@@ -36,7 +36,9 @@
         >
             <v-card>
                 <v-card-title class="headline">Excluir Readequação?</v-card-title>
-                <v-card-text>
+                <v-card-text
+                    v-if="!loading"
+                >
                     <h4
                         class="title mb-2"
                         v-html="dadosProjeto.NomeProjeto"
@@ -46,7 +48,9 @@
                     <h4>Data de abertura: </h4>
                     <span>{{ dadosReadequacao.dtSolicitacao | formatarData }}</span>
                 </v-card-text>
-                <v-card-actions>
+                <v-card-actions
+                    v-if="!loading"
+                >
                     <v-spacer/>
                     <v-btn
                         color="red darken-1"
@@ -64,6 +68,14 @@
                         OK
                     </v-btn>
                 </v-card-actions>
+                <v-card-actions
+                    v-else
+                >
+                    <carregando
+                        :text="'Removendo a readequação...'"
+                        class="mt-5 mb-5"
+                    />
+                </v-card-actions>
             </v-card>
         </v-dialog>
     </div>
@@ -72,10 +84,14 @@
 <script>
 import { mapActions } from 'vuex';
 import { utils } from '@/mixins/utils';
+import Carregando from '@/components/CarregandoVuetify';
 import verificarPerfil from '../mixins/verificarPerfil';
 
 export default {
     name: 'ExcluirButton',
+    components: {
+        Carregando,
+    },
     mixins: [
         utils,
         verificarPerfil,
@@ -97,6 +113,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        origem: {
+            type: String,
+            default: 'painel',
+        },
         perfisAceitos: {
             type: Array,
             default: () => [],
@@ -109,6 +129,7 @@ export default {
     data() {
         return {
             dialog: false,
+            loading: false,
         };
     },
     computed: {
@@ -121,12 +142,15 @@ export default {
             excluirReadequacao: 'readequacao/excluirReadequacao',
         }),
         excluir() {
+            this.loading = true;
             this.excluirReadequacao({
                 idReadequacao: this.dadosReadequacao.idReadequacao,
                 idPronac: this.dadosReadequacao.idPronac,
+                origem: this.origem,
+            }).then(() => {
+                this.dialog = false;
+                this.$emit('excluir-readequacao', { idReadequacao: this.dadosReadequacao.idReadequacao });
             });
-            this.dialog = false;
-            this.$emit('excluir-readequacao', { idReadequacao: this.dadosReadequacao.idReadequacao });
         },
     },
 };

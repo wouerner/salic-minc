@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import * as readequacaoHelperAPI from '@/helpers/api/Readequacao';
 import * as types from './types';
 
@@ -30,11 +31,9 @@ export const buscaReadequacaoPronacTipo = ({ commit }, params) => {
             let readequacao = {};
             if (data.items.length > 1) {
                 readequacao = { items: data.items };
-            } else {
+            } else if (data.items.length === 1
+                       && !_.isEmpty(data.items)) {
                 [readequacao] = data.items;
-            }
-            if (typeof readequacao === 'undefined') {
-                readequacao = [];
             }
             commit(types.SET_READEQUACAO, readequacao);
         });
@@ -73,21 +72,26 @@ export const excluirDocumento = ({ commit }, params) => {
     readequacaoHelperAPI.excluirDocumento(params)
         .then(() => {
             commit(types.EXCLUIR_DOCUMENTO);
+            return '';
         });
 };
 
-export const excluirReadequacao = ({ commit, dispatch }, params) => {
-    readequacaoHelperAPI.excluirReadequacao(params)
+export const excluirReadequacao = async ({ commit, dispatch }, params) => {
+    const resultado = await readequacaoHelperAPI.excluirReadequacao(params)
         .then(() => {
             commit(types.EXCLUIR_READEQUACAO);
-            dispatch('obterListaDeReadequacoes', {
-                idPronac: params.idPronac,
-                stStatusAtual: 'proponente',
-            });
-            dispatch('obterTiposDisponiveis', {
-                idPronac: params.idPronac,
-            });
+            if (params.origem === 'painel') {
+                dispatch('obterListaDeReadequacoes', {
+                    idPronac: params.idPronac,
+                    stStatusAtual: 'proponente',
+                });
+                dispatch('obterTiposDisponiveis', {
+                    idPronac: params.idPronac,
+                });
+            }
+            return true;
         });
+    return resultado;
 };
 
 export const obterReadequacao = ({ commit }, data) => {
@@ -168,7 +172,6 @@ export const finalizarReadequacao = async ({ dispatch }, params) => {
 export const solicitarUsoSaldo = ({ commit }, params) => {
     readequacaoHelperAPI.solicitarUsoSaldo(params)
         .then((response) => {
-            console.log(response);
             commit(types.SET_READEQUACAO, response.data.data.items);
         });
 };

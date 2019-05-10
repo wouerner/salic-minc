@@ -26,7 +26,7 @@
                 xs9
                 offset-xs1
             >
-                <carregando :text="'Carregando readequação de saldo de aplicação...'"/>
+                <carregando :text="'Montando readequação de saldo de aplicação...'"/>
             </v-flex>
             <v-flex v-else>
                 <v-toolbar
@@ -175,6 +175,7 @@
                                 <excluir-button
                                     :dados-readequacao="dadosReadequacao"
                                     :dados-projeto="dadosProjeto"
+                                    :origem="'saldo'"
                                     :perfis-aceitos="getPerfis('proponente')"
                                     :perfil="perfil"
                                     :tela-edicao="true"
@@ -575,8 +576,8 @@ export default {
             handler(value) {
                 this.loaded.readequacao = true;
                 if (typeof value !== 'undefined') {
+                    this.novaReadequacao = false;
                     if (value.idPronac && value.idTipoReadequacao) {
-                        this.novaReadequacao = false;
                         this.inicializarReadequacaoEditada();
                         /* velho em diante 
                     this.obterDisponivelEdicaoReadequacaoPlanilha(this.dadosProjeto.idPronac);
@@ -584,6 +585,8 @@ export default {
                     this.solicitacaoIniciada = true;
                     this.exibirPaineis = true;
 */
+                    } else {
+                        this.novaReadequacao = true;
                     }
                 }
             }
@@ -631,7 +634,7 @@ export default {
                 idPronac: this.idPronac,
                 idTipoReadequacao: 22,
                 stEstagioAtual: 'proponente',
-            });            
+            });
         },
         inicializarReadequacaoEditada() {
             this.readequacaoEditada = {
@@ -703,6 +706,7 @@ export default {
             this.$router.back();
         },
         excluirReadequacao() {
+            this.loading = true;
             this.novaReadequacao = true;
         },
         acionarSolicitarUsoSaldo() {

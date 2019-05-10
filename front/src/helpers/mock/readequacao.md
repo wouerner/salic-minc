@@ -664,5 +664,23 @@ HOST: http://localhost:4000
     + Body
 
             {
-                "mensagem": "Solicitação de uso de saldo criada."
+                    "idPronac": 217336,
+                    "idReadequacao": 15128,
+                    "idTipoReadequacao": 22,
+                    "dsTipoReadequacao": "Saldo de aplicação",
+                    "dtSolicitacao": "2019-01-22",
+                    "idSolicitante": 267,
+                    "dsNomeSolicitante": "Leôncio das Neves",
+                    "dsSolicitacao": "199533,00",
+                    "dsJustificativa": "É necessário",
+                    "idDocumento": 19440,
+                    "idAvaliador": 335,
+                    "dtAvaliador": "2019-02-03",
+                    "dsAvaliacao": "queuqeuqueuq",
+                    "stAtendimento": "N",
+                    "siEncaminhamento": 15,
+                    "idNrReuniao": 45654,
+                    "stEstado": 1,
+                    "dtEnvio": "2019-01-23",
+                    "stStatusAtual": "proponente"
             }

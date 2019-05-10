@@ -688,11 +688,7 @@ class Readequacao implements IServicoRestZend
                 $criarPlanilha = $tbPlanilhaAprovacao->copiarPlanilhas($idPronac, $idReadequacao);
                 
                 if ($criarPlanilha) {
-                    $data = [
-                        'msg' => utf8_decode('Solicitação de uso de saldo de aplicação criada.'),
-                        'success' => 'true',
-                        'readequacao' => $readequacao
-                    ];
+                    $data = $readequacao;
                 } else {
                     $data = [
                         'msg' => utf8_decode('Houve um erro ao criar a solicitação de uso de saldo de aplicação.'),
@@ -704,7 +700,7 @@ class Readequacao implements IServicoRestZend
         } else {
             $data = [
                 'msg' => utf8_decode('Já existe uma solicitação de uso de saldo de aplicação.'),
-                'success' => 'true',
+                'success' => 'false',
                 'readequacao' => $readequacao
             ];
         }
