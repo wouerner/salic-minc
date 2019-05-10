@@ -33,6 +33,9 @@ export const buscaReadequacaoPronacTipo = ({ commit }, params) => {
             } else {
                 [readequacao] = data.items;
             }
+            if (typeof readequacao === 'undefined') {
+                readequacao = [];
+            }
             commit(types.SET_READEQUACAO, readequacao);
         });
 };
