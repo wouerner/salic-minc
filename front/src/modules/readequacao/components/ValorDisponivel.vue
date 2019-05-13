@@ -10,7 +10,7 @@
                 ref="readequacaoSaldo"
                 :value="valorLocal"
                 class="title"
-                @ev="atualizarForm($event)"
+                @ev="atualizarCampo($event)"
             />
             <span
                 class="font-italic grey--text text--darken-2"
@@ -48,8 +48,19 @@ export default {
         this.valorLocal = this.valor;
     },
     methods: {
+        atualizarCampo(value) {
+            if (parseInt(value) === 0) {
+                this.atualizarContador(0);
+            } else {
+                this.atualizarContador(value.length);
+            }
+            this.atualizarForm(value);
+        },
         atualizarForm(value) {
             this.$emit('dados-update', value);
+        },
+        atualizarContador(valor) {
+            this.$emit('editor-texto-counter', valor);
         },
     },
 };

@@ -127,6 +127,7 @@
                                     <valor-disponivel
                                         :valor="dadosReadequacao.dsSolicitacao"
                                         @dados-update="atualizarCampo($event, 'dsSolicitacao')"
+                                        @editor-texto-counter="atualizarContador($event, 'solicitacao')"
                                     />
                                 </v-card>
                             </v-expansion-panel-content>
@@ -182,9 +183,12 @@
                                     @excluir-readequacao="excluirReadequacao"
                                 />
                                 <finalizar-button
-                                    :dados-readequacao="dadosReadequacao"
+                                    :dados-readequacao="readequacaoEditada"
                                     :dados-projeto="dadosProjeto"
                                     :tela-edicao="true"
+                                    :perfis-aceitos="getPerfis('proponente')"
+                                    :perfil="perfil"
+                                    :min-char="minChar"
                                     dark
                                 />
                             </v-layout>
@@ -421,6 +425,7 @@ export default {
                 justificativa: 10,
             },
             contador: {
+                solicitacao: 0,
                 justificativa: 0,
             },
             perfisAceitos: {
@@ -653,7 +658,6 @@ export default {
                 this.mensagem.timeout = 2300;
                 this.mensagem.ativa = true;
                 this.mensagem.cor = 'green darken-1';
-                this.recarregarReadequacoes = true;
             });
         },
         atualizarArquivo(arquivo) {
@@ -663,7 +667,6 @@ export default {
                 this.mensagem.ativa = true;
                 this.mensagem.finaliza = false;
                 this.mensagem.cor = 'green darken-1';
-                this.recarregarReadequacoes = true;
             });
         },
         removerArquivo() {
@@ -674,7 +677,6 @@ export default {
                 this.mensagem.ativa = true;
                 this.mensagem.finaliza = false;
                 this.mensagem.cor = 'green darken-1';
-                this.recarregarReadequacoes = true;
             });
         },
         arquivoTipoInvalido(payload) {

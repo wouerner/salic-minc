@@ -4,7 +4,7 @@
     >
         <v-btn
             v-if="telaEdicao"
-            :disabled="disabled"
+            :disabled="disabled || !validacao"
             dark
             color="blue darken-1"
             @click="dialog = true"
@@ -150,8 +150,12 @@ export default {
                 if (typeof this.minChar.solicitacao === 'number') {
                     if (typeof this.dadosReadequacao.dsSolicitacao !== 'undefined'
                         && typeof this.dadosReadequacao.dsJustificativa !== 'undefined') {
+                        let solicitacao = this.dadosReadequacao.dsSolicitacao.length;
+                        if (parseInt(this.dadosReadequacao.dsSolicitacao)  === 0) {
+                            solicitacao = 0;
+                        }
                         const contador = {
-                            solicitacao: this.dadosReadequacao.dsSolicitacao.length,
+                            solicitacao: solicitacao,
                             justificativa: this.dadosReadequacao.dsJustificativa.length,
                         };
                         this.validacao = this.validarFormulario(
