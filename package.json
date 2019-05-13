@@ -99,7 +99,6 @@
     "style-loader": "^0.23.1",
     "terser-webpack-plugin": "^1.2.1",
     "url-loader": "^1.1.2",
-    "vue-filepond": "^5.0.0",
     "vue-jest": "^3.0.0",
     "vue-loader": "^15.4.2",
     "vue-style-loader": "^4.1.2",
