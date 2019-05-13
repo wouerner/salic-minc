@@ -77,10 +77,16 @@
                             <v-expansion-panel-content
                                 :key="1"
                             >
-                                <div slot="header">
-                                    <h3
-                                        class="headline"
-                                    >Dados da readequação</h3>
+                                <div slot="header"
+                                     class="inline-block"
+                                >
+                                    <v-icon
+                                        color="green darken-3"
+                                    >assignment</v-icon>
+                                    <span
+                                        class="headline grey--text text--darken-3">
+                                        Dados da readequação
+                                    </span>
                                 </div>
                                 <v-card
                                     class="mb-5"
@@ -134,10 +140,14 @@
                             <v-expansion-panel-content
                                 :key="2"
                             >
-                                <div slot="header">
-                                    <h3
-                                        class="headline"
-                                    >Edição da Planilha</h3>
+                                <div slot="header"
+                                >
+                                    <v-icon
+                                        color="green darken-4"
+                                    >grid_on</v-icon>
+                                    <span
+                                        class="headline grey--text text--darken-3"
+                                    >Edição da Planilha</span>
                                 </div>
                                 <v-card>
                                     edição da planilha
