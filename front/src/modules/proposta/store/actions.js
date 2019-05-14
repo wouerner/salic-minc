@@ -34,7 +34,6 @@ export const salvarPlanoDistribuicaoDetalhamento = async ({ commit }, params) =>
         commit(types.UPDATE_PLANO_DISTRIBUICAO_DETALHAMENTO, data.data);
         return response.data;
     }).catch((e) => {
-        console.log('error.', e);
         throw new TypeError(e.response.data, 'salvarPlanoDetalhamento', 10);
     });
 
@@ -44,7 +43,6 @@ export const excluirPlanoDistribuicaoDetalhamento = async ({ commit }, params) =
         commit(types.EXCLUIR_PLANO_DISTRIBUICAO_DETALHAMENTO, params);
         return response.data;
     }).catch((e) => {
-        console.log('error.', e);
         throw new TypeError(e.response.data, 'salvarPlanoDetalhamento', 10);
     });
 

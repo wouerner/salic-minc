@@ -21,6 +21,7 @@ export default {
     name: 'SalicInputMoney',
     props: {
         value: {
+            type: [Number, String],
             default: 0,
         },
         disabled: {

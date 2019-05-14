@@ -7,7 +7,8 @@
         class="browser-default"
         @change="valorSelecionado(selecionado)">
         <option
-            v-for="item in items"
+            v-for="(item, index) in items"
+            :key="index"
             :value="item">{{ item }}%</option>
     </select>
 </template>
@@ -20,8 +21,12 @@ export default {
             type: Boolean,
             default: false,
         },
-        maximoCombo: {},
+        maximoCombo: {
+            type: Number,
+            default: 0,
+        },
         selected: {
+            type: Number,
             default: 0,
         },
     },
@@ -34,15 +39,15 @@ export default {
     computed: {
         items() {
             const total = [];
-            for (let i = this.maximoCombo; i >= 0; i--) {
-                total.push(parseInt(i));
+            for (let i = this.maximoCombo; i >= 0; i -= 1) {
+                total.push(parseInt(i, 10));
             }
             return total;
         },
     },
     watch: {
         selected(val) {
-            this.selecionado = parseInt(val);
+            this.selecionado = parseInt(val, 10);
         },
         disabled() {
             this.$refs.combo.disabled = this.disabled;
@@ -57,12 +62,8 @@ export default {
     methods: {
         valorSelecionado(value) {
             this.retorno = value;
-            this.$emit('evento', parseInt(this.retorno));
+            this.$emit('evento', parseInt(this.retorno, 10));
         },
     },
 };
 </script>
-
-<style scoped>
-
-</style>

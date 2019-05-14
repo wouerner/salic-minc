@@ -615,12 +615,14 @@ export default {
         },
     },
     watch: {
+        // eslint-disable-next-line
         'distribuicao.qtExemplares': function (val) {
             if (val < 0) {
                 this.mensagemAlerta('A quantidade n\xE3o pode passar ser menor que zero');
                 this.distribuicao.qtExemplares = 0;
             }
         },
+        // eslint-disable-next-line
         'distribuicao.qtGratuitaDivulgacao': function (val) {
             const limiteQuantidadeDivulgacao = parseInt(this.distribuicao.qtExemplares * this.valores.percentualGratuitoDivulgacao, 10);
 
@@ -636,6 +638,7 @@ export default {
 
             this.distribuicao.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
         },
+        // eslint-disable-next-line
         'distribuicao.qtGratuitaPatrocinador': function (val) {
             const limitePatrocinador = parseInt(this.distribuicao.qtExemplares * this.valores.percentualGratuitoPatrocinador, 10);
 
@@ -651,6 +654,7 @@ export default {
 
             this.distribuicao.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
         },
+        // eslint-disable-next-line
         'distribuicao.vlUnitarioPopularIntegral': function () {
             if (this.distribuicao.vlUnitarioPopularIntegral > this.valores.valorMaximoPrecoPopular) {
                 this.mensagemAlerta(`O pre\xE7o unit\xE1rio do pre\xE7o popular n\xE3o pode
@@ -658,6 +662,7 @@ export default {
                 this.inputUnitarioPopularIntegral = this.formatarValor(this.valores.valorMaximoPrecoPopular);
             }
         },
+        // eslint-disable-next-line
         'valores.percentualProponente': function (val) {
             if (val > this.valores.percentualProponentePadrao) {
                 this.mensagemAlerta(`Percentual do Proponente n\u00E3o pode ser maior que ${this.valores.percentualProponentePadrao * 100}%`);
