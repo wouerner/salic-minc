@@ -31,8 +31,6 @@ class AvaliacaoResultados_Model_DbTable_LaudoFinal extends MinC_Db_Table_Abstrac
     public function projetosLaudoFinal($estadoId)
     {
         $auth = \Zend_Auth::getInstance();
-
-        $org = new \Orgaos();
         $orgao = $auth->getIdentity()->usu_org_max_superior;
 
         $select = $this->select();
