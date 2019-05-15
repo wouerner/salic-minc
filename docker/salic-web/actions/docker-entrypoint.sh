@@ -23,6 +23,13 @@ fi
 if  ! [ -e "/var/www/salic/application/configs/application.ini" ] ; then
     echo "[ ****************** ] Copying sample application configuration to real one"
     cp /var/www/salic/application/configs/exemplo-application.ini /var/www/salic/application/configs/application.ini
+
+    sed -i "s/@@DB_PDOTYPE@@/$DB_PDOTYPE/g" /var/www/salic/application/configs/application.ini
+    sed -i "s/@@DB_HOST@@/$DB_HOST/g" /var/www/salic/application/configs/application.ini
+    sed -i "s/@@DB_NAME@@/$DB_NAME/g" /var/www/salic/application/configs/application.ini
+    sed -i "s/@@DB_USERNAME@@/$DB_USERNAME/g" /var/www/salic/application/configs/application.ini
+    sed -i "s/@@DB_PASSWORD@@/$DB_PASSWORD/g" /var/www/salic/application/configs/application.ini
+    sed -i "s/@@DB_PORT@@/$DB_PORT/g" /var/www/salic/application/configs/application.ini
 fi
 
 
@@ -30,7 +37,7 @@ fi
 if [ "$XDEBUG_INSTALL" == "true" ]; then
     echo "[ ****************** ] Starting install of XDebug and dependencies."
 	pecl shell-test xdebug && echo "Package xdebug Installed" || (
-		yes | pecl install xdebug 
+		yes | pecl install xdebug
 		echo "zend_extension="`find /usr/local/lib/php/extensions/ -iname 'xdebug.so'` > $XDEBUGINI_PATH
     	echo "xdebug.remote_enable=$XDEBUG_REMOTE_ENABLE" >> $XDEBUGINI_PATH
 
