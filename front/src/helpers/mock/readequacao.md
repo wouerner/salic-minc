@@ -684,3 +684,14 @@ HOST: http://localhost:4000
                     "dtEnvio": "2019-01-23",
                     "stStatusAtual": "proponente"
             }
+
+## Readequação - Obter planilha [/readequacao/obter-planilha/{idPronac}]
++ Parameters
+    + idPronac: 217336 (number, required)
+       + Body
+        {
+          "items": [
+            {
+            }
+          ]
+        }

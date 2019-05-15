@@ -58,9 +58,9 @@
                     >
                         <div v-show="novaReadequacao">
                             <v-btn
-                                @click="acionarSolicitarUsoSaldo()"
                                 dark
                                 class="blue"
+                                @click="acionarSolicitarUsoSaldo()"
                             >
                                 <v-icon>border_color</v-icon>
                                 Solicitar uso do saldo de aplicação
@@ -77,8 +77,9 @@
                             <v-expansion-panel-content
                                 :key="1"
                             >
-                                <div slot="header"
-                                     class="inline-block"
+                                <div
+                                    slot="header"
+                                    class="inline-block"
                                 >
                                     <v-icon
                                         color="green darken-3"
@@ -140,7 +141,8 @@
                             <v-expansion-panel-content
                                 :key="2"
                             >
-                                <div slot="header"
+                                <div
+                                    slot="header"
                                 >
                                     <v-icon
                                         color="green darken-4"
@@ -150,12 +152,35 @@
                                     >Edição da Planilha</span>
                                 </div>
                                 <v-card>
-                                    edição da planilha
                                     <saldo-aplicacao-resumo
                                         :saldo-declarado="dadosReadequacao.dsSolicitacao"
                                         :saldo-disponivel="saldoDisponivel"
                                         :saldo-utilizado="saldoUtilizado"
                                     />
+                                    <s-planilha
+                                        :array-planilha="planilhaSaldo"
+                                        :expand-all="true"
+                                        :list-items="true"
+                                        :agrupamentos="agrupamentos"
+                                        :totais="totaisPlanilha"
+                                    >
+                                        <template
+                                            slot="badge"
+                                            slot-scope="slotProps"
+                                        >
+                                            <v-chip
+                                                v-if="slotProps.planilha.VlSolicitado"
+                                                outline="outline"
+                                                label="label"
+                                                color="#565555"
+                                            >
+                                                R$ {{ formatarParaReal(slotProps.planilha.VlSolicitado) }}
+                                            </v-chip>
+                                        </template>
+                                        <template slot-scope="slotProps">
+                                            <s-analise-de-custos-planilha-itens-solicitado :table="slotProps.itens" />
+                                        </template>
+                                    </s-planilha>
                                 </v-card>
                             </v-expansion-panel-content>
                         </v-expansion-panel>
@@ -211,164 +236,10 @@
             :mensagem="mensagem"
         />
     </v-container>
-    <!--
-         <div class="readequacao-saldo-aplicacao container-fluid">
-         
-         <ul
-         class="collapsible"
-         v-if="!disabled"
-         v-show="exibirPaineis"
-         >
-         <li>
-         <div class="collapsible-header">
-         <i class="material-icons">list</i>
-         Editar planilha or&ccedil;ament&aacute;ria
-         </div>
-         <div class="collapsible-body" v-if="solicitacaoIniciada">
-         <div class="card">
-         <div class="card-content">
-         <readequacao-saldo-aplicacao-resumo
-         :valorSaldoAplicacao="valorSaldoAplicacao"
-         :valorEntrePlanilhasLimpo="valorEntrePlanilhasLimpo"
-         :valorSaldoDisponivelParaUso="valorSaldoDisponivelParaUso"
-         :valorSaldoUtilizado="valorSaldoUtilizado"
-         :valorSaldoDisponivelParaUsoNegativo="valorSaldoDisponivelParaUsoNegativo"
-         :valorSaldoDisponivelParaUsoNeutro="valorSaldoDisponivelParaUsoNeutro"
-         :valorSaldoDisponivelParaUsoPositivo="valorSaldoDisponivelParaUsoPositivo"
-         :valorSaldoUtilizadoPositivo="valorSaldoUtilizadoPositivo"
-         :valorSaldoUtilizadoNeutro="valorSaldoUtilizadoNeutro"
-         :readequacaoAlterada="readequacaoAlterada"                                        
-         :valorSaldoUtilizadoNegativo="valorSaldoUtilizadoNegativo"
-         >
-         </readequacao-saldo-aplicacao-resumo>
-         </div>
-         </div>
-         <div class="card">
-         <div class="card-content">
-         <planilha-orcamentaria
-         :id-pronac="idPronac"
-         :tipo-planilha="tipoPlanilha"
-         :link="1"
-         :id-readequacao="dadosReadequacao.idReadequacao"
-         :componente-planilha="componentePlanilha"
-         :perfil="perfil"
-         :disabled="disabled"
-         :disponivelParaAdicaoItensReadequacaoPlanilha="disponivelParaAdicaoItensReadequacaoPlanilha"
-         v-on:atualizarSaldoEntrePlanilhas="carregarValorEntrePlanilhas"
-         >
-         </planilha-orcamentaria>
-         </div>
-         </div>
-         <div class="card">
-         <div class="card-content">
-         <readequacao-saldo-aplicacao-resumo
-         :valorSaldoAplicacao="valorSaldoAplicacao"
-         :valorEntrePlanilhasLimpo="valorEntrePlanilhasLimpo"
-         :valorSaldoDisponivelParaUso="valorSaldoDisponivelParaUso"
-         :valorSaldoUtilizado="valorSaldoUtilizado"
-         :valorSaldoDisponivelParaUsoNegativo="valorSaldoDisponivelParaUsoNegativo"
-         :valorSaldoDisponivelParaUsoPositivo="valorSaldoDisponivelParaUsoPositivo"
-         :valorSaldoUtilizadoPositivo="valorSaldoUtilizadoPositivo"
-         :valorSaldoUtilizadoNeutro="valorSaldoUtilizadoNeutro"
-         :readequacaoAlterada="readequacaoAlterada"
-         :valorSaldoUtilizadoNegativo="valorSaldoUtilizadoNegativo"
-         >
-         </readequacao-saldo-aplicacao-resumo>
-         </div>
-         </div>
-         </div>
-         <div class="collapsible-body card" v-else>
-         <span>Preencha o valor do saldo dispon&iacute;vel para poder iniciar as altera&ccedil;&atilde;oes na planilha or&ccedil;ament&aacute;ria.</span>
-         </div>
-         </li>
-         </ul>
-         <div v-if="disabled">
-         <div class="card">
-         <div class="card-content">
-         <h4>Saldo de aplica&ccedil;&atildeo declarado</h4>
-         <h6 class="blue-text lighten-1">R$ {{valorSaldoAplicacao}}</h6>
-         </div>
-         </div>
-         <div class="card">
-         <div class="card-content">
-         <planilha-orcamentaria
-         :id-pronac="idPronac"
-         :tipo-planilha="tipoPlanilha"
-         :link="1"
-         :id-readequacao="dadosReadequacao.idReadequacao"
-         :componente-planilha="componentePlanilha"
-         :perfil="perfil"
-         :disabled="disabled"
-         :disponivelParaAdicaoItensReadequacaoPlanilha="disponivelParaAdicaoItensReadequacaoPlanilha"
-         v-on:atualizarSaldoEntrePlanilhas="carregarValorEntrePlanilhas"
-         >
-         </planilha-orcamentaria>
-         </div>
-         </div>
-         </div>
-         <div class="card" v-if="mostrarBotoes">
-         <div class="card-content">
-         <div class="row">
-         <div class="right-align padding20 col s12">
-         <button
-         class="waves-light waves-effect btn red modal-trigger"
-         v-on:click="prepararExcluirReadequacao()"
-         >Excluir</button>
-         <a
-         class="waves-light waves-effect btn modal-trigger"
-         href="#modalFinalizar"
-         :disabled="!podeFinalizarReadequacao"
-         >Finalizar</a>
-         </div>
-         </div>
-         </div>
-         </div>
-         <div id="modalExcluir" class="modal">
-         <div class="modal-content center-align">
-         <h4>Tem certeza que deseja excluir a redequa&ccedil;&atilde;o?</h4>
-         </div>
-         <div class="modal-footer">
-         <a class="waves-effect waves-green btn-flat red white-text"
-         v-on:click="excluirReadequacao">Excluir
-         </a>
-         <a class="modal-close waves-effect waves-green btn-flat"
-         href="#!">Cancelar
-         </a>                                                                                                
-         7    </div>
-         </div>                                                
-         <div id="modalFinalizar" class="modal">
-         <div class="modal-content center-align">
-         <h4>Tem certeza que deseja finalizar a redequa&ccedil;&atilde;o?</h4>
-         </div>
-         <div class="modal-footer">
-         <a 
-         class="waves-effect waves-green btn-flat green white-text"
-         v-on:click="finalizarReadequacao">Finalizar
-         </a>
-         <a class="modal-close waves-effect waves-green btn-flat"
-         href="#!">Cancelar
-         </a>                                                                                                
-         </div>
-         </div>                                                
-         <div v-if="mostrarMensagemFinal" class="card">
-         <div class="card-content">
-         <div class="row">
-         <div class="col s1 right-align"><i class="medium green-text material-icons">check_circle</i></div>
-         <div class="col s11">
-         <p><b>Solicita&ccedil;&atilde;o enviada com sucesso!</b></p>
-         <p>Sua solicita&ccedil;&atilde;o agora est&aacute; para an&aacute;lise t&eacute;cnica do MinC.</p>
-         <p>Para acompanhar, acesse o menu lateral 'Execu&ccedil;&atilde;o -> Dados das readequa&ccedil;&otilde;es'
-         em <a :href="'/projeto/#incentivo/' + idPronac">consultar dados do projeto</a>.</p>
-         </div>
-         </div>
-         </div>
-         </div>
-         </div>
-         </div>
-    -->
 </template>
 <script>
 
+import _ from 'lodash';
 import { mapActions, mapGetters } from 'vuex';
 import { utils } from '@/mixins/utils';
 import Const from '../const';
@@ -378,18 +249,13 @@ import validarFormulario from '../mixins/validarFormulario';
 import verificarPerfil from '../mixins/verificarPerfil';
 import Carregando from '@/components/CarregandoVuetify';
 import FormReadequacao from '../components/FormReadequacao';
-import UploadFile from './../components/UploadFile';
+import UploadFile from '../components/UploadFile';
 import ValorDisponivel from '../components/ValorDisponivel';
 import SaldoAplicacaoResumo from '../components/SaldoAplicacaoResumo';
 import ExcluirButton from '../components/ExcluirButton';
-/* velho abaixo */
-/* import ReadequacaoSaldoAplicacaoResumo from '../components/ReadequacaoSaldoAplicacaoResumo';
-// import ReadequacaoFormulario from '../components/ReadequacaoFormulario';
-import ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria from '../components/ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria';
-import PlanilhaOrcamentariaAlterarItem from '../components/PlanilhaOrcamentariaAlterarItem';
-import PlanilhaOrcamentariaIncluirItem from '../components/PlanilhaOrcamentariaIncluirItem';
-import PlanilhaOrcamentaria from '../components/PlanilhaOrcamentaria';
-*/
+import SPlanilha from '@/components/Planilha/Planilha';
+import MxPlanilha from '@/mixins/planilhas';
+
 export default {
     name: 'SaldoAplicacaoView',
     components: {
@@ -401,16 +267,13 @@ export default {
         FormReadequacao,
         SaldoAplicacaoResumo,
         ExcluirButton,
-/*        ReadequacaoSaldoAplicacaoResumo,
-        PlanilhaOrcamentariaAlterarItem,
-        PlanilhaOrcamentariaIncluirItem,
-        ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria,
-        PlanilhaOrcamentaria,*/
+        SPlanilha,
     },
     mixins: [
         utils,
         validarFormulario,
         verificarPerfil,
+        MxPlanilha,
     ],
     data() {
         return {
@@ -459,21 +322,14 @@ export default {
             permissao: true,
             formatosAceitos: ['application/pdf'],
             novaReadequacao: true,
-            /* velho em diante
-            disabled: false,
-            idPronac: '',
-            pronac: '',
-            nomeProjeto: '',
-            idTipoReadequacao: 22,
-            siEncaminhamento: 12,
-            exibirPaineis: false,
-            solicitacaoIniciada: false,
-            mostrarMensagemFinal: false,
-            valorEntrePlanilhas: [],
-            tipoPlanilha: 7,
-            componentePlanilha: 'ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria',
-            disponivelParaAdicaoItensReadequacaoPlanilha: false,
-            readequacaoAlterada: false, */
+            totaisPlanilha: [
+                {
+                    label: 'Valor Solicitado',
+                    column: 'VlSolicitado',
+                },
+            ],
+            planilhaSaldo: [],
+            agrupamentos: ['FonteRecurso', 'Produto', 'Etapa', 'UF', 'Cidade'],
         };
     },
     computed: {
@@ -494,79 +350,6 @@ export default {
         saldoUtilizado() {
             return this.dadosReadequacao.dsSolicitacao;
         },
-        /* velho em diante 
-        vlDiferencaEntrePlanilhas() {
-            if (typeof this.valorEntrePlanilhas.vlDiferencaPlanilhas !== 'undefined') {
-                return this.valorEntrePlanilhas.vlDiferencaPlanilhas;
-            }
-            return false;
-        },
-        valorEntrePlanilhasLimpo() {
-            return (
-                this.valorEntrePlanilhas.PlanilhaAtivaTotal - this.valorEntrePlanilhas.PlanilhaReadequadaTotal
-            ).toFixed(2);
-        },
-        valorSaldoAplicacao() {
-            return this.dadosReadequacao.dsSolicitacao;
-        },
-        valorSaldoDisponivelParaUso() {
-            return Number(this.valorSaldoAplicacao) + Number(this.valorEntrePlanilhasLimpo);
-        },
-        valorSaldoUtilizado() {
-            return this.valorEntrePlanilhas.PlanilhaReadequadaTotal - this.valorEntrePlanilhas.PlanilhaAtivaTotal;
-        },
-        valorSaldoDisponivelParaUsoPositivo() {
-            if (this.valorSaldoDisponivelParaUso > 0) {
-                return true;
-            }
-            return false;
-        },
-        valorSaldoDisponivelParaUsoNeutro() {
-            if (this.valorSaldoDisponivelParaUso === 0) {
-                return true;
-            }
-            return false;
-        },
-        valorSaldoDisponivelParaUsoNegativo() {
-            if (this.valorSaldoDisponivelParaUso < 0) {
-                return true;
-            }
-            return false;
-        },
-        valorSaldoUtilizadoPositivo() {
-            if (this.valorSaldoUtilizado > 0) {
-                return true;
-            }
-            return false;
-        },
-        valorSaldoUtilizadoNeutro() {
-            if (this.valorSaldoUtilizado === 0) {
-                return true;
-            }
-            return false;
-        },
-        valorSaldoUtilizadoNegativo() {
-            if (this.valorSaldoUtilizado < 0) {
-                return true;
-            }
-            return false;
-        },
-        podeFinalizarReadequacao() {
-            if ((this.valorSaldoDisponivelParaUsoPositivo
-                 || this.valorSaldoDisponivelParaUsoNeutro)
-                && this.valorSaldoUtilizadoPositivo
-                && !this.readequacaoAlterada
-               ) {
-                return true;
-            }
-            return false;
-        },
-        mostrarBotoes() {
-            if (typeof this.dadosReadequacao === 'undefined') {
-                return false;
-            }
-            return true;
-        },*/
     },
     watch: {
         getUsuario(value) {
@@ -594,17 +377,11 @@ export default {
                     this.novaReadequacao = false;
                     if (value.idPronac && value.idTipoReadequacao) {
                         this.inicializarReadequacaoEditada();
-                        /* velho em diante 
-                    this.obterDisponivelEdicaoReadequacaoPlanilha(this.dadosProjeto.idPronac);
-                    this.carregarValorEntrePlanilhas();
-                    this.solicitacaoIniciada = true;
-                    this.exibirPaineis = true;
-*/
                     } else {
                         this.novaReadequacao = true;
                     }
                 }
-            }
+            },
         },
         mensagem: {
             handler(mensagem) {
@@ -725,71 +502,6 @@ export default {
             this.solicitarUsoSaldo({
                 idPronac: this.idPronac,
             });
-        },
-        /* velho em diante */
-        // solicitarUsoSaldo() {
-            /*
-            const self = this;
-                $3.ajax({
-                url: '/readequacao/saldo-aplicacao/solicitar-uso-saldo',
-                type: 'POST',
-                data: {
-                idPronac: self.idPronac,
-                },
-                }).done(
-                () => {
-                const idPronac = self.idPronac;
-                const idTipoReadequacao = self.idTipoReadequacao;
-                const stEstagioAtual = 'proponente';
-                self.buscaReadequacaoPronacTipo({ idPronac, idTipoReadequacao, stEstagioAtual });
-                self.exibirPaineis = true;
-                self.exibirBotaoIniciar = false;
-                self.disponivelEdicaoReadequacaoPlanilha(self.idPronac);
-                self.carregarValorEntrePlanilhas();
-                },
-                );
-        },
-              */
-        atualizarReadequacao(readequacao) {
-            this.readequacaoAlterada = true;
-            this.readequacao = readequacao;
-        },
-        carregarValorEntrePlanilhas() {
-            const self = this;
-            /*
-                $3.ajax({
-                type: 'GET',
-                url: '/readequacao/saldo-aplicacao/carregar-valor-entre-planilhas',
-                data: {
-                idPronac: self.idPronac,
-                idTipoReadequacao: self.idTipoReadequacao,
-                },
-                }).done((response) => {
-                self.valorEntrePlanilhas = response.valorEntrePlanilhas;
-                });
-            */
-        },
-        restaurarFormulario() {
-            this.readequacao = {
-                idPronac: null,
-                idReadequacao: null,
-                justificativa: '',
-                arquivo: null,
-                idTipoReadequacao: null,
-                dsSolicitacao: '',
-                idArquivo: null,
-                nomeArquivo: null,
-            };
-            this.readequacaoAlterada = false;
-        },
-        corValor(valor) {
-            let cor = '';
-            if (valor > 0) {
-                cor = 'positivo';
-            } else if (valor < 0) {
-                cor = 'negativo';
-            }
-            return cor;
         },
     },
 };

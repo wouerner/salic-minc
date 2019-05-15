@@ -1,4 +1,7 @@
 import numeral from 'numeral';
+
+import moneyFilter from '@/filters/money';
+
 import moment from 'moment';
 import 'numeral/locales';
 
@@ -60,7 +63,7 @@ export default {
         },
         definirClasseItem(row) {
             return {
-                'orange lighten-2': row.stCustoPraticado === true || row.stCustoPraticado === '1' || row.stCustoPraticado === 1,
+                'orange lighten-4': row.stCustoPraticado === true || row.stCustoPraticado === '1' || row.stCustoPraticado === 1,
                 'linha-incluida': row.tpAcao === 'I',
                 'linha-excluida': row.tpAcao === 'E',
                 'linha-atualizada': row.tpAcao === 'A',
@@ -72,8 +75,8 @@ export default {
     },
     filters: {
         filtroFormatarParaReal(value) {
-            const parsedValue = parseFloat(value);
-            return numeral(parsedValue).format('0,0.00');
+            const parsedValue = typeof value !== 'undefined' ? parseFloat(value) : 0;
+            return moneyFilter(parsedValue);
         },
         formatarData(value) {
             if (value) {
