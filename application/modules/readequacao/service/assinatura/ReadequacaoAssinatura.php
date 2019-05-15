@@ -724,13 +724,11 @@ class ReadequacaoAssinatura implements IServico
 
     protected function finalizarReadequacaoTransferenciaRecursos($read)
     {
-
         $TbSolicitacaoTransferenciaRecursos = new \Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
         $tbProjetoRecebedorRecursoMapper = new \Readequacao_Model_TbProjetoRecebedorRecursoMapper();
         $tbSolicitacaoTransferenciaRecursosMapper = new \Readequacao_Model_TbSolicitacaoTransferenciaRecursosMapper();
         $projetos = new \Projetos();
-
-        $projetosRecebedores = $TbSolicitacaoTransferenciaRecursos->obterProjetosRecebedores($idReadequacao);
+        $projetosRecebedores = $TbSolicitacaoTransferenciaRecursos->obterProjetosRecebedores($read->idReadequacao);
         $projetoTransferidor = $projetos->buscarProjetoTransferidor($read->idPronac);
 
         foreach ($projetosRecebedores as $projetoRecebedor) {
