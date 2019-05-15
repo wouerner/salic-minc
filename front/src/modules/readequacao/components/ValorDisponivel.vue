@@ -49,7 +49,7 @@ export default {
     },
     methods: {
         atualizarCampo(value) {
-            if (parseInt(value) === 0) {
+            if (parseInt(value, 10) === 0) {
                 this.atualizarContador(0);
             } else {
                 this.atualizarContador(value.length);
