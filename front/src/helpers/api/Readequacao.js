@@ -89,3 +89,8 @@ export const solicitarUsoSaldo = (params) => {
     const path = `/readequacao/solicitar-saldo/${params.idPronac}`;
     return api.getRequest(path);
 };
+
+export const obterPlanilhaReadequacao = (params) => {
+    const path `/readequacao/obter-planilha-readequacao/${params.idPronac}`;
+    return api.getRequest(path);
+};

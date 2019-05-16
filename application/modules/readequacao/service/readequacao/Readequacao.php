@@ -706,5 +706,9 @@ class Readequacao implements IServicoRestZend
         }
         return $data;
     }
+
+    public function obterPlanilha() {
+        
+    }
 }
     

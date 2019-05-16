@@ -685,13 +685,38 @@ HOST: http://localhost:4000
                     "stStatusAtual": "proponente"
             }
 
-## Readequação - Obter planilha [/readequacao/obter-planilha/{idPronac}]
+## Readequação - Obter planilha readequação [/readequacao/obter-planilha-readequacao/{idPronac}]
 + Parameters
     + idPronac: 217336 (number, required)
        + Body
         {
           "items": [
             {
+                "tpPlanilha": "CO",
+                "dtPlanilha": "2019-05-16 14:50:17",
+                "idPronac": 216611,
+                "idProduto": 1,
+                "dsProduto": "Livro",
+                "idReadequacao": 19221,
+                "idEtapa": 2,
+                "dsEtapa": "Produção / execução",
+                "idPlanilhaItem": 101,
+                "dsItem": "Ilustração",
+                "idUnidade": 23,
+                "dsUnidade": "Mês"
+                "qtItem": 5,
+                "nrOcorrencia": 4,
+                "vlUnitario": 335151.33,
+                "qtDias": 10,
+                "tpDespesa": 0,
+                "tpPessoa": 0,
+                "nrContraPartida": 0,
+                "nrFonteRecurso": 109,
+                "idUFDespesa": 35,
+                "idMunicipioDespesa": 355030,
+                "dsJustificativa": "Remanejado por isso e aquilo",
+                "idAgente": 3466,
+                "StAtivo" : "S",
             }
           ]
         }
