@@ -1894,7 +1894,11 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         if ((strlen($cpf) == 11 && !Validacao::validarCPF($cpf)) || (strlen($cpf) == 14 && !Validacao::validarCNPJ($cpf))) {
             $novos_valores[0]['msgCPF'] = utf8_encode('invalido');
         } else {
-            if (count($dados) != 0) {
+            $date = DateTime::createFromFormat('Y-m-d H:i:s', $dados[0]->dtatualizacao);
+            $time2 = new DateTime(); //data atual
+            $interval =  $time2->diff($date);
+
+            if (count($dados) != 0 && $interval->m < 7) {
                 foreach ($dados as $dado) {
                     $dado = ((array) $dado);
                     array_walk($dado, function ($value, $key) use (&$dado) {
@@ -1908,13 +1912,19 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             } else {
                 #Instancia a Classe de Servico do WebService da Receita Federal
                 $wsServico = new ServicosReceitaFederal();
+
                 if (11 == strlen($cpf)) {
+
                     $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf);
+                    var_dump('ola',$arrResultado);
+                    die;
                     if (count($arrResultado) > 0) {
                         $novos_valores[0]['msgCPF'] = utf8_encode('novo');
                         $novos_valores[0]['idAgente'] = $arrResultado['idPessoaFisica'];
                         $novos_valores[0]['Nome'] = utf8_encode($arrResultado['nmPessoaFisica']);
                         $novos_valores[0]['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
+                        var_dump('ola');
+                        die;
                     }
                 } elseif (14 == strlen($cpf)) {
                     $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf);
