@@ -48,7 +48,7 @@ class Readequacao_Model_TbReadequacaoMapper extends MinC_Db_Mapper
             }
 
             $dsJustificativa = $arrData['dsJustificativa'];
-            if (mb_detect_encoding($dsJustificativa == 'UTF-8')) {
+            if (mb_detect_encoding($dsJustificativa)  == 'UTF-8') {
                 $dsJustificativa = utf8_decode($dsJustificativa);
             }
             $objReadequacao->setDsJustificativa($dsJustificativa);
@@ -58,7 +58,7 @@ class Readequacao_Model_TbReadequacaoMapper extends MinC_Db_Mapper
             }
 
             $dsSolicitacao = $arrData['dsSolicitacao'];
-            if (mb_detect_encoding($dsSolicitacao == 'UTF-8')) {
+            if (mb_detect_encoding($dsSolicitacao)  == 'UTF-8') {
                 $dsSolicitacao = utf8_decode($dsSolicitacao);
             }
             $objReadequacao->setDsSolicitacao($dsSolicitacao);
@@ -69,7 +69,6 @@ class Readequacao_Model_TbReadequacaoMapper extends MinC_Db_Mapper
                 }
                 $objReadequacao->setIdDocumento($arrData['idDocumento']);
             }
-
             $id = $this->save($objReadequacao);
             if ($this->getMessage()) {
                 throw new Exception($this->getMessage());
