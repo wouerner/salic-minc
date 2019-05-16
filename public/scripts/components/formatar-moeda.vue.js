@@ -7,6 +7,7 @@ Vue.component('formatar-moeda', {
         ref="input"
         v-on:input="updateMoney($event.target.value)"
         v-on:blur="formatValue"
+        @keyup.enter="formatValue"
     />`,
     props: {
         value: {
