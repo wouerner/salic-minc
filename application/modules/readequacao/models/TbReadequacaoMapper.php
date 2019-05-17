@@ -56,7 +56,6 @@ class Readequacao_Model_TbReadequacaoMapper extends MinC_Db_Mapper
                 $objReadequacao->setDsJustificativa($dsJustificativa);
             }
             
-
             if (!isset($arrData['idReadequacao'])
                 &&  !isset($arrData['dsSolicitacao'])) {
                 $dsSolicitacao = '';
@@ -68,15 +67,15 @@ class Readequacao_Model_TbReadequacaoMapper extends MinC_Db_Mapper
                 }
                 $objReadequacao->setDsSolicitacao($dsSolicitacao);
             }
-
-
+            
             if (!isset($arrData['idReadequacao'])
-                &&  !isset($arrData['dsSolicitacao'])) {
+                &&  !isset($arrData['idDocumento'])) {
                 $idDocumento = new Zend_Db_Expr('NULL');
                 $objReadequacao->setIdDocumento($idDocumento);
             } else if (isset($arrData['idDocumento'])) {
                 $objReadequacao->setIdDocumento($arrData['idDocumento']);
             }
+            
             $id = $this->save($objReadequacao);
             if ($this->getMessage()) {
                 throw new Exception($this->getMessage());
