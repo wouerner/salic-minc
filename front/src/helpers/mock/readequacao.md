@@ -652,7 +652,7 @@ HOST: http://localhost:4000
                 "mensagem": "Readequação enviada para análise."
             }
 
-## Readequação - solicitar uso do saldo [/readequacao/solicitar-saldo/{idPronac}
+## Readequação - solicitar uso do saldo [/readequacao/solicitar-saldo/{idPronac}]
 
 ### Solicita uso do saldo [GET]
 
@@ -685,10 +685,17 @@ HOST: http://localhost:4000
                     "stStatusAtual": "proponente"
             }
 
-## Readequação - Obter planilha readequação [/readequacao/obter-planilha-readequacao/{idPronac}]
+## Readequação - Obter planilha [/readequacao/obter-planilha?idPronac={idPronac}&idTipoReadequacao=23]
+
+### Solicita planilha [GET]
 + Parameters
     + idPronac: 217336 (number, required)
-       + Body
+    + idTipoReadequacao: 2 (number, required)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
         {
           "items": [
             {

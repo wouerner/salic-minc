@@ -659,7 +659,7 @@ class Readequacao implements IServicoRestZend
         $data = [];
         
         if (strlen($idPronac) > 7) {
-            $idPronac = Seguranca::dencrypt($idPronac);
+            $idPronac = \Seguranca::dencrypt($idPronac);
         }
         
         $tbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
@@ -707,8 +707,30 @@ class Readequacao implements IServicoRestZend
         return $data;
     }
 
-    public function obterPlanilha() {
+    public function obterPlanilha($idPronac, $idTipoReadequacao) {
+        $tipos = [
+            \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL => \spPlanilhaOrcamentaria::TIPO_PLANILHA_REMANEJAMENTO,
+            \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA => \spPlanilhaOrcamentaria::TIPO_PLANILHA_READEQUACAO,
+            \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO => \spPlanilhaOrcamentaria::TIPO_PLANILHA_SALDO_APLICACAO
+        ];
         
+        $spPlanilhaOrcamentaria = new \spPlanilhaOrcamentaria();
+        $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, $tipos[$idTipoReadequacao]);
+
+        $planilha = [];
+        foreach ($planilhaOrcamentaria as $item) {
+            $item->Produto = utf8_encode($item->Produto);
+            $item->NomeProjeto = utf8_encode($item->NomeProjeto);
+            $item->Etapa = utf8_encode($item->Etapa);
+            $item->Municipio = utf8_encode($item->Municipio);
+            $item->Item = utf8_encode($item->Item);
+            $item->dsJustificativa = utf8_encode($item->dsJustificativa);
+            $item->FonteRecurso = utf8_encode($item->FonteRecurso);
+            $item->Unidade = utf8_encode($item->Unidade);
+            $planilha[] = $item;
+        };
+        
+        return $planilha;
     }
 }
     
