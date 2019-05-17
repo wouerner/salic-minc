@@ -175,3 +175,10 @@ export const solicitarUsoSaldo = ({ commit }, params) => {
             commit(types.SET_READEQUACAO, response.data.data.items);
         });
 };
+
+export const obterPlanilha = ({ commit }, params) => {
+    readequacaoHelperAPI.obterPlanilha(params)
+        .then((response) => {
+            commit(types.SET_PLANILHA, response.data.data.items);
+        });
+};

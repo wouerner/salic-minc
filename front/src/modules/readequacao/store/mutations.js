@@ -10,6 +10,7 @@ export const state = {
     saldoAplicacaoDisponivelEdicaoItem: {},
     campoAtual: {},
     tiposDisponiveis: [],
+    planilha: {},
 };
 
 export const mutations = {
@@ -27,6 +28,12 @@ export const mutations = {
     },
     [types.GET_READEQUACAO](state, readequacao) {
         state.readequacao = readequacao;
+    },
+    [types.SET_PLANILHA](state, planilha) {
+        state.planilha = planilha;
+    },
+    [types.GET_PLANILHA](state, planilha) {
+        state.planilha = planilha;
     },
     [types.GET_CAMPO_ATUAL](state, campoAtual) {
         state.campoAtual = campoAtual;

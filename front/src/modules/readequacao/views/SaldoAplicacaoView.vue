@@ -158,7 +158,7 @@
                                         :saldo-utilizado="saldoUtilizado"
                                     />
                                     <s-planilha
-                                        :array-planilha="planilhaSaldo"
+                                        :array-planilha="getPlanilha"
                                         :expand-all="true"
                                         :list-items="true"
                                         :agrupamentos="agrupamentos"
@@ -178,7 +178,7 @@
                                             </v-chip>
                                         </template>
                                         <template slot-scope="slotProps">
-                                            <s-analise-de-custos-planilha-itens-solicitado :table="slotProps.itens" />
+                                            <!--<s-analise-de-custos-planilha-itens-solicitado :table="slotProps.itens" />-->
                                         </template>
                                     </s-planilha>
                                 </v-card>
@@ -337,6 +337,7 @@ export default {
             dadosProjeto: 'projeto/projeto',
             dadosReadequacao: 'readequacao/getReadequacao',
             getUsuario: 'autenticacao/getUsuario',
+            getPlanilha: 'readequacao/getPlanilha',
         }),
         perfilAceito() {
             return this.verificarPerfil(this.perfil, this.perfisAceitos);
@@ -419,6 +420,7 @@ export default {
             updateReadequacao: 'readequacao/updateReadequacao',
             finalizarReadequacao: 'readequacao/finalizarReadequacao',
             solicitarUsoSaldo: 'readequacao/solicitarUsoSaldo',
+            obterPlanilha: 'readequacao/obterPlanilha',
         }),
         obterDadosIniciais() {
             this.buscarProjetoCompleto(this.idPronac);
@@ -438,6 +440,10 @@ export default {
                 dsSolicitacao: this.dadosReadequacao.dsSolicitacao,
                 dsJustificativa: this.dadosReadequacao.dsJustificativa,
             };
+            this.obterPlanilha({
+                idPronac: this.dadosReadequacao.idPronac,
+                idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
+            });
         },
         salvarReadequacao() {
             this.updateReadequacao(this.readequacaoEditada).then(() => {
