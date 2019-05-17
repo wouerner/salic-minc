@@ -1894,11 +1894,11 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         if ((strlen($cpf) == 11 && !Validacao::validarCPF($cpf)) || (strlen($cpf) == 14 && !Validacao::validarCNPJ($cpf))) {
             $novos_valores[0]['msgCPF'] = utf8_encode('invalido');
         } else {
-            $date = DateTime::createFromFormat('Y-m-d H:i:s', $dados[0]->dtatualizacao);
-            $time2 = new DateTime(); //data atual
-            $interval =  $time2->diff($date);
+            $data = DateTime::createFromFormat('Y-m-d H:i:s', $dados[0]->dtatualizacao);
+            $dtatual = new DateTime(); //data atual
+            $intervalo =  $dtatual->diff($data);
 
-            if (count($dados) != 0 && $interval->m < 7) {
+            if (count($dados) != 0 && $intervalo->m < 7) {
                 foreach ($dados as $dado) {
                     $dado = ((array) $dado);
                     array_walk($dado, function ($value, $key) use (&$dado) {
@@ -1914,26 +1914,36 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
                 $wsServico = new ServicosReceitaFederal();
 
                 if (11 == strlen($cpf)) {
+                    $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, false);
 
-                    $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf);
-                    var_dump('ola',$arrResultado);
-                    die;
-                    if (count($arrResultado) > 0) {
+                    if (count($arrResultado) > 0 && $arrResultado['situacaoCadastral'] > 0) {
+                        $data = DateTime::createFromFormat('d/m/Y H:i:s', $arrResultado['situacaoCadastral']['dtSituacaoCadastral']);
+                        $dtatual = new DateTime(); //data atual
+                        $intervalo =  $dtatual->diff($data);
+
+                        if( $intervalo->m > 6 ) {
+                            $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, true);
+                        }
                         $novos_valores[0]['msgCPF'] = utf8_encode('novo');
                         $novos_valores[0]['idAgente'] = $arrResultado['idPessoaFisica'];
                         $novos_valores[0]['Nome'] = utf8_encode($arrResultado['nmPessoaFisica']);
                         $novos_valores[0]['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
-                        var_dump('ola');
-                        die;
                     }
                 } elseif (14 == strlen($cpf)) {
-                    $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf);
-                    if (count($arrResultado) > 0) {
+                    $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf,false);
+
+                    if (count($arrResultado) > 0 && $arrResultado['situacaoCadastral'] > 0) {
+                        $data = DateTime::createFromFormat('d/m/Y H:i:s', $arrResultado['situacaoCadastral']['dtSituacaoCadastral']);
+                        $dtatual = new DateTime(); //data atual
+                        $intervalo =  $dtatual->diff($data);
+
+                        if( $intervalo->m > 6 ) {
+                            $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, true);
+                        }
                         $novos_valores[0]['msgCPF'] = utf8_encode('novo');
                         $novos_valores[0]['idAgente'] = $arrResultado['idPessoaJuridica'];
                         $novos_valores[0]['Nome'] = utf8_encode($arrResultado['nmRazaoSocial']);
                         $novos_valores[0]['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
-                        ;
                     }
                 }
             }

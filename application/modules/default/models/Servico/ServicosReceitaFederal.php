@@ -81,7 +81,7 @@ class ServicosReceitaFederal
      * @param bool $forcarBuscaReceita - Define se deve ir na Base da receita federal, mesmo ja existindo o CPF na base do MINC
      * @return ArrayObject|mixed - Resultado da consulta em Json ou ArrayObject
      */
-    public function consultarPessoaJuridicaReceitaFederal($cnpj, $forcarBuscaReceita = false, $returnJSON = false)
+    public function consultarPessoaJuridicaReceitaFederal($cnpj, $forcarBuscaReceita, $returnJSON = false)
     {
         $chars = array(".", "/", "-");
         $cnpj = str_replace($chars, "", $cnpj);
@@ -121,12 +121,12 @@ class ServicosReceitaFederal
      * @param bool $forcarBuscaReceita - Define se deve ir na Base da receita federal, mesmo ja existindo o CPF na base do MINC
      * @return ArrayObject|mixed - Resultado da consulta em Json ou ArrayObject
      */
-    public function consultarPessoaFisicaReceitaFederal($cpf, $forcarBuscaReceita = false, $returnJSON = false)
+    public function consultarPessoaFisicaReceitaFederal($cpf, $forcarBuscaReceita, $returnJSON = false)
     {
         if (11 == strlen($cpf) && !validaCPF($cpf)) {
             throw new InvalidArgumentException("CPF/CNPJ inv&aacute;lido");
         }
-        
+
         $url = $this->baseUrl . self::urlServico . self::urlPessoaFisica . $cpf;
         if ($forcarBuscaReceita) {
             $url .= self::urlForcar;
@@ -137,15 +137,15 @@ class ServicosReceitaFederal
         curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
         curl_setopt($curl, CURLOPT_USERPWD, "$this->user:$this->password");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        
+
         $resultCurl = curl_exec($curl);
         curl_close($curl);
-        
+
         $resultArray = json_decode($resultCurl, true);
         if (is_array($resultArray)) {
             $result = new ArrayObject($resultArray);
             $retornoResultado = $result;
-            
+
             if ($returnJSON) {
                 $retornoResultado = $resultCurl;
             }
