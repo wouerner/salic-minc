@@ -43,6 +43,9 @@
                     <v-card>
                         <v-card-title class="py-1">
                             <h3>Visualizando item: {{ props.item.Item }} </h3>
+                            <editar-item-planilha-button
+                                :item="props.item"
+                            />
                         </v-card-title>
                         <v-divider/>
                         <v-card-text>
@@ -132,11 +135,15 @@
 </template>
 
 <script>
+import EditarItemPlanilhaButton from './EditarItemPlanilhaButton';
 import MxPlanilhaReadequacao from '../mixins/PlanilhaReadequacao';
 import { utils } from '@/mixins/utils';
 
 export default {
     name: 'PlanilhaItensSaldo',
+    components: {
+        EditarItemPlanilhaButton,
+    },
     mixins: [
         MxPlanilhaReadequacao,
         utils,

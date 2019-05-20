@@ -72,7 +72,6 @@
                         xs12
                     >
                         <v-expansion-panel
-                            popout
                         >
                             <v-expansion-panel-content
                                 :key="1"
@@ -91,6 +90,7 @@
                                 </div>
                                 <v-card
                                     class="mb-5"
+                                    flat
                                 >
                                     <v-card-title
                                         class="green lighten-2 title"
@@ -106,6 +106,7 @@
                                 </v-card>
                                 <v-card
                                     class="mb-5"
+                                    flat
                                 >
                                     <v-card-title
                                         class="green lighten-2 title"
@@ -153,6 +154,7 @@
                                 </div>
                                 <v-card
                                     v-if="Object.keys(getPlanilha).length > 0"
+                                    flat
                                 >
                                     <saldo-aplicacao-resumo
                                         :saldo-declarado="dadosReadequacao.dsSolicitacao"
@@ -336,7 +338,7 @@ export default {
                 },
             ],
             planilhaSaldo: [],
-            agrupamentos: ['FonteRecurso', 'Produto', 'Etapa', 'UF', 'Cidade'],
+            agrupamentos: ['FonteRecurso', 'Produto', 'Etapa', 'UF', 'Cidade', 'Etapa'],
         };
     },
     computed: {
