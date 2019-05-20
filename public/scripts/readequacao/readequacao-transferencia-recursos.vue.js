@@ -176,20 +176,20 @@ Vue.component('readequacao-transferencia-recursos', {
 							<thead>
 								<th>Pronac</th>
 								<th>Nome do projeto</th>
-								<th>Vl. transfer&ecirc;ncia</th>
+								<th style="text-align: right">Vl. transfer&ecirc;ncia</th>
 							</thead>
 							<tbody>
 								<tr v-for="(projeto, index) in projetosRecebedores" class="animated fadeIn">
 									<td>{{ projeto.pronac }}</td>
 									<td>{{ projeto.nome}}</td>
-									<td>R$ {{ projeto.vlRecebido}}</td>
+									<td style="text-align: right">R$ {{ converterParaMoedaPontuado(projeto.vlRecebido) }}</td>
 								</tr>
 							</tbody>
 							<tfoot>
 								<tr>
 									<td></td>
 									<td>Total transferido: </td>
-									<td>R$ {{ totalRecebido }} </td>
+									<td style="text-align: right">R$ {{ converterParaMoedaPontuado(totalRecebido) }} </td>
 								</tr>
 							</tfoot>
 						</table>
