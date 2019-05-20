@@ -421,7 +421,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
                     $retorno['error'] = 'CPF inv&aacute;lido';
                     $erro = 1;
                 } else {
-                    $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf);
+                    $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, true);
                     if (empty($arrResultado)) {
                         $retorno['error'] = 'Pessoa n&atilde;o encontrada!';
                         $erro = 1;
@@ -440,7 +440,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
                     $retorno['error'] = 'CNPJ inv&aacute;lido';
                     $erro = 1;
                 } else {
-                    $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf);
+                    $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf, true);
                     if (empty($arrResultado)) {
                         $retorno['error'] = 'Pessoa n&atilde;o encontrada!!';
                         $erro = 1;
@@ -1898,7 +1898,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             $dtatual = new DateTime(); //data atual
             $intervalo =  $dtatual->diff($data);
 
-            if (count($dados) != 0 && $intervalo->m < 7) {
+            if (count($dados) != 0 && $intervalo->days < 183) {
                 foreach ($dados as $dado) {
                     $dado = ((array) $dado);
                     array_walk($dado, function ($value, $key) use (&$dado) {
@@ -1916,15 +1916,21 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
                 if (11 == strlen($cpf)) {
                     $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, false);
 
-                    if (count($arrResultado) > 0 && $arrResultado['situacaoCadastral'] > 0) {
+                    if (count($arrResultado) > 0 && ($arrResultado['situacaoCadastral'] > 0 || !isset($arrResultado['situacaoCadastral']))) {
+
+                        if(isset($arrResultado['situacaoCadastral'])) {
                         $data = DateTime::createFromFormat('d/m/Y H:i:s', $arrResultado['situacaoCadastral']['dtSituacaoCadastral']);
                         $dtatual = new DateTime(); //data atual
                         $intervalo =  $dtatual->diff($data);
-
-                        if( $intervalo->m > 6 ) {
-                            $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, true);
                         }
+
                         $novos_valores[0]['msgCPF'] = utf8_encode('novo');
+
+                        if( $intervalo->days > 183 || !isset($arrResultado['situacaoCadastral'])) {
+                            $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, true);
+                            $novos_valores[0]['msgCPF'] = utf8_encode('atualizado');
+                        }
+
                         $novos_valores[0]['idAgente'] = $arrResultado['idPessoaFisica'];
                         $novos_valores[0]['Nome'] = utf8_encode($arrResultado['nmPessoaFisica']);
                         $novos_valores[0]['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
@@ -1932,15 +1938,17 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
                 } elseif (14 == strlen($cpf)) {
                     $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf,false);
 
-                    if (count($arrResultado) > 0 && $arrResultado['situacaoCadastral'] > 0) {
-                        $data = DateTime::createFromFormat('d/m/Y H:i:s', $arrResultado['situacaoCadastral']['dtSituacaoCadastral']);
-                        $dtatual = new DateTime(); //data atual
-                        $intervalo =  $dtatual->diff($data);
-
-                        if( $intervalo->m > 6 ) {
-                            $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, true);
+                    if (count($arrResultado) > 0 && ($arrResultado['situacaoCadastral'] > 0 || !isset($arrResultado['situacaoCadastral']))) {
+                        if(isset($arrResultado['situacaoCadastral'])) {
+                            $data = DateTime::createFromFormat('d/m/Y H:i:s', $arrResultado['situacaoCadastral']['dtSituacaoCadastral']);
+                            $dtatual = new DateTime(); //data atual
+                            $intervalo =  $dtatual->diff($data);
                         }
                         $novos_valores[0]['msgCPF'] = utf8_encode('novo');
+                        if( $intervalo->days > 183 || !isset($arrResultado['situacaoCadastral'])) {
+                            $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, true);
+                            $novos_valores[0]['msgCPF'] = utf8_encode('atualizado');
+                        }
                         $novos_valores[0]['idAgente'] = $arrResultado['idPessoaJuridica'];
                         $novos_valores[0]['Nome'] = utf8_encode($arrResultado['nmRazaoSocial']);
                         $novos_valores[0]['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';

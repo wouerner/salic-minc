@@ -506,7 +506,7 @@
                 url: '<?= $this->url(array('module' => 'agente', "controller" => "agentes", "action" => "agentecadastrado")); ?>',
                 success: function (data) {
                     if (data.length > 0) {
-                        if (data[0].msgCPF == 'cadastrado') {
+                        if (data[0].msgCPF == 'cadastrado' || data[0].msgCPF == 'atualizado') {
 
                             $('#novocadastro').hide();
                             $('#carregando').show();
