@@ -14,7 +14,7 @@
                     <v-icon class="mr-2">keyboard_backspace</v-icon>
                 </v-btn>
                 <v-card>
-                    <salic-mensagem-erro :texto="'Sem permiss&atilde;o de acesso para este projeto'"/>
+                    <salic-mensagem-erro texto="Sem permiss&atilde;o de acesso para este projeto"/>
                 </v-card>
             </v-flex>
         </v-layout>
@@ -161,8 +161,6 @@
                                     />
                                     <s-planilha
                                         :array-planilha="getPlanilha"
-                                        :expand-all="true"
-                                        :list-items="true"
                                         :agrupamentos="agrupamentos"
                                         :totais="totaisPlanilha"
                                     >
