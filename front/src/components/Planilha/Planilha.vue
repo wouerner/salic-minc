@@ -180,7 +180,7 @@ export default {
     mixins: [MxPlanilhas],
     props: {
         arrayPlanilha: {
-            type: [Array],
+            type: [Array, Object],
             default: () => [],
         },
         headers: {

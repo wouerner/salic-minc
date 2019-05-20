@@ -151,7 +151,9 @@
                                         class="headline grey--text text--darken-3"
                                     >Edição da Planilha</span>
                                 </div>
-                                <v-card>
+                                <v-card
+                                    v-if="Object.keys(getPlanilha).length > 0"
+                                >
                                     <saldo-aplicacao-resumo
                                         :saldo-declarado="dadosReadequacao.dsSolicitacao"
                                         :saldo-disponivel="saldoDisponivel"
@@ -169,19 +171,23 @@
                                             slot-scope="slotProps"
                                         >
                                             <v-chip
-                                                v-if="slotProps.planilha.VlSolicitado"
+                                                v-if="slotProps.planilha.vlAprovado"
                                                 outline="outline"
                                                 label="label"
                                                 color="#565555"
                                             >
-                                                R$ {{ formatarParaReal(slotProps.planilha.VlSolicitado) }}
+                                                R$ {{ formatarParaReal(slotProps.planilha.vlAprovado) }}
                                             </v-chip>
                                         </template>
                                         <template slot-scope="slotProps">
-                                            <!--<s-analise-de-custos-planilha-itens-solicitado :table="slotProps.itens" />-->
+                                            <s-planilha-itens-saldo :table="slotProps.itens" />
                                         </template>
                                     </s-planilha>
                                 </v-card>
+                                <carregando
+                                    v-else
+                                    text="Carregando Planilha"
+                                />
                             </v-expansion-panel-content>
                         </v-expansion-panel>
                     </v-flex>
@@ -254,6 +260,7 @@ import ValorDisponivel from '../components/ValorDisponivel';
 import SaldoAplicacaoResumo from '../components/SaldoAplicacaoResumo';
 import ExcluirButton from '../components/ExcluirButton';
 import SPlanilha from '@/components/Planilha/Planilha';
+import SPlanilhaItensSaldo from '../components/PlanilhaItensSaldo';
 import MxPlanilha from '@/mixins/planilhas';
 
 export default {
@@ -268,6 +275,7 @@ export default {
         SaldoAplicacaoResumo,
         ExcluirButton,
         SPlanilha,
+        SPlanilhaItensSaldo,
     },
     mixins: [
         utils,
@@ -322,10 +330,11 @@ export default {
             permissao: true,
             formatosAceitos: ['application/pdf'],
             novaReadequacao: true,
+            totalItensSelecionados: 0,
             totaisPlanilha: [
                 {
-                    label: 'Valor Solicitado',
-                    column: 'VlSolicitado',
+                    label: 'Valor Aprovado',
+                    column: 'VlAprovado',
                 },
             ],
             planilhaSaldo: [],
