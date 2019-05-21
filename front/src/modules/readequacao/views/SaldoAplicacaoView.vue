@@ -30,20 +30,23 @@
             </v-flex>
             <v-flex v-else>
                 <v-toolbar
-                    color="#0A420E"
+                    height="90"
+                    class="blue-grey darken-2"
                     dark
                 >
                     <v-btn
                         icon
-                        color="#0A420E"
+                        class="hidden-xs-only"
                         href="voltar()"
                     >
                         <v-icon color="white">arrow_back</v-icon>
                     </v-btn>
-                    <v-toolbar-title>Readequação - Saldo de Aplicação</v-toolbar-title>
-                    <v-spacer/>
-                    <v-toolbar-title>
-                        {{ dadosProjeto.Pronac }} - {{ dadosProjeto.NomeProjeto }}
+                    <v-toolbar-title class="ml-2">
+                        <h5 class="headline font-weight-regular">Readequação: Saldo de Aplicação</h5>
+                        <v-divider/>
+                        <div class="subheading mt-1">
+                            Projeto: {{ dadosProjeto.Pronac }} - {{ dadosProjeto.NomeProjeto }}
+                        </div>
                     </v-toolbar-title>
                 </v-toolbar>
                 <v-layout
@@ -71,170 +74,186 @@
                         v-if="!novaReadequacao"
                         xs12
                     >
-                        <v-expansion-panel
+                        <v-stepper
+                            v-model="currentStep"
+                            non-linear
                         >
-                            <v-expansion-panel-content
-                                :key="1"
-                            >
-                                <div
-                                    slot="header"
-                                    class="inline-block"
+                            <v-stepper-header>
+                                <v-stepper-step
+                                    :complete="currentStep > 1"
+                                    editable
+                                    step="1"
                                 >
-                                    <v-icon
-                                        color="green darken-3"
-                                    >assignment</v-icon>
-                                    <span
-                                        class="headline grey--text text--darken-3">
-                                        Dados da readequação
-                                    </span>
-                                </div>
-                                <v-card
-                                    class="mb-5"
-                                    flat
+                                    Dados da readequação
+                                </v-stepper-step>
+                                <v-stepper-step
+                                    :complete="currentStep > 2"
+                                    editable
+                                    step="2"
                                 >
-                                    <v-card-title
-                                        class="green lighten-2 title"
+                                    Planilha orçamentária
+                                </v-stepper-step>
+                                <v-stepper-step
+                                    :complete="currentStep > 3"
+                                    editable
+                                    step="3"
+                                >
+                                    Finalizar
+                                </v-stepper-step>
+                            </v-stepper-header>
+                            <v-stepper-items>
+                                <v-stepper-content
+                                    step="1"
+                                >
+                                    <v-card
+                                        class="mb-5"
+                                        flat
                                     >
-                                        Justificativa da readequação
-                                    </v-card-title>
-                                    <form-readequacao
-                                        :dados-readequacao="dadosReadequacao"
-                                        :min-char="minChar.justificativa"
-                                        @dados-update="atualizarCampo($event, 'dsJustificativa')"
-                                        @editor-texto-counter="atualizarContador($event, 'justificativa')"
-                                    />
-                                </v-card>
-                                <v-card
-                                    class="mb-5"
-                                    flat
-                                >
-                                    <v-card-title
-                                        class="green lighten-2 title"
-                                    >
-                                        Arquivo anexo
-                                    </v-card-title>
-                                    <v-card-actions>
-                                        <upload-file
-                                            :formatos-aceitos="formatosAceitos"
-                                            :id-documento="dadosReadequacao.idDocumento"
-                                            class="mt-1"
-                                            @arquivo-anexado="atualizarArquivo($event)"
-                                            @arquivo-removido="removerArquivo()"
-                                            @arquivo-tipo-invalido="arquivoTipoInvalido($event)"
+                                        <v-card-title
+                                            class="grey lighten-4 title"
+                                        >
+                                            Justificativa da readequação
+                                        </v-card-title>
+                                        <form-readequacao
+                                            :dados-readequacao="dadosReadequacao"
+                                            :min-char="minChar.justificativa"
+                                            @dados-update="atualizarCampo($event, 'dsJustificativa')"
+                                            @editor-texto-counter="atualizarContador($event, 'justificativa')"
                                         />
-                                    </v-card-actions>
-                                </v-card>
-                                <v-card
-                                    class="mb-5"
-                                >
-                                    <v-card-title
-                                        class="green lighten-2 title"
+                                    </v-card>
+                                    <v-card
+                                        class="mb-5"
+                                        flat
                                     >
-                                        Valor disponível
-                                    </v-card-title>
-                                    <valor-disponivel
-                                        :valor="dadosReadequacao.dsSolicitacao"
-                                        @dados-update="atualizarCampo($event, 'dsSolicitacao')"
-                                        @editor-texto-counter="atualizarContador($event, 'solicitacao')"
+                                        <v-card-title
+                                            class="grey lighten-4 title"
+                                        >
+                                            Arquivo anexo
+                                        </v-card-title>
+                                        <v-card-actions>
+                                            <upload-file
+                                                :formatos-aceitos="formatosAceitos"
+                                                :id-documento="dadosReadequacao.idDocumento"
+                                                class="mt-1"
+                                                @arquivo-anexado="atualizarArquivo($event)"
+                                                @arquivo-removido="removerArquivo()"
+                                                @arquivo-tipo-invalido="arquivoTipoInvalido($event)"
+                                            />
+                                        </v-card-actions>
+                                    </v-card>
+                                    <v-card
+                                        class="mb-5"
+                                    >
+                                        <v-card-title
+                                            class="grey lighten-4 title"
+                                        >
+                                            <h5>
+                                                Valor disponível
+                                            </h5>
+                                        </v-card-title>
+                                        <valor-disponivel
+                                            :valor="dadosReadequacao.dsSolicitacao"
+                                            @dados-update="atualizarCampo($event, 'dsSolicitacao')"
+                                            @editor-texto-counter="atualizarContador($event, 'solicitacao')"
+                                        />
+                                    </v-card>
+                                </v-stepper-content>
+                                <v-stepper-content
+                                    step="2"
+                                >
+                                    <v-card
+                                        v-if="Object.keys(getPlanilha).length > 0"
+                                        flat
+                                    >
+                                        <saldo-aplicacao-resumo
+                                            :saldo-declarado="dadosReadequacao.dsSolicitacao"
+                                            :saldo-disponivel="saldoDisponivel"
+                                            :saldo-utilizado="saldoUtilizado"
+                                        />
+                                        <s-planilha
+                                            :array-planilha="getPlanilha"
+                                            :agrupamentos="agrupamentos"
+                                            :totais="totaisPlanilha"
+                                        >
+                                            <template
+                                                slot="badge"
+                                                slot-scope="slotProps"
+                                            >
+                                                <v-chip
+                                                    v-if="slotProps.planilha.vlAprovado"
+                                                    outline="outline"
+                                                    label="label"
+                                                    color="#565555"
+                                                >
+                                                    R$ {{ formatarParaReal(slotProps.planilha.vlAprovado) }}
+                                                </v-chip>
+                                            </template>
+                                            <template slot-scope="slotProps">
+                                                <s-planilha-itens-saldo :table="slotProps.itens" />
+                                            </template>
+                                        </s-planilha>
+                                    </v-card>
+                                    <carregando
+                                        v-else
+                                        text="Carregando Planilha"
                                     />
-                                </v-card>
-                            </v-expansion-panel-content>
-                            <v-expansion-panel-content
-                                :key="2"
-                            >
-                                <div
-                                    slot="header"
-                                >
-                                    <v-icon
-                                        color="green darken-4"
-                                    >grid_on</v-icon>
-                                    <span
-                                        class="headline grey--text text--darken-3"
-                                    >Edição da Planilha</span>
-                                </div>
-                                <v-card
-                                    v-if="Object.keys(getPlanilha).length > 0"
-                                    flat
-                                >
+                                </v-stepper-content>
+                                <v-stepper-content
+                                    step="3">
                                     <saldo-aplicacao-resumo
                                         :saldo-declarado="dadosReadequacao.dsSolicitacao"
                                         :saldo-disponivel="saldoDisponivel"
                                         :saldo-utilizado="saldoUtilizado"
                                     />
-                                    <s-planilha
-                                        :array-planilha="getPlanilha"
-                                        :agrupamentos="agrupamentos"
-                                        :totais="totaisPlanilha"
-                                    >
-                                        <template
-                                            slot="badge"
-                                            slot-scope="slotProps"
-                                        >
-                                            <v-chip
-                                                v-if="slotProps.planilha.vlAprovado"
-                                                outline="outline"
-                                                label="label"
-                                                color="#565555"
-                                            >
-                                                R$ {{ formatarParaReal(slotProps.planilha.vlAprovado) }}
-                                            </v-chip>
-                                        </template>
-                                        <template slot-scope="slotProps">
-                                            <s-planilha-itens-saldo :table="slotProps.itens" />
-                                        </template>
-                                    </s-planilha>
-                                </v-card>
-                                <carregando
-                                    v-else
-                                    text="Carregando Planilha"
-                                />
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
-                    </v-flex>
-                    <v-footer
-                        v-if="!novaReadequacao"
-                        id="footer"
-                        class="pb-4 pt-4 elevation-18"
-                        fixed
-                    >
-                        <v-flex xs11>
-                            <v-layout
-                                row
-                                wrap
-                                justify-end
-                                text-xs-right
-                            >
-                                <v-btn
-                                    color="green darken-1"
-                                    dark
-                                    @click="salvarReadequacao()"
-                                >Salvar
-                                    <v-icon
-                                        right
+
+                                    <finalizar-button
+                                        :dados-readequacao="readequacaoEditada"
+                                        :dados-projeto="dadosProjeto"
+                                        :tela-edicao="true"
+                                        :perfis-aceitos="getPerfis('proponente')"
+                                        :perfil="perfil"
+                                        :min-char="minChar"
                                         dark
-                                    >done</v-icon>
-                                </v-btn>
-                                <excluir-button
-                                    :dados-readequacao="dadosReadequacao"
-                                    :dados-projeto="dadosProjeto"
-                                    :origem="'saldo'"
-                                    :perfis-aceitos="getPerfis('proponente')"
-                                    :perfil="perfil"
-                                    :tela-edicao="true"
-                                    @excluir-readequacao="excluirReadequacao"
-                                />
-                                <finalizar-button
-                                    :dados-readequacao="readequacaoEditada"
-                                    :dados-projeto="dadosProjeto"
-                                    :tela-edicao="true"
-                                    :perfis-aceitos="getPerfis('proponente')"
-                                    :perfil="perfil"
-                                    :min-char="minChar"
-                                    dark
-                                />
-                            </v-layout>
-                        </v-flex>
-                    </v-footer>
+                                    />
+                                </v-stepper-content>
+                            </v-stepper-items>
+                        </v-stepper>
+                        <v-footer
+                            v-if="!novaReadequacao"
+                            id="footer"
+                            class="pb-4 pt-4 elevation-18"
+                            fixed
+                        >
+                            <v-flex xs11>
+                                <v-layout
+                                    row
+                                    wrap
+                                    justify-end
+                                    text-xs-right
+                                >
+                                    <v-btn
+                                        color="green darken-1"
+                                        dark
+                                        @click="salvarReadequacao()"
+                                    >Salvar
+                                        <v-icon
+                                            right
+                                            dark
+                                        >done</v-icon>
+                                    </v-btn>
+                                    <excluir-button
+                                        :dados-readequacao="dadosReadequacao"
+                                        :dados-projeto="dadosProjeto"
+                                        :origem="'saldo'"
+                                        :perfis-aceitos="getPerfis('proponente')"
+                                        :perfil="perfil"
+                                        :tela-edicao="true"
+                                        @excluir-readequacao="excluirReadequacao"
+                                    />
+                                </v-layout>
+                            </v-flex>
+                        </v-footer>
+                    </v-flex>
                 </v-layout>
             </v-flex>
         </v-layout>
@@ -339,6 +358,7 @@ export default {
             ],
             planilhaSaldo: [],
             agrupamentos: ['FonteRecurso', 'Produto', 'Etapa', 'UF', 'Cidade', 'Etapa'],
+            currentStep: 1,
         };
     },
     computed: {
