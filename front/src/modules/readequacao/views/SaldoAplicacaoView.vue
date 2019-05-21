@@ -167,8 +167,11 @@
                                             :saldo-disponivel="saldoDisponivel"
                                             :saldo-utilizado="saldoUtilizado"
                                         />
+                                        <s-planilha-tipos-visualizacao-buttons v-model="opcoesDeVisualizacao" />
                                         <s-planilha
                                             :array-planilha="getPlanilha"
+                                            :expand-all="expandirTudo"
+                                            :list-items="mostrarListagem"
                                             :agrupamentos="agrupamentos"
                                             :totais="totaisPlanilha"
                                         >
@@ -283,6 +286,7 @@ import ValorDisponivel from '../components/ValorDisponivel';
 import SaldoAplicacaoResumo from '../components/SaldoAplicacaoResumo';
 import ExcluirButton from '../components/ExcluirButton';
 import SPlanilha from '@/components/Planilha/Planilha';
+import SPlanilhaTiposVisualizacaoButtons from '@/components/Planilha/PlanilhaTiposVisualizacaoButtons';
 import SPlanilhaItensSaldo from '../components/PlanilhaItensSaldo';
 import MxPlanilha from '@/mixins/planilhas';
 
@@ -298,6 +302,7 @@ export default {
         SaldoAplicacaoResumo,
         ExcluirButton,
         SPlanilha,
+        SPlanilhaTiposVisualizacaoButtons,
         SPlanilhaItensSaldo,
     },
     mixins: [
@@ -360,6 +365,7 @@ export default {
                     column: 'VlAprovado',
                 },
             ],
+            opcoesDeVisualizacao: [0],
             planilhaSaldo: [],
             agrupamentos: ['FonteRecurso', 'Produto', 'Etapa', 'UF', 'Cidade', 'Etapa'],
             currentStep: 1,
@@ -383,6 +389,15 @@ export default {
         },
         saldoUtilizado() {
             return this.dadosReadequacao.dsSolicitacao;
+        },
+        expandirTudo() {
+            return this.isOptionActive(0);
+        },
+        compararPlanilha() {
+            return this.isOptionActive(1);
+        },
+        mostrarListagem() {
+            return this.isOptionActive(2);
         },
     },
     watch: {
@@ -541,6 +556,9 @@ export default {
             this.solicitarUsoSaldo({
                 idPronac: this.idPronac,
             });
+        },
+        isOptionActive(index) {
+            return this.opcoesDeVisualizacao.includes(index);
         },
     },
 };
