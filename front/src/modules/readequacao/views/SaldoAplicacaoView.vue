@@ -37,7 +37,7 @@
                     <v-btn
                         icon
                         class="hidden-xs-only"
-                        href="voltar()"
+                        @click="voltar()"
                     >
                         <v-icon color="white">arrow_back</v-icon>
                     </v-btn>
@@ -80,21 +80,18 @@
                         >
                             <v-stepper-header>
                                 <v-stepper-step
-                                    :complete="currentStep > 1"
                                     editable
                                     step="1"
                                 >
                                     Dados da readequação
                                 </v-stepper-step>
                                 <v-stepper-step
-                                    :complete="currentStep > 2"
                                     editable
                                     step="2"
                                 >
                                     Planilha orçamentária
                                 </v-stepper-step>
                                 <v-stepper-step
-                                    :complete="currentStep > 3"
                                     editable
                                     step="3"
                                 >
@@ -200,21 +197,28 @@
                                 </v-stepper-content>
                                 <v-stepper-content
                                     step="3">
-                                    <saldo-aplicacao-resumo
-                                        :saldo-declarado="dadosReadequacao.dsSolicitacao"
-                                        :saldo-disponivel="saldoDisponivel"
-                                        :saldo-utilizado="saldoUtilizado"
-                                    />
-
-                                    <finalizar-button
-                                        :dados-readequacao="readequacaoEditada"
-                                        :dados-projeto="dadosProjeto"
-                                        :tela-edicao="true"
-                                        :perfis-aceitos="getPerfis('proponente')"
-                                        :perfil="perfil"
-                                        :min-char="minChar"
-                                        dark
-                                    />
+                                    <v-flex
+                                        class="text-xs-center"
+                                        xs-12
+                                    >
+                                        <saldo-aplicacao-resumo
+                                            :saldo-declarado="dadosReadequacao.dsSolicitacao"
+                                            :saldo-disponivel="saldoDisponivel"
+                                            :saldo-utilizado="saldoUtilizado"
+                                        />
+                                        <div class="text-xs-right">
+                                            <finalizar-button
+                                                :dados-readequacao="readequacaoEditada"
+                                                :dados-projeto="dadosProjeto"
+                                                :tela-edicao="true"
+                                                :perfis-aceitos="getPerfis('proponente')"
+                                                :perfil="perfil"
+                                                :min-char="minChar"
+                                                class="text-xs-center"
+                                                dark
+                                            />
+                                        </div>
+                                    </v-flex>
                                 </v-stepper-content>
                             </v-stepper-items>
                         </v-stepper>

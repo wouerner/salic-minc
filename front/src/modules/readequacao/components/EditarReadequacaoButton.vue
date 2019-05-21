@@ -128,34 +128,40 @@
                                     justify-end
                                     text-xs-right
                                 >
-                                    <v-btn
-                                        color="green darken-1"
-                                        dark
-                                        @click="salvarReadequacao()"
-                                    >Salvar
-                                        <v-icon
-                                            right
+                                    <div>
+                                        <v-btn
+                                            color="green darken-1"
                                             dark
-                                        >done</v-icon>
-                                    </v-btn>
-                                    <v-btn
-                                        color="red lighten-2"
-                                        dark
-                                        @click="dialog = false"
-                                    >Cancelar
-                                        <v-icon
-                                            right
+                                            @click="salvarReadequacao()"
+                                        >Salvar
+                                            <v-icon
+                                                right
+                                                dark
+                                            >done</v-icon>
+                                        </v-btn>
+                                    </div>
+                                    <div>
+                                        <v-btn
+                                            color="red lighten-2"
                                             dark
-                                        >cancel</v-icon>
-                                    </v-btn>
-                                    <finalizar-button
-                                        :disabled="!validacao"
-                                        :dados-readequacao="dadosReadequacao"
-                                        :dados-projeto="dadosProjeto"
-                                        :tela-edicao="true"
-                                        dark
-                                        @readequacao-finalizada="readequacaoFinalizada()"
-                                    />
+                                            @click="dialog = false"
+                                        >Cancelar
+                                            <v-icon
+                                                right
+                                                dark
+                                            >cancel</v-icon>
+                                        </v-btn>
+                                    </div>
+                                    <div>
+                                        <finalizar-button
+                                            :disabled="!validacao"
+                                            :dados-readequacao="dadosReadequacao"
+                                            :dados-projeto="dadosProjeto"
+                                            :tela-edicao="true"
+                                            dark
+                                            @readequacao-finalizada="readequacaoFinalizada()"
+                                        />
+                                    </div>
                                 </v-layout>
                             </v-flex>
                         </v-footer>

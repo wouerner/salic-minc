@@ -1,12 +1,11 @@
 <template>
-    <v-layout
+    <div
         v-if="perfilAceito"
     >
         <v-btn
             v-if="telaEdicao"
-            :disabled="disabled || !validacao"
-            dark
-            color="blue darken-1"
+            :disabled="disabled"
+            color="white--text blue darken-1"
             @click="dialog = true"
         >
             Finalizar Readequação
@@ -67,7 +66,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-    </v-layout>
+    </div>
 </template>
 
 <script>
