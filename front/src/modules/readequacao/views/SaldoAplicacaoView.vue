@@ -168,30 +168,71 @@
                                             :saldo-utilizado="saldoUtilizado"
                                         />
                                         <s-planilha-tipos-visualizacao-buttons v-model="opcoesDeVisualizacao" />
-                                        <s-planilha
-                                            :array-planilha="getPlanilha"
-                                            :expand-all="expandirTudo"
-                                            :list-items="mostrarListagem"
-                                            :agrupamentos="agrupamentos"
-                                            :totais="totaisPlanilha"
+                                        <resize-panel
+                                            v-if="Object.keys(getPlanilha).length > 0"
+                                            :allow-resize="true"
+                                            :size="sizePanel"
+                                            units="percents"
+                                            split-to="columns"
                                         >
-                                            <template
-                                                slot="badge"
-                                                slot-scope="slotProps"
+                                            <div
+                                                v-if="compararPlanilha === true"
+                                                slot="firstPane"
                                             >
-                                                <v-chip
-                                                    v-if="slotProps.planilha.vlAprovado"
-                                                    outline="outline"
-                                                    label="label"
-                                                    color="#565555"
+                                                <s-planilha
+                                                    :array-planilha="getPlanilha"
+                                                    :expand-all="expandirTudo"
+                                                    :list-items="mostrarListagem"
+                                                    :agrupamentos="agrupamentos"
+                                                    :totais="totaisPlanilha"
                                                 >
-                                                    R$ {{ formatarParaReal(slotProps.planilha.vlAprovado) }}
-                                                </v-chip>
-                                            </template>
-                                            <template slot-scope="slotProps">
-                                                <s-planilha-itens-saldo :table="slotProps.itens" />
-                                            </template>
-                                        </s-planilha>
+                                                    <template
+                                                        slot="badge"
+                                                        slot-scope="slotProps"
+                                                    >
+                                                        <v-chip
+                                                            v-if="slotProps.planilha.vlAprovado"
+                                                            outline="outline"
+                                                            label="label"
+                                                            color="#565555"
+                                                        >
+                                                            R$ {{ formatarParaReal(slotProps.planilha.vlAprovado) }}
+                                                        </v-chip>
+                                                    </template>
+                                                    <template slot-scope="slotProps">
+                                                        <s-planilha-itens-saldo :table="slotProps.itens" />
+                                                    </template>
+                                                </s-planilha>
+                                            </div>
+                                            <div
+                                                slot="secondPane"
+                                            >
+                                                <s-planilha
+                                                    :array-planilha="getPlanilha"
+                                                    :expand-all="expandirTudo"
+                                                    :list-items="mostrarListagem"
+                                                    :agrupamentos="agrupamentos"
+                                                    :totais="totaisPlanilha"
+                                                >
+                                                    <template
+                                                        slot="badge"
+                                                        slot-scope="slotProps"
+                                                    >
+                                                        <v-chip
+                                                            v-if="slotProps.planilha.vlAprovado"
+                                                            outline="outline"
+                                                            label="label"
+                                                            color="#565555"
+                                                        >
+                                                            R$ {{ formatarParaReal(slotProps.planilha.vlAprovado) }}
+                                                        </v-chip>
+                                                    </template>
+                                                    <template slot-scope="slotProps">
+                                                        <s-planilha-itens-saldo :table="slotProps.itens" />
+                                                    </template>
+                                                </s-planilha>
+                                            </div>
+                                        </resize-panel>
                                     </v-card>
                                     <carregando
                                         v-else
@@ -286,6 +327,7 @@ import ValorDisponivel from '../components/ValorDisponivel';
 import SaldoAplicacaoResumo from '../components/SaldoAplicacaoResumo';
 import ExcluirButton from '../components/ExcluirButton';
 import SPlanilha from '@/components/Planilha/Planilha';
+import ResizePanel from '@/components/resize-panel/ResizeSplitPane';
 import SPlanilhaTiposVisualizacaoButtons from '@/components/Planilha/PlanilhaTiposVisualizacaoButtons';
 import SPlanilhaItensSaldo from '../components/PlanilhaItensSaldo';
 import MxPlanilha from '@/mixins/planilhas';
@@ -301,6 +343,7 @@ export default {
         FormReadequacao,
         SaldoAplicacaoResumo,
         ExcluirButton,
+        ResizePanel,
         SPlanilha,
         SPlanilhaTiposVisualizacaoButtons,
         SPlanilhaItensSaldo,
@@ -365,6 +408,7 @@ export default {
                     column: 'VlAprovado',
                 },
             ],
+            sizePanel: 49.8,
             opcoesDeVisualizacao: [0],
             planilhaSaldo: [],
             agrupamentos: ['FonteRecurso', 'Produto', 'Etapa', 'UF', 'Cidade', 'Etapa'],
