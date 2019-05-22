@@ -690,7 +690,7 @@ HOST: http://localhost:4000
 ### Solicita planilha [GET]
 + Parameters
     + idPronac: 217336 (number, required)
-    + idTipoReadequacao: 2 (number, required)
+    + idTipoReadequacao: 2 (number, optional)
 
 + Response 200 (application/json; charset=utf-8)
 
@@ -724,6 +724,102 @@ HOST: http://localhost:4000
                 "dsJustificativa": "Remanejado por isso e aquilo",
                 "idAgente": 3466,
                 "StAtivo" : "S",
+            }
+          ]
+        }
+
+## Readequação - Obter unidades [/readequacao/planilha-obter-unidades?idPronac={idPronac}
+
+### Obter unidades - usadas na edição dos itens de planilha
++ Parameters
+    + idPronac: 217336 (number, required)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+        {
+          "items": [
+            {
+			    "idUnidade": 25,
+			    "Sigla": "CH",
+			    "Descricao": "Cach\u00ea"
+            }, {
+                "idUnidade": 5,
+                "Sigla": "D",
+                "Descricao": "Dia"
+            }, {
+                "idUnidade": 11,
+                "Sigla": "filme",
+                "Descricao": "Filme"
+            }, {
+			    "idUnidade": 4,
+			    "Sigla": "FL",
+			    "Descricao": "Folha"
+            }, {
+			    "idUnidade": 8,
+			    "Sigla": "H",
+			    "Descricao": "Hora"
+            }, {
+			    "idUnidade": 19,
+			    "Sigla": "instal",
+			    "Descricao": "Instala\u00e7\u00e3o"
+            }, {
+			    "idUnidade": 20,
+			    "Sigla": "Kg",
+			    "Descricao": "Kilograma"
+            }, {
+			    "idUnidade": 22,
+			    "Sigla": "Kg\/m2",
+			    "Descricao": "Kilograma \/ metro 2"
+            }, {
+			    "idUnidade": 23,
+			    "Sigla": "mes",
+			    "Descricao": "M\u00eas"
+            }, {
+			    "idUnidade": 9,
+			    "Sigla": "M",
+			    "Descricao": "Metro"
+            }, {
+			    "idUnidade": 16,
+			    "Sigla": "m2",
+			    "Descricao": "Metro 2"
+            }, {
+			    "idUnidade": 17,
+			    "Sigla": "m3",
+			    "Descricao": "Metro 3"
+            }, {
+			    "idUnidade": 18,
+			    "Sigla": "m3\/Km",
+			    "Descricao": "Metro 3 \/ Km"
+            }, {
+			    "idUnidade": 12,
+			    "Sigla": "min",
+			    "Descricao": "Minuto"
+            }, {
+			    "idUnidade": 1,
+			    "Sigla": "N\u00e3o",
+			    "Descricao": "N\u00e3o Informado"
+            }, {
+			    "idUnidade": 2,
+			    "Sigla": "Obra",
+			    "Descricao": "Obra"
+            }, {
+			    "idUnidade": 13,
+			    "Sigla": "parte",
+			    "Descricao": "Parte"
+            }, {
+			    "idUnidade": 10,
+			    "Sigla": "per",
+			    "Descricao": "Per\u00edodo"
+            }, {
+			    "idUnidade": 15,
+			    "Sigla": "projet",
+			    "Descricao": "Projeto"
+            }, {
+			    "idUnidade": 6,
+			    "Sigla": "RL",
+			    "Descricao": "Rolo"
             }
           ]
         }

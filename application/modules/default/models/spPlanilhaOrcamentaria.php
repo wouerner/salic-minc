@@ -676,6 +676,7 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
                 "k.idPlanilhaAprovacao",
                 "k.idPlanilhaAprovacaoPai",
                 "k.idProduto",
+                "k.idUnidade",
                 "k.idMunicipioDespesa AS idMunicipio",
                 "k.idUFDespesa AS idUF",
                 "k.nrFonteRecurso as idFonte",

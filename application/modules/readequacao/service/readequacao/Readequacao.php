@@ -739,5 +739,21 @@ class Readequacao implements IServicoRestZend
         
         return $planilha;
     }
+
+    public function obterUnidadesPlanilha() {
+        $TbPlanilhaUnidade = new \Proposta_Model_DbTable_TbPlanilhaUnidade();
+        $unidades = $TbPlanilhaUnidade->buscarUnidade();
+
+        $unidadesOut = [];
+        foreach ($unidades as $unidade) {
+            $unidadeObj = new \StdClass();
+            $unidadeObj->idUnidade = $unidade->idUnidade;
+            $unidadeObj->Sigla = utf8_encode($unidade->Sigla);
+            $unidadeObj->Descricao = utf8_encode($unidade->Descricao);
+            $unidadesOut[] = $unidadeObj;
+        }
+
+        return $unidadesOut;
+    }
 }
     
