@@ -179,6 +179,12 @@
                                                 v-if="compararPlanilha === true"
                                                 slot="firstPane"
                                             >
+                                                <v-chip
+                                                    color="blue lighten-4"
+                                                >
+                                                    <v-icon>assignment</v-icon>
+                                                    Planilha Original
+                                                </v-chip>
                                                 <s-planilha
                                                     :array-planilha="getPlanilha"
                                                     :expand-all="expandirTudo"
@@ -207,6 +213,12 @@
                                             <div
                                                 slot="secondPane"
                                             >
+                                                <v-chip
+                                                    color="orange accent-1"
+                                                >
+                                                    <v-icon>edit</v-icon>
+                                                    Planilha em edição
+                                                </v-chip>
                                                 <s-planilha
                                                     :array-planilha="getPlanilha"
                                                     :expand-all="expandirTudo"
