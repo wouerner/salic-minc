@@ -243,9 +243,9 @@
                                                         </v-chip>
                                                     </template>
                                                     <template slot-scope="slotProps">
-                                                      <s-planilha-itens-saldo
-                                                          :table="slotProps.itens"
-                                                      />
+                                                        <s-planilha-itens-saldo
+                                                            :table="slotProps.itens"
+                                                        />
                                                     </template>
                                                 </s-planilha>
                                             </div>
@@ -531,6 +531,7 @@ export default {
             solicitarUsoSaldo: 'readequacao/solicitarUsoSaldo',
             obterPlanilha: 'readequacao/obterPlanilha',
             obterPlanilhaAtiva: 'readequacao/obterPlanilhaAtiva',
+            obterUnidadesPlanilha: 'readequacao/obterUnidadesPlanilha',
         }),
         obterDadosIniciais() {
             this.buscarProjetoCompleto(this.idPronac);
@@ -555,6 +556,9 @@ export default {
                 idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
             });
             this.obterPlanilhaAtiva({
+                idPronac: this.dadosReadequacao.idPronac,
+            });
+            this.obterUnidadesPlanilha({
                 idPronac: this.dadosReadequacao.idPronac,
             });
         },

@@ -22,7 +22,17 @@
                     style="cursor: pointer"
                     @click="props.expanded = !props.expanded"
                 >
-                    <td class="text-xs-left">{{ props.item.Item }}</td>
+                    <td class="text-xs-left">
+                        <a
+                            v-if="isItemDisponivelEdicao(props.item)"
+                            href="javascript:void(0);"
+                        >
+                            {{ props.item.Item }}
+                        </a>
+                        <span v-else>
+                            {{ props.item.Item }}
+                        </span>
+                    </td>
                     <td class="text-xs-center">{{ props.item.Unidade }}</td>
                     <td class="text-xs-center">{{ props.item.QtdeDias }}</td>
                     <td class="text-xs-center">{{ props.item.Quantidade }}</td>
@@ -43,13 +53,19 @@
                     <v-card>
                         <v-card-title class="py-1">
                             <h3>Visualizando item: {{ props.item.Item }} </h3>
-                            <editar-item-planilha-button
-                                v-if="!readonly"
-                                :item="props.item"
-                            />
                         </v-card-title>
                         <v-divider/>
-                        <v-card-text>
+                        <v-card-text
+                            v-if="isItemDisponivelEdicao(props.item)"
+                        >
+                            <editar-item-planilha
+                                v-if="isItemDisponivelEdicao(props.item)"
+                                :item="props.item"
+                            />
+                        </v-card-text>
+                        <v-card-text
+                            v-else
+                        >
                             <v-container grid-list-md>
                                 <v-layout row>
                                     <v-flex
@@ -113,7 +129,7 @@
                                         md12>
                                         <b>Justificativa</b>
                                         <div
-                                            v-html="props.item.justificitivaproponente"
+                                            v-html="props.item.dsJustificativa"
                                         />
                                     </v-flex>
                                 </v-layout>
@@ -136,14 +152,14 @@
 </template>
 
 <script>
-import EditarItemPlanilhaButton from './EditarItemPlanilhaButton';
+import EditarItemPlanilha from './EditarItemPlanilha';
 import MxPlanilhaReadequacao from '../mixins/PlanilhaReadequacao';
 import { utils } from '@/mixins/utils';
 
 export default {
     name: 'PlanilhaItensSaldo',
     components: {
-        EditarItemPlanilhaButton,
+        EditarItemPlanilha,
     },
     mixins: [
         MxPlanilhaReadequacao,
@@ -157,7 +173,7 @@ export default {
         readonly: {
             type: Boolean,
             default: false,
-        }
+        },
     },
     data() {
         return {

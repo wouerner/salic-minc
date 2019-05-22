@@ -17,5 +17,16 @@ export default {
             }
             return (valido.solicitacao && valido.justificativa);
         },
+        validarItemPlanihla(item, contador, minChar) {
+            const valido = {
+                justificativa: false,
+            };
+            if (typeof item.dsJustificativa === 'string') {
+                if (contador.justificativa >= minChar.justificativa) {
+                    valido.justificativa = true;
+                }
+            }
+            return (valido.justificativa);
+        },
     },
 };

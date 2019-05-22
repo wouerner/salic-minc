@@ -27,6 +27,12 @@ export default {
              */
             return row;
         },
+        isItemDisponivelEdicao(item) {
+            if (item.vlComprovado < item.vlAprovado) {
+                return true;
+            }
+            return false;
+        },
         isDisponivelParaEdicao(row) {
             return row;
         },
