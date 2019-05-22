@@ -94,3 +94,8 @@ export const obterPlanilha = (params) => {
     const path = '/readequacao/obter-planilha';
     return api.getRequest(path + parseQueryParams(params));
 };
+
+export const obterUnidadesPlanilha = (params) => {
+    const path = '/readequacao/obter-unidades-planilha';
+    return api.getRequest(path + parseQueryParams(params));
+};

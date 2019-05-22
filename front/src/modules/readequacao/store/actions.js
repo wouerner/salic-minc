@@ -179,7 +179,6 @@ export const solicitarUsoSaldo = ({ commit }, params) => {
 export const obterPlanilhaAtiva = ({ commit }, params) => {
     readequacaoHelperAPI.obterPlanilha(params)
         .then((response) => {
-            console.log(response.data.data.items);
             commit(types.SET_PLANILHA_ATIVA, response.data.data.items);
         });
 };
@@ -188,5 +187,12 @@ export const obterPlanilha = ({ commit }, params) => {
     readequacaoHelperAPI.obterPlanilha(params)
         .then((response) => {
             commit(types.SET_PLANILHA, response.data.data.items);
+        });
+};
+
+export const obterUnidadesPlanilha = ({ commit }, params) => {
+    readequacaoHelperAPI.obterUnidadesPlanilha(params)
+        .then((response) => {
+            commit(types.SET_UNIDADES_PLANILHA, response.data.data.items);
         });
 };

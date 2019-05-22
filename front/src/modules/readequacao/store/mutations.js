@@ -12,6 +12,7 @@ export const state = {
     tiposDisponiveis: [],
     planilha: {},
     planilhaAtiva: {},
+    unidadesPlanilha: {},
 };
 
 export const mutations = {
@@ -41,6 +42,12 @@ export const mutations = {
     },
     [types.GET_PLANILHA_ATIVA](state, data) {
         state.planilhaAtiva = data;
+    },
+    [types.GET_UNIDADES_PLANILHA](state, data) {
+        state.unidadesPlanilha = data;
+    },
+    [types.SET_UNIDADES_PLANILHA](state, data) {
+        state.unidadesPlanilha = data;
     },
     [types.GET_CAMPO_ATUAL](state, campoAtual) {
         state.campoAtual = campoAtual;
