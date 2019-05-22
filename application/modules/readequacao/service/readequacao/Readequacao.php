@@ -707,15 +707,22 @@ class Readequacao implements IServicoRestZend
         return $data;
     }
 
-    public function obterPlanilha($idPronac, $idTipoReadequacao) {
+    public function obterPlanilha($idPronac, $idTipoReadequacao = '') {
         $tipos = [
             \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL => \spPlanilhaOrcamentaria::TIPO_PLANILHA_REMANEJAMENTO,
             \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA => \spPlanilhaOrcamentaria::TIPO_PLANILHA_READEQUACAO,
             \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO => \spPlanilhaOrcamentaria::TIPO_PLANILHA_SALDO_APLICACAO
         ];
-        
-        $spPlanilhaOrcamentaria = new \spPlanilhaOrcamentaria();
-        $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, $tipos[$idTipoReadequacao]);
+
+        $tipoPlanilha = ($idTipoReadequacao) ? $tipoPlanilha[$idTipoReadequacao] : \spPlanilhaOrcamentaria::TIPO_PLANILHA_APROVADA_ATIVA;
+
+        if ($idTipoReadequacao) {
+            $spPlanilhaOrcamentaria = new \spPlanilhaOrcamentaria();
+            $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, $tipos[$idTipoReadequacao]);
+        } else {
+            $tbPlanilhaAprovacao = new \tbPlanilhaAprovacao();
+            $planilhaOrcamentaria = $tbPlanilhaAprovacao->obterPlanilhaAtiva($idPronac);
+        }
 
         $planilha = [];
         foreach ($planilhaOrcamentaria as $item) {

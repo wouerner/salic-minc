@@ -44,6 +44,7 @@
                         <v-card-title class="py-1">
                             <h3>Visualizando item: {{ props.item.Item }} </h3>
                             <editar-item-planilha-button
+                                v-if="!readonly"
                                 :item="props.item"
                             />
                         </v-card-title>
@@ -153,6 +154,10 @@ export default {
             type: Array,
             required: true,
         },
+        readonly: {
+            type: Boolean,
+            default: false,
+        }
     },
     data() {
         return {

@@ -8,3 +8,4 @@ export const getDocumentoReadequacao = state => state.readequacao.documento;
 export const saldoAplicacao = state => state.saldoAplicacao;
 export const saldoAplicacaoDisponivelEdicaoItem = state => state.readequacao.saldoAplicacaoDisponivelEdicaoItem;
 export const getPlanilha = state => state.planilha;
+export const getPlanilhaAtiva = state => state.planilhaAtiva;

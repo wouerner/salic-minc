@@ -183,10 +183,10 @@
                                                     color="blue lighten-4"
                                                 >
                                                     <v-icon>assignment</v-icon>
-                                                    Planilha Original
+                                                    Planilha ativa
                                                 </v-chip>
                                                 <s-planilha
-                                                    :array-planilha="getPlanilha"
+                                                    :array-planilha="getPlanilhaAtiva"
                                                     :expand-all="expandirTudo"
                                                     :list-items="mostrarListagem"
                                                     :agrupamentos="agrupamentos"
@@ -206,7 +206,10 @@
                                                         </v-chip>
                                                     </template>
                                                     <template slot-scope="slotProps">
-                                                        <s-planilha-itens-saldo :table="slotProps.itens" />
+                                                        <s-planilha-itens-saldo
+                                                            :table="slotProps.itens"
+                                                            :readonly="true"
+                                                        />
                                                     </template>
                                                 </s-planilha>
                                             </div>
@@ -240,7 +243,9 @@
                                                         </v-chip>
                                                     </template>
                                                     <template slot-scope="slotProps">
-                                                        <s-planilha-itens-saldo :table="slotProps.itens" />
+                                                      <s-planilha-itens-saldo
+                                                          :table="slotProps.itens"
+                                                      />
                                                     </template>
                                                 </s-planilha>
                                             </div>
@@ -323,7 +328,6 @@
     </v-container>
 </template>
 <script>
-
 import _ from 'lodash';
 import { mapActions, mapGetters } from 'vuex';
 import { utils } from '@/mixins/utils';
@@ -433,6 +437,7 @@ export default {
             dadosReadequacao: 'readequacao/getReadequacao',
             getUsuario: 'autenticacao/getUsuario',
             getPlanilha: 'readequacao/getPlanilha',
+            getPlanilhaAtiva: 'readequacao/getPlanilhaAtiva',
         }),
         perfilAceito() {
             return this.verificarPerfil(this.perfil, this.perfisAceitos);
@@ -525,6 +530,7 @@ export default {
             finalizarReadequacao: 'readequacao/finalizarReadequacao',
             solicitarUsoSaldo: 'readequacao/solicitarUsoSaldo',
             obterPlanilha: 'readequacao/obterPlanilha',
+            obterPlanilhaAtiva: 'readequacao/obterPlanilhaAtiva',
         }),
         obterDadosIniciais() {
             this.buscarProjetoCompleto(this.idPronac);
@@ -547,6 +553,9 @@ export default {
             this.obterPlanilha({
                 idPronac: this.dadosReadequacao.idPronac,
                 idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
+            });
+            this.obterPlanilhaAtiva({
+                idPronac: this.dadosReadequacao.idPronac,
             });
         },
         salvarReadequacao() {
