@@ -270,7 +270,7 @@ class Readequacao_SaldoAplicacaoController extends Readequacao_GenericController
         if ($this->idPerfil != Autenticacao_Model_Grupos::PROPONENTE) {
             $this->_helper->json([
                 'success' => 'true',
-                'disponivelEdicaoItem' => false,
+                'disponivelParaEdicaoReadequacaoPlanilha' => false,
                 'msg' => 'N&atilde;o dispon&iacute;vel para edi&ccedil;&atilde;o de itens.'
             ]);
         }
@@ -281,7 +281,7 @@ class Readequacao_SaldoAplicacaoController extends Readequacao_GenericController
             
             $this->_helper->json([
                 'success' => true,
-                'disponivelEdicaoItem' => $disponivelParaEdicaoReadequacaoPlanilha,
+                'disponivelParaEdicaoReadequacaoPlanilha' => $disponivelParaEdicaoReadequacaoPlanilha,
                 'msg' => 'Dispon&iacute;vel para edi&ccedil;&atilde;o de itens.'
             ]);
         } catch (Exception $e) {
