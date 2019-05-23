@@ -60,33 +60,11 @@
                 />
             </v-flex>
         </v-layout>
-        <v-layout row>
-            <h3>Valores originais</h3>
-        </v-layout>
-        <v-layout row>
-            <v-flex
-                xs12
-                md4
-            >
-                <b>Vl. Solicitado (R$)</b>
-                <div>{{ item.VlSolicitado | filtroFormatarParaReal }}</div>
-            </v-flex>
-            <v-flex
-                xs12
-                md4
-            >
-                <b>Vl. Comprovado (R$)</b>
-                <div>{{ item.vlAprovado | filtroFormatarParaReal }}</div>
-            </v-flex>
-            <v-flex
-                xs12
-                md4
-            >
-                <b>Vl. Comprovado (R$)</b>
-                <div>{{ item.vlComprovado | filtroFormatarParaReal }}</div>
-            </v-flex>
-        </v-layout>
-        <v-layout row>
+        <v-layout
+            row
+            wrap
+            justify-end
+        >
             <v-flex
                 xs12
                 md12>
@@ -102,36 +80,26 @@
         <v-layout
             text-xs-center
         >
-            <v-flex
-                xs12
-                md2
-            >
-                <v-btn
-                    color="green lighten-1"
+            <v-btn
+                color="green lighten-1"
+                dark
+                @click="salvarItem()"
+            >Salvar item
+                <v-icon
+                    right
                     dark
-                    @click="salvarItem()"
-                >Salvar item
-                    <v-icon
-                        right
-                        dark
-                    >done</v-icon>
-                </v-btn>
-            </v-flex>
-            <v-flex
-                xs12
-                md2
-            >
-                <v-btn
-                    color="red lighten-1"
+                >done</v-icon>
+            </v-btn>
+            <v-btn
+                color="red lighten-1"
+                dark
+                @click="cancelar()"
+            >Cancelar
+                <v-icon
+                    right
                     dark
-                    @click="cancelar()"
-                >Cancelar
-                    <v-icon
-                        right
-                        dark
-                    >cancel</v-icon>
-                </v-btn>
-            </v-flex>
+                >cancel</v-icon>
+            </v-btn>
         </v-layout>
     </v-container>
 </template>

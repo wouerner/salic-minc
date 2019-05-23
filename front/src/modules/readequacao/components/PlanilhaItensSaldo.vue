@@ -55,85 +55,39 @@
                             <h3>Visualizando item: {{ props.item.Item }} </h3>
                         </v-card-title>
                         <v-divider/>
-                        <v-card-text
-                            v-if="isItemDisponivelEdicao(props.item)"
-                        >
-                            <editar-item-planilha
+                        <v-card-text>
+                            <div
                                 v-if="isItemDisponivelEdicao(props.item)"
-                                :item="props.item"
-                            />
-                        </v-card-text>
-                        <v-card-text
-                            v-else
-                        >
-                            <v-container grid-list-md>
-                                <v-layout row>
-                                    <v-flex
-                                        xs12
-                                        md2
+                            >
+                                <v-card>
+                                    <visualizar-item-planilha
+                                        :item="props.item"
                                     >
-                                        <b>Unidade</b>
-                                        <div>{{ props.item.Unidade }}</div>
-                                    </v-flex>
-                                    <v-flex
-                                        xs12
-                                        md1
-                                    >
-                                        <b>Dias</b>
-                                        <div>{{ props.item.QtdeDias }}</div>
-                                    </v-flex>
-                                    <v-flex
-                                        xs12
-                                        md1
-                                    >
-                                        <b>Qtd.</b>
-                                        <div>{{ props.item.Quantidade }}</div>
-                                    </v-flex>
-                                    <v-flex
-                                        xs12
-                                        md2
-                                    >
-                                        <b>Ocorrência</b>
-                                        <div>{{ props.item.Ocorrencia }}</div>
-                                    </v-flex>
-                                    <v-flex
-                                        xs12
-                                        md2
-                                    >
-                                        <b>Vl. Unitário (R$)</b>
-                                        <div>{{ props.item.vlUnitario | filtroFormatarParaReal }}</div>
-                                    </v-flex>
-                                    <v-flex
-                                        xs12
-                                        md4
-                                    >
-                                        <b>Vl. Solicitado (R$)</b>
-                                        <div>{{ props.item.VlSolicitado | filtroFormatarParaReal }}</div>
-                                    </v-flex>
-                                    <v-flex
-                                        xs12
-                                        md4
-                                    >
-                                        <b>Vl. Comprovado (R$)</b>
-                                        <div>{{ props.item.vlAprovado | filtroFormatarParaReal }}</div>
-                                    </v-flex>
-                                    <v-flex
-                                        xs12
-                                        md4
-                                    >
-                                        <b>Vl. Comprovado (R$)</b>
-                                        <div>{{ props.item.vlComprovado | filtroFormatarParaReal }}</div>
-                                    </v-flex>
-                                    <v-flex
-                                        xs12
-                                        md12>
-                                        <b>Justificativa</b>
-                                        <div
-                                            v-html="props.item.dsJustificativa"
-                                        />
-                                    </v-flex>
-                                </v-layout>
-                            </v-container>
+                                        <v-layout
+                                            slot="header"
+                                            row
+                                        >
+                                            <v-flex
+                                                xs12
+                                            >
+                                                <h3
+                                                    class="subheading"
+                                                >
+                                                    Dados originais
+                                                </h3>
+                                            </v-flex>
+                                        </v-layout>
+                                    </visualizar-item-planilha>
+                                </v-card>
+                                <editar-item-planilha
+                                    :item="props.item"
+                                />
+                            </div>
+                            <div else>
+                                <visualizar-item-planilha
+                                    :item="props.item"
+                                />
+                            </div>
                         </v-card-text>
                     </v-card>
                 </v-layout>
@@ -153,6 +107,7 @@
 
 <script>
 import EditarItemPlanilha from './EditarItemPlanilha';
+import VisualizarItemPlanilha from './VisualizarItemPlanilha';
 import MxPlanilhaReadequacao from '../mixins/PlanilhaReadequacao';
 import { utils } from '@/mixins/utils';
 
@@ -160,6 +115,7 @@ export default {
     name: 'PlanilhaItensSaldo',
     components: {
         EditarItemPlanilha,
+        VisualizarItemPlanilha,
     },
     mixins: [
         MxPlanilhaReadequacao,
