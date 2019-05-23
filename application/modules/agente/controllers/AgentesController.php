@@ -595,7 +595,6 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
     public function agentesAction()
     {
         $this->autenticacao();
-
         if (($this->GrupoAtivoSalic != 1111) &&
                 ($this->GrupoAtivoSalic != 118) &&
                 ($this->GrupoAtivoSalic != 144) &&
@@ -1894,77 +1893,12 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         if ((strlen($cpf) == 11 && !Validacao::validarCPF($cpf)) || (strlen($cpf) == 14 && !Validacao::validarCNPJ($cpf))) {
             $novos_valores[0]['msgCPF'] = utf8_encode('invalido');
         } else {
-
             $agenteServico = new AgenteService();
-            ;
-
-//            $novos_valores = array();
-//            $dados = Agente_Model_ManterAgentesDAO::buscarAgentes($cpf);
-//
-//            $data = DateTime::createFromFormat('Y-m-d H:i:s', $dados[0]->dtatualizacao);
-//            $dtatual = new DateTime(); //data atual
-//            $intervalo =  $dtatual->diff($data);
-
-//            if (count($dados) != 0 && $intervalo->days < 183) {
-//                foreach ($dados as $dado) {
-//                    $dado = ((array) $dado);
-//                    array_walk($dado, function ($value, $key) use (&$dado) {
-//                        $dado[$key] = utf8_encode($value);
-//                    });
-//                    $novos_valores[0]['msgCPF'] = utf8_encode('cadastrado');
-//                    $novos_valores[0]['idAgente'] = utf8_encode($dado['idagente']);
-//                    $novos_valores[0]['Nome'] = utf8_encode($dado['nome']);
-//                    $novos_valores[0]['agente'] = $dado;
-//                }
-//            } else {
-                #Instancia a Classe de Servico do WebService da Receita Federal
-//                $wsServico = new ServicosReceitaFederal();
-//
-//                if (11 == strlen($cpf)) {
-//                    $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, false);
-//
-//                    if (count($arrResultado) > 0 && ($arrResultado['situacaoCadastral'] > 0 || !isset($arrResultado['situacaoCadastral']))) {
-//
-//                        if(isset($arrResultado['situacaoCadastral'])) {
-//                        $data = DateTime::createFromFormat('d/m/Y H:i:s', $arrResultado['situacaoCadastral']['dtSituacaoCadastral']);
-//                        $dtatual = new DateTime(); //data atual
-//                        $intervalo =  $dtatual->diff($data);
-//                        }
-//
-//                        $novos_valores[0]['msgCPF'] = utf8_encode('novo');
-//
-//                        if( $intervalo->days > 183 || !isset($arrResultado['situacaoCadastral'])) {
-//                            $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, true);
-//                            $novos_valores[0]['msgCPF'] = utf8_encode('atualizado');
-//                        }
-//
-//                        $novos_valores[0]['idAgente'] = $arrResultado['idPessoaFisica'];
-//                        $novos_valores[0]['Nome'] = utf8_encode($arrResultado['nmPessoaFisica']);
-//                        $novos_valores[0]['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
-//                    }
-//                } elseif (14 == strlen($cpf)) {
-//                    $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf,false);
-//
-//                    if (count($arrResultado) > 0 && ($arrResultado['situacaoCadastral'] > 0 || !isset($arrResultado['situacaoCadastral']))) {
-//                        if(isset($arrResultado['situacaoCadastral'])) {
-//                            $data = DateTime::createFromFormat('d/m/Y H:i:s', $arrResultado['situacaoCadastral']['dtSituacaoCadastral']);
-//                            $dtatual = new DateTime(); //data atual
-//                            $intervalo =  $dtatual->diff($data);
-//                        }
-//                        $novos_valores[0]['msgCPF'] = utf8_encode('novo');
-//                        if( $intervalo->days > 183 || !isset($arrResultado['situacaoCadastral'])) {
-//                            $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, true);
-//                            $novos_valores[0]['msgCPF'] = utf8_encode('atualizado');
-//                        }
-//                        $novos_valores[0]['idAgente'] = $arrResultado['idPessoaJuridica'];
-//                        $novos_valores[0]['Nome'] = utf8_encode($arrResultado['nmRazaoSocial']);
-//                        $novos_valores[0]['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
-//                    }
-//                }
-//            }
+            $novos_valores = $agenteServico->agentecadastrado($cpf);
         }
 
-       return $this->_helper->json($agenteServico->agentecadastrado($cpf));
+         $this->_helper->json($novos_valores);
+         die;
     }
 
     /**

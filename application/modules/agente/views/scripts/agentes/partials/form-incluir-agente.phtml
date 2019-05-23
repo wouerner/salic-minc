@@ -505,9 +505,9 @@
                 },
                 url: '<?= $this->url(array('module' => 'agente', "controller" => "agentes", "action" => "agentecadastrado")); ?>',
                 success: function (data) {
-                    if (data.length > 0) {
+                    if (Object.keys(data).length > 0) {
                         if (data.msgCPF == 'cadastrado' || data.msgCPF == 'atualizado') {
-
+// 23969156149
                             $('#novocadastro').hide();
                             $('#carregando').show();
 
@@ -515,7 +515,7 @@
                                 window.location = '<?= $this->url(array('module' => 'agente', "controller" => "agentes", "action" => "agentes")); ?>/id/' + data.idAgente;
                             }
 
-                            var event = new CustomEvent("agenteJaCadastrado", {"detail": data.agente});
+                            var event = new CustomEvent("agenteJaCadastrado", {"detail": data[0].agente});
                             document.dispatchEvent(event);
                         }
                         else if (data.msgCPF == 'invalido') {

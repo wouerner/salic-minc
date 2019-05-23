@@ -2,7 +2,6 @@
 
 namespace Application\Modules\agente\service\agente;
 
-
 class Agente
 {
 
@@ -128,7 +127,7 @@ class Agente
         return $dtatual->diff($data);
     }
 
-    private function obterDadosReceitaFederal($cpf) {
+    private function obterDadosReceitaFederal($cpf, $idAgente) {
 
         #Instancia a Classe de Servico do WebService da Receita Federal
         $wsServico = new \ServicosReceitaFederal();
@@ -153,7 +152,6 @@ class Agente
 
             $novos_valores['msgCPF'] = utf8_encode('novo');
 
-            var_dump($data);
             if( $data > 183 ) {
 
                 $arrResultado = $wsServico->{$servico}($cpf, true);
@@ -166,8 +164,7 @@ class Agente
 
                 $novos_valores['msgCPF'] = utf8_encode('atualizado');
             }
-
-            $novos_valores['idAgente'] = $arrResultado['idPessoaFisica'];
+            $novos_valores['idAgente'] = $idAgente;
             $novos_valores['Nome'] = utf8_encode($arrResultado['nmPessoaFisica']);
             $novos_valores['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
 
@@ -182,7 +179,7 @@ class Agente
             }
             $novos_valores['msgCPF'] = utf8_encode('invalido');
             $novos_valores['msgCPF'] = utf8_encode('atualizado');
-            $novos_valores['idAgente'] = $arrResultado['idPessoaFisica'];
+            $novos_valores['idAgente'] = $idAgente;
             $novos_valores['Nome'] = utf8_encode($arrResultado['nmPessoaFisica']);
             $novos_valores['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
         }
@@ -215,11 +212,14 @@ class Agente
                 $novos_valores['agente'] = $dado;
             }
         } else {
-            $novos_valores = $this->obterDadosReceitaFederal($cpf);
+            if (!empty($dados[0]->idagente)){
+            $novos_valores = $this->obterDadosReceitaFederal($cpf,$dados[0]->idagente);
+            } else {
+                $novos_valores = $this->obterDadosReceitaFederal($cpf,'');
+            }
         }
 
         return $novos_valores;
-
     }
 
 
