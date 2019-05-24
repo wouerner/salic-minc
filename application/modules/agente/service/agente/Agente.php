@@ -127,24 +127,19 @@ class Agente
         return $dtatual->diff($data);
     }
 
-    private function obterDadosReceitaFederal($cpf, $idAgente) {
+    /**
+     * Metodo consulta pessoa fisica no Serviço que consulta Receita Federal
+     * chamada -> function agentecadastrado()
+     * @param $cpf, $idAgente
+     * @return \ArrayObject
+     */
+    private function fisicaReceita($cpf, $idAgente) {
 
         #Instancia a Classe de Servico do WebService da Receita Federal
         $wsServico = new \ServicosReceitaFederal();
         $novos_valores = [];
-        $servico = null;
 
-        switch (strlen($cpf)) {
-
-            case 11:
-                $servico = 'consultarPessoaFisicaReceitaFederal';
-                break;
-            case 14:
-                $servico = 'consultarPessoaJuridicaReceitaFederal';
-                break;
-        }
-
-        $arrResultado = $wsServico->{$servico}($cpf, false);
+        $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, false);
 
         if ( !empty($arrResultado) && !empty($arrResultado['situacaoCadastral'])) {
 
@@ -154,7 +149,7 @@ class Agente
 
             if( $data > 183 ) {
 
-                $arrResultado = $wsServico->{$servico}($cpf, true);
+                $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, true);
 
                 if(!empty($arrResultado["erro"]))
                 {
@@ -171,54 +166,137 @@ class Agente
         }
         elseif(!empty($arrResultado) && empty($arrResultado['situacaoCadastral']))
         {
-            $arrResultado = $wsServico->{$servico}($cpf, true);
+
+            $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, true);
             if(!empty($arrResultado["erro"]))
             {
                 $novos_valores['msgCPF'] = utf8_encode('invalido');
                 return $novos_valores;
             }
-            $novos_valores['msgCPF'] = utf8_encode('invalido');
             $novos_valores['msgCPF'] = utf8_encode('atualizado');
             $novos_valores['idAgente'] = $idAgente;
             $novos_valores['Nome'] = utf8_encode($arrResultado['nmPessoaFisica']);
             $novos_valores['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
+        }else {
+            $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, true);
+            if(!empty($arrResultado["erro"]))
+            {
+                $novos_valores['msgCPF'] = utf8_encode('invalido');
+                return $novos_valores;
+            }
+            $novos_valores['msgCPF'] = utf8_encode('novo');
+            $novos_valores['Nome'] = utf8_encode($arrResultado['nmPessoaFisica']);
+            $novos_valores['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
         }
+
+        return $novos_valores;
+    }
+
+    /**
+     * Metodo consulta pessoa juridica no Serviço que consulta Receita Federal
+     * chamada -> function agentecadastrado()
+     * @param $cpf, $idAgente
+     * @return \ArrayObject
+     */
+    private function juridicaReceita($cpf, $idAgente) {
+
+        #Instancia a Classe de Servico do WebService da Receita Federal
+        $wsServico = new \ServicosReceitaFederal();
+        $novos_valores = [];
+
+        $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf, false);
+
+        if ( !empty($arrResultado) && !empty($arrResultado['situacaoCadastral'])) {
+
+            $data = $this->obterDiferencaDatas($arrResultado['situacaoCadastral']['dtSituacaoCadastral'])->days;
+
+            $novos_valores['msgCPF'] = utf8_encode('novo');
+
+            if( $data > 183 ) {
+
+                $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf, true);
+                if(!empty($arrResultado["erro"]))
+                {
+                    $novos_valores['msgCPF'] = utf8_encode('invalido');
+                    return $novos_valores;
+                }
+                $novos_valores['msgCPF'] = utf8_encode('atualizado');
+            }
+
+            $novos_valores[0]['idAgente'] = $idAgente;
+            $novos_valores[0]['Nome'] = utf8_encode($arrResultado['nmRazaoSocial']);
+            $novos_valores[0]['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
+        }
+        elseif(!empty($arrResultado) && empty($arrResultado['situacaoCadastral']))
+        {
+            $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf, true);
+            if(!empty($arrResultado["erro"]))
+            {
+                $novos_valores['msgCPF'] = utf8_encode('invalido');
+                return $novos_valores;
+            }
+            $novos_valores['msgCPF'] = utf8_encode('atualizado');
+            $novos_valores[0]['idAgente'] = $idAgente;
+            $novos_valores[0]['Nome'] = utf8_encode($arrResultado['nmRazaoSocial']);
+            $novos_valores[0]['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
+            print_r($arrResultado);
+            die;
+        }else {
+            $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf, true);
+            if(!empty($arrResultado["erro"]))
+            {
+                $novos_valores['msgCPF'] = utf8_encode('invalido');
+                return $novos_valores;
+            }
+            $novos_valores['msgCPF'] = utf8_encode('novo');
+            $novos_valores[0]['Nome'] = utf8_encode($arrResultado['nmRazaoSocial']);
+            $novos_valores[0]['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
+        }
+
         return $novos_valores;
     }
 
     /**
      * Metodo de Cadastro e Atualização de agentes com consulta ao InfoConv
      * @access public
-     * @param void
-     * @return void
+     * @param $cpf (cpf ou cnpj)
+     * @return \ArrayObject
      */
     public function agentecadastrado($cpf)
     {
-
         $novos_valores = [];
         $dados = \Agente_Model_ManterAgentesDAO::buscarAgentes($cpf);
 
-        $data = $this->obterDiferencaDatas($dados[0]->dtatualizacao)->days;
+        switch (strlen($cpf)) {
 
-        if (count($dados) != 0 &&  $data < 183) {
-            foreach ($dados as $dado) {
-                $dado = ((array) $dado);
-                array_walk($dado, function ($value, $key) use (&$dado) {
-                    $dado[$key] = utf8_encode($value);
-                });
-                $novos_valores['msgCPF'] = utf8_encode('cadastrado');
-                $novos_valores['idAgente'] = utf8_encode($dado['idagente']);
-                $novos_valores['Nome'] = utf8_encode($dado['nome']);
-                $novos_valores['agente'] = $dado;
-            }
-        } else {
-            if (!empty($dados[0]->idagente)){
-            $novos_valores = $this->obterDadosReceitaFederal($cpf,$dados[0]->idagente);
-            } else {
-                $novos_valores = $this->obterDadosReceitaFederal($cpf,'');
-            }
+            case 11:
+                $servico = 'fisicaReceita';
+                break;
+            case 14:
+                $servico = 'juridicaReceita';
+                break;
         }
 
+        if(!empty($dados)) {
+            $data = $this->obterDiferencaDatas($dados[0]->dtatualizacao)->days;
+
+            if (count($dados) != 0 &&  $data < 183) {
+                foreach ($dados as $dado) {
+                    $dado = ((array) $dado);
+                    array_walk($dado, function ($value, $key) use (&$dado) {
+                        $dado[$key] = utf8_encode($value);
+                    });
+                    $novos_valores['msgCPF'] = utf8_encode('cadastrado');
+                    $novos_valores['idAgente'] = utf8_encode($dado['idagente']);
+                    $novos_valores['Nome'] = utf8_encode($dado['nome']);
+                    $novos_valores['agente'] = $dado;
+                }
+            } else {
+                $novos_valores = $this->{$servico}($cpf,$dados[0]->idagente);
+            }
+        }else {
+            $novos_valores = $this->{$servico}($cpf,'');
+        }
         return $novos_valores;
     }
 

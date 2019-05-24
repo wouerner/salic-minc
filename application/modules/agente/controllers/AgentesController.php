@@ -1896,7 +1896,6 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             $agenteServico = new AgenteService();
             $novos_valores = $agenteServico->agentecadastrado($cpf);
         }
-
          $this->_helper->json($novos_valores);
          die;
     }
