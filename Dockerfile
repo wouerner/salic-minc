@@ -1,7 +1,8 @@
 FROM php:7.0-apache
 
-VOLUME ["/var/www"]
+#VOLUME ["/var/www"]
 
+RUN echo "*"
 RUN apt-get update
 
 RUN echo "[ ***** ***** ***** ] - Installing each item in new command to use cache and avoid download again ***** ***** ***** "
@@ -48,6 +49,7 @@ RUN a2ensite site.conf
 RUN a2dissite 000-default.conf
 RUN a2enmod rewrite
 RUN a2enmod headers
+RUN cd /var/www/salic && composer install --prefer-source --no-interaction
 
 COPY ./docker/salic-web/actions/docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]

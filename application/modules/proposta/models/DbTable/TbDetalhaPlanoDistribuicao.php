@@ -20,9 +20,16 @@ class Proposta_Model_DbTable_TbDetalhaPlanoDistribuicao extends MinC_Db_Table_Ab
 
         $sql = $this->select()
             ->from($this->_name, $cols, $this->_schema)
-            ->where(' idUF= ?', $dados['idUF'])
-            ->where(' idMunicipio= ?', $dados['idMunicipio'])
             ->where('idPlanoDistribuicao = ?', $dados['idPlanoDistribuicao']);
+
+        if ($dados['idUF']) {
+            $sql->where(' idUF= ?', $dados['idUF']);
+        }
+
+        if ($dados['idMunicipio']) {
+            $sql->where(' idMunicipio= ?', $dados['idMunicipio']);
+
+        }
 
         return $this->fetchAll($sql);
     }
@@ -82,5 +89,49 @@ class Proposta_Model_DbTable_TbDetalhaPlanoDistribuicao extends MinC_Db_Table_Ab
         } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    public function updateLocalizacaoDetalhamento($novoIdUF, $novoIdMunicipio, $idProjeto, $idUf, $idMunicipio)
+    {
+        $query = "UPDATE tbDetalhaPlanoDistribuicao 
+            SET tbDetalhaPlanoDistribuicao.idUF = ?, tbDetalhaPlanoDistribuicao.idMunicipio = ?
+            FROM sac.dbo.tbDetalhaPlanoDistribuicao AS tbDetalhaPlanoDistribuicao 
+            INNER JOIN  sac.dbo.PlanoDistribuicaoProduto AS PlanoDistribuicaoProduto 
+            ON PlanoDistribuicaoProduto.idPlanoDistribuicao = tbDetalhaPlanoDistribuicao.idPlanoDistribuicao
+            WHERE PlanoDistribuicaoProduto.idProjeto = ? 
+            AND tbDetalhaPlanoDistribuicao.idUF = ? 
+            AND tbDetalhaPlanoDistribuicao.idMunicipio = ?";
+
+        $bind = [
+            $novoIdUF,
+            $novoIdMunicipio,
+            $idProjeto,
+            $idUf,
+            $idMunicipio
+        ];
+
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $stmt = $db->query($query, $bind);
+        return $stmt->fetch();
+    }
+
+    public function deleteDetalhamentoByLocalizacao($idProjeto, $idUf, $idMunicipio)
+    {
+        $query = "DELETE tbDetalhaPlanoDistribuicao
+            FROM sac.dbo.tbDetalhaPlanoDistribuicao AS tbDetalhaPlanoDistribuicao
+            INNER JOIN sac.dbo.PlanoDistribuicaoProduto AS PlanoDistribuicaoProduto
+            ON PlanoDistribuicaoProduto.idPlanoDistribuicao = tbDetalhaPlanoDistribuicao.idPlanoDistribuicao
+            WHERE PlanoDistribuicaoProduto.idProjeto = ? 
+            AND tbDetalhaPlanoDistribuicao.idUF = ?
+            AND tbDetalhaPlanoDistribuicao.idMunicipio = ?";
+
+        $bind = [
+            $idProjeto,
+            $idUf,
+            $idMunicipio
+        ];
+
+        $db = Zend_Db_Table::getDefaultAdapter();
+        return $db->query($query, $bind);
     }
 }

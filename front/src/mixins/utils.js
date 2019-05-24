@@ -1,4 +1,10 @@
 import moment from 'moment';
+import numeral from 'numeral';
+import 'numeral/locales';
+import filtersQuantidade from '@/filters/quantidade';
+
+numeral.locale('pt-br');
+numeral.defaultFormat('0,0.00');
 
 /* eslint-disable */
 export const utils = {
@@ -69,13 +75,20 @@ export const utils = {
 
             return 'N\xE3o';
         },
+	isObject: function (el) {
+            return typeof el === "object";
+        },
+	converterParaReal: function (value) {
+            value = parseFloat(value);
+            return numeral(value).format('0,0.00');
+        },
         isDataExpirada(date) {
             return moment().diff(date, 'days') > 0;
         },
     },
     filters: {
         formatarData(date) {
-            if (date && date.length === 0) {
+            if (date && date.length === 0 || date === null) {
                 return '-';
             }
             return moment(date)
@@ -89,9 +102,28 @@ export const utils = {
             return agencia;
         },
         formatarConta(conta) {
-            // formato: 99999-9
-            conta = parseInt(conta);
-            return conta.toString().replace(/(\d)(\d{1})$/, '$1-$2');
+            if (!conta) {
+                return '';
+            }
+
+            // formato: 99.999.999-x
+            const regex = /^(?:0{1,})(\w+)(\w{1})$/;
+            const s = conta.toString().match(regex);
+            const n = s[1], t = n.length -1;
+            let novo = '';
+            for( var i = t, a = 1; i >=0; i--, a++ ){
+                var ponto = a % 3 === 0 && i > 0 ? '.' : '';
+                novo = ponto + n.charAt(i) + novo;
+            }
+            return `${novo}-${s[2]}`;
         },
+        filtroFormatarParaReal(value) {
+            const parsedValue = parseFloat(value);
+            return numeral(parsedValue).format('0,0.00');
+        },
+        filtroFormatarQuantidade(value) {
+            const parsedValue = parseFloat(value);
+            return filtersQuantidade(parsedValue);
+        }
     },
-}
+};

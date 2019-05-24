@@ -87,6 +87,26 @@ $arrMenuProponente['usuario']['menu'][] = array('label' => 'Alterar Dados', 'tit
     'url' => $this->url(array('module' => 'autenticacao', 'controller' => 'index', 'action' => 'alterardados'), '', true),
     'grupo' => array()
 );
+
+$jwt = new Zend_Session_Namespace('jwt');
+if (Zend_Registry::get("config")->toArray()['nfe']) {
+
+    $arrMenuProponente['nfe'] = [
+        'id' => 'nfe',
+        'label' => 'Notas Fiscais',
+        'title' => 'Ir para Notas Fiscais',
+        'menu' => [],
+        'grupo' => []
+    ];
+
+    $arrMenuProponente['nfe']['menu'][] =
+        [
+            'label' => 'Vizualizar Notas',
+            'title' => 'Vizualizar Notas',
+            'url' => Zend_Registry::get("config")->toArray()['url']['hostnfe']. '/nfe/' . $jwt->token,
+            'grupo' => []
+        ];
+}
 // ========== FIM MENU PROTOCOLO ==========
 
 // ========== INICIO MENU MANUAIS ==========
@@ -148,6 +168,17 @@ $arrMenu['assinatura']['menu'][] = array(
         ), '', true),
     'title' => 'Ir para Readequa&ccedil;&atilde;o - Gerenciar Assinaturas',
     'label' => 'Gerenciar Assinaturas - Readequa&ccedil;&atilde;o'
+);
+
+$arrMenu['assinatura']['menu'][] = array(
+    'url' => $this->url(
+        array(
+            'module' => 'assinatura',
+            'controller' => 'documentos-devolvidos',
+            'action' => 'listar'
+        ), '', true),
+    'title' => 'Ir para Listar documentos devolvidos',
+    'label' => 'Listar Documentos Devolvidos'
 );
 
 $arrMenu['assinatura']['menu'][] = array(

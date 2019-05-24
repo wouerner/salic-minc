@@ -2922,7 +2922,7 @@ class Projetos extends MinC_Db_Table_Abstract
         $slct = $this->select();
         $slct->setIntegrityCheck(false);
 
-        $slct->from(array("a" => "vwUsuariosOrgaosGrupos"), array("usu_codigo", "usu_nome"), "TABELAS.dbo");
+        $slct->from(array("a" => "vwUsuariosOrgaosGrupos"), array("usu_codigo", "usu_nome", "org_superior"), "TABELAS.dbo");
         $slct->where("gru_codigo = ? ", $idGrupo);
         $slct->where("uog_orgao = ? ", $idOrgaoDestino);
         $slct->where("uog_status = ? ", 1);
@@ -8089,16 +8089,27 @@ class Projetos extends MinC_Db_Table_Abstract
         return $projetos;
     }
 
-    public function verificarPronacDisponivelReceber($idPronac, $pronacRecebedor)
+    public function verificarPronacDisponivelReceber($idPronac, $pronacRecebedor, $idReadequacao)
     {
         try {
+
+            $TbSolicitacaoTransferenciaRecursos = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
+            $projetosRecebedores = $TbSolicitacaoTransferenciaRecursos->obterProjetosRecebedores($idReadequacao);
+
+            $listaProjetosRecebedores = [];
+            
+            foreach ($projetosRecebedores as $projeto) {
+                $listaProjetosRecebedores[] = $projeto->idPronacRecebedor;
+            }
+            
             $select = $this->select();
 
-            $select->where(new Zend_Db_Expr('DtInicioExecucao > GETDATE() AND DtFimExecucao < GETDATE()'));
-            $select->where(new Zend_Db_Expr('(SELECT SAC.DBO.fnNrPortariaAprovacao(AnoProjeto,Sequencial)) IS NOT NULL'));
+            if (!empty($listaProjetosRecebedores)) {
+                $select->where('IdPRONAC NOT IN (?)', $listaProjetosRecebedores);
+            }
             $select->where('IdPRONAC != ?', $idPronac);
             $select->where(new Zend_Db_Expr('AnoProjeto + Sequencial = ?'), $pronacRecebedor);
-
+            
             $projeto = $this->fetchAll($select);
             $saida = [];
 

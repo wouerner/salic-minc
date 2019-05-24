@@ -1,13 +1,12 @@
 <template>
     <div>
         <vue-editor
-            :editorToolbar="customToolbar"
+            :editor-toolbar="customToolbar"
             v-model="editor"
             :placeholder="'Texto do Documento *'"
             @input="enviar($event)"
             @text-change="counter($event)"
-        >
-        </vue-editor>
+        />
     </div>
 </template>
 
@@ -15,10 +14,10 @@
 import { VueEditor } from 'vue2-editor';
 
 export default {
-    props: { value: String },
     components: {
         VueEditor,
     },
+    props: { value: { type: String, default: '' } },
     data() {
         return {
             editor: '',
@@ -34,11 +33,19 @@ export default {
             ],
         };
     },
+    watch: {
+        value() {
+            this.setInfo();
+        },
+    },
+    mounted() {
+        this.setInfo();
+        this.counter();
+    },
     methods: {
         enviar(e) {
             this.$emit('editor-texto-input', e);
         },
-
         counter(e) {
             if (typeof e !== 'undefined' && e.ops.length > 0 && e.ops[0].retain !== undefined) {
                 this.$emit('editor-texto-counter', e.ops[0].retain);
@@ -47,10 +54,6 @@ export default {
         setInfo() {
             this.editor = this.value;
         },
-    },
-    mounted() {
-        this.setInfo();
-        this.counter();
     },
 
 };

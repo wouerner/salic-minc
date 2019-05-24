@@ -1,16 +1,28 @@
 <template>
-    <span v-if="valorFormatado && valorFormatado.length > 0" v-html="valorFormatado"></span>
+    <span
+        v-if="valorFormatado && valorFormatado.length > 0"
+        v-html="valorFormatado"/>
     <span v-else>0</span>
 </template>
 
 <script>
-    export default {
-        /* eslint-disable */
+export default {
+    /* eslint-disable */
         name: "SalicFormatarValor",
-        props: ["valor"],
+        props: {	    
+	    valor: 0,
+	    prefixo: String,
+	},
         computed: {
             valorFormatado: function () {
-                return this.converterParaMoeda(this.valor);
+		let output = '';
+		
+		if (typeof this.prefixo != "undefined") {
+		    output += this.prefixo;
+		}
+		output += this.converterParaMoeda(this.valor);
+		
+                return output;
             }
         },
         methods: {

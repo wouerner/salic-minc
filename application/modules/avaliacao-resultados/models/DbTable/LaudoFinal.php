@@ -30,28 +30,45 @@ class AvaliacaoResultados_Model_DbTable_LaudoFinal extends MinC_Db_Table_Abstrac
 
     public function projetosLaudoFinal($estadoId)
     {
+        $auth = \Zend_Auth::getInstance();
+        $orgao = $auth->getIdentity()->usu_org_max_superior;
+
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from(
             ['p' => 'Projetos'],
-            [
-                'p.IdPronac', 
-                'p.NomeProjeto', 
-                /* 'vp.dsResutaldoAvaliacaoObjeto', */
-                new Zend_Db_Expr('p.AnoProjeto+p.Sequencial AS PRONAC') 
+            ['p.IdPronac',
+                'p.NomeProjeto',
+                'p.Orgao',
+                new Zend_Db_Expr('p.AnoProjeto+p.Sequencial AS PRONAC')
             ],
             'sac.dbo'
         )
-        /* ->join(['doc'=>'tbDocumentoAssinatura'], 'p.IdPRONAC=doc.IdPRONAC', null, 'sac.dbo') */
-        ->join(['fp'=>'FluxosProjeto'], 'fp.idPronac=p.IdPRONAC', null, 'sac.dbo')
-        /* ->join(['vp'=>'vwVisualizarParecerDeAvaliacaoDeResultado'], 'vp.IdPronac=p.IdPRONAC', null, 'sac.dbo') */
-        ->join(['parecer'=>'tbAvaliacaoFinanceira'], 'parecer.IdPronac=p.IdPRONAC', ['parecer.*','parecer.siManifestacao as dsResutaldoAvaliacaoObjeto'], 'sac.dbo')
-        /* ->where('doc.idTipoDoAtoAdministrativo = ?', Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_LAUDO_PRESTACAO_CONTAS) */
-        /* ->where('doc.cdSituacao = ?', Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA) */
-        /* ->where('doc.stEstado = ?', Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO) */
-        ->where('fp.estadoId = ? ', $estadoId);
-        /* echo $select;die; */
-        
+            ->join(['fp'=>'FluxosProjeto'],
+                'fp.idPronac=p.IdPRONAC',
+                null,
+                'sac.dbo'
+            )
+
+            ->joinLeft(['parecer'=>'tbAvaliacaoFinanceira'],
+                'parecer.IdPronac=p.IdPRONAC',
+                ['parecer.*','parecer.siManifestacao as dsResutaldoAvaliacaoObjeto'],
+                'sac.dbo'
+            )
+
+            ->joinLeft(['o' => 'Orgaos'],
+                'p.Orgao=o.Codigo',
+                ['Codigo','Sigla','idSecretaria'],
+                'sac.dbo'
+            )
+            ->joinLeft(['u' => 'Usuarios'],
+                'u.usu_codigo = fp.idAgente',
+                ['u.usu_nome','u.usu_codigo'],
+                'Tabelas.dbo'
+            )
+        ->where('fp.estadoId = ? ', $estadoId)
+        ->where('o.idSecretaria = ?', $orgao);
+
         return $this->fetchAll($select);
     }
 }
