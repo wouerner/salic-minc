@@ -99,3 +99,8 @@ export const obterUnidadesPlanilha = (params) => {
     const path = '/readequacao/obter-unidades-planilha';
     return api.getRequest(path + parseQueryParams(params));
 };
+
+export const atualizarItemPlanilha = (params) => {
+    const path = '/readequacao/item-planilha';
+    return api.postRequest(path, buildData(params), params.idReadequacao);
+};

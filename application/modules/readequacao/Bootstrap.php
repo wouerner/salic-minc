@@ -20,6 +20,7 @@ class Readequacao_Bootstrap extends Zend_Application_Module_Bootstrap
                     'dados-readequacao-documento',
                     'documento',
                     'finalizar',
+                    'item-planilha',
                     'planilha-obter-unidades',
                     'solicitar-saldo',
                     'tipos-disponiveis',

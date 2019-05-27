@@ -196,3 +196,10 @@ export const obterUnidadesPlanilha = ({ commit }, params) => {
             commit(types.SET_UNIDADES_PLANILHA, response.data.data.items);
         });
 };
+
+export const atualizarItemPlanilha = ({ commit }, params) => {
+    readequacaoHelperAPI.atualizarItemPlanilha(params)
+        .then((response) => {
+            commit(types.SET_ITEM_PLANILHA_EDICAO, response.data.data.items);
+        });
+};
