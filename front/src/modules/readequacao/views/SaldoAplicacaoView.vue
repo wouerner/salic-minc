@@ -28,7 +28,9 @@
             >
                 <carregando :text="'Montando readequação de saldo de aplicação...'"/>
             </v-flex>
-            <v-flex v-else>
+            <v-flex
+                v-else
+            >
                 <v-toolbar
                     height="90"
                     class="blue-grey darken-2"
@@ -50,16 +52,17 @@
                     </v-toolbar-title>
                 </v-toolbar>
                 <v-layout
-                    column
                     row
                     pb-2
+                    align-center
                 >
                     <v-flex
                         v-if="novaReadequacao"
-                        offset-xs5
-                        class="mt-4"
+                        xs12
+                        class="mt-4 text-xs-center"
                     >
-                        <div v-show="novaReadequacao">
+                        <div
+                            v-if="!carregandoIniciarSolicitacao">
                             <v-btn
                                 dark
                                 class="blue"
@@ -69,10 +72,16 @@
                                 Solicitar uso do saldo de aplicação
                             </v-btn>
                         </div>
+                        <div
+                            v-else
+                        >
+                            <carregando :text="'Montando readequação de saldo de aplicação...'"/>
+                        </div>
                     </v-flex>
                     <v-flex
-                        v-if="!novaReadequacao"
+                        v-else
                         xs12
+                        class="text-xs-center"
                     >
                         <v-stepper
                             v-model="currentStep"
@@ -332,6 +341,7 @@ import _ from 'lodash';
 import { mapActions, mapGetters } from 'vuex';
 import { utils } from '@/mixins/utils';
 import Const from '../const';
+import SalicMensagemErro from '@/components/SalicMensagemErro';
 import Mensagem from '../components/Mensagem';
 import FinalizarButton from '../components/FinalizarButton';
 import validarFormulario from '../mixins/validarFormulario';
@@ -351,6 +361,7 @@ import MxPlanilha from '@/mixins/planilhas';
 export default {
     name: 'SaldoAplicacaoView',
     components: {
+        SalicMensagemErro,
         Mensagem,
         FinalizarButton,
         Carregando,
@@ -413,6 +424,7 @@ export default {
                 readequacao: false,
                 usuario: false,
             },
+            carregandoIniciarSolicitacao: false,
             loading: true,
             permissao: true,
             formatosAceitos: ['application/pdf'],
@@ -484,6 +496,7 @@ export default {
             handler(value) {
                 this.loaded.readequacao = true;
                 if (typeof value !== 'undefined') {
+                    this.carregandoIniciarSolicitacao = false;
                     this.novaReadequacao = false;
                     if (value.idPronac && value.idTipoReadequacao) {
                         this.inicializarReadequacaoEditada();
@@ -620,8 +633,10 @@ export default {
         excluirReadequacao() {
             this.loading = true;
             this.novaReadequacao = true;
+            this.carregandoIniciarSolicitacao = false;
         },
         acionarSolicitarUsoSaldo() {
+            this.carregandoIniciarSolicitacao = true;
             this.solicitarUsoSaldo({
                 idPronac: this.idPronac,
             });
