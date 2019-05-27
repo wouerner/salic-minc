@@ -81,7 +81,7 @@ class ServicosReceitaFederal
      * @param bool $forcarBuscaReceita - Define se deve ir na Base da receita federal, mesmo ja existindo o CPF na base do MINC
      * @return ArrayObject|mixed - Resultado da consulta em Json ou ArrayObject
      */
-    public function consultarPessoaJuridicaReceitaFederal($cnpj, $forcarBuscaReceita, $returnJSON = false)
+    public function consultarPessoaJuridicaReceitaFederal($cnpj, $forcarBuscaReceita = false, $returnJSON = false)
     {
         $chars = array(".", "/", "-");
         $cnpj = str_replace($chars, "", $cnpj);

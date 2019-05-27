@@ -139,9 +139,9 @@ class Agente
         $wsServico = new \ServicosReceitaFederal();
         $novos_valores = [];
 
-        $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, false);
+        $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf);
 
-        if ( !empty($arrResultado) && !empty($arrResultado['situacaoCadastral'])) {
+        if ( !empty($arrResultado) && !empty($arrResultado['situacaoCadastral']) && !empty($idAgente)) {
 
             $data = $this->obterDiferencaDatas($arrResultado['situacaoCadastral']['dtSituacaoCadastral'])->days;
 
@@ -164,7 +164,7 @@ class Agente
             $novos_valores['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
 
         }
-        elseif(!empty($arrResultado) && empty($arrResultado['situacaoCadastral']))
+        elseif(!empty($arrResultado) && empty($arrResultado['situacaoCadastral']) && !empty($idAgente))
         {
 
             $arrResultado = $wsServico->consultarPessoaFisicaReceitaFederal($cpf, true);
@@ -204,9 +204,9 @@ class Agente
         $wsServico = new \ServicosReceitaFederal();
         $novos_valores = [];
 
-        $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf, false);
+        $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf);
 
-        if ( !empty($arrResultado) && !empty($arrResultado['situacaoCadastral'])) {
+        if ( !empty($arrResultado) && !empty($arrResultado['situacaoCadastral']) && !empty($idAgente)) {
 
             $data = $this->obterDiferencaDatas($arrResultado['situacaoCadastral']['dtSituacaoCadastral'])->days;
 
@@ -227,7 +227,7 @@ class Agente
             $novos_valores[0]['Nome'] = utf8_encode($arrResultado['nmRazaoSocial']);
             $novos_valores[0]['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
         }
-        elseif(!empty($arrResultado) && empty($arrResultado['situacaoCadastral']))
+        elseif(!empty($arrResultado) && empty($arrResultado['situacaoCadastral']) && !empty($idAgente))
         {
             $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf, true);
             if(!empty($arrResultado["erro"]))
@@ -239,8 +239,6 @@ class Agente
             $novos_valores[0]['idAgente'] = $idAgente;
             $novos_valores[0]['Nome'] = utf8_encode($arrResultado['nmRazaoSocial']);
             $novos_valores[0]['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
-            print_r($arrResultado);
-            die;
         }else {
             $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf, true);
             if(!empty($arrResultado["erro"]))
@@ -252,7 +250,6 @@ class Agente
             $novos_valores[0]['Nome'] = utf8_encode($arrResultado['nmRazaoSocial']);
             $novos_valores[0]['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
         }
-
         return $novos_valores;
     }
 

@@ -514,9 +514,7 @@
                             if ($("#modal").val() != 's') {
                                 window.location = '<?= $this->url(array('module' => 'agente', "controller" => "agentes", "action" => "agentes")); ?>/id/' + data.idAgente;
                             }
-
                             var event = new CustomEvent("agenteJaCadastrado", {"detail": data[0].agente});
-                            alert(event);
                             document.dispatchEvent(event);
                         }
                         else if (data.msgCPF == 'invalido') {

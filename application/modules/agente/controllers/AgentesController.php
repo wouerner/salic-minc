@@ -2160,7 +2160,6 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             $agente = $agente[0];
             $agente->id = $agente->idagente;
             $agente->cpfCnpj = $agente->cnpjcpf;
-
             $agenteArray = (array)$agente;
             array_walk($agenteArray, function ($value, $key) use ($agente) {
                 $agente->$key = utf8_encode($value);
