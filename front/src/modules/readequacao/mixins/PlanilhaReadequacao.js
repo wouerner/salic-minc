@@ -4,28 +4,22 @@ export default {
     mixins: [planilhas],
     methods: {
         isLinhaAlterada(row) {
-            /*
-            const proponente = [
-                row.Unidade,
-                row.VlSolicitado,
-                row.ocorrenciaprop,
-                row.quantidadeprop,
-                row.diasprop,
-                row.valorUnitarioprop,
-                row.stCustoPraticado,
-            ];
-            const parecerista = [
+            const planilhaEdicao = [
                 row.idUnidade,
-                row.VlSugeridoParecerista,
-                row.ocorrenciaparc,
-                row.quantidadeparc,
-                row.diasparc,
-                row.valorUnitarioparc,
-                row.stCustoPraticadoParc,
+                row.Ocorrencia,
+                row.Quantidade,
+                row.QtdeDias,
+                row.vlUnitario,
             ];
-            return JSON.stringify(proponente) !== JSON.stringify(parecerista);
-             */
-            return row;
+            const planilhaAtiva = [
+                row.idUnidadeAtivo,
+                row.OcorrenciaAtivo,
+                row.QuantidadeAtivo,
+                row.QtdeDiasAtivo,
+                row.vlUnitarioAtivo,
+            ];
+            console.log(JSON.stringify(planilhaEdicao) !== JSON.stringify(planilhaAtiva));
+            return JSON.stringify(planilhaEdicao) !== JSON.stringify(planilhaAtiva);
         },
         isItemDisponivelEdicao(item) {
             if (item.vlComprovado < item.vlAprovado) {

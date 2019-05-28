@@ -738,16 +738,47 @@ class Readequacao implements IServicoRestZend
         ];
 
         $tipoPlanilha = ($idTipoReadequacao) ? $tipoPlanilha[$idTipoReadequacao] : \spPlanilhaOrcamentaria::TIPO_PLANILHA_APROVADA_ATIVA;
+        $planilhaOrcamentariaAtiva = [];
         
         if ($idTipoReadequacao) {
             $spPlanilhaOrcamentaria = new \spPlanilhaOrcamentaria();
             $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, $tipos[$idTipoReadequacao]);
+            $tbPlanilhaAprovacao = new \tbPlanilhaAprovacao();
+            $planilhaOrcamentariaAtiva = $tbPlanilhaAprovacao->obterPlanilhaAtiva($idPronac);
         } else {
             $tbPlanilhaAprovacao = new \tbPlanilhaAprovacao();
             $planilhaOrcamentaria = $tbPlanilhaAprovacao->obterPlanilhaAtiva($idPronac);
         }
-
+        
         $planilha = [];
+        foreach ($planilhaOrcamentaria as $item) {
+            if ($item->idPlanilhaAprovacaoPai != null) {
+                $planilha[$item->idPlanilhaAprovacaoPai] = $item;
+            } else {
+                $planilha[] = $item;
+            }
+        };
+        
+        if (!empty($planilhaOrcamentariaAtiva)) {
+            $planilhaAtiva = [];
+            foreach ($planilhaOrcamentariaAtiva as $item) {
+                $item->idUnidadeAtivo = $item->idUnidade;
+                $item->OcorrenciaAtivo = $item->Ocorrencia;
+                $item->QuantidadeAtivo = $item->Quantidade;
+                $item->QtdeDiasAtivo = $item->QtdeDias;
+                $item->vlUnitarioAtivo = $item->vlUnitario;
+                
+                if (array_key_exists($item->idPlanilhaAprovacao, $planilha)) {
+                    $planilha[$item->idPlanilhaAprovacao] = $item;
+                } else {
+                    $planilha[] = $item;
+                }
+            }
+
+            $planilhaOrcamentaria = $planilha;
+        }
+
+        $result = [];
         foreach ($planilhaOrcamentaria as $item) {
             $item->Produto = utf8_encode($item->Produto);
             $item->NomeProjeto = utf8_encode($item->NomeProjeto);
@@ -757,10 +788,11 @@ class Readequacao implements IServicoRestZend
             $item->dsJustificativa = utf8_encode($item->dsJustificativa);
             $item->FonteRecurso = utf8_encode($item->FonteRecurso);
             $item->Unidade = utf8_encode($item->Unidade);
-            $planilha[] = $item;
-        };
+            
+            $result[] = $item;
+        }
         
-        return $planilha;
+        return $result;
     }
 
     public function obterUnidadesPlanilha() {

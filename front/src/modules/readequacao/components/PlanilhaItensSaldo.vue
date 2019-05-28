@@ -18,13 +18,13 @@
                 slot-scope="props"
             >
                 <tr
-                    :class="obterClasseItem(props.item)"
+                    :class="getClassItem(props.item)"
                     style="cursor: pointer"
                     @click="props.expanded = !props.expanded"
                 >
                     <td class="text-xs-left">
                         <a
-                            v-if="isItemDisponivelEdicao(props.item)"
+                            v-if="isItemDisponivelEdicao(props.item) && !readonly"
                             href="javascript:void(0);"
                         >
                             {{ props.item.Item }}
@@ -151,6 +151,13 @@ export default {
             itemEmEdicao: {},
             select: {},
         };
+    },
+    methods: {
+        getClassItem(row) {
+            if (!this.readonly) {
+                this.obterClasseItem(row);
+            }
+        },
     },
 };
 </script>
