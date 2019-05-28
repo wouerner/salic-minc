@@ -163,6 +163,34 @@
                                             @editor-texto-counter="atualizarContador($event, 'solicitacao')"
                                         />
                                     </v-card>
+                                    <v-flex xs11>
+                                        <v-layout
+                                            row
+                                            wrap
+                                            justify-end
+                                            text-xs-right
+                                        >
+                                            <v-btn
+                                                color="green darken-1"
+                                                dark
+                                                @click="salvarReadequacao()"
+                                            >Salvar
+                                                <v-icon
+                                                    right
+                                                    dark
+                                                >done</v-icon>
+                                            </v-btn>
+                                            <excluir-button
+                                                :dados-readequacao="dadosReadequacao"
+                                                :dados-projeto="dadosProjeto"
+                                                :origem="'saldo'"
+                                                :perfis-aceitos="getPerfis('proponente')"
+                                                :perfil="perfil"
+                                                :tela-edicao="true"
+                                                @excluir-readequacao="excluirReadequacao"
+                                            />
+                                        </v-layout>
+                                    </v-flex>
                                 </v-stepper-content>
                                 <v-stepper-content
                                     step="2"
@@ -292,41 +320,6 @@
                                 </v-stepper-content>
                             </v-stepper-items>
                         </v-stepper>
-                        <v-footer
-                            v-if="!novaReadequacao"
-                            id="footer"
-                            class="pb-4 pt-4 elevation-18"
-                            fixed
-                        >
-                            <v-flex xs11>
-                                <v-layout
-                                    row
-                                    wrap
-                                    justify-end
-                                    text-xs-right
-                                >
-                                    <v-btn
-                                        color="green darken-1"
-                                        dark
-                                        @click="salvarReadequacao()"
-                                    >Salvar
-                                        <v-icon
-                                            right
-                                            dark
-                                        >done</v-icon>
-                                    </v-btn>
-                                    <excluir-button
-                                        :dados-readequacao="dadosReadequacao"
-                                        :dados-projeto="dadosProjeto"
-                                        :origem="'saldo'"
-                                        :perfis-aceitos="getPerfis('proponente')"
-                                        :perfil="perfil"
-                                        :tela-edicao="true"
-                                        @excluir-readequacao="excluirReadequacao"
-                                    />
-                                </v-layout>
-                            </v-flex>
-                        </v-footer>
                     </v-flex>
                 </v-layout>
             </v-flex>

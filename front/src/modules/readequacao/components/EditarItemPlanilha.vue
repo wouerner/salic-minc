@@ -70,38 +70,42 @@
             <v-flex
                 xs12
                 md12>
-                <s-editor-texto
+                <v-textarea
                     v-model="itemEditado.dsJustificativa"
                     :placeholder="'Justificativa do item'"
                     :min-char="minChar.justificativa"
-                    @text-change="atualizarCampo($event, 'dsJustificativa')"
-                    @editor-texto-counter="atualizarContador($event)"
+                    @change="atualizarCampo($event, 'dsJustificativa')"
                 />
             </v-flex>
         </v-layout>
         <v-layout
-            text-xs-center
+            column
         >
-            <v-btn
-                color="green lighten-1"
-                dark
-                @click="salvarItem()"
-            >Salvar item
-                <v-icon
-                    right
+            <v-flex
+                xs12
+                text-xs-right
+            >
+                <v-btn
+                    color="green lighten-1"
                     dark
-                >done</v-icon>
-            </v-btn>
-            <v-btn
-                color="red lighten-1"
-                dark
-                @click="cancelar()"
-            >Cancelar
-                <v-icon
-                    right
+                    @click="salvarItem()"
+                >Salvar item
+                    <v-icon
+                        right
+                        dark
+                    >done</v-icon>
+                </v-btn>
+                <v-btn
+                    color="red lighten-1"
                     dark
-                >cancel</v-icon>
-            </v-btn>
+                    @click="cancelar()"
+                >Cancelar
+                    <v-icon
+                        right
+                        dark
+                    >cancel</v-icon>
+                </v-btn>
+            </v-flex>
         </v-layout>
     </v-container>
 </template>
@@ -110,18 +114,14 @@
 import { mapGetters, mapActions } from 'vuex';
 import { utils } from '@/mixins/utils';
 import InputMoney from '@/components/InputMoney';
-import SEditorTexto from '@/components/SalicEditorTexto';
-import validarFormulario from '../mixins/validarFormulario';
 
 export default {
     name: 'EditarItemPlanilha',
     components: {
         InputMoney,
-        SEditorTexto,
     },
     mixins: [
         utils,
-        validarFormulario,
     ],
     props: {
         item: {
@@ -198,17 +198,6 @@ export default {
         },
         atualizarCampo(valor, campo) {
             this.itemEditado[campo] = valor;
-        },
-        atualizarContador(valor, campo) {
-            this.contador[campo] = valor;
-            this.validar();
-        },
-        validar() {
-            this.validacao = this.validarItemPlanihla(
-                this.itemEditado,
-                this.contador,
-                this.minChar,
-            );
         },
     },
 };
