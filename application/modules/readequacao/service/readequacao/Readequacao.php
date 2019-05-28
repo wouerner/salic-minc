@@ -30,7 +30,7 @@ class Readequacao implements IServicoRestZend
         $result = $modelTbReadequacao->buscarReadequacao($idReadequacao)[0];
 
         $return = [
-            'Idreadequacao' => $result['idReadequacao'],
+            'idReadequacao' => $result['idReadequacao'],
             'idPronac' => $result['idPronac'],
             'idTipoReadequacao' => $result['idTipoReadequacao'],
             'dtSolicitacao' => $result['dsSolicitacao'],
@@ -480,7 +480,7 @@ class Readequacao implements IServicoRestZend
             'tpCampo' => $tpCampo,
             'dsCampo' => utf8_encode($valorPreCarregado)
         ];
-
+        
         return $resultArray;
     }
 
@@ -490,9 +490,9 @@ class Readequacao implements IServicoRestZend
 
         if (isset($parametros['idReadequacao'])){
             $idReadequacao = $parametros['idReadequacao'];
-            $readequacaoModel = new \Readequacao_Model_DbTable_TbReadequacao();
-            $readequacao = $readequacaoModel->buscarReadequacao($idReadequacao)->current()->toArray();
-
+            
+            $readequacao = $this->buscar($idReadequacao);
+            
             $documento = new DocumentoService(
                 $this->request,
                 $this->response
