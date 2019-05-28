@@ -98,7 +98,7 @@
                 <v-btn
                     color="red lighten-1"
                     dark
-                    @click="cancelar()"
+                    @click="cancelarEdicao()"
                 >Cancelar
                     <v-icon
                         right
@@ -197,6 +197,9 @@ export default {
         },
         salvarItem() {
             this.atualizarItemPlanilha(this.itemEditado);
+        },
+        cancelarEdicao() {
+            this.$emit('fechar-item');
         },
         atualizarCampo(valor, campo) {
             this.itemEditado[campo] = valor;

@@ -81,6 +81,7 @@
                                 </v-card>
                                 <editar-item-planilha
                                     :item="props.item"
+                                    @fechar-item="props.expanded = false"
                                 />
                             </div>
                             <div else>
