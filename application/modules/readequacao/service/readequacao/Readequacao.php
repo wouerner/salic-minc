@@ -26,11 +26,29 @@ class Readequacao implements IServicoRestZend
     public function buscar($idReadequacao)
     {
         $modelTbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
-        $where = [
-            'idReadequacao' => $idReadequacao
-        ];
+        
+        $result = $modelTbReadequacao->buscarReadequacao($idReadequacao)[0];
 
-        return $modelTbReadequacao->findBy($where);
+        $return = [
+            'Idreadequacao' => $result['idReadequacao'],
+            'idPronac' => $result['idPronac'],
+            'idTipoReadequacao' => $result['idTipoReadequacao'],
+            'dtSolicitacao' => $result['dsSolicitacao'],
+            'idSolicitante' => $result['idSolicitante'],
+            'dsJustificativa' => $result['dsJustificativa'],
+            'dsSolicitacao' => $result['dsSolicitacao'],
+            'idDocumento' => $result['idDocumento'],
+            'idAvaliador' => $result['idAvaliador'],
+            'dtAvaliador' => $result['dtAvaliador'],
+            'dsAvaliacao' => $result['dsAvaliacao'],
+            'stAtendimento' => $result['stAtendimento'],
+            'siEncaminhamento' => $result['siEncaminhamento'],
+            'stAnalise' => $result['stAnalise'],
+            'idNrReuniao' => $result['idNrReuniao'],
+            'stEstado' => $result['stEstado'],
+        ];
+        
+        return $return;
     }
 
     public function buscarReadequacoes($idPronac, $idTipoReadequacao = '', $stStatusAtual = '')
