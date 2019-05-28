@@ -30,9 +30,6 @@ class Readequacao_ObterPlanilhaController extends MinC_Controller_Rest_Abstract
         $data = [];
         $code = 200;
 
-        $idPronac = $this->getRequest()->getParam('idPronac');
-        $idTipoReadequacao = $this->getRequest()->getParam('idTipoReadequacao');
-        
         $readequacaoService = new ReadequacaoService($this->getRequest(), $this->getResponse());
         $permissao = $readequacaoService->verificarPermissaoNoProjeto();
         
@@ -41,7 +38,7 @@ class Readequacao_ObterPlanilhaController extends MinC_Controller_Rest_Abstract
             $httpCode = 203;
             $data['message'] = utf8_decode('Você não tem permissão para acessar este projeto');
         } else {
-            $data = $readequacaoService->obterPlanilha($idPronac, $idTipoReadequacao);
+            $data = $readequacaoService->obterPlanilha();
         }
 
         $this->renderJsonResponse(\TratarArray::utf8EncodeArray($data), $code);

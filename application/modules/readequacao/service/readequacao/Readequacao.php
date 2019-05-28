@@ -707,7 +707,12 @@ class Readequacao implements IServicoRestZend
         return $data;
     }
 
-    public function obterPlanilha($idPronac, $idTipoReadequacao = '') {
+    public function obterPlanilha() {
+        $parametros = $this->request->getParams();
+
+        $idPronac = $parametros['idPronac'];
+        $idTipoReadequacao = $parametros['idTipoReadequacao'];
+
         $tipos = [
             \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL => \spPlanilhaOrcamentaria::TIPO_PLANILHA_REMANEJAMENTO,
             \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA => \spPlanilhaOrcamentaria::TIPO_PLANILHA_READEQUACAO,
@@ -715,7 +720,7 @@ class Readequacao implements IServicoRestZend
         ];
 
         $tipoPlanilha = ($idTipoReadequacao) ? $tipoPlanilha[$idTipoReadequacao] : \spPlanilhaOrcamentaria::TIPO_PLANILHA_APROVADA_ATIVA;
-
+        
         if ($idTipoReadequacao) {
             $spPlanilhaOrcamentaria = new \spPlanilhaOrcamentaria();
             $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, $tipos[$idTipoReadequacao]);
@@ -760,7 +765,7 @@ class Readequacao implements IServicoRestZend
         $parametros = $this->request->getParams();
         
         $idPronac = $parametros['idPronac'];
-        $idPlanilha = $parametros['idPlanilha'];
+        $idPlanilhaAprovacao = $parametros['idPlanilhaAprovacao'];
         $idReadequacao = $parametros['idReadequacao'];
         $valorUnitario = $parametros['ValorUnitario'];
         
@@ -774,14 +779,11 @@ class Readequacao implements IServicoRestZend
             $idAgente = $rsAgente[0]->idAgente;
         }
         
-        $valorUnitario = str_replace('.', '', $valorUnitario);
-        $valorUnitario = str_replace(',', '.', $valorUnitario);
-
         $tbPlanilhaAprovacao = new \tbPlanilhaAprovacao();
         $editarItem = $tbPlanilhaAprovacao->buscar(
             [
                 'IdPRONAC=?' => $idPronac,
-                'idPlanilhaAprovacao=?' => $idPlanilha
+                'idPlanilhaAprovacao=?' => $idPlanilhaAprovacao
             ])->current();
         
         $editarItem->idUnidade = $parametros['idUnidade'];
