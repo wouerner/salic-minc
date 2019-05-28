@@ -197,6 +197,7 @@ export default {
         },
         salvarItem() {
             this.atualizarItemPlanilha(this.itemEditado);
+            this.$emit('fechar-item');
         },
         cancelarEdicao() {
             this.$emit('fechar-item');

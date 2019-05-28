@@ -104,7 +104,6 @@ export const updateReadequacao = ({ commit }, params) => {
     readequacaoHelperAPI.updateReadequacao(params)
         .then((response) => {
             commit(types.UPDATE_READEQUACAO, response.data.data.items);
-            commit(types.GET_READEQUACAO, response.data.data.items);
         });
 };
 

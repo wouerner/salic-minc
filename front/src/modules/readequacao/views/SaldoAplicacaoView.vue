@@ -111,64 +111,68 @@
                                 <v-stepper-content
                                     step="1"
                                 >
-                                    <v-card
-                                        class="mb-5"
-                                        flat
+                                    <v-layout>
+                                        <v-flex>
+                                            <v-card
+                                                class="mb-5"
+                                                flat
+                                            >
+                                                <v-card-title
+                                                    class="grey lighten-4 title"
+                                                >
+                                                    Justificativa da readequação
+                                                </v-card-title>
+                                                <form-readequacao
+                                                    :dados-readequacao="dadosReadequacao"
+                                                    :min-char="minChar.justificativa"
+                                                    @dados-update="atualizarCampo($event, 'dsJustificativa')"
+                                                    @editor-texto-counter="atualizarContador($event, 'justificativa')"
+                                                />
+                                            </v-card>
+                                            <v-card
+                                                class="mb-5"
+                                                flat
+                                            >
+                                                <v-card-title
+                                                    class="grey lighten-4 title"
+                                                >
+                                                    Arquivo anexo
+                                                </v-card-title>
+                                                <v-card-actions>
+                                                    <upload-file
+                                                        :formatos-aceitos="formatosAceitos"
+                                                        :id-documento="dadosReadequacao.idDocumento"
+                                                        class="mt-1"
+                                                        @arquivo-anexado="atualizarArquivo($event)"
+                                                        @arquivo-removido="removerArquivo()"
+                                                        @arquivo-tipo-invalido="arquivoTipoInvalido($event)"
+                                                    />
+                                                </v-card-actions>
+                                            </v-card>
+                                            <v-card
+                                                class="mb-5"
+                                            >
+                                                <v-card-title
+                                                    class="grey lighten-4 title"
+                                                >
+                                                    <h5>
+                                                        Valor disponível
+                                                    </h5>
+                                                </v-card-title>
+                                                <valor-disponivel
+                                                    :valor="dadosReadequacao.dsSolicitacao"
+                                                    @dados-update="atualizarCampo($event, 'dsSolicitacao')"
+                                                    @editor-texto-counter="atualizarContador($event, 'solicitacao')"
+                                                />
+                                            </v-card>
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout
+                                        justify-end
+                                        text-xs-right
                                     >
-                                        <v-card-title
-                                            class="grey lighten-4 title"
-                                        >
-                                            Justificativa da readequação
-                                        </v-card-title>
-                                        <form-readequacao
-                                            :dados-readequacao="dadosReadequacao"
-                                            :min-char="minChar.justificativa"
-                                            @dados-update="atualizarCampo($event, 'dsJustificativa')"
-                                            @editor-texto-counter="atualizarContador($event, 'justificativa')"
-                                        />
-                                    </v-card>
-                                    <v-card
-                                        class="mb-5"
-                                        flat
-                                    >
-                                        <v-card-title
-                                            class="grey lighten-4 title"
-                                        >
-                                            Arquivo anexo
-                                        </v-card-title>
-                                        <v-card-actions>
-                                            <upload-file
-                                                :formatos-aceitos="formatosAceitos"
-                                                :id-documento="dadosReadequacao.idDocumento"
-                                                class="mt-1"
-                                                @arquivo-anexado="atualizarArquivo($event)"
-                                                @arquivo-removido="removerArquivo()"
-                                                @arquivo-tipo-invalido="arquivoTipoInvalido($event)"
-                                            />
-                                        </v-card-actions>
-                                    </v-card>
-                                    <v-card
-                                        class="mb-5"
-                                    >
-                                        <v-card-title
-                                            class="grey lighten-4 title"
-                                        >
-                                            <h5>
-                                                Valor disponível
-                                            </h5>
-                                        </v-card-title>
-                                        <valor-disponivel
-                                            :valor="dadosReadequacao.dsSolicitacao"
-                                            @dados-update="atualizarCampo($event, 'dsSolicitacao')"
-                                            @editor-texto-counter="atualizarContador($event, 'solicitacao')"
-                                        />
-                                    </v-card>
-                                    <v-flex xs11>
-                                        <v-layout
-                                            row
-                                            wrap
-                                            justify-end
-                                            text-xs-right
+                                        <v-flex
+                                            xs2
                                         >
                                             <v-btn
                                                 color="green darken-1"
@@ -189,8 +193,8 @@
                                                 :tela-edicao="true"
                                                 @excluir-readequacao="excluirReadequacao"
                                             />
-                                        </v-layout>
-                                    </v-flex>
+                                        </v-flex>
+                                    </v-layout>
                                 </v-stepper-content>
                                 <v-stepper-content
                                     step="2"

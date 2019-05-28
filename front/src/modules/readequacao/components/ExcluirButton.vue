@@ -9,11 +9,11 @@
             color="red darken-3"
             @click="dialog = true"
         >
-            Excluir
+            {{ textoBotao }}
             <v-icon
                 right
                 dark
-            >send</v-icon>
+            >cancel</v-icon>
         </v-btn>
         <div v-else>
             <v-btn
@@ -97,6 +97,10 @@ export default {
         verificarPerfil,
     ],
     props: {
+        textoBotao: {
+            type: String,
+            default: 'Excluir',
+        },
         disabled: {
             type: Boolean,
             default: false,
