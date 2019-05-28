@@ -144,6 +144,7 @@ export default {
                 idPronac: 0,
                 idProduto: 0,
                 idUnidade: 0,
+                idTipoReadequacao: 0,
             },
             campos: [
                 'idUnidade',
@@ -191,6 +192,7 @@ export default {
                 Quantidade: this.item.Quantidade,
                 QtdeDias: this.item.QtdeDias,
                 ValorUnitario: this.item.ValorUnitario,
+                idTipoReadequacao: this.getReadequacao.idTipoReadequacao,
             };
         },
         salvarItem() {

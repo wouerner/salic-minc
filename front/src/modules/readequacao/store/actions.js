@@ -197,9 +197,13 @@ export const obterUnidadesPlanilha = ({ commit }, params) => {
         });
 };
 
-export const atualizarItemPlanilha = ({ commit }, params) => {
+export const atualizarItemPlanilha = ({ commit, dispatch }, params) => {
     readequacaoHelperAPI.atualizarItemPlanilha(params)
         .then((response) => {
             commit(types.SET_ITEM_PLANILHA_EDICAO, response.data.data.items);
+            dispatch('obterPlanilha', {
+                idPronac: params.idPronac,
+                idTipoReadequacao: params.idTipoReadequacao,
+            });
         });
 };
