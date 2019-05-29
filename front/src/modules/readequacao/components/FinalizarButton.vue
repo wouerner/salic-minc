@@ -180,11 +180,14 @@ export default {
                 });
         },
         finalizar() {
-            if ((this.readequacaoEditada.dsJustificativa !== this.dadosReadequacao.dsJustificativa)
-                || (this.readequacaoEditada.dsSolicitacao !== this.dadosReadequacao.dsSolicitacao)) {
-                this.updateReadequacao(this.readequacaoEditada).then(() => {
-                    this.executaFinalizar();
-                });
+            if (typeof this.readequacaoEditada !== 'undefined') {
+                if ((this.readequacaoEditada.dsJustificativa !== this.dadosReadequacao.dsJustificativa)
+                    || (this.readequacaoEditada.dsSolicitacao !== this.dadosReadequacao.dsSolicitacao)) {
+                    this.updateReadequacao(this.readequacaoEditada)
+                        .then(() => {
+                            this.executaFinalizar();
+                        });
+                }
             } else {
                 this.executaFinalizar();
             }

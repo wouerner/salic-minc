@@ -10,6 +10,7 @@
                         v-model="dadosReadequacaoEmEdicao.dsJustificativa"
                         :placeholder="'Justificativa da solicitação de readequação'"
                         :min-char="minChar"
+                        @blur="atualizarForm()"
                         @text-change="atualizarForm()"
                         @editor-texto-counter="atualizarContador($event)"
                     />
@@ -22,7 +23,7 @@
 import SEditorTexto from '@/components/SalicEditorTexto';
 
 export default {
-    name: 'FormReadequacao',
+    name: 'FormJustificativa',
     components: {
         SEditorTexto,
     },
@@ -69,9 +70,13 @@ export default {
     },
     methods: {
         atualizarForm() {
+            if (this.dadosReadequacaoEmEdicao.dsJustificativa === '') {
+                this.$emit('editor-texto-counter', 0);
+            }
             this.$emit('dados-update', this.dadosReadequacaoEmEdicao.dsJustificativa);
         },
         atualizarContador(valor) {
+            this.atualizarForm();
             this.$emit('editor-texto-counter', valor);
         },
     },
