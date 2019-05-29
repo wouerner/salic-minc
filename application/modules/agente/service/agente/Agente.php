@@ -9,40 +9,40 @@ class Agente
      * Este metodo é para correcao de erro ao transformar projeto em proposta
      * o erro acontece quando existe agente com usuario invalido
      */
-    public function salvarUsuarioAgenteAction()
-    {
-        $idAgente = (int)$this->_request->getParam("agente");
-        $idResponsavel = (int)$this->_request->getParam("idResponsavel");
-
-        try {
-
-            if ($this->GrupoAtivoSalic == Autenticacao_Model_Grupos::PROPONENTE) {
-                throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para esta a&ccedil;&atilde;o");
-            }
-
-            if (empty($idAgente) || empty($idResponsavel)) {
-                throw new Exception("Dados obrigat&oacute;rios n&atilde;o informados");
-            }
-
-            $mprAgentes = new Agente_Model_AgentesMapper();
-            $agente = $mprAgentes->findBy(['idAgente' => $idAgente]);
-
-            if (empty($agente)) {
-                throw new Exception("Agente n&atilde;o existe");
-            }
-
-            $where = [];
-            $dados = [];
-            $dbTableAgentes = new Agente_Model_DbTable_Agentes();
-            $where[] = $dbTableAgentes->getAdapter()->quoteInto('idAgente = ?', $idAgente);
-            $dados['Usuario'] = $idResponsavel;
-            $dbTableAgentes->update($dados, $where);
-
-            parent::message("Agente atualizado com sucesso!", "/agente/agentes/form-usuario-agente/id/" . $idAgente, "CONFIRM");
-        } catch (Exception $e) {
-            parent::message($e->getMessage(), "/agente/agentes/form-usuario-agente/id/" . $idAgente, "ERROR");
-        }
-    }
+//    public function salvarUsuarioAgenteAction()
+//    {
+//        $idAgente = (int)$this->_request->getParam("agente");
+//        $idResponsavel = (int)$this->_request->getParam("idResponsavel");
+//
+//        try {
+//
+//            if ($this->GrupoAtivoSalic == Autenticacao_Model_Grupos::PROPONENTE) {
+//                throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para esta a&ccedil;&atilde;o");
+//            }
+//
+//            if (empty($idAgente) || empty($idResponsavel)) {
+//                throw new Exception("Dados obrigat&oacute;rios n&atilde;o informados");
+//            }
+//
+//            $mprAgentes = new Agente_Model_AgentesMapper();
+//            $agente = $mprAgentes->findBy(['idAgente' => $idAgente]);
+//
+//            if (empty($agente)) {
+//                throw new Exception("Agente n&atilde;o existe");
+//            }
+//
+//            $where = [];
+//            $dados = [];
+//            $dbTableAgentes = new Agente_Model_DbTable_Agentes();
+//            $where[] = $dbTableAgentes->getAdapter()->quoteInto('idAgente = ?', $idAgente);
+//            $dados['Usuario'] = $idResponsavel;
+//            $dbTableAgentes->update($dados, $where);
+//
+//            parent::message("Agente atualizado com sucesso!", "/agente/agentes/form-usuario-agente/id/" . $idAgente, "CONFIRM");
+//        } catch (Exception $e) {
+//            parent::message($e->getMessage(), "/agente/agentes/form-usuario-agente/id/" . $idAgente, "ERROR");
+//        }
+//    }
 
     /**
      * Metodo para realizar a buscar de agentes por cpf/cnpj ou por nome
@@ -50,32 +50,32 @@ class Agente
      * @param void
      * @return void
      */
-    public function buscaragenteAction($cpf, $nome)
-    {
-            $cpf = Mascara::delMaskCPF(Mascara::delMaskCNPJ($cpf)); // deleta a mascara
-
-            try {
-                // validacao dos campos
-                if (empty($cpf) && empty($nome)) {
-                    throw new Exception("Dados obrigat&oacute;rios n&atilde;o informados:<br /><br />&eacute; necess&aacute;rio informar o CPF/CNPJ ou o Nome!");
-                } elseif (!empty($cpf) && strlen($cpf) != 11 && strlen($cpf) != 14) { // valida cnpj/cpf
-                    throw new Exception("O CPF/CNPJ informado &eacute; inv&aacute;lido!");
-                } elseif (!empty($cpf) && strlen($cpf) == 11 && !Validacao::validarCPF($cpf)) { // valida cpf
-                    throw new Exception("O CPF informado &eacute; inv&aacute;lido!");
-                } elseif (!empty($cpf) && strlen($cpf) == 14 && !Validacao::validarCNPJ($cpf)) { // valida cnpj
-                    throw new Exception("O CNPJ informado &eacute; inv&aacute;lido!");
-                } else {
-                    // redireciona para a pagina com a busca dos dados com paginacao
-                    $this->redirect("agente/agentes/listaragente?cpf=" . $cpf . "&nome=" . $nome);
-                }
-            } catch (Exception $e) {
-                $this->view->message = $e->getMessage();
-                $this->view->message_type = "ERROR";
-                $this->view->cpf = !empty($cpf) ? Validacao::mascaraCPFCNPJ($cpf) : ''; // caso exista, adiciona a mascara
-                $this->view->nome = $nome;
-            }
-        return  $this->view;
-    }
+//    public function buscaragenteAction($cpf, $nome)
+//    {
+//            $cpf = Mascara::delMaskCPF(Mascara::delMaskCNPJ($cpf)); // deleta a mascara
+//
+//            try {
+//                // validacao dos campos
+//                if (empty($cpf) && empty($nome)) {
+//                    throw new Exception("Dados obrigat&oacute;rios n&atilde;o informados:<br /><br />&eacute; necess&aacute;rio informar o CPF/CNPJ ou o Nome!");
+//                } elseif (!empty($cpf) && strlen($cpf) != 11 && strlen($cpf) != 14) { // valida cnpj/cpf
+//                    throw new Exception("O CPF/CNPJ informado &eacute; inv&aacute;lido!");
+//                } elseif (!empty($cpf) && strlen($cpf) == 11 && !Validacao::validarCPF($cpf)) { // valida cpf
+//                    throw new Exception("O CPF informado &eacute; inv&aacute;lido!");
+//                } elseif (!empty($cpf) && strlen($cpf) == 14 && !Validacao::validarCNPJ($cpf)) { // valida cnpj
+//                    throw new Exception("O CNPJ informado &eacute; inv&aacute;lido!");
+//                } else {
+//                    // redireciona para a pagina com a busca dos dados com paginacao
+//                    $this->redirect("agente/agentes/listaragente?cpf=" . $cpf . "&nome=" . $nome);
+//                }
+//            } catch (Exception $e) {
+//                $this->view->message = $e->getMessage();
+//                $this->view->message_type = "ERROR";
+//                $this->view->cpf = !empty($cpf) ? Validacao::mascaraCPFCNPJ($cpf) : ''; // caso exista, adiciona a mascara
+//                $this->view->nome = $nome;
+//            }
+//        return  $this->view;
+//    }
 
 
     /**
@@ -84,36 +84,36 @@ class Agente
      * @param void
      * @return List
      */
-    public function listaragenteAction()
-    {
-        $this->autenticacao();
-        // recebe os dados via get
-        $get = Zend_Registry::get('get');
-        $cpf = $get->cpf;
-        $nome = $get->nome;
-
-        // realiza a busca por cpf e/ou nome
-        $buscar = Agente_Model_ManterAgentesDAO::buscarAgentes($cpf, $nome);
-
-        if (!$buscar) {
-            // redireciona para a pagina de cadastro de agentes, e, exibe uma notificacao relativa ao cadastro
-            parent::message("Agente n&atilde;o cadastrado!<br /><br />Por favor, cadastre o mesmo no formulário abaixo!", "/agente/manteragentes/agentes?acao=cc&cpf=" . $cpf . "&nome=" . $nome, "ALERT");
-        } else {
-            // ========== INICIO PAGINACAO ==========
-            // criando a paginacao
-            Zend_Paginator::setDefaultScrollingStyle('Sliding');
-            $this->view->addScriptPath(APPLICATION_PATH.'/modules/default/views/scripts/paginacao');
-            Zend_View_Helper_PaginationControl::setDefaultViewPartial('paginacao.phtml');
-            $paginator = Zend_Paginator::factory($buscar); // dados a serem paginados
-            // pagina atual e quantidade de itens por pagina
-            $currentPage = $this->_getParam('page', 1);
-            $paginator->setCurrentPageNumber($currentPage)->setItemCountPerPage(10); // 10 por pagina
-            // ========== FIM PAGINACAO ==========
-
-            $this->view->buscar = $paginator;
-            $this->view->qtdAgentes = count($buscar); // quantidade de agentes
-        }
-    }
+//    public function listaragenteAction()
+//    {
+//        $this->autenticacao();
+//        // recebe os dados via get
+//        $get = Zend_Registry::get('get');
+//        $cpf = $get->cpf;
+//        $nome = $get->nome;
+//
+//        // realiza a busca por cpf e/ou nome
+//        $buscar = Agente_Model_ManterAgentesDAO::buscarAgentes($cpf, $nome);
+//
+//        if (!$buscar) {
+//            // redireciona para a pagina de cadastro de agentes, e, exibe uma notificacao relativa ao cadastro
+//            parent::message("Agente n&atilde;o cadastrado!<br /><br />Por favor, cadastre o mesmo no formulário abaixo!", "/agente/manteragentes/agentes?acao=cc&cpf=" . $cpf . "&nome=" . $nome, "ALERT");
+//        } else {
+//            // ========== INICIO PAGINACAO ==========
+//            // criando a paginacao
+//            Zend_Paginator::setDefaultScrollingStyle('Sliding');
+//            $this->view->addScriptPath(APPLICATION_PATH.'/modules/default/views/scripts/paginacao');
+//            Zend_View_Helper_PaginationControl::setDefaultViewPartial('paginacao.phtml');
+//            $paginator = Zend_Paginator::factory($buscar); // dados a serem paginados
+//            // pagina atual e quantidade de itens por pagina
+//            $currentPage = $this->_getParam('page', 1);
+//            $paginator->setCurrentPageNumber($currentPage)->setItemCountPerPage(10); // 10 por pagina
+//            // ========== FIM PAGINACAO ==========
+//
+//            $this->view->buscar = $paginator;
+//            $this->view->qtdAgentes = count($buscar); // quantidade de agentes
+//        }
+//    }
 
     /**
      * Metodo para retorno de intervalo de tempo
@@ -290,6 +290,8 @@ class Agente
                 }
             } else {
                 $novos_valores = $this->{$servico}($cpf,$dados[0]->idagente);
+                xd($dados);
+                    die;
             }
         }else {
             $novos_valores = $this->{$servico}($cpf,'');
@@ -307,7 +309,7 @@ class Agente
      * @todo refatorar metodo para um generico que possa salvar todas as
      * possibilidades
      */
-    private function salvaragente()
+    public function salvaragente($idAgente = null, $modelAgente = null)
     {
         $arrAuth = (array)\Zend_Auth::getInstance()->getIdentity();
         $usuario = isset($arrAuth['IdUsuario']) ? $arrAuth['IdUsuario'] : $arrAuth['usu_codigo'];
@@ -382,7 +384,7 @@ class Agente
                 $segmentoCultural = $this->_request->getParam("segmentoCultural");
 
                 // só salva area e segmento para a visao de Componente da Comissao e se os campos titular e areaCultural forem informados
-                if ((int)$Visao == VisaoModel::COMPONENTE_DA_COMISSAO && ((int)$titular == 0 || (int)$titular == 1) && !empty($areaCultural)) {
+                if ((int)$Visao == \VisaoModel::COMPONENTE_DA_COMISSAO && ((int)$titular == 0 || (int)$titular == 1) && !empty($areaCultural)) {
                     $GravarComponente = array(// insert
                         'idAgente' => $idAgente,
                         'cdArea' => $areaCultural,
