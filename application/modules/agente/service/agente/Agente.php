@@ -309,7 +309,7 @@ class Agente
      */
     private function salvaragente()
     {
-        $arrAuth = (array)Zend_Auth::getInstance()->getIdentity();
+        $arrAuth = (array)\Zend_Auth::getInstance()->getIdentity();
         $usuario = isset($arrAuth['IdUsuario']) ? $arrAuth['IdUsuario'] : $arrAuth['usu_codigo'];
         $arrayAgente = array(
             'cnpjcpf' => $this->_request->getParam("cpf"),
@@ -319,9 +319,9 @@ class Agente
         );
 
         try {
-            $mprAgentes = new Agente_Model_AgentesMapper();
-            $mprNomes = new Agente_Model_NomesMapper();
-            $mdlAgente = new Agente_Model_Agentes($arrayAgente);
+            $mprAgentes = new \Agente_Model_AgentesMapper();
+            $mprNomes = new \Agente_Model_NomesMapper();
+            $mdlAgente = new \Agente_Model_Agentes($arrayAgente);
             $mprAgentes->save($mdlAgente);
 
             $agente = $mprAgentes->findBy(array('cnpjcpf' => $mdlAgente->getCnpjcpf()));
@@ -331,7 +331,7 @@ class Agente
             $TipoNome = (strlen($mdlAgente->getCnpjcpf()) == 11 ? 18 : 19); // 18 = pessoa fisica e 19 = pessoa juridica
 
             if ($this->modal == "s") {
-                $nome = Seguranca::tratarVarAjaxUFT8($nome);
+                $nome = \Seguranca::tratarVarAjaxUFT8($nome);
             }
 //            $nome = preg_replace('/[^A-Za-zZ0-9\ ]/', '', $nome);
             $nome = preg_replace('/[\'\"\n\`\´]/', '', $nome);
@@ -345,7 +345,7 @@ class Agente
                     'usuario' => $usuario
                 );
 
-                $mprNomes->save(new Agente_Model_Nomes($arrNome));
+                $mprNomes->save(new \Agente_Model_Nomes($arrNome));
             } catch (Exception $e) {
                 throw new Exception("Erro ao salvar o nome: " . $e->getMessage());
             }
@@ -357,7 +357,7 @@ class Agente
              * Validacao - Se for componente da comissao ele nao salva a visao
              * Regra o componente da comissao nao pode alterar sua visao.
              */
-            if ($grupologado != Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) :
+            if ($grupologado != \Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) :
 
                 $GravarVisao = array(
                     'idagente' => $idAgente,
@@ -366,7 +366,7 @@ class Agente
                     'stativo' => 'A');
 
                 try {
-                    $visaoTable = new Agente_Model_DbTable_Visao();
+                    $visaoTable = new \Agente_Model_DbTable_Visao();
                     $busca = $visaoTable->buscarVisao($idAgente, $Visao);
                     if (!$busca) {
                         $i = $visaoTable->cadastrarVisao($GravarVisao);
@@ -398,12 +398,12 @@ class Agente
 
                     try {
                         // busca a titulacao do agente (titular/suplente de area cultural)
-                        $busca = TitulacaoConselheiroDAO::buscarComponente($idAgente, $Visao);
+                        $busca = \TitulacaoConselheiroDAO::buscarComponente($idAgente, $Visao);
 
                         if (!$busca) {
-                            $i = TitulacaoConselheiroDAO::gravarComponente($GravarComponente);
+                            $i = \TitulacaoConselheiroDAO::gravarComponente($GravarComponente);
                         } else {
-                            $i = TitulacaoConselheiroDAO::atualizaComponente($idAgente, $AtualizarComponente);
+                            $i = \TitulacaoConselheiroDAO::atualizaComponente($idAgente, $AtualizarComponente);
                         }
                     } catch (Exception $e) {
                         throw new Exception("Erro ao salvar a &aacute;rea e segmento: " . $e->getMessage());
@@ -444,7 +444,7 @@ class Agente
                     'usuario' => $usuario
                 );
 
-                $enderecoDAO = new Agente_Model_EnderecoNacionalDAO();
+                $enderecoDAO = new \Agente_Model_EnderecoNacionalDAO();
                 $insere = $enderecoDAO->inserir($arrayEnderecos);
             } catch (Exception $e) {
                 throw new Exception("Erro ao salvar o endere&ccedil;o: " . $e->getMessage());
@@ -471,7 +471,7 @@ class Agente
                         'usuario' => $usuario
                     );
 
-                    $insereTelefone = new Agente_Model_DbTable_Telefones();
+                    $insereTelefone = new \Agente_Model_DbTable_Telefones();
                     $insere = $insereTelefone->insert($arrayTelefones);
                 } catch (Exception $e) {
                     throw new Exception("Erro ao salvar o telefone: " . $e->getMessage());
@@ -497,7 +497,7 @@ class Agente
                         'usuario' => $usuario
                     );
 
-                    $insere = new Agente_Model_Email();
+                    $insere = new \Agente_Model_Email();
                     $insere = $insere->inserir($arrayEmail);
                 } catch (Exception $e) {
                     throw new Exception("Erro ao salvar o e-mail: " . $e->getMessage());
@@ -523,10 +523,10 @@ class Agente
 
                 // ============== VINCULA O RESPONSAVEL COM O PROPONENTE CADASTRADO =============================
                 if ((!empty($acao)) && (!empty($idResponsavel))):
-                    $tbVinculo = new Agente_Model_DbTable_TbVinculo();
+                    $tbVinculo = new \Agente_Model_DbTable_TbVinculo();
                     $dadosVinculo = array(
                         'idAgenteProponente' => $idAgente,
-                        'dtVinculo' => new Zend_Db_Expr('GETDATE()'),
+                        'dtVinculo' => new \Zend_Db_Expr('GETDATE()'),
                         'siVinculo' => 0,
                         'idUsuarioResponsavel' => $idResponsavel
                     );
@@ -537,10 +537,10 @@ class Agente
             //================ FIM VINCULA O RESPONSAVEL COM O PROPONENTE CADASTRADO ========================
             if (isset($acao) && $acao != '') {
                 // Retorna para o listar propostas
-                $tbVinculo = new Agente_Model_DbTable_TbVinculo();
+                $tbVinculo = new \Agente_Model_DbTable_TbVinculo();
                 $dadosVinculo = array(
                     'idAgenteProponente' => $idAgente,
-                    'dtVinculo' => new Zend_Db_Expr('GETDATE()'),
+                    'dtVinculo' => new \Zend_Db_Expr('GETDATE()'),
                     'siVinculo' => 0,
                     'idUsuarioResponsavel' => $arrAuth['IdUsuario']
                 );
@@ -554,7 +554,7 @@ class Agente
             $projetofnc = $this->_request->getParam('cadastrarprojeto');
 
             # tratamento para disparar "js custom event" no dispatch
-            $agente = Agente_Model_ManterAgentesDAO::buscarAgentes($cpf);
+            $agente = \Agente_Model_ManterAgentesDAO::buscarAgentes($cpf);
             $agente = $agente[0];
             $agente->id = $agente->idagente;
             $agente->cpfCnpj = $agente->cnpjcpf;
