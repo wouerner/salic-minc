@@ -64,17 +64,13 @@
                             max-width="290px"
                             min-width="290px"
                         >
-                            <template v-slot:activator="{ on }">
-                                <v-form>
-                                    <v-text-field
-                                        :rules="[rules.required, rules.dataExecucaoChars, rules.dataExecucao]"
-                                        v-model="dateFormatted"
-                                        label="Escolha a data"
-                                        prepend-icon="event"
-                                        v-on="on"
-                                    />
-                                </v-form>
-                            </template>
+                            <v-text-field
+                                slot="activator"
+                                :rules="[rules.required, rules.dataExecucaoChars, rules.dataExecucao]"
+                                v-model="dateFormatted"
+                                label="Escolha a data"
+                                prepend-icon="event"
+                            />
                             <v-date-picker
                                 v-model="date"
                                 :allowed-dates="allowedDates"
