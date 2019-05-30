@@ -132,6 +132,10 @@ export default {
         }),
     },
     watch: {
+        date() {
+            this.$emit('dados-update', this.date);
+            this.setChangedDate(this.date);
+        },
         campo() {
             if (this.campo.valor !== '') {
                 let date = this.dadosReadequacao.dsSolicitacao.trim();
@@ -157,10 +161,6 @@ export default {
             this.date = this.parseDate(date);
             this.dateFormatted = this.formatDate(this.date);
             this.updateCampo(this.date);
-        },
-        prepareDate(date) {
-            const [day, month, year] = date.substr(0, 10).split('-');
-            return `${day}-${month}-${year}`;
         },
         formatDate(date) {
             if (!date) {

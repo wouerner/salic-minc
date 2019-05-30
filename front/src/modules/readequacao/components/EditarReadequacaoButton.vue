@@ -272,7 +272,7 @@ export default {
             },
             rules: {
                 required: v => !!v || 'Campo obrigatório.',
-                dataExecucaoChars: v => (v && v.length >= this.minChar.dataExecucao) || `Data em formato inválido ${this.campoAtual}`,
+                dataExecucaoChars: v => (v && v.length >= this.minChar.dataExecucao) || `Data em formato inválido`,
                 dataExecucao: v => (v !== this.campoAtual[`key_${this.dadosReadequacao.idTipoReadequacao}`].dsCampo)
                     || 'Data deve ser diferente da original.',
                 solicitacao: v => (v && v.length >= this.minChar.solicitacao) || `Deve ter no mínimo ${this.minChar.solicitacao} caracteres.`,
