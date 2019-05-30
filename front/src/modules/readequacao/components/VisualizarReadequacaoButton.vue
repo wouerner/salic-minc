@@ -165,7 +165,7 @@
                                     v-if="readequacaoTipoSimples() && dadosReadequacao.dsSolicitacao"
                                     :original-text="getDadosCampo.valor"
                                     :changed-text="textoSolicitacao"
-                                    :method="'diffSentences'"
+                                    :method="'diffWordsWithSpace'"
                                 />
                                 <div
                                     v-else
@@ -319,7 +319,6 @@ export default {
                 Const.TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS,
             ],
             mensagemPadraoOutrasSolicitacoes: 'Sem visualização detalhada para esse tipo de readequação.',
-            textoSolicitacao: '',
         };
     },
     computed: {
@@ -347,6 +346,14 @@ export default {
             }
             return {};
         },
+        textoSolicitacao() {
+            if (this.dadosReadequacao.idTipoReadequacao === Const.TIPO_READEQUACAO_PERIODO_EXECUCAO
+                && this.dadosReadequacao.dsSolicitacao.trim() !== '') {
+                const [year, month, day] = this.dadosReadequacao.dsSolicitacao.substr(0, 10).split('-');
+                return `${day}/${month}/${year}`;
+            }
+            return this.dadosReadequacao.dsSolicitacao;
+        },
     },
     watch: {
         dialog() {
@@ -366,24 +373,12 @@ export default {
             this.inicializarReadequacao();
         },
     },
-    created() {
-        this.inicializarReadequacao();
-    },
     methods: {
         ...mapActions({
             obterCampoAtual: 'readequacao/obterCampoAtual',
         }),
         perfilAceito() {
             return this.verificarPerfil(this.perfil, this.perfisAceitos);
-        },
-        inicializarReadequacao() {
-            if (this.dadosReadequacao.idTipoReadequacao === Const.TIPO_READEQUACAO_PERIODO_EXECUCAO
-                && this.dadosReadequacao.dsSolicitacao.trim() !== '') {
-                const [year, month, day] = this.dadosReadequacao.dsSolicitacao.substr(0, 10).split('-');
-                this.textoSolicitacao = `${day}/${month}/${year}`;
-            } else {
-                this.textoSolicitacao = this.dadosReadequacao.dsSolicitacao;
-            }
         },
         readequacaoTipoSimples() {
             if (this.outrosTiposSolicitacoes.indexOf(this.dadosReadequacao.idTipoReadequacao) > -1) {

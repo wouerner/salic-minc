@@ -458,13 +458,11 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $idPlanilha = $this->_request->getParam('idPlanilha');
 
         $ValorUnitario = $this->_request->getParam('ValorUnitario');
-
-        if (strpos($ValorUnitario, 'R$')) {
-            $ValorUnitario = str_replace('R$ ', '', $ValorUnitario);
-            $ValorUnitario = str_replace('.', '', $ValorUnitario);
-            $ValorUnitario = str_replace(',', '.', $ValorUnitario);
-        }
-
+        
+        $ValorUnitario = str_replace('R$ ', '', $ValorUnitario);
+        $ValorUnitario = str_replace('.', '', $ValorUnitario);
+        $ValorUnitario = str_replace(',', '.', $ValorUnitario);
+        
         $idPronac = $this->_request->getParam("idPronac");
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
@@ -3500,8 +3498,8 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             $this->getResponse()->setHttpResponseCode($httpCode);
             $this->_helper->json(
                 [
-                    'data' => array_map('utf8_encode', $readequacao),
-                    'sucess' => true,
+                    'readequacao' => array_map('utf8_encode', $readequacao),
+                    'success' => true,
                     'msg' => $mensagem
                 ]
             );
@@ -3510,8 +3508,9 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
             $this->_helper->json(
                 [
-                    'msg' => 'N&atilde;o foi poss&iacute;vel obter a readequa&ccedil;&atilde;o. Erro: ' . $objException->getMessage(),
-                    'sucess' => false
+                    'readequacao' => [],
+                    'sucess' => false,
+                    'msg' => 'N&atilde;o foi poss&iacute;vel obter a readequa&ccedil;&atilde;o. Erro: ' . $objException->getMessage()
                 ]
             );
         }

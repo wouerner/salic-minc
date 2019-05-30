@@ -324,8 +324,8 @@ export default {
     },
     watch: {
         getDadosCampo: {
-            handler() {
-                if (!_.isEmpty(this.getDadosCampo)) {
+            handler(value) {
+                if (!_.isEmpty(value)) {
                     this.loading = false;
                 }
             },
