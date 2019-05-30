@@ -133,7 +133,6 @@ export default {
     },
     watch: {
         date() {
-            this.$emit('dados-update', this.date);
             this.setChangedDate(this.date);
         },
         campo() {

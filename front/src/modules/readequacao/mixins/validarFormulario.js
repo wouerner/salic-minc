@@ -17,6 +17,10 @@ export default {
             ) {
                 if (typeof readequacao.idTipoReadequacao !== 'undefined') {
                     if (readequacao.idTipoReadequacao === Const.TIPO_READEQUACAO_PERIODO_EXECUCAO) {
+                        if (campo.includes('/')) {
+                            const [day, month, year] = campo.split('/');
+                            campo = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+                        }
                         if (campo !== ''
                             && readequacao.dsSolicitacao.trim() !== campo) {
                             if (contador.solicitacao >= minChar.dataExecucao) {
