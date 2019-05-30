@@ -155,7 +155,7 @@ export default {
     methods: {
         getClassItem(row) {
             if (!this.readonly) {
-                this.obterClasseItem(row);
+                return this.obterClasseItem(row);
             }
         },
     },

@@ -762,14 +762,13 @@ class Readequacao implements IServicoRestZend
         if (!empty($planilhaOrcamentariaAtiva)) {
             $planilhaAtiva = [];
             foreach ($planilhaOrcamentariaAtiva as $item) {
-                $item->idUnidadeAtivo = $item->idUnidade;
-                $item->OcorrenciaAtivo = $item->Ocorrencia;
-                $item->QuantidadeAtivo = $item->Quantidade;
-                $item->QtdeDiasAtivo = $item->QtdeDias;
-                $item->vlUnitarioAtivo = $item->vlUnitario;
-                
+                $itemAtivo = new \StdClass();
                 if (array_key_exists($item->idPlanilhaAprovacao, $planilha)) {
-                    $planilha[$item->idPlanilhaAprovacao] = $item;
+                    $planilha[$item->idPlanilhaAprovacao]->idUnidadeAtivo = $item->idUnidade;
+                    $planilha[$item->idPlanilhaAprovacao]->OcorrenciaAtivo = $item->Ocorrencia;
+                    $planilha[$item->idPlanilhaAprovacao]->QuantidadeAtivo = $item->Quantidade;
+                    $planilha[$item->idPlanilhaAprovacao]->QtdeDiasAtivo = $item->QtdeDias;
+                    $planilha[$item->idPlanilhaAprovacao]->vlUnitarioAtivo = $item->vlUnitario;
                 } else {
                     $planilha[] = $item;
                 }

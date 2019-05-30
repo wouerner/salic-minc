@@ -18,7 +18,6 @@ export default {
                 row.QtdeDiasAtivo,
                 row.vlUnitarioAtivo,
             ];
-            console.log(JSON.stringify(planilhaEdicao) !== JSON.stringify(planilhaAtiva));
             return JSON.stringify(planilhaEdicao) !== JSON.stringify(planilhaAtiva);
         },
         isItemDisponivelEdicao(item) {
