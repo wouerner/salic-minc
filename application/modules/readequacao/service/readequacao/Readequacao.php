@@ -515,6 +515,11 @@ class Readequacao implements IServicoRestZend
                 $parametros['dsSolicitacao'] = implode('/', array_reverse($data));
             }
         }
+        if ($parametros['idTipoReadequacao'] == \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ALTERACAO_PROPONENTE) {
+            if (strpos($parametros['dsSolicitacao'], '.')) {
+                $parametros['dsSolicitacao'] = preg_replace('/[^0-9]/', '', $parametros['dsSolicitacao']);
+            }
+        }
         
         $mapper = new \Readequacao_Model_TbReadequacaoMapper();
         $idReadequacao = $mapper->salvarSolicitacaoReadequacao($parametros);
