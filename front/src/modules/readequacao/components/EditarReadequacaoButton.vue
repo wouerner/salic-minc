@@ -109,6 +109,7 @@
                                 <upload-file
                                     :formatos-aceitos="formatosAceitos"
                                     :id-documento="getReadequacao.idDocumento"
+                                    :action-done="uploadActionDone"
                                     class="mt-1"
                                     @arquivo-anexado="atualizarArquivo($event)"
                                     @arquivo-removido="removerArquivo()"
@@ -284,6 +285,7 @@ export default {
             ],
             loading: true,
             arquivo: {},
+            uploadActionDone: true,
         };
     },
     computed: {
@@ -414,6 +416,7 @@ export default {
             };
         },
         atualizarArquivo(arquivo) {
+            this.uploadActionDone = false;
             this.readequacaoEditada.documento = arquivo;
             this.updateReadequacao(this.readequacaoEditada).then(() => {
                 this.mensagem.conteudo = 'Arquivo enviado!';
@@ -421,9 +424,11 @@ export default {
                 this.mensagem.finaliza = false;
                 this.mensagem.cor = 'green darken-1';
                 this.recarregarReadequacoes = true;
+                this.uploadActionDone = true;
             });
         },
         removerArquivo() {
+            this.uploadActionDone = false;
             this.readequacaoEditada.documento = '';
             this.readequacaoEditada.idDocumento = '';
             this.updateReadequacao(this.readequacaoEditada).then(() => {
@@ -432,6 +437,7 @@ export default {
                 this.mensagem.finaliza = false;
                 this.mensagem.cor = 'green darken-1';
                 this.recarregarReadequacoes = true;
+                this.uploadActionDone = true;
             });
         },
         atualizarCampo(valor, campo) {
