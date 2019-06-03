@@ -64,17 +64,13 @@
                             max-width="290px"
                             min-width="290px"
                         >
-                            <template v-slot:activator="{ on }">
-                                <v-form>
-                                    <v-text-field
-                                        :rules="[rules.required, rules.dataExecucaoChars, rules.dataExecucao]"
-                                        v-model="dateFormatted"
-                                        label="Escolha a data"
-                                        prepend-icon="event"
-                                        v-on="on"
-                                    />
-                                </v-form>
-                            </template>
+                            <v-text-field
+                                slot="activator"
+                                :rules="[rules.required, rules.dataExecucaoChars, rules.dataExecucao]"
+                                v-model="dateFormatted"
+                                label="Escolha a data"
+                                prepend-icon="event"
+                            />
                             <v-date-picker
                                 v-model="date"
                                 :allowed-dates="allowedDates"
@@ -132,6 +128,9 @@ export default {
         }),
     },
     watch: {
+        date() {
+            this.setChangedDate(this.date);
+        },
         campo() {
             if (this.campo.valor !== '') {
                 let date = this.dadosReadequacao.dsSolicitacao.trim();
@@ -157,10 +156,6 @@ export default {
             this.date = this.parseDate(date);
             this.dateFormatted = this.formatDate(this.date);
             this.updateCampo(this.date);
-        },
-        prepareDate(date) {
-            const [day, month, year] = date.substr(0, 10).split('-');
-            return `${day}-${month}-${year}`;
         },
         formatDate(date) {
             if (!date) {

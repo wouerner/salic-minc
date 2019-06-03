@@ -272,9 +272,8 @@ export default {
             },
             rules: {
                 required: v => !!v || 'Campo obrigatório.',
-                dataExecucaoChars: v => (v && v.length >= this.minChar.dataExecucao) || `Data em formato inválido ${this.campoAtual}`,
-                dataExecucao: v => (v !== this.campoAtual[`key_${this.dadosReadequacao.idTipoReadequacao}`].dsCampo)
-                    || 'Data deve ser diferente da original.',
+                dataExecucaoChars: v => (v && v.length >= this.minChar.dataExecucao) || 'Data em formato inválido',
+                dataExecucao: v => (v !== this.getValorCampoAtual()) || 'Data deve ser diferente da original.',
                 solicitacao: v => (v && v.length >= this.minChar.solicitacao) || `Deve ter no mínimo ${this.minChar.solicitacao} caracteres.`,
                 justificativa: v => (v && v.length >= this.minChar.justificativa)
                     || `Justificativa ter no mínimo ${this.minChar.justificativa} caracteres.`,
@@ -455,6 +454,15 @@ export default {
                     this.campoAtual[`key_${this.dadosReadequacao.idTipoReadequacao}`].dsCampo,
                 );
             }
+        },
+        getValorCampoAtual() {
+            if (typeof this.dadosReadequacao.idReadequacao === 'number') {
+                const key = `key_${this.dadosReadequacao.idTipoReadequacao}`;
+                if (typeof this.campoAtual[key] !== 'undefined') {
+                    return this.campoAtual[key].dsCampo;
+                }
+            }
+            return false;
         },
         readequacaoFinalizada() {
             this.dialog = false;

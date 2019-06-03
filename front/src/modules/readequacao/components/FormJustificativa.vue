@@ -10,8 +10,7 @@
                         v-model="dadosReadequacaoEmEdicao.dsJustificativa"
                         :placeholder="'Justificativa da solicitação de readequação'"
                         :min-char="minChar"
-                        @blur="atualizarForm()"
-                        @text-change="atualizarForm()"
+                        @text-change="atualizarForm($event)"
                         @editor-texto-counter="atualizarContador($event)"
                     />
                 </v-card>
