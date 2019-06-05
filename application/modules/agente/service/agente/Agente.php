@@ -198,11 +198,13 @@ class Agente
      * @param $cpf, $idAgente
      * @return \ArrayObject
      */
-    private function juridicaReceita($cpf, $idAgente) {
+    private function juridicaReceita($cpf, $dados = null) {
 
         #Instancia a Classe de Servico do WebService da Receita Federal
         $wsServico = new \ServicosReceitaFederal();
         $novos_valores = [];
+
+        $idAgente = $dados ? $dados[0]->idagente : '';
 
         $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf);
 
@@ -213,7 +215,6 @@ class Agente
             $novos_valores['msgCPF'] = utf8_encode('novo');
 
             if( $data > 183 ) {
-
                 $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf, true);
                 if(!empty($arrResultado["erro"]))
                 {
@@ -222,10 +223,12 @@ class Agente
                 }
                 $novos_valores['msgCPF'] = utf8_encode('atualizado');
             }
-
             $novos_valores[0]['idAgente'] = $idAgente;
             $novos_valores[0]['Nome'] = utf8_encode($arrResultado['nmRazaoSocial']);
             $novos_valores[0]['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
+
+            $dados[0]->nome = utf8_encode($arrResultado['nmRazaoSocial']);
+            $this->salvarNomeRazaoSocial($idAgente, $dados);
         }
         elseif(!empty($arrResultado) && empty($arrResultado['situacaoCadastral']) && !empty($idAgente))
         {
@@ -239,6 +242,8 @@ class Agente
             $novos_valores[0]['idAgente'] = $idAgente;
             $novos_valores[0]['Nome'] = utf8_encode($arrResultado['nmRazaoSocial']);
             $novos_valores[0]['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
+            $dados[0]->nome = utf8_encode($arrResultado['nmRazaoSocial']);
+            $this->salvarNomeRazaoSocial($idAgente, $dados);
         }else {
             $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf, true);
             if(!empty($arrResultado["erro"]))
@@ -289,10 +294,7 @@ class Agente
                     $novos_valores['agente'] = $dado;
                 }
             } else {
-                $novos_valores = $this->{$servico}($cpf,$dados[0]->idagente);
-                xd($dados);
-                $data = $this->obterDiferencaDatas($dados[0]->dtatualizacao)->days;
-                    die;
+                $novos_valores = $this->{$servico}($cpf,$dados);
             }
         }else {
             $novos_valores = $this->{$servico}($cpf,'');
@@ -302,76 +304,26 @@ class Agente
 
 
     /**
-     * salvaragente
+     * salvarNomeRazaoSocial
      *
      * @access private
      * @return void
-     * @author wouerner <wouerner@gmail.com>
-     * @todo refatorar metodo para um generico que possa salvar todas as
-     * possibilidades
+     * @todo refatorar metodo para um generico que possa salvar todas as possibilidades para Agentes
      */
-    public function salvaragente($idAgente = null, $modelAgente = null)
+    private function salvarNomeRazaoSocial($idAgente = null, $modelAgente = null)
     {
-        $arrAuth = (array)\Zend_Auth::getInstance()->getIdentity();
-        $usuario = isset($arrAuth['IdUsuario']) ? $arrAuth['IdUsuario'] : $arrAuth['usu_codigo'];
-        $arrayAgente = array(
-            'cnpjcpf' => $this->_request->getParam("cpf"),
-            'tipopessoa' => $this->_request->getParam("Tipo"),
-            'status' => 0,
-            'usuario' => $usuario
-        );
-
         try {
-            $mprAgentes = new \Agente_Model_AgentesMapper();
-            $mprNomes = new \Agente_Model_NomesMapper();
-            $mdlAgente = new \Agente_Model_Agentes($arrayAgente);
-            $mprAgentes->save($mdlAgente);
-
-            $agente = $mprAgentes->findBy(array('cnpjcpf' => $mdlAgente->getCnpjcpf()));
-            $cpf = preg_replace('/\.|-|\//', '', $this->_request->getParam("cpf"));
-            $idAgente = $agente['idAgente'];
-            $nome = $this->_request->getParam("nome");
-            $TipoNome = (strlen($mdlAgente->getCnpjcpf()) == 11 ? 18 : 19); // 18 = pessoa fisica e 19 = pessoa juridica
-
-            if ($this->modal == "s") {
-                $nome = \Seguranca::tratarVarAjaxUFT8($nome);
-            }
-//            $nome = preg_replace('/[^A-Za-zZ0-9\ ]/', '', $nome);
+            $nome = $modelAgente[0]->nome;
             $nome = preg_replace('/[\'\"\n\`\´]/', '', $nome);
+            $mprNomes = new \Agente_Model_DbTable_Nomes;
+            $mprNomes->alterar(['Descricao'=>$nome],['idAgente = ?'=> $idAgente]);
+            $mpAgente = new \Agente_Model_DbTable_Agentes;
+            $dataAtualizada = new \DateTime();
+            $mpAgente->alterar(['DtAtualizacao'=> $dataAtualizada->format('Y-m-d h:i:s') ],['idAgente = ?'=> $idAgente]);
 
-            try {
-                $arrNome = array(
-                    'idagente' => $idAgente,
-                    'tiponome' => $TipoNome,
-                    'descricao' => $nome,
-                    'status' => 0,
-                    'usuario' => $usuario
-                );
-
-                $mprNomes->save(new \Agente_Model_Nomes($arrNome));
-            } catch (Exception $e) {
-                throw new Exception("Erro ao salvar o nome: " . $e->getMessage());
-            }
         } catch (Exception $e) {
-            if ($this->modal == 's') {
-                $this->_helper->json(['status' => 'error', 'msg' => $e->getMessage()]);
-            } else {
-                parent::message($e->getMessage(), "agente/agentes/incluiragente", "ERROR");
-            }
+            throw new Exception("Erro ao atualizar a Raz&atilde;o Social: " . $e->getMessage());
         }
-    }
-
-    /**
-     * Metodo salvaagentegeral()
-     * Salva os dados do agente
-     * @access public
-     * @param void
-     * @return void
-     */
-    public function salvaagentegeralAction()
-    {
-        $this->autenticacao();
-        $this->salvaragente();
     }
 
 }
