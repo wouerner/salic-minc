@@ -982,7 +982,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
         return $result;
     }
 
-    public function calculaSaldoReadequacaoBaseDeCusto($idPronac)
+    public function calculaSaldoReadequacaoBaseDeCusto($idPronac, $idReadequacao = '')
     {
 
         $baseDeCusto = [
@@ -993,11 +993,13 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             PlanilhaEtapa::ETAPA_RECOLHIMENTOS
         ];
 
-        $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-        $idReadequacao = $tbReadequacao->buscarIdReadequacaoAtiva(
-            $idPronac,
-            Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA
-        );
+        if ($idReadequacao == '') {
+            $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+            $idReadequacao = $tbReadequacao->buscarIdReadequacaoAtiva(
+                $idPronac,
+                Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA
+            );
+        }
         
         $select = $this->select();
         $select->setIntegrityCheck(false);

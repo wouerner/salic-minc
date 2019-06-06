@@ -831,7 +831,6 @@ class Readequacao implements IServicoRestZend
         $idPronac = $parametros['idPronac'];
         $idPlanilhaAprovacao = $parametros['idPlanilhaAprovacao'];
         $idReadequacao = $parametros['idReadequacao'];
-        $valorUnitario = $parametros['ValorUnitario'];
         
         $auth = \Zend_Auth::getInstance();
         $cpf = isset($auth->getIdentity()->Cpf) ? $auth->getIdentity()->Cpf : $auth->getIdentity()->usu_identificacao;
@@ -853,7 +852,7 @@ class Readequacao implements IServicoRestZend
         $editarItem->idUnidade = $parametros['idUnidade'];
         $editarItem->qtItem = $parametros['Quantidade'];
         $editarItem->nrOcorrencia = $parametros['Ocorrencia'];
-        $editarItem->vlUnitario = $valorUnitario;
+        $editarItem->vlUnitario = $parametros['ValorUnitario'];
         $editarItem->qtDias = $parametros['QtdeDias'];
         $editarItem->nrFonteRecurso = $parametros['idFonte'];
         $editarItem->dsJustificativa = utf8_decode($parametros['Justificativa']);
@@ -908,12 +907,11 @@ class Readequacao implements IServicoRestZend
         ];
         
         $tbPlanilhaAprovacao = new \tbPlanilhaAprovacao();
-        $tipoReadequacao = $tbPlanilhaAprovacao->calculaSaldoReadequacaoBaseDeCusto($idPronac);
+        $tipoReadequacao = $tbPlanilhaAprovacao->calculaSaldoReadequacaoBaseDeCusto($idPronac, $idReadequacao);
         
         if (in_array($tipoReadequacao, ['COMPLEMENTACAO', 'REDUCAO'])) {
             $propostaTbCustosVinculados = new \Proposta_Model_TbCustosVinculadosMapper();
-            $custosVinculados = $propostaTbCustosVinculados->obterCustosVinculadosReadequacao($idPronac);
-            
+            $custosVinculados = $propostaTbCustosVinculados->obterCustosVinculadosReadequacao($idPronac, $idReadequacao);
             foreach ($custosVinculados as $item) {
                 $tbPlanilhaAprovacao = new \tbPlanilhaAprovacao();
                 $editarItem = $tbPlanilhaAprovacao->buscar([
