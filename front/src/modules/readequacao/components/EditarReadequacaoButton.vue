@@ -339,17 +339,6 @@ export default {
             },
             deep: true,
         },
-        dadosReadequacao: {
-            handler(value) {
-                if (value.idPronac && value.idTipoReadequacao) {
-                    this.obterDadosIniciais();
-                    if (this.bindClick === this.dadosReadequacao.idReadequacao) {
-                        this.dialog = true;
-                    }
-                }
-            },
-            deep: true,
-        },
         dialog() {
             if (this.dialog === false
                 && this.recarregarReadequacoes === true) {
@@ -371,16 +360,19 @@ export default {
             if (
                 this.dadosReadequacao.idPronac && this.dadosReadequacao.idTipoReadequacao
             ) {
+                this.inicializarReadequacaoEditada();
                 this.obterReadequacao(this.dadosReadequacao);
-                this.obterCampoAtual({
-                    idPronac: this.dadosReadequacao.idPronac,
-                    idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
-                }).then(() => {
-                    this.inicializarReadequacaoEditada();
-                });
+                const key = `key_${this.dadosReadequacao.idTipoReadequacao}`;
+                if (typeof this.campoAtual[key].dsCampo === 'undefined') {
+                    this.obterCampoAtual({
+                        idPronac: this.dadosReadequacao.idPronac,
+                        idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
+                    });
+                }
             }
         },
         abrirEdicao() {
+            this.inicializarReadequacaoEditada();
             this.obterCampoAtual({
                 idPronac: this.dadosReadequacao.idPronac,
                 idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
