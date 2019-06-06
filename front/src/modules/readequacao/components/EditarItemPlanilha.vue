@@ -107,6 +107,9 @@
                 </v-btn>
             </v-flex>
         </v-layout>
+        <mensagem
+            :mensagem="mensagem"
+        />
     </v-container>
 </template>
 
@@ -114,11 +117,13 @@
 import { mapGetters, mapActions } from 'vuex';
 import { utils } from '@/mixins/utils';
 import InputMoney from '@/components/InputMoney';
+import Mensagem from '../components/Mensagem';
 
 export default {
     name: 'EditarItemPlanilha',
     components: {
         InputMoney,
+        Mensagem,
     },
     mixins: [
         utils,
@@ -164,6 +169,13 @@ export default {
                     v => (v && v.length >= this.minChar.justificativa) || `Justificativa ter no mínimo ${this.minChar.justificativa} caracteres.`,
                 ],
             },
+            mensagem: {
+                ativa: false,
+                timeout: 2300,
+                conteudo: '',
+                cor: '',
+                finaliza: false,
+            },
         };
     },
     computed: {
@@ -196,7 +208,14 @@ export default {
             };
         },
         salvarItem() {
-            this.atualizarItemPlanilha(this.itemEditado);
+            this.atualizarItemPlanilha(this.itemEditado)
+                .then((response) => {
+                    if (response.success === 'false') {
+                        this.mensagem.ativa = true;
+                        this.mensagem.conteudo = '';
+                        this.mensagem.cor = 'red lighten-1';
+                    }
+                });
             this.$emit('fechar-item');
         },
         cancelarEdicao() {

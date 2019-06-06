@@ -122,7 +122,7 @@
                                                 >
                                                     Justificativa da readequação
                                                 </v-card-title>
-                                                <form-readequacao
+                                                <form-justificativa
                                                     :dados-readequacao="dadosReadequacao"
                                                     :min-char="minChar.justificativa"
                                                     @dados-update="atualizarCampo($event, 'dsJustificativa')"
@@ -344,7 +344,7 @@ import FinalizarButton from '../components/FinalizarButton';
 import validarFormulario from '../mixins/validarFormulario';
 import verificarPerfil from '../mixins/verificarPerfil';
 import Carregando from '@/components/CarregandoVuetify';
-import FormReadequacao from '../components/FormReadequacao';
+import FormJustificativa from '../components/FormJustificativa';
 import UploadFile from '../components/UploadFile';
 import ValorDisponivel from '../components/ValorDisponivel';
 import SaldoAplicacaoResumo from '../components/SaldoAplicacaoResumo';
@@ -364,7 +364,7 @@ export default {
         Carregando,
         UploadFile,
         ValorDisponivel,
-        FormReadequacao,
+        FormJustificativa,
         SaldoAplicacaoResumo,
         ExcluirButton,
         ResizePanel,

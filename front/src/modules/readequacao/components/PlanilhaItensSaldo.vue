@@ -57,7 +57,7 @@
                         <v-divider/>
                         <v-card-text>
                             <div
-                                v-if="isItemDisponivelEdicao(props.item)"
+                                v-if="isItemDisponivelEdicao(props.item) && !readonly"
                             >
                                 <v-card>
                                     <visualizar-item-planilha
