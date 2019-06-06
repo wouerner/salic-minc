@@ -848,6 +848,15 @@ class Readequacao implements IServicoRestZend
                 'IdPRONAC=?' => $idPronac,
                 'idPlanilhaAprovacao=?' => $idPlanilhaAprovacao
             ])->current();
+
+
+        $qtd = substr_count($parametros['ValorUnitario'], '.');
+        $valorUnitario = preg_replace(
+            '/\./',
+            '',
+            $parametros['ValorUnitario'],
+            $qtd - 1
+        );
         
         $editarItem->idUnidade = $parametros['idUnidade'];
         $editarItem->qtItem = $parametros['Quantidade'];
