@@ -65,7 +65,6 @@ class Readequacao_Model_TbReadequacaoMapper extends MinC_Db_Mapper
             } else if (isset($arrData['dsSolicitacao'])) {
                 $dsSolicitacao = $arrData['dsSolicitacao'];
                 if (mb_detect_encoding($dsSolicitacao)  == 'UTF-8') {
-                    $dsSolicitacao = str_replace('–', '&ndash;', $dsSolicitacao);
                     $dsSolicitacao = utf8_decode($dsSolicitacao);
                 }
                 $objReadequacao->setDsSolicitacao($dsSolicitacao);
