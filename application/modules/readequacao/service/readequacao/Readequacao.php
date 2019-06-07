@@ -864,7 +864,7 @@ class Readequacao implements IServicoRestZend
         $editarItem->vlUnitario = $parametros['ValorUnitario'];
         $editarItem->qtDias = $parametros['QtdeDias'];
         $editarItem->nrFonteRecurso = $parametros['idFonte'];
-        $editarItem->dsJustificativa = utf8_decode($parametros['Justificativa']);
+        $editarItem->dsJustificativa = utf8_decode($parametros['dsJustificativa']);
         $editarItem->idAgente = $idAgente;
         
         if ($editarItem->tpAcao == 'N') {
