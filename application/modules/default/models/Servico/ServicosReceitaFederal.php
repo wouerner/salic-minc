@@ -121,7 +121,7 @@ class ServicosReceitaFederal
      * @param bool $forcarBuscaReceita - Define se deve ir na Base da receita federal, mesmo ja existindo o CPF na base do MINC
      * @return ArrayObject|mixed - Resultado da consulta em Json ou ArrayObject
      */
-    public function consultarPessoaFisicaReceitaFederal($cpf, $forcarBuscaReceita, $returnJSON = false)
+    public function consultarPessoaFisicaReceitaFederal($cpf, $forcarBuscaReceita = null, $returnJSON = false)
     {
         if (11 == strlen($cpf) && !validaCPF($cpf)) {
             throw new InvalidArgumentException("CPF/CNPJ inv&aacute;lido");

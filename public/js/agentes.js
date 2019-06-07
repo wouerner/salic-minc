@@ -107,7 +107,7 @@ function validaAgenteNovo()
     uf              = $3('#uf').val();
     cidade          = $3('#cidade').val();
     tipoEndereco    = $3('#tipoEndereco').val();
-    tipoLogradouro  = $3("#tipoLogradouro").val();
+    tipoLogradouro  = $3('#tipoLogradouro').find(':selected').val();
     logradouro      = $3('#logradouro').val();
     numero          = $3('#numero').val();
     complemento     = $3('#complemento').val();
@@ -194,16 +194,19 @@ function validaAgenteNovo()
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione o tipo de logradouro!", "tipoLogradouro");
         exibirMsgErro('tipoLogradouro','erroTipoLogradouro');
+        return;
     }
     else if ((numero == '' || numero == null))
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, preencha o campo n&uacute;mero!", "numero");
         exibirMsgErro('numero','erroNumero');
+        return;
     }
     else if ((bairro == ' ' || bairro == '' || bairro == null))
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, preencha o campo bairro!", "bairro");
         exibirMsgErro('bairro','erroBairro');
+        return;
     }
 
     // valida&ccedil;&atilde;o para telefones
