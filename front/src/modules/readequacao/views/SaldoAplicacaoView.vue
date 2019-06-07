@@ -145,7 +145,6 @@
                                                         class="mt-1"
                                                         @arquivo-anexado="atualizarArquivo($event)"
                                                         @arquivo-removido="removerArquivo()"
-                                                        @arquivo-tipo-invalido="arquivoTipoInvalido($event)"
                                                     />
                                                 </v-card-actions>
                                             </v-card>
@@ -328,9 +327,6 @@
                 </v-layout>
             </v-flex>
         </v-layout>
-        <mensagem
-            :mensagem="mensagem"
-        />
     </v-container>
 </template>
 <script>
@@ -339,7 +335,6 @@ import { mapActions, mapGetters } from 'vuex';
 import { utils } from '@/mixins/utils';
 import Const from '../const';
 import SalicMensagemErro from '@/components/SalicMensagemErro';
-import Mensagem from '../components/Mensagem';
 import FinalizarButton from '../components/FinalizarButton';
 import validarFormulario from '../mixins/validarFormulario';
 import verificarPerfil from '../mixins/verificarPerfil';
@@ -359,7 +354,6 @@ export default {
     name: 'SaldoAplicacaoView',
     components: {
         SalicMensagemErro,
-        Mensagem,
         FinalizarButton,
         Carregando,
         UploadFile,
@@ -388,13 +382,6 @@ export default {
                 documento: {},
                 idDocumento: '',
                 dsAvaliacao: '',
-            },
-            mensagem: {
-                ativa: false,
-                timeout: 2300,
-                conteudo: '',
-                cor: '',
-                finaliza: false,
             },
             minChar: {
                 solicitacao: 3,
@@ -503,15 +490,6 @@ export default {
                 }
             },
         },
-        mensagem: {
-            handler(mensagem) {
-                if (mensagem.ativa === false
-                    && mensagem.finaliza === true) {
-                    this.dialog = false;
-                }
-            },
-            deep: true,
-        },
         loaded: {
             handler(value) {
                 const fullyLoaded = _.keys(value).every(i => value[i]);
@@ -542,6 +520,8 @@ export default {
             obterPlanilha: 'readequacao/obterPlanilha',
             obterPlanilhaAtiva: 'readequacao/obterPlanilhaAtiva',
             obterUnidadesPlanilha: 'readequacao/obterUnidadesPlanilha',
+            mensagemSucesso: 'noticias/mensagemSucesso',
+            mensagemErro: 'noticias/mensagemErro',
         }),
         obterDadosIniciais() {
             this.buscarProjetoCompleto(this.idPronac);
@@ -574,38 +554,25 @@ export default {
         },
         salvarReadequacao() {
             this.updateReadequacao(this.readequacaoEditada).then(() => {
-                this.mensagem.conteudo = 'Readequação salva com sucesso!';
-                this.mensagem.timeout = 2300;
-                this.mensagem.ativa = true;
-                this.mensagem.cor = 'green darken-1';
+                this.mensagemSucesso('Readequação atualizada');
             });
         },
         atualizarArquivo(arquivo) {
             this.readequacaoEditada.documento = arquivo;
             this.updateReadequacao(this.readequacaoEditada).then(() => {
-                this.mensagem.conteudo = 'Arquivo enviado!';
-                this.mensagem.ativa = true;
-                this.mensagem.finaliza = false;
-                this.mensagem.cor = 'green darken-1';
+                this.mensagemSucesso('Arquivo adicionado');
             });
         },
         removerArquivo() {
             this.readequacaoEditada.documento = '';
             this.readequacaoEditada.idDocumento = '';
             this.updateReadequacao(this.readequacaoEditada).then(() => {
-                this.mensagem.conteudo = 'Arquivo removido!';
-                this.mensagem.ativa = true;
-                this.mensagem.finaliza = false;
-                this.mensagem.cor = 'green darken-1';
+                this.mensagemSucesso('Arquivo removido!');
             });
         },
         arquivoTipoInvalido(payload) {
             const tiposValidos = payload.formatosAceitos.join(', ');
-            this.mensagem.conteudo = `Tipo fornecido (${payload.formatoEnviado}) não é aceito. Tipos aceitos: ${tiposValidos}`;
-            this.mensagem.timeout = 5000;
-            this.mensagem.ativa = true;
-            this.mensagem.finaliza = false;
-            this.mensagem.cor = 'red lighten-1';
+            this.mensagemErro(`Tipo fornecido (${payload.formatoEnviado}) não é aceito. Tipos aceitos: ${tiposValidos}`);
         },
         atualizarCampo(valor, campo) {
             this.readequacaoEditada[campo] = valor;

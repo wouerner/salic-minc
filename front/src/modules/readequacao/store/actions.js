@@ -100,10 +100,22 @@ export const obterReadequacao = ({ commit }, data) => {
     }
 };
 
-export const updateReadequacao = async ({ commit }, params) => {
+export const updateReadequacao = async ({ commit, dispatch }, params) => {
     const resultado = await readequacaoHelperAPI.updateReadequacao(params)
         .then((response) => {
             commit(types.UPDATE_READEQUACAO, response.data.data.items);
+            dispatch(
+                'noticias/mensagemSucesso',
+                response.data.data.items.message,
+                { root: true },
+            );
+        })
+        .catch((e) => {
+            dispatch(
+                'noticias/mensagemErro',
+                e.response.error.message,
+                { root: true },
+            );
         })
     return resultado;
 };
@@ -149,8 +161,20 @@ export const inserirReadequacao = async ({ commit, dispatch }, params) => {
                 idPronac: params.idPronac,
                 idTipoReadequacao: params.idTipoReadequacao,
             });
+            dispatch(
+                'noticias/mensagemSucesso',
+                response.data.data.items.message,
+                { root: true },
+            );
             return data;
-        });
+        })
+        .catch((e) => {
+            dispatch(
+                'noticias/mensagemErro',
+                e.response.error.message,
+                { root: true },
+            );
+        })
     return resultado;
 };
 
@@ -215,7 +239,7 @@ export const atualizarItemPlanilha = async ({ commit, dispatch }, params) => {
         .catch((e) => {
             dispatch(
                 'noticias/mensagemErro',
-                e.response.data.data.items.message,
+                e.response.error.message,
                 { root: true },
             );
         })

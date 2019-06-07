@@ -94,12 +94,10 @@ export default {
         checkFormat(file) {
             if (!this.formatosAceitos.find(i => i === file.type)) {
                 const payload = {
-                    mensagem: 'Tipo não aceito',
                     formatoEnviado: file.type,
                     formatosAceitos: this.formatosAceitos,
                 };
-                this.$emit('arquivo-tipo-invalido', payload);
-                return false;
+                this.mensagemErro(`Tipo fornecido (${file.type}) não é aceito. Tipos aceitos: ${this.formatosAceitos}`);
             }
             return true;
         },
@@ -111,6 +109,7 @@ export default {
                     const payload = this.$refs.file.files[0];
                     this.$emit('arquivo-anexado', payload);
                 } else {
+                    this.mensagemSucesso('Arquivo removido');
                     this.$emit('arquivo-removido');
                 }
             }
