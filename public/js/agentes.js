@@ -104,9 +104,9 @@ function validaAgenteNovo()
     grupologado      = $3("#grupologado").val();
 
     cep             = $3('#cep').val();
-    uf              = $3('#uf').val();
-    cidade          = $3('#cidade').val();
-    tipoEndereco    = $3('#tipoEndereco').val();
+    uf              = $3('#uf').find(':selected').val();
+    cidade          = $3('#cidade').find(':selected').val();
+    tipoEndereco    = $3('#tipoEndereco').find(':selected').val();
     tipoLogradouro  = $3('#tipoLogradouro').find(':selected').val();
     logradouro      = $3('#logradouro').val();
     numero          = $3('#numero').val();
@@ -184,11 +184,13 @@ function validaAgenteNovo()
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione uma cidade!", "Cidade");
         exibirMsgErro('cidade','erroCidade');
+        return;
     }
     else if ((tipoEndereco == 0 || tipoEndereco == null || tipoEndereco == ' ' ))
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione o tipo de endere&ccedil;o!", "tipoEndereco");
         exibirMsgErro('tipoEndereco','erroTipoEndereco');
+        return;
     }
     else if ((tipoLogradouro == 0 || tipoLogradouro == null || tipoLogradouro == ' ' ))
     {
