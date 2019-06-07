@@ -1,9 +1,12 @@
 <template>
     <v-container grid-list-md>
-        <v-layout row>
+        <v-layout
+            row
+            wrap
+        >
             <v-flex
                 xs12
-                md3
+                md2
             >
                 <v-select
                     v-model="itemEditado.idUnidade"
@@ -16,7 +19,7 @@
             </v-flex>
             <v-flex
                 xs12
-                md1
+                md2
             >
                 <v-text-field
                     v-model="itemEditado.QtdeDias"
@@ -27,7 +30,7 @@
             </v-flex>
             <v-flex
                 xs12
-                md1
+                md2
             >
                 <v-text-field
                     v-model="itemEditado.Quantidade"
@@ -51,15 +54,19 @@
             </v-flex>
             <v-flex
                 xs12
-                md2
+                md12
             >
-                <input-money
-                    ref="ValorUnitario"
-                    :value="item.vlUnitario"
-                    :rules="[rules.required, rules.nonZero]"
-                    class="title"
-                    @ev="atualizarCampo($event, 'ValorUnitario')"
-                />
+                <label class="grey--text text--darken-1 caption">Valor unitário</label>
+                <div class="d-inline-block subheading">
+                    R$
+                    <input-money
+                        ref="ValorUnitario"
+                        :value="item.vlUnitario"
+                        :rules="[rules.required, rules.nonZero]"
+                        class="subheading"
+                        @ev="atualizarCampo($event, 'ValorUnitario')"
+                    />
+                </div>
             </v-flex>
         </v-layout>
         <v-layout
@@ -74,6 +81,8 @@
                     v-model="itemEditado.dsJustificativa"
                     :placeholder="'Justificativa do item'"
                     :min-char="minChar.justificativa"
+                    label="Justificativa"
+                    class="regular"
                     @change="atualizarCampo($event, 'dsJustificativa')"
                 />
             </v-flex>
@@ -83,7 +92,7 @@
         >
             <v-flex
                 xs12
-                text-xs-right
+                text-xs-left
             >
                 <v-btn
                     color="green lighten-1"
@@ -107,9 +116,6 @@
                 </v-btn>
             </v-flex>
         </v-layout>
-        <mensagem
-            :mensagem="mensagem"
-        />
     </v-container>
 </template>
 
@@ -117,13 +123,11 @@
 import { mapGetters, mapActions } from 'vuex';
 import { utils } from '@/mixins/utils';
 import InputMoney from '@/components/InputMoney';
-import Mensagem from '../components/Mensagem';
 
 export default {
     name: 'EditarItemPlanilha',
     components: {
         InputMoney,
-        Mensagem,
     },
     mixins: [
         utils,
@@ -169,13 +173,6 @@ export default {
                     v => (v && v.length >= this.minChar.justificativa) || `Justificativa ter no mínimo ${this.minChar.justificativa} caracteres.`,
                 ],
             },
-            mensagem: {
-                ativa: false,
-                timeout: 2300,
-                conteudo: '',
-                cor: '',
-                finaliza: false,
-            },
         };
     },
     computed: {
@@ -210,13 +207,8 @@ export default {
         salvarItem() {
             this.atualizarItemPlanilha(this.itemEditado)
                 .then((response) => {
-                    if (response.success === 'false') {
-                        this.mensagem.ativa = true;
-                        this.mensagem.conteudo = '';
-                        this.mensagem.cor = 'red lighten-1';
-                    }
+                    this.$emit('fechar-item');
                 });
-            this.$emit('fechar-item');
         },
         cancelarEdicao() {
             this.$emit('fechar-item');

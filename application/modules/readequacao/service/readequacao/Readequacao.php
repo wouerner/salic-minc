@@ -831,79 +831,81 @@ class Readequacao implements IServicoRestZend
         $idPronac = $parametros['idPronac'];
         $idPlanilhaAprovacao = $parametros['idPlanilhaAprovacao'];
         $idReadequacao = $parametros['idReadequacao'];
-        
-        $auth = \Zend_Auth::getInstance();
-        $cpf = isset($auth->getIdentity()->Cpf) ? $auth->getIdentity()->Cpf : $auth->getIdentity()->usu_identificacao;
 
-        $tblAgente = new \Agente_Model_DbTable_Agentes();
-        $rsAgente = $tblAgente->buscar(['CNPJCPF = ?' => $cpf]);
-        $idAgente = 0;
-        if ($rsAgente->count() > 0) {
-            $idAgente = $rsAgente[0]->idAgente;
-        }
+        try {
         
-        $tbPlanilhaAprovacao = new \tbPlanilhaAprovacao();
-        $editarItem = $tbPlanilhaAprovacao->buscar(
-            [
-                'IdPRONAC=?' => $idPronac,
-                'idPlanilhaAprovacao=?' => $idPlanilhaAprovacao
-            ])->current();
+            $auth = \Zend_Auth::getInstance();
+            $cpf = isset($auth->getIdentity()->Cpf) ? $auth->getIdentity()->Cpf : $auth->getIdentity()->usu_identificacao;
 
-
-        $qtd = substr_count($parametros['ValorUnitario'], '.');
-        $valorUnitario = preg_replace(
-            '/\./',
-            '',
-            $parametros['ValorUnitario'],
-            $qtd - 1
-        );
-        
-        $editarItem->idUnidade = $parametros['idUnidade'];
-        $editarItem->qtItem = $parametros['Quantidade'];
-        $editarItem->nrOcorrencia = $parametros['Ocorrencia'];
-        $editarItem->vlUnitario = $parametros['ValorUnitario'];
-        $editarItem->qtDias = $parametros['QtdeDias'];
-        $editarItem->nrFonteRecurso = $parametros['idFonte'];
-        $editarItem->dsJustificativa = utf8_decode($parametros['dsJustificativa']);
-        $editarItem->idAgente = $idAgente;
-        
-        if ($editarItem->tpAcao == 'N') {
-            $editarItem->tpAcao = 'A';
-        }
-        
-        $editarItem->save();
-        
-        $projetosDbTable = new \Projeto_Model_DbTable_Projetos();
-        if ($projetosDbTable->possuiCalculoAutomaticoCustosVinculados($idPronac)) {
-            $atualizarCustosVinculados = $this->atualizarCustosVinculados(
-                $idPronac,
-                $idReadequacao
-            );
-            
-            if ($atualizarCustosVinculados['erro']) {
-                $this->reverterAlteracaoItem(
-                    $idPronac,
-                    $idReadequacao,
-                    $editarItem->idPlanilhaItem
-                );
-
-                $data = [
-                    'message' => $atualizarCustosVinculados['mensagem'],
-                    'success' => 'false',
-                ];
-            } else {
-                $data = [
-                    'message' => 'Item atualizado',
-                    'success' => 'true',
-                ];
+            $tblAgente = new \Agente_Model_DbTable_Agentes();
+            $rsAgente = $tblAgente->buscar(['CNPJCPF = ?' => $cpf]);
+            $idAgente = 0;
+            if ($rsAgente->count() > 0) {
+                $idAgente = $rsAgente[0]->idAgente;
             }
-        } else {
+        
+            $tbPlanilhaAprovacao = new \tbPlanilhaAprovacao();
+            $editarItem = $tbPlanilhaAprovacao->buscar(
+                [
+                    'IdPRONAC=?' => $idPronac,
+                    'idPlanilhaAprovacao=?' => $idPlanilhaAprovacao
+                ])->current();
+
+
+            $qtd = substr_count($parametros['ValorUnitario'], '.');
+            $valorUnitario = preg_replace(
+                '/\./',
+                '',
+                $parametros['ValorUnitario'],
+                $qtd - 1
+            );
+        
+            $editarItem->idUnidade = $parametros['idUnidade'];
+            $editarItem->qtItem = $parametros['Quantidade'];
+            $editarItem->nrOcorrencia = $parametros['Ocorrencia'];
+            $editarItem->vlUnitario = $parametros['ValorUnitario'];
+            $editarItem->qtDias = $parametros['QtdeDias'];
+            $editarItem->nrFonteRecurso = $parametros['idFonte'];
+            $editarItem->dsJustificativa = utf8_decode($parametros['dsJustificativa']);
+            $editarItem->idAgente = $idAgente;
+        
+            if ($editarItem->tpAcao == 'N') {
+                $editarItem->tpAcao = 'A';
+            }
+        
+            $editarItem->save();
+        
+            $projetosDbTable = new \Projeto_Model_DbTable_Projetos();
+            if ($projetosDbTable->possuiCalculoAutomaticoCustosVinculados($idPronac)) {
+                $atualizarCustosVinculados = $this->atualizarCustosVinculados(
+                    $idPronac,
+                    $idReadequacao
+                );
+            
+                if ($atualizarCustosVinculados['erro']) {
+                    $this->reverterAlteracaoItem(
+                        $idPronac,
+                        $idReadequacao,
+                        $editarItem->idPlanilhaItem
+                    );
+                    
+                    throw new Exception($atualizarCustosVinculados['mensagem']);
+                } else {
+                    $data = [
+                        'message' => 'Item atualizado',
+                        'success' => 'true',
+                    ];
+                }
+            } else {
                 $data = [
                     'msg' => 'Item atualizado',
                     'success' => 'true',
                 ];
+            }
+            return $data;
+        } catch(Exception $e) {
+            throw new Exception($atualizarCustosVinculados['mensagem'] . ' / ' . $e);
         }
-        return $data;
     }
 
     public function atualizarCustosVinculados(

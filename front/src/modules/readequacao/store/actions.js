@@ -104,7 +104,7 @@ export const updateReadequacao = async ({ commit }, params) => {
     const resultado = await readequacaoHelperAPI.updateReadequacao(params)
         .then((response) => {
             commit(types.UPDATE_READEQUACAO, response.data.data.items);
-        });
+        })
     return resultado;
 };
 
@@ -205,7 +205,19 @@ export const atualizarItemPlanilha = async ({ commit, dispatch }, params) => {
                 idPronac: params.idPronac,
                 idTipoReadequacao: params.idTipoReadequacao,
             });
+            dispatch(
+                'noticias/mensagemSucesso',
+                response.data.data.items.message,
+                { root: true },
+            );
             return response.data.data.items;
-        });
+        })
+        .catch((e) => {
+            dispatch(
+                'noticias/mensagemErro',
+                e.response.data.data.items.message,
+                { root: true },
+            );
+        })
     return resultado;
 };
