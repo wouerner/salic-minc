@@ -535,7 +535,8 @@ class Readequacao implements IServicoRestZend
         
         $weirdChars = [
             '–' => '&ndash;',
-            ';' => '&#894;'
+            ';' => '&#894;',
+            '’' => '&#8217;',
         ];
         foreach ($weirdChars as $char => $substitution) {
             $texto = str_replace($char, $substitution, $texto);
