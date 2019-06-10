@@ -40,8 +40,8 @@
                     <v-card-actions>
                         <v-text-field
                             :label="campo.titulo"
-                            :value="dadosReadequacaoEmEdicao.dsSolicitacao"
                             :rules="[rules.required, rules.solicitacao]"
+                            v-model="dadosReadequacaoEmEdicao.dsSolicitacao"
                             counter
                             @input="updateCampo"
                         />
@@ -52,6 +52,8 @@
     </v-container>
 </template>
 <script>
+import Const from '../const';
+
 export default {
     name: 'TemplateInput',
     props: {
@@ -89,11 +91,6 @@ export default {
             },
         };
     },
-    computed: {
-        campoTexto() {
-            return this.dadosReadequacao.dsSolicitacao;
-        },
-    },
     watch: {
         campo() {
             if (this.campo.idReadequacao !== 0) {
@@ -107,9 +104,22 @@ export default {
         }
     },
     methods: {
+        verificarCampo() {
+            if (this.dadosReadequacao.idTipoReadequacao ===  Const.TIPO_READEQUACAO_ALTERACAO_PROPONENTE) {
+                this.$nextTick(() => {
+                    this.dadosReadequacaoEmEdicao.dsSolicitacao = this.removeLetras(this.dadosReadequacaoEmEdicao.dsSolicitacao);
+                });
+            }
+        },
+        removeLetras(valor) {
+            const re = /([^0-9]*)/g;
+            valor = valor.replace(re, '');
+            return valor;
+        },
         updateCampo(e) {
-            this.$emit('dados-update', e);
-            this.atualizarContador(e.length);
+            this.verificarCampo();
+            this.$emit('dados-update', this.dadosReadequacaoEmEdicao.dsSolicitacao);
+            this.atualizarContador(this.dadosReadequacaoEmEdicao.dsSolicitacao.length);
         },
         atualizarContador(valor) {
             this.$emit('editor-texto-counter', valor);
