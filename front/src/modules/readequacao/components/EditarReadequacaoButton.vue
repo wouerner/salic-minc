@@ -339,6 +339,16 @@ export default {
             },
             deep: true,
         },
+        dadosReadequacao: {
+            handler(value) {
+               if (value.idPronac && value.idTipoReadequacao) {
+                    if (this.bindClick === this.dadosReadequacao.idReadequacao) {
+                        this.dialog = true;
+                   }
+                }
+            },
+            deep: true,
+        },
         dialog() {
             if (this.dialog === false
                 && this.recarregarReadequacoes === true) {
@@ -363,7 +373,7 @@ export default {
                 this.inicializarReadequacaoEditada();
                 this.obterReadequacao(this.dadosReadequacao);
                 const key = `key_${this.dadosReadequacao.idTipoReadequacao}`;
-                if (typeof this.campoAtual[key].dsCampo === 'undefined') {
+                if (typeof this.campoAtual[key] === 'undefined') {
                     this.obterCampoAtual({
                         idPronac: this.dadosReadequacao.idPronac,
                         idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
@@ -445,11 +455,16 @@ export default {
         },
         validar() {
             if (typeof this.dadosReadequacao.idTipoReadequacao !== 'undefined') {
+                let campo = '';
+                const key = `key_${this.dadosReadequacao.idTipoReadequacao}`;
+                if (typeof this.campoAtual[key] !== 'undefined') {
+                    campo = this.campoAtual[key].dsCampo;
+                }
                 this.validacao = this.validarFormulario(
                     this.readequacaoEditada,
                     this.contador,
                     this.minChar,
-                    this.campoAtual[`key_${this.dadosReadequacao.idTipoReadequacao}`].dsCampo,
+                    campo,
                 );
             }
         },
