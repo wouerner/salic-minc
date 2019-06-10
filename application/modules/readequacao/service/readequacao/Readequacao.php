@@ -473,7 +473,7 @@ class Readequacao implements IServicoRestZend
         if (isset($parametros['idReadequacao'])){
             $idReadequacao = $parametros['idReadequacao'];
             $readequacaoModel = new \Readequacao_Model_DbTable_TbReadequacao();
-            $readequacao = $readequacaoModel->buscarReadequacao($idReadequacao)->current()->toArray();
+            $readequacao = $readequacaoModel->buscarReadequacao($idReadequacao)->current();
 
             $documento = new DocumentoService(
                 $this->request,
@@ -557,7 +557,8 @@ class Readequacao implements IServicoRestZend
                 $parametros['dsSolicitacao'] = preg_replace('/[^0-9]/', '', $parametros['dsSolicitacao']);
             }
         } else if ($parametros['idTipoReadequacao'] == \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_AGENCIA_BANCARIA) {
-            $parametros['dsSolicitacao'] = preg_replace('/[^0-9\-x]/', '', $parametros['dsSolicitacao']);
+            $parametros['dsSolicitacao'] = strtoupper($parametros['dsSolicitacao']);
+            $parametros['dsSolicitacao'] = preg_replace('/[^0-9\-X]/', '', $parametros['dsSolicitacao']);
         } else {
             $parametros['dsSolicitacao'] = $this->converteTextoEmHtml($parametros['dsSolicitacao']);
         }

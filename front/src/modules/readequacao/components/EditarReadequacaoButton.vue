@@ -142,7 +142,7 @@
                                         color="red lighten-2"
                                         dark
                                         @click="dialog = false"
-                                    >Cancelar
+                                    >Fechar
                                         <v-icon
                                             right
                                             dark
