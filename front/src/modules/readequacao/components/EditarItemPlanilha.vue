@@ -1,6 +1,16 @@
 <template>
     <v-container grid-list-md>
+        <v-flex
+            v-if="gravando"
+            xs12
+            text-xs-center
+        >
+            <carregando
+                :text="'Gravando alterações no item...'"
+            />
+        </v-flex>
         <v-layout
+            v-if="!gravando"
             row
             wrap
         >
@@ -68,12 +78,6 @@
                     />
                 </div>
             </v-flex>
-        </v-layout>
-        <v-layout
-            row
-            wrap
-            justify-end
-        >
             <v-flex
                 xs12
                 md12>
@@ -86,10 +90,6 @@
                     @change="atualizarCampo($event, 'dsJustificativa')"
                 />
             </v-flex>
-        </v-layout>
-        <v-layout
-            column
-        >
             <v-flex
                 xs12
                 text-xs-left
@@ -123,10 +123,12 @@
 import { mapGetters, mapActions } from 'vuex';
 import { utils } from '@/mixins/utils';
 import InputMoney from '@/components/InputMoney';
+import Carregando from '@/components/CarregandoVuetify';
 
 export default {
     name: 'EditarItemPlanilha',
     components: {
+        Carregando,
         InputMoney,
     },
     mixins: [
@@ -173,6 +175,7 @@ export default {
                     v => (v && v.length >= this.minChar.justificativa) || `Justificativa ter no mínimo ${this.minChar.justificativa} caracteres.`,
                 ],
             },
+            gravando: false,
         };
     },
     computed: {
@@ -205,8 +208,10 @@ export default {
             };
         },
         salvarItem() {
+            this.gravando = true;
             this.atualizarItemPlanilha(this.itemEditado)
-                .then((response) => {
+                .then(() => {
+                    this.gravando = false;
                     this.$emit('fechar-item');
                 });
         },

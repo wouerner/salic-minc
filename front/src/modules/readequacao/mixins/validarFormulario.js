@@ -17,6 +17,7 @@ export default {
             ) {
                 if (typeof readequacao.idTipoReadequacao !== 'undefined') {
                     if (readequacao.idTipoReadequacao === Const.TIPO_READEQUACAO_PERIODO_EXECUCAO) {
+                        /* eslint-disable no-param-reassign */
                         if (campo.includes('/')) {
                             const [day, month, year] = campo.split('/');
                             campo = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;

@@ -12,7 +12,8 @@ export const mensagemSucesso = ({ dispatch }, msg) => {
             ativo: true,
             color: 'success',
             text: msg,
-        });
+        },
+    );
 };
 
 export const mensagemErro = ({ dispatch }, msg) => {
@@ -22,5 +23,6 @@ export const mensagemErro = ({ dispatch }, msg) => {
             ativo: true,
             color: 'error',
             text: msg,
-        });
+        },
+    );
 };

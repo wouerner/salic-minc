@@ -84,7 +84,7 @@
                                     @fechar-item="props.expanded = false"
                                 />
                             </div>
-                            <div else>
+                            <div v-else>
                                 <visualizar-item-planilha
                                     :item="props.item"
                                 />
@@ -157,6 +157,7 @@ export default {
             if (!this.readonly) {
                 return this.obterClasseItem(row);
             }
+            return '';
         },
     },
 };

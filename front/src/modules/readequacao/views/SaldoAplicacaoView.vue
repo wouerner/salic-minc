@@ -423,7 +423,13 @@ export default {
             sizePanel: 49.8,
             opcoesDeVisualizacao: [0],
             planilhaSaldo: [],
-            agrupamentos: ['FonteRecurso', 'Produto', 'Etapa', 'UF', 'Cidade', 'Etapa'],
+            agrupamentos: [
+                'FonteRecurso',
+                'Produto',
+                'Etapa',
+                'UF',
+                'Municipio',
+            ],
             currentStep: 1,
         };
     },

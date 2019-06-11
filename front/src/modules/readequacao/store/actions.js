@@ -116,7 +116,7 @@ export const updateReadequacao = async ({ commit, dispatch }, params) => {
                 e.response.error.message,
                 { root: true },
             );
-        })
+        });
     return resultado;
 };
 
@@ -174,7 +174,7 @@ export const inserirReadequacao = async ({ commit, dispatch }, params) => {
                 e.response.error.message,
                 { root: true },
             );
-        })
+        });
     return resultado;
 };
 
@@ -242,6 +242,6 @@ export const atualizarItemPlanilha = async ({ commit, dispatch }, params) => {
                 e.response.error.message,
                 { root: true },
             );
-        })
+        });
     return resultado;
 };
