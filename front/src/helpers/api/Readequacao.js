@@ -104,3 +104,8 @@ export const atualizarItemPlanilha = (params) => {
     const path = '/readequacao/item-planilha';
     return api.postRequest(path, buildData(params), params.idReadequacao);
 };
+
+export const calcularResumoPlanilha = (params) => {
+    const path = '/readequacao/calcular-resumo-planilha';
+    return api.getRequest(path + parseQueryParams(params));
+};

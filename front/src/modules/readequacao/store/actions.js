@@ -234,6 +234,13 @@ export const atualizarItemPlanilha = async ({ commit, dispatch }, params) => {
                 response.data.data.items.message,
                 { root: true },
             );
+            dispatch(
+                'calcularResumoPlanilha',
+                {
+                    idPronac: params.idPronac,
+                    idTipoReadequacao: params.idTipoReadequacao,
+                },
+            );
             return response.data.data.items;
         })
         .catch((e) => {
@@ -244,4 +251,11 @@ export const atualizarItemPlanilha = async ({ commit, dispatch }, params) => {
             );
         });
     return resultado;
+};
+
+export const calcularResumoPlanilha = ({ commit }, params) => {
+    readequacaoHelperAPI.calcularResumoPlanilha(params)
+        .then((response) => {
+            commit(types.SET_RESUMO_PLANILHA, response.data.data.items);
+        });
 };

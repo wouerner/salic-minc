@@ -144,7 +144,7 @@ export default {
                 { text: 'Qtde', align: 'center', value: 'Quantidade' },
                 { text: 'Ocor.', align: 'center', value: 'Ocorrencia' },
                 { text: 'Vl. Unitário', align: 'right', value: 'vlUnitario' },
-                { text: 'Vl. Aprovado', align: 'right', value: 'vlAprovado' },
+                { text: 'Vl. Total', align: 'right', value: 'vlAprovado' },
                 { text: 'Vl. Comprovado', align: 'right', value: 'vlComprovado' },
                 { text: 'Justificativa', align: 'right', value: 'dsJustificativa' },
             ],

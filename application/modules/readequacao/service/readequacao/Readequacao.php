@@ -1005,5 +1005,26 @@ class Readequacao implements IServicoRestZend
         $itemAlterado->nrOcorrencia = $itemOriginal->nrOcorrencia;
         $itemAlterado->save();
     }
-}
     
+    public function calcularResumoPlanilha()
+    {
+        $parametros = $this->request->getParams();
+        
+        $idPronac = $parametros['idPronac'];
+        $idTipoReadequacao = $parametros['idTipoReadequacao'];
+
+        $tbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
+        $valorEntrePlanilhas = $tbReadequacao->carregarValorEntrePlanilhas(
+            $idPronac,
+            $idTipoReadequacao
+        );
+
+        if (empty($valorEntrePlanilhas)) {
+            $errorMessage = "Não foi possível calcular a diferença entre planilhas.";
+            throw new \Exception($errorMessage);
+        }
+
+        return $valorEntrePlanilhas;
+    }
+}
+

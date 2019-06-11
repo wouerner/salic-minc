@@ -11,3 +11,4 @@ export const getPlanilha = state => state.planilha;
 export const getPlanilhaAtiva = state => state.planilhaAtiva;
 export const getUnidadesPlanilha = state => state.unidadesPlanilha;
 export const itemPlanilhaEdicao = state => state.itemPlanilhaEdicao;
+export const getResumoPlanilha = state => state.resumoPlanilha;

@@ -14,6 +14,7 @@ export const state = {
     planilhaAtiva: {},
     unidadesPlanilha: {},
     itemPlanilhaEdicao: {},
+    resumoPlanilha: {},
 };
 
 export const mutations = {
@@ -94,4 +95,10 @@ export const mutations = {
     [types.SET_READEQUACOES_PROPONENTE](state, novaReadequacao) {
         state.readequacoesProponente.items.unshift(novaReadequacao);
     },
-};
+    [types.SET_RESUMO_PLANILHA](state, data) {
+        state.resumoPlanilha = data;
+    },
+    [types.GET_RESUMO_PLANILHA](state, data) {
+        state.resumoPlanilha = data;
+    },
+}

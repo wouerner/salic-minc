@@ -1730,9 +1730,14 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
                                 Proposta_Model_Verificacao::INCENTIVO_FISCAL_FEDERAL
                             ]
         )->current();
-
+        
+        $readequacao = $this->buscar(['idReadequacao = ?' => $idReadequacao])->current();
+        
         $retorno = [];
-
+        $retorno['saldoDeclarado'] = floatval($readequacao['dsSolicitacao']);
+        $retorno['saldoValorUtilizado'] = $PlanilhaReadequada['Total'] -  $PlanilhaAtiva['Total'];
+        $retorno['valorTotalDisponivelParaUso'] = $retorno['saldoDeclarado'] - $retorno['saldoValorUtilizado'];
+        
         if ($PlanilhaReadequada['Total'] > 0) {
             if ($PlanilhaAtiva['Total'] == $PlanilhaReadequada['Total']) {
                 $retorno['statusPlanilha'] = 'neutro';

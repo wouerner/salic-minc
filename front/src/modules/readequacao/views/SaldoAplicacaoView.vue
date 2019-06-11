@@ -203,9 +203,9 @@
                                         flat
                                     >
                                         <saldo-aplicacao-resumo
-                                            :saldo-declarado="dadosReadequacao.dsSolicitacao"
-                                            :saldo-disponivel="saldoDisponivel"
-                                            :saldo-utilizado="saldoUtilizado"
+                                            :saldo-declarado="getResumoPlanilha.saldoDeclarado"
+                                            :saldo-disponivel="getResumoPlanilha.valorTotalDisponivelParaUso"
+                                            :saldo-utilizado="getResumoPlanilha.saldoValorUtilizado"
                                         />
                                         <s-planilha-tipos-visualizacao-buttons v-model="opcoesDeVisualizacao" />
                                         <resize-panel
@@ -303,9 +303,9 @@
                                         xs-12
                                     >
                                         <saldo-aplicacao-resumo
-                                            :saldo-declarado="dadosReadequacao.dsSolicitacao"
-                                            :saldo-disponivel="saldoDisponivel"
-                                            :saldo-utilizado="saldoUtilizado"
+                                            :saldo-declarado="getResumoPlanilha.saldoDeclarado"
+                                            :saldo-disponivel="getResumoPlanilha.valorTotalDisponivelParaUso"
+                                            :saldo-utilizado="getResumoPlanilha.saldoValorUtilizado"
                                         />
                                         <div class="text-xs-right">
                                             <finalizar-button
@@ -315,6 +315,7 @@
                                                 :perfis-aceitos="getPerfis('proponente')"
                                                 :perfil="perfil"
                                                 :min-char="minChar"
+                                                :disabled="finalizarDisponivel"
                                                 class="text-xs-center"
                                                 dark
                                             />
@@ -431,6 +432,7 @@ export default {
                 'Municipio',
             ],
             currentStep: 1,
+            finalizarDisponivel: false,
         };
     },
     computed: {
@@ -440,6 +442,7 @@ export default {
             getUsuario: 'autenticacao/getUsuario',
             getPlanilha: 'readequacao/getPlanilha',
             getPlanilhaAtiva: 'readequacao/getPlanilhaAtiva',
+            getResumoPlanilha: 'readequacao/getResumoPlanilha',
         }),
         perfilAceito() {
             return this.verificarPerfil(this.perfil, this.perfisAceitos);
@@ -505,6 +508,14 @@ export default {
             },
             deep: true,
         },
+        getResumoPlanilha() {
+            console.log(this.getResumoPlanilha.saldoValorUtilizado + '<' +  this.getResumoPlanilha.saldoDeclarado);
+            if (this.getResumoPlanilha.saldoValorUtilizado < this.getResumoPlanilha.saldoDeclarado) {
+                this.finalizarDisponivel = true;
+            } else {
+                this.finalizarDisponivel = false;
+            }
+        },
     },
     created() {
         if (typeof this.$route.params.idPronac !== 'undefined') {
@@ -526,6 +537,7 @@ export default {
             obterPlanilha: 'readequacao/obterPlanilha',
             obterPlanilhaAtiva: 'readequacao/obterPlanilhaAtiva',
             obterUnidadesPlanilha: 'readequacao/obterUnidadesPlanilha',
+            calcularResumoPlanilha: 'readequacao/calcularResumoPlanilha',
             mensagemSucesso: 'noticias/mensagemSucesso',
             mensagemErro: 'noticias/mensagemErro',
         }),
@@ -553,6 +565,10 @@ export default {
             });
             this.obterPlanilhaAtiva({
                 idPronac: this.dadosReadequacao.idPronac,
+            });
+            this.calcularResumoPlanilha({
+                idPronac: this.dadosReadequacao.idPronac,
+                idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
             });
             this.obterUnidadesPlanilha({
                 idPronac: this.dadosReadequacao.idPronac,

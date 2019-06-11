@@ -50,7 +50,7 @@
                 xs12
                 md4
             >
-                <b>Vl. Comprovado (R$)</b>
+                <b>Vl. Total (R$)</b>
                 <div>{{ item.vlAprovado | filtroFormatarParaReal }}</div>
             </v-flex>
             <v-flex

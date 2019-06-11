@@ -16,6 +16,7 @@ class Readequacao_Bootstrap extends Zend_Application_Module_Bootstrap
                 'readequacao' => [
                     'index',
                     'campo-atual',
+                    'calcular-resumo-planilha',
                     'dados-readequacao',
                     'dados-readequacao-documento',
                     'documento',
