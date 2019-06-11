@@ -46,5 +46,10 @@ export default {
             }
             return (valido.justificativa);
         },
+        removeLetras(valor) {
+            const re = /([^0-9]*)/g;
+            valor = valor.replace(re, '');
+            return valor;
+        },
     },
 };

@@ -36,6 +36,7 @@
                     :value="item.QtdeDias"
                     :rules="[rules.required]"
                     label="Qtd dias"
+                    @change="atualizarCampo(removeLetras($event), 'QtdeDias')"
                 />
             </v-flex>
             <v-flex
@@ -47,6 +48,7 @@
                     :value="item.Quantidade"
                     :rules="[rules.required]"
                     label="Quantidade"
+                    @change="atualizarCampo(removeLetras($event), 'Quantidade')"
                 />
             </v-flex>
             <v-flex
@@ -59,7 +61,7 @@
                     :rules="[rules.required]"
                     required
                     label="Ocorrência"
-                    @change="atualizarCampo($event, 'Ocorrencia')"
+                    @change="atualizarCampo(removeLetras($event), 'Ocorrencia')"
                 />
             </v-flex>
             <v-flex
@@ -122,6 +124,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { utils } from '@/mixins/utils';
+import validarFormulario from '../mixins/validarFormulario';
 import InputMoney from '@/components/InputMoney';
 import Carregando from '@/components/CarregandoVuetify';
 
@@ -133,6 +136,7 @@ export default {
     },
     mixins: [
         utils,
+        validarFormulario,
     ],
     props: {
         item: {
