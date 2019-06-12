@@ -1894,9 +1894,10 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             $novos_valores[0]['msgCPF'] = utf8_encode('invalido');
         } else {
             $agenteServico = new AgenteService();
-            $novos_valores = $agenteServico->agentecadastrado($cpf);
+            $novos_valores = $agenteServico->cadastrarAgente($cpf);
+
         }
-         $this->_helper->json($novos_valores);
+         $this->_helper->json(\TratarArray::utf8EncodeArray($novos_valores));
          die;
     }
 
