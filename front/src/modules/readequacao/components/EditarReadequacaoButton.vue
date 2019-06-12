@@ -421,6 +421,10 @@ export default {
         atualizarArquivo(arquivo) {
             this.uploadActionDone = false;
             this.readequacaoEditada.documento = arquivo;
+            if (this.readequacaoEditada.idReadequacao === 0) {
+                this.readequacaoEditada.idReadequacao = this.dadosReadequacao.idReadequacao;
+                this.readequacaoEditada.idPronac = this.dadosReadequacao.idPronac;
+            }
             this.updateReadequacao(this.readequacaoEditada).then(() => {
                 this.mensagem.conteudo = 'Arquivo enviado!';
                 this.mensagem.ativa = true;
