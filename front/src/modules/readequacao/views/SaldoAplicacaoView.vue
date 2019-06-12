@@ -509,7 +509,6 @@ export default {
             deep: true,
         },
         getResumoPlanilha() {
-            console.log(this.getResumoPlanilha.saldoValorUtilizado + '<' +  this.getResumoPlanilha.saldoDeclarado);
             if (this.getResumoPlanilha.saldoValorUtilizado < this.getResumoPlanilha.saldoDeclarado) {
                 this.finalizarDisponivel = true;
             } else {

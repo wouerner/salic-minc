@@ -2,37 +2,122 @@
     <v-container>
         <v-layout>
             <v-flex
-                class="green lighten-3"
-                xs3
+                xs12
+                sm4
+                md4
             >
-                <h3 class="subheading">
-                    Saldo declarado
-                </h3>
-                <span class="font-weight-bold">
-                    R$ {{ SaldoDeclarado | filtroFormatarParaReal }}
-                </span>
+                <v-card
+                    class="mx-auto mb-2"
+                    max-width="300"
+                >
+                    <v-toolbar
+                        card
+                        dense
+                    >
+                        <v-toolbar-title>
+                            <span class="subheading">
+                                SALDO DECLARADO
+                            </span>
+                        </v-toolbar-title>
+                        <v-spacer />
+                    </v-toolbar>
+                    <v-card-text>
+                        <v-layout
+                            justify-space-between
+                        >
+                            <v-flex text-xs-left>
+                                <span class="subheading font-weight-light mr-1">
+                                    R$
+                                </span>
+                                <span
+                                    class="display-1 font-weight-light"
+                                >
+                                    {{ SaldoDeclarado | filtroFormatarParaReal }}
+                                </span>
+                            </v-flex>
+                        </v-layout>
+                    </v-card-text>
+                </v-card>
             </v-flex>
             <v-flex
-                :class="colorDisponivel"
-                xs3
+                xs12
+                sm4
+                md4
             >
-                <h3 class="subheading">
-                    Disponível
-                </h3>
-                <span class="font-weight-bold">
-                    R$ {{ SaldoDisponivel | filtroFormatarParaReal }}
-                </span>
+                <v-card
+                    class="mx-auto mb-2"
+                    max-width="300"
+                >
+                    <v-toolbar
+                        card
+                        dense
+                    >
+                        <v-toolbar-title>
+                            <span class="subheading">
+                                UTILIZADO
+                            </span>
+                        </v-toolbar-title>
+                        <v-spacer />
+                    </v-toolbar>
+                    <v-card-text
+                        :class="colorUtilizado"
+                    >
+                        <v-layout
+                            justify-space-between
+                        >
+                            <v-flex text-xs-left>
+                                <span class="subheading font-weight-light mr-1">
+                                    R$
+                                </span>
+                                <span
+                                    class="display-1 font-weight-light"
+                                >
+                                    {{ SaldoUtilizado | filtroFormatarParaReal }}
+                                </span>
+                            </v-flex>
+                        </v-layout>
+                    </v-card-text>
+                </v-card>
             </v-flex>
             <v-flex
-                :class="colorUtilizado"
-                xs3
+                xs12
+                sm4
+                md4
             >
-                <h3 class="subheading">
-                    Utilizado
-                </h3>
-                <span class="font-weight-bold">
-                    R$ {{ SaldoUtilizado | filtroFormatarParaReal }}
-                </span>
+                <v-card
+                    class="mx-auto mb-2"
+                    max-width="300"
+                >
+                    <v-toolbar
+                        card
+                        dense
+                    >
+                        <v-toolbar-title>
+                            <span class="subheading">
+                                DISPONÍVEL
+                            </span>
+                        </v-toolbar-title>
+                        <v-spacer />
+                    </v-toolbar>
+                    <v-card-text
+                        :class="colorDisponivel"
+                    >
+                        <v-layout
+                            justify-space-between
+                        >
+                            <v-flex text-xs-left>
+                                <span class="subheading font-weight-light mr-1">
+                                    R$
+                                </span>
+                                <span
+                                    class="display-1 font-weight-light"
+                                >
+                                    {{ SaldoDisponivel | filtroFormatarParaReal }}
+                                </span>
+                            </v-flex>
+                        </v-layout>
+                    </v-card-text>
+                </v-card>
             </v-flex>
         </v-layout>
     </v-container>
@@ -65,16 +150,16 @@ export default {
     },
     computed: {
         colorDisponivel() {
-            if (this.SaldoDisponivel > 0) {
-                return 'green lighten-3'
+            if (this.SaldoDisponivel < 0) {
+                return 'red lighten-3';
             }
-            return 'red lighten-3';
+            return '';
         },
         colorUtilizado() {
-            if (this.SaldoUtilizado < this.SaldoDeclarado) {
-                return 'green lighten-3'
+            if (this.SaldoUtilizado > this.SaldoDeclarado) {
+                return 'red lighten-3';
             }
-            return 'red lighten-3';
+            return '';
         },
     },
 };
