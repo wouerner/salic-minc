@@ -634,13 +634,13 @@ class Readequacao implements IServicoRestZend
             $tbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
             $finalizar = $tbReadequacao->finalizarSolicitacao($idReadequacao);
             if (!$finalizar) {
-                $data['erro'] = true;
-                $data['mensagem'] = "Houve um erro e não foi possível finalizar a readequação.";
+                $data['error'] = true;
+                $data['message'] = "Houve um erro e não foi possível finalizar a readequação.";
             }
 
-            $data['mensagem'] = "Readequação enviada para análise.";
+            $data['message'] = "Readequação enviada para análise.";
         } else {
-            $data['mensagem'] = "É preciso especificar idPronac e idReadequação para finalizar uma readequação.";
+            $data['message'] = "É preciso especificar idPronac e idReadequação para finalizar uma readequação.";
             $data['erro'] = true;
         }
         return $data;

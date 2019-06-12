@@ -178,9 +178,9 @@ export const inserirReadequacao = async ({ commit, dispatch }, params) => {
     return resultado;
 };
 
-export const finalizarReadequacao = async ({ dispatch }, params) => {
+export const finalizarReadequacaoPainel = async ({ dispatch }, params) => {
     const resultado = await readequacaoHelperAPI.finalizarReadequacao(params)
-        .then(() => {
+        .then((response) => {
             dispatch('obterListaDeReadequacoes', {
                 idPronac: params.idPronac,
                 stStatusAtual: 'proponente',
@@ -189,6 +189,18 @@ export const finalizarReadequacao = async ({ dispatch }, params) => {
                 idPronac: params.idPronac,
                 stStatusAtual: 'analise',
             });
+        });
+    return resultado;
+};
+
+export const finalizarReadequacaoPlanilha = async ({ dispatch }, params) => {
+    const resultado = await readequacaoHelperAPI.finalizarReadequacao(params)
+        .then((response) => {
+            dispatch(
+                'noticias/mensagemSucesso',
+                response.data.data.items.message,
+                { root: true },
+            );
         });
     return resultado;
 };

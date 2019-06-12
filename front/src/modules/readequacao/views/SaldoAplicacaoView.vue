@@ -318,8 +318,10 @@
                                                 :perfil="perfil"
                                                 :min-char="minChar"
                                                 :disabled="!finalizarDisponivel"
+                                                :tela="'planilha'"
                                                 class="text-xs-center"
                                                 dark
+                                                @readequacao-finalizada="readequacaoFinalizada()"
                                             />
                                         </div>
                                     </v-flex>
@@ -534,7 +536,6 @@ export default {
             obterDisponivelEdicaoReadequacaoPlanilha: 'readequacao/obterDisponivelEdicaoItemSaldoAplicacao',
             obterReadequacao: 'readequacao/obterReadequacao',
             updateReadequacao: 'readequacao/updateReadequacao',
-            finalizarReadequacao: 'readequacao/finalizarReadequacao',
             solicitarUsoSaldo: 'readequacao/solicitarUsoSaldo',
             obterPlanilha: 'readequacao/obterPlanilha',
             obterPlanilhaAtiva: 'readequacao/obterPlanilhaAtiva',
@@ -633,6 +634,9 @@ export default {
         },
         isOptionActive(index) {
             return this.opcoesDeVisualizacao.includes(index);
+        },
+        readequacaoFinalizada() {
+            this.voltar();
         },
     },
 };

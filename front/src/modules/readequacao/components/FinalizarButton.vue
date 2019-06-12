@@ -116,6 +116,10 @@ export default {
             type: Object,
             default: () => {},
         },
+        tela: {
+            type: String,
+            default: 'painel',
+        },
     },
     data() {
         return {
@@ -147,7 +151,8 @@ export default {
     methods: {
         ...mapActions({
             updateReadequacao: 'readequacao/updateReadequacao',
-            finalizarReadequacao: 'readequacao/finalizarReadequacao',
+            finalizarReadequacaoPainel: 'readequacao/finalizarReadequacaoPainel',
+            finalizarReadequacaoPlanilha: 'readequacao/finalizarReadequacaoPlanilha',
         }),
         validar() {
             if (typeof this.minChar === 'object') {
@@ -172,14 +177,28 @@ export default {
             }
         },
         executaFinalizar() {
-            this.finalizarReadequacao({
-                idReadequacao: this.dadosReadequacao.idReadequacao,
-                idPronac: this.dadosReadequacao.idPronac,
-            })
-                .then(() => {
-                    this.$emit('readequacao-finalizada');
-                    this.dialog = false;
-                });
+            switch (this.tela) {
+                case 'planilha':
+                    this.finalizarReadequacaoPlanilha({
+                        idReadequacao: this.dadosReadequacao.idReadequacao,
+                        idPronac: this.dadosReadequacao.idPronac,
+                    })
+                    .then(() => {
+                        this.$emit('readequacao-finalizada');
+                        this.dialog = false;
+                    });
+                    break;
+                default:
+                    this.finalizarReadequacaoPainel({
+                        idReadequacao: this.dadosReadequacao.idReadequacao,
+                        idPronac: this.dadosReadequacao.idPronac,
+                    })
+                    .then(() => {
+                        this.$emit('readequacao-finalizada');
+                        this.dialog = false;
+                    });
+                    break;
+            }
         },
         finalizar() {
             if (typeof this.readequacaoEditada !== 'undefined') {
