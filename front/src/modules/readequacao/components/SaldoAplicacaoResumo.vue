@@ -150,16 +150,20 @@ export default {
     },
     computed: {
         colorDisponivel() {
+            let cor = '';
             if (this.SaldoDisponivel < 0) {
-                return 'red lighten-3';
+                cor = 'red lighten-3';
+            } else if (this.SaldoDisponivel > 0) {
+                cor = 'red lighten-3';
             }
-            return '';
+            return cor;
         },
         colorUtilizado() {
+            let cor = '';
             if (this.SaldoUtilizado > this.SaldoDeclarado) {
-                return 'red lighten-3';
+                cor = 'red lighten-3';
             }
-            return '';
+            return cor;
         },
     },
 };

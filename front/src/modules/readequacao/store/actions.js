@@ -253,9 +253,11 @@ export const atualizarItemPlanilha = async ({ commit, dispatch }, params) => {
     return resultado;
 };
 
-export const calcularResumoPlanilha = ({ commit }, params) => {
-    readequacaoHelperAPI.calcularResumoPlanilha(params)
+export const calcularResumoPlanilha = async ({ commit }, params) => {
+    const resultado = await readequacaoHelperAPI.calcularResumoPlanilha(params)
         .then((response) => {
             commit(types.SET_RESUMO_PLANILHA, response.data.data.items);
+            return response.data.data.items;
         });
+    return resultado;
 };

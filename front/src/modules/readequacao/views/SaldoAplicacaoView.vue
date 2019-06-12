@@ -203,6 +203,7 @@
                                         flat
                                     >
                                         <saldo-aplicacao-resumo
+                                            v-if="exibirResumo"
                                             :saldo-declarado="getResumoPlanilha.saldoDeclarado"
                                             :saldo-disponivel="getResumoPlanilha.valorTotalDisponivelParaUso"
                                             :saldo-utilizado="getResumoPlanilha.saldoValorUtilizado"
@@ -303,6 +304,7 @@
                                         xs-12
                                     >
                                         <saldo-aplicacao-resumo
+                                            v-if="exibirResumo"
                                             :saldo-declarado="getResumoPlanilha.saldoDeclarado"
                                             :saldo-disponivel="getResumoPlanilha.valorTotalDisponivelParaUso"
                                             :saldo-utilizado="getResumoPlanilha.saldoValorUtilizado"
@@ -315,7 +317,7 @@
                                                 :perfis-aceitos="getPerfis('proponente')"
                                                 :perfil="perfil"
                                                 :min-char="minChar"
-                                                :disabled="finalizarDisponivel"
+                                                :disabled="!finalizarDisponivel"
                                                 class="text-xs-center"
                                                 dark
                                             />
@@ -432,6 +434,7 @@ export default {
                 'Municipio',
             ],
             currentStep: 1,
+            exibirResumo: false,
             finalizarDisponivel: false,
         };
     },
@@ -509,7 +512,7 @@ export default {
             deep: true,
         },
         getResumoPlanilha() {
-            if (this.getResumoPlanilha.saldoValorUtilizado < this.getResumoPlanilha.saldoDeclarado) {
+            if (this.getResumoPlanilha.saldoValorUtilizado <= this.getResumoPlanilha.saldoDeclarado) {
                 this.finalizarDisponivel = true;
             } else {
                 this.finalizarDisponivel = false;
@@ -568,6 +571,8 @@ export default {
             this.calcularResumoPlanilha({
                 idPronac: this.dadosReadequacao.idPronac,
                 idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
+            }).then(() => {
+                this.exibirResumo = true;
             });
             this.obterUnidadesPlanilha({
                 idPronac: this.dadosReadequacao.idPronac,
