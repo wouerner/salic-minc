@@ -395,9 +395,6 @@ export default {
                 this.loading = false;
             }
         },
-        dadosReadequacao() {
-            this.inicializarReadequacao();
-        },
     },
     methods: {
         ...mapActions({

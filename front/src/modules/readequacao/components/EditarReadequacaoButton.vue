@@ -27,7 +27,6 @@
             />
         </template>
         <v-dialog
-            :persistent="mensagem.ativa"
             v-model="dialog"
             fullscreen
             hide-overlay
@@ -133,11 +132,13 @@
                                     justify-end
                                     text-xs-right
                                 >
-                                    <div>
-                                        <v-btn
-                                            color="green darken-1"
-                                            dark
-                                        >
+                                    <v-btn
+                                        color="green darken-1"
+                                        dark
+                                        @click="salvarReadequacao()"
+                                    >
+                                        Salvar
+                                        <v-icon>
                                             done
                                         </v-icon>
                                     </v-btn>

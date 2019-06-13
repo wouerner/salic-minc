@@ -180,7 +180,7 @@ export const inserirReadequacao = async ({ commit, dispatch }, params) => {
 
 export const finalizarReadequacaoPainel = async ({ dispatch }, params) => {
     const resultado = await readequacaoHelperAPI.finalizarReadequacao(params)
-        .then((response) => {
+        .then(() => {
             dispatch('obterListaDeReadequacoes', {
                 idPronac: params.idPronac,
                 stStatusAtual: 'proponente',

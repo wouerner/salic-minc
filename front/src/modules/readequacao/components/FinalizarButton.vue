@@ -200,26 +200,26 @@ export default {
         },
         executaFinalizar() {
             switch (this.tela) {
-                case 'planilha':
-                    this.finalizarReadequacaoPlanilha({
-                        idReadequacao: this.dadosReadequacao.idReadequacao,
-                        idPronac: this.dadosReadequacao.idPronac,
-                    })
+            case 'planilha':
+                this.finalizarReadequacaoPlanilha({
+                    idReadequacao: this.dadosReadequacao.idReadequacao,
+                    idPronac: this.dadosReadequacao.idPronac,
+                })
                     .then(() => {
                         this.$emit('readequacao-finalizada');
                         this.dialog = false;
                     });
-                    break;
-                default:
-                    this.finalizarReadequacaoPainel({
-                        idReadequacao: this.dadosReadequacao.idReadequacao,
-                        idPronac: this.dadosReadequacao.idPronac,
-                    })
+                break;
+            default:
+                this.finalizarReadequacaoPainel({
+                    idReadequacao: this.dadosReadequacao.idReadequacao,
+                    idPronac: this.dadosReadequacao.idPronac,
+                })
                     .then(() => {
                         this.$emit('readequacao-finalizada');
                         this.dialog = false;
                     });
-                    break;
+                break;
             }
         },
         finalizar() {

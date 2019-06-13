@@ -48,8 +48,8 @@ export default {
         },
         removeLetras(valor) {
             const re = /([^0-9]*)/g;
-            valor = valor.replace(re, '');
-            return valor;
+            const novoValor = valor.replace(re, '');
+            return novoValor;
         },
     },
 };

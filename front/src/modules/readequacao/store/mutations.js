@@ -101,4 +101,4 @@ export const mutations = {
     [types.GET_RESUMO_PLANILHA](state, data) {
         state.resumoPlanilha = data;
     },
-}
+};
