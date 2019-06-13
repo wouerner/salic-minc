@@ -11,7 +11,9 @@
             @click.stop="abrirEdicao()"
         >
             <v-tooltip bottom>
-                <v-icon slot="activator">edit</v-icon>
+                <v-icon slot="activator">
+                    edit
+                </v-icon>
                 <span>Editar Readequação</span>
             </v-tooltip>
         </v-btn>
@@ -43,7 +45,9 @@
                         dark
                         @click="dialog = false"
                     >
-                        <v-icon>close</v-icon>
+                        <v-icon>
+                            close
+                        </v-icon>
                     </v-btn>
                     <v-toolbar-title>Readequação - {{ dadosReadequacao.dsTipoReadequacao }}</v-toolbar-title>
                     <v-spacer/>
@@ -136,7 +140,9 @@
                                         <v-icon
                                             right
                                             dark
-                                        >done</v-icon>
+                                        >
+                                            done
+                                        </v-icon>
                                     </v-btn>
                                     <v-btn
                                         color="red lighten-2"
@@ -146,7 +152,9 @@
                                         <v-icon
                                             right
                                             dark
-                                        >cancel</v-icon>
+                                        >
+                                            cancel
+                                        </v-icon>
                                     </v-btn>
                                     <finalizar-button
                                         :disabled="!validacao"
@@ -342,10 +350,10 @@ export default {
         },
         dadosReadequacao: {
             handler(value) {
-               if (value.idPronac && value.idTipoReadequacao) {
+                if (value.idPronac && value.idTipoReadequacao) {
                     if (this.bindClick === this.dadosReadequacao.idReadequacao) {
                         this.dialog = true;
-                   }
+                    }
                 }
             },
             deep: true,

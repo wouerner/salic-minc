@@ -9,7 +9,9 @@
                 md5
             >
                 <v-card>
-                    <v-card-title class="grey lighten-2 title">Versão original</v-card-title>
+                    <v-card-title class="grey lighten-2 title">
+                        Versão original
+                    </v-card-title>
                     <v-divider/>
                     <v-card-text>
                         {{ campo.valor }}
@@ -28,7 +30,9 @@
                     @click="copiarOriginal()"
                 >
                     igualar
-                    <v-icon>sync</v-icon>
+                    <v-icon>
+                        sync
+                    </v-icon>
                 </v-btn>
             </v-flex>
             <v-flex
@@ -36,7 +40,9 @@
                 md5
             >
                 <v-card>
-                    <v-card-title class="green lighten-2 title">Versão readequada</v-card-title>
+                    <v-card-title class="green lighten-2 title">
+                        Versão readequada
+                    </v-card-title>
                     <v-card-actions>
                         <v-text-field
                             :label="campo.titulo"
@@ -105,7 +111,7 @@ export default {
     },
     methods: {
         verificarCampo() {
-            if (this.dadosReadequacao.idTipoReadequacao ===  Const.TIPO_READEQUACAO_ALTERACAO_PROPONENTE) {
+            if (this.dadosReadequacao.idTipoReadequacao === Const.TIPO_READEQUACAO_ALTERACAO_PROPONENTE) {
                 this.$nextTick(() => {
                     this.dadosReadequacaoEmEdicao.dsSolicitacao = this.removeLetras(this.dadosReadequacaoEmEdicao.dsSolicitacao);
                 });
@@ -113,10 +119,10 @@ export default {
         },
         removeLetras(valor) {
             const re = /([^0-9]*)/g;
-            valor = valor.replace(re, '');
-            return valor;
+            const novoValor = valor.replace(re, '');
+            return novoValor;
         },
-        updateCampo(e) {
+        updateCampo() {
             this.verificarCampo();
             this.$emit('dados-update', this.dadosReadequacaoEmEdicao.dsSolicitacao);
             this.atualizarContador(this.dadosReadequacaoEmEdicao.dsSolicitacao.length);

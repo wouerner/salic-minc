@@ -129,8 +129,7 @@ export default {
     computed: {
         ...mapGetters({
             campoAtual: 'readequacao/getCampoAtual',
-        })
-        ,
+        }),
         perfilAceito() {
             return this.verificarPerfil(this.perfil, this.perfisAceitos);
         },
@@ -181,7 +180,7 @@ export default {
                                     );
                                 });
                             }
-                        } else {  
+                        } else {
                             this.validacao = this.validarFormulario(
                                 this.dadosReadequacao,
                                 contador,
