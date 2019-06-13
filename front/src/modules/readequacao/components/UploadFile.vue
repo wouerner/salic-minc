@@ -1,7 +1,14 @@
 <template>
     <div
-        class="pa-2"
+        class="pa-3"
     >
+        <div
+            v-if="!actionDone"
+            xs12
+            class="grey--text text--darken-1 pa-3"
+        >
+            {{ textoCarregando }}
+        </div>
         <v-btn
             flat
             class="blue lighten-2 mr-2"
@@ -69,10 +76,15 @@ export default {
             ],
             default: 0,
         },
+        actionDone: {
+            type: Boolean,
+            default: true,
+        },
     },
     data() {
         return {
             file: '',
+            textoCarregando: '',
         };
     },
     computed: {
@@ -98,6 +110,7 @@ export default {
             return true;
         },
         handleFileUpload() {
+            this.textoCarregando = 'Subindo arquivo...';
             const file = this.$refs.file.files[0];
             if (this.checkFormat(file)) {
                 this.file = file;
@@ -111,6 +124,7 @@ export default {
             }
         },
         removerArquivo() {
+            this.textoCarregando = 'Removendo arquivo...';
             this.$emit('arquivo-removido');
         },
     },

@@ -478,7 +478,7 @@ class Readequacao implements IServicoRestZend
             'idTipoReadequacao' => $idTipoReadequacao,
             'descricao' => $descricao,
             'tpCampo' => $tpCampo,
-            'dsCampo' => utf8_encode($valorPreCarregado)
+            'dsCampo' => utf8_encode($this->converteTextoEmHtml($valorPreCarregado)),
         ];
         
         return $resultArray;
@@ -490,7 +490,6 @@ class Readequacao implements IServicoRestZend
 
         if (isset($parametros['idReadequacao'])){
             $idReadequacao = $parametros['idReadequacao'];
-            
             $readequacao = $this->buscar($idReadequacao);
             
             $documento = new DocumentoService(
@@ -506,7 +505,7 @@ class Readequacao implements IServicoRestZend
                     $errorMessage = "Não foi possível remover o idDocumento {$readequacao['idDocumento']}!";
                     throw new \Exception($errorMessage);
                 }
-                $parametros['idDocumento'] = null;
+                $parametros['idDocumento'] = 0;
             }
             if (!empty($_FILES['documento'])) {
                 $metadata = [
@@ -527,20 +526,7 @@ class Readequacao implements IServicoRestZend
             }
         }
 
-        if ($parametros['idTipoReadequacao'] == \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PERIODO_EXECUCAO) {
-            if (strpos($parametros['dsSolicitacao'], '-')) {
-                $data = explode('-', $parametros['dsSolicitacao']);
-                $parametros['dsSolicitacao'] = implode('/', array_reverse($data));
-            }
-        }
-        if ($parametros['idTipoReadequacao'] == \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ALTERACAO_PROPONENTE) {
-            if (strpos($parametros['dsSolicitacao'], '.')) {
-                $parametros['dsSolicitacao'] = preg_replace('/[^0-9]/', '', $parametros['dsSolicitacao']);
-            }
-        }
-        if ($parametros['idTipoReadequacao'] == \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_AGENCIA_BANCARIA) {
-            $parametros['dsSolicitacao'] = preg_replace('/[^0-9\-x]/', '', $parametros['dsSolicitacao']);
-        }
+        $parametros = $this->__prepararDadosGravacao($parametros);
         
         $mapper = new \Readequacao_Model_TbReadequacaoMapper();
         $idReadequacao = $mapper->salvarSolicitacaoReadequacao($parametros);
@@ -549,6 +535,50 @@ class Readequacao implements IServicoRestZend
         $result = \TratarArray::utf8EncodeArray($result);
 
         return $result;
+    }
+
+    public function converteTextoEmHtml($texto)
+    {
+        $list = get_html_translation_table(HTML_ENTITIES);
+        unset($list['"']);
+        unset($list['\'']);
+        unset($list['<']);
+        unset($list['>']);
+        unset($list['&']);
+        
+        $search = array_map('utf8_encode', $list);
+        $values = array_values($list);
+        $texto = str_replace($search, $values, $texto);
+        
+        $weirdChars = [
+            '–' => '&ndash;',
+            ';' => '&#894;',
+            '’' => '&#8217;',
+        ];
+        foreach ($weirdChars as $char => $substitution) {
+            $texto = str_replace($char, $substitution, $texto);
+        }
+        
+        return $texto;
+    }
+
+    private function __prepararDadosGravacao($parametros)
+    {
+        if ($parametros['idTipoReadequacao'] == \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PERIODO_EXECUCAO) {
+            if (strpos($parametros['dsSolicitacao'], '-')) {
+                $data = explode('-', $parametros['dsSolicitacao']);
+                $parametros['dsSolicitacao'] = implode('/', array_reverse($data));
+            }
+        } else if ($parametros['idTipoReadequacao'] == \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ALTERACAO_PROPONENTE) {
+            $parametros['dsSolicitacao'] = preg_replace('/[^0-9]/', '', $parametros['dsSolicitacao']);
+        } else if ($parametros['idTipoReadequacao'] == \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_AGENCIA_BANCARIA) {
+            $parametros['dsSolicitacao'] = strtoupper($parametros['dsSolicitacao']);
+            $parametros['dsSolicitacao'] = preg_replace('/[^0-9\-X]/', '', $parametros['dsSolicitacao']);
+        } else {
+            $parametros['dsSolicitacao'] = $this->converteTextoEmHtml($parametros['dsSolicitacao']);
+        }
+
+        return $parametros;
     }
 
     public function remover()
