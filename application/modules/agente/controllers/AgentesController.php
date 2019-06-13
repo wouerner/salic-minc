@@ -1894,7 +1894,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             $novos_valores[0]['msgCPF'] = utf8_encode('invalido');
         } else {
             $agenteServico = new AgenteService();
-            $novos_valores = $agenteServico->cadastrarAgente($cpf);
+            $novos_valores[0] = $agenteServico->cadastrarAgente($cpf);
 
         }
          $this->_helper->json(\TratarArray::utf8EncodeArray($novos_valores));
@@ -2869,7 +2869,6 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             $b++;
         }
         $this->view->visaoAgente = $selectAgente;
-        //var_dump($selectAgente) ;die;
 
         // caso o formulario seja enviado via post
         if ($this->getRequest()->isPost()) {
