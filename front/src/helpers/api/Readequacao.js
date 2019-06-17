@@ -109,3 +109,8 @@ export const calcularResumoPlanilha = (params) => {
     const path = '/readequacao/calcular-resumo-planilha';
     return api.getRequest(path + parseQueryParams(params));
 };
+
+export const reverterAlteracaoItem = (params) => {
+    const path = '/readequacao/reverter-alteracao-item';
+    return api.postRequest(path, buildData(params));
+};

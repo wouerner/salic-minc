@@ -273,3 +273,13 @@ export const calcularResumoPlanilha = async ({ commit }, params) => {
         });
     return resultado;
 };
+
+export const reverterAlteracaoItem = ({ dispatch }, params) => {
+    readequacaoHelperAPI.reverterAlteracaoItem(params)
+        .then(() => {
+            dispatch('obterPlanilha', {
+                idPronac: params.idPronac,
+                idTipoReadequacao: params.idTipoReadequacao,
+            });
+        });
+};

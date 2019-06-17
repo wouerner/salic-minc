@@ -821,7 +821,6 @@ class Readequacao implements IServicoRestZend
 
             $planilhaOrcamentaria = $planilha;
         }
-
         $result = [];
         foreach ($planilhaOrcamentaria as $item) {
             $item->Produto = utf8_encode($item->Produto);
@@ -1029,11 +1028,18 @@ class Readequacao implements IServicoRestZend
             'idPlanilhaItem = ?' => $idPlanilhaItem,
             'idReadequacao = ?' => $idReadequacao
         ])->current();
-        
-        $itemAlterado->vlUnitario = $itemOriginal->vlUnitario;
-        $itemAlterado->qtItem = $itemOriginal->qtItem;
-        $itemAlterado->nrOcorrencia = $itemOriginal->nrOcorrencia;
-        $itemAlterado->save();
+        if (!empty($itemAlterado)
+            && !empty($itemOriginal)) {
+            $itemAlterado->vlUnitario = $itemOriginal->vlUnitario;
+            $itemAlterado->qtItem = $itemOriginal->qtItem;
+            $itemAlterado->nrOcorrencia = $itemOriginal->nrOcorrencia;
+            $itemAlterado->save();
+
+            return ['message' => 'Dados do item revertidos!'];
+        } else {
+            $errorMessage = "Não foi possível reverter dados do item.";
+            throw new \Exception($errorMessage);
+        }
     }
     
     public function calcularResumoPlanilha()

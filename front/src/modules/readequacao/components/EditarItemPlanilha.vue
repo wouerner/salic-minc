@@ -107,6 +107,20 @@
                     >done</v-icon>
                 </v-btn>
                 <v-btn
+                    v-if="isAlterado()"
+                    color="blue lighten-1"
+                    dark
+                    @click="reverterItem()"
+                >
+                    Reverter
+                    <v-icon
+                        right
+                        dark
+                    >
+                        restore
+                    </v-icon>
+                </v-btn>
+                <v-btn
                     color="red lighten-1"
                     dark
                     @click="cancelarEdicao()"
@@ -125,6 +139,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import { utils } from '@/mixins/utils';
 import validarFormulario from '../mixins/validarFormulario';
+import MxPlanilhaReadequacao from '../mixins/PlanilhaReadequacao';
 import InputMoney from '@/components/InputMoney';
 import Carregando from '@/components/CarregandoVuetify';
 
@@ -136,6 +151,7 @@ export default {
     },
     mixins: [
         utils,
+        MxPlanilhaReadequacao,
         validarFormulario,
     ],
     props: {
@@ -194,6 +210,7 @@ export default {
     methods: {
         ...mapActions({
             atualizarItemPlanilha: 'readequacao/atualizarItemPlanilha',
+            reverterAlteracaoItem: 'readequacao/reverterAlteracaoItem',
         }),
         inicializarItemEditado() {
             this.itemEditado = {
@@ -207,7 +224,7 @@ export default {
                 Ocorrencia: this.item.Ocorrencia,
                 Quantidade: this.item.Quantidade,
                 QtdeDias: this.item.QtdeDias,
-                ValorUnitario: this.item.ValorUnitario,
+                ValorUnitario: this.item.vlUnitario,
                 idTipoReadequacao: this.getReadequacao.idTipoReadequacao,
             };
         },
@@ -222,8 +239,33 @@ export default {
         cancelarEdicao() {
             this.$emit('fechar-item');
         },
+        reverterItem() {
+            this.reverterAlteracaoItem({
+                idPronac: this.item.idPronac,
+                idReadequacao: this.getReadequacao.idReadequacao,
+                idTipoReadequacao: this.getReadequacao.idTipoReadequacao,
+                idPlanilhaItem: this.item.idPlanilhaItem,
+            });
+        },
         atualizarCampo(valor, campo) {
             this.itemEditado[campo] = valor;
+        },
+        isAlterado() {
+            const planilhaEdicao = [
+                this.item.idUnidade,
+                this.item.Ocorrencia,
+                this.item.Quantidade,
+                this.item.QtdeDias,
+                this.item.vlUnitario,
+            ];
+            const planilhaAtiva = [
+                this.item.idUnidadeAtivo,
+                this.item.OcorrenciaAtivo,
+                this.item.QuantidadeAtivo,
+                this.item.QtdeDiasAtivo,
+                this.item.vlUnitarioAtivo,
+            ];
+            return JSON.stringify(planilhaEdicao) !== JSON.stringify(planilhaAtiva);
         },
     },
 };

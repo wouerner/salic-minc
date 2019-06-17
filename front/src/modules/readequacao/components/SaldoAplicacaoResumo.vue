@@ -120,6 +120,20 @@
                 </v-card>
             </v-flex>
         </v-layout>
+        <v-layout
+            v-if="SaldoDisponivel < 0"
+        >
+            <v-flex
+                xs12
+                sm12
+            >
+                <v-chip
+                    color="red accent-1"
+                >
+                    Valor ultrapassado! Reduza sua planilha em R$ {{ SaldoDisponivel }}.
+                </v-chip>
+            </v-flex>
+        </v-layout>
     </v-container>
 </template>
 <script>
@@ -154,7 +168,7 @@ export default {
             if (this.SaldoDisponivel < 0) {
                 cor = 'red lighten-3';
             } else if (this.SaldoDisponivel > 0) {
-                cor = 'red lighten-3';
+                cor = 'green lighten-3';
             }
             return cor;
         },
