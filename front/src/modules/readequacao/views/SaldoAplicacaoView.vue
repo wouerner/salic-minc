@@ -341,8 +341,7 @@ import { utils } from '@/mixins/utils';
 import Const from '../const';
 import SalicMensagemErro from '@/components/SalicMensagemErro';
 import FinalizarButton from '../components/FinalizarButton';
-import validarFormulario from '../mixins/validarFormulario';
-import verificarPerfil from '../mixins/verificarPerfil';
+import MxReadequacao from '../mixins/Readequacao';
 import Carregando from '@/components/CarregandoVuetify';
 import FormJustificativa from '../components/FormJustificativa';
 import UploadFile from '../components/UploadFile';
@@ -373,8 +372,7 @@ export default {
     },
     mixins: [
         utils,
-        validarFormulario,
-        verificarPerfil,
+        MxReadequacao,
         MxPlanilha,
     ],
     data() {
@@ -522,11 +520,15 @@ export default {
         },
     },
     created() {
+        this.loaded = this.checkAlreadyLoadedData(
+            this.loaded,
+            this.getUsuario,
+            this.dadosProjeto,
+            this.dadosReadequacao,
+        );
         if (typeof this.$route.params.idPronac !== 'undefined') {
             this.idPronac = this.$route.params.idPronac;
-            if (Object.keys(this.dadosProjeto).length === 0) {
-                this.obterDadosIniciais();
-            }
+            this.obterDadosIniciais();
         }
     },
     methods: {

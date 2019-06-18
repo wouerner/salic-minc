@@ -85,7 +85,7 @@
 import { mapActions } from 'vuex';
 import { utils } from '@/mixins/utils';
 import Carregando from '@/components/CarregandoVuetify';
-import verificarPerfil from '../mixins/verificarPerfil';
+import MxReadequacao from '../mixins/Readequacao';
 
 export default {
     name: 'ExcluirButton',
@@ -94,7 +94,7 @@ export default {
     },
     mixins: [
         utils,
-        verificarPerfil,
+        MxReadequacao,
     ],
     props: {
         textoBotao: {

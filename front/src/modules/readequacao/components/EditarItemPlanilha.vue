@@ -138,7 +138,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { utils } from '@/mixins/utils';
-import validarFormulario from '../mixins/validarFormulario';
+import MxReadequacao from '../mixins/Readequacao';
 import MxPlanilhaReadequacao from '../mixins/PlanilhaReadequacao';
 import InputMoney from '@/components/InputMoney';
 import Carregando from '@/components/CarregandoVuetify';
@@ -152,7 +152,7 @@ export default {
     mixins: [
         utils,
         MxPlanilhaReadequacao,
-        validarFormulario,
+        MxReadequacao,
     ],
     props: {
         item: {

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import Const from '../const';
 
 export default {
@@ -51,5 +52,42 @@ export default {
             const novoValor = valor.replace(re, '');
             return novoValor;
         },
+        verificarPerfil(perfil, perfisAceitos) {
+            if (!_.isEmpty(perfisAceitos)) {
+                if (perfisAceitos.includes(perfil)) {
+                    return true;
+                }
+                return false;
+            }
+            return true;
+        },
+        abrirArquivo(idDocumento) {
+            const urlArquivo = `/readequacao/readequacoes/abrir-documento-readequacao?id=${idDocumento}`;
+            window.location.href = urlArquivo;
+        },
+        checkAlreadyLoadedData(loaded, usuario, projeto, readequacao) {
+            const localLoaded = {
+                projeto: loaded.projeto,
+                readequacao: loaded.readequacao,
+                usuario: loaded.usuario,
+            };
+            if (typeof usuario === 'object') {
+                if (Object.keys(usuario).length > 0) {
+                    localLoaded.usuario = true;
+                }
+            }
+            if (typeof projeto === 'object') {
+                if (Object.keys(projeto).length > 0) {
+                    localLoaded.projeto = true;
+                }
+            }
+            if (typeof readequacao === 'object') {
+                if (Object.keys(readequacao).length > 0) {
+                    localLoaded.readequacao = true;
+                }
+            }
+            return localLoaded;
+        },
+
     },
 };
