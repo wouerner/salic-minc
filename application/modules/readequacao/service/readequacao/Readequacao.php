@@ -624,6 +624,34 @@ class Readequacao implements IServicoRestZend
         }
     }
 
+    private function __removerItensPlanilha($idReadequacao)
+    {
+        $tbPlanilhaAprovacao = new \tbPlanilhaAprovacao();
+        $planilha = $tbPlanilhaAprovacao->buscar([
+            'idReadequacao = ?' => $idReadequacao,
+        ]);
+        $idsExcluir = [];
+        foreach($planilha as $item) {
+            $idsExcluir[] = $item['idPlanilhaAprovacao'];
+        }
+        $this->__doRemoveItemPlanilha($idsExcluir);
+    }
+
+    private function __doRemoveItemPlanilha($idsExcluir)
+    {
+        $chunkSize = 30;
+        $idsInsert = array_splice($idsExcluir, 0, $chunkSize);
+        $tbPlanilhaAprovacao = new \tbPlanilhaAprovacao();
+        $tbPlanilhaAprovacao->delete([
+            'idPlanilhaAprovacao IN (?)' => $idsInsert
+        ]);
+        if (!empty($idsExcluir)) {
+            $this->__doRemoveItemPlanilha($idsExcluir);
+        } else {
+            return;
+        }
+    }
+
     public function removerRemanejamentoParcial($readequacao) {
         
     }
@@ -638,12 +666,10 @@ class Readequacao implements IServicoRestZend
     }
     
     public function removerSaldoAplicacao($readequacao) {
-        $tbPlanilhaAprovacao = new \tbPlanilhaAprovacao();
-        $tbPlanilhaAprovacao->delete([
-            'IdPRONAC = ?' => $readequacao['idPronac'],
-            'tpPlanilha = ?' => 'SR',
-            'idReadequacao = ?' => $readequacao['idReadequacao']
-        ]);
+        if (isset($readequacao['idReadequacao'])
+            && $readequacao['idReadequacao'] > 0) {
+            $this->__removerItensPlanilha($readequacao['idReadequacao']);
+        }
     }
     
     public function removerTransferenciaRecursos($readequacaoModel) {
