@@ -685,12 +685,13 @@ HOST: http://localhost:4000
                     "stStatusAtual": "proponente"
             }
 
-## Readequação - Obter planilha [/readequacao/obter-planilha?idPronac={idPronac}&idTipoReadequacao=23]
+## Readequação - Obter planilha [/readequacao/obter-planilha=2116336&idTipoReadequacao=22]
 
 ### Solicita planilha [GET]
+
 + Parameters
     + idPronac: 217336 (number, required)
-    + idTipoReadequacao: 2 (number, optional)
+    + idTipoReadequacao: 22 (number, required)
 
 + Response 200 (application/json; charset=utf-8)
 
@@ -728,7 +729,7 @@ HOST: http://localhost:4000
           ]
         }
 
-## Readequação - Obter unidades [/readequacao/planilha-obter-unidades?idPronac={idPronac}
+## Readequação - Obter unidades [/readequacao/planilha-obter-unidades?idPronac={idPronac}]
 
 ### Obter unidades - usadas na edição dos itens de planilha
 + Parameters
@@ -741,9 +742,9 @@ HOST: http://localhost:4000
         {
           "items": [
             {
-			    "idUnidade": 25,
-			    "Sigla": "CH",
-			    "Descricao": "Cach\u00ea"
+                "idUnidade": 25,
+                "Sigla": "CH",
+                "Descricao": "Cach\u00ea"
             }, {
                 "idUnidade": 5,
                 "Sigla": "D",
@@ -753,73 +754,142 @@ HOST: http://localhost:4000
                 "Sigla": "filme",
                 "Descricao": "Filme"
             }, {
-			    "idUnidade": 4,
-			    "Sigla": "FL",
-			    "Descricao": "Folha"
+                "idUnidade": 4,
+                "Sigla": "FL",
+                "Descricao": "Folha"
             }, {
-			    "idUnidade": 8,
-			    "Sigla": "H",
-			    "Descricao": "Hora"
+                "idUnidade": 8,
+                "Sigla": "H",
+                "Descricao": "Hora"
             }, {
-			    "idUnidade": 19,
-			    "Sigla": "instal",
-			    "Descricao": "Instala\u00e7\u00e3o"
+                "idUnidade": 19,
+                "Sigla": "instal",
+                "Descricao": "Instala\u00e7\u00e3o"
             }, {
-			    "idUnidade": 20,
-			    "Sigla": "Kg",
-			    "Descricao": "Kilograma"
+                "idUnidade": 20,
+                "Sigla": "Kg",
+                "Descricao": "Kilograma"
             }, {
-			    "idUnidade": 22,
-			    "Sigla": "Kg\/m2",
-			    "Descricao": "Kilograma \/ metro 2"
+                "idUnidade": 22,
+                "Sigla": "Kg\/m2",
+                "Descricao": "Kilograma \/ metro 2"
             }, {
-			    "idUnidade": 23,
-			    "Sigla": "mes",
-			    "Descricao": "M\u00eas"
+                "idUnidade": 23,
+                "Sigla": "mes",
+                "Descricao": "M\u00eas"
             }, {
-			    "idUnidade": 9,
-			    "Sigla": "M",
-			    "Descricao": "Metro"
+                "idUnidade": 9,
+                "Sigla": "M",
+                "Descricao": "Metro"
             }, {
-			    "idUnidade": 16,
-			    "Sigla": "m2",
-			    "Descricao": "Metro 2"
+                "idUnidade": 16,
+                "Sigla": "m2",
+                "Descricao": "Metro 2"
             }, {
-			    "idUnidade": 17,
-			    "Sigla": "m3",
-			    "Descricao": "Metro 3"
+                "idUnidade": 17,
+                "Sigla": "m3",
+                "Descricao": "Metro 3"
             }, {
-			    "idUnidade": 18,
-			    "Sigla": "m3\/Km",
-			    "Descricao": "Metro 3 \/ Km"
+                "idUnidade": 18,
+                "Sigla": "m3\/Km",
+                "Descricao": "Metro 3 \/ Km"
             }, {
-			    "idUnidade": 12,
-			    "Sigla": "min",
-			    "Descricao": "Minuto"
+                "idUnidade": 12,
+                "Sigla": "min",
+                "Descricao": "Minuto"
             }, {
-			    "idUnidade": 1,
-			    "Sigla": "N\u00e3o",
-			    "Descricao": "N\u00e3o Informado"
+                "idUnidade": 1,
+                "Sigla": "N\u00e3o",
+                "Descricao": "N\u00e3o Informado"
             }, {
-			    "idUnidade": 2,
-			    "Sigla": "Obra",
-			    "Descricao": "Obra"
+                "idUnidade": 2,
+                "Sigla": "Obra",
+                "Descricao": "Obra"
             }, {
-			    "idUnidade": 13,
-			    "Sigla": "parte",
-			    "Descricao": "Parte"
+                "idUnidade": 13,
+                "Sigla": "parte",
+                "Descricao": "Parte"
             }, {
-			    "idUnidade": 10,
-			    "Sigla": "per",
-			    "Descricao": "Per\u00edodo"
+                "idUnidade": 10,
+                "Sigla": "per",
+                "Descricao": "Per\u00edodo"
             }, {
-			    "idUnidade": 15,
-			    "Sigla": "projet",
-			    "Descricao": "Projeto"
+                "idUnidade": 15,
+                "Sigla": "projet",
+                "Descricao": "Projeto"
             }, {
-			    "idUnidade": 6,
-			    "Sigla": "RL",
-			    "Descricao": "Rolo"
+                "idUnidade": 6,
+                "Sigla": "RL",
+                "Descricao": "Rolo"
             }
           ]
         }
+
+## Readequação - Atualizar item planilha [/readequacao/item-planilha]
+
+### Altera item de planilha [POST]
+
++ Parameters
+    + idReadequacao: 15213 (number, required)
+    + idPlanilhaItem: 153 (number, required)
+    + idPlanilhaAprovacao: 2315213 (number, required)
+    + idPronac: 205213 (number, required)
+    + dsJustificativa: "Alteração do item tal, alterando valor unitário e quantidade." (string, required)
+    + idUnidade: 213 (number, required)
+    + idFonte: 109 (number, required)
+    + Ocorrencia: 5 (number, required)
+    + Quantidade: 15 (number, required)
+    + QtdeDias: 205213 (number, required)
+    + ValorUnitario: 3613.50 (number, required)
+    + idTipoReadequacao: 22 (number, required)
+    
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "mensagem": "Item atualizado."
+            }
+
+
+## Readequação - calcular resumo da planilha [/readequacao/calcular-resumo-planilha]
+
+### Executa cálculos do resumo da planilha [GET]
+
++ Parameters
+    + idPronac: 217336 (number, required)
+    + idTipoReadequacao: 22 (number, required)
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "saldoDeclarado": 150636.50,
+                "saldoValorUtilizado": 1220.00,
+                "valorTotalDisponivelParaUso": -132.24,
+                "statusPlanilha": "negativo",
+                "PlanilhaReadequadaTotal": 63330.55,
+                "PlanilhaAtivaTotal": 64444.55
+                
+            }
+
+## Readequação - Reverter alteração de item [/readequacao/reverter-alteracao-item]
+
+### Reverte alteração de item de planilha [POST]
+
++ Parameters
+    + idReadequacao: 15213 (number, required)
+    + idPlanilhaItem: 153 (number, required)
+    + idPronac: 205213 (number, required)
+    + idTipoReadequacao: 22 (number, required)
+    
+
++ Response 200 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "mensagem": "Dados do item revertidos!"
+            }
