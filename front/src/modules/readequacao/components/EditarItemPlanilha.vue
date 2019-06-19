@@ -204,6 +204,11 @@ export default {
             getReadequacao: 'readequacao/getReadequacao',
         }),
     },
+    watch: {
+        item() {
+            this.inicializarItemEditado();
+        },
+    },
     created() {
         this.inicializarItemEditado();
     },

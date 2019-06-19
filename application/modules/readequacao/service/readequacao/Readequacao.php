@@ -1059,6 +1059,7 @@ class Readequacao implements IServicoRestZend
             $itemAlterado->vlUnitario = $itemOriginal->vlUnitario;
             $itemAlterado->qtItem = $itemOriginal->qtItem;
             $itemAlterado->nrOcorrencia = $itemOriginal->nrOcorrencia;
+            $itemAlterado->dsJustificativa = "";
             $itemAlterado->save();
 
             return ['message' => 'Dados do item revertidos!'];
