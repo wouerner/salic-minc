@@ -40,7 +40,7 @@
                     <td class="text-xs-right">{{ props.item.vlUnitario | filtroFormatarParaReal }}</td>
                     <td class="text-xs-right">{{ props.item.vlAprovado | filtroFormatarParaReal }}</td>
                     <td class="text-xs-right">{{ props.item.vlComprovado | filtroFormatarParaReal }}</td>
-                    <td class="text-xs-right">{{ props.item.dsJustificativa }}</td>
+                    <td class="text-xs-right">{{ decodeHtml(props.item.dsJustificativa) }}</td>
                 </tr>
             </template>
             <template
