@@ -72,6 +72,11 @@ export default {
         formatarParaReal(value) {
             return this.$options.filters.filtroFormatarParaReal(value);
         },
+        decodeHtml(value) {
+            const decoded = document.createElement('span');
+            decoded.innerHTML = value;
+            return decoded.textContent;
+        },
     },
     filters: {
         filtroFormatarParaReal(value) {

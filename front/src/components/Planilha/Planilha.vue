@@ -121,7 +121,7 @@ const SCollapsibleRecursivo = {
                                         h('i',
                                             { class: `material-icons mt-2 pl-${self.contador * 1}` },
                                             [self.getHeader(self.contador).icon]),
-                                        h('span', { class: 'ml-2 mt-2' }, key),
+                                        h('span', { class: 'ml-2 mt-2' }, self.decodeHtml(key)),
                                         h('VSpacer'),
                                         badgeHeader,
                                     ]),
