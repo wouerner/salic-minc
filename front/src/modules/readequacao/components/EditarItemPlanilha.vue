@@ -9,129 +9,135 @@
                 :text="'Gravando alterações no item...'"
             />
         </v-flex>
-        <v-layout
-            v-if="!gravando"
-            row
-            wrap
+        <v-form
+            ref="form"
         >
-            <v-flex
-                xs12
-                md2
+            <v-layout
+                v-if="!gravando"
+                row
+                wrap
             >
-                <v-select
-                    v-model="itemEditado.idUnidade"
-                    :value="itemEditado.idUnidade"
-                    :items="getUnidadesPlanilha"
-                    item-text="Descricao"
-                    item-value="idUnidade"
-                    label="Unidade"
-                />
-            </v-flex>
-            <v-flex
-                xs12
-                md2
-            >
-                <v-text-field
-                    v-model="itemEditado.QtdeDias"
-                    :value="item.QtdeDias"
-                    :rules="[rules.required]"
-                    label="Qtd dias"
-                    @change="atualizarCampo(removeLetras($event), 'QtdeDias')"
-                />
-            </v-flex>
-            <v-flex
-                xs12
-                md2
-            >
-                <v-text-field
-                    v-model="itemEditado.Quantidade"
-                    :value="item.Quantidade"
-                    :rules="[rules.required]"
-                    label="Quantidade"
-                    @change="atualizarCampo(removeLetras($event), 'Quantidade')"
-                />
-            </v-flex>
-            <v-flex
-                xs12
-                md2
-            >
-                <v-text-field
-                    v-model="itemEditado.Ocorrencia"
-                    :value="item.Ocorrencia"
-                    :rules="[rules.required]"
-                    required
-                    label="Ocorrência"
-                    @change="atualizarCampo(removeLetras($event), 'Ocorrencia')"
-                />
-            </v-flex>
-            <v-flex
-                xs12
-                md12
-            >
-                <label class="grey--text text--darken-1 caption">Valor unitário</label>
-                <div class="d-inline-block subheading">
-                    R$
-                    <input-money
-                        ref="ValorUnitario"
-                        :value="item.vlUnitario"
-                        :rules="[rules.required, rules.nonZero]"
-                        class="subheading"
-                        @ev="atualizarCampo($event, 'ValorUnitario')"
-                    />
-                </div>
-            </v-flex>
-            <v-flex
-                xs12
-                md12>
-                <v-textarea
-                    v-model="itemEditado.dsJustificativa"
-                    :placeholder="'Justificativa do item'"
-                    :min-char="minChar.justificativa"
-                    label="Justificativa"
-                    class="regular"
-                    @change="atualizarCampo($event, 'dsJustificativa')"
-                />
-            </v-flex>
-            <v-flex
-                xs12
-                text-xs-left
-            >
-                <v-btn
-                    color="green lighten-1"
-                    dark
-                    @click="salvarItem()"
-                >Salvar item
-                    <v-icon
-                        right
-                        dark
-                    >done</v-icon>
-                </v-btn>
-                <v-btn
-                    v-if="isAlterado()"
-                    color="blue lighten-1"
-                    dark
-                    @click="reverterItem()"
+                <v-flex
+                    xs12
+                    md2
                 >
-                    Reverter
-                    <v-icon
-                        right
+                    <v-select
+                        v-model="itemEditado.idUnidade"
+                        :value="itemEditado.idUnidade"
+                        :items="getUnidadesPlanilha"
+                        item-text="Descricao"
+                        item-value="idUnidade"
+                        label="Unidade"
+                    />
+                </v-flex>
+                <v-flex
+                    xs12
+                    md2
+                >
+                    <v-text-field
+                        v-model="itemEditado.QtdeDias"
+                        :value="item.QtdeDias"
+                        :rules="[rules.required]"
+                        label="Qtd dias"
+                        @change="atualizarCampo(removeLetras($event), 'QtdeDias')"
+                    />
+                </v-flex>
+                <v-flex
+                    xs12
+                    md2
+                >
+                    <v-text-field
+                        v-model="itemEditado.Quantidade"
+                        :value="item.Quantidade"
+                        :rules="[rules.required]"
+                        label="Quantidade"
+                        @change="atualizarCampo(removeLetras($event), 'Quantidade')"
+                    />
+                </v-flex>
+                <v-flex
+                    xs12
+                    md2
+                >
+                    <v-text-field
+                        v-model="itemEditado.Ocorrencia"
+                        :value="item.Ocorrencia"
+                        :rules="[rules.required]"
+                        required
+                        label="Ocorrência"
+                        @change="atualizarCampo(removeLetras($event), 'Ocorrencia')"
+                    />
+                </v-flex>
+                <v-flex
+                    xs12
+                    md12
+                >
+                    <label class="grey--text text--darken-1 caption">Valor unitário</label>
+                    <div class="d-inline-block subheading">
+                        R$
+                        <input-money
+                            ref="ValorUnitario"
+                            :value="item.vlUnitario"
+                            :rules="[rules.required, rules.nonZero]"
+                            class="subheading"
+                            @ev="atualizarCampo($event, 'ValorUnitario')"
+                        />
+                    </div>
+                </v-flex>
+                <v-flex
+                    xs12
+                    md12>
+                    <v-textarea
+                        ref="justificativa"
+                        v-model="itemEditado.dsJustificativa"
+                        :placeholder="'Justificativa do item'"
+                        :min-char="minChar.justificativa"
+                        :rules="[rules.required, rules.justificativaMin]"
+                        label="Justificativa"
+                        class="regular"
+                        @change="atualizarCampo($event, 'dsJustificativa')"
+                    />
+                </v-flex>
+                <v-flex
+                    xs12
+                    text-xs-left
+                >
+                    <v-btn
+                        color="green lighten-1"
                         dark
+                        @click="salvarItem()"
+                    >Salvar item
+                        <v-icon
+                            right
+                            dark
+                        >done</v-icon>
+                    </v-btn>
+                    <v-btn
+                        v-if="isAlterado()"
+                        color="blue lighten-1"
+                        dark
+                        @click="reverterItem()"
                     >
-                        restore
-                    </v-icon>
-                </v-btn>
-                <v-btn
-                    color="red lighten-1"
-                    dark
-                    @click="cancelarEdicao()"
-                >Cancelar
-                    <v-icon
-                        right
+                        Reverter
+                        <v-icon
+                            right
+                            dark
+                        >
+                            restore
+                        </v-icon>
+                    </v-btn>
+                    <v-btn
+                        color="red lighten-1"
                         dark
-                    >cancel</v-icon>
-                </v-btn>
-            </v-flex>
-        </v-layout>
+                        @click="cancelarEdicao()"
+                    >Cancelar
+                        <v-icon
+                            right
+                            dark
+                        >cancel</v-icon>
+                    </v-btn>
+                </v-flex>
+            </v-layout>
+        </v-form>
     </v-container>
 </template>
 
@@ -190,10 +196,7 @@ export default {
             rules: {
                 required: v => !!v || 'Campo obrigatório.',
                 nonZero: v => (v && v >= 0) || 'Campo não pode ser zerado ou negativo.',
-                justificativa: [
-                    v => !!v || 'Preencha a justificativa.',
-                    v => (v && v.length >= this.minChar.justificativa) || `Justificativa ter no mínimo ${this.minChar.justificativa} caracteres.`,
-                ],
+                justificativaMin: v => (v && v.length >= this.minChar.justificativa) || this.justificativaMinMessage,
             },
             gravando: false,
         };
@@ -203,6 +206,9 @@ export default {
             getUnidadesPlanilha: 'readequacao/getUnidadesPlanilha',
             getReadequacao: 'readequacao/getReadequacao',
         }),
+        justificativaMinMessage() {
+            return `Justificativa ter no mínimo ${this.minChar.justificativa} caracteres.`;
+        },
     },
     watch: {
         item() {
@@ -234,6 +240,10 @@ export default {
             };
         },
         salvarItem() {
+            if (this.itemEditado.dsJustificativa.length < this.minChar.justificativa) {
+                this.$refs.form.validate();
+                return;
+            }
             this.gravando = true;
             this.atualizarItemPlanilha(this.itemEditado)
                 .then(() => {
