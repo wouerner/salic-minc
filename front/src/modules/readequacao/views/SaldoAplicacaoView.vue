@@ -512,11 +512,10 @@ export default {
             deep: true,
         },
         getResumoPlanilha() {
-            if (this.getResumoPlanilha.saldoValorUtilizado <= this.getResumoPlanilha.saldoDeclarado) {
-                this.finalizarDisponivel = true;
-            } else {
-                this.finalizarDisponivel = false;
-            }
+            this.checkFinalizar();
+        },
+        readequacaoEditada() {
+            this.checkFinalizar();
         },
     },
     created() {
@@ -636,6 +635,14 @@ export default {
         },
         isOptionActive(index) {
             return this.opcoesDeVisualizacao.includes(index);
+        },
+        checkFinalizar() {
+            if (this.getResumoPlanilha.saldoValorUtilizado <= this.getResumoPlanilha.saldoDeclarado
+                && this.readequacaoEditada.dsJustificativa.length >= this.minChar.justificativa) {
+                this.finalizarDisponivel = true;
+            } else {
+                this.finalizarDisponivel = false;
+            }
         },
         readequacaoFinalizada() {
             this.voltar();
