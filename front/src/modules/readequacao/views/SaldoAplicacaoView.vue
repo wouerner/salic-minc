@@ -420,7 +420,7 @@ export default {
             totaisPlanilha: [
                 {
                     label: 'Valor Aprovado',
-                    column: 'VlAprovado',
+                    column: 'vlAprovado',
                 },
             ],
             sizePanel: 49.8,
