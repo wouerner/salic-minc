@@ -69,7 +69,7 @@
                 </v-flex>
                 <v-flex
                     xs12
-                    md12
+                    md3
                 >
                     <label class="grey--text text--darken-1 caption">Valor unitário</label>
                     <div class="d-inline-block subheading">
