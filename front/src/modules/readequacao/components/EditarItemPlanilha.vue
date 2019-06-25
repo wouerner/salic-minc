@@ -19,7 +19,7 @@
             >
                 <v-flex
                     xs12
-                    md2
+                    md3
                 >
                     <v-select
                         v-model="itemEditado.idUnidade"
