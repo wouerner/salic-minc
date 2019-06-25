@@ -32,7 +32,7 @@
                 </v-flex>
                 <v-flex
                     xs12
-                    md2
+                    md1
                 >
                     <v-text-field
                         v-model="itemEditado.QtdeDias"
@@ -44,7 +44,7 @@
                 </v-flex>
                 <v-flex
                     xs12
-                    md2
+                    md1
                 >
                     <v-text-field
                         v-model="itemEditado.Quantidade"
@@ -56,7 +56,7 @@
                 </v-flex>
                 <v-flex
                     xs12
-                    md2
+                    md1
                 >
                     <v-text-field
                         v-model="itemEditado.Ocorrencia"
@@ -69,7 +69,7 @@
                 </v-flex>
                 <v-flex
                     xs12
-                    md3
+                    md2
                 >
                     <label class="grey--text text--darken-1 caption">Valor unitário</label>
                     <div class="d-inline-block subheading">
@@ -81,6 +81,16 @@
                             class="subheading"
                             @ev="atualizarCampo($event, 'ValorUnitario')"
                         />
+                    </div>
+                </v-flex>
+                <v-flex
+                    xs12
+                    md2
+                >
+                    <label class="grey--text text--darken-1 caption">Valor total</label>
+                    <div class="d-inline-block subheading">
+                        R$
+                        {{ valorTotal | filtroFormatarParaReal }}
                     </div>
                 </v-flex>
                 <v-flex
@@ -208,6 +218,9 @@ export default {
         }),
         justificativaMinMessage() {
             return `Justificativa ter no mínimo ${this.minChar.justificativa} caracteres.`;
+        },
+        valorTotal() {
+            return this.itemEditado.Ocorrencia * this.itemEditado.Quantidade * this.itemEditado.ValorUnitario;
         },
     },
     watch: {
