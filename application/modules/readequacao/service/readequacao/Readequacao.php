@@ -857,6 +857,7 @@ class Readequacao implements IServicoRestZend
             $item->dsJustificativa = utf8_encode($item->dsJustificativa);
             $item->FonteRecurso = utf8_encode($item->FonteRecurso);
             $item->Unidade = utf8_encode($item->Unidade);
+            $item->vlComprovado = (!is_null($item->vlComprovado)) ? $item->vlComprovado : 0;
             
             $result[] = $item;
         }
