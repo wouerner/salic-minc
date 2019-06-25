@@ -273,6 +273,8 @@ export default {
                 idReadequacao: this.getReadequacao.idReadequacao,
                 idTipoReadequacao: this.getReadequacao.idTipoReadequacao,
                 idPlanilhaItem: this.item.idPlanilhaItem,
+                idPlanilhaAprovacao: this.item.idPlanilhaAprovacao,
+                idPlanilhaAprovacaoPai: this.item.idPlanilhaAprovacaoPai,
             });
         },
         atualizarCampo(valor, campo) {

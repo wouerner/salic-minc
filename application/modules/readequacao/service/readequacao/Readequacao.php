@@ -1038,23 +1038,45 @@ class Readequacao implements IServicoRestZend
     }    
     
     public function reverterAlteracaoItem(
-        $idPronac,
-        $idReadequacao,
-        $idPlanilhaItem
+        $idPronac = '',
+        $idReadequacao = '',
+        $idPlanilhaItem = '',
+        $idPlanilhaAprovacao = '',
+        $idPlanilhaAprovacaoPai = ''
     ) {
+        $parametros = $this->request->getParams();
+        $idPronac = ($idPronac) ? $idPronac : $parametros['idPronac'];
+        $idReadequacao = ($idReadequacao) ? $idReadequacao : $parametros['idReadequacao'];
+        $idPlanilhaItem = ($idPlanilhaItem) ? $idPlanilhaItem : $parametros['idPlanilhaItem'];
+        $idPlanilhaAprovacao = ($idPlanilhaAprovacao) ? $idPlanilhaAprovacao : $parametros['idPlanilhaAprovacao'];
+        $idPlanilhaAprovacaoPai = ($idPlanilhaAprovacaoPai) ? $idPlanilhaAprovacaoPai : $parametros['idPlanilhaAprovacaoPai'];
+        
         $tbPlanilhaAprovacao = new \tbPlanilhaAprovacao();
         
-        $itemOriginal = $tbPlanilhaAprovacao->buscar([
-            'idPronac = ?' => $idPronac,
-            'idPlanilhaItem = ?' => $idPlanilhaItem,
-            'stAtivo = ?' => 'S'
-        ])->current();
+        if ($idPlanilhaAprovacaoPai) {
+            $itemOriginal = $tbPlanilhaAprovacao->buscar([
+                'idPlanilhaAprovacao = ?' => $idPlanilhaAprovacaoPai,
+            ])->current();
+        } else {
+            $itemOriginal = $tbPlanilhaAprovacao->buscar([
+                'idPronac = ?' => $idPronac,
+                'idPlanilhaItem = ?' => $idPlanilhaItem,
+                'stAtivo = ?' => 'S'
+            ])->current();
+        }
         
-        $itemAlterado = $tbPlanilhaAprovacao->buscar([
-            'idPronac = ?' => $idPronac,
-            'idPlanilhaItem = ?' => $idPlanilhaItem,
-            'idReadequacao = ?' => $idReadequacao
-        ])->current();
+        if ($idPlanilhaAprovacao) {
+            $itemAlterado = $tbPlanilhaAprovacao->buscar([
+                'idPlanilhaAprovacao = ?' => $idPlanilhaAprovacao,
+            ])->current();
+        } else {
+            $itemAlterado = $tbPlanilhaAprovacao->buscar([
+                'idPronac = ?' => $idPronac,
+                'idPlanilhaItem = ?' => $idPlanilhaItem,
+                'idReadequacao = ?' => $idReadequacao,
+            ])->current();
+        }
+        
         if (!empty($itemAlterado)
             && !empty($itemOriginal)) {
             $itemAlterado->vlUnitario = $itemOriginal->vlUnitario;

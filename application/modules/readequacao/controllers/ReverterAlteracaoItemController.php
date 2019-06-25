@@ -34,6 +34,7 @@ class Readequacao_ReverterAlteracaoItemController extends MinC_Controller_Rest_A
         $idPronac = $this->getRequest()->getParam('idPronac');
         $idReadequacao = $this->getRequest()->getParam('idReadequacao');
         $idPlanilhaItem = $this->getRequest()->getParam('idPlanilhaItem');
+        $idPlanilhaAprovacao = $this->getRequest()->getParam('idPlanilhaAprovacao');
         
         $readequacaoService = new ReadequacaoService($this->getRequest(), $this->getResponse());
         $permissao = $readequacaoService->verificarPermissaoNoProjeto();
@@ -46,7 +47,8 @@ class Readequacao_ReverterAlteracaoItemController extends MinC_Controller_Rest_A
                 $data = $readequacaoService->reverterAlteracaoItem(
                     $idPronac,
                     $idReadequacao,
-                    $idPlanilhaItem
+                    $idPlanilhaItem,
+                    $idPlanilhaAprovacao
                 );
                 
             } catch (\Exception $objException) {

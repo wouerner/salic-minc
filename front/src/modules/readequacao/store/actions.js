@@ -281,5 +281,9 @@ export const reverterAlteracaoItem = ({ dispatch }, params) => {
                 idPronac: params.idPronac,
                 idTipoReadequacao: params.idTipoReadequacao,
             });
+            dispatch('calcularResumoPlanilha', {
+                idPronac: params.idPronac,
+                idTipoReadequacao: params.idTipoReadequacao,
+            });
         });
 };
