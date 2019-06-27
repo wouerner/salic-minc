@@ -1735,7 +1735,7 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
         
         $retorno = [];
         $retorno['saldoDeclarado'] = floatval($readequacao['dsSolicitacao']);
-        $retorno['saldoValorUtilizado'] = $PlanilhaReadequada['Total'] -  $PlanilhaAtiva['Total'];
+        $retorno['saldoValorUtilizado'] = round($PlanilhaReadequada['Total'] -  $PlanilhaAtiva['Total'], 3);
         $retorno['valorTotalDisponivelParaUso'] = $retorno['saldoDeclarado'] - $retorno['saldoValorUtilizado'];
         
         if ($PlanilhaReadequada['Total'] > 0) {
