@@ -311,7 +311,7 @@
                                         />
                                         <div class="text-xs-right">
                                             <finalizar-button
-                                                :dados-readequacao="readequacaoEditada"
+                                                :readequacao-editada="readequacaoEditada"
                                                 :dados-projeto="dadosProjeto"
                                                 :tela-edicao="true"
                                                 :perfis-aceitos="getPerfis('proponente')"

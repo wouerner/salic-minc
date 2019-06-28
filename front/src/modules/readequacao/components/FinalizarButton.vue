@@ -91,10 +91,6 @@ export default {
             type: Object,
             default: () => {},
         },
-        dadosReadequacao: {
-            type: Object,
-            default: () => {},
-        },
         telaEdicao: {
             type: Boolean,
             default: false,
@@ -129,6 +125,7 @@ export default {
     computed: {
         ...mapGetters({
             campoAtual: 'readequacao/getCampoAtual',
+            dadosReadequacao: 'readequacao/getReadequacao',
         }),
         perfilAceito() {
             return this.verificarPerfil(this.perfil, this.perfisAceitos);
