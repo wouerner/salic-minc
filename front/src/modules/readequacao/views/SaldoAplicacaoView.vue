@@ -550,7 +550,7 @@ export default {
             this.buscaReadequacaoPronacTipo({
                 idPronac: this.idPronac,
                 idTipoReadequacao: 22,
-                stEstagioAtual: 'proponente',
+                stStatusAtual: 'proponente',
             });
         },
         inicializarReadequacaoEditada() {
