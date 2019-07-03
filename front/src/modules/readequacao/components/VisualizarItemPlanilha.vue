@@ -34,17 +34,10 @@
             </v-flex>
             <v-flex
                 xs12
-                md2
+                md3
             >
                 <b>Vl. Unitário (R$)</b>
                 <div>{{ item.vlUnitario | filtroFormatarParaReal }}</div>
-            </v-flex>
-            <v-flex
-                xs12
-                md4
-            >
-                <b>Vl. Solicitado (R$)</b>
-                <div>{{ item.VlSolicitado | filtroFormatarParaReal }}</div>
             </v-flex>
             <v-flex
                 xs12
@@ -62,7 +55,8 @@
             </v-flex>
             <v-flex
                 xs12
-                md12>
+                md12
+            >
                 <b>Justificativa</b>
                 <div
                     v-html="item.dsJustificativa"

@@ -225,6 +225,8 @@ export default {
                         .then(() => {
                             this.executaFinalizar();
                         });
+                } else {
+                    this.executaFinalizar();
                 }
             } else {
                 this.executaFinalizar();
