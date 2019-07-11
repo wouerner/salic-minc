@@ -26,8 +26,8 @@
 <script>
 
 import numeral from 'numeral';
-import { utils } from '@/mixins/utils';
 import 'numeral/locales';
+import { utils } from '@/mixins/utils';
 
 numeral.locale('pt-br');
 numeral.defaultFormat('0,0.00');

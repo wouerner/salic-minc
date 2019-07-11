@@ -156,7 +156,6 @@
                                     </v-btn>
                                     <finalizar-button
                                         :disabled="!validacao"
-                                        :dados-readequacao="dadosReadequacao"
                                         :dados-projeto="dadosProjeto"
                                         :tela-edicao="true"
                                         :readequacao-editada="readequacaoEditada"

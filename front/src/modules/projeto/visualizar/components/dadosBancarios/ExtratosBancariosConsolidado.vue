@@ -86,8 +86,8 @@
 
 import { mapActions, mapGetters } from 'vuex';
 import { Printd } from 'printd';
-import Carregando from '@/components/CarregandoVuetify';
 import { utils } from '@/mixins/utils';
+import Carregando from '@/components/CarregandoVuetify';
 import FiltroTipoConta from './components/FiltroTipoConta';
 
 export default {

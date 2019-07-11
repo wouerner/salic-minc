@@ -888,6 +888,16 @@ class Readequacao implements IServicoRestZend
         $idPlanilhaAprovacao = $parametros['idPlanilhaAprovacao'];
         $idReadequacao = $parametros['idReadequacao'];
 
+        if ($parametros['idTipoReadequacao']) {
+            $idTipoReadequacao = $parametros['idTipoReadequacao'];
+        } else {
+            $tbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
+            $readequacao = $tbReadequacao->buscar([
+                'idReadequacao = ?' => $idReadequacao
+            ])->current();
+            $idTipoReadequacao = $readequacao->idTipoReadequacao;
+        }
+        
         $auth = \Zend_Auth::getInstance();
         $cpf = isset($auth->getIdentity()->Cpf) ? $auth->getIdentity()->Cpf : $auth->getIdentity()->usu_identificacao;
 
@@ -930,7 +940,9 @@ class Readequacao implements IServicoRestZend
         $editarItem->save();
         
         $projetosDbTable = new \Projeto_Model_DbTable_Projetos();
-        if ($projetosDbTable->possuiCalculoAutomaticoCustosVinculados($idPronac)) {
+        if ($projetosDbTable->possuiCalculoAutomaticoCustosVinculados($idPronac)
+            && $idTipoReadequacao == \Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA
+        ) {
             $atualizarCustosVinculados = $this->atualizarCustosVinculados(
                 $idPronac,
                 $idReadequacao

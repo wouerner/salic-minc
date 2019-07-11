@@ -311,7 +311,7 @@
                                         />
                                         <div class="text-xs-right">
                                             <finalizar-button
-                                                :dados-readequacao="readequacaoEditada"
+                                                :readequacao-editada="readequacaoEditada"
                                                 :dados-projeto="dadosProjeto"
                                                 :tela-edicao="true"
                                                 :perfis-aceitos="getPerfis('proponente')"
@@ -550,7 +550,7 @@ export default {
             this.buscaReadequacaoPronacTipo({
                 idPronac: this.idPronac,
                 idTipoReadequacao: 22,
-                stEstagioAtual: 'proponente',
+                stStatusAtual: 'proponente',
             });
         },
         inicializarReadequacaoEditada() {
@@ -637,7 +637,7 @@ export default {
             return this.opcoesDeVisualizacao.includes(index);
         },
         checkFinalizar() {
-            if (this.getResumoPlanilha.saldoValorUtilizado <= this.getResumoPlanilha.saldoDeclarado
+            if (this.getResumoPlanilha.saldoValorUtilizado === this.getResumoPlanilha.saldoDeclarado
                 && this.readequacaoEditada.dsJustificativa.length >= this.minChar.justificativa) {
                 this.finalizarDisponivel = true;
             } else {
