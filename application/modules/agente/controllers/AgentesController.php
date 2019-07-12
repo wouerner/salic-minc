@@ -1,4 +1,7 @@
 <?php
+
+use Application\Modules\Agente\Service\Agente\Agente as AgenteService;
+
 class Agente_AgentesController extends MinC_Controller_Action_Abstract
 {
     /**
@@ -592,7 +595,6 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
     public function agentesAction()
     {
         $this->autenticacao();
-
         if (($this->GrupoAtivoSalic != 1111) &&
                 ($this->GrupoAtivoSalic != 118) &&
                 ($this->GrupoAtivoSalic != 144) &&
@@ -1888,9 +1890,6 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->_helper->viewRenderer->setNoRender(true);
         $cpf = preg_replace('/\.|-|\//', '', $_REQUEST['cpf']);
 
-        $novos_valores = array();
-        $dados = Agente_Model_ManterAgentesDAO::buscarAgentes($cpf);
-
         if ((strlen($cpf) == 11 && !Validacao::validarCPF($cpf)) || (strlen($cpf) == 14 && !Validacao::validarCNPJ($cpf))) {
             $novos_valores[0]['msgCPF'] = utf8_encode('invalido');
         } else {
@@ -1928,9 +1927,8 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
                 }
             }
         }
-
-        $this->_helper->json($novos_valores);
-        die;
+         $this->_helper->json(\TratarArray::utf8EncodeArray($novos_valores));
+         die;
     }
 
     /**
@@ -2193,7 +2191,6 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             $agente = $agente[0];
             $agente->id = $agente->idagente;
             $agente->cpfCnpj = $agente->cnpjcpf;
-
             $agenteArray = (array)$agente;
             array_walk($agenteArray, function ($value, $key) use ($agente) {
                 $agente->$key = utf8_encode($value);
@@ -2902,7 +2899,6 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             $b++;
         }
         $this->view->visaoAgente = $selectAgente;
-        //var_dump($selectAgente) ;die;
 
         // caso o formulario seja enviado via post
         if ($this->getRequest()->isPost()) {
