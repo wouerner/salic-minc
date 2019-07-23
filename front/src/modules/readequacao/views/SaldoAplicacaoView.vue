@@ -348,7 +348,7 @@ import UploadFile from '../components/UploadFile';
 import ValorDisponivel from '../components/ValorDisponivel';
 import SaldoAplicacaoResumo from '../components/SaldoAplicacaoResumo';
 import ExcluirButton from '../components/ExcluirButton';
-import SPlanilha from '@/components/Planilha/Planilha';
+import SPlanilha from '@/components/Planilha/PlanilhaV2';
 import ResizePanel from '@/components/resize-panel/ResizeSplitPane';
 import SPlanilhaTiposVisualizacaoButtons from '@/components/Planilha/PlanilhaTiposVisualizacaoButtons';
 import SPlanilhaItensSaldo from '../components/PlanilhaItensSaldo';
