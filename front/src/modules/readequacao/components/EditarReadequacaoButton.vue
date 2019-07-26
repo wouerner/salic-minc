@@ -11,7 +11,9 @@
             @click.stop="abrirEdicao()"
         >
             <v-tooltip bottom>
-                <v-icon slot="activator">edit</v-icon>
+                <v-icon slot="activator">
+                    edit
+                </v-icon>
                 <span>Editar Readequação</span>
             </v-tooltip>
         </v-btn>
@@ -25,7 +27,6 @@
             />
         </template>
         <v-dialog
-            :persistent="mensagem.ativa"
             v-model="dialog"
             fullscreen
             hide-overlay
@@ -43,7 +44,9 @@
                         dark
                         @click="dialog = false"
                     >
-                        <v-icon>close</v-icon>
+                        <v-icon>
+                            close
+                        </v-icon>
                     </v-btn>
                     <v-toolbar-title>Readequação - {{ dadosReadequacao.dsTipoReadequacao }}</v-toolbar-title>
                     <v-spacer/>
@@ -77,7 +80,7 @@
                                 :dados-readequacao="dadosReadequacao"
                                 :campo="getDadosCampo"
                                 :min-char="minChar.solicitacao"
-                                :rules="rules.solicitacao"
+                                :rules="rules"
                                 @dados-update="atualizarCampo($event, 'dsSolicitacao')"
                                 @editor-texto-counter="atualizarContador($event, 'solicitacao')"
                             />
@@ -90,7 +93,7 @@
                             >
                                 Justificativa da readequação
                             </v-card-title>
-                            <form-readequacao
+                            <form-justificativa
                                 :dados-readequacao="dadosReadequacao"
                                 :min-char="minChar.justificativa"
                                 @dados-update="atualizarCampo($event, 'dsJustificativa')"
@@ -109,9 +112,11 @@
                                 <upload-file
                                     :formatos-aceitos="formatosAceitos"
                                     :id-documento="getReadequacao.idDocumento"
+                                    :action-done="uploadActionDone"
                                     class="mt-1"
                                     @arquivo-anexado="atualizarArquivo($event)"
                                     @arquivo-removido="removerArquivo()"
+                                    @arquivo-tipo-invalido="arquivoTipoInvalido($event)"
                                 />
                             </v-card-actions>
                         </v-card>
@@ -131,27 +136,29 @@
                                         color="green darken-1"
                                         dark
                                         @click="salvarReadequacao()"
-                                    >Salvar
-                                        <v-icon
-                                            right
-                                            dark
-                                        >done</v-icon>
+                                    >
+                                        Salvar
+                                        <v-icon>
+                                            done
+                                        </v-icon>
                                     </v-btn>
                                     <v-btn
                                         color="red lighten-2"
                                         dark
                                         @click="dialog = false"
-                                    >Cancelar
+                                    >Fechar
                                         <v-icon
                                             right
                                             dark
-                                        >cancel</v-icon>
+                                        >
+                                            cancel
+                                        </v-icon>
                                     </v-btn>
                                     <finalizar-button
                                         :disabled="!validacao"
-                                        :dados-readequacao="dadosReadequacao"
                                         :dados-projeto="dadosProjeto"
                                         :tela-edicao="true"
+                                        :readequacao-editada="readequacaoEditada"
                                         dark
                                         @readequacao-finalizada="readequacaoFinalizada()"
                                     />
@@ -160,20 +167,6 @@
                         </v-footer>
                     </v-flex>
                 </v-layout>
-                <v-snackbar
-                    :color="mensagem.cor"
-                    :timeout="mensagem.timeout"
-                    v-model="mensagem.ativa"
-                    bottom
-                ><span>{{ mensagem.conteudo }}</span>
-                    <v-btn
-                        dark
-                        flat
-                        @click="mensagem.ativa = false"
-                    >
-                        Fechar
-                    </v-btn>
-                </v-snackbar>
             </v-card>
         </v-dialog>
     </v-layout>
@@ -183,22 +176,21 @@
 import _ from 'lodash';
 import { mapActions, mapGetters } from 'vuex';
 import Carregando from '@/components/CarregandoVuetify';
-import FormReadequacao from './FormReadequacao';
+import FormJustificativa from './FormJustificativa';
 import TemplateTextarea from './TemplateTextarea';
 import TemplateInput from './TemplateInput';
 import TemplateDate from './TemplateDate';
 import TemplateRedirect from './TemplateRedirect';
 import FinalizarButton from './FinalizarButton';
 import UploadFile from './UploadFile';
-import validarFormulario from '../mixins/validarFormulario';
-import verificarPerfil from '../mixins/verificarPerfil';
+import MxReadequacao from '../mixins/Readequacao';
 
 export default {
     name: 'EditarReadequacaoButton',
     components: {
         Carregando,
         FinalizarButton,
-        FormReadequacao,
+        FormJustificativa,
         TemplateTextarea,
         TemplateInput,
         TemplateDate,
@@ -206,8 +198,7 @@ export default {
         UploadFile,
     },
     mixins: [
-        validarFormulario,
-        verificarPerfil,
+        MxReadequacao,
     ],
     props: {
         dadosReadequacao: {
@@ -244,7 +235,7 @@ export default {
                 date: 'TemplateDate',
             },
             templateEdicao: [],
-            formatosAceitos: 'application/pdf',
+            formatosAceitos: ['application/pdf'],
             panel: [true, true],
             readequacaoEditada: {
                 idReadequacao: 0,
@@ -256,13 +247,6 @@ export default {
                 dsAvaliacao: '',
             },
             redirecionar: false,
-            mensagem: {
-                ativa: false,
-                timeout: 2300,
-                conteudo: '',
-                cor: '',
-                finaliza: false,
-            },
             recarregarReadequacoes: false,
             validacao: false,
             contador: {
@@ -270,14 +254,13 @@ export default {
                 justificativa: 0,
             },
             rules: {
-                solicitacao: [
-                    v => !!v || 'Campo obrigatório.',
-                    v => (v && v.length >= this.minChar.solicitacao) || `Deve ter no mínimo ${this.minChar.solicitacao} caracteres.`,
-                ],
-                justificativa: [
-                    v => !!v || 'Preencha a justificativa.',
-                    v => (v && v.length >= this.minChar.justificativa) || `Justificativa ter no mínimo ${this.minChar.justificativa} caracteres.`,
-                ],
+                required: v => !!v || 'Campo obrigatório.',
+                dataExecucaoChars: v => (v && v.length >= this.minChar.dataExecucao) || 'Data em formato inválido',
+                dataExecucao: v => (v !== this.getValorCampoAtual()) || 'Data deve ser diferente da original.',
+                somenteNumerico: v => (v && /^[\d]*$/.test(v)) || 'Somente dados numéricos',
+                solicitacao: v => (v && v.length >= this.minChar.solicitacao) || `Deve ter no mínimo ${this.minChar.solicitacao} caracteres.`,
+                justificativa: v => (v && v.length >= this.minChar.justificativa)
+                    || `Justificativa ter no mínimo ${this.minChar.justificativa} caracteres.`,
             },
             campos: [
                 'dsSolicitacao',
@@ -285,6 +268,7 @@ export default {
             ],
             loading: true,
             arquivo: {},
+            uploadActionDone: true,
         };
     },
     computed: {
@@ -329,19 +313,9 @@ export default {
                 this.dialog = true;
             }
         },
-        mensagem: {
-            handler(mensagem) {
-                if (mensagem.ativa === false
-                    && mensagem.finaliza === true) {
-                    this.dialog = false;
-                }
-            },
-            deep: true,
-        },
         dadosReadequacao: {
             handler(value) {
                 if (value.idPronac && value.idTipoReadequacao) {
-                    this.obterDadosIniciais();
                     if (this.bindClick === this.dadosReadequacao.idReadequacao) {
                         this.dialog = true;
                     }
@@ -365,21 +339,26 @@ export default {
             obterReadequacao: 'readequacao/obterReadequacao',
             updateReadequacao: 'readequacao/updateReadequacao',
             finalizarReadequacao: 'readequacao/finalizarReadequacao',
+            mensagemSucesso: 'noticias/mensagemSucesso',
+            mensagemErro: 'noticias/mensagemErro',
         }),
         obterDadosIniciais() {
             if (
                 this.dadosReadequacao.idPronac && this.dadosReadequacao.idTipoReadequacao
             ) {
+                this.inicializarReadequacaoEditada();
                 this.obterReadequacao(this.dadosReadequacao);
-                this.obterCampoAtual({
-                    idPronac: this.dadosReadequacao.idPronac,
-                    idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
-                }).then(() => {
-                    this.inicializarReadequacaoEditada();
-                });
+                const key = `key_${this.dadosReadequacao.idTipoReadequacao}`;
+                if (typeof this.campoAtual[key] === 'undefined') {
+                    this.obterCampoAtual({
+                        idPronac: this.dadosReadequacao.idPronac,
+                        idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
+                    });
+                }
             }
         },
         abrirEdicao() {
+            this.inicializarReadequacaoEditada();
             this.obterCampoAtual({
                 idPronac: this.dadosReadequacao.idPronac,
                 idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
@@ -395,11 +374,7 @@ export default {
         },
         salvarReadequacao() {
             this.updateReadequacao(this.readequacaoEditada).then(() => {
-                this.mensagem.conteudo = 'Readequação salva com sucesso!';
-                this.mensagem.timeout = 2300;
-                this.mensagem.ativa = true;
-                this.mensagem.finaliza = true;
-                this.mensagem.cor = 'green darken-1';
+                this.mensagemSucesso('Readequação salva com sucesso!');
                 this.recarregarReadequacoes = true;
             });
         },
@@ -415,42 +390,66 @@ export default {
             };
         },
         atualizarArquivo(arquivo) {
+            this.uploadActionDone = false;
             this.readequacaoEditada.documento = arquivo;
+            if (this.readequacaoEditada.idReadequacao === 0) {
+                this.readequacaoEditada.idReadequacao = this.dadosReadequacao.idReadequacao;
+                this.readequacaoEditada.idPronac = this.dadosReadequacao.idPronac;
+            }
             this.updateReadequacao(this.readequacaoEditada).then(() => {
-                this.mensagem.conteudo = 'Arquivo enviado!';
-                this.mensagem.ativa = true;
-                this.mensagem.finaliza = false;
-                this.mensagem.cor = 'green darken-1';
+                this.mensagemSucesso('Arquivo enviado!');
                 this.recarregarReadequacoes = true;
+                this.uploadActionDone = true;
             });
         },
         removerArquivo() {
+            this.uploadActionDone = false;
             this.readequacaoEditada.documento = '';
             this.readequacaoEditada.idDocumento = '';
             this.updateReadequacao(this.readequacaoEditada).then(() => {
-                this.mensagem.conteudo = 'Arquivo removido!';
-                this.mensagem.ativa = true;
-                this.mensagem.finaliza = false;
-                this.mensagem.cor = 'green darken-1';
+                this.mensagemSucesso('Arquivo removido!');
                 this.recarregarReadequacoes = true;
+                this.uploadActionDone = true;
             });
         },
+        arquivoTipoInvalido(payload) {
+            const tiposValidos = payload.formatosAceitos.join(', ');
+            this.mensagemErro(`Tipo fornecido (${payload.formatoEnviado}) não é aceito. Tipos aceitos: ${tiposValidos}`);
+        },
         atualizarCampo(valor, campo) {
-            if (this.campos.includes(campo)) {
-                this.readequacaoEditada[campo] = valor;
-                this.validar();
+            if (typeof this.readequacaoEditada.idTipoReadequacao !== 'undefined') {
+                if (this.campos.includes(campo)) {
+                    this.readequacaoEditada[campo] = valor;
+                    this.validar();
+                }
             }
         },
         atualizarContador(valor, campo) {
             this.contador[campo] = valor;
-            this.validar();
         },
         validar() {
-            this.validacao = this.validarFormulario(
-                this.readequacaoEditada,
-                this.contador,
-                this.minChar,
-            );
+            if (typeof this.dadosReadequacao.idTipoReadequacao !== 'undefined') {
+                let campo = '';
+                const key = `key_${this.dadosReadequacao.idTipoReadequacao}`;
+                if (typeof this.campoAtual[key] !== 'undefined') {
+                    campo = this.campoAtual[key].dsCampo;
+                }
+                this.validacao = this.validarFormulario(
+                    this.readequacaoEditada,
+                    this.contador,
+                    this.minChar,
+                    campo,
+                );
+            }
+        },
+        getValorCampoAtual() {
+            if (typeof this.dadosReadequacao.idReadequacao === 'number') {
+                const key = `key_${this.dadosReadequacao.idTipoReadequacao}`;
+                if (typeof this.campoAtual[key] !== 'undefined') {
+                    return this.campoAtual[key].dsCampo;
+                }
+            }
+            return false;
         },
         readequacaoFinalizada() {
             this.dialog = false;

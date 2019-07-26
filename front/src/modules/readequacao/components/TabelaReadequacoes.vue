@@ -3,7 +3,9 @@
         v-if="loading"
         ma-5
     >
-        <carregando :text="'Carregando lista de readequações...'"/>
+        <carregando
+            :text="'Carregando lista de readequações...'"
+        />
     </div>
     <div
         v-else
@@ -99,7 +101,7 @@
 <script>
 import { utils } from '@/mixins/utils';
 import Carregando from '@/components/CarregandoVuetify';
-import abrirArquivo from '../mixins/abrirArquivo';
+import MxReadequacao from '../mixins/Readequacao';
 
 export default {
     name: 'TabelaReadequacoes',
@@ -108,7 +110,7 @@ export default {
     },
     mixins: [
         utils,
-        abrirArquivo,
+        MxReadequacao,
     ],
     props: {
         dadosReadequacao: {

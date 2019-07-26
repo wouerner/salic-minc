@@ -1,5 +1,7 @@
 <?php
 
+use Application\Modules\Readequacao\Service\Readequacao\Readequacao as ReadequacaoService;
+
 class Readequacao_Model_TbReadequacaoMapper extends MinC_Db_Mapper
 {
     public function __construct()
@@ -68,12 +70,18 @@ class Readequacao_Model_TbReadequacaoMapper extends MinC_Db_Mapper
                 $objReadequacao->setDsSolicitacao($dsSolicitacao);
             }
             
-            if (!isset($arrData['idReadequacao'])
-                &&  !isset($arrData['idDocumento'])) {
+            if ((!isset($arrData['idReadequacao'])
+                 &&  !isset($arrData['idDocumento']))
+                || (!$arrData['idDocumento'])
+            ) {
                 $idDocumento = new Zend_Db_Expr('NULL');
                 $objReadequacao->setIdDocumento($idDocumento);
             } else if (isset($arrData['idDocumento'])) {
-                $objReadequacao->setIdDocumento($arrData['idDocumento']);
+                $idDocumento = $arrData['idDocumento'];
+                if ($idDocumento == 0) {
+                    $idDocumento = new Zend_Db_Expr('NULL');
+                }
+                $objReadequacao->setIdDocumento($idDocumento);
             }
             
             $id = $this->save($objReadequacao);
